@@ -1,4 +1,4 @@
-Shader "Unlit/Spiral_Shader"
+Shader "Unlit/SpiralURP_Shader"
 {
     Properties
     {
@@ -25,7 +25,7 @@ Shader "Unlit/Spiral_Shader"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "../../ShaderLibraries/Shaders/MyShaderLibraries/MySpiral.cginc"
+            #include "../../../ShaderLibraries/Shaders/MyShaderLibraries/MySpiral.cginc"
 
 
             struct appdata

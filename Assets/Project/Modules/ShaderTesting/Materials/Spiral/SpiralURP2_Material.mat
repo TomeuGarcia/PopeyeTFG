@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Spiral_Material
-  m_Shader: {fileID: 4800000, guid: 3df4c493271ab17479af00d63d9c80c8, type: 3}
+  m_Name: SpiralURP2_Material
+  m_Shader: {fileID: 4800000, guid: 8b87cb9f28d5de347bd06c72622a680d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -31,12 +31,10 @@ Material:
     m_Floats:
     - _NumberOfSpikes: 3
     - _RotationSpeed: -0.05
-    - _SpikeFade: 0.05
+    - _SpikeFade: 0.105
     - _SpikeOriginOffset: 0.3
-    - _SpikeSharpness: 0.089
     - _SpikeSize: 0.63
-    - _SpiralOffset: 0
-    - _TwistSharpness: 1
-    - _TwistStraightness: 1.05
+    - _SpiralOffset: 6.65
+    - _TwistStraightness: 1
     m_Colors: []
   m_BuildTextureStacks: []
