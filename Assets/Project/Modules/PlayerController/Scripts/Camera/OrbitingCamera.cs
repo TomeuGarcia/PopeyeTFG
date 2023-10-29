@@ -11,7 +11,7 @@ public class OrbitingCamera : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private Transform _focus;
     private Vector3 _focusPoint;
-    [HideInInspector] public Vector3 focusPointOffset;
+    [HideInInspector] public Vector3 focusPointOffset = Vector3.zero;
 
     [SerializeField, Range(1.0f, 300.0f)] public float _distance;
     [SerializeField, Range(0.0f, 10.0f)] private float _noFocusRadius;
@@ -49,17 +49,22 @@ public class OrbitingCamera : MonoBehaviour
         _focusPoint = _focus.position;
     }
 
+    private void OnValidate()
+    {
+        if (_camera != null && _focus != null)
+        {
+            _focusPoint = _focus.position;
+            UpdateFocusPoint();
+            UpdateState();
+            UpdateTransform();
+        }
+    }
+
 
     private void LateUpdate()
     {
         UpdateFocusPoint();
-
-        _lookRotation = transform.localRotation;
-
-        _lookDirection = transform.forward;
-        //_lookDirection = lookRotation * transform.forward;
-        _lookPosition = _focusPoint - _lookDirection * _distance;
-
+        UpdateState();
 
         CheckCameraObstruction();
 
@@ -71,7 +76,7 @@ public class OrbitingCamera : MonoBehaviour
         if (followPlayer)
         {
             //Original
-            transform.SetPositionAndRotation(_lookPosition, _lookRotation);
+            UpdateTransform();
         }
     }
 
@@ -100,6 +105,20 @@ public class OrbitingCamera : MonoBehaviour
             _focusPoint = focusPosition;
         }
         
+    }
+
+    private void UpdateState()
+    {
+        _lookRotation = transform.localRotation;
+
+        _lookDirection = transform.forward;
+        //_lookDirection = lookRotation * transform.forward;
+        _lookPosition = _focusPoint - _lookDirection * _distance;
+    }
+
+    private void UpdateTransform()
+    {
+        transform.SetPositionAndRotation(_lookPosition, _lookRotation);
     }
 
     private void CheckCameraObstruction()
