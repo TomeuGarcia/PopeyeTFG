@@ -90,7 +90,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
 
     private void Update()
     {
-        if (transform.position.y < -1 && _respawnsAfterDeath)
+        if (_respawnsAfterDeath && transform.position.y < -1)
         {
             Respawn();
         }        
@@ -151,7 +151,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
 
     public bool CanBeDamaged(DamageHit damageHit)
     {
-        return !_healthSystem.IsDead() && !_healthSystem.IsInvulnerable;
+        return !IsDead() && !_healthSystem.IsInvulnerable;
     }
 
     public bool IsDead()
@@ -159,10 +159,13 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
         return _healthSystem.IsDead();
     }
 
-    public async UniTask StartDeathAnimation()
+    public async UniTaskVoid StartDeathAnimation()
     {
         float deathDuration = 1.0f;
         _enemyController.enabled = false;
+
+        SetCanRotate(false);
+        GetStunned(deathDuration);
 
         await transform.DOBlendableRotateBy(Vector3.right * 180f, deathDuration).AsyncWaitForCompletion();
         
@@ -176,21 +179,17 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
         {
             Destroy(gameObject);
         }
-        
-
-        GetStunned(deathDuration);
     }
 
     private void Respawn()
     {
         _enemyController.enabled = true;
         transform.position = _respawnPosition;
-        _healthSystem.HealToMax();
         transform.rotation = Quaternion.identity;
+        _healthSystem.HealToMax();
+        SetCanRotate(true);
 
         _stateMachine.ResetStateMachine();
-
-        Debug.Log("RESPAWN");
     }
     
     private void TakeKnockback(Vector3 knockbackForce)
