@@ -1,0 +1,56 @@
+name: Development Build
+
+on: 
+  workflow_dispatch: {}  # To launch builds manually
+  pull_request:
+    branches: [ develop ]  #To auto launch builds when PR to develop 
+
+jobs:
+  buildForStandaloneWindows64:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+        unityVersion:
+          - 2022.3.2f1
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: false
+      - name: Free disk space
+        run: .github/workflows/scripts/free_disk_space.sh
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      - name: Restore LFS cache
+        uses: actions/cache@v3
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+      - uses: game-ci/unity-builder@v2
+        id: buildStep
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          unityVersion: ${{ matrix.unityVersion }}
+          buildName: DevPopeye
+      - uses: actions/upload-artifact@v3
+        with:
+          name: DevPopeye-${{ matrix.targetPlatform }}-${{ steps.buildStep.outputs.buildVersion }}
+          path: build/${{ matrix.targetPlatform }}/
