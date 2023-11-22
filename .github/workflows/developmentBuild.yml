@@ -3,7 +3,7 @@ name: Development Build
 on: 
   workflow_dispatch: {}  # To launch builds manually
   pull_request:
-    branches: [ develop ]  #To auto launch builds when PR to develop 
+    branches: [ develop, main ]  #To auto launch builds when PR to develop 
 
 jobs:
   buildForStandaloneWindows64:
