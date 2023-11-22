@@ -3,7 +3,7 @@ name: Development Build
 on: 
   workflow_dispatch: {}  # To launch builds manually
   pull_request:
-    branches: [ develop ]  #To auto launch builds when PR to develop 
+    branches: [ develop, main ]  #To auto launch builds when PR to develop 
 
 jobs:
   buildForStandaloneWindows64:
@@ -21,8 +21,8 @@ jobs:
         with:
           fetch-depth: 0
           lfs: false
-      - name: Free disk space
-        run: .github/workflows/scripts/free_disk_space.sh
+      #- name: Free disk space
+       # run: .github/workflows/scripts/free_disk_space.sh
       - name: Create LFS file list
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
       - name: Restore LFS cache
