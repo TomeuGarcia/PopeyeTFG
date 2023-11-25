@@ -9,11 +9,12 @@ public class PlayerRespawnCheckpoint_Trigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // is there a better way to do this?
         if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG))
-        {
+        {            
             other.gameObject.GetComponent<Player>()._respawnPosition = _respawnPoint.position;
             
-            gameObject.SetActive(false); // disable self
+            gameObject.SetActive(false); // disable self            
         }    
     }
 
