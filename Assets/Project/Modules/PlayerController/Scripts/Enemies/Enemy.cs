@@ -49,6 +49,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
 
     public delegate void EnemyEvent(Enemy senderEnemy);
     public EnemyEvent OnDeathAnimationFinished;
+    
 
 
     private bool _alreadyInitialized = false;
