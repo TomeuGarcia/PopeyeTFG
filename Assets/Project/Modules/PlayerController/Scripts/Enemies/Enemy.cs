@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
+public class Enemy : AEnemy, IDamageHitTarget, IMovementInputHandler
 {
     [Header("COMPONENTS")]
     [SerializeField] private IEnemyStateMachine _stateMachine;
     [SerializeField] private PlayerController _enemyController;
     [SerializeField] private Rigidbody _rigidbody;
-    [SerializeField] private Transform _attackTarget;
+    //[SerializeField] private Transform _attackTarget;
     [SerializeField] private MeshRenderer _meshRenderer;
     private Material _meshMaterial;
 
@@ -46,9 +46,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
     private bool _respawnsAfterDeath;
     private Vector3 _respawnPosition;
 
-
-    public delegate void EnemyEvent(Enemy senderEnemy);
-    public EnemyEvent OnDeathAnimationFinished;
+    
     
 
 
@@ -57,11 +55,17 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
     {
         if (_alreadyInitialized) return;
 
-        AwakeInit(_attackTarget, true);
+        AwakeInit(_attackTarget);
         SetRespawnPosition(Position);
     }
+    
+    public override void AwakeInit(Transform attackTarget)
+    {
+        base.AwakeInit(attackTarget);
+        AwakeInit_old(attackTarget,false);
+    }
 
-    public void AwakeInit(Transform attackTarget, bool respawnsAfterDeath)
+    public void AwakeInit_old(Transform attackTarget, bool respawnsAfterDeath)
     {
         _attackTarget = attackTarget;
 
@@ -170,7 +174,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
 
         await transform.DOBlendableRotateBy(Vector3.right * 180f, deathDuration).AsyncWaitForCompletion();
         
-        OnDeathAnimationFinished?.Invoke(this);
+        InvokeOnDeathComplete();
 
         if (_respawnsAfterDeath)
         {

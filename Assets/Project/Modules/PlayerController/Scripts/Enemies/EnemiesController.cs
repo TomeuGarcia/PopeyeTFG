@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemiesController : MonoBehaviour
 {
     [SerializeField] private bool _initEnemies = true;
-    [SerializeField] private bool _enemiesRespawn = true;
+    [SerializeField] private bool _enemiesRespawn = false;
 
     [Header("PARENTS")]
     [SerializeField] private GameObject BigEnemies;
@@ -33,7 +33,7 @@ public class EnemiesController : MonoBehaviour
         for (int i = 0; i < numberOfBigEnemies; ++i, ++enemyI)
         {
             Enemy enemy = BigEnemies.transform.GetChild(i).GetComponent<Enemy>();            
-            enemy.AwakeInit(_enemyAttackTarget, _enemiesRespawn);
+            enemy.AwakeInit_old(_enemyAttackTarget, _enemiesRespawn);
             enemy.SetRespawnPosition(enemy.Position);
 
             _enemies[enemyI] = enemy;
@@ -42,7 +42,7 @@ public class EnemiesController : MonoBehaviour
         for (int i = 0; i < numberOfMediumEnemies; ++i, ++enemyI)
         {
             Enemy enemy = MediumEnemies.transform.GetChild(i).GetComponent<Enemy>();
-            enemy.AwakeInit(_enemyAttackTarget, _enemiesRespawn);
+            enemy.AwakeInit_old(_enemyAttackTarget, _enemiesRespawn);
             enemy.SetRespawnPosition(enemy.Position);
 
             _enemies[enemyI] = enemy;
@@ -51,7 +51,7 @@ public class EnemiesController : MonoBehaviour
         for (int i = 0; i < numberOfSmallEnemies; ++i, ++enemyI)
         {
             Enemy enemy = SmallEnemies.transform.GetChild(i).GetComponent<Enemy>();
-            enemy.AwakeInit(_enemyAttackTarget, _enemiesRespawn);
+            enemy.AwakeInit_old(_enemyAttackTarget, _enemiesRespawn);
             enemy.SetRespawnPosition(enemy.Position);
 
             _enemies[enemyI] = enemy;

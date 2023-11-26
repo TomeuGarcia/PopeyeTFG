@@ -23,11 +23,11 @@ public class EnemySpawner : MonoBehaviour
         public class SpawnSequenceBeat
         {
             [SerializeField, Range(0.0f, 10.0f)] private float _delayBeforeSpawn = 0.5f;
-            [SerializeField] private Enemy _enemyPrefab;
+            [SerializeField] private AEnemy _enemyPrefab;
             [SerializeField] private Transform _spawnSpot;
 
             public float DelayBeforeSpawn => _delayBeforeSpawn;
-            public Enemy EnemyPrefab => _enemyPrefab;
+            public AEnemy EnemyPrefab => _enemyPrefab;
             public Vector3 SpawnPosition => _spawnSpot.position;
         }
 
@@ -81,19 +81,19 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void SpawnEnemy(Enemy enemyPrefab, Vector3 spawnPosition)
+    private void SpawnEnemy(AEnemy enemyPrefab, Vector3 spawnPosition)
     {
-        Enemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        enemy.AwakeInit(_enemyAttackTarget, false);
+        AEnemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        enemy.AwakeInit(_enemyAttackTarget);
 
-        enemy.OnDeathAnimationFinished += DecrementActiveEnemiesCount;
+        enemy.OnDeathComplete += DecrementActiveEnemiesCount;
     }
 
     
 
-    private void DecrementActiveEnemiesCount(Enemy destroyedEnemy)
+    private void DecrementActiveEnemiesCount(AEnemy destroyedEnemy)
     {
-        destroyedEnemy.OnDeathAnimationFinished -= DecrementActiveEnemiesCount;
+        destroyedEnemy.OnDeathComplete -= DecrementActiveEnemiesCount;
 
         --_activeEnemiesCount;
     }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &582160833095235853
+--- !u!1 &578154714784261611
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,51 +8,103 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7049596192231382805}
-  - component: {fileID: 516674109671028496}
-  - component: {fileID: 7235236421173443407}
-  - component: {fileID: 510475595366179757}
-  - component: {fileID: 2741710100473379948}
-  - component: {fileID: 2678814384996220594}
-  - component: {fileID: 5066664616112765849}
-  - component: {fileID: 7427424191014701390}
+  - component: {fileID: 4463041287585602228}
+  - component: {fileID: 4735250719613439942}
   m_Layer: 0
-  m_Name: SlimeBody
+  m_Name: SlimeMediator_Size3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7049596192231382805
+--- !u!4 &4463041287585602228
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.126, z: 0}
+  m_GameObject: {fileID: 578154714784261611}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7378742200920036401}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4735250719613439942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578154714784261611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfcdb9b799f49ec4a964161b20f98bcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slimeMovement: {fileID: 2109834771631650075}
+  _slimeHealth: {fileID: 129179429737552354}
+  _slimeAnimation: {fileID: 8784783522602541844}
+  _slimeDivider: {fileID: 2067100639111306409}
+  _boxCollider: {fileID: 3462995563991828812}
+--- !u!1 &3861768562356960769
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7378742200920036401}
+  - component: {fileID: 2273671462667775971}
+  - component: {fileID: 2635525039347396959}
+  - component: {fileID: 3462995563991828812}
+  - component: {fileID: 5597591312320529887}
+  - component: {fileID: 4821231514884419924}
+  - component: {fileID: 129179429737552354}
+  - component: {fileID: 2067100639111306409}
+  - component: {fileID: 8784783522602541844}
+  - component: {fileID: 2109834771631650075}
+  m_Layer: 0
+  m_Name: Slime
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7378742200920036401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861768562356960769}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4176856628655035919}
+  m_Father: {fileID: 4463041287585602228}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &516674109671028496
+--- !u!33 &2273671462667775971
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
+  m_GameObject: {fileID: 3861768562356960769}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &7235236421173443407
+--- !u!23 &2635525039347396959
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
+  m_GameObject: {fileID: 3861768562356960769}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -88,13 +140,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &510475595366179757
+--- !u!65 &3462995563991828812
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
+  m_GameObject: {fileID: 3861768562356960769}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -109,13 +161,13 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!195 &2741710100473379948
+--- !u!195 &5597591312320529887
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
+  m_GameObject: {fileID: 3861768562356960769}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
@@ -131,13 +183,13 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &2678814384996220594
+--- !u!54 &4821231514884419924
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
+  m_GameObject: {fileID: 3861768562356960769}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -158,128 +210,64 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &5066664616112765849
+--- !u!114 &129179429737552354
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb42af37f8e21c4283df70598facdb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speeedThreshold: {x: 2, y: 4}
-  _navMeshAgent: {fileID: 2741710100473379948}
-  _proximityTargetGetterBehaviour: {fileID: 6187672698759323335}
-  _slimeHealth: {fileID: 7427424191014701390}
-  _spawnForce: 10
-  _rb: {fileID: 2678814384996220594}
-  _bc: {fileID: 510475595366179757}
-  _squashAmount: 0.8
-  _stretchAmount: 1.2
-  _animationSpeed: 0.5
---- !u!114 &7427424191014701390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582160833095235853}
+  m_GameObject: {fileID: 3861768562356960769}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 50
-  _slimeToSpawn: {fileID: 5913288535366187737, guid: 121c63d8ae3a0054fa66c80de632e7fd,
-    type: 3}
-  _numberOfSlimes: 2
-  _explosionParticles: {fileID: 1313813982915144674, guid: 932a41c67e2ee094db5e22f14adc9c6f,
-    type: 3}
---- !u!1 &3638022750653369447
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4176856628655035919}
-  - component: {fileID: 6187672698759323335}
-  - component: {fileID: 5902914695967428188}
-  m_Layer: 0
-  m_Name: SlimeBig
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4176856628655035919
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3638022750653369447}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.96, y: 0.83, z: 2.929}
-  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7049596192231382805}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6187672698759323335
+--- !u!114 &2067100639111306409
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3638022750653369447}
+  m_GameObject: {fileID: 3861768562356960769}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b509849098fd8d4092e5cec047257de, type: 3}
+  m_Script: {fileID: 11500000, guid: 621a24a46fc1a724d8bcad0e60d5fa2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onTargetFound:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5066664616112765849}
-        m_TargetAssemblyTypeName: SlimeMovement, Assembly-CSharp
-        m_MethodName: SetTarget
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTargetLost:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!135 &5902914695967428188
-SphereCollider:
+  _slimeToSpawn: {fileID: 6668136983467904787, guid: 8a9ad2c9b6b1c2a4d97046cbef19b0ff,
+    type: 3}
+  _numberOfSlimes: 2
+--- !u!114 &8784783522602541844
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3638022750653369447}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
+  m_GameObject: {fileID: 3861768562356960769}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 10
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 004c00fb405efd24d8de45ca5110d94c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _explosionParticles: {fileID: 1313813982915144674, guid: 932a41c67e2ee094db5e22f14adc9c6f,
+    type: 3}
+  _squashAmount: 0.8
+  _stretchAmount: 1.2
+  _animationSpeed: 1
+--- !u!114 &2109834771631650075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861768562356960769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb42af37f8e21c4283df70598facdb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speeedThreshold: {x: 3, y: 5}
+  _navMeshAgent: {fileID: 5597591312320529887}
+  _spawnForce: 10
+  _rb: {fileID: 4821231514884419924}
