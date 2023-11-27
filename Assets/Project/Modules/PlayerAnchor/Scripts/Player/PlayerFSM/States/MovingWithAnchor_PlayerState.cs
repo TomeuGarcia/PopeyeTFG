@@ -4,26 +4,34 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class MovingWithAnchor_PlayerState : APlayerState
     {
+        private readonly PlayerStatesBlackboard _blackboard;
         private readonly MovingWithAnchor_PlayerStateConfig _config;
 
-        public MovingWithAnchor_PlayerState(MovingWithAnchor_PlayerStateConfig config)
+        public MovingWithAnchor_PlayerState(PlayerStatesBlackboard blackboard, MovingWithAnchor_PlayerStateConfig config)
         {
+            _blackboard = blackboard;
             _config = config;
         }
         
         protected override void DoEnter()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override bool Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
+            if (_blackboard.MovesetInputsController.Aim_Pressed())
+            {
+                NextState = PlayerStates.AimingThrowAnchor;
+                return true;
+            }
+
+            return false;
         }
     }
 }

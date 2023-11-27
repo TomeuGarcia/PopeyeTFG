@@ -5,6 +5,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 {
     public interface IPlayerMediator
     {
-        
+
+        public void SetMaxMovementSpeed(float maxMovementSpeed);
+
     }
 }

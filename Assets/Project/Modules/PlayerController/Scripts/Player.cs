@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Popeye.Modules.PlayerController;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget

@@ -1,30 +1,51 @@
+using System;
+using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class Dead_PlayerState : APlayerState
     {
+        private readonly PlayerStatesBlackboard _blackboard;
         private readonly Dead_PlayerStateConfig _config;
+        
+        private bool _finishedDying;
 
-        public Dead_PlayerState(Dead_PlayerStateConfig config)
+        public Dead_PlayerState(PlayerStatesBlackboard blackboard, Dead_PlayerStateConfig config)
         {
+            _blackboard = blackboard;
             _config = config;
         }
         
         
         protected override void DoEnter()
         {
-            throw new System.NotImplementedException();
+            _finishedDying = false;
+            WaitForSpawnToFinish().Forget();
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override bool Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
+            if (_finishedDying)
+            {
+                NextState = PlayerStates.Spawning;
+                return true;
+            }
+
+            return false;
         }
+        
+        
+        private async UniTaskVoid WaitForSpawnToFinish()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.DurationBeforeRespawn));
+            _finishedDying = true;
+        }
+        
     }
 }

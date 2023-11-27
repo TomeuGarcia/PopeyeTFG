@@ -4,10 +4,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class PullingAnchor_PlayerState : APlayerState
     {
+        private readonly PlayerStatesBlackboard _blackboard;
         private readonly PullingAnchor_PlayerStateConfig _config;
 
-        public PullingAnchor_PlayerState(PullingAnchor_PlayerStateConfig config)
+        public PullingAnchor_PlayerState(PlayerStatesBlackboard blackboard, PullingAnchor_PlayerStateConfig config)
         {
+            _blackboard = blackboard;
             _config = config;
         }
         

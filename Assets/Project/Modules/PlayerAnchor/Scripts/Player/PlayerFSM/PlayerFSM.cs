@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
 
 
@@ -12,36 +13,37 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private Dictionary<PlayerStates, APlayerState> _states;
 
 
-        public void Setup(PlayerStateConfigHelper.ConfigurationsGroup stateConfigurations)
+        public void Setup(PlayerStateConfigHelper.ConfigurationsGroup stateConfigurations,
+                          PlayerStatesBlackboard blackboard)
         {
             Spawning_PlayerState spawningState 
-                = new Spawning_PlayerState(stateConfigurations.spawning);
+                = new Spawning_PlayerState(blackboard, stateConfigurations.spawning);
             Dead_PlayerState deadState 
-                = new Dead_PlayerState(stateConfigurations.dead);
+                = new Dead_PlayerState(blackboard, stateConfigurations.dead);
             WithAnchor_PlayerState withAnchorState 
-                = new WithAnchor_PlayerState(stateConfigurations.withAnchor);
+                = new WithAnchor_PlayerState(blackboard, stateConfigurations.withAnchor);
             WithoutAnchor_PlayerState withoutAnchorState 
-                = new WithoutAnchor_PlayerState(stateConfigurations.withoutAnchor);
+                = new WithoutAnchor_PlayerState(blackboard, stateConfigurations.withoutAnchor);
             
             MovingWithAnchor_PlayerState movingWithAnchor 
-                = new MovingWithAnchor_PlayerState(stateConfigurations.movingWithAnchor);
+                = new MovingWithAnchor_PlayerState(blackboard, stateConfigurations.movingWithAnchor);
             AimingThrowAnchor_PlayerState aimingThrowAnchor 
-                = new AimingThrowAnchor_PlayerState(stateConfigurations.aimingThrowAnchor);
+                = new AimingThrowAnchor_PlayerState(blackboard, stateConfigurations.aimingThrowAnchor);
             ThrowingAnchor_PlayerState throwingAnchor 
-                = new ThrowingAnchor_PlayerState(stateConfigurations.throwingAnchor);
+                = new ThrowingAnchor_PlayerState(blackboard, stateConfigurations.throwingAnchor);
 
             MovingWithoutAnchor_PlayerState movingWithoutAnchor 
-                = new MovingWithoutAnchor_PlayerState(stateConfigurations.movingWithoutAnchor);
+                = new MovingWithoutAnchor_PlayerState(blackboard, stateConfigurations.movingWithoutAnchor);
             PickingUpAnchor_PlayerState pickingUpAnchor 
-                = new PickingUpAnchor_PlayerState(stateConfigurations.pickingUpAnchor);
+                = new PickingUpAnchor_PlayerState(blackboard, stateConfigurations.pickingUpAnchor);
             DashingTowardsAnchor_PlayerState dashingTowardsAnchor 
-                = new DashingTowardsAnchor_PlayerState(stateConfigurations.dashingTowardsAnchor);
+                = new DashingTowardsAnchor_PlayerState(blackboard, stateConfigurations.dashingTowardsAnchor);
             KickingAnchor_PlayerState kickingAnchor 
-                = new KickingAnchor_PlayerState(stateConfigurations.kickingAnchor);
+                = new KickingAnchor_PlayerState(blackboard, stateConfigurations.kickingAnchor);
             PullingAnchor_PlayerState pullingAnchor 
-                = new PullingAnchor_PlayerState(stateConfigurations.pullingAnchor);
+                = new PullingAnchor_PlayerState(blackboard, stateConfigurations.pullingAnchor);
             SpinningAnchor_PlayerState spinningAnchor 
-                = new SpinningAnchor_PlayerState(stateConfigurations.spinningAnchor);
+                = new SpinningAnchor_PlayerState(blackboard, stateConfigurations.spinningAnchor);
             
             
             withAnchorState.Setup(movingWithAnchor, aimingThrowAnchor, throwingAnchor);
@@ -66,10 +68,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_currentState.Update(deltaTime))
             {
-                _currentState.Exit();
-                _currentState = _states[_currentState.NextState];
-                _currentState.Enter();
+                OverwriteState(_currentState.NextState);
             }
+        }
+
+        public void OverwriteState(PlayerStates newState)
+        {
+            _currentState.Exit();
+            _currentState = _states[newState];
+            _currentState.Enter();
         }
         
     }

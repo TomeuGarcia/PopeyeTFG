@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Modules.PlayerController;
 using UnityEngine;
 using UnityEngine.Serialization;
 
