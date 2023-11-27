@@ -23,6 +23,7 @@ public class CameraShake : MonoBehaviour
         }
 
         _instance = this;
+        transform.SetParent(null);
     }
 
 
