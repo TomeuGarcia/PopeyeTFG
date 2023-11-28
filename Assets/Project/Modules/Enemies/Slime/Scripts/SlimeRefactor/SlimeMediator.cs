@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Modules.Enemies.Components;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System.Threading.Tasks;
