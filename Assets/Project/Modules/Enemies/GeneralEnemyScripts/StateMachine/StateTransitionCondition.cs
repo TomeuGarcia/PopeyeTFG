@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class StateTransitionCondition : MonoBehaviour
+namespace Popeye.Modules.Enemies.StateMachine
 {
-    public abstract bool IsMet();
+    public abstract class StateTransitionCondition : MonoBehaviour
+    {
+        public abstract bool IsMet();
+    }
 }

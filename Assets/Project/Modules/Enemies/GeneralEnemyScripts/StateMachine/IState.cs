@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IState
+namespace Popeye.Modules.Enemies.StateMachine
 {
-   IState ProcessTransitions();
+   public interface IState
+   {
+      IState ProcessTransitions();
 
-   void Enter();
+      void Enter();
 
-   void Exit();
+      void Exit();
 
+   }
 }

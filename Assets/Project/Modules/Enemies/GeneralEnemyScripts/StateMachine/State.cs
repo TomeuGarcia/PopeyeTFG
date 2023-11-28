@@ -3,41 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
-public class State : MonoBehaviour,IState
+namespace Popeye.Modules.Enemies.StateMachine
 {
-    [SerializeField] private List<StateTransition> transitions = new List<StateTransition>();
-    [SerializeField] private UnityEvent onEnterState = new UnityEvent();
-    [SerializeField] private UnityEvent onExitState = new UnityEvent();
-    public IState ProcessTransitions()
+    public class State : MonoBehaviour, IState
     {
-        // Loop over all of the possible transitions from this state
-        foreach (var transition in transitions)
+        [SerializeField] private List<StateTransition> _transitions = new List<StateTransition>();
+        [SerializeField] private UnityEvent _onEnterState = new UnityEvent();
+        [SerializeField] private UnityEvent _onExitState = new UnityEvent();
+
+        public IState ProcessTransitions()
         {
-            // Check to see if the particular transition conditions are met
-            if (transition.ShouldTransition())
+            // Loop over all of the possible transitions from this state
+            foreach (var transition in _transitions)
             {
-                // Let the caller know which state we should transition to
-                return transition.NextState;
+                // Check to see if the particular transition conditions are met
+                if (transition.ShouldTransition())
+                {
+                    // Let the caller know which state we should transition to
+                    return transition.NextState;
+                }
             }
+
+            // No transitions have all of their conditions met
+            return null;
         }
 
-        // No transitions have all of their conditions met
-        return null;
+        private void OnEnable()
+        {
+            _onEnterState.Invoke();
+        }
+
+        private void OnDisable()
+        {
+            _onExitState.Invoke();
+        }
+
+        public void Enter() => gameObject.SetActive(true);
+
+        public void Exit() => gameObject.SetActive(false);
     }
-
-    private void OnEnable()
-    {
-        onEnterState.Invoke();
-    }
-
-    private void OnDisable()
-    {
-        onExitState.Invoke();
-    }
-
-    public void Enter() => gameObject.SetActive(true);
-
-    public void Exit() => gameObject.SetActive(false);
 }
 

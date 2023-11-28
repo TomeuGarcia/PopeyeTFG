@@ -46,10 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slimeMovement: {fileID: 2109834771631650075}
-  _slimeHealth: {fileID: 129179429737552354}
-  _slimeAnimation: {fileID: 8784783522602541844}
+  _enemyHealth: {fileID: 129179429737552354}
+  _squashStretchAnimator: {fileID: 8784783522602541844}
   _slimeDivider: {fileID: 2067100639111306409}
   _boxCollider: {fileID: 3462995563991828812}
+  _slimeTransform: {fileID: 7378742200920036401}
 --- !u!1 &3861768562356960769
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,9 +253,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _explosionParticles: {fileID: 1313813982915144674, guid: 932a41c67e2ee094db5e22f14adc9c6f,
     type: 3}
-  _squashAmount: 0.8
-  _stretchAmount: 1.2
-  _animationSpeed: 1
+  _squashAmountY: 0.8
+  _squashAmountXZ: 1.2
+  _stretchAmountY: 1.2
+  _stretchAmountXZ: 1
+  _squashAndStretchTime: 0.5
 --- !u!114 &2109834771631650075
 MonoBehaviour:
   m_ObjectHideFlags: 0

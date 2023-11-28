@@ -4,24 +4,28 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+namespace Popeye.Modules.Enemies.Bullets
 {
-    [SerializeField] private float lifeTime;
-    private Coroutine destroyBullet;
-    private void OnCollisionEnter(Collision other)
+    public class Bullet : MonoBehaviour
     {
-        StopCoroutine(destroyBullet);
-        Destroy(gameObject);
-    }
+        [SerializeField] private float _lifeTime;
+        private Coroutine _destroyBullet;
 
-    private void Start()
-    {
-        destroyBullet = StartCoroutine(DestroyBullet());
-    }
+        private void OnCollisionEnter(Collision other)
+        {
+            StopCoroutine(_destroyBullet);
+            Destroy(gameObject);
+        }
 
-    private IEnumerator DestroyBullet()
-    {
-        yield return new WaitForSeconds(lifeTime);
-        Destroy(gameObject);
+        private void Start()
+        {
+            _destroyBullet = StartCoroutine(DestroyBullet());
+        }
+
+        private IEnumerator DestroyBullet()
+        {
+            yield return new WaitForSeconds(_lifeTime);
+            Destroy(gameObject);
+        }
     }
 }

@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HasTargetCondition : StateTransitionCondition
+namespace Popeye.Modules.Enemies.StateMachine
 {
-    [SerializeField] private ProximityTargetGetterBehaviour targetGetterBehaviour = null;
-    [SerializeField] private bool shouldHaveTarget;
-    
+    public class HasTargetCondition : StateTransitionCondition
+    {
+        [SerializeField] private ProximityTargetGetterBehaviour _targetGetterBehaviour = null;
+        [SerializeField] private bool _shouldHaveTarget;
 
-    public override bool IsMet() => targetGetterBehaviour.HasTarget == shouldHaveTarget;
+
+        public override bool IsMet() => _targetGetterBehaviour.HasTarget == _shouldHaveTarget;
+    }
 }

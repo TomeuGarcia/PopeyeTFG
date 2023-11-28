@@ -2,38 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawnerInteractor_Trigger : AEnemySpawnerInteractor
+namespace Popeye.Modules.Enemies
 {
-    [SerializeField] private Collider[] _triggers;
-    [SerializeField] private AWorldInteractor[] _worldInteractors;
-    
-
-    private void OnTriggerEnter(Collider other)
+    public class EnemySpawnerInteractor_Trigger : AEnemySpawnerInteractor
     {
-        if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG))
-        {
-            StartEnemySpawnerWaves();
-        }
-    }
+        [SerializeField] private Collider[] _triggers;
+        [SerializeField] private AWorldInteractor[] _worldInteractors;
 
-    protected override void OnAllEnemyWavesFinishedEvent()
-    {
-        foreach (AWorldInteractor worldInteractor in _worldInteractors)
-        {
-            worldInteractor.AddDeactivationInput();
-        }
-    }
 
-    protected override void OnOnFirstEnemyWaveStartedEvent()
-    {
-        foreach (Collider trigger in _triggers)
+        private void OnTriggerEnter(Collider other)
         {
-            trigger.enabled = false;
+            if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG))
+            {
+                StartEnemySpawnerWaves();
+            }
         }
 
-        foreach (AWorldInteractor worldInteractor in _worldInteractors)
+        protected override void OnAllEnemyWavesFinishedEvent()
         {
-            worldInteractor.AddActivationInput();
+            foreach (AWorldInteractor worldInteractor in _worldInteractors)
+            {
+                worldInteractor.AddDeactivationInput();
+            }
+        }
+
+        protected override void OnOnFirstEnemyWaveStartedEvent()
+        {
+            foreach (Collider trigger in _triggers)
+            {
+                trigger.enabled = false;
+            }
+
+            foreach (AWorldInteractor worldInteractor in _worldInteractors)
+            {
+                worldInteractor.AddActivationInput();
+            }
         }
     }
 }

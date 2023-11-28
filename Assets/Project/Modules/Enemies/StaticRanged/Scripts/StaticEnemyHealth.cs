@@ -24,8 +24,6 @@ public class StaticEnemyHealth : MonoBehaviour,IDamageHitTarget
         _healthSystem.TakeDamage(anchorHit.Damage);
         if (_healthSystem.IsDead())
         {
-            //TODO: this destroy is provisional
-            //TOASK Tomeu: why it hits more than one time with just one shot
             Destroy(transform.parent.gameObject);
         }
     }

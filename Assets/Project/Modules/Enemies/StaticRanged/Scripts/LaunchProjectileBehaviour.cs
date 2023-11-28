@@ -1,23 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class LaunchProjectileBehaviour : MonoBehaviour
+namespace Popeye.Modules.Enemies
 {
-    [SerializeField] private GameObject projectilePrefab = null;
-    [SerializeField] private Transform spawnPoint = null;
-    [SerializeField] private float relativeSpeed;
-
-
-    public void Launch()
+    public class LaunchProjectileBehaviour : MonoBehaviour
     {
-        var projectileInstance = Instantiate(projectilePrefab, spawnPoint.position,
-            Quaternion.LookRotation(spawnPoint.transform.forward));
-        
+        [SerializeField] private GameObject _projectilePrefab = null;
+        [SerializeField] private Transform _spawnPoint = null;
+        [SerializeField] private float _relativeSpeed;
 
-        if (projectileInstance.TryGetComponent(out Rigidbody rb))
+
+        public void Launch()
         {
-            rb.velocity = rb.transform.TransformDirection(spawnPoint.transform.forward * relativeSpeed);
+            var projectileInstance = Instantiate(_projectilePrefab, _spawnPoint.position,
+                Quaternion.LookRotation(_spawnPoint.transform.forward));
+
+
+            if (projectileInstance.TryGetComponent(out Rigidbody rb))
+            {
+                rb.velocity = rb.transform.TransformDirection(_spawnPoint.transform.forward * _relativeSpeed);
+            }
         }
     }
 }

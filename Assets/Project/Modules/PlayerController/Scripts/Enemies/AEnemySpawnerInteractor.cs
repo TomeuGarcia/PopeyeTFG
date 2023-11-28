@@ -2,30 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AEnemySpawnerInteractor : MonoBehaviour
+namespace Popeye.Modules.Enemies
 {
-    [Header("ENEMY SPAWNER")]
-    [SerializeField] private EnemySpawner _enemySpawner;
-
-    private void OnEnable()
+    public abstract class AEnemySpawnerInteractor : MonoBehaviour
     {
-        _enemySpawner.OnFirstWaveStarted += OnOnFirstEnemyWaveStartedEvent;
-        _enemySpawner.OnAllWavesFinished += OnAllEnemyWavesFinishedEvent;
+        [Header("ENEMY SPAWNER")] [SerializeField]
+        private EnemySpawner _enemySpawner;
+
+        private void OnEnable()
+        {
+            _enemySpawner.OnFirstWaveStarted += OnOnFirstEnemyWaveStartedEvent;
+            _enemySpawner.OnAllWavesFinished += OnAllEnemyWavesFinishedEvent;
+        }
+
+        private void OnDisable()
+        {
+            _enemySpawner.OnFirstWaveStarted -= OnOnFirstEnemyWaveStartedEvent;
+            _enemySpawner.OnAllWavesFinished -= OnAllEnemyWavesFinishedEvent;
+        }
+
+
+        protected void StartEnemySpawnerWaves()
+        {
+            _enemySpawner.StartWaves();
+        }
+
+        protected abstract void OnOnFirstEnemyWaveStartedEvent();
+        protected abstract void OnAllEnemyWavesFinishedEvent();
+
+
     }
-    private void OnDisable()
-    {
-        _enemySpawner.OnFirstWaveStarted -= OnOnFirstEnemyWaveStartedEvent;
-        _enemySpawner.OnAllWavesFinished -= OnAllEnemyWavesFinishedEvent;
-    }
-
-
-    protected void StartEnemySpawnerWaves()
-    {
-        _enemySpawner.StartWaves();
-    }
-
-    protected abstract void OnOnFirstEnemyWaveStartedEvent();
-    protected abstract void OnAllEnemyWavesFinishedEvent();
-
-
 }

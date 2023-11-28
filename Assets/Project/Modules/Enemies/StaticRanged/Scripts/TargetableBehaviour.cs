@@ -3,16 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
-public class TargetableBehaviour : MonoBehaviour
+namespace Popeye.Modules.Enemies
 {
- [SerializeField] public Transform targetPoint = null;
- //[SerializeField] private BelongsToBehaviour belongsToBehaviour = null;
+ public class TargetableBehaviour : MonoBehaviour
+ {
+   [SerializeField] public Transform targetPoint = null;
+   //[SerializeField] private BelongsToBehaviour belongsToBehaviour = null;
 
- public Transform TargetPoint => targetPoint;
- //public BelongsToBehaviour BelongsToBehaviour => belongsToBehaviour;
+   public Transform TargetPoint => targetPoint;
+   //public BelongsToBehaviour BelongsToBehaviour => belongsToBehaviour;
+ }
+
+
+ [Serializable]
+ public class UnityTargetableEvent : UnityEvent<TargetableBehaviour> { }
 }
-
-
-[Serializable]
-public class UnityTargetableEvent : UnityEvent<TargetableBehaviour> { }

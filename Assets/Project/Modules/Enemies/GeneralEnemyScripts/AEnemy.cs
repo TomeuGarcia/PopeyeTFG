@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AEnemy : MonoBehaviour
+namespace Popeye.Modules.Enemies
 {
-    protected Transform _attackTarget;
-    
-    public Action<AEnemy> OnDeathComplete;
-    
-    public virtual void AwakeInit(Transform attackTarget)
+    public class AEnemy : MonoBehaviour
     {
-        _attackTarget = attackTarget;
-    }
+        protected Transform _attackTarget;
 
-    protected void InvokeOnDeathComplete()
-    {
-        OnDeathComplete?.Invoke(this);
+        public Action<AEnemy> OnDeathComplete;
+
+        public virtual void AwakeInit(Transform attackTarget)
+        {
+            _attackTarget = attackTarget;
+        }
+
+        protected void InvokeOnDeathComplete()
+        {
+            OnDeathComplete?.Invoke(this);
+        }
     }
 }
