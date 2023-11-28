@@ -218,6 +218,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb42af37f8e21c4283df70598facdb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _navMeshAgent: {fileID: 6150467610471333831}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _destinationUpdateTime: 0.2
   _speeedThreshold: {x: 5, y: 7}
   _navMeshAgent: {fileID: 6150467610471333831}
   _spawnForce: 3
@@ -272,4 +276,5 @@ MonoBehaviour:
   _squashStretchAnimator: {fileID: 7860900730581999901}
   _slimeDivider: {fileID: 8865523304329242488}
   _boxCollider: {fileID: 1351218561991610330}
+  slimeMindEnemy: {fileID: 0}
   _slimeTransform: {fileID: 6534911457466879058}

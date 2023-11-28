@@ -2780,8 +2780,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd90d453adad9c0478471b6d740aa5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGetterBehaviour: {fileID: 1469970472}
-  shouldHaveTarget: 1
+  _targetGetterBehaviour: {fileID: 1469970472}
+  _shouldHaveTarget: 0
 --- !u!1 &123238780
 GameObject:
   m_ObjectHideFlags: 0
@@ -4994,10 +4994,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bc2ca6fdc9ce8e4eb712e7a8077a01f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5804595945269757517, guid: 41511b03b8d84d843a4e5eb6585183a7,
+  _projectilePrefab: {fileID: 5804595945269757517, guid: 41511b03b8d84d843a4e5eb6585183a7,
     type: 3}
-  spawnPoint: {fileID: 572104339}
-  relativeSpeed: 12
+  _spawnPoint: {fileID: 572104339}
+  _relativeSpeed: 12
 --- !u!114 &212117789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16673,52 +16673,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e533eb945f06508478e55ee1ae4d8f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitions:
+  _transitions:
   - nextState: {fileID: 1057716083}
     conditions:
     - {fileID: 97494568}
-  onEnterState:
+  _onEnterState:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 212117786}
-        m_TargetAssemblyTypeName: BurstTimer, Assembly-CSharp
-        m_MethodName: DeActivate
-        m_Mode: 1
+      - m_Target: {fileID: 846516585}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 212117789}
-        m_TargetAssemblyTypeName: LaserTrackerBehaviour, Assembly-CSharp
-        m_MethodName: ClearTarget
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1170873722}
-        m_TargetAssemblyTypeName: AimAtTargetBehaviour, Assembly-CSharp
-        m_MethodName: ClearTarget
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onExitState:
+  _onExitState:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 97494566}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &736101986
 Transform:
   m_ObjectHideFlags: 0
@@ -20163,8 +20151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd90d453adad9c0478471b6d740aa5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGetterBehaviour: {fileID: 1469970472}
-  shouldHaveTarget: 0
+  _targetGetterBehaviour: {fileID: 1469970472}
+  _shouldHaveTarget: 0
 --- !u!43 &863967479
 Mesh:
   m_ObjectHideFlags: 0
@@ -23882,15 +23870,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e533eb945f06508478e55ee1ae4d8f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitions:
+  _transitions:
   - nextState: {fileID: 736101985}
     conditions:
     - {fileID: 846516587}
-  onEnterState:
+  _onEnterState:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 212117786}
-        m_TargetAssemblyTypeName: BurstTimer, Assembly-CSharp
+        m_TargetAssemblyTypeName: Popeye.Modules.Enemies.BurstTimer, Assembly-CSharp
         m_MethodName: Activate
         m_Mode: 1
         m_Arguments:
@@ -23901,9 +23889,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onExitState:
+  _onExitState:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 212117786}
+        m_TargetAssemblyTypeName: Popeye.Modules.Enemies.BurstTimer, Assembly-CSharp
+        m_MethodName: DeActivate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1057800261
 GameObject:
   m_ObjectHideFlags: 0
@@ -33187,7 +33187,31 @@ MonoBehaviour:
         m_CallState: 2
   onTargetLost:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 212117789}
+        m_TargetAssemblyTypeName: Popeye.Modules.Enemies.LaserTrackerBehaviour, Assembly-CSharp
+        m_MethodName: ClearTarget
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1170873722}
+        m_TargetAssemblyTypeName: Popeye.Modules.Enemies.AimAtTargetBehaviour, Assembly-CSharp
+        m_MethodName: ClearTarget
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!135 &1469970473
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -39431,8 +39455,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb42af37f8e21c4283df70598facdb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speeedThreshold: {x: 2, y: 4}
   _navMeshAgent: {fileID: 1766335538}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _speeedThreshold: {x: 2, y: 4}
   _spawnForce: 10
   _rb: {fileID: 926028898}
 --- !u!195 &1766335538

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,21 +12,24 @@ namespace Popeye.Modules.Enemies.Bullets
     {
         [SerializeField] private float _lifeTime;
         private Coroutine _destroyBullet;
-
+        private CancellationTokenSource _cancellationTokenSource;
         private void OnCollisionEnter(Collision other)
         {
-            StopCoroutine(_destroyBullet);
+            _cancellationTokenSource.Cancel();
             Destroy(gameObject);
         }
 
         private void Start()
         {
-            _destroyBullet = StartCoroutine(DestroyBullet());
+            _cancellationTokenSource = new CancellationTokenSource();
+            DestroyBullet();
         }
 
-        private IEnumerator DestroyBullet()
+        private async UniTaskVoid DestroyBullet()
         {
-            yield return new WaitForSeconds(_lifeTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(_lifeTime),
+                cancellationToken: _cancellationTokenSource.Token);
+            
             Destroy(gameObject);
         }
     }

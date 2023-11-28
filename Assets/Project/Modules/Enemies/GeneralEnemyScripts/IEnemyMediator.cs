@@ -6,5 +6,5 @@ public interface IEnemyMediator
 {
 
     public void OnDeath();
-    public void OnHitted();
+    public void OnHit();
 }

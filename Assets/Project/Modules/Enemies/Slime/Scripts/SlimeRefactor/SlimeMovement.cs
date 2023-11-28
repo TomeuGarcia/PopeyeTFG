@@ -7,14 +7,12 @@ using Random=UnityEngine.Random;
 
 namespace Popeye.Modules.Enemies.Components
 {
-    public class SlimeMovement : MonoBehaviour
+    public class SlimeMovement : ANavMeshMovement
     {
         [SerializeField] private Vector2 _speeedThreshold = new Vector2(5, 7);
-        [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private int _spawnForce = 10;
         [SerializeField] private Rigidbody _rb;
-
-        private Transform _playerTransform = null;
+        
         private bool _followPlayer = false;
 
         protected IEnemyMediator _mediator;
@@ -25,16 +23,17 @@ namespace Popeye.Modules.Enemies.Components
             _mediator = slimeMediator;
         }
 
-        private void Start()
+        private new void Start()
         {
-            _navMeshAgent.speed = Random.Range(_speeedThreshold.x, _speeedThreshold.y);
+            _speed = Random.Range(_speeedThreshold.x, _speeedThreshold.y);
+            _navMeshAgent.speed = _speed;
         }
 
         void Update()
         {
             if (_followPlayer && _playerTransform != null && _navMeshAgent.isActiveAndEnabled)
             {
-                _navMeshAgent.SetDestination(_playerTransform.position);
+                SetDestination(_playerTransform.position);
             }
 
         }
@@ -56,16 +55,6 @@ namespace Popeye.Modules.Enemies.Components
         public void StopExplosionForce()
         {
             _rb.velocity = Vector3.zero;
-        }
-
-        public void DeactivateNavigation()
-        {
-            _navMeshAgent.enabled = false;
-        }
-
-        public void ActivateNavigation()
-        {
-            _navMeshAgent.enabled = true;
         }
 
 

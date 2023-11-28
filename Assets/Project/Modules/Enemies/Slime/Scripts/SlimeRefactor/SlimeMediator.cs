@@ -87,7 +87,7 @@ namespace Popeye.Modules.Enemies
             Divide();
         }
 
-        public void OnHitted()
+        public void OnHit()
         {
             throw new NotImplementedException();
         }

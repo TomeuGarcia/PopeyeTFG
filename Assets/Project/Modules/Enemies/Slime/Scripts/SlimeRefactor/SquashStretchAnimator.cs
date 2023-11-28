@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening;
 namespace Popeye.Modules.Enemies.Components
@@ -17,7 +19,6 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private float _squashAndStretchTime = 0.5f;
 
         private bool _playAnimation = false;
-        
 
         private Transform _transform;
 
@@ -39,7 +40,7 @@ namespace Popeye.Modules.Enemies.Components
 
         
 
-        private async void SquashAndStretch()
+        private async  UniTaskVoid SquashAndStretch()
         {
             // Squash
            await _transform.DOScale(new Vector3(_squashAmountXZ, _squashAmountY, _squashAmountXZ), _squashAndStretchTime).AsyncWaitForCompletion();
@@ -62,7 +63,6 @@ namespace Popeye.Modules.Enemies.Components
 
         public void PlayMove()
         {
-            Debug.Log("playMovebro");
             _playAnimation = true;
             SquashAndStretch();
         }
