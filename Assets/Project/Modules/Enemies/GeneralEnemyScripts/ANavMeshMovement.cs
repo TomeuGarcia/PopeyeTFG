@@ -11,11 +11,17 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] protected NavMeshAgent _navMeshAgent;
         [SerializeField] protected float _speed;
         [SerializeField] protected float _targetDistanceThreshold = 0.5f;
+        private float _squaredTargetDistanceThreshold;
         protected Transform _playerTransform = null;
 
-        protected virtual void Start()
+        private void Awake()
         {
+            _squaredTargetDistanceThreshold = _targetDistanceThreshold * _targetDistanceThreshold;
+        }
 
+        private void OnValidate()
+        {
+            _squaredTargetDistanceThreshold = _targetDistanceThreshold * _targetDistanceThreshold;
         }
 
         public virtual void SetPlayerTransform(Transform transform)
@@ -36,7 +42,7 @@ namespace Popeye.Modules.Enemies.Components
         protected virtual void SetDestination(Vector3 destination)
         {
             float sqrDistance = (destination - _navMeshAgent.destination).sqrMagnitude;
-                if (sqrDistance > _targetDistanceThreshold * _targetDistanceThreshold)
+                if (sqrDistance > _squaredTargetDistanceThreshold)
                 {
                     _navMeshAgent.SetDestination(destination);
                 }
