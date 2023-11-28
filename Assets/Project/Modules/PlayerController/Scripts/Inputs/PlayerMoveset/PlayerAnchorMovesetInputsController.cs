@@ -38,10 +38,6 @@ namespace Popeye.Modules.PlayerController.Inputs
         {
             return _aim.WasPressedThisFrame();
         }
-        public bool Aim_HeldPressed()
-        {
-            return _aim.IsPressed();
-        }
         public bool Aim_Released()
         {
             return _aim.WasReleasedThisFrame();
@@ -51,6 +47,14 @@ namespace Popeye.Modules.PlayerController.Inputs
         public bool Throw_Pressed()
         {
             return _throw.WasPressedThisFrame();
+        }
+        public bool Throw_HeldPressed()
+        {
+            return _throw.IsPressed();
+        }
+        public bool Throw_Released()
+        {
+            return _throw.WasReleasedThisFrame();
         }
         
         

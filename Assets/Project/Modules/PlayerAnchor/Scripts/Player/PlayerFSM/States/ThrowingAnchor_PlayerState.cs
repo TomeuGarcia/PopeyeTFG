@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -7,6 +8,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private readonly PlayerStatesBlackboard _blackboard;
         private readonly ThrowingAnchor_PlayerStateConfig _config;
 
+        private bool _anchorThrowFinished;
+
         public ThrowingAnchor_PlayerState(PlayerStatesBlackboard blackboard, ThrowingAnchor_PlayerStateConfig config)
         {
             _blackboard = blackboard;
@@ -15,17 +18,34 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            throw new System.NotImplementedException();
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_config.MovementSpeed);
+            _anchorThrowFinished = false;
+            StartThrowAnchor().Forget();
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override bool Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
+            if (_anchorThrowFinished)
+            {
+                NextState = PlayerStates.WithoutAnchor;
+                return true;
+            }
+            
+            return false;
+        }
+
+        private async UniTaskVoid StartThrowAnchor()
+        {
+            _blackboard.PlayerMediator.ThrowAnchor();
+
+            await UniTask.WaitUntil(() => !_blackboard.AnchorMediator.IsBeingThrown());
+            
+            _anchorThrowFinished = true;
         }
     }
 }

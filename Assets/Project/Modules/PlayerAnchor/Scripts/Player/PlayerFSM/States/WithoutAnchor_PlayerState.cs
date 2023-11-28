@@ -53,6 +53,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (_currentState.Update(deltaTime))
             {
                 _currentState.Exit();
+                
+                if (_currentState.NextState == PlayerStates.WithAnchor)
+                {
+                    NextState = PlayerStates.WithAnchor;
+                    return true;
+                }
+                
                 _currentState = _states[_currentState.NextState];
                 _currentState.Enter();
             }

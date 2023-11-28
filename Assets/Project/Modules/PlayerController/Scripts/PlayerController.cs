@@ -23,13 +23,7 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 1.0f)] private float _blendWithVelocityDirection = 0.0f;
         public Vector3 LookDirection => _lookTransform.forward;
         public Vector3 ReverseLookDirection => -_lookTransform.forward;
-        private bool _canRotate = true;
-
-        public bool CanRotate
-        {
-            get { return _canRotate; }
-            set { _canRotate = value; }
-        }
+        public bool CanRotate { get; set; }
 
 
         [Header("VELOCITY")] [SerializeField, Range(0.0f, 100.0f)]
@@ -100,6 +94,8 @@ namespace Popeye.Modules.PlayerController
             {
                 MovementInputHandler = new WorldAxisMovementInput();
             }
+
+            CanRotate = true;
         }
 
 
@@ -126,7 +122,7 @@ namespace Popeye.Modules.PlayerController
 
         private void LateUpdate()
         {
-            if (_canRotate)
+            if (CanRotate)
             {
                 UpdateLookTransform();
             }
@@ -207,7 +203,7 @@ namespace Popeye.Modules.PlayerController
 
             if (!OnGround)
             {
-                _velocity += Vector3.down * _airFallAcceleration * Time.deltaTime;
+                _velocity += Vector3.down * (_airFallAcceleration * Time.deltaTime);
             }
         }
 
@@ -315,5 +311,11 @@ namespace Popeye.Modules.PlayerController
             _rigidbody.angularVelocity = Vector3.zero;
         }
 
+
+        public Vector3 GetFloorAlignedLookDirection()
+        {
+            return ProjectOnContactPlane(LookDirection).normalized;
+        }
+        
     }
 }

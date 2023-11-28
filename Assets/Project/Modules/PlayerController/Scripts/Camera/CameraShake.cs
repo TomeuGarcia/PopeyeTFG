@@ -3,39 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraShake : MonoBehaviour
+namespace Popeye.Modules.Camera
 {
-    
-    private static CameraShake _instance;
-    public static CameraShake Instance => _instance;
-
-
-    [SerializeField] private Transform _shakeTransform;
-    [SerializeField] private OrbitingCamera _orbitingCamera;
-
-
-    private void Awake()
+    public class CameraShake : MonoBehaviour
     {
-        if (_instance != null)
+
+        private static CameraShake _instance;
+        public static CameraShake Instance => _instance;
+
+
+        [SerializeField] private Transform _shakeTransform;
+        [SerializeField] private OrbitingCamera _orbitingCamera;
+
+
+        private void Awake()
         {
-            Destroy(this);
-            return;
+            if (_instance != null)
+            {
+                Destroy(this);
+                return;
+            }
+
+            _instance = this;
+            transform.SetParent(null);
+            transform.localPosition = Vector3.zero;
         }
 
-        _instance = this;
-        transform.SetParent(null);
+
+        private void Update()
+        {
+            _orbitingCamera.focusPointOffset = _shakeTransform.localPosition;
+        }
+
+        public async void PlayShake(float strength, float duration)
+        {
+            await _shakeTransform.DOPunchPosition(Vector3.down * strength, duration)
+                .AsyncWaitForCompletion();
+        }
+
     }
-
-
-    private void Update()
-    {
-        _orbitingCamera.focusPointOffset = _shakeTransform.localPosition;
-    }
-
-    public async void PlayShake(float strength, float duration)
-    {
-        await _shakeTransform.DOPunchPosition(Vector3.down * strength, duration)
-            .AsyncWaitForCompletion();
-    }
-
 }

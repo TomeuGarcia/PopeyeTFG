@@ -3,7 +3,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 {
     public static class PlayerStateConfigHelper
     {
-        public const string ASSET_PATH = "Popeye/PlayerAnchor/PlayerStateConfigs/";
+        public const string SO_ASSETS_PATH = "Popeye/PlayerAnchor/PlayerStateConfigs/";
 
 
         [System.Serializable]

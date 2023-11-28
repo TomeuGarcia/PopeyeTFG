@@ -7,6 +7,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
 
         public void SetMaxMovementSpeed(float maxMovementSpeed);
+        public void SetCanRotate(bool canRotate);
+
+        public void ThrowAnchor();
 
     }
 }

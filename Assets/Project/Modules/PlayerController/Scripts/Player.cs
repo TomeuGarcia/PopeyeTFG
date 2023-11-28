@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Popeye.Modules.Camera;
 using Popeye.Modules.PlayerController;
 using UnityEngine;
 

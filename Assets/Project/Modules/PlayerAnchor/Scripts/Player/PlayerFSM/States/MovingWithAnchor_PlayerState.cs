@@ -15,7 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_config.MovementSpeed);
         }
 
         public override void Exit()
@@ -25,7 +25,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.Aim_Pressed())
+            if (_blackboard.MovesetInputsController.Throw_Pressed())
             {
                 NextState = PlayerStates.AimingThrowAnchor;
                 return true;

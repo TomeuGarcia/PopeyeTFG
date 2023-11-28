@@ -62,7 +62,7 @@ namespace InputSystem
                     ""id"": ""78022133-4efb-4377-af08-7b12a37d300e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {

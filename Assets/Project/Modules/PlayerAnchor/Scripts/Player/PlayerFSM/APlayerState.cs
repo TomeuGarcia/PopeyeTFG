@@ -15,6 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public void Enter()
         {
             NextState = PlayerStates.None;
+            DoEnter();
         }
 
         protected abstract void DoEnter();

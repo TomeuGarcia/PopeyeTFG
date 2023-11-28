@@ -7,6 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private readonly PlayerStatesBlackboard _blackboard;
         private readonly AimingThrowAnchor_PlayerStateConfig _config;
 
+        private bool _heldThrowButtonLongEnough;
         
         public AimingThrowAnchor_PlayerState(PlayerStatesBlackboard blackboard, AimingThrowAnchor_PlayerStateConfig config)
         {
@@ -16,17 +17,58 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            throw new System.NotImplementedException();
+            _heldThrowButtonLongEnough = false;
+            
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_config.MovementSpeed);
+            _blackboard.AnchorMediator.ResetThrowForce();
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override bool Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
+            if (_blackboard.MovesetInputsController.Aim_Released())
+            {
+                CancelChargingThrow();
+                NextState = PlayerStates.MovingWithAnchor;
+                return true;
+            }
+            
+            if (_blackboard.MovesetInputsController.Throw_HeldPressed())
+            {
+                _heldThrowButtonLongEnough = true;
+                ChargeThrow(deltaTime);
+            }
+            else if (_blackboard.MovesetInputsController.Throw_Released())
+            {
+                if (_heldThrowButtonLongEnough)
+                {
+                    NextState = PlayerStates.ThrowingAnchor;
+                }
+                else
+                {
+                    CancelChargingThrow();
+                    NextState = PlayerStates.MovingWithAnchor;
+                }
+                
+                return true;
+            }
+            
+            return false;
         }
+
+        private void ChargeThrow(float deltaTime)
+        {
+            _blackboard.AnchorMediator.IncrementThrowForce(deltaTime);
+        }
+        
+        private void CancelChargingThrow()
+        {
+            _blackboard.AnchorMediator.CancelChargingThrow();
+        }
+        
     }
 }
