@@ -6,6 +6,8 @@ using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
 using Project.Modules.PlayerAnchor.Anchor;
+using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
+using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor
@@ -22,15 +24,27 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private PlayerController _playerController;
 
         [Header("Player States")] 
-        [SerializeField] private PlayerStateConfigHelper.ConfigurationsGroup _playerStatesConfigurations;
+        [SerializeField] private PlayerStatesConfig _playerStatesConfigurations;
 
         
         [Space(20)] 
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
-        [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
+        [SerializeField] private AnchorPhysics _anchorPhysics;
         [SerializeField] private Transform _anchorMoveTransform;
         
+        [Header("Anchor Throwing")]
+        [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
+        [SerializeField] private AnchorTrajectoryEndSpot _anchorTrajectoryEndSpot;
+        
+        
+        [Header("CHAIN")]
+        [SerializeField] private AnchorChain _anchorChain;
+
+        [SerializeField] private Transform _chainPlayerBindTransform;
+        [SerializeField] private Transform _chainAnchorBindTransform;
+
+        [SerializeField] private LineRenderer debugLine;
 
         private void Awake()
         {
@@ -39,23 +53,40 @@ namespace Project.Modules.PlayerAnchor
 
         private void Install()
         {
-            // Player FSM
-            PlayerStatesBlackboard playerStatesBlackboard =
-                new PlayerStatesBlackboard(_player, new PlayerAnchorMovesetInputsController(), _anchor);
-            PlayerFSM playerStateMachine = new PlayerFSM();
-            playerStateMachine.Setup(_playerStatesConfigurations, playerStatesBlackboard);
+            // Anchor
+            AnchorMotion anchorMotion = new AnchorMotion();
+            AnchorThrower anchorThrower = new AnchorThrower();
+            AnchorThrowTrajectory anchorThrowTrajectory = new AnchorThrowTrajectory();
+            AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
+            AnchorFSM anchorStateMachine = new AnchorFSM();
+            
+            
+            anchorMotion.Configure(_anchorMoveTransform);
+            anchorThrower.Configure(_player, _anchor, anchorThrowTrajectory, anchorMotion, _anchorThrowConfig);
+            anchorThrowTrajectory.Configure(_anchorTrajectoryEndSpot, debugLine);
+            anchorStatesBlackboard.Configure(anchorMotion, _anchorPhysics, _anchorChain, _player.AnchorCarryHolder, 
+                _player.AnchorGrabToThrowHolder);
+            anchorStateMachine.Setup(anchorStatesBlackboard);
 
-            // PlayerController
-            _playerController.MovementInputHandler = new CameraAxisMovementInput(_isometricCamera.CameraTransform);
+            _anchor.Configure(anchorStateMachine, anchorThrowTrajectory, anchorThrower, anchorMotion);
+            _anchorPhysics.Configure(_anchor);
+            _anchorChain.Configure(_chainPlayerBindTransform, _chainAnchorBindTransform);
+
+            
             
             // Player
+            IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.CameraTransform);
+            PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController();
+            PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
+            PlayerFSM playerStateMachine = new PlayerFSM();
+            
+            
+            playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, movesetInputsController, _anchor, 
+                anchorThrower);
+            playerStateMachine.Setup(playerStatesBlackboard);
+
             _player.Configure(playerStateMachine, _playerController, _anchor);
-            
-            
-            // Anchor
-            AnchorMotion anchorMotion = new AnchorMotion(_anchorMoveTransform);
-            AnchorThrowTrajectory anchorThrowTrajectory = new AnchorThrowTrajectory(_anchorThrowConfig, anchorMotion);
-            _anchor.Configure(anchorThrowTrajectory);
+            _playerController.MovementInputHandler = movementInputHandler;
         }
     }
 }

@@ -7,14 +7,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class Spawning_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly Spawning_PlayerStateConfig _config;
 
         private bool _finishedSpawning;
 
-        public Spawning_PlayerState(PlayerStatesBlackboard blackboard, Spawning_PlayerStateConfig config)
+        public Spawning_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
         
         
@@ -44,7 +42,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private async UniTaskVoid WaitForSpawnToFinish()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_config.SpawnDuration));
+            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.SpawnDuration));
             _finishedSpawning = true;
         }
         

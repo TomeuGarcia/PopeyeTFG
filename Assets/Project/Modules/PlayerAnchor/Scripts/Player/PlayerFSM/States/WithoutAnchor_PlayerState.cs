@@ -6,15 +6,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class WithoutAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly WithoutAnchor_PlayerStateConfig _config;
         private APlayerState _currentState;
         private Dictionary<PlayerStates, APlayerState> _states;
 
 
-        public WithoutAnchor_PlayerState(PlayerStatesBlackboard blackboard, WithoutAnchor_PlayerStateConfig config)
+        public WithoutAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
 
         public void Setup(MovingWithoutAnchor_PlayerState movingWithoutAnchor,

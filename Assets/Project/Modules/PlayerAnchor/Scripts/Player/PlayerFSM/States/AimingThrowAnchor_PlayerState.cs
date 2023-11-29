@@ -5,27 +5,24 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class AimingThrowAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly AimingThrowAnchor_PlayerStateConfig _config;
 
-        private bool _heldThrowButtonLongEnough;
         
-        public AimingThrowAnchor_PlayerState(PlayerStatesBlackboard blackboard, AimingThrowAnchor_PlayerStateConfig config)
+        public AimingThrowAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
         
         protected override void DoEnter()
         {
-            _heldThrowButtonLongEnough = false;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
+            _blackboard.AnchorThrower.ResetThrowForce();
             
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_config.MovementSpeed);
-            _blackboard.AnchorMediator.ResetThrowForce();
+            StartChargingThrow();
         }
 
         public override void Exit()
         {
-            
+            _blackboard.AnchorMediator.OnStopChargingThrow();
         }
 
         public override bool Update(float deltaTime)
@@ -39,35 +36,34 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             if (_blackboard.MovesetInputsController.Throw_HeldPressed())
             {
-                _heldThrowButtonLongEnough = true;
                 ChargeThrow(deltaTime);
             }
             else if (_blackboard.MovesetInputsController.Throw_Released())
             {
-                if (_heldThrowButtonLongEnough)
-                {
-                    NextState = PlayerStates.ThrowingAnchor;
-                }
-                else
-                {
-                    CancelChargingThrow();
-                    NextState = PlayerStates.MovingWithAnchor;
-                }
-                
+                NextState = PlayerStates.ThrowingAnchor;
                 return true;
             }
             
             return false;
         }
 
+        
+        private void StartChargingThrow()
+        {
+            _blackboard.PlayerMediator.AimAnchor();
+            _blackboard.AnchorMediator.OnStartChargingThrow();
+        }
+        
         private void ChargeThrow(float deltaTime)
         {
-            _blackboard.AnchorMediator.IncrementThrowForce(deltaTime);
+            _blackboard.AnchorThrower.IncrementThrowForce(deltaTime);
+            _blackboard.AnchorMediator.OnKeepChargingThrow();
         }
         
         private void CancelChargingThrow()
         {
-            _blackboard.AnchorMediator.CancelChargingThrow();
+            _blackboard.AnchorThrower.CancelChargingThrow();
+            _blackboard.PlayerMediator.CarryAnchor();
         }
         
     }

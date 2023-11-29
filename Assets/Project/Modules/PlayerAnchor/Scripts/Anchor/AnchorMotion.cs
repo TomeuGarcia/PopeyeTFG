@@ -5,9 +5,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public class AnchorMotion
     {
-        private readonly Transform _anchorMoveTransform;
+        private Transform _anchorMoveTransform;
 
-        public AnchorMotion(Transform anchorMoveTransform)
+        public Vector3 AnchorPosition => _anchorMoveTransform.position;
+
+        
+        public void Configure(Transform anchorMoveTransform)
         {
             _anchorMoveTransform = anchorMoveTransform;
         }
@@ -21,17 +24,30 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public void MoveToPosition(Vector3 position, float duration, Ease ease = Ease.Linear)
         {
-
+            _anchorMoveTransform.DOMove(position, duration)
+                .SetEase(ease);
         }
 
         public void CancelMovement()
         {
             _anchorMoveTransform.DOKill();
         }
-
-        public void FallDown()
+        
+        public void Unparent()
         {
-            
+            _anchorMoveTransform.DOKill();
+            _anchorMoveTransform.SetParent(null);
         }
+        public void ParentAndReset(Transform parent, float duration, Ease ease = Ease.Linear)
+        {
+            _anchorMoveTransform.SetParent(parent);
+
+            _anchorMoveTransform.DOKill();
+            _anchorMoveTransform.DOLocalMove(Vector3.zero, duration)
+                .SetEase(ease);
+            _anchorMoveTransform.DOLocalRotateQuaternion(Quaternion.identity, duration)
+                .SetEase(ease);
+        }
+        
     }
 }

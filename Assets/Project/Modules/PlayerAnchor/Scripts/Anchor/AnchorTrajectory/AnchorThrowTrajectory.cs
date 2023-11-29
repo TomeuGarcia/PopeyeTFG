@@ -7,59 +7,111 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public class AnchorThrowTrajectory
     {
-        private readonly AnchorThrowConfig _throwConfig;
-        private readonly AnchorMotion _anchorMotion;
-        private float _currentThrowForce01;
-        private float _currentThrowCurveForce01;
+        private AnchorTrajectoryEndSpot _trajectoryEndSpot;
+        private AnchorThrowConfig _anchorThrowConfig;
 
-        public float ThrowDistance { get; private set; }
-        public bool AnchorIsBeingThrown { get; private set; }
-        
-        public AnchorThrowTrajectory(AnchorThrowConfig throwConfig, AnchorMotion anchorMotion)
-        {
-            _throwConfig = throwConfig;
-            _anchorMotion = anchorMotion;
-            ResetThrowForce();
-        }
 
-        
-        public void ResetThrowForce()
+        private Vector3[] _straightTrajectoryPath;
+        private Vector3[] _curvedEndTrajectoryPath;
+
+        private LineRenderer _debugLine;
+        public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, LineRenderer debugLine)
         {
-            _currentThrowForce01 = 0.0f;
+            _trajectoryEndSpot = trajectoryEndSpot;
+
+            _straightTrajectoryPath = new Vector3[2];
+            _curvedEndTrajectoryPath = new Vector3[20];
+            _debugLine = debugLine;
         }
         
-        public void IncrementThrowForce(float deltaTime)
+
+
+
+        public void UpdateTrajectoryEndSpot()
         {
-            _currentThrowForce01 += deltaTime / _throwConfig.MaxThrowForceChargeDuration;
-            _currentThrowForce01 = Mathf.Min(1.0f, _currentThrowForce01);
+            if (GetFirstHitInTrajectoryPath(_curvedEndTrajectoryPath, out RaycastHit hit))
+            {
+                Vector3 position = hit.point + hit.normal * 0.05f;
+                _trajectoryEndSpot.MatchSpot(position, hit.normal);
+            }
+
+            Vector3[] debugPositions = _curvedEndTrajectoryPath;
+            _debugLine.positionCount = debugPositions.Length;
+            _debugLine.SetPositions(debugPositions);
+        }
+        public void ShowTrajectoryEndSpot()
+        {
+            _trajectoryEndSpot.Show();
+        }
+        public void HideTrajectoryEndSpot()
+        {
+            _trajectoryEndSpot.Hide();
+        }
+
+
+        public void UpdateTrajectoryPath(Vector3 startPoint, Vector3 direction, float distance)
+        {
+            DoUpdateTrajectoryPath(_straightTrajectoryPath, startPoint, direction, distance);
+            DoUpdateTrajectoryPath(_curvedEndTrajectoryPath, startPoint, direction, distance);
+            CurveTrajectoryPath(_curvedEndTrajectoryPath);
+        }
+        
+        private void DoUpdateTrajectoryPath(Vector3[] trajectoryPath, Vector3 startPoint, Vector3 direction, float distance)
+        {
+            trajectoryPath[0] = startPoint;
+
+            int steps = trajectoryPath.Length - 1;
+            float distanceStep = distance / steps;
             
-            _currentThrowCurveForce01 = _throwConfig.ThrowForceCurve.Evaluate(_currentThrowForce01);
-
-            UpdateThrowDistance();
+            for (int i = 1; i < trajectoryPath.Length; ++i)
+            {
+                trajectoryPath[i] = startPoint + (direction * (distanceStep * i));
+            }
         }
-
-        private void UpdateThrowDistance()
+        
+        private void CurveTrajectoryPath(Vector3[] trajectoryPath)
         {
-            ThrowDistance = Mathf.Lerp(_throwConfig.MinThrowDistance, _throwConfig.MaxThrowDistance, 
-                _currentThrowCurveForce01);
+            for (int i = trajectoryPath.Length / 2; i < trajectoryPath.Length; ++i)
+            {
+                float t = (float)i / (trajectoryPath.Length - 1.0f);
+                t = Mathf.Pow(t, 10);
+                
+                if (Physics.Raycast(trajectoryPath[i], Vector3.down, out RaycastHit hit, 1000, 
+                        PositioningHelper.Instance.ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+                {
+                    trajectoryPath[i] = Vector3.Lerp(trajectoryPath[i], hit.point, t);
+                }
+            }
         }
+        
+        
+        
 
-
-        public async UniTaskVoid ThrowAnchor(Vector3 throwDirection)
+        private bool GetFirstHitInTrajectoryPath(Vector3[] trajectoryPath, out RaycastHit trajectoryHit)
         {
-            Vector3 moveDisplacement = throwDirection * ThrowDistance;
-            float moveDuration = _currentThrowCurveForce01 * _throwConfig.MaxThrowMoveDuration;
+            for (int i = 0; i < trajectoryPath.Length - 1; ++i)
+            {
+                Vector3 pointA = trajectoryPath[i];
+                Vector3 pointB = trajectoryPath[i+1];
+                Vector3 AtoB = pointB - pointA;
 
-            _anchorMotion.MoveByDisplacement(moveDisplacement, moveDuration, Ease.OutQuad);
-
-            await UniTask.Delay(TimeSpan.FromSeconds(moveDuration));
-            AnchorIsBeingThrown = true;
+                if (Physics.Raycast(pointA, AtoB.normalized, out trajectoryHit, AtoB.magnitude, 
+                        PositioningHelper.Instance.ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+                {
+                    return true;
+                }
+            }
+            
+            if (Physics.Raycast(trajectoryPath[trajectoryPath.Length - 1], Vector3.down, out trajectoryHit, 
+                    1000, PositioningHelper.Instance.ObstaclesLayerMask,QueryTriggerInteraction.Ignore))
+            {
+                return true;
+            }
+            
+            
+            trajectoryHit = new RaycastHit();
+            return false;
         }
 
-        public void InterruptThrow()
-        {
-            _anchorMotion.CancelMovement();
-            AnchorIsBeingThrown = false;
-        }
     }
 }

@@ -12,11 +12,13 @@ namespace Popeye.Modules.PlayerController
         private Vector3 _movementInput;
         private Vector3 _lookInput;
 
-        [Header("COMPONENTS")] [SerializeField]
-        private Rigidbody _rigidbody;
+        [Header("COMPONENTS")] 
+        [SerializeField] private Rigidbody _rigidbody;
+        public Vector3 Position => _rigidbody.position;
 
         [SerializeField] private MeshRenderer _renderer;
         private Material _material;
+
 
         [Header("LOOK")] [SerializeField] public Transform _lookTransform;
         [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;

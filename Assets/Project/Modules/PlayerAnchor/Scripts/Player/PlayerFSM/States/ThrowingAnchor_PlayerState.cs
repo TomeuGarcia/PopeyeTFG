@@ -6,26 +6,26 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class ThrowingAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly ThrowingAnchor_PlayerStateConfig _config;
 
         private bool _anchorThrowFinished;
 
-        public ThrowingAnchor_PlayerState(PlayerStatesBlackboard blackboard, ThrowingAnchor_PlayerStateConfig config)
+        public ThrowingAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
         
         protected override void DoEnter()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_config.MovementSpeed);
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.ThrowingAnchorMoveSpeed);
             _anchorThrowFinished = false;
             StartThrowAnchor().Forget();
+            
+            _blackboard.PlayerMediator.SetCanRotate(false);
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.SetCanRotate(true);
         }
 
         public override bool Update(float deltaTime)
@@ -41,7 +41,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private async UniTaskVoid StartThrowAnchor()
         {
-            _blackboard.PlayerMediator.ThrowAnchor();
+            _blackboard.AnchorThrower.ThrowAnchor();
 
             await UniTask.WaitUntil(() => !_blackboard.AnchorMediator.IsBeingThrown());
             

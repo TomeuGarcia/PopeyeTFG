@@ -7,14 +7,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class Dead_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly Dead_PlayerStateConfig _config;
         
         private bool _finishedDying;
 
-        public Dead_PlayerState(PlayerStatesBlackboard blackboard, Dead_PlayerStateConfig config)
+        public Dead_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
         
         
@@ -43,7 +41,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         private async UniTaskVoid WaitForSpawnToFinish()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_config.DurationBeforeRespawn));
+            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.BeforeRespawnDuration));
             _finishedDying = true;
         }
         

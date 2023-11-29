@@ -5,12 +5,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class SpinningAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly SpinningAnchor_PlayerStateConfig _config;
 
-        public SpinningAnchor_PlayerState(PlayerStatesBlackboard blackboard, SpinningAnchor_PlayerStateConfig config)
+        public SpinningAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
         
         protected override void DoEnter()

@@ -1,31 +1,46 @@
+
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class MovingWithoutAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly MovingWithoutAnchor_PlayerStateConfig _config;
 
-        public MovingWithoutAnchor_PlayerState(PlayerStatesBlackboard blackboard, MovingWithoutAnchor_PlayerStateConfig config)
+        public MovingWithoutAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
         
         protected override void DoEnter()
         {
-            throw new System.NotImplementedException();
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override bool Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
+            //if (_blackboard.MovesetInputsController.PickUp_Pressed() && PlayerCanPickUpAnchor())
+            if (PlayerCanPickUpAnchor())
+            {
+                NextState = PlayerStates.PickingUpAnchor;
+                return true;
+            }
+            
+            return false;
         }
+
+        
+        private bool PlayerCanPickUpAnchor()
+        {
+            return _blackboard.AnchorMediator.IsRestingOnFloor() && 
+                   _blackboard.PlayerMediator.GetDistanceFromAnchor() < _blackboard.PlayerStatesConfig.AnchorPickUpDistance;
+        }
+        
     }
 }

@@ -5,17 +5,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class MovingWithAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly MovingWithAnchor_PlayerStateConfig _config;
 
-        public MovingWithAnchor_PlayerState(PlayerStatesBlackboard blackboard, MovingWithAnchor_PlayerStateConfig config)
+        public MovingWithAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _config = config;
         }
         
         protected override void DoEnter()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_config.MovementSpeed);
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithAnchorMoveSpeed);
         }
 
         public override void Exit()

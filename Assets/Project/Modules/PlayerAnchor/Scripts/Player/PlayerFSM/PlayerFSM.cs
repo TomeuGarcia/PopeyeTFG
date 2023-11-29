@@ -13,37 +13,36 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private Dictionary<PlayerStates, APlayerState> _states;
 
 
-        public void Setup(PlayerStateConfigHelper.ConfigurationsGroup stateConfigurations,
-                          PlayerStatesBlackboard blackboard)
+        public void Setup(PlayerStatesBlackboard blackboard)
         {
             Spawning_PlayerState spawningState 
-                = new Spawning_PlayerState(blackboard, stateConfigurations.spawning);
+                = new Spawning_PlayerState(blackboard);
             Dead_PlayerState deadState 
-                = new Dead_PlayerState(blackboard, stateConfigurations.dead);
+                = new Dead_PlayerState(blackboard);
             WithAnchor_PlayerState withAnchorState 
-                = new WithAnchor_PlayerState(blackboard, stateConfigurations.withAnchor);
+                = new WithAnchor_PlayerState(blackboard);
             WithoutAnchor_PlayerState withoutAnchorState 
-                = new WithoutAnchor_PlayerState(blackboard, stateConfigurations.withoutAnchor);
+                = new WithoutAnchor_PlayerState(blackboard);
             
             MovingWithAnchor_PlayerState movingWithAnchor 
-                = new MovingWithAnchor_PlayerState(blackboard, stateConfigurations.movingWithAnchor);
+                = new MovingWithAnchor_PlayerState(blackboard);
             AimingThrowAnchor_PlayerState aimingThrowAnchor 
-                = new AimingThrowAnchor_PlayerState(blackboard, stateConfigurations.aimingThrowAnchor);
+                = new AimingThrowAnchor_PlayerState(blackboard);
             ThrowingAnchor_PlayerState throwingAnchor 
-                = new ThrowingAnchor_PlayerState(blackboard, stateConfigurations.throwingAnchor);
+                = new ThrowingAnchor_PlayerState(blackboard);
 
             MovingWithoutAnchor_PlayerState movingWithoutAnchor 
-                = new MovingWithoutAnchor_PlayerState(blackboard, stateConfigurations.movingWithoutAnchor);
+                = new MovingWithoutAnchor_PlayerState(blackboard);
             PickingUpAnchor_PlayerState pickingUpAnchor 
-                = new PickingUpAnchor_PlayerState(blackboard, stateConfigurations.pickingUpAnchor);
+                = new PickingUpAnchor_PlayerState(blackboard);
             DashingTowardsAnchor_PlayerState dashingTowardsAnchor 
-                = new DashingTowardsAnchor_PlayerState(blackboard, stateConfigurations.dashingTowardsAnchor);
+                = new DashingTowardsAnchor_PlayerState(blackboard);
             KickingAnchor_PlayerState kickingAnchor 
-                = new KickingAnchor_PlayerState(blackboard, stateConfigurations.kickingAnchor);
+                = new KickingAnchor_PlayerState(blackboard);
             PullingAnchor_PlayerState pullingAnchor 
-                = new PullingAnchor_PlayerState(blackboard, stateConfigurations.pullingAnchor);
+                = new PullingAnchor_PlayerState(blackboard);
             SpinningAnchor_PlayerState spinningAnchor 
-                = new SpinningAnchor_PlayerState(blackboard, stateConfigurations.spinningAnchor);
+                = new SpinningAnchor_PlayerState(blackboard);
             
             
             withAnchorState.Setup(movingWithAnchor, aimingThrowAnchor, throwingAnchor);
