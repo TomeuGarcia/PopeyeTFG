@@ -51,11 +51,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DistortionSpeed: -0.2
+    - _DistrortionAmount: 0.02
     - _MaxTDamage: 0.7
     - _MinTDamage: 0.15
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Scale: 13
-    - _TDamage: 0.321
-    m_Colors: []
+    - _TDamage: 0.084
+    - _Width: 0.05
+    m_Colors:
+    - _BorderColor: {r: 1.61217, g: 0, b: 0.03459188, a: 0}
+    - _DamagedColor: {r: 0.33962256, g: 0, b: 0, a: 0}
+    - _HealthyColor: {r: 0.5519313, g: 0.6757478, b: 0.745283, a: 0}
   m_BuildTextureStacks: []
