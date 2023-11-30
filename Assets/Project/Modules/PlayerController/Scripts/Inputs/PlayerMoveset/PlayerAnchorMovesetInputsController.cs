@@ -2,12 +2,14 @@ namespace Popeye.Modules.PlayerController.Inputs
 {
     public class PlayerAnchorMovesetInputsController
     {
-        private InputSystem.PlayerAnchorInputControls _playerInputControls;
+        private readonly InputSystem.PlayerAnchorInputControls _playerInputControls;
 
-        private UnityEngine.InputSystem.InputAction _aim;
-        private UnityEngine.InputSystem.InputAction _throw;
+        private readonly UnityEngine.InputSystem.InputAction _aim;
+        private readonly UnityEngine.InputSystem.InputAction _throw;
         
-        private UnityEngine.InputSystem.InputAction _pickUp;
+        private readonly UnityEngine.InputSystem.InputAction _pickUp;
+        
+        private readonly UnityEngine.InputSystem.InputAction _pull;
         /*
         private UnityEngine.InputSystem.InputAction _meleeAttack;
         private UnityEngine.InputSystem.InputAction _melee2;
@@ -26,6 +28,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             _throw = _playerInputControls.Land.Throw;
             
             _pickUp = _playerInputControls.Land.PickUp;
+            
+            _pull = _playerInputControls.Land.Pull;
         }
 
         ~PlayerAnchorMovesetInputsController()
@@ -61,6 +65,11 @@ namespace Popeye.Modules.PlayerController.Inputs
         public bool PickUp_Pressed()
         {
             return _pickUp.WasPressedThisFrame();
+        }
+        
+        public bool Pull_Pressed()
+        {
+            return _pull.WasPressedThisFrame();
         }
 
 

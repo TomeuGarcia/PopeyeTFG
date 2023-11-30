@@ -73,6 +73,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pull"",
+                    ""type"": ""Button"",
+                    ""id"": ""c65dcb9c-2172-44ae-ac42-7fcc00bdad4a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -211,7 +220,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""5ff001e8-d6d5-476a-ae81-da280269a3e9"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -233,7 +242,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""31344599-6688-44b7-8217-337bbdc2b960"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -244,7 +253,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""a68eb38b-af5b-4fe8-ab87-a68d758c1a88"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -306,6 +315,28 @@ namespace InputSystem
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43d45cba-04aa-41b5-890c-f72a45a388de"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79e8283f-b9af-43e0-b4b6-cdd463fed519"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -346,6 +377,7 @@ namespace InputSystem
             m_Land_Aim = m_Land.FindAction("Aim", throwIfNotFound: true);
             m_Land_Throw = m_Land.FindAction("Throw", throwIfNotFound: true);
             m_Land_PickUp = m_Land.FindAction("PickUp", throwIfNotFound: true);
+            m_Land_Pull = m_Land.FindAction("Pull", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -412,6 +444,7 @@ namespace InputSystem
         private readonly InputAction m_Land_Aim;
         private readonly InputAction m_Land_Throw;
         private readonly InputAction m_Land_PickUp;
+        private readonly InputAction m_Land_Pull;
         public struct LandActions
         {
             private @PlayerAnchorInputControls m_Wrapper;
@@ -421,6 +454,7 @@ namespace InputSystem
             public InputAction @Aim => m_Wrapper.m_Land_Aim;
             public InputAction @Throw => m_Wrapper.m_Land_Throw;
             public InputAction @PickUp => m_Wrapper.m_Land_PickUp;
+            public InputAction @Pull => m_Wrapper.m_Land_Pull;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -445,6 +479,9 @@ namespace InputSystem
                 @PickUp.started += instance.OnPickUp;
                 @PickUp.performed += instance.OnPickUp;
                 @PickUp.canceled += instance.OnPickUp;
+                @Pull.started += instance.OnPull;
+                @Pull.performed += instance.OnPull;
+                @Pull.canceled += instance.OnPull;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -464,6 +501,9 @@ namespace InputSystem
                 @PickUp.started -= instance.OnPickUp;
                 @PickUp.performed -= instance.OnPickUp;
                 @PickUp.canceled -= instance.OnPickUp;
+                @Pull.started -= instance.OnPull;
+                @Pull.performed -= instance.OnPull;
+                @Pull.canceled -= instance.OnPull;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -497,6 +537,7 @@ namespace InputSystem
             void OnAim(InputAction.CallbackContext context);
             void OnThrow(InputAction.CallbackContext context);
             void OnPickUp(InputAction.CallbackContext context);
+            void OnPull(InputAction.CallbackContext context);
         }
     }
 }

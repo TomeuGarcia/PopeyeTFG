@@ -11,6 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public PlayerAnchorMovesetInputsController MovesetInputsController { get; private set;  }
         public IAnchorMediator AnchorMediator { get; private set;  }
         public IAnchorThrower AnchorThrower { get; private set;  }
+        public IAnchorPuller AnchorPuller { get; private set;  }
         
 
 
@@ -18,13 +19,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                                     IPlayerMediator playerMediator, 
                                     PlayerAnchorMovesetInputsController movesetInputsController,
                                     IAnchorMediator anchorMediator,
-                                    IAnchorThrower anchorThrower)
+                                    IAnchorThrower anchorThrower,
+                                    IAnchorPuller anchorPuller)
         {
             PlayerStatesConfig = playerStatesConfig;
             PlayerMediator = playerMediator;
             MovesetInputsController = movesetInputsController;
             AnchorMediator = anchorMediator;
             AnchorThrower = anchorThrower;
+            AnchorPuller = anchorPuller;
         }
     }
 }

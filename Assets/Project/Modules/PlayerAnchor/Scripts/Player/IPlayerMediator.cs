@@ -19,5 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void CarryAnchor();
         public void AimAnchor();
 
+
+        public void OnAnchorThrowEndedInVoid();
     }
 }

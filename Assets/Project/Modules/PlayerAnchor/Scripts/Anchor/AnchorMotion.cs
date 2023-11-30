@@ -28,6 +28,13 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 .SetEase(ease);
         }
 
+        public void MoveAlongPath(Vector3[] path, float duration, Ease ease = Ease.Linear)
+        {
+            _anchorMoveTransform.DOPath(path, duration)
+                .SetEase(ease);
+        }
+        
+
         public void CancelMovement()
         {
             _anchorMoveTransform.DOKill();

@@ -6,6 +6,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
         Carried,
         GrabbedToThrow,
         Thrown,
+        Pulled,
         RestingOnFloor
     }
 }

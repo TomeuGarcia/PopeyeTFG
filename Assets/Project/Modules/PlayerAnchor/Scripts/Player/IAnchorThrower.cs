@@ -4,6 +4,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 {
     public interface IAnchorThrower
     {
+        public bool AnchorIsBeingThrown();
         public void ThrowAnchor();
         public void CancelChargingThrow();
         public void ResetThrowForce();

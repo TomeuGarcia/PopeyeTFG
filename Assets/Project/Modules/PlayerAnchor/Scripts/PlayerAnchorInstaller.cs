@@ -35,6 +35,7 @@ namespace Project.Modules.PlayerAnchor
         
         [Header("Anchor Throwing")]
         [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
+        [SerializeField] private AnchorPullConfig _anchorPullConfig;
         [SerializeField] private AnchorTrajectoryEndSpot _anchorTrajectoryEndSpot;
         
         
@@ -45,6 +46,8 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private Transform _chainAnchorBindTransform;
 
         [SerializeField] private LineRenderer debugLine;
+        [SerializeField] private LineRenderer debugLine2;
+        [SerializeField] private LineRenderer debugLine3;
 
         private void Awake()
         {
@@ -56,6 +59,7 @@ namespace Project.Modules.PlayerAnchor
             // Anchor
             AnchorMotion anchorMotion = new AnchorMotion();
             AnchorThrower anchorThrower = new AnchorThrower();
+            AnchorPuller anchorPuller = new AnchorPuller();
             AnchorThrowTrajectory anchorThrowTrajectory = new AnchorThrowTrajectory();
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
@@ -63,12 +67,14 @@ namespace Project.Modules.PlayerAnchor
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorThrowTrajectory, anchorMotion, _anchorThrowConfig);
-            anchorThrowTrajectory.Configure(_anchorTrajectoryEndSpot, debugLine);
+            anchorPuller.Configure(_player, _anchor, anchorThrowTrajectory, anchorMotion, _anchorPullConfig);
+            anchorThrowTrajectory.Configure(_anchorTrajectoryEndSpot, _anchorThrowConfig, _anchorPullConfig,
+                debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(anchorMotion, _anchorPhysics, _anchorChain, _player.AnchorCarryHolder, 
                 _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
 
-            _anchor.Configure(anchorStateMachine, anchorThrowTrajectory, anchorThrower, anchorMotion);
+            _anchor.Configure(anchorStateMachine, anchorThrowTrajectory, anchorThrower, anchorPuller, anchorMotion);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(_chainPlayerBindTransform, _chainAnchorBindTransform);
 
@@ -82,7 +88,7 @@ namespace Project.Modules.PlayerAnchor
             
             
             playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, movesetInputsController, _anchor, 
-                anchorThrower);
+                anchorThrower, anchorPuller);
             playerStateMachine.Setup(playerStatesBlackboard);
 
             _player.Configure(playerStateMachine, _playerController, _anchor);

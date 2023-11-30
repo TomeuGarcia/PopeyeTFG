@@ -16,6 +16,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
             Carried_AnchorState carried = new Carried_AnchorState(blackboard);
             GrabbedToThrow_AnchorState grabbedToThrow = new GrabbedToThrow_AnchorState(blackboard);
             Thrown_AnchorState thrown = new Thrown_AnchorState(blackboard);
+            Pulled_AnchorState pulled = new Pulled_AnchorState(blackboard);
             RestingOnFloor_AnchorState restingOnFloor = new RestingOnFloor_AnchorState(blackboard);
             
             
@@ -24,6 +25,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
                 { AnchorStates.Carried , carried },
                 { AnchorStates.GrabbedToThrow , grabbedToThrow },
                 { AnchorStates.Thrown , thrown },
+                { AnchorStates.Pulled , pulled },
                 { AnchorStates.RestingOnFloor , restingOnFloor }
             };
 

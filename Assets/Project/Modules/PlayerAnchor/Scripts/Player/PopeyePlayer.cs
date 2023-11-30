@@ -72,5 +72,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchor.SetGrabbedToThrow();
         }
+
+        
+        public void OnAnchorThrowEndedInVoid()
+        {
+            // TODO
+            // enter pull state
+            
+            
+            // reset anchor accordingly
+            
+        }
     }
 }

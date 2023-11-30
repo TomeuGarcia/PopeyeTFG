@@ -14,6 +14,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorFSM _stateMachine;
         private AnchorThrowTrajectory _anchorThrowTrajectory;
         private AnchorThrower _anchorThrower;
+        private AnchorPuller _anchorPuller;
         private AnchorMotion _anchorMotion;
 
 
@@ -21,11 +22,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
 
         public void Configure(AnchorFSM stateMachine, AnchorThrowTrajectory anchorThrowTrajectory,
-            AnchorThrower anchorThrower, AnchorMotion anchorMotion)
+            AnchorThrower anchorThrower, AnchorPuller anchorPuller, AnchorMotion anchorMotion)
         {
             _stateMachine = stateMachine;
             _anchorThrowTrajectory = anchorThrowTrajectory;
             _anchorThrower = anchorThrower;
+            _anchorPuller = anchorPuller;
             _anchorMotion = anchorMotion;
         }
         
@@ -33,6 +35,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void SetThrown()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
+        }
+        public void SetPulled()
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
         }
         public void SetCarried()
         {
@@ -50,7 +56,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public bool IsBeingThrown()
         {
-            return _anchorThrower.AnchorIsBeingThrown;
+            return _anchorThrower.AnchorIsBeingThrown();
+        }
+        public bool IsBeingPulled()
+        {
+            return _anchorPuller.AnchorIsBeingPulled();
         }
         public bool IsRestingOnFloor()
         {

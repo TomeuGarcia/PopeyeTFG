@@ -31,6 +31,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 NextState = PlayerStates.PickingUpAnchor;
                 return true;
             }
+
+            if (_blackboard.MovesetInputsController.Pull_Pressed() && PlayerCanPullAnchor())
+            {
+                NextState = PlayerStates.PullingAnchor;
+                return true;
+            }
             
             return false;
         }
@@ -41,6 +47,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return _blackboard.AnchorMediator.IsRestingOnFloor() && 
                    _blackboard.PlayerMediator.GetDistanceFromAnchor() < _blackboard.PlayerStatesConfig.AnchorPickUpDistance;
         }
-        
+
+        private bool PlayerCanPullAnchor()
+        {
+            return true;
+        }
     }
 }
