@@ -34,6 +34,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         }
         
+        public override bool HasSubState(PlayerStates state)
+        {
+            return _states.ContainsKey(state);
+        }
         
         protected override void DoEnter()
         {

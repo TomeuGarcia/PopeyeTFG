@@ -32,8 +32,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
 
-            if (_blackboard.MovesetInputsController.Pull_Pressed() && PlayerCanPullAnchor())
+            if ((_blackboard.MovesetInputsController.Pull_Pressed() && PlayerCanPullAnchor())
+                || _blackboard.queuedAnchorPull)
             {
+                _blackboard.queuedAnchorPull = false;
                 NextState = PlayerStates.PullingAnchor;
                 return true;
             }

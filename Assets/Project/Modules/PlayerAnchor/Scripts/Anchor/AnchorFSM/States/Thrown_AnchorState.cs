@@ -15,11 +15,13 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
             _blackboard.AnchorMotion.Unparent();
             
             _blackboard.AnchorChain.Show();
+            //_blackboard.AnchorChain.DisableTension();
         }
 
         public void Exit()
         {
-            
+            //_blackboard.AnchorChain.EnableTension();
+            _blackboard.AnchorChain.SetFailedThrow(false);
         }
     }
 }

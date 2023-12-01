@@ -16,6 +16,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private bool _anchorIsBeingPulled;
         
+        
+        public AnchorThrowResult AnchorPullResult { get; private set; }
+        
+        
+        
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorThrowTrajectory anchorThrowTrajectory, AnchorMotion anchorMotion,
             AnchorPullConfig pullConfig)
@@ -25,6 +30,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorThrowTrajectory = anchorThrowTrajectory;
             _anchorMotion = anchorMotion;
             _pullConfig = pullConfig;
+
+            AnchorPullResult = new AnchorThrowResult();
         }
 
 
@@ -36,21 +43,24 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PullAnchor()
         {
             _anchor.SetPulled();
+
             
-            float distance = _player.GetDistanceFromAnchor();
-            float duration = ComputePullDuration(distance);
-            
-            DoPullAnchor(distance, duration).Forget();
+            Vector3 anchorPosition = _anchor.Position;
+            Vector3 playerPosition = _player.GetAnchorThrowStartPosition();
+            Vector3[] trajectoryPath = _anchorThrowTrajectory.GetPullTrajectory(anchorPosition, 
+                playerPosition, 10, out float trajectoryDistance);
+            float duration = ComputePullDuration(trajectoryDistance);
+            AnchorPullResult.Reset(trajectoryPath, duration, false);
+
+            DoPullAnchor(AnchorPullResult).Forget();
         }
         
-        private async UniTaskVoid DoPullAnchor(float distance, float duration)
+        private async UniTaskVoid DoPullAnchor(AnchorThrowResult anchorPullResult)
         {
-            Vector3[] trajectoryPath = _anchorThrowTrajectory.GetReverseCorrectedTrajectoryPath();
-            
-            _anchorMotion.MoveAlongPath(trajectoryPath, duration, Ease.Linear);
+            _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, Ease.InOutQuad);
             
             _anchorIsBeingPulled = true;
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorPullResult.Duration));
             
             _anchorIsBeingPulled = false;
             

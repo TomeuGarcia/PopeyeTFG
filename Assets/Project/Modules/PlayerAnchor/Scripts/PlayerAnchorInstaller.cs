@@ -1,4 +1,5 @@
 using System;
+using AYellowpaper;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
@@ -40,7 +41,9 @@ namespace Project.Modules.PlayerAnchor
         
         
         [Header("CHAIN")]
+        [SerializeField] private ChainConfig _anchorChainConfig;
         [SerializeField] private AnchorChain _anchorChain;
+        [SerializeField] private InterfaceReference<IChainPhysics, MonoBehaviour> _chainPhysics;
 
         [SerializeField] private Transform _chainPlayerBindTransform;
         [SerializeField] private Transform _chainAnchorBindTransform;
@@ -63,6 +66,7 @@ namespace Project.Modules.PlayerAnchor
             AnchorThrowTrajectory anchorThrowTrajectory = new AnchorThrowTrajectory();
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
+            IChainPhysics chainPhysics = _chainPhysics.Value;
             
             
             anchorMotion.Configure(_anchorMoveTransform);
@@ -73,10 +77,12 @@ namespace Project.Modules.PlayerAnchor
             anchorStatesBlackboard.Configure(anchorMotion, _anchorPhysics, _anchorChain, _player.AnchorCarryHolder, 
                 _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
+            chainPhysics.Configure(_anchorChainConfig);
 
-            _anchor.Configure(anchorStateMachine, anchorThrowTrajectory, anchorThrower, anchorPuller, anchorMotion);
+            _anchor.Configure(anchorStateMachine, anchorThrowTrajectory, anchorThrower, anchorPuller, anchorMotion,
+                _anchorChain);
             _anchorPhysics.Configure(_anchor);
-            _anchorChain.Configure(_chainPlayerBindTransform, _chainAnchorBindTransform);
+            _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
 
             
             

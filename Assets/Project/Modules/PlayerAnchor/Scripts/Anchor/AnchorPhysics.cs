@@ -1,4 +1,5 @@
 using System;
+using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
@@ -8,7 +9,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
-        [SerializeField] private SpringJoint _joint;
 
         private IAnchorMediator _anchorMediator;
 

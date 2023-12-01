@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player;
 using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
+using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
@@ -17,24 +18,30 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorPuller _anchorPuller;
         private AnchorMotion _anchorMotion;
 
+        private AnchorChain _anchorChain;
 
         public Vector3 Position => _anchorMotion.AnchorPosition;
 
 
         public void Configure(AnchorFSM stateMachine, AnchorThrowTrajectory anchorThrowTrajectory,
-            AnchorThrower anchorThrower, AnchorPuller anchorPuller, AnchorMotion anchorMotion)
+            AnchorThrower anchorThrower, AnchorPuller anchorPuller, AnchorMotion anchorMotion,
+            AnchorChain anchorChain)
         {
             _stateMachine = stateMachine;
             _anchorThrowTrajectory = anchorThrowTrajectory;
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
             _anchorMotion = anchorMotion;
+
+            _anchorChain = anchorChain;
         }
         
         
-        public void SetThrown()
+        public void SetThrown(bool failedThrow)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
+            
+            _anchorChain.SetFailedThrow(failedThrow);
         }
         public void SetPulled()
         {
@@ -90,7 +97,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void OnKeepChargingThrow()
         {
             _anchorThrower.UpdateThrowTrajectory();
-            _anchorThrowTrajectory.UpdateTrajectoryEndSpot();
         }
         public void OnStopChargingThrow()
         {
@@ -109,7 +115,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
             else
             {
                 // idk there is no floor, reset Anchor I guess
-                
             }
         }
 

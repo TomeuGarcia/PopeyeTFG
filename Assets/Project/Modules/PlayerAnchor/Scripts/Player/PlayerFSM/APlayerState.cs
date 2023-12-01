@@ -10,8 +10,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public abstract class APlayerState
     {
         public PlayerStates NextState { get; protected set; }
-        
-        
+
+        public virtual bool HasSubState(PlayerStates state)
+        {
+            return false;
+            
+        }
+
         public void Enter()
         {
             NextState = PlayerStates.None;

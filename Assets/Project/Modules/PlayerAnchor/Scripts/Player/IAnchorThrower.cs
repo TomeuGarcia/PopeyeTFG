@@ -9,5 +9,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void CancelChargingThrow();
         public void ResetThrowForce();
         public void IncrementThrowForce(float deltaTime);
+        public AnchorThrowResult GetLastAnchorThrowResult();
     }
 }

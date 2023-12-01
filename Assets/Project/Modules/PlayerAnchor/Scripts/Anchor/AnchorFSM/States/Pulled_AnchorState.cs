@@ -12,6 +12,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         public void Enter()
         {
             _blackboard.AnchorPhysics.EnablePhysics();
+            _blackboard.AnchorChain.DisableTension();
         }
 
         public void Exit()

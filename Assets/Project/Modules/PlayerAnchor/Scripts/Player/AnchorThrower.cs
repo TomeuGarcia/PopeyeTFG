@@ -20,6 +20,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public float ThrowDistance { get; private set; }
         private bool _anchorIsBeingThrown;
 
+        public AnchorThrowResult AnchorThrowResult { get; private set; }
+
+
+
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorThrowTrajectory anchorThrowTrajectory, AnchorMotion anchorMotion,
@@ -30,6 +34,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorThrowTrajectory = anchorThrowTrajectory;
             _anchorMotion = anchorMotion;
             _throwConfig = throwConfig;
+
+            AnchorThrowResult = new AnchorThrowResult();
             
             ResetThrowForce();
         }
@@ -52,28 +58,27 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void ThrowAnchor()
         {
-            _anchor.SetThrown();
-            
-            Vector3 throwDirection = _player.GetFloorAlignedLookDirection();
-            float moveDuration = ComputeThrowDuration();
-
-            DoThrowAnchor(throwDirection, ThrowDistance, moveDuration).Forget();
-        }
-
-        private async UniTaskVoid DoThrowAnchor(Vector3 direction, float distance, float duration)
-        {
             Vector3[] trajectoryPath = _anchorThrowTrajectory.GetCorrectedTrajectoryPath();
-            duration = _anchorThrowTrajectory.GetCorrectedDurationByDistance(distance, duration);
+            float moveDuration = ComputeThrowDuration();
+            moveDuration = _anchorThrowTrajectory.GetCorrectedDurationByDistance(ThrowDistance, moveDuration);
             bool trajectoryEndsOnVoid = _anchorThrowTrajectory.TrajectoryEndsOnVoid;
             
-            _anchorMotion.MoveAlongPath(trajectoryPath, duration, Ease.Linear);
+            _anchor.SetThrown(trajectoryEndsOnVoid);
+
+            AnchorThrowResult.Reset(trajectoryPath, moveDuration, trajectoryEndsOnVoid);
+            DoThrowAnchor(AnchorThrowResult).Forget();
+        }
+
+        private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
+        {
+            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, Ease.Linear);
 
             _anchorIsBeingThrown = true;
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
             
             _anchorIsBeingThrown = false;
 
-            if (trajectoryEndsOnVoid)
+            if (anchorThrowResult.EndsOnVoid)
             {
                 _player.OnAnchorThrowEndedInVoid();
             }
@@ -106,7 +111,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             ThrowDistance = ComputeThrowDistance();
         }
         
-        
+
         private float ComputeThrowDistance()
         {
             return Mathf.Lerp(_throwConfig.MinThrowDistance, _throwConfig.MaxThrowDistance, 
@@ -122,6 +127,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void CancelChargingThrow()
         {
             // TODO
+        }
+        
+        public AnchorThrowResult GetLastAnchorThrowResult()
+        {
+            return AnchorThrowResult;
         }
         
     }

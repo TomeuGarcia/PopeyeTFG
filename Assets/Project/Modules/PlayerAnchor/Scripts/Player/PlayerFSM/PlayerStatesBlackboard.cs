@@ -12,8 +12,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public IAnchorMediator AnchorMediator { get; private set;  }
         public IAnchorThrower AnchorThrower { get; private set;  }
         public IAnchorPuller AnchorPuller { get; private set;  }
-        
 
+        
+        // Queues
+        public bool queuedAnchorPull;
+        
 
         public void Configure(PlayerStatesConfig playerStatesConfig,
                                     IPlayerMediator playerMediator, 
@@ -28,6 +31,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             AnchorMediator = anchorMediator;
             AnchorThrower = anchorThrower;
             AnchorPuller = anchorPuller;
+
+            queuedAnchorPull = false;
         }
+        
+        
     }
 }

@@ -12,9 +12,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private APlayerState _currentState;
         private Dictionary<PlayerStates, APlayerState> _states;
 
+        public PlayerStatesBlackboard Blackboard { get; private set; }
 
         public void Setup(PlayerStatesBlackboard blackboard)
         {
+            Blackboard = blackboard;
+            
             Spawning_PlayerState spawningState 
                 = new Spawning_PlayerState(blackboard);
             Dead_PlayerState deadState 
@@ -67,15 +70,33 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_currentState.Update(deltaTime))
             {
-                OverwriteState(_currentState.NextState);
+                _currentState.Exit();
+                _currentState = _states[_currentState.NextState];
+                _currentState.Enter();
             }
         }
 
         public void OverwriteState(PlayerStates newState)
         {
-            _currentState.Exit();
-            _currentState = _states[newState];
-            _currentState.Enter();
+            if (_states.ContainsKey(newState))
+            {
+                _currentState.Exit();
+                _currentState = _states[newState];
+                _currentState.Enter();
+                return;
+            }
+            
+            foreach (var state in _states)
+            {
+                if (state.Value.HasSubState(newState))
+                {
+                    _currentState.Exit();
+                    _currentState = _states[state.Key];
+                    _currentState.Enter();
+                    return;
+                }
+            }
+            
         }
         
     }

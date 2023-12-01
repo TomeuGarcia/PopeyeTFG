@@ -66,7 +66,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 spotLookDirection = Vector3.up;
             }
             spotPosition += spotLookDirection * 0.05f;
-            _trajectoryEndSpot.MatchSpot(spotPosition, spotLookDirection);
+            _trajectoryEndSpot.MatchSpot(spotPosition, spotLookDirection, !TrajectoryEndsOnVoid);
 
             
             _debugLine.positionCount = _straightTrajectoryPath.Length;
@@ -90,6 +90,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             DoUpdateTrajectoryPath(_straightTrajectoryPath, startPoint, direction, distance);
             DoUpdateTrajectoryPath(_curvedEndTrajectoryPath, startPoint, direction, distance);
             CurveTrajectoryPath(_curvedEndTrajectoryPath, _anchorThrowConfig.TrajectoryBendSharpness);
+            UpdateTrajectoryEndSpot();
         }
         
         private void DoUpdateTrajectoryPath(Vector3[] trajectoryPath, Vector3 startPoint, Vector3 direction, float distance)
@@ -147,13 +148,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 }
             }
             
-            if (Physics.Raycast(trajectoryPath[trajectoryPath.Length - 1], Vector3.down, out trajectoryHit, 
-                    1000, PositioningHelper.Instance.ObstaclesLayerMask,QueryTriggerInteraction.Ignore))
-            {
-                trajectoryIndex = trajectoryPath.Length - 1;
-                return true;
-            }
-
             trajectoryIndex = -1;
             trajectoryHit = new RaycastHit();
             return false;
@@ -185,18 +179,45 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
 
 
-        public Vector3[] GetReverseCorrectedTrajectoryPath()
-        {
-            return GetReverseTrajectoryPath(_correctedTrajectoryPath);
-        }
-        private Vector3[] GetReverseTrajectoryPath(Vector3[] trajectoryPath)
-        {
-            Vector3[] reverseTrajectoryPath = new Vector3[trajectoryPath.Length];
-            trajectoryPath.CopyTo(reverseTrajectoryPath, 0);
-            Array.Reverse(reverseTrajectoryPath);
 
-            return reverseTrajectoryPath;
+        public Vector3[] GetPullTrajectory(Vector3 anchorPosition, Vector3 goalPosition, int numberOfSteps,
+            out float trajectoryDistance)
+        {
+            if (numberOfSteps < 1)
+            {
+                throw new Exception("numberOfSteps must be greater than 0");
+            }
+            
+            Vector3[] trajectoryPoints = new Vector3[numberOfSteps];
+            trajectoryDistance = 0.0f;
+
+            Vector3 anchorToGoal = goalPosition - anchorPosition;
+            float distancePerStep = anchorToGoal.magnitude / numberOfSteps;
+            Vector3 anchorToGoalDirection = anchorToGoal.normalized;
+
+            float anchorPointY = anchorPosition.y;
+            float goalPointY = goalPosition.y;
+            bool goalIsHigher = goalPointY > anchorPointY;
+            
+            
+            trajectoryPoints[0] = anchorPosition;
+            for (int i = 1; i < numberOfSteps; ++i)
+            {
+                float t = (float)i / (numberOfSteps-1);
+                float p = goalIsHigher ? 1.0f/_anchorPullConfig.TrajectoryBendSharpness : _anchorPullConfig.TrajectoryBendSharpness;
+                t = Mathf.Pow(t, p);
+                
+                Vector3 trajectoryPoint = anchorPosition + (anchorToGoalDirection * (distancePerStep * i));
+                trajectoryPoint.y = Mathf.Lerp(anchorPointY, goalPointY, t);
+
+                trajectoryPoints[i] = trajectoryPoint;
+
+                trajectoryDistance += Vector3.Distance(trajectoryPoints[i - 1], trajectoryPoint);
+            }
+
+            return trajectoryPoints;
         }
+        
         
     }
 }

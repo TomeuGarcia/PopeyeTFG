@@ -9,9 +9,12 @@ namespace Project.Modules.PlayerAnchor.Chain
         private Transform _anchorBindTransform;
         [SerializeField] private LineRenderer _chainLine;
         
+        private IChainPhysics _chainPhysics;
+
         
-        public void Configure(Transform playerBindTransform, Transform anchorBindTransform)
+        public void Configure(IChainPhysics chainPhysics, Transform playerBindTransform, Transform anchorBindTransform)
         {
+            _chainPhysics = chainPhysics;
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
         }
@@ -31,6 +34,23 @@ namespace Project.Modules.PlayerAnchor.Chain
         {
             _chainLine.enabled = false;
         }
+
+
+        public void EnableTension()
+        {
+            _chainPhysics.EnableTension();
+        }
+        
+        public void DisableTension()
+        {
+            _chainPhysics.DisableTension();
+        }
+
+        public void SetFailedThrow(bool failedThrow)
+        {
+            _chainPhysics.SetFailedThrow(failedThrow);
+        }
+        
         
     }
 }

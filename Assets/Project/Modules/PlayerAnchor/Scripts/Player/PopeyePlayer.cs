@@ -76,12 +76,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void OnAnchorThrowEndedInVoid()
         {
-            // TODO
-            // enter pull state
-            
-            
-            // reset anchor accordingly
-            
+            _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);
+            _stateMachine.Blackboard.queuedAnchorPull = true;
         }
+
     }
 }

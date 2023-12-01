@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -24,7 +25,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.SetCanRotate(true);
         }
 
         public override bool Update(float deltaTime)
@@ -42,8 +43,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             _blackboard.AnchorPuller.PullAnchor();
 
-            await UniTask.WaitUntil(() => !_blackboard.AnchorMediator.IsBeingThrown());
-            
+            await UniTask.WaitUntil(() => !_blackboard.AnchorMediator.IsBeingPulled());
             _anchorPullingFinished = true;
         }
     }

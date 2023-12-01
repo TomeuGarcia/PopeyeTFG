@@ -9,9 +9,16 @@ namespace Project.Modules.PlayerAnchor.Anchor
         [SerializeField] private Transform _spotTransform;
         [SerializeField, Range(0.0f, 100.0f)] private float _followSpeed = 80.0f;
         [SerializeField, Range(0.0f, 5.0f)] private float _stopFollowDistance = 0.1f;
+        [SerializeField] private TrajectoryEndSpotView _view;
 
         private Vector3 _toTarget;
         private bool _updatePosition;
+
+
+        private void Awake()
+        {
+            _view.Configure();
+        }
 
         private void Update()
         {
@@ -21,8 +28,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
             }
         }
 
-        public void MatchSpot(Vector3 position, Vector3 hitNormal)
+        public void MatchSpot(Vector3 position, Vector3 hitNormal, bool isValid)
         {
+            SetValidState(isValid);
             if (Vector3.Distance(_spotTransform.position, position) < _stopFollowDistance)
             {
                 _updatePosition = false;
@@ -48,12 +56,17 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void Show()
         {
-            gameObject.SetActive(true);
+            _view.Show();
         }
         public void Hide()
         {
-            gameObject.SetActive(false);
+            _view.Hide();
             _updatePosition = false;
+        }
+
+        private void SetValidState(bool isValid)
+        {
+            _view.SetValid(isValid);
         }
     }
 }
