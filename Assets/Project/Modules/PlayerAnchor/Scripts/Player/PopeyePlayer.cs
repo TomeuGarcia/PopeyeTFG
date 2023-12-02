@@ -37,9 +37,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _stateMachine.Update(Time.deltaTime);
         }
+        
 
-        
-        
         public void SetMaxMovementSpeed(float maxMovementSpeed)
         {
             _playerController.MaxSpeed = maxMovementSpeed;

@@ -25,22 +25,30 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
         
 
-        public void DisablePhysics()
+        public void DisableAllPhysics()
         {
             _collider.enabled = false;
-            _rigidbody.useGravity = false;
+            UseGravity(false);
             _rigidbody.interpolation = RigidbodyInterpolation.None;
             SetImmovable();
         }
         
-        public void EnablePhysics()
+        public void EnableAllPhysics()
         {
             _collider.enabled = true;
-            _rigidbody.useGravity = true;
+            UseGravity(true);
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             SetMovable();
         }
-        
+
+
+        public void UseGravity(bool useGravity)
+        {
+            _rigidbody.useGravity = useGravity;
+
+            _rigidbody.drag = useGravity ? 0 : float.MaxValue;
+            _rigidbody.mass = useGravity ? 3 : float.MaxValue;
+        }
         
         public void SetMovable()
         {

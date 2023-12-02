@@ -8,11 +8,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public float Duration { get; private set; }
         public bool EndsOnVoid { get; private set; }
             
-        public void Reset(Vector3[] throwPathPoints, float duration, bool landedOnVoid)
+        public void Reset(Vector3[] throwPathPoints, float duration, bool endsOnVoid)
         {
             TrajectoryPathPoints = throwPathPoints;
             Duration = duration;
-            EndsOnVoid = landedOnVoid;
+            EndsOnVoid = endsOnVoid;
         }
     }
 }

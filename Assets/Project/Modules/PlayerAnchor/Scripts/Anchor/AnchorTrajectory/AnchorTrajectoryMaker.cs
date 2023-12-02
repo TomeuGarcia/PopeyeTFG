@@ -203,7 +203,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             trajectoryDistance = 0.0f;
 
             Vector3 anchorToGoal = goalPosition - anchorPosition;
-            float distancePerStep = anchorToGoal.magnitude / numberOfSteps;
+            float distancePerStep = anchorToGoal.magnitude / (numberOfSteps-1);
             Vector3 anchorToGoalDirection = anchorToGoal.normalized;
 
             

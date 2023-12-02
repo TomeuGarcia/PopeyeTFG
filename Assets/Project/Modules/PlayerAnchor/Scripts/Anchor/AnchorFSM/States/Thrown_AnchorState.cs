@@ -11,7 +11,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         
         public void Enter()
         {
-            _blackboard.AnchorPhysics.EnablePhysics();
+            _blackboard.AnchorPhysics.EnableAllPhysics();
             _blackboard.AnchorMotion.Unparent();
             
             _blackboard.AnchorChain.Show();
@@ -21,6 +21,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         public void Exit()
         {
             //_blackboard.AnchorChain.EnableTension();
+            
             _blackboard.AnchorChain.SetFailedThrow(false);
         }
     }

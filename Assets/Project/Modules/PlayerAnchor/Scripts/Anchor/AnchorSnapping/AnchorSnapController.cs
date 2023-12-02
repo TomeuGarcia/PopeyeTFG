@@ -8,6 +8,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private TrajectoryHitChecker _trajectoryHitChecker;
 
         public bool HasSnapTarget => _currentSnapTarget != null;
+        public IAnchorSnapTarget AnchorSnapTarget => _currentSnapTarget;
         
         
 
@@ -19,28 +20,53 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public bool CheckForSnapTarget(Vector3[] trajectoryPath)
         {
-            if (_trajectoryHitChecker.GetFirstTriggerHitInTrajectoryPath(trajectoryPath, 
+            if (!_trajectoryHitChecker.GetFirstTriggerHitInTrajectoryPath(trajectoryPath,
                     out RaycastHit hit, out int trajectoryHitIndex))
             {
-                if (CheckHitIsSnapTarget(hit, out IAnchorSnapTarget snapTarget))
-                {
-                    if (HasSnapTarget)
-                    {
-                        RemoveCurrentSnapTarget();
-                    }
-                    AddNewCurrentSnapTarget(snapTarget);
-
-                    return true;
-                }
-                
                 if (HasSnapTarget)
                 {
                     RemoveCurrentSnapTarget();
                 }
+
+                return false;
+            }
+
+            if (!CheckHitIsSnapTarget(hit, out IAnchorSnapTarget snapTarget))
+            {
+                if (HasSnapTarget)
+                {
+                    RemoveCurrentSnapTarget();
+                }
+                
+                return false;
             }
             
-
-            return false;
+            
+            if (!snapTarget.CanSnapFromPosition(trajectoryPath[^1]))
+            {
+                if (HasSnapTarget)
+                {
+                    RemoveCurrentSnapTarget();
+                }
+                
+                return false;
+            }
+            
+            
+            if (HasSnapTarget)
+            {
+                if (_currentSnapTarget != snapTarget)
+                {
+                    RemoveCurrentSnapTarget();
+                    AddNewCurrentSnapTarget(snapTarget);
+                }
+            }
+            else
+            {
+                AddNewCurrentSnapTarget(snapTarget);
+            }
+                
+            return true;
         }
         
         private bool CheckHitIsSnapTarget(RaycastHit hit, out IAnchorSnapTarget snapTarget)
@@ -55,7 +81,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _currentSnapTarget = newSnapTarget;
             _currentSnapTarget.EnterPrepareForSnapping();
         }
-        private void RemoveCurrentSnapTarget()
+        public void RemoveCurrentSnapTarget()
         {
             _currentSnapTarget.QuitPrepareForSnapping();
             ClearState();
@@ -66,7 +92,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void ConfirmCurrentTarget(float durationBeforeReachingTarget)
         {
             _currentSnapTarget.PlaySnapAnimation(durationBeforeReachingTarget).Forget();
-            ClearState();
         }
 
         public Vector3 GetTargetSnapPosition()
@@ -78,7 +103,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return _currentSnapTarget.GetSnapRotation();
         }
 
-        private void ClearState()
+        public void ClearState()
         {
             _currentSnapTarget = null;
         }

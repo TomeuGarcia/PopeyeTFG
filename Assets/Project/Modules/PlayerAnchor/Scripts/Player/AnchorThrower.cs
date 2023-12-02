@@ -63,17 +63,25 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _anchorIsBeingThrown;
         }
 
+        public Vector3[] AtrajectoryPath;
         public void ThrowAnchor()
+        {
+            UpdateAnchorThrowResult();
+
+            _anchor.SetThrown(AnchorThrowResult.EndsOnVoid);
+            DoThrowAnchor(AnchorThrowResult).Forget();
+        }
+
+        private void UpdateAnchorThrowResult()
         {
             float moveDuration = ComputeThrowDuration();
             bool trajectoryEndsOnVoid = false;
             Vector3[] trajectoryPath = null;
 
-            
             if (_anchorSnapController.HasSnapTarget)
             {
                 trajectoryPath = _anchorTrajectoryMaker.ComputeCurvedTrajectory(_anchor.Position, 
-                    _anchorSnapController.GetTargetSnapPosition(), 10, out float distance);
+                    _anchorSnapController.GetTargetSnapPosition(), 4, out float distance);
                 moveDuration = (moveDuration / ThrowDistance) * distance;
                 
                 _anchorSnapController.ConfirmCurrentTarget(moveDuration);
@@ -84,33 +92,41 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 moveDuration = _anchorTrajectoryMaker.GetCorrectedDurationByDistance(ThrowDistance, moveDuration);
                 trajectoryEndsOnVoid = _anchorTrajectoryMaker.TrajectoryEndsOnVoid;
             }
-            
-            
-            _anchor.SetThrown(trajectoryEndsOnVoid);
 
+            AtrajectoryPath = trajectoryPath;
+            
             AnchorThrowResult.Reset(trajectoryPath, moveDuration, trajectoryEndsOnVoid);
-            DoThrowAnchor(AnchorThrowResult).Forget();
         }
-
+        
         private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
         {
-            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, Ease.Linear);
+            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, Ease.OutSine);
 
             _anchorIsBeingThrown = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
-            
             _anchorIsBeingThrown = false;
 
+            OnThrowCompleted(anchorThrowResult);
+        }
+
+        private void OnThrowCompleted(AnchorThrowResult anchorThrowResult)
+        {
             if (anchorThrowResult.EndsOnVoid)
             {
                 _player.OnAnchorThrowEndedInVoid();
+            }
+            else if (_anchorSnapController.HasSnapTarget)
+            {
+                _anchor.SetGrabbedBySnapper(_anchorSnapController.AnchorSnapTarget);
+                _anchorSnapController.ClearState();
             }
             else
             {
                 _anchor.SnapToFloor().Forget();
             }
         }
-
+        
+        
         public void InterruptThrow()
         {
             _anchorMotion.CancelMovement();
@@ -149,7 +165,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void CancelChargingThrow()
         {
-            // TODO
+            if (_anchorSnapController.HasSnapTarget)
+            {
+                _anchorSnapController.RemoveCurrentSnapTarget();
+            }
         }
         
         public AnchorThrowResult GetLastAnchorThrowResult()

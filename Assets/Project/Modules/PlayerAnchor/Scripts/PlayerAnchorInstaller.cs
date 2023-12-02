@@ -56,6 +56,7 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private LineRenderer debugLine3;
         [SerializeField] private bool drawDebugLines = true;
         private AnchorTrajectoryMaker trajectoryMaker;
+        private AnchorThrower AanchorThrower;
         
         private void OnValidate()
         {
@@ -85,7 +86,7 @@ namespace Project.Modules.PlayerAnchor
             TrajectoryHitChecker anchorTrajectoryHitChecker = new TrajectoryHitChecker(
                 _obstaclesMask, _anchorSnapTargetMask);
             AnchorSnapController anchorSnapController = new AnchorSnapController();
-            
+
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorThrowConfig, 
@@ -123,6 +124,21 @@ namespace Project.Modules.PlayerAnchor
             
             // Debug
             trajectoryMaker = anchorTrajectoryMaker;
+            AanchorThrower = anchorThrower;
+
         }
+        
+        private void OnDrawGizmos()
+        {
+            if (AanchorThrower != null && AanchorThrower.AtrajectoryPath != null)
+            {
+                Gizmos.color = Color.red;
+                for (int i = 0; i < AanchorThrower.AtrajectoryPath.Length - 1; ++i)
+                {
+                    Gizmos.DrawLine(AanchorThrower.AtrajectoryPath[i], AanchorThrower.AtrajectoryPath[i+1]);
+                }
+            }
+        }
+        
     }
 }

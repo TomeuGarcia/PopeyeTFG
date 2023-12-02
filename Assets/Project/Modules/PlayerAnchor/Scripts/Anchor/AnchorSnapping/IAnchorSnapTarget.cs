@@ -5,6 +5,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorSnapTarget
     {
+        public Transform GetSnapTransform();
         public Vector3 GetSnapPosition();
         public Quaternion GetSnapRotation();
 

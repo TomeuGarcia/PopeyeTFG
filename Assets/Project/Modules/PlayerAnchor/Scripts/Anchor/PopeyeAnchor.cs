@@ -59,6 +59,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
         }
+        public void SetGrabbedBySnapper(IAnchorSnapTarget snapTarget)
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
+            _anchorMotion.ParentAndReset(snapTarget.GetSnapTransform(), 0.1f);
+        }
         
         
         public bool IsBeingThrown()
@@ -76,12 +81,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void OnCollisionWithObstacle(Collision collision)
         {
+            return;
             if (IsBeingThrown())
             {
                 // interrupt throw
                 _anchorThrower.InterruptThrow();
                 // snap to floor
-                SnapToFloor().Forget();;
+                SnapToFloor().Forget();
+                Debug.Log("uhmmm");
             }
             else
             {
