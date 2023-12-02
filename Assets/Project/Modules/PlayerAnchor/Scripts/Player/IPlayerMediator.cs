@@ -17,7 +17,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         public void CarryAnchor();
-        public void AimAnchor();
+        public void StartChargingThrow();
+        public void ChargeThrow(float deltaTime);
+        public void StopChargingThrow();
+        public void CancelChargingThrow();
+        public void ThrowAnchor();
+        public void PullAnchor();
 
 
         public void OnAnchorThrowEndedInVoid();

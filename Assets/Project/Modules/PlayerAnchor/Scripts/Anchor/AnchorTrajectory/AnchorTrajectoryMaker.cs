@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
 {
-    public class AnchorThrowTrajectory
+    public class AnchorTrajectoryMaker
     {
         private AnchorTrajectoryEndSpot _trajectoryEndSpot;
         private AnchorThrowConfig _anchorThrowConfig;
@@ -27,6 +27,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private LineRenderer _debugLine;
         private LineRenderer _debugLine2;
         private LineRenderer _debugLine3;
+
+        public bool drawDebugLines = false;
+        
         public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
             AnchorThrowConfig anchorThrowConfig, AnchorPullConfig anchorPullConfig,
             LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3)
@@ -43,38 +46,20 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _debugLine2 = debugLine2;
             _debugLine3 = debugLine3;
         }
-        
 
 
-
-        public void UpdateTrajectoryEndSpot()
+        private void DrawDebugLines()
         {
-            Vector3 spotPosition;
-            Vector3 spotLookDirection;
-            
-            if (GetFirstHitInTrajectoryPath(_curvedEndTrajectoryPath, out RaycastHit hit, out _trajectoryHitIndex))
-            {
-                TrajectoryEndsOnVoid = false;
-                spotPosition = hit.point;
-                spotLookDirection = hit.normal;
-            }
-            else
-            {
-                TrajectoryEndsOnVoid = true;
-                _trajectoryHitIndex = _curvedEndTrajectoryPath.Length - 1;
-                spotPosition = _curvedEndTrajectoryPath[_curvedEndTrajectoryPath.Length - 1];
-                spotLookDirection = Vector3.up;
-            }
-            spotPosition += spotLookDirection * 0.05f;
-            _trajectoryEndSpot.MatchSpot(spotPosition, spotLookDirection, !TrajectoryEndsOnVoid);
-
-            
             _debugLine.positionCount = _straightTrajectoryPath.Length;
             _debugLine.SetPositions(_straightTrajectoryPath);
             
             _debugLine2.positionCount = _curvedEndTrajectoryPath.Length;
             _debugLine2.SetPositions(_curvedEndTrajectoryPath);
         }
+
+
+        
+        
         public void ShowTrajectoryEndSpot()
         {
             _trajectoryEndSpot.Show();
@@ -91,6 +76,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
             DoUpdateTrajectoryPath(_curvedEndTrajectoryPath, startPoint, direction, distance);
             CurveTrajectoryPath(_curvedEndTrajectoryPath, _anchorThrowConfig.TrajectoryBendSharpness);
             UpdateTrajectoryEndSpot();
+            
+            if (drawDebugLines)
+            {
+                DrawDebugLines();
+            }
         }
         
         private void DoUpdateTrajectoryPath(Vector3[] trajectoryPath, Vector3 startPoint, Vector3 direction, float distance)
@@ -108,7 +98,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         private void CurveTrajectoryPath(Vector3[] trajectoryPath, int bendSharpness)
         {
-            for (int i = bendSharpness; i < trajectoryPath.Length; ++i)
+            for (int i = trajectoryPath.Length / 2; i < trajectoryPath.Length; ++i)
             {
                 float t = (float)i / (trajectoryPath.Length - 1.0f);
                 t = Mathf.Pow(t, bendSharpness);
@@ -128,6 +118,29 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
                 trajectoryPath[i] = curvedPathPoint;
             }
+        }
+        
+        private void UpdateTrajectoryEndSpot()
+        {
+            Vector3 spotPosition;
+            Vector3 spotLookDirection;
+            
+            if (GetFirstHitInTrajectoryPath(_curvedEndTrajectoryPath, out RaycastHit hit, out _trajectoryHitIndex))
+            {
+                TrajectoryEndsOnVoid = false;
+                spotPosition = hit.point;
+                spotLookDirection = hit.normal;
+            }
+            else
+            {
+                TrajectoryEndsOnVoid = true;
+                _trajectoryHitIndex = _curvedEndTrajectoryPath.Length - 1;
+                spotPosition = _curvedEndTrajectoryPath[_curvedEndTrajectoryPath.Length - 1];
+                spotLookDirection = Vector3.up;
+            }
+            
+            spotPosition += spotLookDirection * 0.05f;
+            _trajectoryEndSpot.MatchSpot(spotPosition, spotLookDirection, !TrajectoryEndsOnVoid);
         }
 
 
@@ -180,7 +193,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
 
 
-        public Vector3[] GetPullTrajectory(Vector3 anchorPosition, Vector3 goalPosition, int numberOfSteps,
+        public Vector3[] ComputeCurvedTrajectory(Vector3 anchorPosition, Vector3 goalPosition, int numberOfSteps,
             out float trajectoryDistance)
         {
             if (numberOfSteps < 1)
@@ -188,6 +201,20 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 throw new Exception("numberOfSteps must be greater than 0");
             }
             
+
+            bool goalIsHigher = goalPosition.y > anchorPosition.y;
+            
+            float bendSharpness = goalIsHigher ? 
+                1.0f/_anchorPullConfig.TrajectoryBendSharpness : 
+                _anchorPullConfig.TrajectoryBendSharpness;
+            
+            return DoComputeCurvedTrajectory(anchorPosition, goalPosition, numberOfSteps, out trajectoryDistance,
+                bendSharpness);
+        }
+        
+        private Vector3[] DoComputeCurvedTrajectory(Vector3 anchorPosition, Vector3 goalPosition, int numberOfSteps,
+            out float trajectoryDistance, float bendSharpness)
+        {
             Vector3[] trajectoryPoints = new Vector3[numberOfSteps];
             trajectoryDistance = 0.0f;
 
@@ -195,20 +222,15 @@ namespace Project.Modules.PlayerAnchor.Anchor
             float distancePerStep = anchorToGoal.magnitude / numberOfSteps;
             Vector3 anchorToGoalDirection = anchorToGoal.normalized;
 
-            float anchorPointY = anchorPosition.y;
-            float goalPointY = goalPosition.y;
-            bool goalIsHigher = goalPointY > anchorPointY;
-            
             
             trajectoryPoints[0] = anchorPosition;
             for (int i = 1; i < numberOfSteps; ++i)
             {
                 float t = (float)i / (numberOfSteps-1);
-                float p = goalIsHigher ? 1.0f/_anchorPullConfig.TrajectoryBendSharpness : _anchorPullConfig.TrajectoryBendSharpness;
-                t = Mathf.Pow(t, p);
+                t = Mathf.Pow(t, bendSharpness);
                 
                 Vector3 trajectoryPoint = anchorPosition + (anchorToGoalDirection * (distancePerStep * i));
-                trajectoryPoint.y = Mathf.Lerp(anchorPointY, goalPointY, t);
+                trajectoryPoint.y = Mathf.Lerp(anchorPosition.y, goalPosition.y, t);
 
                 trajectoryPoints[i] = trajectoryPoint;
 

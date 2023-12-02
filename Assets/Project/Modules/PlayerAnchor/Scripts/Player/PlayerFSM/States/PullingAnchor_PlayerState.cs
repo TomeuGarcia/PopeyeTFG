@@ -41,7 +41,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private async UniTaskVoid StartPulling()
         {
-            _blackboard.AnchorPuller.PullAnchor();
+            _blackboard.PlayerMediator.PullAnchor();
 
             await UniTask.WaitUntil(() => !_blackboard.AnchorMediator.IsBeingPulled());
             _anchorPullingFinished = true;

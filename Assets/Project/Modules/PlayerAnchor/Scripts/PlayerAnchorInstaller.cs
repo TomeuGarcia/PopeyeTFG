@@ -63,23 +63,23 @@ namespace Project.Modules.PlayerAnchor
             AnchorMotion anchorMotion = new AnchorMotion();
             AnchorThrower anchorThrower = new AnchorThrower();
             AnchorPuller anchorPuller = new AnchorPuller();
-            AnchorThrowTrajectory anchorThrowTrajectory = new AnchorThrowTrajectory();
+            AnchorTrajectoryMaker anchorTrajectoryMaker = new AnchorTrajectoryMaker();
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
             
             
             anchorMotion.Configure(_anchorMoveTransform);
-            anchorThrower.Configure(_player, _anchor, anchorThrowTrajectory, anchorMotion, _anchorThrowConfig);
-            anchorPuller.Configure(_player, _anchor, anchorThrowTrajectory, anchorMotion, _anchorPullConfig);
-            anchorThrowTrajectory.Configure(_anchorTrajectoryEndSpot, _anchorThrowConfig, _anchorPullConfig,
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorThrowConfig);
+            anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorPullConfig);
+            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorThrowConfig, _anchorPullConfig,
                 debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(anchorMotion, _anchorPhysics, _anchorChain, _player.AnchorCarryHolder, 
                 _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorChainConfig);
 
-            _anchor.Configure(anchorStateMachine, anchorThrowTrajectory, anchorThrower, anchorPuller, anchorMotion,
+            _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorChain);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
@@ -93,11 +93,10 @@ namespace Project.Modules.PlayerAnchor
             PlayerFSM playerStateMachine = new PlayerFSM();
             
             
-            playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, movesetInputsController, _anchor, 
-                anchorThrower, anchorPuller);
+            playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, movesetInputsController, _anchor);
             playerStateMachine.Setup(playerStatesBlackboard);
 
-            _player.Configure(playerStateMachine, _playerController, _anchor);
+            _player.Configure(playerStateMachine, _playerController, _anchor, anchorThrower, anchorPuller);
             _playerController.MovementInputHandler = movementInputHandler;
         }
     }

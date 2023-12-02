@@ -15,14 +15,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
-            _blackboard.AnchorThrower.ResetThrowForce();
             
             StartChargingThrow();
         }
 
         public override void Exit()
         {
-            _blackboard.AnchorMediator.OnStopChargingThrow();
+            StopChargingThrow();
         }
 
         public override bool Update(float deltaTime)
@@ -50,20 +49,22 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         private void StartChargingThrow()
         {
-            _blackboard.PlayerMediator.AimAnchor();
-            _blackboard.AnchorMediator.OnStartChargingThrow();
+            _blackboard.PlayerMediator.StartChargingThrow();
         }
         
         private void ChargeThrow(float deltaTime)
         {
-            _blackboard.AnchorThrower.IncrementThrowForce(deltaTime);
-            _blackboard.AnchorMediator.OnKeepChargingThrow();
+            _blackboard.PlayerMediator.ChargeThrow(deltaTime);
+        }
+
+        private void StopChargingThrow()
+        {
+            _blackboard.PlayerMediator.StopChargingThrow();
         }
         
         private void CancelChargingThrow()
         {
-            _blackboard.AnchorThrower.CancelChargingThrow();
-            _blackboard.PlayerMediator.CarryAnchor();
+            _blackboard.PlayerMediator.CancelChargingThrow();
         }
         
     }

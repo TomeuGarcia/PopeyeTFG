@@ -82,6 +82,24 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5371a25-52a4-419e-8009-4afd4f2e9d11"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Kick"",
+                    ""type"": ""Button"",
+                    ""id"": ""77027586-2d0c-4667-9bc5-70b31877f699"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -242,7 +260,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""31344599-6688-44b7-8217-337bbdc2b960"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -253,7 +271,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""a68eb38b-af5b-4fe8-ab87-a68d758c1a88"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -333,8 +351,52 @@ namespace InputSystem
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Desktop"",
                     ""action"": ""Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""588042c2-32f9-4a80-a475-3d5090299484"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a1f3c3d-8e59-46ef-9ca8-de56c32863ed"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72d3ab2e-538e-4c67-be06-f721167155f5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Kick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7dfa0d8f-c417-4b72-a5cc-85386756b77e"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Kick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -378,6 +440,8 @@ namespace InputSystem
             m_Land_Throw = m_Land.FindAction("Throw", throwIfNotFound: true);
             m_Land_PickUp = m_Land.FindAction("PickUp", throwIfNotFound: true);
             m_Land_Pull = m_Land.FindAction("Pull", throwIfNotFound: true);
+            m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
+            m_Land_Kick = m_Land.FindAction("Kick", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -445,6 +509,8 @@ namespace InputSystem
         private readonly InputAction m_Land_Throw;
         private readonly InputAction m_Land_PickUp;
         private readonly InputAction m_Land_Pull;
+        private readonly InputAction m_Land_Dash;
+        private readonly InputAction m_Land_Kick;
         public struct LandActions
         {
             private @PlayerAnchorInputControls m_Wrapper;
@@ -455,6 +521,8 @@ namespace InputSystem
             public InputAction @Throw => m_Wrapper.m_Land_Throw;
             public InputAction @PickUp => m_Wrapper.m_Land_PickUp;
             public InputAction @Pull => m_Wrapper.m_Land_Pull;
+            public InputAction @Dash => m_Wrapper.m_Land_Dash;
+            public InputAction @Kick => m_Wrapper.m_Land_Kick;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -482,6 +550,12 @@ namespace InputSystem
                 @Pull.started += instance.OnPull;
                 @Pull.performed += instance.OnPull;
                 @Pull.canceled += instance.OnPull;
+                @Dash.started += instance.OnDash;
+                @Dash.performed += instance.OnDash;
+                @Dash.canceled += instance.OnDash;
+                @Kick.started += instance.OnKick;
+                @Kick.performed += instance.OnKick;
+                @Kick.canceled += instance.OnKick;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -504,6 +578,12 @@ namespace InputSystem
                 @Pull.started -= instance.OnPull;
                 @Pull.performed -= instance.OnPull;
                 @Pull.canceled -= instance.OnPull;
+                @Dash.started -= instance.OnDash;
+                @Dash.performed -= instance.OnDash;
+                @Dash.canceled -= instance.OnDash;
+                @Kick.started -= instance.OnKick;
+                @Kick.performed -= instance.OnKick;
+                @Kick.canceled -= instance.OnKick;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -538,6 +618,8 @@ namespace InputSystem
             void OnThrow(InputAction.CallbackContext context);
             void OnPickUp(InputAction.CallbackContext context);
             void OnPull(InputAction.CallbackContext context);
+            void OnDash(InputAction.CallbackContext context);
+            void OnKick(InputAction.CallbackContext context);
         }
     }
 }

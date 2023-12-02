@@ -16,15 +16,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerFSM _stateMachine;
         private PlayerController.PlayerController _playerController;
         private PopeyeAnchor _anchor;
+        private IAnchorThrower _anchorThrower;
+        private IAnchorPuller _anchorPuller;
         
         public Vector3 Position => _playerController.Position;
         
+        
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
-            PopeyeAnchor anchor)
+            PopeyeAnchor anchor, IAnchorThrower anchorThrower, IAnchorPuller anchorPuller)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
             _anchor = anchor;
+            _anchorThrower = anchorThrower;
+            _anchorPuller = anchorPuller;
         }
 
 
@@ -68,12 +73,42 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchor.SetCarried();
         }
-        public void AimAnchor()
+
+        public void StartChargingThrow()
         {
+            _anchorThrower.ResetThrowForce();
             _anchor.SetGrabbedToThrow();
+            _anchor.OnStartChargingThrow();
         }
 
-        
+        public void ChargeThrow(float deltaTime)
+        {
+            _anchorThrower.IncrementThrowForce(deltaTime);
+            _anchor.OnKeepChargingThrow();
+        }
+
+        public void StopChargingThrow()
+        {
+            _anchor.OnStopChargingThrow();
+        }
+
+        public void CancelChargingThrow()
+        {
+            _anchorThrower.CancelChargingThrow();
+            CarryAnchor();
+        }
+
+        public void ThrowAnchor()
+        {
+            _anchorThrower.ThrowAnchor();
+        }
+
+        public void PullAnchor()
+        {
+            _anchorPuller.PullAnchor();
+        }
+
+
         public void OnAnchorThrowEndedInVoid()
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);

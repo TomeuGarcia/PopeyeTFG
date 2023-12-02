@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         private IPlayerMediator _player;
         private PopeyeAnchor _anchor;
-        private AnchorThrowTrajectory _anchorThrowTrajectory;
+        private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorMotion _anchorMotion;
         private AnchorPullConfig _pullConfig;
 
@@ -22,12 +22,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
-            AnchorThrowTrajectory anchorThrowTrajectory, AnchorMotion anchorMotion,
+            AnchorTrajectoryMaker anchorTrajectoryMaker, AnchorMotion anchorMotion,
             AnchorPullConfig pullConfig)
         {
             _player = player;
             _anchor = anchor;
-            _anchorThrowTrajectory = anchorThrowTrajectory;
+            _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _anchorMotion = anchorMotion;
             _pullConfig = pullConfig;
 
@@ -47,7 +47,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             Vector3 anchorPosition = _anchor.Position;
             Vector3 playerPosition = _player.GetAnchorThrowStartPosition();
-            Vector3[] trajectoryPath = _anchorThrowTrajectory.GetPullTrajectory(anchorPosition, 
+            Vector3[] trajectoryPath = _anchorTrajectoryMaker.ComputeCurvedTrajectory(anchorPosition, 
                 playerPosition, 10, out float trajectoryDistance);
             float duration = ComputePullDuration(trajectoryDistance);
             AnchorPullResult.Reset(trajectoryPath, duration, false);

@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         private IPlayerMediator _player;
         private PopeyeAnchor _anchor;
-        private AnchorThrowTrajectory _anchorThrowTrajectory;
+        private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorMotion _anchorMotion;
         private AnchorThrowConfig _throwConfig;
         
@@ -26,12 +26,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
-            AnchorThrowTrajectory anchorThrowTrajectory, AnchorMotion anchorMotion,
+            AnchorTrajectoryMaker anchorTrajectoryMaker, AnchorMotion anchorMotion,
             AnchorThrowConfig throwConfig)
         {
             _player = player;
             _anchor = anchor;
-            _anchorThrowTrajectory = anchorThrowTrajectory;
+            _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _anchorMotion = anchorMotion;
             _throwConfig = throwConfig;
 
@@ -47,7 +47,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Vector3 throwStartPoint = _player.GetAnchorThrowStartPosition();
             Vector3 throwDirection = _player.GetFloorAlignedLookDirection();
 
-            _anchorThrowTrajectory.UpdateTrajectoryPath(throwStartPoint, throwDirection, ThrowDistance);
+            _anchorTrajectoryMaker.UpdateTrajectoryPath(throwStartPoint, throwDirection, ThrowDistance);
         }
 
 
@@ -58,10 +58,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void ThrowAnchor()
         {
-            Vector3[] trajectoryPath = _anchorThrowTrajectory.GetCorrectedTrajectoryPath();
+            Vector3[] trajectoryPath = _anchorTrajectoryMaker.GetCorrectedTrajectoryPath();
             float moveDuration = ComputeThrowDuration();
-            moveDuration = _anchorThrowTrajectory.GetCorrectedDurationByDistance(ThrowDistance, moveDuration);
-            bool trajectoryEndsOnVoid = _anchorThrowTrajectory.TrajectoryEndsOnVoid;
+            moveDuration = _anchorTrajectoryMaker.GetCorrectedDurationByDistance(ThrowDistance, moveDuration);
+            bool trajectoryEndsOnVoid = _anchorTrajectoryMaker.TrajectoryEndsOnVoid;
             
             _anchor.SetThrown(trajectoryEndsOnVoid);
 

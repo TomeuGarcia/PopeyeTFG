@@ -13,7 +13,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {
         private AnchorFSM _stateMachine;
-        private AnchorThrowTrajectory _anchorThrowTrajectory;
+        private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrower _anchorThrower;
         private AnchorPuller _anchorPuller;
         private AnchorMotion _anchorMotion;
@@ -23,12 +23,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public Vector3 Position => _anchorMotion.AnchorPosition;
 
 
-        public void Configure(AnchorFSM stateMachine, AnchorThrowTrajectory anchorThrowTrajectory,
+        public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, AnchorMotion anchorMotion,
             AnchorChain anchorChain)
         {
             _stateMachine = stateMachine;
-            _anchorThrowTrajectory = anchorThrowTrajectory;
+            _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
             _anchorMotion = anchorMotion;
@@ -92,7 +92,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void OnStartChargingThrow()
         {
-            _anchorThrowTrajectory.ShowTrajectoryEndSpot();
+            _anchorTrajectoryMaker.ShowTrajectoryEndSpot();
         }
         public void OnKeepChargingThrow()
         {
@@ -100,7 +100,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
         public void OnStopChargingThrow()
         {
-            _anchorThrowTrajectory.HideTrajectoryEndSpot();
+            _anchorTrajectoryMaker.HideTrajectoryEndSpot();
         }
 
         
