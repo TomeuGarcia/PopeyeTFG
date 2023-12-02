@@ -1,10 +1,14 @@
-using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using System;
+using Cysharp.Threading.Tasks;
+
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class DashingTowardsAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
+
+        private bool _finishedDashing;
 
         public DashingTowardsAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
@@ -13,17 +17,33 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            throw new System.NotImplementedException();
+            _blackboard.queuedDashTowardsAnchor = false;
+            
+            StartDashing().Forget();
+            _blackboard.PlayerMediator.SetInvulnerable();
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            _blackboard.PlayerMediator.SetVulnerable();
         }
 
         public override bool Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
+            if (_finishedDashing)
+            {
+                NextState = PlayerStates.PickingUpAnchor;
+                return true;
+            }
+
+            return false;
+        }
+
+        private async UniTaskVoid StartDashing()
+        {
+            _blackboard.PlayerMediator.DashTowardsAnchor(_blackboard.PlayerStatesConfig.DashDuration);
+            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.DashDuration));
+            _finishedDashing = true;
         }
     }
 }

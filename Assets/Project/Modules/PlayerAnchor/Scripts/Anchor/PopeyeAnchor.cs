@@ -16,7 +16,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrower _anchorThrower;
         private AnchorPuller _anchorPuller;
-        private AnchorMotion _anchorMotion;
+        private TransformMotion _anchorMotion;
 
         private AnchorChain _anchorChain;
 
@@ -24,7 +24,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
-            AnchorThrower anchorThrower, AnchorPuller anchorPuller, AnchorMotion anchorMotion,
+            AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
             AnchorChain anchorChain)
         {
             _stateMachine = stateMachine;
@@ -77,6 +77,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public bool IsRestingOnFloor()
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.RestingOnFloor;
+        }
+        public bool IsGrabbedBySnapper()
+        {
+            return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.GrabbedBySnapper;
         }
 
         public void OnCollisionWithObstacle(Collision collision)
@@ -140,6 +144,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }
-        
+
+
+        public Vector3 GetDashEndPosition()
+        {
+            Vector3 dashEndPosition = Position;
+            
+            
+            return dashEndPosition;
+        }
     }
 }

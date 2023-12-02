@@ -10,6 +10,9 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly UnityEngine.InputSystem.InputAction _pickUp;
         
         private readonly UnityEngine.InputSystem.InputAction _pull;
+        
+        private readonly UnityEngine.InputSystem.InputAction _dash;
+        private readonly UnityEngine.InputSystem.InputAction _kick;
         /*
         private UnityEngine.InputSystem.InputAction _meleeAttack;
         private UnityEngine.InputSystem.InputAction _melee2;
@@ -30,6 +33,10 @@ namespace Popeye.Modules.PlayerController.Inputs
             _pickUp = _playerInputControls.Land.PickUp;
             
             _pull = _playerInputControls.Land.Pull;
+
+            _dash = _playerInputControls.Land.Dash;
+            
+            _kick = _playerInputControls.Land.Kick;
         }
 
         ~PlayerAnchorMovesetInputsController()
@@ -73,5 +80,15 @@ namespace Popeye.Modules.PlayerController.Inputs
         }
 
 
+        public bool Dash_Pressed()
+        {
+            return _dash.WasPressedThisFrame();
+        }
+        
+        
+        public bool Kick_Pressed()
+        {
+            return _kick.WasPressedThisFrame();
+        }
     }
 }

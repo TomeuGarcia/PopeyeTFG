@@ -19,7 +19,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         public void Exit()
         {
             _blackboard.AnchorPhysics.UseGravity(true);
-            _blackboard.AnchorMotion.Unparent();
+            _blackboard.TransformMotion.Unparent();
         }
         
         

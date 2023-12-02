@@ -24,7 +24,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             return _snapSpot.position;
         }
-        
+
+        public Vector3 GetLookDirection()
+        {
+            return LookDirection;
+        }
+
         public Quaternion GetSnapRotation()
         {
             return Quaternion.AngleAxis(-45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
@@ -33,7 +38,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public bool CanSnapFromPosition(Vector3 position)
         {
-            Vector3 direction = (transform.position - position).normalized;
+            Vector3 direction = (position - transform.position).normalized;
             float dot = Vector3.Dot(direction, LookDirection);
 
             return dot > 0.0f;

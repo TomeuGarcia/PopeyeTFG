@@ -7,6 +7,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
     {
         public Transform GetSnapTransform();
         public Vector3 GetSnapPosition();
+        public Vector3 GetLookDirection();
         public Quaternion GetSnapRotation();
 
         public bool CanSnapFromPosition(Vector3 position);

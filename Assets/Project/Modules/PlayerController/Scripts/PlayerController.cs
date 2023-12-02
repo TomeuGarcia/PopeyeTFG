@@ -15,6 +15,7 @@ namespace Popeye.Modules.PlayerController
         [Header("COMPONENTS")] 
         [SerializeField] private Rigidbody _rigidbody;
         public Vector3 Position => _rigidbody.position;
+        public Transform Transform => _rigidbody.transform;
 
         [SerializeField] private MeshRenderer _renderer;
         private Material _material;

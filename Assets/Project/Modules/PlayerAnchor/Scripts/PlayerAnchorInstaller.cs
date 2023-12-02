@@ -6,6 +6,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
+using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Project.Modules.PlayerAnchor.Anchor;
 using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Project.Modules.PlayerAnchor.Chain;
@@ -23,7 +24,8 @@ namespace Project.Modules.PlayerAnchor
         [Header("PLAYER")]
         [SerializeField] private PopeyePlayer _player;
         [SerializeField] private PlayerController _playerController;
-
+        [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
+        
         [Header("Player States")] 
         [SerializeField] private PlayerStatesConfig _playerStatesConfigurations;
 
@@ -76,7 +78,7 @@ namespace Project.Modules.PlayerAnchor
         private void Install()
         {
             // Anchor
-            AnchorMotion anchorMotion = new AnchorMotion();
+            TransformMotion anchorMotion = new TransformMotion();
             AnchorThrower anchorThrower = new AnchorThrower();
             AnchorPuller anchorPuller = new AnchorPuller();
             AnchorTrajectoryMaker anchorTrajectoryMaker = new AnchorTrajectoryMaker();
@@ -111,13 +113,15 @@ namespace Project.Modules.PlayerAnchor
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.CameraTransform);
             PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController();
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
+            TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
             
-            
             playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, movesetInputsController, _anchor);
+            playerMotion.Configure(_playerController.Transform);
             playerStateMachine.Setup(playerStatesBlackboard);
 
-            _player.Configure(playerStateMachine, _playerController, _anchor, anchorThrower, anchorPuller);
+            _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig, playerMotion, 
+                _anchor, anchorThrower, anchorPuller);
             _playerController.MovementInputHandler = movementInputHandler;
             
             

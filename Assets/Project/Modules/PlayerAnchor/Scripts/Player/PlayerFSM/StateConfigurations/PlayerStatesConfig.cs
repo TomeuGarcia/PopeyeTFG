@@ -1,10 +1,11 @@
+using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 {
     [CreateAssetMenu(fileName = "PlayerStatesConfig", 
-        menuName = PlayerStatesConfigHelper.SO_ASSETS_PATH + "PlayerStatesConfig")]
+        menuName = PlayerConfigHelper.SO_ASSETS_PATH + "PlayerStatesConfig")]
     public class PlayerStatesConfig : ScriptableObject
     {
         [Header("SPAWNING")]
@@ -33,6 +34,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _anchorPickUpDistance = 2.0f;
         
         public float AnchorPickUpDistance => _anchorPickUpDistance;
+
+        
+        [Header("DASH")]
+        [SerializeField, Range(0.01f, 10.0f)] private float _dashDuration = 0.25f;
+        
+        public float DashDuration => _dashDuration;
 
     }
 }

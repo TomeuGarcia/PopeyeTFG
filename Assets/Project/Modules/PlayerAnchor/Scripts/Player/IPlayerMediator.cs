@@ -23,8 +23,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void CancelChargingThrow();
         public void ThrowAnchor();
         public void PullAnchor();
+        public void DashTowardsAnchor(float duration);
 
 
         public void OnAnchorThrowEndedInVoid();
+
+
+        public UniTaskVoid LookTowardsAnchorForDuration(float duration);
+        
+        public void SetVulnerable();
+        public void SetInvulnerable();
     }
 }

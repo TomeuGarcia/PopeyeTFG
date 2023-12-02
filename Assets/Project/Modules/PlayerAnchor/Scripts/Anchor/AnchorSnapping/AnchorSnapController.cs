@@ -42,7 +42,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             }
             
             
-            if (!snapTarget.CanSnapFromPosition(trajectoryPath[^1]))
+            if (!snapTarget.CanSnapFromPosition(trajectoryPath[0]))
             {
                 if (HasSnapTarget)
                 {

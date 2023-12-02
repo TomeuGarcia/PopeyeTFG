@@ -32,11 +32,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
 
-            if ((_blackboard.MovesetInputsController.Pull_Pressed() && PlayerCanPullAnchor())
-                || _blackboard.queuedAnchorPull)
+            if (PlayerCanPullAnchor())
             {
                 _blackboard.queuedAnchorPull = false;
                 NextState = PlayerStates.PullingAnchor;
+                return true;
+            }
+
+            if (PlayerCanDashTowardsAnchor())
+            {
+                NextState = PlayerStates.DashingTowardsAnchor;
                 return true;
             }
             
@@ -52,6 +57,33 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanPullAnchor()
         {
+            bool hasEnoughStamina = PlayerHasEnoughStamina();
+
+            if (_blackboard.queuedAnchorPull && hasEnoughStamina)
+            {
+                _blackboard.queuedAnchorPull = false;
+                return true;
+            }
+
+            return _blackboard.MovesetInputsController.Pull_Pressed() && hasEnoughStamina;
+        }
+
+        private bool PlayerCanDashTowardsAnchor()
+        {
+            bool hasEnoughStamina = PlayerHasEnoughStamina();
+
+            if (_blackboard.queuedDashTowardsAnchor && hasEnoughStamina)
+            {
+                _blackboard.queuedDashTowardsAnchor = false;
+                return true;
+            }
+
+            return _blackboard.MovesetInputsController.Dash_Pressed() && hasEnoughStamina;
+        }
+        
+        private bool PlayerHasEnoughStamina()
+        {
+            // TODO
             return true;
         }
     }

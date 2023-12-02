@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Project.Modules.PlayerAnchor;
 using Project.Modules.PlayerAnchor.Anchor;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IPlayerMediator _player;
         private PopeyeAnchor _anchor;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
-        private AnchorMotion _anchorMotion;
+        private TransformMotion _anchorMotion;
         private AnchorThrowConfig _throwConfig;
         
         private AnchorSnapController _anchorSnapController;
@@ -29,7 +30,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
-            AnchorTrajectoryMaker anchorTrajectoryMaker, AnchorMotion anchorMotion,
+            AnchorTrajectoryMaker anchorTrajectoryMaker, TransformMotion anchorMotion,
             AnchorThrowConfig throwConfig, AnchorSnapController anchorSnapController)
         {
             _player = player;
@@ -52,9 +53,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Vector3 throwDirection = _player.GetFloorAlignedLookDirection();
 
             Vector3[] trajectoryPath =
-                _anchorTrajectoryMaker.UpdateTrajectoryPath(throwStartPoint, throwDirection, ThrowDistance);
+                _anchorTrajectoryMaker.UpdateTrajectoryPath(throwStartPoint, throwDirection, ThrowDistance,
+                    !_anchorSnapController.HasSnapTarget);
 
-            _anchorSnapController.CheckForSnapTarget(trajectoryPath);
+            if (_anchorSnapController.CheckForSnapTarget(trajectoryPath))
+            {
+                IAnchorSnapTarget snapTarget = _anchorSnapController.AnchorSnapTarget;
+                _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(snapTarget.GetSnapPosition(), snapTarget.GetLookDirection());
+            }
         }
 
 

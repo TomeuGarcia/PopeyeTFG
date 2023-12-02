@@ -73,12 +73,17 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
 
 
-        public Vector3[] UpdateTrajectoryPath(Vector3 startPoint, Vector3 direction, float distance)
+        public Vector3[] UpdateTrajectoryPath(Vector3 startPoint, Vector3 direction, float distance,
+            bool updateTrajectoryEndSpot)
         {
             DoUpdateTrajectoryPath(_straightTrajectoryPath, startPoint, direction, distance);
             DoUpdateTrajectoryPath(_curvedEndTrajectoryPath, startPoint, direction, distance);
             CurveTrajectoryPath(_curvedEndTrajectoryPath, _anchorThrowConfig.TrajectoryBendSharpness);
-            UpdateTrajectoryEndSpot();
+
+            if (updateTrajectoryEndSpot)
+            {
+                UpdateTrajectoryEndSpot();
+            }
 
             if (drawDebugLines)
             {
@@ -130,7 +135,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
             Vector3 spotPosition;
             Vector3 spotLookDirection;
             
-            
             if (_trajectoryHitChecker.GetFirstObstacleHitInTrajectoryPath(_curvedEndTrajectoryPath, 
                     out RaycastHit hit, out _trajectoryHitIndex))
             {
@@ -147,7 +151,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
             }
             
             spotPosition += spotLookDirection * 0.05f;
-            _trajectoryEndSpot.MatchSpot(spotPosition, spotLookDirection, !TrajectoryEndsOnVoid);
+            MakeTrajectoryEndSpotMatchSpot(spotPosition, spotLookDirection);
+        }
+
+        public void MakeTrajectoryEndSpotMatchSpot(Vector3 position, Vector3 lookDirection)
+        {
+            _trajectoryEndSpot.MatchSpot(position, lookDirection, !TrajectoryEndsOnVoid);
         }
 
 

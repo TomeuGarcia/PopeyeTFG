@@ -1,6 +1,9 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
+using Project.Modules.PlayerAnchor;
 using Project.Modules.PlayerAnchor.Anchor;
 using UnityEngine;
 
@@ -15,18 +18,23 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private PlayerFSM _stateMachine;
         private PlayerController.PlayerController _playerController;
+        private PlayerMovesetConfig _playerMovesetConfig;
         private PopeyeAnchor _anchor;
         private IAnchorThrower _anchorThrower;
         private IAnchorPuller _anchorPuller;
+        private TransformMotion _playerMotion;
         
         public Vector3 Position => _playerController.Position;
         
         
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
+            PlayerMovesetConfig playerMovesetConfig, TransformMotion playerMotion,
             PopeyeAnchor anchor, IAnchorThrower anchorThrower, IAnchorPuller anchorPuller)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
+            _playerMovesetConfig = playerMovesetConfig; 
+            _playerMotion = playerMotion;
             _anchor = anchor;
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
@@ -105,6 +113,30 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PullAnchor()
         {
             _anchorPuller.PullAnchor();
+            LookTowardsAnchorForDuration(0.3f).Forget();
+        }
+
+        public void DashTowardsAnchor(float duration)
+        {
+            Vector3 up = Vector3.up;
+            Vector3 toAnchor = Vector3.ProjectOnPlane((_anchor.Position - Position).normalized, up);
+            Vector3 right = Vector3.Cross(toAnchor, up).normalized;
+
+            Vector3 extraDisplacement = toAnchor * _playerMovesetConfig.DashExtraDisplacement.z;
+            extraDisplacement += right * _playerMovesetConfig.DashExtraDisplacement.x;
+            extraDisplacement += up * _playerMovesetConfig.DashExtraDisplacement.y;
+
+            Vector3 dashEndPosition = _anchor.GetDashEndPosition() + extraDisplacement;
+
+            if (_anchor.IsGrabbedBySnapper())
+            {
+                dashEndPosition += toAnchor * _playerMovesetConfig.SnapExtraDisplacement.z;
+                extraDisplacement += right * _playerMovesetConfig.SnapExtraDisplacement.x;
+                extraDisplacement += up * _playerMovesetConfig.SnapExtraDisplacement.y;
+            }
+            
+            LookTowardsAnchorForDuration(duration).Forget();
+            _playerMotion.MoveToPosition(dashEndPosition, duration, Ease.InOutQuad);
         }
 
 
@@ -114,5 +146,25 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.Blackboard.queuedAnchorPull = true;
         }
 
+        public async UniTaskVoid LookTowardsAnchorForDuration(float duration)
+        {
+            _playerController.CanRotate = false;
+            _playerController.LookTowardsPosition(_anchor.Position);
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            _playerController.CanRotate = true;
+        }
+
+
+        public void SetVulnerable()
+        {
+            // TODO
+            Debug.Log("Invulnerable");
+        }
+
+        public void SetInvulnerable()
+        {
+            // TODO
+            Debug.Log("Vulnerable");
+        }
     }
 }

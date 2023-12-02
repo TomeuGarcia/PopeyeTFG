@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Project.Modules.PlayerAnchor;
 using Project.Modules.PlayerAnchor.Anchor;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IPlayerMediator _player;
         private PopeyeAnchor _anchor;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
-        private AnchorMotion _anchorMotion;
+        private TransformMotion _anchorMotion;
         private AnchorPullConfig _pullConfig;
 
         private bool _anchorIsBeingPulled;
@@ -22,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
-            AnchorTrajectoryMaker anchorTrajectoryMaker, AnchorMotion anchorMotion,
+            AnchorTrajectoryMaker anchorTrajectoryMaker, TransformMotion anchorMotion,
             AnchorPullConfig pullConfig)
         {
             _player = player;

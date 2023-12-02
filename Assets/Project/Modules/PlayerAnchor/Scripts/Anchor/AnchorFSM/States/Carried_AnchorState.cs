@@ -15,7 +15,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         
         public void Enter()
         {
-            _blackboard.AnchorMotion.ParentAndReset(_blackboard.AnchorCarryHolder, 0.2f, Ease.InOutSine);
+            _blackboard.TransformMotion.ParentAndReset(_blackboard.AnchorCarryHolder, 0.2f, Ease.InOutSine);
             _blackboard.AnchorPhysics.DisableAllPhysics();
             
             _blackboard.AnchorChain.Hide();

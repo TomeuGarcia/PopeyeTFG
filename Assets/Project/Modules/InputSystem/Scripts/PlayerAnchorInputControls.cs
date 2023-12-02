@@ -359,7 +359,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""588042c2-32f9-4a80-a475-3d5090299484"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -370,7 +370,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""5a1f3c3d-8e59-46ef-9ca8-de56c32863ed"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -381,7 +381,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""72d3ab2e-538e-4c67-be06-f721167155f5"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -392,7 +392,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""7dfa0d8f-c417-4b72-a5cc-85386756b77e"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
