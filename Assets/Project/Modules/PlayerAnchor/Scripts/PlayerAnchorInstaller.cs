@@ -38,7 +38,8 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
         [SerializeField] private AnchorPullConfig _anchorPullConfig;
         [SerializeField] private AnchorTrajectoryEndSpot _anchorTrajectoryEndSpot;
-        
+        [SerializeField] private LayerMask _obstaclesMask;
+        [SerializeField] private LayerMask _anchorSnapTargetMask;
         
         [Header("CHAIN")]
         [SerializeField] private ChainConfig _anchorChainConfig;
@@ -48,13 +49,27 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private Transform _chainPlayerBindTransform;
         [SerializeField] private Transform _chainAnchorBindTransform;
 
+        
+        [Header("DEBUG")]
         [SerializeField] private LineRenderer debugLine;
         [SerializeField] private LineRenderer debugLine2;
         [SerializeField] private LineRenderer debugLine3;
+        [SerializeField] private bool drawDebugLines = true;
+        private AnchorTrajectoryMaker trajectoryMaker;
+        
+        private void OnValidate()
+        {
+            if (trajectoryMaker != null)
+            {
+                trajectoryMaker.drawDebugLines = drawDebugLines;
+            }
+        }
+
 
         private void Awake()
         {
             Install();
+            OnValidate();
         }
 
         private void Install()
@@ -67,17 +82,22 @@ namespace Project.Modules.PlayerAnchor
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
+            TrajectoryHitChecker anchorTrajectoryHitChecker = new TrajectoryHitChecker(
+                _obstaclesMask, _anchorSnapTargetMask);
+            AnchorSnapController anchorSnapController = new AnchorSnapController();
             
             
             anchorMotion.Configure(_anchorMoveTransform);
-            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorThrowConfig);
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorThrowConfig, 
+                anchorSnapController);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorPullConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorThrowConfig, _anchorPullConfig,
-                debugLine, debugLine2, debugLine3);
+                anchorTrajectoryHitChecker, debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(anchorMotion, _anchorPhysics, _anchorChain, _player.AnchorCarryHolder, 
                 _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorChainConfig);
+            anchorSnapController.Configure(anchorTrajectoryHitChecker);
 
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorChain);
@@ -98,6 +118,11 @@ namespace Project.Modules.PlayerAnchor
 
             _player.Configure(playerStateMachine, _playerController, _anchor, anchorThrower, anchorPuller);
             _playerController.MovementInputHandler = movementInputHandler;
+            
+            
+            
+            // Debug
+            trajectoryMaker = anchorTrajectoryMaker;
         }
     }
 }

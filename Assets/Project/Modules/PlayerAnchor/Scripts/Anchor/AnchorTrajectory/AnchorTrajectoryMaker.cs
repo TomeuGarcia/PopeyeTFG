@@ -11,7 +11,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorTrajectoryEndSpot _trajectoryEndSpot;
         private AnchorThrowConfig _anchorThrowConfig;
         private AnchorPullConfig _anchorPullConfig;
-
+        private TrajectoryHitChecker _trajectoryHitChecker;
+        
 
         private Vector3[] _straightTrajectoryPath;
         private Vector3[] _curvedEndTrajectoryPath;
@@ -32,11 +33,13 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
             AnchorThrowConfig anchorThrowConfig, AnchorPullConfig anchorPullConfig,
+            TrajectoryHitChecker trajectoryHitChecker,
             LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3)
         {
             _trajectoryEndSpot = trajectoryEndSpot;
             _anchorThrowConfig = anchorThrowConfig;
             _anchorPullConfig = anchorPullConfig;
+            _trajectoryHitChecker = trajectoryHitChecker;
 
             _trajectoryEndSpot.Hide();
             
@@ -70,17 +73,19 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
 
 
-        public void UpdateTrajectoryPath(Vector3 startPoint, Vector3 direction, float distance)
+        public Vector3[] UpdateTrajectoryPath(Vector3 startPoint, Vector3 direction, float distance)
         {
             DoUpdateTrajectoryPath(_straightTrajectoryPath, startPoint, direction, distance);
             DoUpdateTrajectoryPath(_curvedEndTrajectoryPath, startPoint, direction, distance);
             CurveTrajectoryPath(_curvedEndTrajectoryPath, _anchorThrowConfig.TrajectoryBendSharpness);
             UpdateTrajectoryEndSpot();
-            
+
             if (drawDebugLines)
             {
                 DrawDebugLines();
             }
+
+            return _curvedEndTrajectoryPath;
         }
         
         private void DoUpdateTrajectoryPath(Vector3[] trajectoryPath, Vector3 startPoint, Vector3 direction, float distance)
@@ -125,7 +130,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
             Vector3 spotPosition;
             Vector3 spotLookDirection;
             
-            if (GetFirstHitInTrajectoryPath(_curvedEndTrajectoryPath, out RaycastHit hit, out _trajectoryHitIndex))
+            
+            if (_trajectoryHitChecker.GetFirstObstacleHitInTrajectoryPath(_curvedEndTrajectoryPath, 
+                    out RaycastHit hit, out _trajectoryHitIndex))
             {
                 TrajectoryEndsOnVoid = false;
                 spotPosition = hit.point;
@@ -141,29 +148,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             spotPosition += spotLookDirection * 0.05f;
             _trajectoryEndSpot.MatchSpot(spotPosition, spotLookDirection, !TrajectoryEndsOnVoid);
-        }
-
-
-        private bool GetFirstHitInTrajectoryPath(Vector3[] trajectoryPath, out RaycastHit trajectoryHit, 
-            out int trajectoryIndex)
-        {
-            for (int i = 0; i < trajectoryPath.Length - 1; ++i)
-            {
-                Vector3 pointA = trajectoryPath[i];
-                Vector3 pointB = trajectoryPath[i+1];
-                Vector3 AtoB = pointB - pointA;
-
-                if (Physics.Raycast(pointA, AtoB.normalized, out trajectoryHit, AtoB.magnitude + 0.2f, 
-                        PositioningHelper.Instance.ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
-                {
-                    trajectoryIndex = i;
-                    return true;
-                }
-            }
-            
-            trajectoryIndex = -1;
-            trajectoryHit = new RaycastHit();
-            return false;
         }
 
 

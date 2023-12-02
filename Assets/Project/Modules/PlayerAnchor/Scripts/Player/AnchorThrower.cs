@@ -14,6 +14,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private AnchorMotion _anchorMotion;
         private AnchorThrowConfig _throwConfig;
         
+        private AnchorSnapController _anchorSnapController;
+        
+        
         private float _currentThrowForce01;
         private float _currentThrowCurveForce01;
         
@@ -27,13 +30,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker, AnchorMotion anchorMotion,
-            AnchorThrowConfig throwConfig)
+            AnchorThrowConfig throwConfig, AnchorSnapController anchorSnapController)
         {
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _anchorMotion = anchorMotion;
             _throwConfig = throwConfig;
+            _anchorSnapController = anchorSnapController;
 
             AnchorThrowResult = new AnchorThrowResult();
             
@@ -47,7 +51,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Vector3 throwStartPoint = _player.GetAnchorThrowStartPosition();
             Vector3 throwDirection = _player.GetFloorAlignedLookDirection();
 
-            _anchorTrajectoryMaker.UpdateTrajectoryPath(throwStartPoint, throwDirection, ThrowDistance);
+            Vector3[] trajectoryPath =
+                _anchorTrajectoryMaker.UpdateTrajectoryPath(throwStartPoint, throwDirection, ThrowDistance);
+
+            _anchorSnapController.CheckForSnapTarget(trajectoryPath);
         }
 
 
@@ -58,10 +65,26 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void ThrowAnchor()
         {
-            Vector3[] trajectoryPath = _anchorTrajectoryMaker.GetCorrectedTrajectoryPath();
             float moveDuration = ComputeThrowDuration();
-            moveDuration = _anchorTrajectoryMaker.GetCorrectedDurationByDistance(ThrowDistance, moveDuration);
-            bool trajectoryEndsOnVoid = _anchorTrajectoryMaker.TrajectoryEndsOnVoid;
+            bool trajectoryEndsOnVoid = false;
+            Vector3[] trajectoryPath = null;
+
+            
+            if (_anchorSnapController.HasSnapTarget)
+            {
+                trajectoryPath = _anchorTrajectoryMaker.ComputeCurvedTrajectory(_anchor.Position, 
+                    _anchorSnapController.GetTargetSnapPosition(), 10, out float distance);
+                moveDuration = (moveDuration / ThrowDistance) * distance;
+                
+                _anchorSnapController.ConfirmCurrentTarget(moveDuration);
+            }
+            else
+            {
+                trajectoryPath = _anchorTrajectoryMaker.GetCorrectedTrajectoryPath();
+                moveDuration = _anchorTrajectoryMaker.GetCorrectedDurationByDistance(ThrowDistance, moveDuration);
+                trajectoryEndsOnVoid = _anchorTrajectoryMaker.TrajectoryEndsOnVoid;
+            }
+            
             
             _anchor.SetThrown(trajectoryEndsOnVoid);
 
