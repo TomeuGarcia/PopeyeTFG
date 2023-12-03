@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class AnchorHealthDrainer : MonoBehaviour
 {
     [Header("REFERENCES")]
     [SerializeField] private Anchor _anchor;
-    [SerializeField] private AnchorDamageDealer _anchorDamageDealer;
+    [FormerlySerializedAs("_anchorDamageDealer")] [SerializeField] private AnchorDamageDealer_Old anchorDamageDealerOld;
     [SerializeField] private MeshRenderer _anchorMesh;
     private Material _anchorMaterial;
     [SerializeField] private LineRenderer _ownerBinderLine;

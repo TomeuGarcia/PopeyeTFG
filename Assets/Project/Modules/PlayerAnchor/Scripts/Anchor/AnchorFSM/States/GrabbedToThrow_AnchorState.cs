@@ -14,7 +14,9 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         public void Enter()
         {
             _blackboard.TransformMotion.ParentAndReset(_blackboard.AnchorGrabToThrowHolder, 0.2f, Ease.InOutSine);
+            _blackboard.AnchorPhysics.DisableAllPhysics();
         }
+        
 
         public void Exit()
         {

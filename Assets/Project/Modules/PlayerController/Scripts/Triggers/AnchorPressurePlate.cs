@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget

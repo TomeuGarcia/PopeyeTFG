@@ -7,9 +7,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         [SerializeField] private ValueStatBar _staminaBar;
         
-        public void Configure(AValueStat staminaStat)
+        public void Configure(TimeStaminaSystem staminaStat)
         {
-            _staminaBar.Init(staminaStat);
+            _staminaBar.Init(staminaStat, staminaStat.FullRecoverDuration);
         }
         
         

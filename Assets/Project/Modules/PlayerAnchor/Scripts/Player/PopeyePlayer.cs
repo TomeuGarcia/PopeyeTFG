@@ -127,9 +127,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PullAnchor()
         {
             _anchorPuller.PullAnchor();
-            SpendStamina(_playerMovesetConfig.AnchorPullStaminaCost);
             LookTowardsAnchorForDuration(0.3f).Forget();
         }
+
+        public void OnPullAnchorComplete()
+        {
+            SpendStamina(_playerMovesetConfig.AnchorPullStaminaCost);
+            if (HasStaminaLeft())
+            {
+                _anchor.SetCarried();
+            }
+        }
+        
 
         public void DashTowardsAnchor(float duration)
         {
@@ -182,7 +191,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Debug.Log("Vulnerable");
         }
 
-        
+        public bool HasStaminaLeft()
+        {
+            return _staminaSystem.HasStaminaLeft();
+        }
         public bool HasMaxStamina()
         {
             return _staminaSystem.HasMaxStamina();
@@ -192,7 +204,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             if (spendAmount == 0) return;
             
             _staminaSystem.Spend(spendAmount);
-            if (!_staminaSystem.HasStaminaLeft())
+            if (!HasStaminaLeft())
             {
                 EnterTiredState();
             }

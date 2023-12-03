@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Popeye.Modules.Camera;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class AnchorDamageDealer : MonoBehaviour
+public class AnchorDamageDealer_Old : MonoBehaviour
 {
     [Header("REFERENCES")]
     [SerializeField] private Anchor _anchor;
@@ -63,19 +64,19 @@ public class AnchorDamageDealer : MonoBehaviour
 
     private void Start()
     {
-        _throwHit = new DamageHit(CombatManager.Instance.DamageEnemiesAndDestructiblesPreset, 
+        _throwHit = new DamageHit(CombatManagerSingleton.Instance.DamageEnemiesAndDestructiblesPreset, 
             _throwHitDamage, _throwHitKnockbackForce, _throwHitStunDuration);
 
-        _groundHit = new DamageHit(CombatManager.Instance.DamageEnemiesDestructiblesAndInteractablesPreset, 
+        _groundHit = new DamageHit(CombatManagerSingleton.Instance.DamageEnemiesDestructiblesAndInteractablesPreset, 
             _groundHitDamage, _groundHitKnockbackForce, _groundHitStunDuration);
 
-        _meleeHit = new DamageHit(CombatManager.Instance.DamageOnlyEnemiesPreset, 
+        _meleeHit = new DamageHit(CombatManagerSingleton.Instance.DamageOnlyEnemiesPreset, 
             _meleeHitDamage, _meleeHitKnockbackForce, _meleeHitStunDuration);
 
-        _pullBackHit = new DamageHit(CombatManager.Instance.DamageOnlyEnemiesPreset, 
+        _pullBackHit = new DamageHit(CombatManagerSingleton.Instance.DamageOnlyEnemiesPreset, 
             _pullBackHitDamage, _pullBackHitKnockbackForce, _pullBackHitStunDuration);
 
-        _explosionHit = new DamageHit(CombatManager.Instance.DamageEnemiesAndDestructiblesPreset, 
+        _explosionHit = new DamageHit(CombatManagerSingleton.Instance.DamageEnemiesAndDestructiblesPreset, 
             _explosionHitDamage, _explosionHitKnockbackForce, _explosionHitStunDuration);
 
         OnValidate();
@@ -212,7 +213,7 @@ public class AnchorDamageDealer : MonoBehaviour
 
     private bool TryDealDamage(GameObject hitObject, DamageHit damageHit, bool restoresStamina)
     {
-        if (!CombatManager.Instance.TryDealDamage(hitObject, damageHit, out DamageHitResult damageHitResult))
+        if (!CombatManagerSingleton.Instance.TryDealDamage(hitObject, damageHit, out DamageHitResult damageHitResult))
         {
             return false;
         }

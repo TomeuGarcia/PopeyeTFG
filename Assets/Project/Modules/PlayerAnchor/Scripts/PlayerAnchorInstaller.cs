@@ -1,5 +1,6 @@
 using System;
 using AYellowpaper;
+using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
@@ -8,6 +9,7 @@ using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using Project.Modules.PlayerAnchor.Anchor;
 using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Project.Modules.PlayerAnchor.Chain;
@@ -40,6 +42,10 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
         [SerializeField] private Transform _anchorMoveTransform;
+
+        [Header("Anchor Damage")] 
+        [SerializeField] private AnchorDamageDealer _anchorDamageDealer;
+        [SerializeField] private AnchorDamageConfig _anchorDamageConfig;
         
         [Header("Anchor Throwing")]
         [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
@@ -88,6 +94,11 @@ namespace Project.Modules.PlayerAnchor
 
         private void Install()
         {
+            // Services
+            ServiceLocator.Instance.RegisterService<ICombatManager>(new CombatManagerService());
+
+            ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
+
             // Anchor
             TransformMotion anchorMotion = new TransformMotion();
             AnchorThrower anchorThrower = new AnchorThrower();
@@ -99,7 +110,7 @@ namespace Project.Modules.PlayerAnchor
             TrajectoryHitChecker anchorTrajectoryHitChecker = new TrajectoryHitChecker(
                 _obstaclesMask, _anchorSnapTargetMask);
             AnchorSnapController anchorSnapController = new AnchorSnapController();
-
+            
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorThrowConfig, 
@@ -114,7 +125,8 @@ namespace Project.Modules.PlayerAnchor
             anchorSnapController.Configure(anchorTrajectoryHitChecker);
 
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorChain);
+                _anchorDamageDealer, _anchorChain);
+            _anchorDamageDealer.Configure(_anchorDamageConfig, combatManager);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
 

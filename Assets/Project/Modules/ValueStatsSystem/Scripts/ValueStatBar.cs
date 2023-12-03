@@ -22,7 +22,7 @@ namespace Popeye.Modules.ValueStatSystem
         [SerializeField] private Color _decrementColor = Color.red;
 
         
-        private AValueStat _aValueStat;
+        private AValueStat _valueStat;
         private bool _isSubscribed;
 
         
@@ -42,7 +42,7 @@ namespace Popeye.Modules.ValueStatSystem
     
         private void OnEnable()
         {
-            if (_aValueStat != null)
+            if (_valueStat != null)
             {
                 SubscribeToEvents();
             }
@@ -50,15 +50,20 @@ namespace Popeye.Modules.ValueStatSystem
     
         private void OnDisable()
         {
-            if (_aValueStat != null)
+            if (_valueStat != null)
             {
                 UnsubscribeToEvents();
             }
         }
-    
-        public void Init(AValueStat aValueStat)
+
+        public void Init(AValueStat valueStat, float fullFillDuration)
         {
-            _aValueStat = aValueStat;
+            Init(valueStat);
+            _fullFillDuration = fullFillDuration;
+        }
+        public void Init(AValueStat valueStat)
+        {
+            _valueStat = valueStat;
             _isSubscribed = false;
     
             OnValidate();
@@ -73,7 +78,7 @@ namespace Popeye.Modules.ValueStatSystem
             if (_isSubscribed) return;
             _isSubscribed = true;
     
-            _aValueStat.OnValueUpdate += UpdateFillImage;
+            _valueStat.OnValueUpdate += UpdateFillImage;
         }
         
         private void UnsubscribeToEvents()
@@ -81,18 +86,18 @@ namespace Popeye.Modules.ValueStatSystem
             if (!_isSubscribed) return;
             _isSubscribed = false;
     
-            _aValueStat.OnValueUpdate -= UpdateFillImage;
+            _valueStat.OnValueUpdate -= UpdateFillImage;
         }
     
     
         private void InstantUpdateFillImage()
         {
-            _fillImage.fillAmount = _lazyBarFillImage.fillAmount = _aValueStat.GetValuePer1Ratio();
+            _fillImage.fillAmount = _lazyBarFillImage.fillAmount = _valueStat.GetValuePer1Ratio();
         }
     
         private void UpdateFillImage()
         {
-            float newFillValue = _aValueStat.GetValuePer1Ratio();        
+            float newFillValue = _valueStat.GetValuePer1Ratio();        
             float changeAmount = newFillValue - _fillImage.fillAmount;
 
             bool isSubtracting = changeAmount < 0;

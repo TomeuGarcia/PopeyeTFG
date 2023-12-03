@@ -64,8 +64,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             await UniTask.Delay(TimeSpan.FromSeconds(anchorPullResult.Duration));
             
             _anchorIsBeingPulled = false;
-            
-            _anchor.SetCarried();
         }
         
         

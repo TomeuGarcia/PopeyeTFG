@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Anchor : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Anchor : MonoBehaviour
     [SerializeField] private LineRenderer _ownerBinderLine;
     [SerializeField] private Collider _hitTrigger;
     [SerializeField] private SphereCollider _collider;
-    [SerializeField] public AnchorDamageDealer _anchorDamageDealer;
+    [FormerlySerializedAs("_anchorDamageDealer")] [SerializeField] public AnchorDamageDealer_Old anchorDamageDealerOld;
     [SerializeField] private LayerMask _obstacleLayers;
     [SerializeField] private GroundedAnchor _groundedAnchor;
     [SerializeField] private AnchorSnapper _anchorSnapper;
@@ -146,7 +147,7 @@ public class Anchor : MonoBehaviour
         if (Vector3.Dot(normal, Vector3.up) < 0.5f)
         {
             SnapToFloor();
-            _anchorDamageDealer.DealGroundHitDamage(Position, _throwStrength01);
+            anchorDamageDealerOld.DealGroundHitDamage(Position, _throwStrength01);
             _alreadyCollidedWithWall = true;
             return;
         }
@@ -157,7 +158,7 @@ public class Anchor : MonoBehaviour
 
         if (!_alreadyCollidedWithWall)
         {
-            _anchorDamageDealer.DealGroundHitDamage(Position, _throwStrength01);
+            anchorDamageDealerOld.DealGroundHitDamage(Position, _throwStrength01);
         }        
         
         _groundedAnchor.gameObject.SetActive(true);
@@ -167,7 +168,7 @@ public class Anchor : MonoBehaviour
     {
         if (IsOnAir())
         {
-            _anchorDamageDealer.DealThrowHitDamage(otherCollider.gameObject, Position);
+            anchorDamageDealerOld.DealThrowHitDamage(otherCollider.gameObject, Position);
         }       
         else if (_isBeingPulled)
         {            
@@ -572,7 +573,7 @@ public class Anchor : MonoBehaviour
         float duration = 0.5f;
         float halfDuration = duration / 2;
 
-        _anchorDamageDealer.StartMeleeHitDamage(Position, prepareDuration, duration);
+        anchorDamageDealerOld.StartMeleeHitDamage(Position, prepareDuration, duration);
 
         _canMeleeAttack = false;
 
@@ -720,7 +721,7 @@ public class Anchor : MonoBehaviour
 
     public void UseExplosionAbility()
     {
-        _anchorDamageDealer.DealExplosionDamage(Position);
+        anchorDamageDealerOld.DealExplosionDamage(Position);
         _staminaSystem.Spend((int)_explosionStamina);
     }
 

@@ -18,6 +18,8 @@ namespace Popeye.Modules.ValueStatSystem
         private CancellationTokenSource _waitToRestoreCancellation;
         private CancellationTokenSource _restoringStaminaCancellation;
 
+        public float FullRecoverDuration => _config.FullRecoverDuration;
+
         
         public TimeStaminaSystem(ITimeStaminaConfig config)
         {

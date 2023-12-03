@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
@@ -81,7 +82,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
         _stateMachine.AwakeInit(this);
 
 
-        _contactDamageHit = new DamageHit(CombatManager.Instance.DamageOnlyPlayerPreset,
+        _contactDamageHit = new DamageHit(CombatManagerSingleton.Instance.DamageOnlyPlayerPreset,
             _contactHitDamageAmount, _contactHitKnockbackForce, _contactHitStunDuration);
 
         DisableDealingContactDamage();
@@ -106,7 +107,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
             _contactDamageHit.Position = Position;
             _contactDamageHit.KnockbackDirection = PositioningHelper.Instance.GetDirectionAlignedWithFloor(Position, other.transform.position);
 
-            CombatManager.Instance.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
+            CombatManagerSingleton.Instance.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
         }        
     }
 

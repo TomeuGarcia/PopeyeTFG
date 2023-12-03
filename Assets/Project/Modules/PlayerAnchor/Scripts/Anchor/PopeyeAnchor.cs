@@ -18,6 +18,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorPuller _anchorPuller;
         private TransformMotion _anchorMotion;
 
+        private AnchorDamageDealer _anchorDamageDealer;
         private AnchorChain _anchorChain;
 
         public Vector3 Position => _anchorMotion.AnchorPosition;
@@ -25,7 +26,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
-            AnchorChain anchorChain)
+            AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain)
         {
             _stateMachine = stateMachine;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
@@ -33,6 +34,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorPuller = anchorPuller;
             _anchorMotion = anchorMotion;
 
+            _anchorDamageDealer = anchorDamageDealer;
             _anchorChain = anchorChain;
         }
         

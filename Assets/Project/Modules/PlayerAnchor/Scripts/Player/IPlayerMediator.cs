@@ -23,6 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void CancelChargingThrow();
         public void ThrowAnchor();
         public void PullAnchor();
+        public void OnPullAnchorComplete();
         public void DashTowardsAnchor(float duration);
 
 
@@ -34,6 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void SetVulnerable();
         public void SetInvulnerable();
 
+        public bool HasStaminaLeft();
         public bool HasMaxStamina();
     }
 }
