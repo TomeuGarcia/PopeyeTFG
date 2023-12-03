@@ -26,8 +26,10 @@ namespace Project.Modules.PlayerAnchor
         [Header("PLAYER")]
         [SerializeField] private PopeyePlayer _player;
         [SerializeField] private PlayerController _playerController;
+        [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView; 
         [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
-        [FormerlySerializedAs("timeStaminaConfigSo")] [FormerlySerializedAs("aTimeStaminaConfigSo")] [FormerlySerializedAs("timeStaminaConfig")] [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
+        [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
+        
         
         [Header("Player States")] 
         [SerializeField] private PlayerStatesConfig _playerStatesConfigurations;
@@ -126,7 +128,8 @@ namespace Project.Modules.PlayerAnchor
             PlayerFSM playerStateMachine = new PlayerFSM();
             TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerStaminaConfig);
             
-            playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, movesetInputsController, _anchor);
+            playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, _playerView.Value, 
+                movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform);
             playerStateMachine.Setup(playerStatesBlackboard);
 

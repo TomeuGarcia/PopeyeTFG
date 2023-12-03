@@ -9,6 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     {
         public PlayerStatesConfig PlayerStatesConfig { get; private set; }
         public IPlayerMediator PlayerMediator { get; private set;  }
+        public IPlayerView PlayerView { get; private set; }
         public PlayerAnchorMovesetInputsController MovesetInputsController { get; private set;  }
         public IAnchorMediator AnchorMediator { get; private set;  }
 
@@ -19,12 +20,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
 
         public void Configure(PlayerStatesConfig playerStatesConfig,
-            IPlayerMediator playerMediator, 
+            IPlayerMediator playerMediator, IPlayerView playerView,
             PlayerAnchorMovesetInputsController movesetInputsController,
             IAnchorMediator anchorMediator)
         {
             PlayerStatesConfig = playerStatesConfig;
             PlayerMediator = playerMediator;
+            PlayerView = playerView;
             MovesetInputsController = movesetInputsController;
             AnchorMediator = anchorMediator;
         }

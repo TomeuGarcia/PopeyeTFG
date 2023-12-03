@@ -14,11 +14,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.TiredMoveSpeed);
+            _blackboard.PlayerView.StartTired();
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerView.EndTired();
         }
 
         public override bool Update(float deltaTime)
