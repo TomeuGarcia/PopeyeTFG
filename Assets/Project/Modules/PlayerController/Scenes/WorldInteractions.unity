@@ -35384,6 +35384,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1619028717}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1624003007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1624003008}
+  - component: {fileID: 1624003009}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1624003008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624003007}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.0573702, y: -6.5376773, z: 12.116467}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1624003009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624003007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04efb6c194d04c75a1d1e3870cf202e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1628669145
 Mesh:
   m_ObjectHideFlags: 0
@@ -39279,37 +39323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3485ecb949feb9e4f8271e2ace35999d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1802162088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288311013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  EventReference:
-    Guid:
-      Data1: -1444786415
-      Data2: 1239156762
-      Data3: 890798475
-      Data4: -1717589940
-    Path: event:/CHARACETR_MOVEMENT/SFX_Footsteps_rock_soft
-  Event: 
-  PlayEvent: 1
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  AllowNonRigidbodyDoppler: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!114 &1802162089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48510,10 +48523,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1802162089}
-    - targetCorrespondingSourceObject: {fileID: 2205425778900378741, guid: 0f1cb9433ad699344b8a89276f63dd45,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1802162088}
   m_SourcePrefab: {fileID: 100100000, guid: 0f1cb9433ad699344b8a89276f63dd45, type: 3}
 --- !u!4 &6100274277819689436 stripped
 Transform:
