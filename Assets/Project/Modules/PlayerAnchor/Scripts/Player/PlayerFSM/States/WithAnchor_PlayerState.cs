@@ -35,7 +35,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _currentState = _states[PlayerStates.MovingWithAnchor];
+            PlayerStates entryState = PlayerStates.MovingWithAnchor;
+            if (_blackboard.queuedOverwriteState != PlayerStates.None &&
+                _states.ContainsKey(_blackboard.queuedOverwriteState))
+            {
+                entryState = _blackboard.queuedOverwriteState;
+            }
+
+            _currentState = _states[entryState];
             _currentState.Enter();
         }
 

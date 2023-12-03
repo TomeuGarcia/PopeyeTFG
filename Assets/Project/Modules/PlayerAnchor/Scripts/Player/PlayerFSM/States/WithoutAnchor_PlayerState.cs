@@ -20,7 +20,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                             DashingTowardsAnchor_PlayerState dashingTowardsAnchor,
                             KickingAnchor_PlayerState kickingAnchor,
                             PullingAnchor_PlayerState pullingAnchor,
-                            SpinningAnchor_PlayerState spinningAnchor)
+                            SpinningAnchor_PlayerState spinningAnchor,
+                            Tired_PlayerState tired)
         {
             _states = new Dictionary<PlayerStates, APlayerState>()
             {
@@ -29,9 +30,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 { PlayerStates.DashingTowardsAnchor , dashingTowardsAnchor },
                 { PlayerStates.KickingAnchor , kickingAnchor },
                 { PlayerStates.PullingAnchor , pullingAnchor },
-                { PlayerStates.SpinningAnchor , spinningAnchor }
+                { PlayerStates.SpinningAnchor , spinningAnchor },
+                { PlayerStates.Tired , tired }
             };
-
         }
         
         public override bool HasSubState(PlayerStates state)
@@ -41,7 +42,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _currentState = _states[PlayerStates.MovingWithoutAnchor];
+            PlayerStates entryState = PlayerStates.MovingWithoutAnchor;
+            if (_blackboard.queuedOverwriteState != PlayerStates.None &&
+                _states.ContainsKey(_blackboard.queuedOverwriteState))
+            {
+                entryState = _blackboard.queuedOverwriteState;
+            }
+
+            _currentState = _states[entryState];
             _currentState.Enter();
         }
 

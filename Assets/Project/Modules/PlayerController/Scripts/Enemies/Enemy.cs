@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
+using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler

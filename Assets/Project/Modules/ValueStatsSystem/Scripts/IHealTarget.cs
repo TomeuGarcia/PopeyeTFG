@@ -2,8 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IHealthTarget
+namespace Popeye.Modules.ValueStatSystem
 {
-    public void Heal(float healAmount);
-    public void HealToMax();
+    public interface IHealthTarget
+    {
+        public void Heal(float healAmount);
+        public void HealToMax();
+    }
 }
+
+

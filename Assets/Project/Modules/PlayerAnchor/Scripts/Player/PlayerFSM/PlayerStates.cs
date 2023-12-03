@@ -18,6 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         DashingTowardsAnchor,
         KickingAnchor,
         PullingAnchor,
-        SpinningAnchor
+        SpinningAnchor,
+        Tired
     }
 }

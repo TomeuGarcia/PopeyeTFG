@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
 public class AnchorHealthDrainer : MonoBehaviour
@@ -90,7 +91,7 @@ public class AnchorHealthDrainer : MonoBehaviour
 
     public void IncrementDrainedHealth(float restoreAmount)
     {
-        _staminaSystem.Restore(restoreAmount);
+        _staminaSystem.Restore((int)restoreAmount);
 
         _canHeal = _staminaSystem.HasMaxStamina();
 

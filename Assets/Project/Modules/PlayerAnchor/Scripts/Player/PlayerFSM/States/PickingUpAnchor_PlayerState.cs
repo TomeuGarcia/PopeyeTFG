@@ -31,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private void StartPickingUpAnchor()
         {
-            _blackboard.PlayerMediator.CarryAnchor();
+            _blackboard.PlayerMediator.PickUpAnchor();
         }
     }
 }

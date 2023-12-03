@@ -23,13 +23,19 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.Throw_Pressed())
+            if (PlayerCanThrowAnchor())
             {
                 NextState = PlayerStates.AimingThrowAnchor;
                 return true;
             }
 
             return false;
+        }
+
+
+        private bool PlayerCanThrowAnchor()
+        {
+            return _blackboard.MovesetInputsController.Throw_Pressed();
         }
     }
 }

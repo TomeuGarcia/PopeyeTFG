@@ -1,3 +1,4 @@
+using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerController.Inputs;
 using Project.Modules.PlayerAnchor.Anchor;
@@ -13,21 +14,19 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         
         // Queues
-        public bool queuedAnchorPull;
         public bool queuedDashTowardsAnchor;
+        public PlayerStates queuedOverwriteState;
         
 
         public void Configure(PlayerStatesConfig playerStatesConfig,
-                                    IPlayerMediator playerMediator, 
-                                    PlayerAnchorMovesetInputsController movesetInputsController,
-                                    IAnchorMediator anchorMediator)
+            IPlayerMediator playerMediator, 
+            PlayerAnchorMovesetInputsController movesetInputsController,
+            IAnchorMediator anchorMediator)
         {
             PlayerStatesConfig = playerStatesConfig;
             PlayerMediator = playerMediator;
             MovesetInputsController = movesetInputsController;
             AnchorMediator = anchorMediator;
-
-            queuedAnchorPull = false;
         }
         
         

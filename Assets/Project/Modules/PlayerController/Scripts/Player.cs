@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Popeye.Modules.Camera;
 using Popeye.Modules.PlayerController;
+using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget

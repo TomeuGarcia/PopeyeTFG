@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
 public class Anchor : MonoBehaviour
@@ -109,7 +110,7 @@ public class Anchor : MonoBehaviour
 
         _trajectoryPathPoints = new Vector3[_maxForceTrajectory.positionCount];
 
-        _staminaSystem = new StaminaSystem(_requiredDrainedHealth, 0.0f);
+        _staminaSystem = new StaminaSystem(new StaminaConfig((int)_requiredDrainedHealth, 0));
         _staminaBar.Init(_staminaSystem);
         _anchorHealthDrainer.AwakeInit(_staminaSystem);
 
@@ -720,7 +721,7 @@ public class Anchor : MonoBehaviour
     public void UseExplosionAbility()
     {
         _anchorDamageDealer.DealExplosionDamage(Position);
-        _staminaSystem.Spend(_explosionStamina);
+        _staminaSystem.Spend((int)_explosionStamina);
     }
 
 

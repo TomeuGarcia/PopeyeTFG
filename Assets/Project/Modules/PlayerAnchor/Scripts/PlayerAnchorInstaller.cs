@@ -7,10 +7,12 @@ using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
+using Popeye.Modules.ValueStatSystem;
 using Project.Modules.PlayerAnchor.Anchor;
 using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerAnchor
 {
@@ -25,6 +27,7 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private PopeyePlayer _player;
         [SerializeField] private PlayerController _playerController;
         [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
+        [FormerlySerializedAs("timeStaminaConfigSo")] [FormerlySerializedAs("aTimeStaminaConfigSo")] [FormerlySerializedAs("timeStaminaConfig")] [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
         
         [Header("Player States")] 
         [SerializeField] private PlayerStatesConfig _playerStatesConfigurations;
@@ -51,6 +54,10 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private Transform _chainPlayerBindTransform;
         [SerializeField] private Transform _chainAnchorBindTransform;
 
+
+        [Header("HUD")] 
+        [SerializeField] private PlayerHUD _playerHUD;
+
         
         [Header("DEBUG")]
         [SerializeField] private LineRenderer debugLine;
@@ -59,6 +66,8 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private bool drawDebugLines = true;
         private AnchorTrajectoryMaker trajectoryMaker;
         private AnchorThrower AanchorThrower;
+
+        
         
         private void OnValidate()
         {
@@ -115,21 +124,24 @@ namespace Project.Modules.PlayerAnchor
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
+            TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerStaminaConfig);
             
             playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform);
             playerStateMachine.Setup(playerStatesBlackboard);
 
-            _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig, playerMotion, 
-                _anchor, anchorThrower, anchorPuller);
+            _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig,  
+                playerStamina, playerMotion, _anchor, anchorThrower, anchorPuller);
             _playerController.MovementInputHandler = movementInputHandler;
             
+            
+            // HUD
+            _playerHUD.Configure(playerStamina);
             
             
             // Debug
             trajectoryMaker = anchorTrajectoryMaker;
             AanchorThrower = anchorThrower;
-
         }
         
         private void OnDrawGizmos()
@@ -143,6 +155,7 @@ namespace Project.Modules.PlayerAnchor
                 }
             }
         }
+
         
     }
 }

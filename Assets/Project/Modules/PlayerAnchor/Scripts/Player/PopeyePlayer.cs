@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
+using Popeye.Modules.ValueStatSystem;
 using Project.Modules.PlayerAnchor;
 using Project.Modules.PlayerAnchor.Anchor;
 using UnityEngine;
@@ -19,21 +20,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerFSM _stateMachine;
         private PlayerController.PlayerController _playerController;
         private PlayerMovesetConfig _playerMovesetConfig;
+
+        private TimeStaminaSystem _staminaSystem;
+        
+        private TransformMotion _playerMotion;
+        
         private PopeyeAnchor _anchor;
         private IAnchorThrower _anchorThrower;
         private IAnchorPuller _anchorPuller;
-        private TransformMotion _playerMotion;
+        
         
         public Vector3 Position => _playerController.Position;
         
         
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
-            PlayerMovesetConfig playerMovesetConfig, TransformMotion playerMotion,
+            PlayerMovesetConfig playerMovesetConfig, 
+            TimeStaminaSystem staminaSystem, 
+            TransformMotion playerMotion,
             PopeyeAnchor anchor, IAnchorThrower anchorThrower, IAnchorPuller anchorPuller)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
-            _playerMovesetConfig = playerMovesetConfig; 
+            _playerMovesetConfig = playerMovesetConfig;
+            _staminaSystem = staminaSystem;
             _playerMotion = playerMotion;
             _anchor = anchor;
             _anchorThrower = anchorThrower;
@@ -57,6 +66,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = canRotate;
         }
 
+        
         public float GetDistanceFromAnchor()
         {
             return Vector3.Distance(Position, _anchor.Position);
@@ -76,11 +86,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _anchorGrabToThrowHolder.position;
         }
 
-        public void CarryAnchor()
+
+        
+        public void PickUpAnchor()
         {
             _anchor.SetCarried();
+            SpendStamina(_playerMovesetConfig.AnchorPickUpStaminaCost);
         }
-
+        
         public void StartChargingThrow()
         {
             _anchorThrower.ResetThrowForce();
@@ -102,17 +115,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void CancelChargingThrow()
         {
             _anchorThrower.CancelChargingThrow();
-            CarryAnchor();
+            _anchor.SetCarried();
         }
 
         public void ThrowAnchor()
         {
             _anchorThrower.ThrowAnchor();
+            SpendStamina(_playerMovesetConfig.AnchorThrowStaminaCost);
         }
 
         public void PullAnchor()
         {
             _anchorPuller.PullAnchor();
+            SpendStamina(_playerMovesetConfig.AnchorPullStaminaCost);
             LookTowardsAnchorForDuration(0.3f).Forget();
         }
 
@@ -131,19 +146,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
             if (_anchor.IsGrabbedBySnapper())
             {
                 dashEndPosition += toAnchor * _playerMovesetConfig.SnapExtraDisplacement.z;
-                extraDisplacement += right * _playerMovesetConfig.SnapExtraDisplacement.x;
-                extraDisplacement += up * _playerMovesetConfig.SnapExtraDisplacement.y;
+                dashEndPosition += right * _playerMovesetConfig.SnapExtraDisplacement.x;
+                dashEndPosition += up * _playerMovesetConfig.SnapExtraDisplacement.y;
             }
             
             LookTowardsAnchorForDuration(duration).Forget();
             _playerMotion.MoveToPosition(dashEndPosition, duration, Ease.InOutQuad);
+            SpendStamina(_playerMovesetConfig.AnchorDashStaminaCost);
         }
 
 
         public void OnAnchorThrowEndedInVoid()
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);
-            _stateMachine.Blackboard.queuedAnchorPull = true;
         }
 
         public async UniTaskVoid LookTowardsAnchorForDuration(float duration)
@@ -165,6 +180,27 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             // TODO
             Debug.Log("Vulnerable");
+        }
+
+        
+        public bool HasMaxStamina()
+        {
+            return _staminaSystem.HasMaxStamina();
+        }
+        private void SpendStamina(int spendAmount)
+        {
+            if (spendAmount == 0) return;
+            
+            _staminaSystem.Spend(spendAmount);
+            if (!_staminaSystem.HasStaminaLeft())
+            {
+                EnterTiredState();
+            }
+        }
+
+        private void EnterTiredState()
+        {
+            _stateMachine.OverwriteState(PlayerStates.PlayerStates.Tired);
         }
     }
 }

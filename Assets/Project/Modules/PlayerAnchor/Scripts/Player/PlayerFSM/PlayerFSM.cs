@@ -1,8 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
-using Popeye.Modules.PlayerController.Inputs;
-using UnityEngine;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -46,11 +43,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 = new PullingAnchor_PlayerState(blackboard);
             SpinningAnchor_PlayerState spinningAnchor 
                 = new SpinningAnchor_PlayerState(blackboard);
+            Tired_PlayerState tired
+                = new Tired_PlayerState(blackboard);
             
             
             withAnchorState.Setup(movingWithAnchor, aimingThrowAnchor, throwingAnchor);
             withoutAnchorState.Setup(movingWithoutAnchor, pickingUpAnchor, dashingTowardsAnchor, kickingAnchor, 
-                pullingAnchor, spinningAnchor);
+                pullingAnchor, spinningAnchor, tired);
 
             _states = new Dictionary<PlayerStates, APlayerState>()
             {
@@ -70,33 +69,38 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_currentState.Update(deltaTime))
             {
-                _currentState.Exit();
-                _currentState = _states[_currentState.NextState];
-                _currentState.Enter();
+                TransitionToNextState(_currentState.NextState);
             }
+        }
+
+        private void TransitionToNextState(PlayerStates nextState)
+        {
+            _currentState.Exit();
+            _currentState = _states[nextState];
+            _currentState.Enter();
         }
 
         public void OverwriteState(PlayerStates newState)
         {
+            Blackboard.queuedOverwriteState = newState;
+            
             if (_states.ContainsKey(newState))
             {
-                _currentState.Exit();
-                _currentState = _states[newState];
-                _currentState.Enter();
-                return;
+                TransitionToNextState(newState);
             }
-            
-            foreach (var state in _states)
+            else
             {
-                if (state.Value.HasSubState(newState))
+                foreach (var state in _states)
                 {
-                    _currentState.Exit();
-                    _currentState = _states[state.Key];
-                    _currentState.Enter();
-                    return;
+                    if (state.Value.HasSubState(newState))
+                    {
+                        TransitionToNextState(state.Key);
+                        break;
+                    }
                 }
             }
             
+            Blackboard.queuedOverwriteState = PlayerStates.None;
         }
         
     }
