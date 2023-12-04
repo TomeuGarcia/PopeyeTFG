@@ -32,7 +32,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public Quaternion GetSnapRotation()
         {
-            return Quaternion.AngleAxis(-45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
+            return Quaternion.AngleAxis(45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
         }
         
 

@@ -41,6 +41,7 @@ namespace Project.Modules.PlayerAnchor
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
+        [SerializeField] private AnchorMotionConfig _anchorMotionConfig;
         [SerializeField] private Transform _anchorMoveTransform;
 
         [Header("Anchor Damage")] 
@@ -118,15 +119,15 @@ namespace Project.Modules.PlayerAnchor
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorPullConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorThrowConfig, _anchorPullConfig,
                 anchorTrajectoryHitChecker, debugLine, debugLine2, debugLine3);
-            anchorStatesBlackboard.Configure(anchorMotion, _anchorPhysics, _anchorChain, _player.AnchorCarryHolder, 
-                _player.AnchorGrabToThrowHolder);
+            anchorStatesBlackboard.Configure(anchorMotion, _anchorMotionConfig, _anchorPhysics, _anchorChain, 
+                _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorChainConfig);
             anchorSnapController.Configure(anchorTrajectoryHitChecker);
 
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorDamageDealer, _anchorChain);
-            _anchorDamageDealer.Configure(_anchorDamageConfig, combatManager);
+            _anchorDamageDealer.Configure(_anchorDamageConfig, combatManager, _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
 
@@ -142,7 +143,7 @@ namespace Project.Modules.PlayerAnchor
             
             playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
-            playerMotion.Configure(_playerController.Transform);
+            playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerStateMachine.Setup(playerStatesBlackboard);
 
             _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig,  

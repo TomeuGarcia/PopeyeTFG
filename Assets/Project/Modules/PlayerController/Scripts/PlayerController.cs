@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerController
         [SerializeField] private Rigidbody _rigidbody;
         public Vector3 Position => _rigidbody.position;
         public Transform Transform => _rigidbody.transform;
+        public Transform LookTransform => _lookTransform;
 
         [SerializeField] private MeshRenderer _renderer;
         private Material _material;
@@ -23,7 +24,7 @@ namespace Popeye.Modules.PlayerController
 
         [Header("LOOK")] 
         [SerializeField] private bool _useLookInput = true;
-        [SerializeField] public Transform _lookTransform;
+        [SerializeField] private Transform _lookTransform;
         [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;
         [SerializeField, Range(0.0f, 1.0f)] private float _blendWithVelocityDirection = 0.0f;
         public Vector3 LookDirection => _lookTransform.forward;

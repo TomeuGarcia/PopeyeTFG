@@ -13,13 +13,13 @@ public class AnchorDamageDealer_Old : MonoBehaviour
     [SerializeField] private AnchorHealthDrainer _anchorHealthDrainer;
 
     [Header("THROW HIT")]
-    [SerializeField, Range(0.0f, 20.0f)] private float _throwHitDamage = 5.0f;
+    [SerializeField, Range(0.0f, 20.0f)] private int _throwHitDamage = 5;
     [SerializeField, Range(0.0f, 500.0f)] private float _throwHitKnockbackForce = 80.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _throwHitStunDuration = 0.2f;
 
     [Header("GROUND HIT")]
     [SerializeField] private TriggerNotifier _groundHitNotifier;
-    [SerializeField, Range(0.0f, 30.0f)] private float _groundHitDamage = 10.0f;
+    [SerializeField, Range(0.0f, 30.0f)] private int _groundHitDamage = 10;
     [SerializeField, Range(0.0f, 500.0f)] private float _groundHitKnockbackForce = 120.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _groundHitStunDuration = 0.4f;
     [SerializeField, Range(0.0f, 10.0f)] private float _groundHitRadius = 2.0f;
@@ -28,18 +28,18 @@ public class AnchorDamageDealer_Old : MonoBehaviour
     [SerializeField] private AnimationCurve _groundHitSizeCurve;
 
     [Header("MELEE HIT")]
-    [SerializeField, Range(0.0f, 30.0f)] private float _meleeHitDamage = 5.0f;
+    [SerializeField, Range(0.0f, 30.0f)] private int _meleeHitDamage = 5;
     [SerializeField, Range(0.0f, 500.0f)] private float _meleeHitKnockbackForce = 80.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _meleeHitStunDuration = 0.4f;
     [SerializeField] private TriggerNotifier _meleeHitBoxNotifier;
 
     [Header("PULL BACK HIT")]
-    [SerializeField, Range(0.0f, 30.0f)] private float _pullBackHitDamage = 5.0f;
+    [SerializeField, Range(0.0f, 30.0f)] private int _pullBackHitDamage = 5;
     [SerializeField, Range(0.0f, 500.0f)] private float _pullBackHitKnockbackForce = 80.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _pullBackHitStunDuration = 0.4f;
     
     [Header("EXPLOSION HIT")]
-    [SerializeField, Range(0.0f, 30.0f)] private float _explosionHitDamage = 20.0f;
+    [SerializeField, Range(0.0f, 30.0f)] private int _explosionHitDamage = 20;
     [SerializeField, Range(0.0f, 500.0f)] private float _explosionHitKnockbackForce = 80.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _explosionHitStunDuration = 0.4f;
     [SerializeField, Range(0.0f, 10.0f)] private float _explosionHitSize = 2.0f;

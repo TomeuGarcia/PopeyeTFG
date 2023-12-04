@@ -15,7 +15,7 @@ public class AnchorHealthDrainer : MonoBehaviour
     private Material _chainMaterial;
 
     [Header("HEALING")]
-    [SerializeField, Range(0.0f, 100.0f)] private float _healAmount = 10.0f;
+    [SerializeField, Range(0.0f, 100.0f)] private int _healAmount = 10;
     [SerializeField, Range(0.0f, 10.0f)] private float _healDuration = 3.0f;
     private float _healTimer;
     [SerializeField] private AnimationCurve _chargedCurve;

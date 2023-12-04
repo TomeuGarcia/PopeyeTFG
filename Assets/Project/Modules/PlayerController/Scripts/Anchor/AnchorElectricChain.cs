@@ -21,7 +21,7 @@ public class AnchorElectricChain : MonoBehaviour
         _anchor = anchor;
         ExitElectricMode();
 
-        _electricDamageHit = new DamageHit(CombatManagerSingleton.Instance.DamageOnlyEnemiesPreset, 10.0f, 80.0f, 2.0f);
+        _electricDamageHit = new DamageHit(CombatManagerSingleton.Instance.DamageOnlyEnemiesPreset, 10, 80.0f, 2.0f);
     }
 
 

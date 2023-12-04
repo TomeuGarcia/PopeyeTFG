@@ -39,11 +39,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
         
         
-        public void SetThrown(bool failedThrow)
+        public void SetThrown(AnchorThrowResult anchorThrowResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
+            _anchorDamageDealer.DealThrowDamage(anchorThrowResult).Forget();
             
-            _anchorChain.SetFailedThrow(failedThrow);
+            _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
         }
         public void SetPulled()
         {
@@ -64,7 +65,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void SetGrabbedBySnapper(IAnchorSnapTarget snapTarget)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
-            _anchorMotion.ParentAndReset(snapTarget.GetSnapTransform(), 0.1f);
+            //_anchorMotion.ParentAndReset(snapTarget.GetSnapTransform(), 0.1f);
+
+            float duration = 0.1f;
+            _anchorMotion.MoveToPosition(snapTarget.GetSnapPosition(), duration, Ease.InOutSine);
+            _anchorMotion.Rotate(snapTarget.GetSnapRotation(), duration, Ease.InOutSine);
+            _anchorMotion.Parent(snapTarget.GetSnapTransform());
         }
         
         

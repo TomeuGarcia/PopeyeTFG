@@ -6,10 +6,15 @@ namespace Project.Modules.CombatSystem
 {
     public class DamageHitResult
     {
-        public float ReceivedDamage { get; set; }
+        public IDamageHitTarget DamageHitTarget { get; private set; }
+        public GameObject DamageHitTargetGameObject { get; private set; }
+        public float ReceivedDamage { get; private set; }
 
-        public DamageHitResult(float receivedDamage)
+        public DamageHitResult(IDamageHitTarget damageHitTarget, GameObject damageHitTargetGameObject, 
+            float receivedDamage)
         {
+            DamageHitTarget = damageHitTarget;
+            DamageHitTargetGameObject = damageHitTargetGameObject;
             ReceivedDamage = receivedDamage;
         }
     }

@@ -6,7 +6,7 @@ namespace Popeye.Modules.ValueStatSystem
 {
     public interface IHealthTarget
     {
-        public void Heal(float healAmount);
+        public void Heal(int healAmount);
         public void HealToMax();
     }
 }

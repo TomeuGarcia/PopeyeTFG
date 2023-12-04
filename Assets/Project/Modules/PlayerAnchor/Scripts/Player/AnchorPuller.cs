@@ -51,7 +51,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Vector3[] trajectoryPath = _anchorTrajectoryMaker.ComputeCurvedTrajectory(anchorPosition, 
                 playerPosition, 10, out float trajectoryDistance);
             float duration = ComputePullDuration(trajectoryDistance);
-            AnchorPullResult.Reset(trajectoryPath, duration, false);
+            AnchorPullResult.Reset(trajectoryPath,  Quaternion.identity, Quaternion.identity, 
+                duration, false);
 
             DoPullAnchor(AnchorPullResult).Forget();
         }

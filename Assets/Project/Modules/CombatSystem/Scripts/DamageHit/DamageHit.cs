@@ -6,7 +6,7 @@ namespace Project.Modules.CombatSystem
 {
     public class DamageHit 
     {
-        public float Damage { get; set; }
+        public int Damage { get; set; }
         public Vector3 Position  { get; set; }
     
     
@@ -56,7 +56,7 @@ namespace Project.Modules.CombatSystem
             KnockbackDirection = Vector3.zero;
         }
         
-        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, float damage, float knockbackMagnitude, float stunDuration)
+        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, int damage, float knockbackMagnitude, float stunDuration)
         {
             _damageHitTargetTypeMask = damageHitTargetTypeMask;
             Damage = damage;
@@ -67,7 +67,7 @@ namespace Project.Modules.CombatSystem
             KnockbackDirection = Vector3.zero;
         }
         
-        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, float damage, float knockbackMagnitude, float stunDuration, Vector3 position)
+        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, int damage, float knockbackMagnitude, float stunDuration, Vector3 position)
         {
             _damageHitTargetTypeMask = damageHitTargetTypeMask;
             Damage = damage;

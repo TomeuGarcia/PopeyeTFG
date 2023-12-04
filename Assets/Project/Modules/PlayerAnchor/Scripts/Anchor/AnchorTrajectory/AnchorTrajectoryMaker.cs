@@ -233,6 +233,15 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return trajectoryPoints;
         }
         
+        public Quaternion ComputePathLookRotationBetweenIndices(Vector3[] pathPoints, int startIndex, int endIndex)
+        {
+            Vector3 pathForward = (pathPoints[endIndex] - pathPoints[startIndex]).normalized;
+            Vector3 up = Vector3.up;
+            Vector3 right = Vector3.Cross(pathForward, up).normalized;
+            up = Vector3.Cross(pathForward, right).normalized;
+
+            return Quaternion.LookRotation(pathForward, up);
+        }
         
     }
 }

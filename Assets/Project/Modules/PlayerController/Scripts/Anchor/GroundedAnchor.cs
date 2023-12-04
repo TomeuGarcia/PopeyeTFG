@@ -93,8 +93,8 @@ public class GroundedAnchor : MonoBehaviour
     private void Update()
     {
         directionArrow.transform.position = transform.position;
-        transform.rotation = _playerController._lookTransform.rotation;
-        directionArrow.transform.rotation = _playerController._lookTransform.rotation;
+        transform.rotation = _playerController.LookTransform.rotation;
+        directionArrow.transform.rotation = _playerController.LookTransform.rotation;
         
 
         if (Input.GetKeyDown(KeyCode.M))

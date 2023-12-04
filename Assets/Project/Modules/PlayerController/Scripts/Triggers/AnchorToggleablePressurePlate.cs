@@ -8,10 +8,12 @@ public class AnchorToggleablePressurePlate : AnchorPressurePlate
 
     protected override bool CanBeTriggered(DamageHit damageHit)
     {
+        /*
         if (!_collider.bounds.Contains(damageHit.Position))
         {
             return false;
         }
+        */
 
         return damageHit.Damage > 10;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,10 +8,10 @@ namespace Popeye.Modules.ValueStatSystem
 {
     public class HealthSystem : AValueStat
     {
-        private float _maxHealth;
-        private float _currentHealth;
-        public float MaxHealth => _maxHealth;    
-        public float CurrentHealth => _currentHealth;    
+        private int _maxHealth;
+        private int _currentHealth;
+        public int MaxHealth => _maxHealth;    
+        public int CurrentHealth => _currentHealth;    
     
         private bool _isInvulnerable;
         public bool IsInvulnerable
@@ -20,7 +21,7 @@ namespace Popeye.Modules.ValueStatSystem
         }
     
     
-        public HealthSystem(float maxHealth)
+        public HealthSystem(int maxHealth)
         {
             _maxHealth = maxHealth;
             _currentHealth = maxHealth;
@@ -28,14 +29,14 @@ namespace Popeye.Modules.ValueStatSystem
         }
     
     
-        public float TakeDamage(float damageAmount)
+        public int TakeDamage(int damageAmount)
         {
-            if (IsInvulnerable) { return 0.0f; }
+            if (IsInvulnerable) { return 0; }
     
-            float receivedDamage = Mathf.Min(damageAmount, _currentHealth);
+            int receivedDamage = Mathf.Min(damageAmount, _currentHealth);
     
             _currentHealth -= damageAmount;
-            _currentHealth = Mathf.Max(0f, _currentHealth);
+            _currentHealth = Mathf.Max(0, _currentHealth);
 
             InvokeOnValueUpdate();
     
@@ -44,13 +45,13 @@ namespace Popeye.Modules.ValueStatSystem
         
         public void Kill()
         {
-            _currentHealth = 0f;
+            _currentHealth = 0;
 
             InvokeOnValueUpdate();
         }
     
     
-        public void Heal(float healAmount)
+        public void Heal(int healAmount)
         {
             _currentHealth += healAmount;
             _currentHealth = Mathf.Min(MaxHealth, _currentHealth);
@@ -67,14 +68,14 @@ namespace Popeye.Modules.ValueStatSystem
     
         public bool IsDead()
         {
-            return _currentHealth == 0f;
+            return _currentHealth == 0;
         }
     
         public async void SetInvulnerableForDuration(float duration, bool setVulnerableEvenIfDead = false)
         {
             _isInvulnerable = true;
     
-            await Task.Delay((int)(duration * 1000));
+            await Task.Delay(TimeSpan.FromSeconds(duration));
     
             if (!IsDead() || setVulnerableEvenIfDead)
             {
@@ -84,7 +85,7 @@ namespace Popeye.Modules.ValueStatSystem
     
         public override float GetValuePer1Ratio()
         {
-            return _currentHealth / _maxHealth;
+            return (float)_currentHealth / _maxHealth;
         }
     }
 }

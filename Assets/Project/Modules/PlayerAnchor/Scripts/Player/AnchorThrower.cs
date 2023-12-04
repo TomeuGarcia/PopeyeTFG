@@ -74,7 +74,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             UpdateAnchorThrowResult();
 
-            _anchor.SetThrown(AnchorThrowResult.EndsOnVoid);
+            _anchor.SetThrown(AnchorThrowResult);
             DoThrowAnchor(AnchorThrowResult).Forget();
         }
 
@@ -100,13 +100,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
 
             AtrajectoryPath = trajectoryPath;
+
+            Quaternion startLookRotation = _anchorTrajectoryMaker.ComputePathLookRotationBetweenIndices(trajectoryPath, 
+                    0, 1);
+            Quaternion endLookRotation= _anchorTrajectoryMaker.ComputePathLookRotationBetweenIndices(trajectoryPath, 
+                    trajectoryPath.Length-2, trajectoryPath.Length-1);
             
-            AnchorThrowResult.Reset(trajectoryPath, moveDuration, trajectoryEndsOnVoid);
+            AnchorThrowResult.Reset(trajectoryPath, startLookRotation, endLookRotation, moveDuration, trajectoryEndsOnVoid);
         }
         
         private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
         {
             _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, Ease.OutSine);
+            _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
+                anchorThrowResult.Duration, Ease.OutSine);
 
             _anchorIsBeingThrown = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
@@ -181,6 +188,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return AnchorThrowResult;
         }
-        
+
     }
 }

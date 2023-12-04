@@ -137,6 +137,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             {
                 _anchor.SetCarried();
             }
+            else
+            {
+                _anchor.SnapToFloor().Forget();
+            }
         }
         
 

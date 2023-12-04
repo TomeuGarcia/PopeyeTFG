@@ -27,12 +27,12 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
     [SerializeField, Range(0.0f, 1.0f)] private float _knockbackEffectiveness = 1.0f;
 
     [Header("HEALTH")]
-    [SerializeField, Range(0.0f, 100.0f)] private float _maxHealth = 50.0f;
+    [SerializeField, Range(0.0f, 100.0f)] private int _maxHealth = 50;
     private HealthSystem _healthSystem;
 
 
     [Header("CONTACT DAMAGE")]
-    [SerializeField, Range(0.0f, 30.0f)] private float _contactHitDamageAmount = 10.0f;
+    [SerializeField, Range(0.0f, 30.0f)] private int _contactHitDamageAmount = 10;
     [SerializeField, Range(0.0f, 30.0f)] private float _contactHitKnockbackForce = 18.0f;
     [SerializeField, Range(0.0f, 30.0f)] private float _contactHitStunDuration = 0.0f;
     private DamageHit _contactDamageHit;
@@ -150,7 +150,7 @@ public class Enemy : MonoBehaviour, IDamageHitTarget, IMovementInputHandler
 
         StartTakeDamageAnimation().Forget();
 
-        return new DamageHitResult(receivedDamage);
+        return new DamageHitResult(this, gameObject, receivedDamage);
     }
 
     public bool CanBeDamaged(DamageHit damageHit)
