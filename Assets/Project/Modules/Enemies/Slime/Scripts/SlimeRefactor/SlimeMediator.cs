@@ -118,7 +118,7 @@ namespace Popeye.Modules.Enemies
         }
         public void OnHit()
         {
-            throw new NotImplementedException();
+            //In this case, do nothing
         }
 
         public EnemyPatrolling.PatrolType GetPatrolType()
