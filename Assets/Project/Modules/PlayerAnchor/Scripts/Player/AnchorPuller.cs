@@ -32,7 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorMotion = anchorMotion;
             _pullConfig = pullConfig;
 
-            AnchorPullResult = new AnchorThrowResult();
+            AnchorPullResult = new AnchorThrowResult(_pullConfig.MoveInterpolationCurve);
         }
 
 
@@ -43,23 +43,26 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PullAnchor()
         {
-            _anchor.SetPulled();
-
-            
             Vector3 anchorPosition = _anchor.Position;
             Vector3 playerPosition = _player.GetAnchorThrowStartPosition();
+            Vector3 pullDirection = -_player.GetFloorAlignedDirectionToAnchor();
+            
             Vector3[] trajectoryPath = _anchorTrajectoryMaker.ComputeCurvedTrajectory(anchorPosition, 
                 playerPosition, 10, out float trajectoryDistance);
             float duration = ComputePullDuration(trajectoryDistance);
-            AnchorPullResult.Reset(trajectoryPath,  Quaternion.identity, Quaternion.identity, 
+            
+            AnchorPullResult.Reset(trajectoryPath, pullDirection, Quaternion.identity, Quaternion.identity, 
                 duration, false);
+
+            _anchor.SetPulled(AnchorPullResult);
 
             DoPullAnchor(AnchorPullResult).Forget();
         }
         
         private async UniTaskVoid DoPullAnchor(AnchorThrowResult anchorPullResult)
         {
-            _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, Ease.InOutQuad);
+            _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 
+                AnchorPullResult.InterpolationEaseCurve);
             
             _anchorIsBeingPulled = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorPullResult.Duration));

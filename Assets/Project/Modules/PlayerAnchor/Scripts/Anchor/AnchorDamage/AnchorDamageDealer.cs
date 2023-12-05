@@ -15,14 +15,20 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private Transform _damageStartTransform;
         private TransformMotion _damageTriggerMotion;
         [SerializeField] private DamageTrigger _anchorThrowDamageTrigger;
-        
+
+        private DamageHit _throwDamageHit;
+        private DamageHit _pullDamageHit;
 
         public void Configure(AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
             Transform damageStartTransform)
         {
             _config = anchorDamageConfig;
             _damageStartTransform = damageStartTransform;
-            _anchorThrowDamageTrigger.Configure(combatManager, new DamageHit(_config.AnchorThrowDamageHit));
+
+            _throwDamageHit = new DamageHit(_config.AnchorThrowDamageHit); 
+            _pullDamageHit = new DamageHit(_config.AnchorPullDamageHit); 
+            
+            _anchorThrowDamageTrigger.Configure(combatManager, _throwDamageHit);
             _anchorThrowDamageTrigger.Deactivate();
 
             _damageTriggerMotion = new TransformMotion();
@@ -30,22 +36,64 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
 
 
-        public async UniTaskVoid DealThrowDamage(AnchorThrowResult anchorThrowResult)
+        public void DealThrowDamage(AnchorThrowResult anchorThrowResult)
         {
+            _anchorThrowDamageTrigger.SetDamageHit(_throwDamageHit);
+            _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
+            
+            
             Vector3[] damagePathPoints = new Vector3[anchorThrowResult.TrajectoryPathPoints.Length];
             anchorThrowResult.TrajectoryPathPoints.CopyTo(damagePathPoints, 0);
             damagePathPoints[0] = _damageStartTransform.position;
-            
-            _damageTriggerMotion.SetPosition(damagePathPoints[0]);
-            _damageTriggerMotion.SetRotation(_damageStartTransform.rotation);
-            _damageTriggerMotion.MoveAlongPath(damagePathPoints, anchorThrowResult.Duration);
 
-            _anchorThrowDamageTrigger.Activate();
-            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
-            _anchorThrowDamageTrigger.Deactivate();
+            DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration,
+                    anchorThrowResult.InterpolationEaseCurve, 0.0f)
+                .Forget();
+        }
+
+        public void DealPullDamage(AnchorThrowResult anchorPullResult)
+        {
+            _anchorThrowDamageTrigger.SetDamageHit(_pullDamageHit);
+            _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorPullResult.Direction);
+            
+            DealTrajectoryDamage(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration,
+                    anchorPullResult.InterpolationEaseCurve, 0.1f)
+                .Forget();
         }
         
-        
+        private async UniTaskVoid DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, AnimationCurve ease,
+            float easeThreshold)
+        {
+            _damageTriggerMotion.SetPosition(trajectoryPoints[0]);
+            _damageTriggerMotion.SetRotation(_damageStartTransform.rotation);
+            _damageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
+            
+            var wait = await WaitUntilEase(ease, duration, easeThreshold);
+            _anchorThrowDamageTrigger.Activate();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
+            _anchorThrowDamageTrigger.Deactivate();
+        }
+
+
+        private async UniTask<float> WaitUntilEase(AnimationCurve ease, float duration, float threshold)
+        {
+            float t = 0f;
+            float curveT = 0f;
+            while (curveT < threshold)
+            {
+                t += Time.deltaTime / duration;
+                curveT = ease.Evaluate(t);
+                await UniTask.Yield();
+            }
+
+            return t;
+        }
+
+
+        private void PullDamageHitTarget(IDamageHitTarget damageHitTarget)
+        {
+            
+        }
         
     }
 }

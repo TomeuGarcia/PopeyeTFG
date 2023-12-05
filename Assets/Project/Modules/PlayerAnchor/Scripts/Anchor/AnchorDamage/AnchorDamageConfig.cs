@@ -8,9 +8,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
     public class AnchorDamageConfig : ScriptableObject
     {
         [SerializeField] private DamageHitConfig _anchorThrowDamageHit;
+        [SerializeField] private DamageHitConfig _anchorPullDamageHit;
         
         
         public DamageHitConfig AnchorThrowDamageHit => _anchorThrowDamageHit;
+        public DamageHitConfig AnchorPullDamageHit => _anchorPullDamageHit;
         
     }
 }

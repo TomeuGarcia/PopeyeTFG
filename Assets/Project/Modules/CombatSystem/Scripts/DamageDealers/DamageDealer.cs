@@ -13,9 +13,17 @@ namespace Project.Modules.CombatSystem
             _damageHit = damageHit;
         }
 
-        public void UpdateDamageHit(Vector3 position, Vector3 knockbackDirection)
+        public void SetDamageHit(DamageHit damageHit)
+        {
+            _damageHit = damageHit;
+        }
+
+        public void UpdatePosition(Vector3 position)
         {
             _damageHit.Position = position;
+        }
+        public void UpdateKnockbackDirection(Vector3 knockbackDirection)
+        {
             _damageHit.KnockbackDirection = knockbackDirection;
         }
 

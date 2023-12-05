@@ -48,6 +48,13 @@ namespace Project.Modules.PlayerAnchor
 
         public void MoveAlongPath(Vector3[] path, float duration, Ease ease = Ease.Linear)
         {
+            _moveTransform.DOKill();
+            _moveTransform.DOPath(path, duration)
+                .SetEase(ease);
+        }
+        public void MoveAlongPath(Vector3[] path, float duration, AnimationCurve ease)
+        {
+            _moveTransform.DOKill();
             _moveTransform.DOPath(path, duration)
                 .SetEase(ease);
         }
@@ -55,6 +62,14 @@ namespace Project.Modules.PlayerAnchor
         
         public void Rotate(Quaternion endRotation, float duration, Ease ease = Ease.Linear)
         {
+            _rotateTransform.DORotateQuaternion(endRotation, duration)
+                .SetEase(ease);
+        }
+
+        public void RotateStartToEnd(Quaternion startRotation, Quaternion endRotation, float duration,
+            AnimationCurve ease)
+        {
+            _rotateTransform.rotation = startRotation;
             _rotateTransform.DORotateQuaternion(endRotation, duration)
                 .SetEase(ease);
         }

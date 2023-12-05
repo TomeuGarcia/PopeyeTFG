@@ -22,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private float _currentThrowCurveForce01;
         
         public float ThrowDistance { get; private set; }
+        public Vector3 ThrowDirection { get; private set; }
         private bool _anchorIsBeingThrown;
 
         public AnchorThrowResult AnchorThrowResult { get; private set; }
@@ -40,7 +41,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _throwConfig = throwConfig;
             _anchorSnapController = anchorSnapController;
 
-            AnchorThrowResult = new AnchorThrowResult();
+            AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve);
             
             ResetThrowForce();
         }
@@ -50,10 +51,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void UpdateThrowTrajectory()
         {
             Vector3 throwStartPoint = _player.GetAnchorThrowStartPosition();
-            Vector3 throwDirection = _player.GetFloorAlignedLookDirection();
+            ThrowDirection = _player.GetFloorAlignedLookDirection();
 
             Vector3[] trajectoryPath =
-                _anchorTrajectoryMaker.UpdateTrajectoryPath(throwStartPoint, throwDirection, ThrowDistance,
+                _anchorTrajectoryMaker.UpdateTrajectoryPath(throwStartPoint, ThrowDirection, ThrowDistance,
                     !_anchorSnapController.HasSnapTarget);
 
             if (_anchorSnapController.CheckForSnapTarget(trajectoryPath))
@@ -106,14 +107,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Quaternion endLookRotation= _anchorTrajectoryMaker.ComputePathLookRotationBetweenIndices(trajectoryPath, 
                     trajectoryPath.Length-2, trajectoryPath.Length-1);
             
-            AnchorThrowResult.Reset(trajectoryPath, startLookRotation, endLookRotation, moveDuration, trajectoryEndsOnVoid);
+            AnchorThrowResult.Reset(trajectoryPath, ThrowDirection,
+                startLookRotation, endLookRotation, moveDuration, trajectoryEndsOnVoid);
         }
         
         private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
         {
-            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, Ease.OutSine);
+            
+            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
+                anchorThrowResult.InterpolationEaseCurve);
             _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
-                anchorThrowResult.Duration, Ease.OutSine);
+                anchorThrowResult.Duration, anchorThrowResult.InterpolationEaseCurve);
+              /*
+            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration);
+            _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
+                anchorThrowResult.Duration);
+            */
 
             _anchorIsBeingThrown = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));

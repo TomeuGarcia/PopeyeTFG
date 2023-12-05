@@ -10,9 +10,11 @@ namespace Project.Modules.CombatSystem
         private DamageDealer _damageDealer;
         private HashSet<GameObject> _hitTargetsHistory;
 
-        
+        [SerializeField] private bool _damageTargetsOncePerActivation = false;
         [SerializeField] private Collider _collider;
-        
+
+
+        public Action<DamageHitResult> OnDamageDealt;
 
         
         public void Configure(ICombatManager combatManager, DamageHit damageHit)
@@ -24,6 +26,11 @@ namespace Project.Modules.CombatSystem
             _collider.isTrigger = true;
         }
 
+        public void SetDamageHit(DamageHit damageHit)
+        {
+            _damageDealer.SetDamageHit(damageHit);
+        }
+        
         public void Activate()
         {
             _hitTargetsHistory.Clear();
@@ -32,21 +39,26 @@ namespace Project.Modules.CombatSystem
         public void Deactivate()
         {
             _collider.enabled = false;
-        } 
+        }
+
+        public void UpdateDamageKnockbackDirection(Vector3 knockbackDirection)
+        {
+            _damageDealer.UpdateKnockbackDirection(knockbackDirection);
+        }
         
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(other.gameObject.name);
-            if (_hitTargetsHistory.Contains(other.gameObject))
+            if (_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
             {
                 return;
             }
 
-            _damageDealer.UpdateDamageHit(transform.position, transform.forward);
+            _damageDealer.UpdatePosition(transform.position);
             
             if (_damageDealer.TryDealDamage(other.gameObject, out DamageHitResult damageHitResult))
             {
                 _hitTargetsHistory.Add(damageHitResult.DamageHitTargetGameObject);
+                OnDamageDealt?.Invoke(damageHitResult);
             }
         }
 

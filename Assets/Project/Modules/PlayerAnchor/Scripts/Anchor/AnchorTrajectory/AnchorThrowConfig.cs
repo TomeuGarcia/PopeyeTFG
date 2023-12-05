@@ -30,6 +30,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public float MinThrowDistance => _minThrowDistance;
         public float MaxThrowDistance => _maxThrowDistance;
+
+
+        [Header("MOVEMENT")] 
+        [SerializeField] private AnimationCurve _moveInterpolationCurve;
+        public AnimationCurve MoveInterpolationCurve => _moveInterpolationCurve;
+        
         
 
         [Header("THROW TRAJECTORY BEND")] 

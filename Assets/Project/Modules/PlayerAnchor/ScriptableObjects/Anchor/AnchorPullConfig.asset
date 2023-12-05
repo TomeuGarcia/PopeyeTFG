@@ -14,6 +14,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minPullDistance: 2
   _maxPullDistance: 10
-  _minPullMoveDuration: 0.15
-  _maxPullMoveDuration: 0.3
+  _moveInterpolationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.06481133
+      outSlope: 0.06481133
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.117573805
+    - serializedVersion: 3
+      time: 0.6005706
+      value: 0.0706661
+      inSlope: 0.22747798
+      outSlope: 0.22747798
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.119616546
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.85045815
+      value: 0.5014946
+      inSlope: 3.0193439
+      outSlope: 3.0193439
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.0665287
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _minPullMoveDuration: 0.3
+  _maxPullMoveDuration: 0.6
   _trajectoryBendSharpness: 4

@@ -42,13 +42,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
-            _anchorDamageDealer.DealThrowDamage(anchorThrowResult).Forget();
+            _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
         }
-        public void SetPulled()
+        public void SetPulled(AnchorThrowResult anchorPullResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
+            _anchorDamageDealer.DealPullDamage(anchorPullResult);
         }
         public void SetCarried()
         {

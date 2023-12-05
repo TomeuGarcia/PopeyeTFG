@@ -18,6 +18,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public float MaxPullDistance => _maxPullDistance;
         
         
+        [Header("MOVEMENT")] 
+        [SerializeField] private AnimationCurve _moveInterpolationCurve;
+        public AnimationCurve MoveInterpolationCurve => _moveInterpolationCurve;
+        
+        
         [Header("DURATIONS")]
         [SerializeField, Range(0.01f, 10.0f)] private float _minPullMoveDuration = 0.2f;
         [SerializeField, Range(0.01f, 10.0f)] private float _maxPullMoveDuration = 0.5f;

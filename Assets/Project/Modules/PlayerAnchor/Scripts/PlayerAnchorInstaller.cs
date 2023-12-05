@@ -28,9 +28,12 @@ namespace Project.Modules.PlayerAnchor
         [Header("PLAYER")]
         [SerializeField] private PopeyePlayer _player;
         [SerializeField] private PlayerController _playerController;
-        [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView; 
+        [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
+        [SerializeField] private HealthBehaviour _playerHealthBehaviour;
+        [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
         [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
         [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
+        
         
         
         [Header("Player States")] 
@@ -140,13 +143,15 @@ namespace Project.Modules.PlayerAnchor
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
             TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerStaminaConfig);
+            PlayerHealth playerHealth = new PlayerHealth();
             
             playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerStateMachine.Setup(playerStatesBlackboard);
+            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth);
 
-            _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig,  
+            _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig, _playerView.Value, playerHealth, 
                 playerStamina, playerMotion, _anchor, anchorThrower, anchorPuller);
             _playerController.MovementInputHandler = movementInputHandler;
             

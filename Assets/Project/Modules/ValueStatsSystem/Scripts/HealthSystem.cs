@@ -70,16 +70,20 @@ namespace Popeye.Modules.ValueStatSystem
         {
             return _currentHealth == 0;
         }
-    
+
+        public void SetInvulnerable(bool isInvulnerable)
+        {
+            _isInvulnerable = isInvulnerable;
+        }
         public async void SetInvulnerableForDuration(float duration, bool setVulnerableEvenIfDead = false)
         {
-            _isInvulnerable = true;
+            SetInvulnerable(true);
     
             await Task.Delay(TimeSpan.FromSeconds(duration));
     
             if (!IsDead() || setVulnerableEvenIfDead)
             {
-                _isInvulnerable = false;
+                SetInvulnerable(false);
             }        
         }
     

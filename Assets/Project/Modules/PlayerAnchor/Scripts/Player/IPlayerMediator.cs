@@ -10,6 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void SetMaxMovementSpeed(float maxMovementSpeed);
         public void SetCanRotate(bool canRotate);
         public float GetDistanceFromAnchor();
+        public Vector3 GetFloorAlignedDirectionToAnchor();
         public Vector3 GetFloorAlignedLookDirection();
         public Vector3 GetFloorNormal();
         public Vector3 GetAnchorThrowStartPosition();
@@ -37,5 +38,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public bool HasStaminaLeft();
         public bool HasMaxStamina();
+
+
+        public void OnDamageTaken();
+        public void OnKilledByDamageTaken();
+        public void OnHealed();
     }
 }

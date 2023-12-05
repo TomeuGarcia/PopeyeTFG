@@ -21,6 +21,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerController.PlayerController _playerController;
         private PlayerMovesetConfig _playerMovesetConfig;
 
+        private IPlayerView _playerView;
+        private PlayerHealth _playerHealth;
         private TimeStaminaSystem _staminaSystem;
         
         private TransformMotion _playerMotion;
@@ -35,13 +37,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerMovesetConfig playerMovesetConfig, 
-            TimeStaminaSystem staminaSystem, 
+            IPlayerView playerView, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
             TransformMotion playerMotion,
             PopeyeAnchor anchor, IAnchorThrower anchorThrower, IAnchorPuller anchorPuller)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
             _playerMovesetConfig = playerMovesetConfig;
+            _playerView = playerView;
+            _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
             _playerMotion = playerMotion;
             _anchor = anchor;
@@ -70,6 +74,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public float GetDistanceFromAnchor()
         {
             return Vector3.Distance(Position, _anchor.Position);
+        }
+
+        public Vector3 GetFloorAlignedDirectionToAnchor()
+        {
+            return Vector3.ProjectOnPlane((_anchor.Position - Position).normalized, Vector3.up).normalized;
         }
 
         public Vector3 GetFloorAlignedLookDirection()
@@ -185,14 +194,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void SetVulnerable()
         {
-            // TODO
-            Debug.Log("Invulnerable");
+            _playerHealth.SetInvulnerable(false);
         }
 
         public void SetInvulnerable()
         {
-            // TODO
-            Debug.Log("Vulnerable");
+            _playerHealth.SetInvulnerable(true);
         }
 
         public bool HasStaminaLeft()
@@ -203,6 +210,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return _staminaSystem.HasMaxStamina();
         }
+
+        public void OnDamageTaken()
+        {
+            _playerView.PlayTakeDamageAnimation();
+        }
+
+        public void OnKilledByDamageTaken()
+        {
+            _playerView.PlayDeathAnimation();
+        }
+
+        public void OnHealed()
+        {
+            _playerView.PlayHealAnimation();
+        }
+
         private void SpendStamina(int spendAmount)
         {
             if (spendAmount == 0) return;
