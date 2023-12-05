@@ -34,44 +34,29 @@ namespace Popeye.Modules.Enemies.Components
         public void Start()
         {
             _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
-
-            if (_patrolType == PatrolType.None)
-            {
-                return;
-            }
-            else if (_patrolType == PatrolType.FixedWaypoints)
-            {
-                
-                
-            }
-            else if (_patrolType == PatrolType.Random)
-            {
-                
-            }
         }
 
         private void Update()
         {
             if (_patrolType == PatrolType.FixedWaypoints)
             {
-                float playerSqrMagnitude = (_playerTransform.position - _navMeshAgent.transform.position).sqrMagnitude;
+                
                 if (_patrolling)
                 {
-                    if (playerSqrMagnitude < _squaredPlayerDistanceThreshold)
+                    if (IsPlayerAtCloseDistance())
                     {
                         _mediator.OnPlayerClose();
                         return;
                     }
-
-                    float wayPointSqrMagnitude = (_target - _navMeshAgent.transform.position).sqrMagnitude;
-                    if (wayPointSqrMagnitude < _squaredWayPointDistanceThreshold)
+                    
+                    if (IsCloseToWayPoint())
                     {
                         UpdateWaypointDestination();
                     }
                 }
                 else
                 {
-                    if (playerSqrMagnitude > _squaredPlayerDistanceThreshold)
+                    if (IsPlayerAtFarDistance())
                     {
                         _patrolling = true;
                         _mediator.OnPlayerFar();
@@ -122,6 +107,29 @@ namespace Popeye.Modules.Enemies.Components
         {
             return _wayPoints;
         }
+
+        private float GetPlayerSqrMagnitude()
+        {
+            return (_playerTransform.position - _navMeshAgent.transform.position).sqrMagnitude;
+        }
         
+        private bool IsPlayerAtCloseDistance()
+        {
+            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
+        }
+        private bool IsPlayerAtFarDistance()
+        {
+            return GetPlayerSqrMagnitude() > _squaredPlayerDistanceThreshold;
+        }
+        
+        private float GetWayPointSqrMagnitude()
+        {
+            return (_target - _navMeshAgent.transform.position).sqrMagnitude;
+        }
+        
+        private bool IsCloseToWayPoint()
+        {
+            return GetWayPointSqrMagnitude() < _squaredWayPointDistanceThreshold;
+        }
     }
 }

@@ -4,14 +4,11 @@ using UnityEngine;
 
 namespace Popeye.Core.Services.GameReferences
 {
-    public class IGameReferences : MonoBehaviour
+    public interface IGameReferences
     {
-        protected Transform _playerTransform;
+        Transform GetPlayer();
+        void SetPlayer(Transform playerTransform);
 
-        public Transform GetPlayer()
-        {
-            return _playerTransform;
-        }
 
     }
 }
