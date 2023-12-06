@@ -6,12 +6,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class PlayerHUD : MonoBehaviour
     {
         [SerializeField] private ValueStatBar _healthBar;
-        [SerializeField] private ValueStatBar _staminaBar;
+        [SerializeField] private TimeValueStatBar _staminaBar;
         
-        public void Configure(AValueStat healthSystem,TimeStaminaSystem staminaStat)
+        public void Configure(AValueStat healthSystem, ATimeValueStat staminaStat)
         {
             _healthBar.Init(healthSystem);
-            _staminaBar.Init(staminaStat, staminaStat.FullRecoverDuration);
+            _staminaBar.Init(staminaStat);
         }
         
         

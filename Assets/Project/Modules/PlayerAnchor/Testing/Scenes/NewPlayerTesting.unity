@@ -20114,7 +20114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 1967107122}
-  _staminaBar: {fileID: 7919672370562149739}
+  _staminaBar: {fileID: 7498518783969896729}
 --- !u!1 &1736772694
 GameObject:
   m_ObjectHideFlags: 0
@@ -22328,6 +22328,8 @@ MonoBehaviour:
   _lazyColor: {r: 1, g: 1, b: 1, a: 1}
   _incrementColor: {r: 0.07058822, g: 0.85882354, b: 0.56026226, a: 1}
   _decrementColor: {r: 0.9528302, g: 0.63591635, b: 0.09438412, a: 1}
+  _fillEase: 7
+  _lazyFillEase: 7
 --- !u!1 &1978821958
 GameObject:
   m_ObjectHideFlags: 0
@@ -25856,7 +25858,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7498518783969896728}
-  - component: {fileID: 7919672370562149739}
+  - component: {fileID: 7498518783969896729}
   m_Layer: 5
   m_Name: Stamina_ValueStatBar
   m_TagString: Untagged
@@ -26447,6 +26449,30 @@ RectTransform:
   m_AnchoredPosition: {x: 40, y: -90}
   m_SizeDelta: {x: 300, y: 20}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &7498518783969896729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2155919673695814979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2cdde0ecc80406ca8f5fd55dd043814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainTransform: {fileID: 7498518783969896728}
+  _fillImage: {fileID: 8657339298217668878}
+  _lazyBarFillImage: {fileID: 4426627665339315752}
+  _fullFillDuration: 1
+  _lazyFullFillDuration: 2
+  _colorPunchMinDuration: 0.4
+  _originalColor: {r: 0.15686275, g: 0.6392157, b: 0.8000001, a: 1}
+  _lazyColor: {r: 1, g: 1, b: 1, a: 1}
+  _incrementColor: {r: 0.07058824, g: 0.8588236, b: 0.56078434, a: 1}
+  _decrementColor: {r: 0.95294124, g: 0.63529414, b: 0.09411766, a: 1}
+  _fillEase: 7
+  _lazyFillEase: 7
 --- !u!114 &7898587211817461807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26477,28 +26503,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7919672370562149739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2155919673695814979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6462b5de43d996d4dbbd0ce392f5d432, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mainTransform: {fileID: 7498518783969896728}
-  _fillImage: {fileID: 8657339298217668878}
-  _lazyBarFillImage: {fileID: 4426627665339315752}
-  _fullFillDuration: 1
-  _lazyFullFillDuration: 2
-  _colorPunchMinDuration: 0.4
-  _originalColor: {r: 0.15508187, g: 0.63770926, b: 0.8018868, a: 1}
-  _lazyColor: {r: 1, g: 1, b: 1, a: 1}
-  _incrementColor: {r: 0.07058822, g: 0.85882354, b: 0.56026226, a: 1}
-  _decrementColor: {r: 0.9529412, g: 0.63529414, b: 0.09411765, a: 1}
 --- !u!4 &8078446478059374539
 Transform:
   m_ObjectHideFlags: 0
@@ -26545,7 +26549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.15508187, g: 0.63770926, b: 0.8018868, a: 1}
+  m_Color: {r: 0.15686275, g: 0.6392157, b: 0.8000001, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

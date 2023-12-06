@@ -8,7 +8,7 @@ namespace Popeye.Modules.ValueStatSystem
     {
         public delegate void ValueStatEvent();
         public ValueStatEvent OnValueUpdate;
-
+        
         protected void InvokeOnValueUpdate()
         {
             OnValueUpdate?.Invoke();

@@ -12,13 +12,18 @@ namespace Popeye.Modules.Utilities
         
         public Timer(float duration)
         {
-            _duration = duration;
-            _counter = 0;
+            SetDuration(duration);
+            Clear();
         }
 
         public void SetDuration(float newDuration)
         {
             _duration = newDuration;
+        }
+
+        public void Clear()
+        {
+            _counter = 0;
         }
 
         public void Update(float deltaTime)

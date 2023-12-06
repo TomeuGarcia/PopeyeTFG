@@ -8,6 +8,7 @@ namespace Popeye.Modules.ValueStatSystem
     {
         private int _currentStamina;
         public int MaxStamina => _config.MaxStamina;
+        public int CurrentStamina => _currentStamina;
 
         private readonly IStaminaConfig _config;
         

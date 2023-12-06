@@ -2,10 +2,11 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Timer = Popeye.Modules.Utilities.Timer;
 
 namespace Popeye.Modules.ValueStatSystem
 {
-    public class TimeStaminaSystem : AValueStat
+    public class TimeStaminaSystem : ATimeValueStat
     {
         private StaminaSystem _staminaSystem;
 
@@ -16,10 +17,17 @@ namespace Popeye.Modules.ValueStatSystem
         private bool _isRestoringStamina;
         
         private CancellationTokenSource _waitToRestoreCancellation;
-        private CancellationTokenSource _restoringStaminaCancellation;
+        private CancellationTokenSource _restoringCancellation;
 
+        private Timer _fullRecoverTimer;
+        
         public float FullRecoverDuration => _config.FullRecoverDuration;
 
+        
+        private float _temporaryRestoreT;
+        private int TemporaryRestoredStamina => (int)(_temporaryRestoreT * _staminaSystem.MaxStamina);
+        private bool HasTemporaryRestoredStamina => TemporaryRestoredStamina > 0;
+        
         
         public TimeStaminaSystem(ITimeStaminaConfig config)
         {
@@ -33,11 +41,18 @@ namespace Popeye.Modules.ValueStatSystem
             ExhaustedAllStamina = _config.SpawnStamina == 0;
             _isWaitingToRestoreStamina = false;
             _isRestoringStamina = false;
+
+            _fullRecoverTimer = new Timer(FullRecoverDuration);
         }
         
         
         public void Spend(int spendAmount)
         {
+            if (_isRestoringStamina)
+            {
+                CancelRestoringStamina();
+            }
+            
             _staminaSystem.Spend(spendAmount);
 
             if (_staminaSystem.HasStaminaLeft())
@@ -54,6 +69,11 @@ namespace Popeye.Modules.ValueStatSystem
     
         public void SpendAll()
         {
+            if (_isRestoringStamina)
+            {
+                CancelRestoringStamina();
+            }
+            
             _staminaSystem.SpendAll();
             
             StartRecoverAfterExhaust();
@@ -66,7 +86,7 @@ namespace Popeye.Modules.ValueStatSystem
         {
             _staminaSystem.Restore(gainAmount);
     
-            InvokeOnValueUpdate();
+            //InvokeOnValueUpdate();
         }
     
         public void RestoreAll()
@@ -78,7 +98,7 @@ namespace Popeye.Modules.ValueStatSystem
     
         public bool HasStaminaLeft()
         {
-            return _staminaSystem.HasStaminaLeft();
+            return _staminaSystem.HasStaminaLeft() || HasTemporaryRestoredStamina; 
         }
         public bool HasMaxStamina()
         {
@@ -113,16 +133,22 @@ namespace Popeye.Modules.ValueStatSystem
         }
         private void CancelRestoringStamina()
         {
-            _restoringStaminaCancellation.Cancel();
+            RestoreTemporarilyRestoredStamina();
+            _isRestoringStamina = false;
+            _restoringCancellation.Cancel();
+            
+            InvokeOnValueStopUpdate();
         }
 
 
         private void WaitToRestore(float waitDuration)
         {
+            /*
             if (_isRestoringStamina)
             {
                 CancelRestoringStamina();
             }
+            */
             
             if (_isWaitingToRestoreStamina)
             {
@@ -140,44 +166,67 @@ namespace Popeye.Modules.ValueStatSystem
                 cancellationToken: _waitToRestoreCancellation.Token);
             
             _isWaitingToRestoreStamina = false;
-            
+
+            _restoringCancellation = new CancellationTokenSource();
             StartRestoring();
         }
-
 
         
         private void StartRestoring()
         {
+            /*
             if (_isRestoringStamina)
             {
                 CancelRestoringStamina();
             }
+            */
             
-            _restoringStaminaCancellation = new CancellationTokenSource();
-            DoStartRestoring().Forget();
+            float durationToFullyRecover = ComputeDurationToFullyRecover();
+            DoStartRestoring(durationToFullyRecover).Forget();
+            InvokeOnValueStartUpdate(durationToFullyRecover);
         }
-        private async UniTaskVoid DoStartRestoring()
+        private async UniTaskVoid DoStartRestoring(float durationToFullyRecover)
         {
             _isRestoringStamina = true;
             
-            float staminaPerTick = _staminaSystem.MaxStamina / _config.FullRecoverDuration;
-            
-            while (!_staminaSystem.HasMaxStamina())
-            {
-                float timeSpan = Time.deltaTime;
-                int restoredStaminaStep = (int)Mathf.Max(staminaPerTick * timeSpan, 1);
-                Restore(restoredStaminaStep);
+            _fullRecoverTimer.SetDuration(durationToFullyRecover);
+            _fullRecoverTimer.Clear();
 
-                await UniTask.Delay(TimeSpan.FromSeconds(timeSpan),
-                    cancellationToken: _restoringStaminaCancellation.Token);
+            _temporaryRestoreT = 0f;
+            
+            while (!_fullRecoverTimer.HasFinished() && _isRestoringStamina)
+            {
+                float timeStep = Time.deltaTime;
+
+                _temporaryRestoreT += timeStep / FullRecoverDuration;
+                
+                _fullRecoverTimer.Update(timeStep);
+                await UniTask.Yield();
+            }
+
+            if (HasTemporaryRestoredStamina)
+            {
+                RestoreTemporarilyRestoredStamina();
             }
             
-            _restoringStaminaCancellation.Dispose();
-            _restoringStaminaCancellation = null;
-
             _isRestoringStamina = false;
             ExhaustedAllStamina = false;
+            
+            _restoringCancellation.Dispose();
+            _restoringCancellation = null;
         }
 
+        private float ComputeDurationToFullyRecover()
+        {
+            return (1f - _staminaSystem.GetValuePer1Ratio()) * FullRecoverDuration;
+        }
+
+        private void RestoreTemporarilyRestoredStamina()
+        {
+            int restoredStamina = (int)(_temporaryRestoreT * _staminaSystem.MaxStamina);
+            _staminaSystem.Restore(restoredStamina);
+            _temporaryRestoreT = 0f;
+        }
+        
     }
 }

@@ -1,12 +1,10 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Popeye.Modules.ValueStatSystem
 {
-    public class ValueStatBar : MonoBehaviour
+    public abstract class AValueStatBar : MonoBehaviour
     {
         [Header("COMPONENTS")]
         [SerializeField] private RectTransform _mainTransform;
@@ -21,9 +19,14 @@ namespace Popeye.Modules.ValueStatSystem
         [SerializeField] private Color _incrementColor = Color.green;
         [SerializeField] private Color _decrementColor = Color.red;
 
+        [SerializeField] private Ease _fillEase = Ease.Linear;
+        [SerializeField] private Ease _lazyFillEase = Ease.InOutQuad;
         
-        private AValueStat _valueStat;
         private bool _isSubscribed;
+        
+        protected abstract AValueStat ValueStat { get; }
+
+        protected float LazyExtraDuration => _lazyFullFillDuration - _fullFillDuration;
 
         
     
@@ -42,7 +45,7 @@ namespace Popeye.Modules.ValueStatSystem
     
         private void OnEnable()
         {
-            if (_valueStat != null)
+            if (HasSubscriptionReferences())
             {
                 SubscribeToEvents();
             }
@@ -50,20 +53,15 @@ namespace Popeye.Modules.ValueStatSystem
     
         private void OnDisable()
         {
-            if (_valueStat != null)
+            if (HasSubscriptionReferences())
             {
                 UnsubscribeToEvents();
             }
         }
 
-        public void Init(AValueStat valueStat, float fullFillDuration)
+
+        protected void BaseInit()
         {
-            Init(valueStat);
-            _fullFillDuration = fullFillDuration;
-        }
-        public void Init(AValueStat valueStat)
-        {
-            _valueStat = valueStat;
             _isSubscribed = false;
     
             OnValidate();
@@ -71,50 +69,63 @@ namespace Popeye.Modules.ValueStatSystem
             SubscribeToEvents();
             InstantUpdateFillImage();
         }
-    
-    
+
+
+        protected abstract bool HasSubscriptionReferences();
+        protected abstract void DoSubscribeToEvents();
+        protected abstract void DoUnsubscribeToEvents();
+
         private void SubscribeToEvents()
         {
             if (_isSubscribed) return;
             _isSubscribed = true;
     
-            _valueStat.OnValueUpdate += UpdateFillImage;
+            DoSubscribeToEvents();
         }
-        
         private void UnsubscribeToEvents()
         {
             if (!_isSubscribed) return;
             _isSubscribed = false;
     
-            _valueStat.OnValueUpdate -= UpdateFillImage;
+            DoUnsubscribeToEvents();
         }
     
     
         private void InstantUpdateFillImage()
         {
-            _fillImage.fillAmount = _lazyBarFillImage.fillAmount = _valueStat.GetValuePer1Ratio();
+            _fillImage.fillAmount = _lazyBarFillImage.fillAmount = ValueStat.GetValuePer1Ratio();
         }
     
-        private void UpdateFillImage()
+        protected void UpdateFillImage()
         {
-            float newFillValue = _valueStat.GetValuePer1Ratio();        
+            float newFillValue = ValueStat.GetValuePer1Ratio();        
             float changeAmount = newFillValue - _fillImage.fillAmount;
 
             bool isSubtracting = changeAmount < 0;
             changeAmount = Mathf.Abs(changeAmount);
-            
-            FillBar(_fillImage, newFillValue, changeAmount * _fullFillDuration);
-            FillBar(_lazyBarFillImage, newFillValue, changeAmount * _lazyFullFillDuration);
 
-            PunchFillImageColor(isSubtracting ? _decrementColor : _incrementColor, 
-                changeAmount * _fullFillDuration);
+            float fillDuration = changeAmount * _fullFillDuration;
+            float lazyFillDuration = changeAmount * _lazyFullFillDuration;
+
+            DoUpdateFillImage(newFillValue, fillDuration, lazyFillDuration, isSubtracting);
         }
+        
+        protected void DoUpdateFillImage(float newFillValue, float fillDuration, float lazyFillDuration,
+            bool isSubtracting)
+        {
+            FillBar(_fillImage, newFillValue, fillDuration, _fillEase);
+            FillBar(_lazyBarFillImage, newFillValue, lazyFillDuration, _lazyFillEase);
+
+            PunchFillImageColor(isSubtracting ? _decrementColor : _incrementColor, fillDuration);
+        }
+        
+        
     
-        private void FillBar(Image fillImage, float newFillValue, float duration)
+        private void FillBar(Image fillImage, float newFillValue, float duration, Ease ease)
         {
             fillImage.DOComplete();
             fillImage.DOFillAmount(newFillValue, duration)
-                .SetEase(Ease.InOutQuad);
+                .SetEase(ease);
         }
         
         private void PunchFillImageColor(Color punchColor, float duration)
@@ -133,7 +144,12 @@ namespace Popeye.Modules.ValueStatSystem
             _mainTransform.DOComplete();
             _mainTransform.DOPunchPosition(Vector3.right * 20.0f, 0.5f);
         }
-    
+
+        protected void KillAllUpdates()
+        {
+            _mainTransform.DOComplete();
+            _fillImage.DOKill();
+            _lazyBarFillImage.DOKill();
+        }
     }
 }
-

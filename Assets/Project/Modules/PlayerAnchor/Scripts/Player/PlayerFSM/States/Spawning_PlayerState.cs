@@ -21,11 +21,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             _finishedSpawning = false;
             WaitForSpawnToFinish().Forget();
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(0);
+            _blackboard.PlayerMediator.SetCanRotate(false);
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.SetCanRotate(true);
         }
 
         public override bool Update(float deltaTime)
