@@ -32,8 +32,8 @@ namespace Popeye.Modules.PlayerController
         public bool CanRotate { get; set; }
 
 
-        [Header("VELOCITY")] [SerializeField, Range(0.0f, 100.0f)]
-        private float _maxSpeed = 10.0f;
+        [Header("VELOCITY")] 
+        [SerializeField, Range(0.0f, 100.0f)] private float _maxSpeed = 10.0f;
 
         private Vector3 _velocity;
         private Vector3 _desiredVelocity;
@@ -44,13 +44,16 @@ namespace Popeye.Modules.PlayerController
             set { _maxSpeed = value; }
         }
 
-        [Header("ACCELERATION")] [SerializeField, Range(0.0f, 100.0f)]
-        private float _maxAcceleration = 10.0f;
+        [Header("ACCELERATION")] 
+        [SerializeField, Range(0.0f, 100.0f)] private float _maxAcceleration = 10.0f;
 
         [SerializeField, Range(0.0f, 100.0f)] private float _maxAirAcceleration = 5.0f;
         [SerializeField, Range(0.0f, 100.0f)] private float _airFallAcceleration = 10.0f;
 
-        [Header("GROUND")] [SerializeField] private LayerMask _groundProbeMask = -1;
+        [Header("GROUND")] 
+        [SerializeField] private LayerMask _groundProbeMask = -1;
+
+        private Vector3 _groundNormal;
 
         [Tooltip("Used to define ground contacts, not to limit movement slopes (use _maxAirAcceleration for that)")]
         [SerializeField, Range(0.0f, 90.0f)]
@@ -229,16 +232,18 @@ namespace Popeye.Modules.PlayerController
             if (!Physics.Raycast(_rigidbody.position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
                     _groundProbeMask))
             {
+                _groundNormal = Vector3.up;
                 return false;
             }
-
+            
             if (hit.normal.y < GetGroundCollisionMinDot(hit.collider.gameObject.layer))
             {
+                _groundNormal = Vector3.up;
                 return false;
             }
 
             _groundContactCount = 1;
-            _contactNormal = hit.normal;
+            _groundNormal = _contactNormal = hit.normal;
             float dot = Vector3.Dot(_velocity, hit.normal);
             if (dot > 0.0f)
             {
@@ -320,8 +325,8 @@ namespace Popeye.Modules.PlayerController
 
         public Vector3 GetFloorAlignedLookDirection()
         {
-            return ProjectOnContactPlane(LookDirection).normalized;
+            return ProjectOnPlane(LookDirection, _groundNormal).normalized;
         }
-        
+
     }
 }

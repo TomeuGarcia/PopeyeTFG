@@ -19,7 +19,7 @@ namespace Popeye.Modules.ValueStatSystem
         [SerializeField] private Color _incrementColor = Color.green;
         [SerializeField] private Color _decrementColor = Color.red;
 
-        [SerializeField] private Ease _fillEase = Ease.Linear;
+        [SerializeField] private Ease _fillEase = Ease.InOutQuad;
         [SerializeField] private Ease _lazyFillEase = Ease.InOutQuad;
         
         private bool _isSubscribed;

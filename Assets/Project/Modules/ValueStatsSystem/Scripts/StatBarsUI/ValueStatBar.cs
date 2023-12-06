@@ -1,3 +1,4 @@
+using UnityEngine;
 
 namespace Popeye.Modules.ValueStatSystem
 {
@@ -5,13 +6,13 @@ namespace Popeye.Modules.ValueStatSystem
     {
         private AValueStat _valueStat;
         protected override AValueStat ValueStat => _valueStat;
-        
-        
+
         public void Init(AValueStat valueStat)
         {
             _valueStat = valueStat;
             BaseInit();
         }
+            
 
 
         protected override bool HasSubscriptionReferences()
@@ -30,4 +31,3 @@ namespace Popeye.Modules.ValueStatSystem
         }
     }
 }
-
