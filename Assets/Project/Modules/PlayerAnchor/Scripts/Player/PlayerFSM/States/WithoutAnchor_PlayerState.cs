@@ -21,7 +21,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                             KickingAnchor_PlayerState kickingAnchor,
                             PullingAnchor_PlayerState pullingAnchor,
                             SpinningAnchor_PlayerState spinningAnchor,
-                            Tired_PlayerState tired)
+                            Tired_PlayerState tired,
+                            Healing_PlayerState healing)
         {
             _states = new Dictionary<PlayerStates, APlayerState>()
             {
@@ -31,7 +32,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 { PlayerStates.KickingAnchor , kickingAnchor },
                 { PlayerStates.PullingAnchor , pullingAnchor },
                 { PlayerStates.SpinningAnchor , spinningAnchor },
-                { PlayerStates.Tired , tired }
+                { PlayerStates.Tired , tired },
+                { PlayerStates.Healing , healing }
             };
         }
         

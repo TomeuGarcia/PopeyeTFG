@@ -100,6 +100,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Heal"",
+                    ""type"": ""Button"",
+                    ""id"": ""feeea9fc-b89a-470c-a6ea-4851ceb8406b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -399,6 +408,28 @@ namespace InputSystem
                     ""action"": ""Kick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17f4030b-9cc1-4b59-885a-2347177e1314"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe1cfa72-5e1f-479f-a9fd-95e414c8291b"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -442,6 +473,7 @@ namespace InputSystem
             m_Land_Pull = m_Land.FindAction("Pull", throwIfNotFound: true);
             m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
             m_Land_Kick = m_Land.FindAction("Kick", throwIfNotFound: true);
+            m_Land_Heal = m_Land.FindAction("Heal", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -511,6 +543,7 @@ namespace InputSystem
         private readonly InputAction m_Land_Pull;
         private readonly InputAction m_Land_Dash;
         private readonly InputAction m_Land_Kick;
+        private readonly InputAction m_Land_Heal;
         public struct LandActions
         {
             private @PlayerAnchorInputControls m_Wrapper;
@@ -523,6 +556,7 @@ namespace InputSystem
             public InputAction @Pull => m_Wrapper.m_Land_Pull;
             public InputAction @Dash => m_Wrapper.m_Land_Dash;
             public InputAction @Kick => m_Wrapper.m_Land_Kick;
+            public InputAction @Heal => m_Wrapper.m_Land_Heal;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -556,6 +590,9 @@ namespace InputSystem
                 @Kick.started += instance.OnKick;
                 @Kick.performed += instance.OnKick;
                 @Kick.canceled += instance.OnKick;
+                @Heal.started += instance.OnHeal;
+                @Heal.performed += instance.OnHeal;
+                @Heal.canceled += instance.OnHeal;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -584,6 +621,9 @@ namespace InputSystem
                 @Kick.started -= instance.OnKick;
                 @Kick.performed -= instance.OnKick;
                 @Kick.canceled -= instance.OnKick;
+                @Heal.started -= instance.OnHeal;
+                @Heal.performed -= instance.OnHeal;
+                @Heal.canceled -= instance.OnHeal;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -620,6 +660,7 @@ namespace InputSystem
             void OnPull(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
             void OnKick(InputAction.CallbackContext context);
+            void OnHeal(InputAction.CallbackContext context);
         }
     }
 }

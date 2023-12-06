@@ -45,11 +45,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 = new SpinningAnchor_PlayerState(blackboard);
             Tired_PlayerState tired
                 = new Tired_PlayerState(blackboard);
+
+            Healing_PlayerState healingWithAnchor
+                = new Healing_PlayerState(blackboard, PlayerStates.MovingWithAnchor);
+            Healing_PlayerState healingWithoutAnchor
+                = new Healing_PlayerState(blackboard, PlayerStates.MovingWithoutAnchor);
             
             
-            withAnchorState.Setup(movingWithAnchor, aimingThrowAnchor, throwingAnchor);
+            withAnchorState.Setup(movingWithAnchor, aimingThrowAnchor, throwingAnchor, healingWithAnchor);
             withoutAnchorState.Setup(movingWithoutAnchor, pickingUpAnchor, dashingTowardsAnchor, kickingAnchor, 
-                pullingAnchor, spinningAnchor, tired);
+                pullingAnchor, spinningAnchor, tired, healingWithoutAnchor);
 
             _states = new Dictionary<PlayerStates, APlayerState>()
             {

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
 {
@@ -10,9 +11,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
     {
         [Header("Health")] 
         [SerializeField, Range(0, 300)] private int _maxHealth = 100;
+        [SerializeField, Range(0, 300)] private int _potionHealAmount = 30;
         
         
         public int MaxHealth => _maxHealth;
+        public int PotionHealAmount => _potionHealAmount;
 
 
     }

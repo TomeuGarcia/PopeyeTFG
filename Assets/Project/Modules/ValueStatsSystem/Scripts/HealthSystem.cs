@@ -70,6 +70,10 @@ namespace Popeye.Modules.ValueStatSystem
         {
             return _currentHealth == 0;
         }
+        public bool IsMaxHealth()
+        {
+            return _currentHealth == MaxHealth;
+        }
 
         public void SetInvulnerable(bool isInvulnerable)
         {

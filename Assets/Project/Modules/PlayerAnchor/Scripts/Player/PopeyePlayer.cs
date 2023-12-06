@@ -211,6 +211,23 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _staminaSystem.HasMaxStamina();
         }
 
+        public bool CanHeal()
+        {
+            // For now there are no number of heal limits
+            return !_playerHealth.IsMaxHealth();
+        }
+
+        public async UniTask UseHeal()
+        {
+            _playerHealth.UseHeal();
+            await _playerView.PlayHealAnimation();
+        }
+
+        public void HealToMax()
+        {
+            _playerHealth.HealToMax();
+        }
+
         public void OnDamageTaken()
         {
             _playerView.PlayTakeDamageAnimation();

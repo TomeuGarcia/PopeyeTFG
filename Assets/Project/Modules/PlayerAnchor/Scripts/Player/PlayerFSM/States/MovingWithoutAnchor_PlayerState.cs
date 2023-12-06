@@ -44,6 +44,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
             
+            if (PlayerCanHeal())
+            {
+                NextState = PlayerStates.Healing;
+                return true;
+            }
+            
             return false;
         }
 
@@ -70,5 +76,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return _blackboard.MovesetInputsController.Dash_Pressed();
         }
         
+        private bool PlayerCanHeal()
+        {
+            return _blackboard.MovesetInputsController.Heal_Pressed() && _blackboard.PlayerMediator.CanHeal();
+        }
     }
 }

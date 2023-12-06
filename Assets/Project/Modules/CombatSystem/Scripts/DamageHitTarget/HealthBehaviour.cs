@@ -50,6 +50,10 @@ namespace Project.Modules.CombatSystem
         {
             return HealthSystem.IsDead();
         }
+        public bool IsMaxHealth()
+        {
+            return HealthSystem.IsMaxHealth();
+        }
         
 
         public void Heal(int healAmount)

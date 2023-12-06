@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+
 namespace Popeye.Modules.PlayerAnchor.Player
 {
     public interface IPlayerView
@@ -7,7 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void EndTired();
         void PlayTakeDamageAnimation();
         void PlayDeathAnimation();
-        void PlayHealAnimation();
+        UniTask PlayHealAnimation();
 
     }
 }

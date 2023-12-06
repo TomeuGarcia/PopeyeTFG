@@ -7,10 +7,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         private IPlayerMediator _playerMediator;
         private HealthBehaviour _playerHealthBehaviour;
+        private int _potionHealAmount;
         
-        public void Configure(IPlayerMediator playerMediator, HealthBehaviour playerHealthBehaviour, int maxHealth)
+        public void Configure(IPlayerMediator playerMediator, HealthBehaviour playerHealthBehaviour, int maxHealth,
+            int potionHealAmount)
         {
             _playerMediator = playerMediator;
+            _potionHealAmount = potionHealAmount;
 
             _playerHealthBehaviour = playerHealthBehaviour;
             _playerHealthBehaviour.Configure(this, maxHealth, DamageHitTargetType.Player);
@@ -37,13 +40,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerHealthBehaviour.HealthSystem.SetInvulnerable(isInvulnerable);
         }
         
-        public void Heal(int healAmount)
+        public void UseHeal()
         {
-            _playerHealthBehaviour.Heal(healAmount);
+            _playerHealthBehaviour.Heal(_potionHealAmount);
         }
         public void HealToMax()
         {
             _playerHealthBehaviour.HealToMax();
+        }
+
+        public bool IsMaxHealth()
+        {
+            return _playerHealthBehaviour.IsMaxHealth();
         }
         
     }

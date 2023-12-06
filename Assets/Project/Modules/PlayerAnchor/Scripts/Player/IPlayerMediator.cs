@@ -40,6 +40,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public bool HasMaxStamina();
 
 
+        public bool CanHeal();
+        public UniTask UseHeal();
+        public void HealToMax();
+        
         public void OnDamageTaken();
         public void OnKilledByDamageTaken();
         public void OnHealed();

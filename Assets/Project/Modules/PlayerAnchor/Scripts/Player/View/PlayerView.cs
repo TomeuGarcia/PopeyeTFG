@@ -48,12 +48,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetMeshBaseColor(_damagedColor);
         }
 
-        public void PlayHealAnimation()
+        public async UniTask PlayHealAnimation()
         {
-            FlickBaseColor(2, 0.3f, _healColor).Forget();
+            await FlickBaseColor(2, 0.15f, _healColor);
         }
 
-        private async UniTaskVoid FlickBaseColor(int numberOfFlicks, float flickDuration, Color flickColor)
+        private async UniTask FlickBaseColor(int numberOfFlicks, float flickDuration, Color flickColor)
         {
             flickDuration /= 2;
             for (int i = 0; i < numberOfFlicks; ++i)

@@ -23,6 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _throwingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _pullingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _tiredMoveSpeed = 2.5f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _healingMoveSpeed = 2.5f;
 
         public float WithoutAnchorMoveSpeed => _withoutAnchorMoveSpeed;
         public float WithAnchorMoveSpeed => _withAnchorMoveSpeed;
@@ -30,6 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float ThrowingAnchorMoveSpeed => _throwingAnchorMoveSpeed;
         public float PullingAnchorMoveSpeed => _pullingAnchorMoveSpeed;
         public float TiredMoveSpeed => _tiredMoveSpeed;
+        public float HealingMoveSpeed => _healingMoveSpeed;
         
         
         [Header("ANCHOR PICK UP")]

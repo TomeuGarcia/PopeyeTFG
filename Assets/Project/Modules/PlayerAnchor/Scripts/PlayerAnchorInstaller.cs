@@ -149,7 +149,8 @@ namespace Project.Modules.PlayerAnchor
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerStateMachine.Setup(playerStatesBlackboard);
-            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth);
+            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
+                _playerGeneralConfig.PotionHealAmount);
 
             _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig, _playerView.Value, playerHealth, 
                 playerStamina, playerMotion, _anchor, anchorThrower, anchorPuller);
@@ -157,7 +158,7 @@ namespace Project.Modules.PlayerAnchor
             
             
             // HUD
-            _playerHUD.Configure(playerStamina);
+            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);
             
             
             // Debug
