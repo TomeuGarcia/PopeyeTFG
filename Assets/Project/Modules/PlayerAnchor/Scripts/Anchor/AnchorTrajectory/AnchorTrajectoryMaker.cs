@@ -8,22 +8,20 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public class AnchorTrajectoryMaker
     {
+        private Vector3[] _straightLineTrajectoryPoints;
+        private Vector3[] _curvedTrajectoryPoints;
+        private AnchorThrowConfig _throwConfig;
+        private LayerMask AutoTargetLayerMask => _throwConfig.AutoTargetLayerMask;
+        private LayerMask ObstaclesLayerMask => _throwConfig.ObstaclesLayerMask;
+        private AnimationCurve HeightOffsetCurve => _throwConfig.HeightDisplacementCurve;
+        private float FloorProbeDistance => _throwConfig.HeightToConsiderFloor;
+        private float FloorDotThreshold => _throwConfig.MaxSteepDotToConsiderFloor;
+        
+        
+        
         private AnchorTrajectoryEndSpot _trajectoryEndSpot;
-        private AnchorThrowConfig _anchorThrowConfig;
         private AnchorPullConfig _anchorPullConfig;
-        private TrajectoryHitChecker _trajectoryHitChecker;
         
-
-        private Vector3[] _straightTrajectoryPath;
-        private Vector3[] _curvedEndTrajectoryPath;
-        
-        private Vector3[] _correctedTrajectoryPath;
-        private float _correctedPathDistance;
-        
-        private int _trajectoryHitIndex;
-
-        public bool TrajectoryEndsOnVoid { get; private set; }
-
 
         private LineRenderer _debugLine;
         private LineRenderer _debugLine2;
@@ -33,24 +31,27 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
             AnchorThrowConfig anchorThrowConfig, AnchorPullConfig anchorPullConfig,
-            TrajectoryHitChecker trajectoryHitChecker,
             LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3)
         {
             _trajectoryEndSpot = trajectoryEndSpot;
-            _anchorThrowConfig = anchorThrowConfig;
+            _throwConfig = anchorThrowConfig;
             _anchorPullConfig = anchorPullConfig;
-            _trajectoryHitChecker = trajectoryHitChecker;
 
             _trajectoryEndSpot.Hide();
             
-            _straightTrajectoryPath = new Vector3[2];
-            _curvedEndTrajectoryPath = new Vector3[20];
+            _straightLineTrajectoryPoints = new Vector3[2];
+            _curvedTrajectoryPoints = new Vector3[20];
+            
+            
             _debugLine = debugLine;
             _debugLine2 = debugLine2;
             _debugLine3 = debugLine3;
         }
 
-
+        public void DrawDebugLines()
+        {
+            DrawDebugLines(_straightLineTrajectoryPoints, _curvedTrajectoryPoints);
+        }
         private void DrawDebugLines(Vector3[] trajectory1, Vector3[] trajectory2, Vector3[] trajectory3 = null)
         {
             _debugLine.positionCount = trajectory1.Length;
@@ -67,7 +68,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         }
 
-
         
         
         public void ShowTrajectoryEndSpot()
@@ -80,119 +80,13 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
 
 
-        public Vector3[] UpdateTrajectoryPath(Vector3 startPoint, Vector3 direction, float distance,
-            bool updateTrajectoryEndSpot)
+
+        public void MakeTrajectoryEndSpotMatchSpot(Vector3 position, Vector3 lookDirection, bool endsOnFloor)
         {
-            DoUpdateTrajectoryPath(_straightTrajectoryPath, startPoint, direction, distance);
-            DoUpdateTrajectoryPath(_curvedEndTrajectoryPath, startPoint, direction, distance);
-            CurveTrajectoryPath(_curvedEndTrajectoryPath, _anchorThrowConfig.TrajectoryBendSharpness);
-
-            if (updateTrajectoryEndSpot)
-            {
-                UpdateTrajectoryEndSpot();
-            }
-
-            if (drawDebugLines)
-            {
-                DrawDebugLines(_straightTrajectoryPath, _curvedEndTrajectoryPath);
-            }
-
-            return _curvedEndTrajectoryPath;
+            _trajectoryEndSpot.MatchSpot(position, lookDirection, endsOnFloor);
         }
+
         
-        private void DoUpdateTrajectoryPath(Vector3[] trajectoryPath, Vector3 startPoint, Vector3 direction, float distance)
-        {
-            trajectoryPath[0] = startPoint;
-
-            int steps = trajectoryPath.Length - 1;
-            float distanceStep = distance / steps;
-            
-            for (int i = 1; i < trajectoryPath.Length; ++i)
-            {
-                trajectoryPath[i] = startPoint + (direction * (distanceStep * i));
-            }
-        }
-        
-        private void CurveTrajectoryPath(Vector3[] trajectoryPath, int bendSharpness)
-        {
-            for (int i = trajectoryPath.Length / 2; i < trajectoryPath.Length; ++i)
-            {
-                float t = (float)i / (trajectoryPath.Length - 1.0f);
-                t = Mathf.Pow(t, bendSharpness);
-
-                Vector3 curvedPathPoint;                
-                
-                if (Physics.Raycast(trajectoryPath[i], Vector3.down, out RaycastHit hit, 
-                        _anchorThrowConfig.HeightToConsiderFloor, 
-                        PositioningHelper.Instance.ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
-                {
-                    curvedPathPoint = Vector3.Lerp(trajectoryPath[i], hit.point, t);
-                }
-                else
-                {
-                    curvedPathPoint = trajectoryPath[i] + Vector3.down * (_anchorThrowConfig.HeightToConsiderFloor * t);
-                }
-
-                trajectoryPath[i] = curvedPathPoint;
-            }
-        }
-        
-        private void UpdateTrajectoryEndSpot()
-        {
-            Vector3 spotPosition;
-            Vector3 spotLookDirection;
-            
-            if (_trajectoryHitChecker.GetFirstObstacleHitInTrajectoryPath(_curvedEndTrajectoryPath, 
-                    out RaycastHit hit, out _trajectoryHitIndex))
-            {
-                TrajectoryEndsOnVoid = false;
-                spotPosition = hit.point;
-                spotLookDirection = hit.normal;
-            }
-            else
-            {
-                TrajectoryEndsOnVoid = true;
-                _trajectoryHitIndex = _curvedEndTrajectoryPath.Length - 1;
-                spotPosition = _curvedEndTrajectoryPath[_curvedEndTrajectoryPath.Length - 1];
-                spotLookDirection = Vector3.up;
-            }
-            
-            spotPosition += spotLookDirection * 0.05f;
-            MakeTrajectoryEndSpotMatchSpot(spotPosition, spotLookDirection);
-        }
-
-        public void MakeTrajectoryEndSpotMatchSpot(Vector3 position, Vector3 lookDirection)
-        {
-            _trajectoryEndSpot.MatchSpot(position, lookDirection, !TrajectoryEndsOnVoid);
-        }
-
-
-        public Vector3[] GetCorrectedTrajectoryPath()
-        {
-            int pathCount = _trajectoryHitIndex + 1;
-            _correctedTrajectoryPath = new Vector3[pathCount];
-            _correctedPathDistance = 0.0f;
-
-            if (_curvedEndTrajectoryPath.Length > 0)
-            {
-                _correctedTrajectoryPath[0] = _curvedEndTrajectoryPath[0];
-            }
-            for (int i = 1; i < pathCount; ++i)
-            {
-                _correctedTrajectoryPath[i] = _curvedEndTrajectoryPath[i];
-                _correctedPathDistance += Vector3.Distance(_correctedTrajectoryPath[i-1], _correctedTrajectoryPath[i]);
-            }
-
-            return _correctedTrajectoryPath;
-        }
-
-        public float GetCorrectedDurationByDistance(float distance, float duration)
-        {
-            return (duration / distance) * _correctedPathDistance;
-        }
-
-
-
         public Vector3[] ComputeCurvedTrajectory(Vector3 anchorPosition, Vector3 goalPosition, int numberOfSteps,
             out float trajectoryDistance)
         {
@@ -256,28 +150,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         
         
-        
-        //// NEW
 
-        private Vector3[] _straightLineTrajectoryPoints;
-        private Vector3[] _curvedTrajectoryPoints;
-        private AnchorThrowConfig _throwConfig;
-        private LayerMask AutoTargetLayerMask => _throwConfig.AutoTargetLayerMask;
-        private LayerMask ObstaclesLayerMask => _throwConfig.ObstaclesLayerMask;
-        private AnimationCurve HeightOffsetCurve => _throwConfig.HeightDisplacementCurve;
-        private float FloorProbeDistance => _throwConfig.HeightToConsiderFloor;
-        private float FloorDotThreshold => _throwConfig.MaxSteepDotToConsiderFloor;
-
-        public void SuperDuperSetup(AnchorThrowConfig throwConfig, int trajectorySteps)
-        {
-            _straightLineTrajectoryPoints = new Vector3[2];
-            _curvedTrajectoryPoints = new Vector3[trajectorySteps];
-            _throwConfig = throwConfig;
-        }
         
         public Vector3[] ComputeUpdatedTrajectory(Vector3 startPosition, Vector3 direction, Vector3 floorNormal, 
             float distance, out float trajectoryDistance, out bool trajectoryEndsOnTheFloor, 
-            out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget)
+            out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget, 
+            out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle)
         {
             
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
@@ -290,6 +168,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
                     
                     validAutoAimTarget = true;
                     trajectoryEndsOnTheFloor = true;
+                    obstacleHit = default;
+                    trajectoryHitsObstacle = false;
+                    
                     return _curvedTrajectoryPoints;
                 }
             }
@@ -302,13 +183,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             bool obstacleInTheWayOfTheTrajectory =
                 CheckFirstHitInTrajectory(_curvedTrajectoryPoints, 0.1f, out int lastIndexBeforeCollision,
-                    out RaycastHit hit, ObstaclesLayerMask, QueryTriggerInteraction.Ignore);
+                    out obstacleHit, ObstaclesLayerMask, QueryTriggerInteraction.Ignore);
             if (obstacleInTheWayOfTheTrajectory)
             {
                 trajectoryEndsOnTheFloor =
                     MakeHitObstacleTrajectory(_curvedTrajectoryPoints, lastIndexBeforeCollision,
-                        out Vector3[] trajectoryPointsAfterCollision, direction, hit);
+                        out Vector3[] trajectoryPointsAfterCollision, direction, obstacleHit);
 
+                trajectoryHitsObstacle = true;
                 return trajectoryPointsAfterCollision;
             }
             
@@ -320,9 +202,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
             {
                 RemakeTrajectoryEnd(_curvedTrajectoryPoints, floorHit.point, 
                     distance, out distance);
+
+                obstacleHit = floorHit;
             }
-            
-            
+
+            trajectoryHitsObstacle = trajectoryEndsOnTheFloor;
             return _curvedTrajectoryPoints;
         }
 

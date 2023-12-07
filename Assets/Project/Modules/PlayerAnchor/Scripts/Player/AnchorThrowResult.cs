@@ -6,6 +6,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class AnchorThrowResult
     {
         public Vector3[] TrajectoryPathPoints { get; private set; }
+        public Vector3 FirstTrajectoryPathPoint => TrajectoryPathPoints[0];
+        public Vector3 LastTrajectoryPathPoint => TrajectoryPathPoints[^1];
         public Vector3 Direction { get; private set; }
         public Quaternion StartLookRotation { get; private set; }
         public Quaternion EndLookRotation { get; private set; }

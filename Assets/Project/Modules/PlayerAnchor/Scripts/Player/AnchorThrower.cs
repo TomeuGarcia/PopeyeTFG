@@ -15,7 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private TransformMotion _anchorMotion;
         private AnchorThrowConfig _throwConfig;
         
-        private AnchorSnapController _anchorSnapController;
+        private AnchorAutoAimController _anchorAutoAimController;
         
         
         private float _currentThrowForce01;
@@ -27,25 +27,23 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public AnchorThrowResult AnchorThrowResult { get; private set; }
 
-
-
+        
+            
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker, TransformMotion anchorMotion,
-            AnchorThrowConfig throwConfig, AnchorSnapController anchorSnapController)
+            AnchorThrowConfig throwConfig, AnchorAutoAimController anchorAutoAimController)
         {
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _anchorMotion = anchorMotion;
             _throwConfig = throwConfig;
-            _anchorSnapController = anchorSnapController;
+            _anchorAutoAimController = anchorAutoAimController;
 
             AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve);
             
             ResetThrowForce();
-            
-            _anchorTrajectoryMaker.SuperDuperSetup(_throwConfig, 20);
         }
 
         public bool AnchorIsBeingThrown()
@@ -63,15 +61,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Vector3 floorNormal = _player.GetFloorNormal();
             float distance = ThrowDistance;
             float finalTrajectoryDistance;
-            bool trajectoryEndsOnFloor;
-            
-            IAutoAimTarget autoAimTarget;
-            bool validAutoAimTarget;
+
 
             Vector3[] trajectoryPoints =
                 _anchorTrajectoryMaker.ComputeUpdatedTrajectory(startPosition, direction, floorNormal, distance,
-                    out finalTrajectoryDistance, out trajectoryEndsOnFloor, 
-                    out autoAimTarget, out validAutoAimTarget);
+                    out finalTrajectoryDistance, out bool trajectoryEndsOnFloor, 
+                    out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget, 
+                    out RaycastHit obstacleHit, out bool trajectoryHitsObstacle);
             
             
             Vector3 right = Vector3.Cross(direction, floorNormal).normalized;
@@ -83,22 +79,41 @@ namespace Popeye.Modules.PlayerAnchor.Player
             AnchorThrowResult.Reset(trajectoryPoints, direction, startLookRotation, endLookRotation, 
                 duration, !trajectoryEndsOnFloor);
 
-
+            
+            
             if (validAutoAimTarget)
             {
-                _anchorSnapController.ManageAutoAimTargetFound(autoAimTarget);
+                _anchorAutoAimController.ManageAutoAimTargetFound(autoAimTarget);
+                
+                _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(autoAimTarget.GetAimLockPosition(), 
+                    autoAimTarget.GetLookDirectionForAimedTargeter(), trajectoryEndsOnFloor);
             }
             else
             {
-                _anchorSnapController.ManageNoAutoAimTargetFound();
+                _anchorAutoAimController.ManageNoAutoAimTargetFound();
+
+                if (trajectoryHitsObstacle && trajectoryEndsOnFloor)
+                {
+                    _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(obstacleHit.point, 
+                        obstacleHit.normal, true);
+                }
+                else
+                {
+                    _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(AnchorThrowResult.LastTrajectoryPathPoint, 
+                        Vector3.up, false);
+                }
+                
+                
             }
+
+            _anchorTrajectoryMaker.DrawDebugLines();
         }
         
         public void ThrowAnchor()
         {
-            if (_anchorSnapController.HasAutoAimTarget)
+            if (_anchorAutoAimController.HasAutoAimTarget)
             {
-                _anchorSnapController.UseCurrentTarget(AnchorThrowResult.Duration);
+                _anchorAutoAimController.UseCurrentTarget(AnchorThrowResult.Duration);
             }
 
             _anchor.SetThrown(AnchorThrowResult);
@@ -128,14 +143,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 return;
             }
             
-            if (_anchorSnapController.HasAutoAimTarget)
+            if (_anchorAutoAimController.HasAutoAimTarget)
             {
-                _anchor.SetGrabbedBySnapper(_anchorSnapController.AnchorAutoAimTarget);
-                _anchorSnapController.ClearState();
+                _anchor.SetGrabbedBySnapper(_anchorAutoAimController.AnchorAutoAimTarget);
+                _anchorAutoAimController.ClearState();
                 return;
             }
             
-            _anchor.SnapToFloor().Forget();
+            _anchor.SetRestingOnFloor();
         }
         
         
@@ -177,9 +192,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void CancelChargingThrow()
         {
-            if (_anchorSnapController.HasAutoAimTarget)
+            if (_anchorAutoAimController.HasAutoAimTarget)
             {
-                _anchorSnapController.RemoveCurrentAutoAimTarget();
+                _anchorAutoAimController.RemoveCurrentAutoAimTarget();
             }
         }
         

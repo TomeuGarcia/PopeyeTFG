@@ -5,6 +5,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
     public interface IAutoAimTarget
     {
         Vector3 GetAimLockPosition();
+        Vector3 GetLookDirectionForAimedTargeter();
         Quaternion GetRotationForAimedTargeter();
         Transform GetParentTransformForTargeter();
         bool CanBeAimedFromPosition(Vector3 position);

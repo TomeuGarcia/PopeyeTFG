@@ -25,12 +25,17 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return _snapSpot.position;
         }
 
+        public Vector3 GetLookDirectionForAimedTargeter()
+        {
+            return LookDirection;
+        }
+
         public bool CanBeAimedFromPosition(Vector3 position)
         {
             Vector3 direction = (position - transform.position).normalized;
             float dot = Vector3.Dot(direction, LookDirection);
 
-            return dot > 0.0f;
+            return dot > 0.2f;
         }
 
         public Vector3 GetLookDirection()

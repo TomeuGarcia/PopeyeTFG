@@ -8,9 +8,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public bool IsBeingThrown();
         public bool IsBeingPulled();
         public bool IsRestingOnFloor();
-
-        public void OnCollisionWithObstacle(Collision collision);
-        
         
     }
 }

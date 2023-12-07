@@ -13,11 +13,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private IAnchorMediator _anchorMediator;
 
 
-        private void OnCollisionEnter(Collision other)
-        {
-            _anchorMediator.OnCollisionWithObstacle(other);
-        }
-
 
         public void Configure(IAnchorMediator anchorMediator)
         {

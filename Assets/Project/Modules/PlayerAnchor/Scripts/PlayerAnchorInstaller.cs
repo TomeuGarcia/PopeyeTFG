@@ -111,22 +111,20 @@ namespace Project.Modules.PlayerAnchor
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
-            TrajectoryHitChecker anchorTrajectoryHitChecker = new TrajectoryHitChecker(
-                _obstaclesMask, _anchorSnapTargetMask);
-            AnchorSnapController anchorSnapController = new AnchorSnapController();
+            AnchorAutoAimController anchorAutoAimController = new AnchorAutoAimController();
             
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorThrowConfig, 
-                anchorSnapController);
+                anchorAutoAimController);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorPullConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorThrowConfig, _anchorPullConfig,
-                anchorTrajectoryHitChecker, debugLine, debugLine2, debugLine3);
+                debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(anchorMotion, _anchorMotionConfig, _anchorPhysics, _anchorChain, 
                 _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorChainConfig);
-            anchorSnapController.Configure(anchorTrajectoryHitChecker);
+            anchorAutoAimController.Configure();
 
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorDamageDealer, _anchorChain);

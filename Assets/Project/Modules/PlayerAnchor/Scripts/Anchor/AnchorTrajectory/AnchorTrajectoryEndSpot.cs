@@ -24,31 +24,31 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             if (_updatePosition)
             {
-                _spotTransform.position += _toTarget.normalized * (_followSpeed * Time.deltaTime * _toTarget.magnitude);
+                Vector3 moveDisplacement = 
+                    _toTarget.normalized * (_followSpeed * Time.deltaTime * _toTarget.sqrMagnitude);
+                
+                _spotTransform.position += moveDisplacement;
             }
         }
 
-        public void MatchSpot(Vector3 position, Vector3 hitNormal, bool isValid)
+        public void MatchSpot(Vector3 position, Vector3 lookDirection, bool isValid)
         {
             SetValidState(isValid);
-            if (Vector3.Distance(_spotTransform.position, position) < _stopFollowDistance)
-            {
-                _updatePosition = false;
-                return;
-            }
 
-            _updatePosition = true;
             _toTarget = position - _spotTransform.position;
+            _toTarget = Vector3.ClampMagnitude(_toTarget, 10.0f);
+            
+            _updatePosition = _toTarget.magnitude > _stopFollowDistance;
 
-            if (Vector3.Dot(hitNormal, Vector3.up) > 0.95f)
+            if (Vector3.Dot(lookDirection, Vector3.up) > 0.95f)
             {
                 _spotTransform.rotation = Quaternion.identity;
             }
             else
             {
-                Vector3 right = Vector3.Cross(hitNormal, Vector3.up).normalized;
-                Vector3 forward = Vector3.Cross(hitNormal, right).normalized;
-                Quaternion look = Quaternion.LookRotation(forward, hitNormal);
+                Vector3 right = Vector3.Cross(lookDirection, Vector3.up).normalized;
+                Vector3 forward = Vector3.Cross(lookDirection, right).normalized;
+                Quaternion look = Quaternion.LookRotation(forward, lookDirection);
                 _spotTransform.rotation = look;
             }
             

@@ -59,7 +59,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedToThrow);
         }
-        private void SetRestingOnFloor()
+        public void SetRestingOnFloor()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
         }
@@ -96,24 +96,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.GrabbedBySnapper;
         }
-
-        public void OnCollisionWithObstacle(Collision collision)
-        {
-            return;
-            if (IsBeingThrown())
-            {
-                // interrupt throw
-                _anchorThrower.InterruptThrow();
-                // snap to floor
-                SnapToFloor().Forget();
-                Debug.Log("uhmmm");
-            }
-            else
-            {
-                
-            }
-        }
-
+        
 
         public void OnStartChargingThrow()
         {

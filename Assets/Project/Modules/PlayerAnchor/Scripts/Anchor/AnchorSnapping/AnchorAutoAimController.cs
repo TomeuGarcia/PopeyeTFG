@@ -2,19 +2,18 @@ using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
 {
-    public class AnchorSnapController
+    public class AnchorAutoAimController
     {
         private IAutoAimTarget _currentAutoAimTarget;
-        private TrajectoryHitChecker _trajectoryHitChecker;
 
         public bool HasAutoAimTarget => _currentAutoAimTarget != null;
         public IAutoAimTarget AnchorAutoAimTarget => _currentAutoAimTarget;
         
         
 
-        public void Configure(TrajectoryHitChecker trajectoryHitChecker)
+        public void Configure()
         {
-            _trajectoryHitChecker = trajectoryHitChecker;
+            _currentAutoAimTarget = null;
         }
 
 
