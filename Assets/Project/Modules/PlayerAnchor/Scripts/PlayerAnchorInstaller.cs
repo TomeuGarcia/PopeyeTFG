@@ -165,19 +165,7 @@ namespace Project.Modules.PlayerAnchor
             trajectoryMaker = anchorTrajectoryMaker;
             AanchorThrower = anchorThrower;
         }
-        
-        private void OnDrawGizmos()
-        {
-            if (AanchorThrower != null && AanchorThrower.AtrajectoryPath != null)
-            {
-                Gizmos.color = Color.red;
-                for (int i = 0; i < AanchorThrower.AtrajectoryPath.Length - 1; ++i)
-                {
-                    Gizmos.DrawLine(AanchorThrower.AtrajectoryPath[i], AanchorThrower.AtrajectoryPath[i+1]);
-                }
-            }
-        }
 
-        
+
     }
 }

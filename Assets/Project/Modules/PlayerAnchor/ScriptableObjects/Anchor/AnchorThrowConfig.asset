@@ -75,4 +75,44 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _trajectoryBendSharpness: 10
+  _heightDisplacementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.000045018387
+      value: -0.002650247
+      inSlope: 0.5120167
+      outSlope: 0.5120167
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6987103
+      value: 0.35507804
+      inSlope: -1.7830533
+      outSlope: -1.7830533
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.049944866
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0000451
+      value: -0.49857405
+      inSlope: -3.7761276
+      outSlope: -3.7761276
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10981933
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _heightToConsiderFloor: 8
+  _obstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  _autoTargetLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  _maxSteepAngleToConsiderFloor: 60

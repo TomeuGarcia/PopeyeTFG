@@ -15,28 +15,17 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private Vector3 UpDirection => -transform.right;
 
 
-        public Transform GetSnapTransform()
+        public Transform GetParentTransformForTargeter()
         {
             return _snapSpot;
         }
 
-        public Vector3 GetSnapPosition()
+        public Vector3 GetAimLockPosition()
         {
             return _snapSpot.position;
         }
 
-        public Vector3 GetLookDirection()
-        {
-            return LookDirection;
-        }
-
-        public Quaternion GetSnapRotation()
-        {
-            return Quaternion.AngleAxis(45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
-        }
-        
-
-        public bool CanSnapFromPosition(Vector3 position)
+        public bool CanBeAimedFromPosition(Vector3 position)
         {
             Vector3 direction = (position - transform.position).normalized;
             float dot = Vector3.Dot(direction, LookDirection);
@@ -44,18 +33,40 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return dot > 0.0f;
         }
 
-        public void EnterPrepareForSnapping()
+        public Vector3 GetLookDirection()
+        {
+            return LookDirection;
+        }
+        
+
+        public Quaternion GetRotationForAimedTargeter()
+        {
+            return Quaternion.AngleAxis(45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
+        }
+        
+
+        public bool CanSnapFromPosition(Vector3 position)
+        {
+            return CanBeAimedFromPosition(position);
+        }
+
+        
+        public void OnAddedAsAimTarget()
         {
             PlayOpenAnimation(0.2f);
         }
 
-        public void QuitPrepareForSnapping()
+        public void OnRemovedFromAimTarget()
         {
             PlayCloseAnimation(0.2f);
         }
 
+        public void OnUsedAsAimTarget(float delay)
+        {
+            PlaySnapAnimation(delay).Forget();
+        }
 
-        public async UniTaskVoid PlaySnapAnimation(float delay)
+        private async UniTaskVoid PlaySnapAnimation(float delay)
         {
             float delay1 = delay * 0.7f;
             float delay2 = delay * 0.2f;
@@ -89,5 +100,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
                     .SetEase(Ease.InOutSine);
             }
         }
+
+        
     }
 }

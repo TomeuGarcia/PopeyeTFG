@@ -4,11 +4,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public class AnchorSnapController
     {
-        private IAnchorSnapTarget _currentSnapTarget;
+        private IAutoAimTarget _currentAutoAimTarget;
         private TrajectoryHitChecker _trajectoryHitChecker;
 
-        public bool HasSnapTarget => _currentSnapTarget != null;
-        public IAnchorSnapTarget AnchorSnapTarget => _currentSnapTarget;
+        public bool HasAutoAimTarget => _currentAutoAimTarget != null;
+        public IAutoAimTarget AnchorAutoAimTarget => _currentAutoAimTarget;
         
         
 
@@ -18,94 +18,60 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
 
 
-        public bool CheckForSnapTarget(Vector3[] trajectoryPath)
+        public void ManageNoAutoAimTargetFound()
         {
-            if (!_trajectoryHitChecker.GetFirstTriggerHitInTrajectoryPath(trajectoryPath,
-                    out RaycastHit hit, out int trajectoryHitIndex))
+            if (HasAutoAimTarget)
             {
-                if (HasSnapTarget)
-                {
-                    RemoveCurrentSnapTarget();
-                }
-
-                return false;
+                RemoveCurrentAutoAimTarget();
             }
-
-            if (!CheckHitIsSnapTarget(hit, out IAnchorSnapTarget snapTarget))
+        }
+        
+        public void ManageAutoAimTargetFound(IAutoAimTarget autoAimTarget)
+        {
+            if (HasAutoAimTarget)
             {
-                if (HasSnapTarget)
+                if (_currentAutoAimTarget != autoAimTarget)
                 {
-                    RemoveCurrentSnapTarget();
-                }
-                
-                return false;
-            }
-            
-            
-            if (!snapTarget.CanSnapFromPosition(trajectoryPath[0]))
-            {
-                if (HasSnapTarget)
-                {
-                    RemoveCurrentSnapTarget();
-                }
-                
-                return false;
-            }
-            
-            
-            if (HasSnapTarget)
-            {
-                if (_currentSnapTarget != snapTarget)
-                {
-                    RemoveCurrentSnapTarget();
-                    AddNewCurrentSnapTarget(snapTarget);
+                    RemoveCurrentAutoAimTarget();
+                    AddNewCurrentAutoAimTarget(autoAimTarget);
                 }
             }
             else
             {
-                AddNewCurrentSnapTarget(snapTarget);
+                AddNewCurrentAutoAimTarget(autoAimTarget);
             }
-                
-            return true;
-        }
-        
-        private bool CheckHitIsSnapTarget(RaycastHit hit, out IAnchorSnapTarget snapTarget)
-        {
-            
-            return hit.collider.TryGetComponent(out snapTarget);
         }
         
 
-        private void AddNewCurrentSnapTarget(IAnchorSnapTarget newSnapTarget)
+        private void AddNewCurrentAutoAimTarget(IAutoAimTarget newSnapTarget)
         {
-            _currentSnapTarget = newSnapTarget;
-            _currentSnapTarget.EnterPrepareForSnapping();
+            _currentAutoAimTarget = newSnapTarget;
+            _currentAutoAimTarget.OnAddedAsAimTarget();
         }
-        public void RemoveCurrentSnapTarget()
+        public void RemoveCurrentAutoAimTarget()
         {
-            _currentSnapTarget.QuitPrepareForSnapping();
+            _currentAutoAimTarget.OnRemovedFromAimTarget();
             ClearState();
         }
         
-        
-        
-        public void ConfirmCurrentTarget(float durationBeforeReachingTarget)
+        public void UseCurrentTarget(float durationBeforeReachingTarget)
         {
-            _currentSnapTarget.PlaySnapAnimation(durationBeforeReachingTarget).Forget();
+            _currentAutoAimTarget.OnUsedAsAimTarget(durationBeforeReachingTarget);
         }
 
-        public Vector3 GetTargetSnapPosition()
+        
+        public Vector3 GetTargetAimLockPosition()
         {
-            return _currentSnapTarget.GetSnapPosition();
+            return _currentAutoAimTarget.GetAimLockPosition();
         }
-        public Quaternion GetTargetSnapRotation()
+        public Quaternion GetTargetRotation()
         {
-            return _currentSnapTarget.GetSnapRotation();
+            return _currentAutoAimTarget.GetRotationForAimedTargeter();
         }
 
         public void ClearState()
         {
-            _currentSnapTarget = null;
+            _currentAutoAimTarget = null;
         }
     }
 }

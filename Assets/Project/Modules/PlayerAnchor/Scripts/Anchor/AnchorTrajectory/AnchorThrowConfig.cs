@@ -41,7 +41,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         [Header("THROW TRAJECTORY BEND")] 
         [SerializeField, Range(2, 16)] private int _trajectoryBendSharpness = 10;
 
+        [SerializeField] private AnimationCurve _heightDisplacementCurve;
+        
         public int TrajectoryBendSharpness => _trajectoryBendSharpness;
+        public AnimationCurve HeightDisplacementCurve => _heightDisplacementCurve;
+        
+        
 
         
         [Header("EDGE CASES")] 
@@ -50,6 +55,16 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public float HeightToConsiderFloor => _heightToConsiderFloor;
 
 
+
+        [Header("COLLISION DETECTION")] 
+        [SerializeField] private LayerMask _obstaclesLayerMask;
+        [SerializeField] private LayerMask _autoTargetLayerMask;
+        [SerializeField, Range(0.0f, 90.0f)] private float _maxSteepAngleToConsiderFloor = 60.0f;
+        private float _maxSteepDotToConsiderFloor;
+        
+        public LayerMask ObstaclesLayerMask => _obstaclesLayerMask;
+        public LayerMask AutoTargetLayerMask => _autoTargetLayerMask;
+        public float MaxSteepDotToConsiderFloor => _maxSteepDotToConsiderFloor;
         
         
 
@@ -57,6 +72,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _maxThrowDistance = Mathf.Max(_maxThrowDistance, _minThrowDistance);
             _maxThrowMoveDuration = Mathf.Max(_maxThrowMoveDuration, _minThrowMoveDuration);
+
+            _maxSteepDotToConsiderFloor = Mathf.Cos(_maxSteepAngleToConsiderFloor * Mathf.Deg2Rad);
         }
 
         private void Awake()

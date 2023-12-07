@@ -63,15 +63,20 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
         }
-        public void SetGrabbedBySnapper(IAnchorSnapTarget snapTarget)
+        public void SetGrabbedBySnapper(IAutoAimTarget autoAimTarget)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
-            //_anchorMotion.ParentAndReset(snapTarget.GetSnapTransform(), 0.1f);
 
+            
             float duration = 0.1f;
-            _anchorMotion.MoveToPosition(snapTarget.GetSnapPosition(), duration, Ease.InOutSine);
-            _anchorMotion.Rotate(snapTarget.GetSnapRotation(), duration, Ease.InOutSine);
-            _anchorMotion.Parent(snapTarget.GetSnapTransform());
+            //_anchorMotion.MoveToPosition(autoAimTarget.GetAimLockPosition(), duration, Ease.InOutSine);
+            _anchorMotion.Rotate(autoAimTarget.GetRotationForAimedTargeter(), duration, Ease.InOutSine);
+
+            Transform parentTransform = autoAimTarget.GetParentTransformForTargeter();
+            if (parentTransform != null)
+            {
+                _anchorMotion.Parent(parentTransform);
+            }
         }
         
         
