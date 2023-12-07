@@ -40,7 +40,7 @@ MonoBehaviour:
   _minThrowMoveDuration: 0.1
   _maxThrowMoveDuration: 0.2
   _minThrowDistance: 2
-  _maxThrowDistance: 7
+  _maxThrowDistance: 8
   _moveInterpolationCurve:
     serializedVersion: 2
     m_Curve:
@@ -54,8 +54,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.72091377
-      value: 0.37667632
+      time: 0.6510448
+      value: 0.41912913
       inSlope: 1.4999926
       outSlope: 1.4999926
       tangentMode: 0
@@ -63,13 +63,22 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      time: 0.8525844
+      value: 0.96995354
+      inSlope: 0.70165235
+      outSlope: 0.70165235
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.48473445
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.1906209
+      outSlope: 0.1906209
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.5035826
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -81,34 +90,34 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.000045018387
       value: -0.002650247
-      inSlope: 0.5120167
-      outSlope: 0.5120167
+      inSlope: 1.4276061
+      outSlope: 1.4276061
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.6987103
-      value: 0.35507804
-      inSlope: -1.7830533
-      outSlope: -1.7830533
+      time: 0.7026492
+      value: 1.0003917
+      inSlope: -0.02645026
+      outSlope: -0.02645026
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.049944866
+      inWeight: 0.22965093
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.0000451
-      value: -0.49857405
-      inSlope: -0.08719682
-      outSlope: -0.08719682
+      time: 0.99727297
+      value: -0.98367417
+      inSlope: -10.056189
+      outSlope: -10.056189
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.60672194
+      inWeight: 0.07642568
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _heightToConsiderFloor: 8
+  _heightToConsiderFloor: 4
   _obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 1

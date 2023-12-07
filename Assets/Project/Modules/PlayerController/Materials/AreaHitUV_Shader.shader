@@ -1,13 +1,13 @@
-Shader "Unlit/AreaHit_Shader"
+Shader "Unlit/AreaHitUV_Shader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
         _WaveColor ("Wave Color", Color) = (1,0,0,1)
-        _WaveSpeed ("Wave Speed", Range(0, 10)) = 1
+        _WaveSpeed ("Wave Speed", Range(-10, 10)) = 1
         _WaveFrequency ("Wave Frequency", Range(0, 10)) = 1
         _WaveSharpness("Wave Sharpness", Range(0, 10)) = 1
-        _StartTime("Start Time", Range(0, 10)) = 1
+        _StartTime("Start Time", Range(0, 200)) = 1
         _WaveDirection("Wave Direction", Range(0, 1)) = 0
         _WaveDuration("Wave Duration", Range(0, 10)) = 1
         _TimeOverwrite("Time Overwrite", Range(-1, 10)) = 1
@@ -63,10 +63,10 @@ Shader "Unlit/AreaHit_Shader"
                 float time = _Time.y - _StartTime + (0.4f * _WaveDuration);
                 time = lerp(_TimeOverwrite, time, step(_TimeOverwrite, -0.1));
 
-                float waveDirection = lerp(i.objectPosition.y, i.objectPosition.x, _WaveDirection);
+                float waveDirection = lerp(i.uv.y, i.uv.x, _WaveDirection);
 
                 float x = ((waveDirection * _WaveDuration * _WaveFrequency + time * _WaveSpeed) % _WaveDuration) / _WaveDuration;
-                endColor.w = pow(abs(1.0f - x), _WaveSharpness);
+                endColor.w = pow(abs(x), _WaveSharpness);
 
                 return endColor;
             }
