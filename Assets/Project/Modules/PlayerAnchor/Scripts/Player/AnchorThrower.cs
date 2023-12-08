@@ -57,15 +57,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             float duration = ComputeThrowDuration();
             
             Vector3 startPosition = _player.GetAnchorThrowStartPosition();
-            Vector3 direction = _player.GetFloorAlignedLookDirection();
+            Vector3 direction = _player.GetLookDirection(); //_player.GetFloorAlignedLookDirection();
             Vector3 floorNormal = _player.GetFloorNormal();
             float distance = ThrowDistance;
-            float finalTrajectoryDistance;
 
 
             Vector3[] trajectoryPoints =
                 _anchorTrajectoryMaker.ComputeUpdatedTrajectory(startPosition, direction, floorNormal, distance,
-                    out finalTrajectoryDistance, out bool trajectoryEndsOnFloor, 
+                    out float finalTrajectoryDistance, out bool trajectoryEndsOnFloor, 
                     out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget, 
                     out RaycastHit obstacleHit, out bool trajectoryHitsObstacle);
 
@@ -124,10 +123,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
         {
-            /*
             _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
-                anchorThrowResult.InterpolationEaseCurve);*/
-            _anchorMotion.MoveToPosition(anchorThrowResult.LastTrajectoryPathPoint, anchorThrowResult.Duration, 
                 anchorThrowResult.InterpolationEaseCurve);
             _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
                 anchorThrowResult.Duration, anchorThrowResult.InterpolationEaseCurve);

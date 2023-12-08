@@ -192,6 +192,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
                     MakeHitObstacleTrajectory(_curvedTrajectoryPoints, lastIndexBeforeCollision,
                         out Vector3[] trajectoryPointsAfterCollision, direction, obstacleHit);
 
+                trajectoryDistance = ComputeTrajectoryDistance(trajectoryPointsAfterCollision);
                 trajectoryHitsObstacle = true;
                 return trajectoryPointsAfterCollision;
             }
@@ -208,6 +209,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 obstacleHit = floorHit;
             }
 
+            trajectoryDistance = ComputeTrajectoryDistance(_curvedTrajectoryPoints);
             trajectoryHitsObstacle = trajectoryEndsOnTheFloor;
             return _curvedTrajectoryPoints;
         }
@@ -384,7 +386,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             float trajectoryDistance = 0.0f;
             for (int i = 0; i < trajectoryPoints.Length-1; ++i)
             {
-                trajectoryDistance = Vector3.Distance(trajectoryPoints[i], trajectoryPoints[i + 1]);
+                trajectoryDistance += Vector3.Distance(trajectoryPoints[i], trajectoryPoints[i + 1]);
             }
 
             return trajectoryDistance;

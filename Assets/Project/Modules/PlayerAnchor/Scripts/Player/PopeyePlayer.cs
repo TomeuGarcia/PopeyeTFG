@@ -81,6 +81,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return Vector3.ProjectOnPlane((_anchor.Position - Position).normalized, Vector3.up).normalized;
         }
 
+        public Vector3 GetLookDirection()
+        {
+            return _playerController.LookDirection;
+        }
         public Vector3 GetFloorAlignedLookDirection()
         {
             return _playerController.GetFloorAlignedLookDirection();

@@ -21,7 +21,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorDamageDealer _anchorDamageDealer;
         private AnchorChain _anchorChain;
 
-        public Vector3 Position => _anchorMotion.AnchorPosition;
+        public Vector3 Position => _anchorMotion.Position;
 
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,

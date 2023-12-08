@@ -11,6 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void SetCanRotate(bool canRotate);
         public float GetDistanceFromAnchor();
         public Vector3 GetFloorAlignedDirectionToAnchor();
+        public Vector3 GetLookDirection();
         public Vector3 GetFloorAlignedLookDirection();
         public Vector3 GetFloorNormal();
         public Vector3 GetAnchorThrowStartPosition();

@@ -27,7 +27,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 Vector3 moveDisplacement = 
                     _toTarget.normalized * (_followSpeed * Time.deltaTime * _toTarget.sqrMagnitude);
                 
-                _spotTransform.position += moveDisplacement;
+                //_spotTransform.position += moveDisplacement;
+                _spotTransform.position += _toTarget;
             }
         }
 

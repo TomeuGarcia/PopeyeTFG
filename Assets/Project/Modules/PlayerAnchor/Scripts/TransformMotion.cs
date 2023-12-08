@@ -8,7 +8,7 @@ namespace Project.Modules.PlayerAnchor
         private Transform _moveTransform;
         private Transform _rotateTransform;
 
-        public Vector3 AnchorPosition => _moveTransform.position;
+        public Vector3 Position => _moveTransform.position;
 
         ~TransformMotion()
         {

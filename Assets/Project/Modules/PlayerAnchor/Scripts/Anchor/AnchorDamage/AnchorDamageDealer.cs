@@ -68,8 +68,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _damageTriggerMotion.SetPosition(trajectoryPoints[0]);
             _damageTriggerMotion.SetRotation(_damageStartTransform.rotation);
-            //_damageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
-            _damageTriggerMotion.MoveToPosition(trajectoryPoints[^1], duration, ease);
+            _damageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
             
             var wait = await WaitUntilEase(ease, duration, easeThreshold);
             _anchorThrowDamageTrigger.Activate();
