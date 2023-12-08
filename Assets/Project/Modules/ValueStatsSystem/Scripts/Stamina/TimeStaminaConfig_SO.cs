@@ -18,12 +18,12 @@ namespace Popeye.Modules.ValueStatSystem
 
         [Header("DURATIONS")]
         [SerializeField, Range(0.01f, 20.0f)] private float _fullRecoverDuration = 1.0f;
-        [SerializeField, Range(0.01f, 20.0f)] private float _recoverDelayAfterUseDuration = 0.5f;
-        [SerializeField, Range(0.01f, 20.0f)] private float _recoverDelayAfterExhaustDuration = 2.0f;
+        [SerializeField, Range(0.01f, 20.0f)] private float _recoverAfterUseDelayDuration = 0.5f;
+        [SerializeField, Range(0.01f, 20.0f)] private float _recoverAfterExhaustDelayDuration = 2.0f;
         
         public float FullRecoverDuration => _fullRecoverDuration;
-        public float RecoverDelayAfterUseDuration => _recoverDelayAfterUseDuration;
-        public float RecoverDelayAfterExhaustDuration => _recoverDelayAfterExhaustDuration;
+        public float RecoverAfterUseDelayDuration => _recoverAfterUseDelayDuration;
+        public float RecoverAfterExhaustDelayDuration => _recoverAfterExhaustDelayDuration;
 
 
         private void OnValidate()

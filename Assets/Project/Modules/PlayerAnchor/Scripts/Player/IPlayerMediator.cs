@@ -33,8 +33,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public UniTaskVoid LookTowardsAnchorForDuration(float duration);
         
-        public void SetVulnerable();
-        public void SetInvulnerable();
 
         public bool HasStaminaLeft();
         public bool HasMaxStamina();

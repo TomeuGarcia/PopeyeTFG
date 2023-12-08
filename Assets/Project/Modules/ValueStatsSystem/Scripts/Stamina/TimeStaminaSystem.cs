@@ -119,11 +119,11 @@ namespace Popeye.Modules.ValueStatSystem
         
         private void StartRecoverAfterUse()
         {
-            WaitToRestore(_config.RecoverDelayAfterUseDuration);
+            WaitToRestore(_config.RecoverAfterUseDelayDuration);
         }
         private void StartRecoverAfterExhaust()
         {
-            WaitToRestore(_config.RecoverDelayAfterExhaustDuration);
+            WaitToRestore(_config.RecoverAfterExhaustDelayDuration);
             ExhaustedAllStamina = true;
         }
         

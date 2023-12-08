@@ -19,7 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private PlayerFSM _stateMachine;
         private PlayerController.PlayerController _playerController;
-        private PlayerMovesetConfig _playerMovesetConfig;
+        private PlayerGeneralConfig _playerGeneralConfig;
 
         private IPlayerView _playerView;
         private PlayerHealth _playerHealth;
@@ -36,14 +36,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
-            PlayerMovesetConfig playerMovesetConfig, 
+            PlayerGeneralConfig playerGeneralConfig, 
             IPlayerView playerView, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
             TransformMotion playerMotion,
             PopeyeAnchor anchor, IAnchorThrower anchorThrower, IAnchorPuller anchorPuller)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
-            _playerMovesetConfig = playerMovesetConfig;
+            _playerGeneralConfig = playerGeneralConfig;
             _playerView = playerView;
             _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
@@ -100,7 +100,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PickUpAnchor()
         {
             _anchor.SetCarried();
-            SpendStamina(_playerMovesetConfig.AnchorPickUpStaminaCost);
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorPickUpStaminaCost);
         }
         
         public void StartChargingThrow()
@@ -130,7 +130,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void ThrowAnchor()
         {
             _anchorThrower.ThrowAnchor();
-            SpendStamina(_playerMovesetConfig.AnchorThrowStaminaCost);
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorThrowStaminaCost);
         }
 
         public void PullAnchor()
@@ -141,7 +141,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void OnPullAnchorComplete()
         {
-            SpendStamina(_playerMovesetConfig.AnchorPullStaminaCost);
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorPullStaminaCost);
             if (HasStaminaLeft())
             {
                 _anchor.SetCarried();
@@ -159,22 +159,27 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Vector3 toAnchor = Vector3.ProjectOnPlane((_anchor.Position - Position).normalized, up);
             Vector3 right = Vector3.Cross(toAnchor, up).normalized;
 
-            Vector3 extraDisplacement = toAnchor * _playerMovesetConfig.DashExtraDisplacement.z;
-            extraDisplacement += right * _playerMovesetConfig.DashExtraDisplacement.x;
-            extraDisplacement += up * _playerMovesetConfig.DashExtraDisplacement.y;
+            Vector3 dashExtraDisplacement = _playerGeneralConfig.MovesetConfig.DashExtraDisplacement;
+            
+            Vector3 extraDisplacement = toAnchor * dashExtraDisplacement.z;
+            extraDisplacement += right * dashExtraDisplacement.x;
+            extraDisplacement += up * dashExtraDisplacement.y;
 
             Vector3 dashEndPosition = _anchor.GetDashEndPosition() + extraDisplacement;
 
             if (_anchor.IsGrabbedBySnapper())
             {
-                dashEndPosition += toAnchor * _playerMovesetConfig.SnapExtraDisplacement.z;
-                dashEndPosition += right * _playerMovesetConfig.SnapExtraDisplacement.x;
-                dashEndPosition += up * _playerMovesetConfig.SnapExtraDisplacement.y;
+                Vector3 snapExtraDisplacement = _playerGeneralConfig.MovesetConfig.SnapExtraDisplacement;
+                dashEndPosition += toAnchor * snapExtraDisplacement.z;
+                dashEndPosition += right * snapExtraDisplacement.x;
+                dashEndPosition += up * snapExtraDisplacement.y;
             }
             
             LookTowardsAnchorForDuration(duration).Forget();
             _playerMotion.MoveToPosition(dashEndPosition, duration, Ease.InOutQuad);
-            SpendStamina(_playerMovesetConfig.AnchorDashStaminaCost);
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
+
+            SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
         }
 
 
@@ -192,16 +197,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
 
 
-        public void SetVulnerable()
+        private void SetInvulnerableForDuration(float duration)
         {
-            _playerHealth.SetInvulnerable(false);
+            _playerHealth.SetInvulnerableForDuration(duration);
         }
-
-        public void SetInvulnerable()
-        {
-            _playerHealth.SetInvulnerable(true);
-        }
-
+        
         public bool HasStaminaLeft()
         {
             return _staminaSystem.HasStaminaLeft();

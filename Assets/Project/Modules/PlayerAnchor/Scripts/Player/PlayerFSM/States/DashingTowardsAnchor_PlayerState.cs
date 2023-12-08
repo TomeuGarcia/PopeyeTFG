@@ -20,12 +20,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.queuedDashTowardsAnchor = false;
             
             StartDashing().Forget();
-            _blackboard.PlayerMediator.SetInvulnerable();
         }
 
         public override void Exit()
         {
-            _blackboard.PlayerMediator.SetVulnerable();
         }
 
         public override bool Update(float deltaTime)

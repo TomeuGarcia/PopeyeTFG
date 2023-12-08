@@ -266,7 +266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 66608852}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2463,30 +2463,13 @@ MonoBehaviour:
   _playerHealthBehaviour: {fileID: 8855915030016586952}
   _playerGeneralConfig: {fileID: 11400000, guid: 20f5b37d2810b164385c918e8b4a4e59,
     type: 2}
-  _playerMovesetConfig: {fileID: 11400000, guid: e065df1b0ca8c5046a8ba8d6bf58e49c,
-    type: 2}
-  _playerStaminaConfig: {fileID: 11400000, guid: f27082ed321ee93429f68d65295b9719,
-    type: 2}
-  _playerStatesConfigurations: {fileID: 11400000, guid: 496b9998974105540925c59743ad07e8,
-    type: 2}
   _anchor: {fileID: 337442843}
   _anchorPhysics: {fileID: 1736772699}
-  _anchorMotionConfig: {fileID: 11400000, guid: ccb9c0c9ab7f136418740e29682f771e,
+  _anchorGeneralConfig: {fileID: 11400000, guid: 8bb683caed1c71040b8f9b1664b122d5,
     type: 2}
   _anchorMoveTransform: {fileID: 1736772695}
   _anchorDamageDealer: {fileID: 2051063915}
-  _anchorDamageConfig: {fileID: 11400000, guid: d7c0ea2f2e777864ab0ded4af35480e7,
-    type: 2}
-  _anchorThrowConfig: {fileID: 11400000, guid: f4b3f883df214284cbc35f64b7492330, type: 2}
-  _anchorPullConfig: {fileID: 11400000, guid: 7fb81ef55a067944f819a7a133d52ffe, type: 2}
   _anchorTrajectoryEndSpot: {fileID: 377260737}
-  _obstaclesMask:
-    serializedVersion: 2
-    m_Bits: 1
-  _anchorSnapTargetMask:
-    serializedVersion: 2
-    m_Bits: 16384
-  _anchorChainConfig: {fileID: 11400000, guid: 635c28447f2998c418b874845bf498b8, type: 2}
   _anchorChain: {fileID: 2035750437}
   _chainPhysics:
     _underlyingValue: {fileID: 2035750438}
@@ -2992,7 +2975,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337442841}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7904,7 +7887,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 795583334}
   m_LocalRotation: {x: 0.46193978, y: 0.33141357, z: -0.19134171, w: 0.8001032}
-  m_LocalPosition: {x: -63.639614, y: 155.88458, z: -63.639603}
+  m_LocalPosition: {x: -63.639614, y: 157.88458, z: -63.639603}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10950,7 +10933,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -14538,7 +14521,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1325053430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15726,7 +15709,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1393044849}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.75, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15966,7 +15949,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!120 &1465016762
 LineRenderer:
   serializedVersion: 2
@@ -25732,7 +25715,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!120 &2136853366
 LineRenderer:
   serializedVersion: 2
@@ -25789,7 +25772,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.5000001
+        value: 0.30487823
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -25797,22 +25780,22 @@ LineRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.96467394
-        value: 0.49999994
-        inSlope: 0
-        outSlope: 0
+        time: 0.9266305
+        value: 0.2317073
+        inSlope: -0.19683346
+        outSlope: -0.19683346
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.16715549
         outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: -14.211358
-        outSlope: -14.211358
+        inSlope: -3.4459937
+        outSlope: -3.4459937
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.4615395
+        inWeight: 1
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

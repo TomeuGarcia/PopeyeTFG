@@ -379,7 +379,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""5a1f3c3d-8e59-46ef-9ca8-de56c32863ed"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -401,7 +401,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""7dfa0d8f-c417-4b72-a5cc-85386756b77e"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",

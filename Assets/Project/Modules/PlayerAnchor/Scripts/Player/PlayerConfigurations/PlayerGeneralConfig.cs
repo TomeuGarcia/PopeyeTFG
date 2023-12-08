@@ -1,4 +1,6 @@
 using System;
+using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,5 +20,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         public int PotionHealAmount => _potionHealAmount;
 
 
+        [Header("OTHER CONFIGURATIONS")] 
+        [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
+        [SerializeField] private PlayerStatesConfig _playerStatesConfig;
+        [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
+
+        public PlayerMovesetConfig MovesetConfig => _playerMovesetConfig;
+        public PlayerStatesConfig StatesConfig => _playerStatesConfig;
+        public TimeStaminaConfig_SO StaminaConfig => _playerStaminaConfig;
     }
 }

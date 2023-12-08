@@ -37,8 +37,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _maxThrowForceChargeDuration: 0.3
-  _minThrowMoveDuration: 0.1
-  _maxThrowMoveDuration: 0.2
+  _minThrowMoveDuration: 0.2
+  _maxThrowMoveDuration: 0.4
   _minThrowDistance: 2
   _maxThrowDistance: 8
   _moveInterpolationCurve:
@@ -90,15 +90,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.000045018387
       value: -0.002650247
-      inSlope: 1.4276061
-      outSlope: 1.4276061
+      inSlope: 0.0479616
+      outSlope: 0.0479616
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.7026492
-      value: 1.0003917
+      time: 0.8648735
+      value: 0.038828313
       inSlope: -0.02645026
       outSlope: -0.02645026
       tangentMode: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _heightToConsiderFloor: 4
+  _heightToConsiderFloor: 5
   _obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 1

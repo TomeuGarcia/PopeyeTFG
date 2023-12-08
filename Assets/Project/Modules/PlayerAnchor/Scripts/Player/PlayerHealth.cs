@@ -39,6 +39,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _playerHealthBehaviour.HealthSystem.SetInvulnerable(isInvulnerable);
         }
+        public void SetInvulnerableForDuration(float duration)
+        {
+            _playerHealthBehaviour.HealthSystem.SetInvulnerableForDuration(duration);
+        }
         
         public void UseHeal()
         {

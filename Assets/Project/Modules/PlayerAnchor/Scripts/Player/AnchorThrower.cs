@@ -68,6 +68,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
                     out finalTrajectoryDistance, out bool trajectoryEndsOnFloor, 
                     out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget, 
                     out RaycastHit obstacleHit, out bool trajectoryHitsObstacle);
+
+            duration = (duration / ThrowDistance) * finalTrajectoryDistance;
             
             
             Vector3 right = Vector3.Cross(direction, floorNormal).normalized;

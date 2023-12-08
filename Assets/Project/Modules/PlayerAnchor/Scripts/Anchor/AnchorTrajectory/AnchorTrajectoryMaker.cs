@@ -40,7 +40,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _trajectoryEndSpot.Hide();
             
             _straightLineTrajectoryPoints = new Vector3[2];
-            _curvedTrajectoryPoints = new Vector3[20];
+            _curvedTrajectoryPoints = new Vector3[10];
             
             
             _debugLine = debugLine;
@@ -73,10 +73,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void ShowTrajectoryEndSpot()
         {
             _trajectoryEndSpot.Show();
+            _debugLine2.gameObject.SetActive(true);
         }
         public void HideTrajectoryEndSpot()
         {
             _trajectoryEndSpot.Hide();
+            _debugLine2.gameObject.SetActive(false);
         }
 
 
@@ -267,7 +269,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         private bool CheckForAutoAimTarget(Vector3[] trajectoryPoints, out IAutoAimTarget autoAimTarget)
         {
-            if (!CheckFirstHitInTrajectory(trajectoryPoints, 0.1f, out int lastIndexBeforeCollision, 
+            if (!CheckFirstHitInTrajectory(trajectoryPoints, 0.5f, out int lastIndexBeforeCollision, 
                     out RaycastHit hit, AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
                 autoAimTarget = null;

@@ -42,8 +42,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         
         [Header("DASH")]
         [SerializeField, Range(0.01f, 10.0f)] private float _dashDuration = 0.25f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _dashInvulnerableDuration = 0.5f;
         
         public float DashDuration => _dashDuration;
+        public float DashInvulnerableDuration => _dashInvulnerableDuration;
 
     }
 }

@@ -11,6 +11,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.ValueStatSystem;
 using Project.Modules.CombatSystem;
 using Project.Modules.PlayerAnchor.Anchor;
+using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
@@ -31,35 +32,23 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
-        [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
-        [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
+       
         
-        
-        
-        [Header("Player States")] 
-        [SerializeField] private PlayerStatesConfig _playerStatesConfigurations;
-
         
         [Space(20)] 
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
-        [SerializeField] private AnchorMotionConfig _anchorMotionConfig;
+        [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private Transform _anchorMoveTransform;
 
         [Header("Anchor Damage")] 
         [SerializeField] private AnchorDamageDealer _anchorDamageDealer;
-        [SerializeField] private AnchorDamageConfig _anchorDamageConfig;
         
         [Header("Anchor Throwing")]
-        [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
-        [SerializeField] private AnchorPullConfig _anchorPullConfig;
         [SerializeField] private AnchorTrajectoryEndSpot _anchorTrajectoryEndSpot;
-        [SerializeField] private LayerMask _obstaclesMask;
-        [SerializeField] private LayerMask _anchorSnapTargetMask;
-        
+
         [Header("CHAIN")]
-        [SerializeField] private ChainConfig _anchorChainConfig;
         [SerializeField] private AnchorChain _anchorChain;
         [SerializeField] private InterfaceReference<IChainPhysics, MonoBehaviour> _chainPhysics;
 
@@ -115,20 +104,20 @@ namespace Project.Modules.PlayerAnchor
             
             
             anchorMotion.Configure(_anchorMoveTransform);
-            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorThrowConfig, 
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorGeneralConfig.ThrowConfig, 
                 anchorAutoAimController);
-            anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorPullConfig);
-            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorThrowConfig, _anchorPullConfig,
+            anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, anchorMotion, _anchorGeneralConfig.PullConfig);
+            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.PullConfig,
                 debugLine, debugLine2, debugLine3);
-            anchorStatesBlackboard.Configure(anchorMotion, _anchorMotionConfig, _anchorPhysics, _anchorChain, 
+            anchorStatesBlackboard.Configure(anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, _anchorChain, 
                 _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
-            chainPhysics.Configure(_anchorChainConfig);
+            chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorAutoAimController.Configure();
 
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorDamageDealer, _anchorChain);
-            _anchorDamageDealer.Configure(_anchorDamageConfig, combatManager, _playerController.LookTransform);
+            _anchorDamageDealer.Configure(_anchorGeneralConfig.DamageConfig, combatManager, _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
 
@@ -140,16 +129,16 @@ namespace Project.Modules.PlayerAnchor
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
-            TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerStaminaConfig);
+            TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
             
-            playerStatesBlackboard.Configure(_playerStatesConfigurations, _player, _playerView.Value, 
+            playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
                 _playerGeneralConfig.PotionHealAmount);
 
-            _player.Configure(playerStateMachine, _playerController, _playerMovesetConfig, _playerView.Value, playerHealth, 
+            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _playerView.Value, playerHealth, 
                 playerStamina, playerMotion, _anchor, anchorThrower, anchorPuller);
             _playerController.MovementInputHandler = movementInputHandler;
             
