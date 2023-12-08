@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Core.Services.GameReferences;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Enemies.Components;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -11,7 +14,9 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private List<SlimeData> _sizeToPrefab;
         private Dictionary<SlimeSize, GameObject> _sizeToPrefabDictionary = new Dictionary<SlimeSize, GameObject>();
         private int _currentSlimesCount;
-
+        
+        [SerializeField] private EnemyPatrolling.PatrolType _patrolType = EnemyPatrolling.PatrolType.None;
+        [SerializeField] private Transform[] _wayPoints;
         public enum SlimeSize
         {
             SlimeSize1,
@@ -32,16 +37,11 @@ namespace Popeye.Modules.Enemies
             {
                 _sizeToPrefabDictionary.Add(slimeData.size, slimeData.prefab);
             }
-
-            GameObject go = Instantiate(_sizeToPrefabDictionary[_startingStartSize], transform);
-            SlimeMediator mediator = go.GetComponent<SlimeMediator>();
-            mediator.SetPlayerTransform(_attackTarget);
-            mediator.SetSlimeMind(this);
-            mediator.PlayMoveAnimation();
+            InstantiateFirstSlime();
             _currentSlimesCount++;
-
         }
 
+        
         public void AddSlimeToList()
         {
             _currentSlimesCount++;
@@ -55,6 +55,19 @@ namespace Popeye.Modules.Enemies
             {
                 InvokeOnDeathComplete();
             }
+        }
+        
+        private void InstantiateFirstSlime()
+        {
+            GameObject go = Instantiate(_sizeToPrefabDictionary[_startingStartSize], transform);
+            SlimeMediator mediator = go.GetComponent<SlimeMediator>();
+            mediator.Init();
+            _attackTarget = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
+            mediator.SetPlayerTransform(_attackTarget);
+            mediator.SetSlimeMind(this);
+            mediator.PlayMoveAnimation();
+            if(_patrolType == EnemyPatrolling.PatrolType.FixedWaypoints){mediator.SetWayPoints(_wayPoints);}
+            if(_patrolType == EnemyPatrolling.PatrolType.None){mediator.StartChasing();}
         }
     }
 }

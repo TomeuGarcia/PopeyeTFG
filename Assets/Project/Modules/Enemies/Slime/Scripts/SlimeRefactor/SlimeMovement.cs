@@ -15,7 +15,7 @@ namespace Popeye.Modules.Enemies.Components
         
         private bool _followPlayer = false;
 
-        protected IEnemyMediator _mediator;
+        private IEnemyMediator _mediator;
 
 
         public void Configure(IEnemyMediator slimeMediator)
@@ -41,10 +41,10 @@ namespace Popeye.Modules.Enemies.Components
         public void SetTarget(Transform transform)
         {
             _playerTransform = transform;
-            if (_navMeshAgent.isActiveAndEnabled)
+           /* if (_navMeshAgent.isActiveAndEnabled && _followPlayer)
             {
-                _followPlayer = true;
-            }
+                StartChasing();
+            }*/
         }
 
         public void ApplyExplosionForce(Vector3 explosionForceDir)
@@ -57,7 +57,15 @@ namespace Popeye.Modules.Enemies.Components
             _rb.velocity = Vector3.zero;
         }
 
+        public void StopChasing()
+        {
+            _followPlayer = false;
+        }
 
+        public void StartChasing()
+        {
+            _followPlayer = true;
+        }
 
 
 
