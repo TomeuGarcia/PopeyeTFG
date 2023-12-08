@@ -39,6 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private async UniTaskVoid StartDashing()
         {
+            _finishedDashing = false;
             _blackboard.PlayerMediator.DashTowardsAnchor(_blackboard.PlayerStatesConfig.DashDuration);
             await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.DashDuration));
             _finishedDashing = true;

@@ -14,7 +14,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
             _blackboard.AnchorPhysics.EnableAllPhysics();
             _blackboard.TransformMotion.Unparent();
             
-            _blackboard.AnchorChain.Show();
+            _blackboard.AnchorChain.SetThrownView();
             //_blackboard.AnchorChain.DisableTension();
         }
 

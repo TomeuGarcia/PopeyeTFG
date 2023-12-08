@@ -18,6 +18,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorPuller _anchorPuller;
         private TransformMotion _anchorMotion;
 
+        private AnchorPhysics _anchorPhysics;
         private AnchorDamageDealer _anchorDamageDealer;
         private AnchorChain _anchorChain;
 
@@ -26,6 +27,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
+            AnchorPhysics anchorPhysics,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain)
         {
             _stateMachine = stateMachine;
@@ -34,6 +36,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorPuller = anchorPuller;
             _anchorMotion = anchorMotion;
 
+            _anchorPhysics = anchorPhysics;
             _anchorDamageDealer = anchorDamageDealer;
             _anchorChain = anchorChain;
         }
@@ -147,8 +150,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             Vector3 dashEndPosition = Position;
             
-            
             return dashEndPosition;
         }
+
+        
     }
 }

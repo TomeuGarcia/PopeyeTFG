@@ -26,13 +26,13 @@ namespace Project.Modules.PlayerAnchor.Chain
             _chainLine.SetPosition(1, _anchorBindTransform.position);
         }
 
-        public void Show()
+        public void SetThrownView()
         {
             _chainLine.enabled = true;
         }
-        public void Hide()
+        public void SetCarriedView()
         {
-            _chainLine.enabled = false;
+            _chainLine.enabled = true;
         }
 
 

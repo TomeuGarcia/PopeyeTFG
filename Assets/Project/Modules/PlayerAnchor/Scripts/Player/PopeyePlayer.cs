@@ -181,6 +181,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             LookTowardsAnchorForDuration(duration).Forget();
             _playerMotion.MoveToPosition(dashEndPosition, duration, Ease.InOutQuad);
+            
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
 
             SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);

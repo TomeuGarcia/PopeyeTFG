@@ -271,19 +271,31 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         private bool CheckForAutoAimTarget(Vector3[] trajectoryPoints, out IAutoAimTarget autoAimTarget)
         {
-            if (!CheckFirstHitInTrajectory(trajectoryPoints, 0.5f, out int lastIndexBeforeCollision, 
-                    out RaycastHit hit, AutoTargetLayerMask, QueryTriggerInteraction.Collide))
+            if (CheckAtopHitInTrajectoryPoint(trajectoryPoints, 0, 0.5f, out RaycastHit hit,
+                    AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
-                autoAimTarget = null;
-                return false;
+                if (CheckHitIsAutoAimTarget(hit, out autoAimTarget))
+                {
+                    return true;
+                }
             }
             
-            if (!hit.collider.gameObject.TryGetComponent<IAutoAimTarget>(out autoAimTarget))
+            if (CheckFirstHitInTrajectory(trajectoryPoints, 0.5f, out int lastIndexBeforeCollision, 
+                    out hit, AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
-                return false;
+                if (CheckHitIsAutoAimTarget(hit, out autoAimTarget))
+                {
+                    return true;
+                }
             }
 
-            return true;
+            autoAimTarget = null;
+            return false;
+        }
+
+        private bool CheckHitIsAutoAimTarget(RaycastHit hit, out IAutoAimTarget autoAimTarget)
+        {
+            return hit.collider.gameObject.TryGetComponent<IAutoAimTarget>(out autoAimTarget);
         }
 
         private bool CheckFirstHitInTrajectory(Vector3[] trajectoryPoints, float extraDistance, out int lastIndexBeforeCollision,
@@ -306,10 +318,18 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return false;
         }
 
+        
         private bool CheckFloorHitInTrajectoryPoint(Vector3[] trajectoryPoints, int trajectoryPointIndex,
             float extraDistance, out RaycastHit hit, int layerMask, QueryTriggerInteraction queryTriggerInteraction)
         {
             Vector3 origin = trajectoryPoints[trajectoryPointIndex]; 
+
+            return CheckFloorHit(origin, extraDistance, FloorProbeDistance, out hit, layerMask, queryTriggerInteraction);
+        }
+        private bool CheckAtopHitInTrajectoryPoint(Vector3[] trajectoryPoints, int trajectoryPointIndex,
+            float extraDistance, out RaycastHit hit, int layerMask, QueryTriggerInteraction queryTriggerInteraction)
+        {
+            Vector3 origin = trajectoryPoints[trajectoryPointIndex] + (Vector3.up * FloorProbeDistance); 
 
             return CheckFloorHit(origin, extraDistance, FloorProbeDistance, out hit, layerMask, queryTriggerInteraction);
         }

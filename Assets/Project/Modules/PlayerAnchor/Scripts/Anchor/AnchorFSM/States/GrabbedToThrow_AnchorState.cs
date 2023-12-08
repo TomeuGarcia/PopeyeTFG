@@ -17,6 +17,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
             _blackboard.TransformMotion.ParentAndUpdate(_blackboard.AnchorGrabToThrowHolder,
                 Vector3.zero, _blackboard.AnchorMotionConfig.GrabbedToThrowAnchorRotation,
                 0.2f, Ease.InOutSine);
+            
             _blackboard.AnchorPhysics.DisableAllPhysics();
         }
         
