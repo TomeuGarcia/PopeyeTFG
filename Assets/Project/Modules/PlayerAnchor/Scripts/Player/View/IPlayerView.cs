@@ -8,7 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void StartTired();
         void EndTired();
         void PlayTakeDamageAnimation();
-        void PlayDeathAnimation();
+        UniTask PlayDeathAnimation();
         UniTask PlayHealAnimation();
 
     }

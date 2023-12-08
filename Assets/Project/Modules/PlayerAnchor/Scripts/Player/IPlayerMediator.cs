@@ -49,5 +49,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         public Transform GetTargetForEnemies();
+        public void Respawn();
     }
 }

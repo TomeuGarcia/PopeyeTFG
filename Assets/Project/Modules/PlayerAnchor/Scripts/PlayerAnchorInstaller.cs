@@ -118,11 +118,11 @@ namespace Project.Modules.PlayerAnchor
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorAutoAimController.Configure();
 
-            _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorDamageDealer, _anchorChain);
             _anchorDamageDealer.Configure(_anchorGeneralConfig.DamageConfig, combatManager, _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
+            _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
+                _anchorPhysics, _anchorDamageDealer, _anchorChain);
 
             
             

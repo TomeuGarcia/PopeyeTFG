@@ -44,5 +44,13 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
 
             CurrentStateType = newState;
         }
+
+        public void Reset()
+        {
+            _currentState.Exit();
+            CurrentStateType = AnchorStates.Carried;
+            _currentState = _states[CurrentStateType];
+            _currentState.Enter();
+        }
     }
 }

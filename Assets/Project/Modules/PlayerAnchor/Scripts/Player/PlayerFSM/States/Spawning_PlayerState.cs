@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -19,7 +20,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _finishedSpawning = false;
             WaitForSpawnToFinish().Forget();
             _blackboard.PlayerMediator.SetMaxMovementSpeed(0);
             _blackboard.PlayerMediator.SetCanRotate(false);
@@ -44,6 +44,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private async UniTaskVoid WaitForSpawnToFinish()
         {
+            _finishedSpawning = false;
             await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.SpawnDuration));
             _finishedSpawning = true;
         }

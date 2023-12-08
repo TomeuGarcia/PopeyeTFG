@@ -43,8 +43,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             FlickBaseColor(3, 0.2f, _damagedColor).Forget();
         }
 
-        public void PlayDeathAnimation()
+        public async UniTask PlayDeathAnimation()
         {
+            await FlickBaseColor(2, 0.5f, _damagedColor);
             SetMeshBaseColor(_damagedColor);
         }
 

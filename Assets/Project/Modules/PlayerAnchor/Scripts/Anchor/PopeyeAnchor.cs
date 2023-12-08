@@ -39,8 +39,15 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorPhysics = anchorPhysics;
             _anchorDamageDealer = anchorDamageDealer;
             _anchorChain = anchorChain;
+            
+            _anchorPhysics.DisableAllPhysics();
+            _anchorChain.DisableTension();
         }
         
+        public void ResetState()
+        {
+            _stateMachine.Reset();
+        }
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {

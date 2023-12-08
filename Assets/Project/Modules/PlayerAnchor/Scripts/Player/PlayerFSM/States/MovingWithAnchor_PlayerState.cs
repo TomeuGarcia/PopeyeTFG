@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -14,6 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithAnchorMoveSpeed);
+            Debug.Log("mov w anch");
         }
 
         public override void Exit()

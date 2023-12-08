@@ -15,6 +15,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _anchorCarryHolder;
         [SerializeField] private Transform _anchorGrabToThrowHolder;
         [SerializeField] private Transform _targetForEnemies;
+        [SerializeField] private PlayerRespawner _playerRespawner;
+        
         public Transform AnchorCarryHolder => _anchorCarryHolder;
         public Transform AnchorGrabToThrowHolder => _anchorGrabToThrowHolder;
         
@@ -31,7 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PopeyeAnchor _anchor;
         private IAnchorThrower _anchorThrower;
         private IAnchorPuller _anchorPuller;
-        
+
         
         public Vector3 Position => _playerController.Position;
         
@@ -58,6 +60,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void Update()
         {
             _stateMachine.Update(Time.deltaTime);
+        }
+
+
+        private void ResetAnchor()
+        {
+            _anchor.ResetState();
         }
         
 
@@ -209,6 +217,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _targetForEnemies;
         }
 
+        public void Respawn()
+        {
+            _playerMotion.MoveToPosition(_playerRespawner.RespawnPosition, 0.01f);  
+            _playerHealth.HealToMax();
+            ResetAnchor();
+        }
+
         private async UniTaskVoid DropTargetForEnemies(float duration)
         {
             _targetForEnemies.SetParent(null);
@@ -256,6 +271,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void OnKilledByDamageTaken()
         {
+            _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
             _playerView.PlayDeathAnimation();
         }
 

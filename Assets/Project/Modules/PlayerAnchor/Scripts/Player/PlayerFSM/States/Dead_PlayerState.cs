@@ -18,19 +18,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _finishedDying = false;
             WaitForSpawnToFinish().Forget();
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(0);
+            _blackboard.PlayerMediator.SetCanRotate(false);
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.SetCanRotate(true);
         }
 
         public override bool Update(float deltaTime)
         {
             if (_finishedDying)
             {
+                _blackboard.PlayerMediator.Respawn();
                 NextState = PlayerStates.Spawning;
                 return true;
             }
@@ -41,6 +43,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         private async UniTaskVoid WaitForSpawnToFinish()
         {
+            _finishedDying = false;
             await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.BeforeRespawnDuration));
             _finishedDying = true;
         }
