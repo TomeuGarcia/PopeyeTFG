@@ -45,6 +45,11 @@ namespace Project.Modules.PlayerAnchor
             _moveTransform.DOMove(position, duration)
                 .SetEase(ease);
         }
+        public void MoveToPosition(Vector3 position, float duration, AnimationCurve ease)
+        {
+            _moveTransform.DOMove(position, duration)
+                .SetEase(ease);
+        }
 
         public void MoveAlongPath(Vector3[] path, float duration, Ease ease = Ease.Linear)
         {

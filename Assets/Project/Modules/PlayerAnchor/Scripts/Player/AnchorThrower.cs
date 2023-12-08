@@ -124,7 +124,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
         {
+            /*
             _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
+                anchorThrowResult.InterpolationEaseCurve);*/
+            _anchorMotion.MoveToPosition(anchorThrowResult.LastTrajectoryPathPoint, anchorThrowResult.Duration, 
                 anchorThrowResult.InterpolationEaseCurve);
             _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
                 anchorThrowResult.Duration, anchorThrowResult.InterpolationEaseCurve);

@@ -45,9 +45,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
             Vector3[] damagePathPoints = new Vector3[anchorThrowResult.TrajectoryPathPoints.Length];
             anchorThrowResult.TrajectoryPathPoints.CopyTo(damagePathPoints, 0);
             damagePathPoints[0] = _damageStartTransform.position;
-
-            DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration,
-                    anchorThrowResult.InterpolationEaseCurve, 0.0f)
+            
+            DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
+                    anchorThrowResult.Duration, _config.ThrowDamageExtraDuration,
+                    anchorThrowResult.InterpolationEaseCurve, -1.0f)
                 .Forget();
         }
 
@@ -56,30 +57,33 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorThrowDamageTrigger.SetDamageHit(_pullDamageHit);
             _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorPullResult.Direction);
             
-            DealTrajectoryDamage(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration,
+            DealTrajectoryDamage(anchorPullResult.TrajectoryPathPoints, 
+                    anchorPullResult.Duration, _config.PullDamageExtraDuration,
                     anchorPullResult.InterpolationEaseCurve, 0.1f)
                 .Forget();
         }
         
-        private async UniTaskVoid DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, AnimationCurve ease,
-            float easeThreshold)
+        private async UniTaskVoid DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
+            AnimationCurve ease, float easeThreshold)
         {
             _damageTriggerMotion.SetPosition(trajectoryPoints[0]);
             _damageTriggerMotion.SetRotation(_damageStartTransform.rotation);
-            _damageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
+            //_damageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
+            _damageTriggerMotion.MoveToPosition(trajectoryPoints[^1], duration, ease);
             
             var wait = await WaitUntilEase(ease, duration, easeThreshold);
             _anchorThrowDamageTrigger.Activate();
             await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
+            await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));
             _anchorThrowDamageTrigger.Deactivate();
         }
 
 
-        private async UniTask<float> WaitUntilEase(AnimationCurve ease, float duration, float threshold)
+        private async UniTask<float> WaitUntilEase(AnimationCurve ease, float duration, float easeThreshold)
         {
             float t = 0f;
             float curveT = 0f;
-            while (curveT < threshold)
+            while (curveT < easeThreshold)
             {
                 t += Time.deltaTime / duration;
                 curveT = ease.Evaluate(t);

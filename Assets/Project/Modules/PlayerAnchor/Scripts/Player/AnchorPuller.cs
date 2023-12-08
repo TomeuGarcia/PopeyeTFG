@@ -61,7 +61,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private async UniTaskVoid DoPullAnchor(AnchorThrowResult anchorPullResult)
         {
+            /*
             _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 
+                AnchorPullResult.InterpolationEaseCurve);
+                */
+            
+            _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
                 AnchorPullResult.InterpolationEaseCurve);
             
             _anchorIsBeingPulled = true;
