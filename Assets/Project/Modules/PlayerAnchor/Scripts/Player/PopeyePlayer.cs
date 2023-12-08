@@ -14,6 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         [SerializeField] private Transform _anchorCarryHolder;
         [SerializeField] private Transform _anchorGrabToThrowHolder;
+        [SerializeField] private Transform _targetForEnemies;
         public Transform AnchorCarryHolder => _anchorCarryHolder;
         public Transform AnchorGrabToThrowHolder => _anchorGrabToThrowHolder;
         
@@ -185,6 +186,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
 
             SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
+            DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
         }
 
 
@@ -201,6 +203,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = true;
         }
 
+        
+        public Transform GetTargetForEnemies()
+        {
+            return _targetForEnemies;
+        }
+
+        private async UniTaskVoid DropTargetForEnemies(float duration)
+        {
+            _targetForEnemies.SetParent(null);
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            _targetForEnemies.SetParent(_playerController.Transform);
+            _targetForEnemies.localPosition = Vector3.zero;
+        }
+        
 
         private void SetInvulnerableForDuration(float duration)
         {
@@ -247,6 +263,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _playerView.PlayHealAnimation();
         }
+        
 
         private void SpendStamina(int spendAmount)
         {

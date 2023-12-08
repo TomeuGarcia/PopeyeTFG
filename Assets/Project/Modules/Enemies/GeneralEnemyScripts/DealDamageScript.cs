@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 public class DealDamageScript : MonoBehaviour
@@ -13,14 +14,18 @@ public class DealDamageScript : MonoBehaviour
 
     private void Awake()
     {
+        /*
         _contactDamageHit = new DamageHit(CombatManager.Instance.DamageOnlyPlayerPreset,
             _contactHitDamageAmount, _contactHitKnockbackForce, _contactHitStunDuration);
+            */
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        /*
         _contactDamageHit.Position = _transform.position;
         _contactDamageHit.KnockbackDirection = PositioningHelper.Instance.GetDirectionAlignedWithFloor(_transform.position, other.transform.position);
         CombatManager.Instance.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
+        */
     }
 }

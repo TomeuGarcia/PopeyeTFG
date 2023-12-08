@@ -1,5 +1,6 @@
 using System;
 using AYellowpaper;
+using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
@@ -28,7 +29,7 @@ namespace Project.Modules.PlayerAnchor
         [Space(20)]
         [Header("PLAYER")]
         [SerializeField] private PopeyePlayer _player;
-        [SerializeField] private PlayerController _playerController;
+        [SerializeField] private Popeye.Modules.PlayerController.PlayerController _playerController;
         [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
@@ -89,9 +90,11 @@ namespace Project.Modules.PlayerAnchor
         {
             // Services
             ServiceLocator.Instance.RegisterService<ICombatManager>(new CombatManagerService());
+            ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
 
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
 
+            
             // Anchor
             TransformMotion anchorMotion = new TransformMotion();
             AnchorThrower anchorThrower = new AnchorThrower();

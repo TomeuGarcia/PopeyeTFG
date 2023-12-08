@@ -46,5 +46,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnDamageTaken();
         public void OnKilledByDamageTaken();
         public void OnHealed();
+
+
+        public Transform GetTargetForEnemies();
     }
 }

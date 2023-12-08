@@ -10,6 +10,7 @@ public abstract class IEnemyState
         Idle,
         Chasing,
         Dashing,
+        Stunned,
         Dead
     }
 
