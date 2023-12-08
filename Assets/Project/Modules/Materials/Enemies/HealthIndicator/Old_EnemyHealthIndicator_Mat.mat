@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2414159276497579753
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EnemyHealthIndicator_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: ab6243de5f6a5f04c8249567d39c191a,
+  m_Name: Old_EnemyHealthIndicator_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 76e1db75108a5434a9334a97ea3390fe,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,30 +51,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DDistortAmount: 40
-    - _Damage: 0.15
-    - _DistortAmount: 100
-    - _MaxDamage: 0.7
-    - _MinDamage: 0.15
+    - _DistortionSpeed: -0.2
+    - _DistrortionAmount: 0.02
+    - _MaxTDamage: 0.7
+    - _MinTDamage: 0.15
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 15
-    - _TwirlStrength: 10
+    - _Scale: 13
+    - _TDamage: 0.149
+    - _Width: 0.02
     m_Colors:
-    - _DColor: {r: 0, g: 2, b: 1.8671908, a: 0}
-    - _DDistortSpeed: {r: 0, g: -0.2, b: 0, a: 0}
-    - _DistortionSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _BorderColor: {r: 0, g: 1.61217, b: 1.5972965, a: 0}
+    - _DamagedColor: {r: 0.33962256, g: 0, b: 0, a: 0}
+    - _HealthyColor: {r: 0.5519313, g: 0.6757478, b: 0.745283, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2289328360969117464
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
