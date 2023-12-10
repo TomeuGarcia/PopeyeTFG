@@ -8,6 +8,7 @@ namespace Popeye.Modules.Enemies.Components
     {
         private HealthSystem _healthSystem;
         [SerializeField, Range(0.0f, 100.0f)] private float _maxHealth = 50.0f;
+        [SerializeField] private EnemyVisuals _enemyVisuals;
 
         private IEnemyMediator _mediator;
 
@@ -30,9 +31,11 @@ namespace Popeye.Modules.Enemies.Components
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
             _healthSystem.TakeDamage(damageHit.Damage);
+            _enemyVisuals.OnHitEffects();
             if (IsDead())
             {
                 _mediator.OnDeath();
+                _enemyVisuals.OnDeathEffects();
             }
 
             return new DamageHitResult(damageHit.Damage);
