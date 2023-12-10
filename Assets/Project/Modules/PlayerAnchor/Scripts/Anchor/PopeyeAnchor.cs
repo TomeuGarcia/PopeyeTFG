@@ -54,13 +54,39 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
+            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
+                anchorThrowResult.InterpolationEaseCurve);
+            _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
+                anchorThrowResult.Duration, anchorThrowResult.InterpolationEaseCurve);
+            
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
         }
         public void SetPulled(AnchorThrowResult anchorPullResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
             _anchorDamageDealer.DealPullDamage(anchorPullResult);
+            
+            /*
+            _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 
+                AnchorPullResult.InterpolationEaseCurve);
+            */
+            _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
+                anchorPullResult.InterpolationEaseCurve);
         }
+
+        public void SetKicked(AnchorThrowResult anchorKickResult)
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
+            _anchorDamageDealer.DealKickDamage(anchorKickResult);
+            
+            _anchorMotion.MoveAlongPath(anchorKickResult.TrajectoryPathPoints, anchorKickResult.Duration, 
+                anchorKickResult.InterpolationEaseCurve);
+            _anchorMotion.RotateStartToEnd(anchorKickResult.StartLookRotation,anchorKickResult.EndLookRotation, 
+                anchorKickResult.Duration, anchorKickResult.InterpolationEaseCurve);
+            
+            _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
+        }
+        
         public void SetCarried()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Carried);

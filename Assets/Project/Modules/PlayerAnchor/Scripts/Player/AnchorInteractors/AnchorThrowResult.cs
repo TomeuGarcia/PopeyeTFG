@@ -33,5 +33,30 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Duration = duration;
             EndsOnVoid = endsOnVoid;
         }
+        
+        public void Reset(Vector3[] throwPathPoints, Vector3 direction, Vector3 floorNormal,
+            float duration, bool endsOnVoid)
+        {
+            TrajectoryPathPoints = throwPathPoints;
+            Direction = direction;
+            
+            Vector3 right = Vector3.Cross(direction, floorNormal).normalized;
+            StartLookRotation = ComputePathLookRotationBetweenIndices(0, 1, right);
+            EndLookRotation = ComputePathLookRotationBetweenIndices(TrajectoryPathPoints.Length-2, 
+                TrajectoryPathPoints.Length-1, right);
+            
+            Duration = duration;
+            EndsOnVoid = endsOnVoid;
+        }
+        
+        private Quaternion ComputePathLookRotationBetweenIndices(int startIndex, int endIndex,
+            Vector3 right)
+        {
+            Vector3 pathForward = (TrajectoryPathPoints[endIndex] - TrajectoryPathPoints[startIndex]).normalized;
+            Vector3 up = Vector3.Cross(pathForward, right).normalized;
+
+            return Quaternion.LookRotation(pathForward, up);
+        }
+        
     }
 }

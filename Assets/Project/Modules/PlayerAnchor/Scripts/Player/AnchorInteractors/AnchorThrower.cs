@@ -12,7 +12,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IPlayerMediator _player;
         private PopeyeAnchor _anchor;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
-        private TransformMotion _anchorMotion;
         private AnchorThrowConfig _throwConfig;
         
         private AnchorAutoAimController _anchorAutoAimController;
@@ -31,13 +30,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
-            AnchorTrajectoryMaker anchorTrajectoryMaker, TransformMotion anchorMotion,
+            AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrowConfig throwConfig, AnchorAutoAimController anchorAutoAimController)
         {
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
-            _anchorMotion = anchorMotion;
             _throwConfig = throwConfig;
             _anchorAutoAimController = anchorAutoAimController;
 
@@ -63,22 +61,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
             Vector3[] trajectoryPoints =
-                _anchorTrajectoryMaker.ComputeUpdatedTrajectory(startPosition, direction, floorNormal, distance,
+                _anchorTrajectoryMaker.ComputeUpdatedTrajectoryWithAutoAim(startPosition, direction,  
+                    floorNormal, _throwConfig.HeightDisplacementCurve, distance,
                     out float finalTrajectoryDistance, out bool trajectoryEndsOnFloor, 
                     out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget, 
                     out RaycastHit obstacleHit, out bool trajectoryHitsObstacle);
 
             duration = (duration / ThrowDistance) * finalTrajectoryDistance;
             
-            
-            Vector3 right = Vector3.Cross(direction, floorNormal).normalized;
-            Quaternion startLookRotation = _anchorTrajectoryMaker.ComputePathLookRotationBetweenIndices(trajectoryPoints, 
-                0, 1, right);
-            Quaternion endLookRotation = _anchorTrajectoryMaker.ComputePathLookRotationBetweenIndices(trajectoryPoints, 
-                trajectoryPoints.Length-2, trajectoryPoints.Length-1, right);
-            
-            AnchorThrowResult.Reset(trajectoryPoints, direction, startLookRotation, endLookRotation, 
-                duration, !trajectoryEndsOnFloor);
+            AnchorThrowResult.Reset(trajectoryPoints, direction, floorNormal, duration, !trajectoryEndsOnFloor);
 
             
             
@@ -104,7 +95,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
                         Vector3.up, false);
                 }
                 
-                
             }
 
             _anchorTrajectoryMaker.DrawDebugLines();
@@ -123,12 +113,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
         {
-            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
-                anchorThrowResult.InterpolationEaseCurve);
-            _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
-                anchorThrowResult.Duration, anchorThrowResult.InterpolationEaseCurve);
-
-            
             _anchorIsBeingThrown = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
             _anchorIsBeingThrown = false;
@@ -153,14 +137,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _anchor.SetRestingOnFloor();
         }
-        
-        
-        public void InterruptThrow()
-        {
-            _anchorMotion.CancelMovement();
-            _anchorIsBeingThrown = false;
-        }
-        
         
 
         public void ResetThrowForce()

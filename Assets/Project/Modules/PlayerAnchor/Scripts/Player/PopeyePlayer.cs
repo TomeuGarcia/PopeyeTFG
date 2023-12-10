@@ -33,6 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PopeyeAnchor _anchor;
         private IAnchorThrower _anchorThrower;
         private IAnchorPuller _anchorPuller;
+        private IAnchorKicker _anchorKicker;
 
         
         public Vector3 Position => _playerController.Position;
@@ -42,7 +43,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerGeneralConfig playerGeneralConfig, 
             IPlayerView playerView, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
             TransformMotion playerMotion,
-            PopeyeAnchor anchor, IAnchorThrower anchorThrower, IAnchorPuller anchorPuller)
+            PopeyeAnchor anchor, 
+            IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
@@ -54,6 +56,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchor = anchor;
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
+            _anchorKicker = anchorKicker;
         }
 
 
@@ -168,6 +171,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void DashTowardsAnchor(float duration)
         {
+            LookTowardsAnchorForDuration(duration).Forget();
+            _playerMotion.MoveToPosition(ComputeDashEndPosition(), duration, Ease.InOutQuad);
+            
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
+
+            SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
+            DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
+        }
+
+        private Vector3 ComputeDashEndPosition()
+        {
             Vector3 up = Vector3.up;
             Vector3 toAnchor = Vector3.ProjectOnPlane((_anchor.Position - Position).normalized, up);
             Vector3 right = Vector3.Cross(toAnchor, up).normalized;
@@ -187,14 +201,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 dashEndPosition += right * snapExtraDisplacement.x;
                 dashEndPosition += up * snapExtraDisplacement.y;
             }
-            
-            LookTowardsAnchorForDuration(duration).Forget();
-            _playerMotion.MoveToPosition(dashEndPosition, duration, Ease.InOutQuad);
-            
-            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
 
-            SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
-            DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
+            return dashEndPosition;
+        }
+        
+
+        public void KickAnchor()
+        {
+            _anchorKicker.KickAnchor();
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorKickStaminaCost);
         }
 
 

@@ -21,6 +21,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public DamageHitConfig AnchorPullDamageHit => _anchorPullDamageHit;
         public float PullDamageExtraDuration => _pullDamageExtraDuration;
+        
+        
+        [Header("KICK")]
+        [SerializeField] private DamageHitConfig _anchorKickDamageHit;
+        [SerializeField, Range(0f, 5.0f)] private float _kickDamageExtraDuration = 0.2f;
+        
+        public DamageHitConfig AnchorKickDamageHit => _anchorKickDamageHit;
+        public float KickDamageExtraDuration => _kickDamageExtraDuration;
 
 
 
