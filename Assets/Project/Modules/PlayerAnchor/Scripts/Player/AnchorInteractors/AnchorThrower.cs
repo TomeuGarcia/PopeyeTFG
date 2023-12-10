@@ -55,8 +55,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             float duration = ComputeThrowDuration();
             
             Vector3 startPosition = _player.GetAnchorThrowStartPosition();
-            Vector3 direction = _player.GetLookDirection(); //_player.GetFloorAlignedLookDirection();
             Vector3 floorNormal = _player.GetFloorNormal();
+            Vector3 direction = _player.GetLookDirectionConsideringSteep();
             float distance = ThrowDistance;
 
 

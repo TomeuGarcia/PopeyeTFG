@@ -102,9 +102,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return _playerController.GetFloorAlignedLookDirection();
         }
+
+        public Vector3 GetLookDirectionConsideringSteep()
+        {
+            Vector3 playerLookDirection = GetLookDirection();
+
+            bool isInSteepLookingUp = Vector3.Dot(GetFloorNormal(), playerLookDirection) < 0;
+            return isInSteepLookingUp
+                ? GetFloorAlignedLookDirection()
+                : playerLookDirection;
+        }
+
         public Vector3 GetFloorNormal()
         {
-            return _playerController.ContactNormal;
+            return _playerController.GroundNormal;
         }
 
         public Vector3 GetAnchorThrowStartPosition()

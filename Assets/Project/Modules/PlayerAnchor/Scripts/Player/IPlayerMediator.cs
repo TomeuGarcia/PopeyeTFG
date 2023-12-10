@@ -13,6 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Vector3 GetFloorAlignedDirectionToAnchor();
         public Vector3 GetLookDirection();
         public Vector3 GetFloorAlignedLookDirection();
+        public Vector3 GetLookDirectionConsideringSteep();
         public Vector3 GetFloorNormal();
         public Vector3 GetAnchorThrowStartPosition();
 

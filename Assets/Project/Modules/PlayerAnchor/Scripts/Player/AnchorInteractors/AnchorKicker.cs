@@ -34,8 +34,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void KickAnchor()
         {
             Vector3 startPosition = _anchor.Position;
-            Vector3 direction = _player.GetLookDirection();
             Vector3 floorNormal = _player.GetFloorNormal();
+            Vector3 direction = _player.GetLookDirectionConsideringSteep();
             float distance = _anchorKickConfig.AnchorKickMoveDistance;
 
             Vector3[] trajectoryPoints =
