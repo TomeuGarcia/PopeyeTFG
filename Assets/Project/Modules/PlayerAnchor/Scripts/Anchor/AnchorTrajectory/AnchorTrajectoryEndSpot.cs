@@ -29,6 +29,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 
                 //_spotTransform.position += moveDisplacement;
                 _spotTransform.position += _toTarget;
+                _toTarget = Vector3.zero; // will need to remove this if we want to move with acceleration;
             }
         }
 

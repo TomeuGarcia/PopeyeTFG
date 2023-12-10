@@ -58,6 +58,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorTrajectoryMaker.ShowTrajectoryEndSpot();
             _anchorTrajectoryMaker.DrawDebugLines();
+            _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(anchorThrowResult.LastTrajectoryPathPoint, 
+                Vector3.up, !anchorThrowResult.EndsOnVoid);
             
             _anchorIsBeingKicked = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
