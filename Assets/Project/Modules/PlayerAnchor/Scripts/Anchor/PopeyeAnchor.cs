@@ -128,6 +128,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 _anchorMotion.Parent(parentTransform);
             }
         }
+
+        public void SetSpinning()
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);
+        }
         
         
         public bool IsBeingThrown()
@@ -187,7 +192,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
             Vector3 floorPosition = PositioningHelper.Instance.GetFloorPositionUnderneath(Position);
             float duration = Vector3.Distance(Position, floorPosition) * 0.1f;
 
+            _anchorMotion.Unparent();
             _anchorMotion.MoveToPosition(floorPosition, duration, Ease.OutSine);
+            
 
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }

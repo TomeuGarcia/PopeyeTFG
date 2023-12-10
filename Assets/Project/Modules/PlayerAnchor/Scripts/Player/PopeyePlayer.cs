@@ -58,8 +58,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
             _anchorKicker = anchorKicker;
+
+            _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
 
+        private void OnDestroy()
+        {
+            _staminaSystem.OnValueExhausted -= OnStaminaExhausted;
+        }
 
         private void Update()
         {
@@ -239,6 +245,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerView.PlayKickAnimation();
         }
 
+        public async UniTaskVoid StartSpinningAnchor()
+        {
+            _anchor.SetSpinning();
+            
+            await _staminaSystem.SpendProgressively();
+            
+            _anchor.SnapToFloor().Forget();
+        }
+        public void StopSpinningAnchor()
+        {
+            _staminaSystem.StopSpendingProgressively();
+        }
+        
+
 
         public void OnAnchorEndedInVoid()
         {
@@ -329,10 +349,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             if (spendAmount == 0) return;
             
             _staminaSystem.Spend(spendAmount);
-            if (!HasStaminaLeft())
-            {
-                EnterTiredState();
-            }
+        }
+
+        private void OnStaminaExhausted()
+        {
+            EnterTiredState();
         }
 
         private void EnterTiredState()

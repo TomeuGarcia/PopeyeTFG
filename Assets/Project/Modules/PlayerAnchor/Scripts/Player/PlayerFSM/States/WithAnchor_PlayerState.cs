@@ -18,14 +18,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public void Setup(MovingWithAnchor_PlayerState movingWithAnchor,
                             AimingThrowAnchor_PlayerState aimingThrowAnchor,
                             ThrowingAnchor_PlayerState throwingAnchor,
-                            Healing_PlayerState healing)
+                            Healing_PlayerState healing,
+                            KickingAnchor_PlayerState kickingAnchor)
         {
             _states = new Dictionary<PlayerStates, APlayerState>()
             {
                 { PlayerStates.MovingWithAnchor , movingWithAnchor },
                 { PlayerStates.AimingThrowAnchor , aimingThrowAnchor },
                 { PlayerStates.ThrowingAnchor , throwingAnchor },
-                { PlayerStates.Healing , healing }
+                { PlayerStates.Healing , healing },
+                { PlayerStates.KickingAnchor , kickingAnchor }
             };
 
         }

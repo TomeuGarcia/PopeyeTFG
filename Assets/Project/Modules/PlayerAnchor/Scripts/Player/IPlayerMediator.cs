@@ -29,6 +29,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnPullAnchorComplete();
         public void DashTowardsAnchor(float duration);
         public void KickAnchor();
+        public UniTaskVoid StartSpinningAnchor();
+        public void StopSpinningAnchor();
 
 
         public void OnAnchorEndedInVoid();
