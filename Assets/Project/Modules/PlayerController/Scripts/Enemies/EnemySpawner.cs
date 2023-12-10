@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -41,12 +42,17 @@ namespace Popeye.Modules.Enemies
         private int _activeEnemiesCount;
         private bool AllCurrentWaveEnemiesAreDead => _activeEnemiesCount == 0;
 
+        [SerializeField] private EnemyConfiguration _enemyConfiguration;
+        private EnemyFactory _enemyFactory;
         public delegate void EnemySpawnerEvent();
 
         public EnemySpawnerEvent OnFirstWaveStarted;
         public EnemySpawnerEvent OnAllWavesFinished;
 
-
+        private void Awake()
+        {
+            _enemyFactory = new EnemyFactory(Instantiate(_enemyConfiguration));
+        }
 
         public void StartWaves()
         {
@@ -85,14 +91,15 @@ namespace Popeye.Modules.Enemies
 
         private void SpawnEnemy(AEnemy enemyPrefab, Vector3 spawnPosition)
         {
-            AEnemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            //AEnemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            AEnemy enemy = _enemyFactory.Create(enemyPrefab.Id, spawnPosition, Quaternion.identity);
             enemy.AwakeInit(_enemyAttackTarget);
 
             enemy.OnDeathComplete += DecrementActiveEnemiesCount;
         }
-
-
-
+        
+        
+        
         private void DecrementActiveEnemiesCount(AEnemy destroyedEnemy)
         {
             destroyedEnemy.OnDeathComplete -= DecrementActiveEnemiesCount;

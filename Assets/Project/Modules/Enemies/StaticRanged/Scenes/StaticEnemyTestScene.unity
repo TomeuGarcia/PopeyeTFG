@@ -3297,6 +3297,8 @@ MonoBehaviour:
       _enemyPrefab: {fileID: 5980008594002771081, guid: b0c64d3da80613f449b04033ea69b64a,
         type: 3}
       _spawnSpot: {fileID: 310504106}
+  _enemyConfiguration: {fileID: 11400000, guid: 0f9d598e6e987c643bd4a9399a2149d5,
+    type: 2}
 --- !u!1 &148754941
 GameObject:
   m_ObjectHideFlags: 0
@@ -16247,11 +16249,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SlimeMind_Size3
       objectReference: {fileID: 0}
+    - target: {fileID: 4038672679056358302, guid: 4377d212ca901e94c898446b901227b5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4377d212ca901e94c898446b901227b5, type: 3}
+--- !u!4 &738642228 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3883141934073842412, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 367195375688969300}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &741342626
 Mesh:
   m_ObjectHideFlags: 0
@@ -49534,6 +49547,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2015172574162109736, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: _bullets
+      value: 
+      objectReference: {fileID: -3095006413518802994, guid: 41511b03b8d84d843a4e5eb6585183a7,
+        type: 3}
+    - target: {fileID: 2015172574162109736, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: _transform
+      value: 
+      objectReference: {fileID: 738642228}
     - target: {fileID: 6330098183825555885, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
         type: 3}
       propertyPath: m_Name
@@ -49593,6 +49617,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777636493727658905, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: Shoot.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Popeye.Modules.Enemies.LaunchProjectileBehaviour, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

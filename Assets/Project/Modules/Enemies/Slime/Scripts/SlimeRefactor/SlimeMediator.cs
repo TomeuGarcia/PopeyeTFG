@@ -22,12 +22,14 @@ namespace Popeye.Modules.Enemies
         public SlimeMindEnemy slimeMindEnemy;
         public Transform playerTransform { get; private set; }
         [SerializeField] private Transform _slimeTransform;
+        private Transform _particlePoolParent;
+        private Core.Pool.ObjectPool _objectPool;
 
         public void Init()
         {
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
-            _squashStretchAnimator.Configure(this,_slimeTransform);
+            _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);
             _slimeDivider.Configure(this);
             _enemyPatrolling.Configure(this);
         }
@@ -35,6 +37,16 @@ namespace Popeye.Modules.Enemies
         public void SetSlimeMind(SlimeMindEnemy slimeMind)
         {
             slimeMindEnemy = slimeMind;
+        }
+
+        public void SetObjectPool(Core.Pool.ObjectPool objectPool)
+        {
+            _objectPool = objectPool;
+        }
+
+        public Core.Pool.ObjectPool GetObjectPool()
+        {
+            return _objectPool;
         }
         public void PlayMoveAnimation()
         {

@@ -5,12 +5,12 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using Debug = FMOD.Debug;
 
 namespace Popeye.Modules.Enemies.Bullets
 {
     public class Bullet : MonoBehaviour
     {
-        [SerializeField] private float _lifeTime;
         [SerializeField] private Transform _transform;
         private Coroutine _destroyBullet;
         private CancellationTokenSource _cancellationTokenSource;
@@ -19,6 +19,7 @@ namespace Popeye.Modules.Enemies.Bullets
         [SerializeField] private float _contactHitDamageAmount;
         [SerializeField] private float _contactHitStunDuration;
         [SerializeField] private float _contactHitKnockbackForce;
+        [SerializeField] private PooledBullets _bullet;
         private void OnCollisionEnter(Collision other)
         {
             _cancellationTokenSource.Cancel();
@@ -26,8 +27,7 @@ namespace Popeye.Modules.Enemies.Bullets
             _contactDamageHit.Position = _transform.position;
             _contactDamageHit.KnockbackDirection = PositioningHelper.Instance.GetDirectionAlignedWithFloor(_transform.position, other.transform.position);
             CombatManager.Instance.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
-            
-            Destroy(gameObject);
+            //_bullet.Recycle();
         }
 
         private void Start()
@@ -36,15 +36,6 @@ namespace Popeye.Modules.Enemies.Bullets
                 _contactHitDamageAmount, _contactHitKnockbackForce, _contactHitStunDuration);
             
             _cancellationTokenSource = new CancellationTokenSource();
-            DestroyBullet();
-        }
-
-        private async UniTaskVoid DestroyBullet()
-        {
-            await UniTask.Delay(TimeSpan.FromSeconds(_lifeTime),
-                cancellationToken: _cancellationTokenSource.Token);
-            
-            Destroy(gameObject);
         }
     }
 }
