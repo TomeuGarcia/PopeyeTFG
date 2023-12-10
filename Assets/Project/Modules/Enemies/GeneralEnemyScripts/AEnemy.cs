@@ -16,6 +16,11 @@ namespace Popeye.Modules.Enemies
             _attackTarget = attackTarget;
         }
 
+        public void SetAttackTarget(Transform attackTarget)
+        {
+            _attackTarget = attackTarget;
+        }
+        
         protected void InvokeOnDeathComplete()
         {
             OnDeathComplete?.Invoke(this);

@@ -3,46 +3,46 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.StateMachine;
+using Popeye.Modules.PlayerController;
+using Popeye.Modules.PlayerController.Inputs;
+using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Popeye.Modules.Enemies
 {
     public class Enemy : AEnemy, IDamageHitTarget, IMovementInputHandler
     {
-        [Header("COMPONENTS")] [SerializeField]
-        private IEnemyStateMachine _stateMachine;
-
-        [SerializeField] private PlayerController _enemyController;
-
+        [Header("COMPONENTS")] 
+        [SerializeField] private IEnemyStateMachine _stateMachine;
+        [SerializeField] private PlayerController.PlayerController _enemyController;
         [SerializeField] private Rigidbody _rigidbody;
-
-        //[SerializeField] private Transform _attackTarget;
         [SerializeField] private MeshRenderer _meshRenderer;
         private Material _meshMaterial;
-
-        [Header("MOVE SPEEDS")] [SerializeField, Range(0.0f, 100.0f)]
-        private float _maxMoveSpeed = 16.0f;
-
-        public float MaxMoveSpeed => _maxMoveSpeed;
-
-        [Header("KNOCKBACK")] [SerializeField, Range(0.0f, 1.0f)]
-        private float _knockbackEffectiveness = 1.0f;
-
-        [Header("HEALTH")] [SerializeField, Range(0.0f, 100.0f)]
-        private float _maxHealth = 50.0f;
-
+        
+        
+        [Header("HEALTH")]
+        [SerializeField, Range(0.0f, 100.0f)] private int _maxHealth = 50;
         private HealthSystem _healthSystem;
 
+        [Header("MOVE SPEEDS")] 
+        [SerializeField, Range(0.0f, 100.0f)] private float _maxMoveSpeed = 16.0f;
+        public float MaxMoveSpeed => _maxMoveSpeed;
 
-        [Header("CONTACT DAMAGE")] [SerializeField, Range(0.0f, 30.0f)]
-        private float _contactHitDamageAmount = 10.0f;
-
-        [SerializeField, Range(0.0f, 30.0f)] private float _contactHitKnockbackForce = 18.0f;
-        [SerializeField, Range(0.0f, 30.0f)] private float _contactHitStunDuration = 0.0f;
+        [Header("CONTACT DAMAGE")]
+        [SerializeField] private DamageHitConfig _contactDamageConfig;
         private DamageHit _contactDamageHit;
+        
         private bool _canDealContactDamage;
 
+        [Header("KNOCKBACK")] 
+        [SerializeField, Range(0.0f, 1.0f)] private float _knockbackEffectiveness = 1.0f;
+
+        [HideInInspector] public float stunTime;
+        
 
         public Vector3 Position => transform.position;
         public Vector3 LookDirection => _enemyController.LookDirection;
@@ -55,6 +55,7 @@ namespace Popeye.Modules.Enemies
         private bool _respawnsAfterDeath;
         private Vector3 _respawnPosition;
 
+        private ICombatManager _combatManager;
 
 
 
@@ -63,6 +64,8 @@ namespace Popeye.Modules.Enemies
 
         private void Start()
         {
+            _combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
+            
             if (_alreadyInitialized) return;
 
             AwakeInit(_attackTarget);
@@ -92,9 +95,9 @@ namespace Popeye.Modules.Enemies
 
             _stateMachine.AwakeInit(this);
 
+            
 
-            _contactDamageHit = new DamageHit(CombatManager.Instance.DamageOnlyPlayerPreset,
-                _contactHitDamageAmount, _contactHitKnockbackForce, _contactHitStunDuration);
+            _contactDamageHit = new DamageHit(_contactDamageConfig);
 
             DisableDealingContactDamage();
 
@@ -119,7 +122,7 @@ namespace Popeye.Modules.Enemies
                 _contactDamageHit.KnockbackDirection =
                     PositioningHelper.Instance.GetDirectionAlignedWithFloor(Position, other.transform.position);
 
-                CombatManager.Instance.TryDealDamage(other.gameObject, _contactDamageHit,
+                _combatManager.TryDealDamage(other.gameObject, _contactDamageHit,
                     out DamageHitResult damageHitResult);
             }
         }
@@ -150,7 +153,8 @@ namespace Popeye.Modules.Enemies
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            TakeKnockback(damageHit.KnockbackForce);
+            //TakeKnockback(damageHit.KnockbackForce * 200f);
+            transform.DOBlendableMoveBy(damageHit.KnockbackForce * 4f, damageHit.StunDuration/2);
 
             float receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
             if (_healthSystem.IsDead())
@@ -159,12 +163,13 @@ namespace Popeye.Modules.Enemies
             }
             else
             {
-                GetStunned(damageHit.StunDuration);
+                stunTime = damageHit.StunDuration;
+                _stateMachine.OverwriteCurrentState(IEnemyState.States.Stunned);
             }
-
+            
             StartTakeDamageAnimation().Forget();
 
-            return new DamageHitResult(receivedDamage);
+            return new DamageHitResult(this, gameObject, receivedDamage);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)
@@ -217,10 +222,9 @@ namespace Popeye.Modules.Enemies
             Vector3 pushForce = knockbackForce * _knockbackEffectiveness;
 
             _rigidbody.AddForce(pushForce, ForceMode.Impulse);
-
         }
 
-        private async void GetStunned(float duration)
+        public async void GetStunned(float duration)
         {
             DisableMovement();
             await Task.Delay((int)(duration * 1000));

@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
-public class TurretHealth : MonoBehaviour,IDamageHitTarget
+public class TurretHealth : MonoBehaviour, IDamageHitTarget
 {
     private HealthSystem _healthSystem;
-    [SerializeField, Range(0.0f, 100.0f)] private float _maxHealth = 50.0f;
+    [SerializeField, Range(0, 100)] private int _maxHealth = 50;
+    
+    
+    
     private void Awake()
     {
         _healthSystem = new HealthSystem(_maxHealth);
@@ -18,14 +23,14 @@ public class TurretHealth : MonoBehaviour,IDamageHitTarget
 
     public DamageHitResult TakeHitDamage(DamageHit damageHit)
     {
-        _healthSystem.TakeDamage(damageHit.Damage);
+        int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
         if (IsDead())
         {   
             //TODO: death feedback
             Destroy(gameObject);
         }
 
-        return new DamageHitResult(damageHit.Damage);
+        return new DamageHitResult(this, gameObject, receivedDamage);
     }
 
     public bool CanBeDamaged(DamageHit damageHit)

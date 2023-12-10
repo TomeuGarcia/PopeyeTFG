@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 public class AnchorElectricChain : MonoBehaviour
@@ -20,7 +21,7 @@ public class AnchorElectricChain : MonoBehaviour
         _anchor = anchor;
         ExitElectricMode();
 
-        _electricDamageHit = new DamageHit(CombatManager.Instance.DamageOnlyEnemiesPreset, 10.0f, 80.0f, 2.0f);
+        _electricDamageHit = new DamageHit(CombatManagerSingleton.Instance.DamageOnlyEnemiesPreset, 10, 80.0f, 2.0f);
     }
 
 
@@ -42,7 +43,7 @@ public class AnchorElectricChain : MonoBehaviour
 
         if (Vector3.Dot(chainRight, towardsTarget) < 0) _electricDamageHit.KnockbackDirection *= -1;
 
-        if (CombatManager.Instance.TryDealDamage(other.gameObject, _electricDamageHit, out DamageHitResult damageHitResult))
+        if (CombatManagerSingleton.Instance.TryDealDamage(other.gameObject, _electricDamageHit, out DamageHitResult damageHitResult))
         {
             _electrifiedDebug.transform.parent = other.transform;
             _electrifiedDebug.transform.localPosition = Vector3.zero;
