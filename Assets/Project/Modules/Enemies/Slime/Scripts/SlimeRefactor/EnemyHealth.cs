@@ -31,11 +31,15 @@ namespace Popeye.Modules.Enemies.Components
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
             _healthSystem.TakeDamage(damageHit.Damage);
-            _enemyVisuals.OnHitEffects();
+            
             if (IsDead())
             {
                 _mediator.OnDeath();
                 _enemyVisuals.OnDeathEffects();
+            }
+            else
+            {
+                _enemyVisuals.OnHitEffects(_healthSystem.CurrentHealth / _healthSystem.MaxHealth);
             }
 
             return new DamageHitResult(damageHit.Damage);

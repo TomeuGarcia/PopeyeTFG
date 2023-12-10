@@ -124,7 +124,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 72fa3a50c3742b248b34fdac95e688ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 50
-  _enemyVisuals: {fileID: 0}
+  _enemyVisuals: {fileID: 6051609206907086381}
 --- !u!114 &2067100639111306409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,16 +327,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63aeec9146340e3499f43c26974aa0b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
   _originalMeshDatas:
   - _mesh: {fileID: 2635525039347396959}
     _originalMaterials:
     - {fileID: 0}
-  _flashSequence:
-  - _flashMaterial: {fileID: 2100000, guid: 8eb632e9f39971244a4b61a662582db0, type: 2}
-    _waitTime: 0.05
-  - _flashMaterial: {fileID: 2100000, guid: d53b284abe63ffb42b73f49b3d0f7376, type: 2}
-    _waitTime: 0.05
-  - _flashMaterial: {fileID: 2100000, guid: 3c2fae565109a2b40882bbeacdd03910, type: 2}
-    _waitTime: 0.05
-  - _flashMaterial: {fileID: 2100000, guid: d53b284abe63ffb42b73f49b3d0f7376, type: 2}
-    _waitTime: 0.05
