@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9135270981808465179}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 9135270983014444384}
   - component: {fileID: 9135270983014444399}
   - component: {fileID: 9135270983014444385}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AnchorToggleablePressurePlate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _triggeredMaterial: {fileID: 2100000, guid: 3a4cfb8fea563f2438e02434097e9b68, type: 2}
-  _notTriggeredMaterial: {fileID: 2100000, guid: 0b9f88c0d57e2eb46bc501fda0dab22c, type: 2}
+  _notTriggeredMaterial: {fileID: 2100000, guid: 0b9f88c0d57e2eb46bc501fda0dab22c,
+    type: 2}
   _buttonMesh: {fileID: 9135270983080061235}
   _buttonTransform: {fileID: 9135270983080061234}
   _collider: {fileID: 9135270983014444385}
@@ -94,9 +95,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9135270983014444387}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 2, y: 0.5, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9135270983080061237
@@ -110,7 +119,7 @@ GameObject:
   - component: {fileID: 9135270983080061234}
   - component: {fileID: 9135270983080061232}
   - component: {fileID: 9135270983080061235}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +202,7 @@ GameObject:
   - component: {fileID: 9135270983099053925}
   - component: {fileID: 9135270983099053923}
   - component: {fileID: 9135270983099053922}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -18,9 +18,11 @@ GameObject:
   - component: {fileID: 8865523304329242488}
   - component: {fileID: 7860900730581999901}
   - component: {fileID: 2150481757876597378}
+  - component: {fileID: 4482571036909438060}
+  - component: {fileID: 54252317983404123}
   m_Layer: 0
   m_Name: Slime
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -219,10 +221,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb42af37f8e21c4283df70598facdb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speeedThreshold: {x: 5, y: 6}
   _navMeshAgent: {fileID: 6150467610471333831}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _speeedThreshold: {x: 5, y: 6}
   _spawnForce: 3
   _rb: {fileID: 7348990576285241089}
+--- !u!114 &4482571036909438060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5fe4d03f5d7434db5e2377748142c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _navMeshAgent: {fileID: 6150467610471333831}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _playerDistanceThreshold: 30
+  _wayPointDistanceThreshold: 1
+--- !u!114 &54252317983404123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6b84086a6759d54e9c9e66574f3696c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transform: {fileID: 6534911457466879058}
+  _contactHitDamageAmount: 10
+  _contactHitStunDuration: 0
+  _contactHitKnockbackForce: 18
 --- !u!1 &6668136983467904787
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,5 +309,7 @@ MonoBehaviour:
   _enemyHealth: {fileID: 7406570661138091252}
   _squashStretchAnimator: {fileID: 7860900730581999901}
   _slimeDivider: {fileID: 8865523304329242488}
+  _enemyPatrolling: {fileID: 4482571036909438060}
   _boxCollider: {fileID: 1351218561991610330}
+  slimeMindEnemy: {fileID: 0}
   _slimeTransform: {fileID: 6534911457466879058}

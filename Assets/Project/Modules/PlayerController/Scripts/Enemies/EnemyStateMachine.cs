@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Project.Modules.PlayerController.Scripts.Enemies;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.StateMachine
@@ -46,6 +47,7 @@ namespace Popeye.Modules.Enemies.StateMachine
                 _dashRecoverDuration, _dashDistance,
                 _enemy.MaxMoveSpeed);
             EnemyDeadState deadState = new EnemyDeadState(_enemy);
+            EnemyStunnedState stunnedState = new EnemyStunnedState(_enemy);
 
 
             _states = new Dictionary<IEnemyState.States, IEnemyState>()
@@ -53,7 +55,8 @@ namespace Popeye.Modules.Enemies.StateMachine
                 { IEnemyState.States.Idle, idleState },
                 { IEnemyState.States.Dead, deadState },
                 { IEnemyState.States.Chasing, chasingState },
-                { IEnemyState.States.Dashing, dashingState }
+                { IEnemyState.States.Dashing, dashingState },
+                { IEnemyState.States.Stunned, stunnedState }
             };
 
             _currentState = _states[IEnemyState.States.Idle];

@@ -4,6 +4,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Popeye.Modules.Utilities;
 using UnityEngine;
 
 public class SpinAttack_PlayerState : IPlayerState

@@ -136,14 +136,12 @@ MonoBehaviour:
   _stateMachine: {fileID: 4344442727484116637}
   _enemyController: {fileID: 4344442727484116646}
   _rigidbody: {fileID: 4344442727484116641}
-  _attackTarget: {fileID: 0}
   _meshRenderer: {fileID: 4344442729178436228}
-  _maxMoveSpeed: 16
-  _knockbackEffectiveness: 1
   _maxHealth: 50
-  _contactHitDamageAmount: 10
-  _contactHitKnockbackForce: 18
-  _contactHitStunDuration: 0
+  _maxMoveSpeed: 16
+  _contactDamageConfig: {fileID: 11400000, guid: 900850db41e7a2042ad2ee5de1fcaead,
+    type: 2}
+  _knockbackEffectiveness: 1
 --- !u!114 &4344442727484116637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,6 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 4344442727484116641}
   _renderer: {fileID: 4344442729178436228}
+  _useLookInput: 1
   _lookTransform: {fileID: 4344442727975684845}
   _lookSpeed: 800
   _blendWithVelocityDirection: 0
