@@ -159,12 +159,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorThrower.ThrowAnchor();
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorThrowStaminaCost);
+            
+            _playerView.PlayThrowAnimation();
         }
 
         public void PullAnchor()
         {
             _anchorPuller.PullAnchor();
             LookTowardsAnchorForDuration(0.3f).Forget();
+            
+            _playerView.PlayPullAnimation(0.3f);
         }
 
         public void OnPullAnchorComplete()
@@ -197,6 +201,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
             DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
+            
+            _playerView.PlayDashAnimation(duration);
         }
 
         private Vector3 ComputeDashEndPosition()
@@ -229,6 +235,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorKicker.KickAnchor();
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorKickStaminaCost);
+
+            _playerView.PlayKickAnimation();
         }
 
 

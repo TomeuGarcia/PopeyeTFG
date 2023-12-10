@@ -1,6 +1,7 @@
 
 
 using System;
+using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player;
@@ -19,15 +20,17 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private TransformMotion _anchorMotion;
 
         private AnchorPhysics _anchorPhysics;
+        private IAnchorView _anchorView;
         private AnchorDamageDealer _anchorDamageDealer;
         private AnchorChain _anchorChain;
+
 
         public Vector3 Position => _anchorMotion.Position;
 
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
-            AnchorPhysics anchorPhysics,
+            AnchorPhysics anchorPhysics, IAnchorView anchorView,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain)
         {
             _stateMachine = stateMachine;
@@ -37,6 +40,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorMotion = anchorMotion;
 
             _anchorPhysics = anchorPhysics;
+            _anchorView = anchorView;
             _anchorDamageDealer = anchorDamageDealer;
             _anchorChain = anchorChain;
             
@@ -60,6 +64,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 anchorThrowResult.Duration, anchorThrowResult.InterpolationEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
+            
+            _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
         }
         public void SetPulled(AnchorThrowResult anchorPullResult)
         {
@@ -72,6 +78,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             */
             _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
                 anchorPullResult.InterpolationEaseCurve);
+            
+            _anchorView.PlayPulledAnimation(anchorPullResult.Duration);
         }
 
         public void SetKicked(AnchorThrowResult anchorKickResult)
@@ -85,11 +93,15 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 anchorKickResult.Duration, anchorKickResult.InterpolationEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
+            
+            _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
         }
         
         public void SetCarried()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Carried);
+            
+            _anchorView.PlayCarriedAnimation();
         }
         public void SetGrabbedToThrow()
         {
@@ -98,6 +110,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void SetRestingOnFloor()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
+            
+            _anchorView.PlayRestOnFloorAnimation();
         }
         public void SetGrabbedBySnapper(IAutoAimTarget autoAimTarget)
         {

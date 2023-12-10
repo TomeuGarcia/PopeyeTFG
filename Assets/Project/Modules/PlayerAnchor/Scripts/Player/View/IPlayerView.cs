@@ -10,6 +10,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void PlayTakeDamageAnimation();
         UniTask PlayDeathAnimation();
         UniTask PlayHealAnimation();
+        void PlayDashAnimation(float duration);
+        void PlayKickAnimation();
+        void PlayThrowAnimation();
+        UniTaskVoid PlayPullAnimation(float duration);
 
     }
 }

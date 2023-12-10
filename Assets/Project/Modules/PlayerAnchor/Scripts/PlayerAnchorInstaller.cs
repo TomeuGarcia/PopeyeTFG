@@ -40,9 +40,11 @@ namespace Project.Modules.PlayerAnchor
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
+        [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private Transform _anchorMoveTransform;
 
+        
         [Header("Anchor Damage")] 
         [SerializeField] private AnchorDamageDealer _anchorDamageDealer;
         
@@ -124,7 +126,7 @@ namespace Project.Modules.PlayerAnchor
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorDamageDealer, _anchorChain);
+                _anchorPhysics, _anchorView.Value, _anchorDamageDealer, _anchorChain);
 
             
             
