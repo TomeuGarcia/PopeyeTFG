@@ -52,6 +52,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private Quaternion ComputePathLookRotationBetweenIndices(int startIndex, int endIndex,
             Vector3 right)
         {
+            if (Mathf.Max(startIndex, endIndex) >= TrajectoryPathPoints.Length ||
+                Mathf.Min(startIndex, endIndex) < 0)
+            {
+                return Quaternion.identity;
+            }
+            
             Vector3 pathForward = (TrajectoryPathPoints[endIndex] - TrajectoryPathPoints[startIndex]).normalized;
             Vector3 up = Vector3.Cross(pathForward, right).normalized;
 

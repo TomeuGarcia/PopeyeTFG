@@ -30,7 +30,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void KickAnchor();
 
 
-        public void OnAnchorThrowEndedInVoid();
+        public void OnAnchorEndedInVoid();
 
 
         public UniTaskVoid LookTowardsAnchorForDuration(float duration);

@@ -72,7 +72,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             if (anchorThrowResult.EndsOnVoid)
             {
-                _player.OnAnchorThrowEndedInVoid();
+                _player.OnAnchorEndedInVoid();
                 return;
             }
             

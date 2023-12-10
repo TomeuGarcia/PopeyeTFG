@@ -35,6 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IAnchorPuller _anchorPuller;
         private IAnchorKicker _anchorKicker;
 
+        private bool _pullingAnchorFromTheVoid;
         
         public Vector3 Position => _playerController.Position;
         
@@ -157,6 +158,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void OnPullAnchorComplete()
         {
+            if (_pullingAnchorFromTheVoid)
+            {
+                _anchor.SetCarried();
+                _pullingAnchorFromTheVoid = false;
+                return;
+            }
+            
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorPullStaminaCost);
             if (HasStaminaLeft())
             {
@@ -213,9 +221,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
 
 
-        public void OnAnchorThrowEndedInVoid()
+        public void OnAnchorEndedInVoid()
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);
+            _pullingAnchorFromTheVoid = true;
         }
 
         public async UniTaskVoid LookTowardsAnchorForDuration(float duration)
