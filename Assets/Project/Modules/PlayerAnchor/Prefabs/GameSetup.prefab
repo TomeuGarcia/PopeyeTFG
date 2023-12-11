@@ -257,9 +257,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!135 &3175196758156884210
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3040,7 +3040,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7511529590618314738}
+  - {fileID: 8961244722100828080}
   m_Father: {fileID: 2920165420592035363}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3400,7 +3400,7 @@ Transform:
   - {fileID: 4844391905437604777}
   - {fileID: 1114212322728283138}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8941487205473583298
 GameObject:
@@ -3682,7 +3682,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e84f29c78a65b6499f7729f1ea4a091, type: 3}
---- !u!4 &7511529590618314738 stripped
+--- !u!4 &8961244722100828080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1468996763599380545, guid: 4e84f29c78a65b6499f7729f1ea4a091,
     type: 3}

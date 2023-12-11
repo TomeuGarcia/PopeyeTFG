@@ -23,7 +23,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void DisableAllPhysics()
         {
             _collider.enabled = false;
-            UseGravity(false);
             _rigidbody.interpolation = RigidbodyInterpolation.None;
             SetImmovable();
         }
@@ -31,19 +30,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void EnableAllPhysics()
         {
             _collider.enabled = true;
-            UseGravity(true);
             _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             SetMovable();
         }
-
-
-        public void UseGravity(bool useGravity)
-        {
-            _rigidbody.useGravity = useGravity;
-
-            _rigidbody.drag = useGravity ? 0 : float.MaxValue;
-            _rigidbody.mass = useGravity ? 3 : float.MaxValue;
-        }
+        
         
         public void SetMovable()
         {

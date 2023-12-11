@@ -117,11 +117,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
 
-            
-            float duration = 0.1f;
-            //_anchorMotion.MoveToPosition(autoAimTarget.GetAimLockPosition(), duration, Ease.InOutSine);
-            _anchorMotion.Rotate(autoAimTarget.GetRotationForAimedTargeter(), duration, Ease.InOutSine);
-
             Transform parentTransform = autoAimTarget.GetParentTransformForTargeter();
             if (parentTransform != null)
             {
