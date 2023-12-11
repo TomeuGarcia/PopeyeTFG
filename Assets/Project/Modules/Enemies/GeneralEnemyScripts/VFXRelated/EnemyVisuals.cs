@@ -31,7 +31,6 @@ public class EnemyVisuals : MonoBehaviour
 
     public virtual void OnHitEffects(float healthCoef)
     {
-        Debug.Log(healthCoef);
         _originalMeshDatas[0]._mesh.material.SetFloat("_Damage", healthCoef);
         
         FlashEffect();
