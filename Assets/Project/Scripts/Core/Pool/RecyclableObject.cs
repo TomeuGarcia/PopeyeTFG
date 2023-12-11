@@ -17,6 +17,7 @@ namespace Popeye.Core.Pool
 
         public void Recycle()
         {
+            if(isActiveAndEnabled)
             _objectPool.RecycleGameObject(this);
         }
 

@@ -120,10 +120,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa09cee7d610c8b4b847cf1fbf1f119c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lifeTime: 5
   _transform: {fileID: 3779504105842157641}
-  _contactHitDamageAmount: 10
-  _contactHitStunDuration: 0
-  _contactHitKnockbackForce: 18
+  _contactDamageConfig: {fileID: 11400000, guid: c6614f1bb8f4db24d8bc9bee3b1beaf3,
+    type: 2}
   _bullet: {fileID: -3095006413518802994}
 --- !u!54 &4305976176017049196
 Rigidbody:
@@ -164,4 +164,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe7693c6a3792c4db771564af8ad4a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rb: {fileID: 4305976176017049196}
   _lifeTime: 5

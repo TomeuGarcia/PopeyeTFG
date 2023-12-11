@@ -5,6 +5,8 @@ using Popeye.Modules.Enemies.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System.Threading.Tasks;
+using Popeye.Core.Services.ServiceLocator;
+using Project.Modules.CombatSystem;
 using Task = System.Threading.Tasks.Task;
 
 
@@ -17,6 +19,9 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private SquashStretchAnimator _squashStretchAnimator;
         [SerializeField] private SlimeDivider _slimeDivider;
         [SerializeField] private EnemyPatrolling _enemyPatrolling;
+        [SerializeField] private DamageTrigger _damageTrigger;
+        
+        [SerializeField] private DamageHitConfig _contactDamageHitConfig;
 
         [SerializeField] private BoxCollider _boxCollider;
         public SlimeMindEnemy slimeMindEnemy;
@@ -32,6 +37,7 @@ namespace Popeye.Modules.Enemies
             _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);
             _slimeDivider.Configure(this);
             _enemyPatrolling.Configure(this);
+            _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
         }
 
         public void SetSlimeMind(SlimeMindEnemy slimeMind)

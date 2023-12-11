@@ -30,7 +30,7 @@ namespace Popeye.Modules.Enemies
 
             if (projectileInstance.TryGetComponent(out Rigidbody rb))
             {
-                rb.velocity = rb.transform.TransformDirection(_spawnPoint.transform.forward * _relativeSpeed);
+                rb.velocity = rb.transform.TransformDirection(-_spawnPoint.transform.forward * _relativeSpeed);
             }
         }
     }

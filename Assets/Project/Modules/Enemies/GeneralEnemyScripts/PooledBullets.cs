@@ -8,7 +8,7 @@ public class PooledBullets : RecyclableObject
     [SerializeField] private float _lifeTime;
     internal override void Init()
     {
-        Invoke(nameof(Recycle),_lifeTime);
+       Invoke(nameof(Recycle),_lifeTime);
     }
 
     internal override void Release()
