@@ -5,6 +5,7 @@ namespace Popeye.Modules.ValueStatSystem
         public delegate void TimeValueStatEvent(float durationToMax);
         public TimeValueStatEvent OnValueStartUpdate;
         public ValueStatEvent OnValueStopUpdate;
+        public ValueStatEvent OnValueExhausted;
         
         
         protected void InvokeOnValueStartUpdate(float durationToMax)
@@ -14,6 +15,10 @@ namespace Popeye.Modules.ValueStatSystem
         protected void InvokeOnValueStopUpdate()
         {
             OnValueStopUpdate?.Invoke();
+        }
+        protected void InvokeOnValueExhausted()
+        {
+            OnValueExhausted?.Invoke();
         }
 
     }

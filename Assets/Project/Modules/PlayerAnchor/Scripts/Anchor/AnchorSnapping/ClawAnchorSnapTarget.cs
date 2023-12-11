@@ -11,6 +11,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
         [SerializeField] private Transform _clawsTransform;
         [SerializeField] private Transform[] _claws;
 
+        private const float ACCEPT_FROM_POSITION_MIN_DOT = 0.1f;
+        
         private Vector3 LookDirection => transform.up;
         private Vector3 UpDirection => -transform.right;
 
@@ -35,7 +37,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             Vector3 direction = (position - transform.position).normalized;
             float dot = Vector3.Dot(direction, LookDirection);
 
-            return dot > 0.2f;
+            return dot > ACCEPT_FROM_POSITION_MIN_DOT;
         }
 
         public Vector3 GetLookDirection()

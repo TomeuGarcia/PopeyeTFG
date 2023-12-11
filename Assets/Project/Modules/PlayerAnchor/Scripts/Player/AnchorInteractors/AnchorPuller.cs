@@ -12,7 +12,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IPlayerMediator _player;
         private PopeyeAnchor _anchor;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
-        private TransformMotion _anchorMotion;
         private AnchorPullConfig _pullConfig;
 
         private bool _anchorIsBeingPulled;
@@ -23,13 +22,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
-            AnchorTrajectoryMaker anchorTrajectoryMaker, TransformMotion anchorMotion,
+            AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorPullConfig pullConfig)
         {
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
-            _anchorMotion = anchorMotion;
             _pullConfig = pullConfig;
 
             AnchorPullResult = new AnchorThrowResult(_pullConfig.MoveInterpolationCurve);
@@ -54,20 +52,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             AnchorPullResult.Reset(trajectoryPath, pullDirection, Quaternion.identity, Quaternion.identity, 
                 duration, false);
 
+            
             _anchor.SetPulled(AnchorPullResult);
-
             DoPullAnchor(AnchorPullResult).Forget();
         }
         
         private async UniTaskVoid DoPullAnchor(AnchorThrowResult anchorPullResult)
         {
-            /*
-            _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 
-                AnchorPullResult.InterpolationEaseCurve);
-                */
-            
-            _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
-                AnchorPullResult.InterpolationEaseCurve);
+
             
             _anchorIsBeingPulled = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorPullResult.Duration));

@@ -44,42 +44,78 @@ namespace Popeye.Modules.ValueStatSystem
 
             _fullRecoverTimer = new Timer(FullRecoverDuration);
         }
-        
-        
-        public void Spend(int spendAmount)
+
+
+
+        private void DoSpendStart()
         {
             if (_isRestoringStamina)
             {
                 CancelRestoringStamina();
             }
-            
-            _staminaSystem.Spend(spendAmount);
+        }
 
+        private void DoSpendEnd()
+        {
             if (_staminaSystem.HasStaminaLeft())
             {
                 StartRecoverAfterUse();
             }
             else
             {
-                StartRecoverAfterExhaust();   
+                StartRecoverAfterExhaust();
+                InvokeOnValueExhausted();
             }
     
             InvokeOnValueUpdate();
+        }
+        
+        public void Spend(int spendAmount)
+        {
+            DoSpendStart();
+            _staminaSystem.Spend(spendAmount);
+            DoSpendEnd();
         }
     
         public void SpendAll()
         {
-            if (_isRestoringStamina)
+            DoSpendStart();
+            _staminaSystem.SpendAll();
+            DoSpendEnd();
+        }
+
+        private int _progressiveSpendPerSecond = 20;
+        private bool _spendingProgressively;
+
+        public async UniTask SpendProgressively()
+        {
+            _spendingProgressively = true;
+            
+            DoSpendStart();
+            
+            float accomulatedSpendAmount = 0.0f;
+            while (_spendingProgressively && _staminaSystem.HasStaminaLeft())
             {
-                CancelRestoringStamina();
+                while (accomulatedSpendAmount < 1)
+                {
+                    accomulatedSpendAmount += Time.deltaTime * _progressiveSpendPerSecond;
+                    await UniTask.Yield();
+                }
+                
+                int spendAmount = (int)accomulatedSpendAmount;
+                accomulatedSpendAmount -= spendAmount;
+                
+                _staminaSystem.Spend(spendAmount);
+                InvokeOnValueUpdate();
             }
             
-            _staminaSystem.SpendAll();
-            
-            StartRecoverAfterExhaust();
-    
-            InvokeOnValueUpdate();
+            DoSpendEnd();
         }
+        public void StopSpendingProgressively()
+        {
+            _spendingProgressively = false;
+        }
+        
     
     
         public void Restore(int gainAmount)

@@ -12,7 +12,6 @@ namespace Project.Modules.CombatSystem
             {
                 return false;
             }
-
             if (DamageHitIgnoresDamageTarget(damageHit, hitTarget))
             {
                 return false;

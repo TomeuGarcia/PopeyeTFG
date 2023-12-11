@@ -8,6 +8,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
         Thrown,
         Pulled,
         RestingOnFloor,
-        GrabbedBySnapper
+        GrabbedBySnapper,
+        Spinning
     }
 }

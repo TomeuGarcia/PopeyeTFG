@@ -43,6 +43,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 NextState = PlayerStates.DashingTowardsAnchor;
                 return true;
             }
+
+            if (PlayerCanKickAnchor())
+            {
+                NextState = PlayerStates.KickingAnchor;
+                return true;
+            }
             
             if (PlayerCanHeal())
             {
@@ -74,6 +80,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             }
 
             return _blackboard.MovesetInputsController.Dash_Pressed();
+        }
+
+        private bool PlayerCanKickAnchor()
+        {
+            return _blackboard.MovesetInputsController.Kick_Pressed() &&
+                   _blackboard.AnchorMediator.IsRestingOnFloor() && 
+                   _blackboard.PlayerMediator.GetDistanceFromAnchor() < _blackboard.PlayerStatesConfig.AnchorKickDistance;
         }
         
         private bool PlayerCanHeal()
