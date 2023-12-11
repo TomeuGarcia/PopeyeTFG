@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.PlayerController;
+using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
 
 public class PlayerControllerSceneInstaller : MonoBehaviour

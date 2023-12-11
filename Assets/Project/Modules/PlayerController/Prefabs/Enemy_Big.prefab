@@ -1108,12 +1108,12 @@ MonoBehaviour:
   _enemyController: {fileID: 4108343465357452362}
   _rigidbody: {fileID: 4108343465357452364}
   _meshRenderer: {fileID: 4108343464942315911}
-  _maxMoveSpeed: 16
-  _knockbackEffectiveness: 1
   _maxHealth: 50
-  _contactHitDamageAmount: 10
-  _contactHitKnockbackForce: 18
-  _contactHitStunDuration: 0
+  _maxMoveSpeed: 16
+  _contactDamageConfig: {fileID: 11400000, guid: 900850db41e7a2042ad2ee5de1fcaead,
+    type: 2}
+  _knockbackEffectiveness: 1
+  stunTime: 0
 --- !u!114 &4108343465357452361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1148,6 +1148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 4108343465357452364}
   _renderer: {fileID: 4108343464942315911}
+  _useLookInput: 1
   _lookTransform: {fileID: 4108343464695837522}
   _lookSpeed: 800
   _blendWithVelocityDirection: 0
@@ -1589,7 +1590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4108343465811035723}
   - component: {fileID: 4108343465811035722}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
