@@ -9,7 +9,7 @@ namespace Popeye.Modules.Enemies.Components
     public class EnemyHealth : MonoBehaviour, IDamageHitTarget
     {
         private HealthSystem _healthSystem;
-        [SerializeField, Range(0.0f, 100.0f)] private float _maxHealth = 50.0f;
+        [SerializeField, Range(0, 100)] private int _maxHealth = 50;
         [SerializeField] private EnemyVisuals _enemyVisuals;
 
         private IEnemyMediator _mediator;
@@ -32,7 +32,7 @@ namespace Popeye.Modules.Enemies.Components
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            _healthSystem.TakeDamage(damageHit.Damage);
+            int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
             
             if (IsDead())
             {
