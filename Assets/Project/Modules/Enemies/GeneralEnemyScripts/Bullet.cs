@@ -38,7 +38,6 @@ namespace Popeye.Modules.Enemies.Bullets
                 PositioningHelper.Instance.GetDirectionAlignedWithFloor(_transform.position, other.transform.position);
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
             _bullet.Recycle();
-            Debug.Log("Recycle bullet");
         }
 
 

@@ -18,7 +18,7 @@ namespace Popeye.Modules.Enemies
             _enemyConfiguration = enemyConfiguration;
             _enemyConfiguration.Init();
         }
-        public AEnemy Create(string id, Vector3 position, Quaternion initialRotation)
+        public AEnemy Create(Guid id, Vector3 position, Quaternion initialRotation)
         {
             return Object.Instantiate(_enemyConfiguration.GetEnemyPrefabById(id),position,initialRotation);
         }

@@ -9,8 +9,8 @@ namespace Popeye.Modules.Enemies
     {
         protected Transform _attackTarget;
         public Action<AEnemy> OnDeathComplete;
-        [SerializeField] private string _id;
-        public string Id => _id;
+        [SerializeField] private ID _id;
+        public ID Id => _id;
         
 
         public virtual void AwakeInit(Transform attackTarget)

@@ -54,10 +54,10 @@ public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget
 
     private void Update()
     {
-        if (_movesetInputHandler.IsElectricChainAbility_Pressed())
+        /*if (_movesetInputHandler.IsElectricChainAbility_Pressed())
         {
             _anchor.AnchorElectricChain.ToggleElectricMode();
-        }
+        }*/
     }
 
 

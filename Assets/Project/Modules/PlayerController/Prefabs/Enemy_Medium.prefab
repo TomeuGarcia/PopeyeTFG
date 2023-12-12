@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 318675e3015aa2242a1fe1f87f89360f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: medium_spider
+  _id: {fileID: 11400000, guid: 934bb52c6e90d864d823d249f9be0f16, type: 2}
   _stateMachine: {fileID: 4344442727484116637}
   _enemyController: {fileID: 4344442727484116646}
   _rigidbody: {fileID: 4344442727484116641}
@@ -143,6 +143,7 @@ MonoBehaviour:
   _contactDamageConfig: {fileID: 11400000, guid: 900850db41e7a2042ad2ee5de1fcaead,
     type: 2}
   _knockbackEffectiveness: 1
+  stunTime: 0
 --- !u!114 &4344442727484116637
 MonoBehaviour:
   m_ObjectHideFlags: 0

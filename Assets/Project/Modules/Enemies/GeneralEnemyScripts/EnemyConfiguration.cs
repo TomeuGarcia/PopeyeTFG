@@ -10,19 +10,20 @@ namespace Popeye.Modules.Enemies
     public class EnemyConfiguration : ScriptableObject
     {
         [SerializeField] private AEnemy[] _enemies;
-        private Dictionary<string, AEnemy> _idToEnemy;
+        private Dictionary<Guid, AEnemy> _idToEnemy;
 
 
         public void Init()
         {
-            _idToEnemy = new Dictionary<string, AEnemy>();
+            _idToEnemy = new Dictionary<Guid, AEnemy>();
+            
             foreach (var enemy in _enemies)
             {
-                _idToEnemy.Add(enemy.Id, enemy);
+                _idToEnemy.Add(enemy.Id.Id, enemy);
             }
         }
 
-        public AEnemy GetEnemyPrefabById(string id)
+        public AEnemy GetEnemyPrefabById(Guid id)
         {
             AEnemy enemy;
             if (!_idToEnemy.TryGetValue(id, out enemy))
