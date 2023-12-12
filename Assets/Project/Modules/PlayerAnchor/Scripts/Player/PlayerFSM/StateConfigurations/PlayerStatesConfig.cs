@@ -22,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _aimingMoveSpeed = 5.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _throwingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _pullingAnchorMoveSpeed = 0.5f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _kickingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _tiredMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _healingMoveSpeed = 2.5f;
 
@@ -30,6 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float AimingMoveSpeed => _aimingMoveSpeed;
         public float ThrowingAnchorMoveSpeed => _throwingAnchorMoveSpeed;
         public float PullingAnchorMoveSpeed => _pullingAnchorMoveSpeed;
+        public float KickingAnchorMoveSpeed => _kickingAnchorMoveSpeed;
         public float TiredMoveSpeed => _tiredMoveSpeed;
         public float HealingMoveSpeed => _healingMoveSpeed;
         
@@ -38,6 +40,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _anchorPickUpDistance = 2.0f;
         
         public float AnchorPickUpDistance => _anchorPickUpDistance;
+        
+        
+        [Header("ANCHOR KICK")]
+        [SerializeField, Range(0.0f, 20.0f)] private float _anchorKickDistance = 4.0f;
+        
+        public float AnchorKickDistance => _anchorKickDistance;
 
         
         [Header("DASH")]

@@ -14,11 +14,13 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         [SerializeField] private AnchorMotionConfig _anchorMotionConfig;
         [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
         [SerializeField] private AnchorPullConfig _anchorPullConfig;
+        [SerializeField] private AnchorKickConfig _anchorKickConfig;
         
         public ChainConfig ChainConfig => _anchorChainConfig;
         public AnchorDamageConfig DamageConfig => _anchorDamageConfig;
         public AnchorMotionConfig MotionConfig => _anchorMotionConfig;
         public AnchorThrowConfig ThrowConfig => _anchorThrowConfig;
         public AnchorPullConfig PullConfig => _anchorPullConfig;
+        public AnchorKickConfig KickConfig => _anchorKickConfig;
     }
 }

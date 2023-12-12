@@ -19,6 +19,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
             Pulled_AnchorState pulled = new Pulled_AnchorState(blackboard);
             RestingOnFloor_AnchorState restingOnFloor = new RestingOnFloor_AnchorState(blackboard);
             GrabbedBySnapper_AnchorState grabbedBySnapper = new GrabbedBySnapper_AnchorState(blackboard);
+            Spinning_AnchorState spinning = new Spinning_AnchorState(blackboard);
             
             
             _states = new Dictionary<AnchorStates, IAnchorState>()
@@ -28,7 +29,8 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
                 { AnchorStates.Thrown , thrown },
                 { AnchorStates.Pulled , pulled },
                 { AnchorStates.RestingOnFloor , restingOnFloor },
-                { AnchorStates.GrabbedBySnapper , grabbedBySnapper }
+                { AnchorStates.GrabbedBySnapper , grabbedBySnapper },
+                { AnchorStates.Spinning , spinning }
             };
 
             CurrentStateType = AnchorStates.Carried;

@@ -38,12 +38,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         
 
-        [Header("THROW TRAJECTORY BEND")] 
-        [SerializeField, Range(2, 16)] private int _trajectoryBendSharpness = 10;
-
+        [Header("TRAJECTORY OFFSET")]
         [SerializeField] private AnimationCurve _heightDisplacementCurve;
         
-        public int TrajectoryBendSharpness => _trajectoryBendSharpness;
         public AnimationCurve HeightDisplacementCurve => _heightDisplacementCurve;
         
         

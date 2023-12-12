@@ -33,7 +33,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PopeyeAnchor _anchor;
         private IAnchorThrower _anchorThrower;
         private IAnchorPuller _anchorPuller;
+        private IAnchorKicker _anchorKicker;
 
+        private bool _pullingAnchorFromTheVoid;
         
         public Vector3 Position => _playerController.Position;
         
@@ -42,7 +44,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerGeneralConfig playerGeneralConfig, 
             IPlayerView playerView, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
             TransformMotion playerMotion,
-            PopeyeAnchor anchor, IAnchorThrower anchorThrower, IAnchorPuller anchorPuller)
+            PopeyeAnchor anchor, 
+            IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
@@ -54,8 +57,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchor = anchor;
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
+            _anchorKicker = anchorKicker;
+
+            _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
 
+        private void OnDestroy()
+        {
+            _staminaSystem.OnValueExhausted -= OnStaminaExhausted;
+        }
 
         private void Update()
         {
@@ -98,9 +108,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return _playerController.GetFloorAlignedLookDirection();
         }
+
+        public Vector3 GetLookDirectionConsideringSteep()
+        {
+            Vector3 playerLookDirection = GetLookDirection();
+
+            bool isInSteepLookingUp = Vector3.Dot(GetFloorNormal(), playerLookDirection) < 0;
+            return isInSteepLookingUp
+                ? GetFloorAlignedLookDirection()
+                : playerLookDirection;
+        }
+
         public Vector3 GetFloorNormal()
         {
-            return _playerController.ContactNormal;
+            return _playerController.GroundNormal;
         }
 
         public Vector3 GetAnchorThrowStartPosition()
@@ -144,16 +165,27 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorThrower.ThrowAnchor();
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorThrowStaminaCost);
+            
+            _playerView.PlayThrowAnimation();
         }
 
         public void PullAnchor()
         {
             _anchorPuller.PullAnchor();
             LookTowardsAnchorForDuration(0.3f).Forget();
+            
+            _playerView.PlayPullAnimation(0.3f);
         }
 
         public void OnPullAnchorComplete()
         {
+            if (_pullingAnchorFromTheVoid)
+            {
+                _anchor.SetCarried();
+                _pullingAnchorFromTheVoid = false;
+                return;
+            }
+            
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorPullStaminaCost);
             if (HasStaminaLeft())
             {
@@ -167,6 +199,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
 
         public void DashTowardsAnchor(float duration)
+        {
+            LookTowardsAnchorForDuration(duration).Forget();
+            _playerMotion.MoveToPosition(ComputeDashEndPosition(), duration, Ease.InOutQuad);
+            
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
+
+            SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
+            DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
+            
+            _playerView.PlayDashAnimation(duration);
+        }
+
+        private Vector3 ComputeDashEndPosition()
         {
             Vector3 up = Vector3.up;
             Vector3 toAnchor = Vector3.ProjectOnPlane((_anchor.Position - Position).normalized, up);
@@ -187,20 +232,38 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 dashEndPosition += right * snapExtraDisplacement.x;
                 dashEndPosition += up * snapExtraDisplacement.y;
             }
-            
-            LookTowardsAnchorForDuration(duration).Forget();
-            _playerMotion.MoveToPosition(dashEndPosition, duration, Ease.InOutQuad);
-            
-            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
 
-            SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
-            DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
+            return dashEndPosition;
+        }
+        
+
+        public void KickAnchor()
+        {
+            _anchorKicker.KickAnchor();
+            SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorKickStaminaCost);
+
+            _playerView.PlayKickAnimation();
         }
 
+        public async UniTaskVoid StartSpinningAnchor()
+        {
+            _anchor.SetSpinning();
+            
+            await _staminaSystem.SpendProgressively();
+            
+            _anchor.SnapToFloor().Forget();
+        }
+        public void StopSpinningAnchor()
+        {
+            _staminaSystem.StopSpendingProgressively();
+        }
+        
 
-        public void OnAnchorThrowEndedInVoid()
+
+        public void OnAnchorEndedInVoid()
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);
+            _pullingAnchorFromTheVoid = true;
         }
 
         public async UniTaskVoid LookTowardsAnchorForDuration(float duration)
@@ -286,10 +349,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             if (spendAmount == 0) return;
             
             _staminaSystem.Spend(spendAmount);
-            if (!HasStaminaLeft())
-            {
-                EnterTiredState();
-            }
+        }
+
+        private void OnStaminaExhausted()
+        {
+            EnterTiredState();
         }
 
         private void EnterTiredState()

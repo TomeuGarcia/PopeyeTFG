@@ -13,6 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Vector3 GetFloorAlignedDirectionToAnchor();
         public Vector3 GetLookDirection();
         public Vector3 GetFloorAlignedLookDirection();
+        public Vector3 GetLookDirectionConsideringSteep();
         public Vector3 GetFloorNormal();
         public Vector3 GetAnchorThrowStartPosition();
 
@@ -27,9 +28,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PullAnchor();
         public void OnPullAnchorComplete();
         public void DashTowardsAnchor(float duration);
+        public void KickAnchor();
+        public UniTaskVoid StartSpinningAnchor();
+        public void StopSpinningAnchor();
 
 
-        public void OnAnchorThrowEndedInVoid();
+        public void OnAnchorEndedInVoid();
 
 
         public UniTaskVoid LookTowardsAnchorForDuration(float duration);

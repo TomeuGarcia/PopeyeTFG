@@ -53,7 +53,6 @@ namespace Popeye.Modules.PlayerController
         [Header("GROUND")] 
         [SerializeField] private LayerMask _groundProbeMask = -1;
 
-        private Vector3 _groundNormal;
 
         [Tooltip("Used to define ground contacts, not to limit movement slopes (use _maxAirAcceleration for that)")]
         [SerializeField, Range(0.0f, 90.0f)]
@@ -71,7 +70,9 @@ namespace Popeye.Modules.PlayerController
 
         private Vector3 _contactNormal;
         public Vector3 ContactNormal => _contactNormal;
+        public Vector3 GroundNormal { get; private set; }
         private int _groundContactCount;
+
         private bool OnGround => _groundContactCount > 0;
 
         private Vector3 _steepNormal;
@@ -222,28 +223,29 @@ namespace Popeye.Modules.PlayerController
             {
                 return false;
             }
-
+            
+            if (!Physics.Raycast(_rigidbody.position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
+                    _groundProbeMask))
+            {
+                GroundNormal = Vector3.up;
+                return false;
+            }
+            GroundNormal = hit.normal;
+            
+            
             float speed = _velocity.magnitude;
             if (speed > _groundSnapBreakSpeed)
             {
                 return false;
             }
-
-            if (!Physics.Raycast(_rigidbody.position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
-                    _groundProbeMask))
-            {
-                _groundNormal = Vector3.up;
-                return false;
-            }
             
             if (hit.normal.y < GetGroundCollisionMinDot(hit.collider.gameObject.layer))
             {
-                _groundNormal = Vector3.up;
                 return false;
             }
 
             _groundContactCount = 1;
-            _groundNormal = _contactNormal = hit.normal;
+            _contactNormal = hit.normal;
             float dot = Vector3.Dot(_velocity, hit.normal);
             if (dot > 0.0f)
             {
@@ -325,7 +327,7 @@ namespace Popeye.Modules.PlayerController
 
         public Vector3 GetFloorAlignedLookDirection()
         {
-            return ProjectOnPlane(LookDirection, _groundNormal).normalized;
+            return ProjectOnPlane(LookDirection, GroundNormal).normalized;
         }
 
     }

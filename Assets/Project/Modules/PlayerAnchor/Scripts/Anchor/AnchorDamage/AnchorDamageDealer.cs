@@ -18,6 +18,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         private DamageHit _throwDamageHit;
         private DamageHit _pullDamageHit;
+        private DamageHit _kickDamageHit;
 
         public void Configure(AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
             Transform damageStartTransform)
@@ -27,6 +28,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
             _throwDamageHit = new DamageHit(_config.AnchorThrowDamageHit); 
             _pullDamageHit = new DamageHit(_config.AnchorPullDamageHit); 
+            _kickDamageHit = new DamageHit(_config.AnchorKickDamageHit); 
             
             _anchorThrowDamageTrigger.Configure(combatManager, _throwDamageHit);
             _anchorThrowDamageTrigger.Deactivate();
@@ -38,7 +40,24 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void DealThrowDamage(AnchorThrowResult anchorThrowResult)
         {
-            _anchorThrowDamageTrigger.SetDamageHit(_throwDamageHit);
+            DealForwardThrowDamage(anchorThrowResult, _throwDamageHit, _config.ThrowDamageExtraDuration);
+        }
+
+        public void DealPullDamage(AnchorThrowResult anchorPullResult)
+        {
+            DealBackwardThrowDamage(anchorPullResult, _pullDamageHit, _config.PullDamageExtraDuration);
+        }
+        
+        public void DealKickDamage(AnchorThrowResult anchorKickResult)
+        {
+            DealForwardThrowDamage(anchorKickResult, _kickDamageHit, _config.KickDamageExtraDuration);
+        }
+
+        
+        private void DealForwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit, 
+            float extraDurationBeforeDeactivate)
+        {
+            _anchorThrowDamageTrigger.SetDamageHit(damageHit);
             _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
             
             
@@ -47,21 +66,24 @@ namespace Project.Modules.PlayerAnchor.Anchor
             damagePathPoints[0] = _damageStartTransform.position;
             
             DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
-                    anchorThrowResult.Duration, _config.ThrowDamageExtraDuration,
+                    anchorThrowResult.Duration, extraDurationBeforeDeactivate,
                     anchorThrowResult.InterpolationEaseCurve, -1.0f)
                 .Forget();
         }
 
-        public void DealPullDamage(AnchorThrowResult anchorPullResult)
+        private void DealBackwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit,
+            float extraDurationBeforeDeactivate)
         {
-            _anchorThrowDamageTrigger.SetDamageHit(_pullDamageHit);
-            _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorPullResult.Direction);
+            _anchorThrowDamageTrigger.SetDamageHit(damageHit);
+            _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
             
-            DealTrajectoryDamage(anchorPullResult.TrajectoryPathPoints, 
-                    anchorPullResult.Duration, _config.PullDamageExtraDuration,
-                    anchorPullResult.InterpolationEaseCurve, 0.1f)
+            DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
+                    anchorThrowResult.Duration, extraDurationBeforeDeactivate,
+                    anchorThrowResult.InterpolationEaseCurve, 0.1f)
                 .Forget();
         }
+        
+        
         
         private async UniTaskVoid DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
             AnimationCurve ease, float easeThreshold)
