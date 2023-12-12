@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class AnchorHealthDrainer : MonoBehaviour
 {
     [Header("REFERENCES")]
     [SerializeField] private Anchor _anchor;
-    [SerializeField] private AnchorDamageDealer _anchorDamageDealer;
+    [FormerlySerializedAs("_anchorDamageDealer")] [SerializeField] private AnchorDamageDealer_Old anchorDamageDealerOld;
     [SerializeField] private MeshRenderer _anchorMesh;
     private Material _anchorMaterial;
     [SerializeField] private LineRenderer _ownerBinderLine;
     private Material _chainMaterial;
 
     [Header("HEALING")]
-    [SerializeField, Range(0.0f, 100.0f)] private float _healAmount = 10.0f;
+    [SerializeField, Range(0.0f, 100.0f)] private int _healAmount = 10;
     [SerializeField, Range(0.0f, 10.0f)] private float _healDuration = 3.0f;
     private float _healTimer;
     [SerializeField] private AnimationCurve _chargedCurve;
@@ -90,7 +92,7 @@ public class AnchorHealthDrainer : MonoBehaviour
 
     public void IncrementDrainedHealth(float restoreAmount)
     {
-        _staminaSystem.Restore(restoreAmount);
+        _staminaSystem.Restore((int)restoreAmount);
 
         _canHeal = _staminaSystem.HasMaxStamina();
 

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Components
@@ -42,7 +44,7 @@ namespace Popeye.Modules.Enemies.Components
                 _enemyVisuals.OnHitEffects(_healthSystem.CurrentHealth / _healthSystem.MaxHealth);
             }
 
-            return new DamageHitResult(damageHit.Damage);
+            return new DamageHitResult(this, gameObject, receivedDamage);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)

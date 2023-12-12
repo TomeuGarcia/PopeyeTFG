@@ -8,6 +8,7 @@ Shader "Unlit/AreaHit_Shader"
         _WaveFrequency ("Wave Frequency", Range(0, 10)) = 1
         _WaveSharpness("Wave Sharpness", Range(0, 10)) = 1
         _StartTime("Start Time", Range(0, 10)) = 1
+        _WaveDirection("Wave Direction", Range(0, 1)) = 0
         _WaveDuration("Wave Duration", Range(0, 10)) = 1
         _TimeOverwrite("Time Overwrite", Range(-1, 10)) = 1
     }
@@ -43,7 +44,7 @@ Shader "Unlit/AreaHit_Shader"
             float4 _MainTex_ST;
 
             fixed4 _WaveColor;
-            float _WaveSpeed, _WaveFrequency, _WaveSharpness, _WaveDuration;
+            float _WaveDirection, _WaveSpeed, _WaveFrequency, _WaveSharpness, _WaveDuration;
             float _StartTime, _TimeOverwrite;
 
             v2f vert (appdata v)
@@ -62,7 +63,9 @@ Shader "Unlit/AreaHit_Shader"
                 float time = _Time.y - _StartTime + (0.4f * _WaveDuration);
                 time = lerp(_TimeOverwrite, time, step(_TimeOverwrite, -0.1));
 
-                float x = ((i.objectPosition.y * _WaveDuration * _WaveFrequency + time * _WaveSpeed) % _WaveDuration) / _WaveDuration;
+                float waveDirection = lerp(i.objectPosition.y, i.objectPosition.x, _WaveDirection);
+
+                float x = ((waveDirection * _WaveDuration * _WaveFrequency + time * _WaveSpeed) % _WaveDuration) / _WaveDuration;
                 endColor.w = pow(abs(1.0f - x), _WaveSharpness);
 
                 return endColor;

@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
-public class StaticEnemyHealth : MonoBehaviour,IDamageHitTarget
+public class StaticEnemyHealth : MonoBehaviour, IDamageHitTarget
 {
     private HealthSystem _healthSystem;
-    [SerializeField, Range(0.0f, 100.0f)] private float _maxHealth = 50.0f;
+    [SerializeField, Range(0.0f, 100)] private int _maxHealth = 50;
 
     void Awake()
     {

@@ -2,51 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraAxisMovementInput : IMovementInputHandler
+namespace Popeye.Modules.PlayerController.Inputs
 {
-    private Transform _cameraTransform;
-    private InputSystem.PlayerInputControls _playerInputControls;
-
-
-    public CameraAxisMovementInput(Transform cameraTransform)
+    public class CameraAxisMovementInput : IMovementInputHandler
     {
-        _cameraTransform = cameraTransform;
-
-        _playerInputControls = new InputSystem.PlayerInputControls();
-        _playerInputControls.Enable();
-    }
-
-    ~CameraAxisMovementInput()
-    {
-        _playerInputControls.Disable();
-    }
+        private Transform _cameraTransform;
+        private InputSystem.PlayerAnchorInputControls _playerInputControls;
 
 
-    public Vector3 GetMovementInput()
-    {
-        Vector2 movementInput = _playerInputControls.Land.Move.ReadValue<Vector2>();
+        public CameraAxisMovementInput(Transform cameraTransform)
+        {
+            _cameraTransform = cameraTransform;
 
-        return ToCameraAlignedInput(movementInput);
-    }
+            _playerInputControls = new InputSystem.PlayerAnchorInputControls();
+            _playerInputControls.Enable();
+        }
 
-    public Vector3 GetLookInput()
-    {
-        Vector3 lookInput = _playerInputControls.Land.Look.ReadValue<Vector2>();
-
-        return ToCameraAlignedInput(lookInput);
-    }
+        ~CameraAxisMovementInput()
+        {
+            _playerInputControls.Disable();
+        }
 
 
-    private Vector3 ToCameraAlignedInput(Vector2 input)
-    {
-        input = Vector2.ClampMagnitude(input, 1.0f);
+        public Vector3 GetMovementInput()
+        {
+            Vector2 movementInput = _playerInputControls.Land.Move.ReadValue<Vector2>();
 
-        Vector3 result = Vector3.zero;
-        Vector3 forward = Vector3.Cross(_cameraTransform.right, Vector3.up).normalized;
+            return ToCameraAlignedInput(movementInput);
+        }
 
-        result += _cameraTransform.right * input.x;
-        result += forward * input.y;
+        public Vector3 GetLookInput()
+        {
+            Vector3 lookInput = _playerInputControls.Land.Look.ReadValue<Vector2>();
 
-        return result;
+            return ToCameraAlignedInput(lookInput);
+        }
+
+
+        private Vector3 ToCameraAlignedInput(Vector2 input)
+        {
+            input = Vector2.ClampMagnitude(input, 1.0f);
+
+            Vector3 result = Vector3.zero;
+            Vector3 forward = Vector3.Cross(_cameraTransform.right, Vector3.up).normalized;
+
+            result += _cameraTransform.right * input.x;
+            result += forward * input.y;
+
+            return result;
+        }
     }
 }

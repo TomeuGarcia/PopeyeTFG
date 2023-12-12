@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 public class AnchorToggleablePressurePlate : AnchorPressurePlate
@@ -7,10 +8,12 @@ public class AnchorToggleablePressurePlate : AnchorPressurePlate
 
     protected override bool CanBeTriggered(DamageHit damageHit)
     {
+        /*
         if (!_collider.bounds.Contains(damageHit.Position))
         {
             return false;
         }
+        */
 
         return damageHit.Damage > 10;
     }

@@ -2,6 +2,10 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Popeye.Modules.Camera;
+using Popeye.Modules.PlayerController;
+using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget
@@ -19,7 +23,7 @@ public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget
     private Color _defaultMeshColor;
 
     [Header("HEALTH")]
-    [SerializeField, Range(0.0f, 100.0f)] private float _maxHealth = 50.0f;
+    [SerializeField, Range(0.0f, 100.0f)] private int _maxHealth = 50;
     [SerializeField] private ValueStatBar _healthBar;
     private HealthSystem _healthSystem;
 
@@ -80,7 +84,7 @@ public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget
         SetInvulnerableForDuration(1.5f);
         TakeDamageAnimation();
 
-        return new DamageHitResult(receivedDamage);
+        return new DamageHitResult(this, gameObject, receivedDamage);
     }
 
     public bool CanBeDamaged(DamageHit damageHit)
@@ -146,7 +150,7 @@ public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget
         _targetForEnemies.localPosition = Vector3.zero;
     }
 
-    public void Heal(float healAmount)
+    public void Heal(int healAmount)
     {
         _healthSystem.Heal(healAmount);
     }
