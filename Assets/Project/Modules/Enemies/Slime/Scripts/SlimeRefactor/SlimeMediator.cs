@@ -31,6 +31,7 @@ namespace Popeye.Modules.Enemies
 
         public void Init()
         {
+            _enemyVisuals.Configure();
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
             _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);

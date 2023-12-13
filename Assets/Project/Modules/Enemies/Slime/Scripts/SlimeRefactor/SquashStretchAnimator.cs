@@ -13,7 +13,6 @@ namespace Popeye.Modules.Enemies.Components
 {
     public class SquashStretchAnimator : MonoBehaviour, IEnemyAnimator
     {
-        
         private Core.Pool.ObjectPool _objectPool;
         
         [SerializeField] private float _squashAmountY = 0.8f;
@@ -28,25 +27,20 @@ namespace Popeye.Modules.Enemies.Components
 
         protected AEnemyMediator _mediator;
 
-        public void Configure(IEnemyMediator slimeMediator,Transform transform,ObjectPool objectPool)
+        public void Configure(AEnemyMediator slimeMediator, Transform transform, ObjectPool objectPool)
         {
             _mediator = slimeMediator;
             _transform = transform;
             _objectPool = objectPool;
             
         }
-        
-
 
         private void SpawnExplosionParticles()
         {
             var obj = _objectPool.Spawn<PooledParticle>(transform.position,quaternion.identity);
             //obj.Recycle();
         }
-
-
         
-
         private async  UniTaskVoid SquashAndStretch()
         {
             // Squash
@@ -58,6 +52,7 @@ namespace Popeye.Modules.Enemies.Components
            SquashAndStretch();
 
         }
+        
         public void PlayTakeDamage()
         {
             throw new NotImplementedException();

@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfcdb9b799f49ec4a964161b20f98bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slimeMovement: {fileID: 2109834771631650075}
   _enemyHealth: {fileID: 129179429737552354}
+  _enemyVisuals: {fileID: 892496079672398938}
+  _slimeMovement: {fileID: 2109834771631650075}
   _squashStretchAnimator: {fileID: 8784783522602541844}
   _slimeDivider: {fileID: 2067100639111306409}
   _enemyPatrolling: {fileID: 2356680394100086253}
@@ -76,6 +77,7 @@ GameObject:
   - component: {fileID: 2109834771631650075}
   - component: {fileID: 2356680394100086253}
   - component: {fileID: 292460232546019636}
+  - component: {fileID: 892496079672398938}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Enemy
@@ -231,7 +233,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 50
-  _enemyVisuals: {fileID: 6051609206907086381}
 --- !u!114 &2067100639111306409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,3 +314,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damageTargetsOncePerActivation: 0
   _collider: {fileID: 3462995563991828812}
+--- !u!114 &892496079672398938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861768562356960769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63aeec9146340e3499f43c26974aa0b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
+  _originalMeshDatas:
+  - _mesh: {fileID: 2635525039347396959}
+    _originalMaterial: {fileID: 0}

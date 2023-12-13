@@ -32,9 +32,14 @@ namespace Popeye.Modules.Enemies.VFX
             }
         }
 
+        public void Configure()
+        {
+            _originalMeshDatas[0]._mesh.material.SetFloat("_Health", 1.0f);
+        }
+
         public virtual void PlayHitEffects(float healthCoef01)
         {
-            _originalMeshDatas[0]._mesh.material.SetFloat("_Damage", healthCoef01);
+            _originalMeshDatas[0]._mesh.material.SetFloat("_Health", healthCoef01);
 
             FlashEffect();
         }
