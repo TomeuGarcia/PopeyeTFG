@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PositioningHelper : MonoBehaviour
 {
     [SerializeField] private LayerMask _obstaclesLayerMask;
     [SerializeField] private LayerMask _floorLayerMask;
-    [SerializeField, Range(0.0f, 10.0f)] private float _floorProbeDistance = 2.0f;
+    [SerializeField, Range(0.0f, 10.0f)] private float _characterFloorProbeDistance = 2.0f;
+    [SerializeField, Range(0.0f, 10.0f)] private float _floorProbeDistance = 10.0f;
     [SerializeField, Range(0.0f, 1.0f)] private float _skinWidth = 0.01f;
 
+    public LayerMask ObstaclesLayerMask => _obstaclesLayerMask;
+    
+    
     public static PositioningHelper Instance
     {
         get;
@@ -48,7 +53,7 @@ public class PositioningHelper : MonoBehaviour
     {
         Vector3 forward = (goalPosition - startPosition).normalized;
 
-        if (Physics.Raycast(startPosition, Vector3.down, out RaycastHit hit, _floorProbeDistance, _floorLayerMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(startPosition, Vector3.down, out RaycastHit hit, _characterFloorProbeDistance, _floorLayerMask, QueryTriggerInteraction.Ignore))
         {
             forward = Vector3.ProjectOnPlane(forward, hit.normal);
         }
@@ -56,6 +61,24 @@ public class PositioningHelper : MonoBehaviour
         return forward;
     }
 
+
+
+    public bool CheckFloorUnderneath(Vector3 startPosition)
+    {
+        return Physics.Raycast(startPosition, Vector3.down, out RaycastHit hit, _floorProbeDistance,
+            _floorLayerMask, QueryTriggerInteraction.Ignore);
+    }
+    public Vector3 GetFloorPositionUnderneath(Vector3 startPosition)
+    {
+        if (Physics.Raycast(startPosition, Vector3.down, out RaycastHit hit, _floorProbeDistance,
+                _floorLayerMask, QueryTriggerInteraction.Ignore))
+        {
+            return hit.point;
+        }
+        
+        return startPosition;
+    }
+    
 
     private Vector3 GetCollideAndSlideResult(Vector3 startPosition, Vector3 goalPosition, float sphereRadius)
     {

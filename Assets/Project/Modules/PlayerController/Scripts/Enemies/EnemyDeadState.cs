@@ -3,39 +3,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDeadState : IEnemyState
+namespace Popeye.Modules.Enemies.StateMachine
 {
-    private Enemy _enemy;
-
-    public EnemyDeadState(Enemy enemy)
+    public class EnemyDeadState : IEnemyState
     {
-        _enemy = enemy;
-    }
+        private Enemy _enemy;
+
+        public EnemyDeadState(Enemy enemy)
+        {
+            _enemy = enemy;
+        }
 
 
-    protected override void DoEnter()
-    {
-        StartDeathAnimation();
-    }
+        protected override void DoEnter()
+        {
+            StartDeathAnimation();
+        }
 
-    public override void Exit()
-    {
-        
-    }
-    
-    public override void Interrupt()
-    {
-        
-    }
+        public override void Exit()
+        {
 
-    public override bool Update(float deltaTime)
-    {
-        return false;
-    }
+        }
 
-    private void StartDeathAnimation()
-    {
-        _enemy.StartDeathAnimation().Forget();
-    }
+        public override void Interrupt()
+        {
 
+        }
+
+        public override bool Update(float deltaTime)
+        {
+            return false;
+        }
+
+        private void StartDeathAnimation()
+        {
+            _enemy.StartDeathAnimation().Forget();
+        }
+
+    }
 }

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget
@@ -44,15 +45,17 @@ public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget
     {
         OnTakeAnchorHit();
 
-        return new DamageHitResult(0);
+        return new DamageHitResult(this, gameObject, 0);
     }
 
     protected virtual bool CanBeTriggered(DamageHit damageHit)
     {
+        /*
         if (!_collider.bounds.Contains(damageHit.Position))
         {
             return false;
         }
+        */
 
         return !_isTriggered && damageHit.Damage > 10;
     }
