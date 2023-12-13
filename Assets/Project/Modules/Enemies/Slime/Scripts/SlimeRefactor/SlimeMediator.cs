@@ -10,10 +10,9 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Popeye.Modules.Enemies
 {
-    public class SlimeMediator : MonoBehaviour , IEnemyMediator
+    public class SlimeMediator : AEnemyMediator
     {
         [SerializeField] private SlimeMovement _slimeMovement;
-        [SerializeField] private EnemyHealth _enemyHealth;
         [SerializeField] private SquashStretchAnimator _squashStretchAnimator;
         [SerializeField] private SlimeDivider _slimeDivider;
         [SerializeField] private EnemyPatrolling _enemyPatrolling;
@@ -90,17 +89,18 @@ namespace Popeye.Modules.Enemies
             Destroy(gameObject);
         }
 
-        public void OnDeath()
+        public override void OnDeath()
         {
+            base.OnDeath();
             Divide();
         }
 
-        public void OnPlayerClose()
+        public override void OnPlayerClose()
         {
             StartChasing();
         }
 
-        public void OnPlayerFar()
+        public override void OnPlayerFar()
         {
             StartPatrolling();
         }
@@ -115,10 +115,6 @@ namespace Popeye.Modules.Enemies
         {
             _slimeMovement.StopChasing();
             _enemyPatrolling.SetPatrolling(true);
-        }
-        public void OnHit()
-        {
-            //In this case, do nothing
         }
 
         public EnemyPatrolling.PatrolType GetPatrolType()

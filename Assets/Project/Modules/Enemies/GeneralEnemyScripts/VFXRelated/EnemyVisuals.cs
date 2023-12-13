@@ -4,61 +4,65 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class EnemyVisuals : MonoBehaviour
+namespace Popeye.Modules.Enemies.VFX
 {
-    //This is the base script, any unique additions to these
-    //effects must be done by creating a new unique script
-    //that inherits from this one.
-    
-    [System.Serializable]
-    public class OriginalMeshData
+    public class EnemyVisuals : MonoBehaviour
     {
-        public MeshRenderer _mesh;
-        [HideInInspector] public Material _originalMaterial;
-    }
+        //This is the base script, any unique additions to these
+        //effects must be done by creating a new unique script
+        //that inherits from this one.
 
-    [SerializeField] private GeneralEnemyVFXConfig _visualConfig;
-    [SerializeField] [Tooltip("First mesh on the list will be the one that gets 'hurt'")]
-    private List<OriginalMeshData> _originalMeshDatas = new();
-
-    private void Awake()
-    {
-        foreach (var data in _originalMeshDatas)
+        [System.Serializable]
+        public class OriginalMeshData
         {
-            data._originalMaterial = data._mesh.material;
+            public MeshRenderer _mesh;
+            [HideInInspector] public Material _originalMaterial;
         }
-    }
 
-    public virtual void OnHitEffects(float healthCoef)
-    {
-        _originalMeshDatas[0]._mesh.material.SetFloat("_Damage", healthCoef);
-        
-        FlashEffect();
-    }
+        [SerializeField] private GeneralEnemyVFXConfig _visualConfig;
 
-    private async UniTaskVoid FlashEffect() 
-    {
-        foreach (var flash in _visualConfig._flashSequence)
+        [SerializeField] [Tooltip("First mesh on the list will be the one that gets 'hurt'")]
+        private List<OriginalMeshData> _originalMeshDatas = new();
+
+        private void Awake()
         {
             foreach (var data in _originalMeshDatas)
             {
-                data._mesh.material = flash._flashMaterial;
+                data._originalMaterial = data._mesh.material;
             }
-            
-            await UniTask.Delay(TimeSpan.FromSeconds(flash._waitTime));
         }
 
-        foreach (var data in _originalMeshDatas)
+        public virtual void PlayHitEffects(float healthCoef01)
         {
-            for (int i = 0; i < data._mesh.materials.Length; i++)
+            _originalMeshDatas[0]._mesh.material.SetFloat("_Damage", healthCoef01);
+
+            FlashEffect();
+        }
+
+        private async UniTaskVoid FlashEffect()
+        {
+            foreach (var flash in _visualConfig._flashSequence)
             {
-                data._mesh.material = data._originalMaterial;
+                foreach (var data in _originalMeshDatas)
+                {
+                    data._mesh.material = flash._flashMaterial;
+                }
+
+                await UniTask.Delay(TimeSpan.FromSeconds(flash._waitTime));
+            }
+
+            foreach (var data in _originalMeshDatas)
+            {
+                for (int i = 0; i < data._mesh.materials.Length; i++)
+                {
+                    data._mesh.material = data._originalMaterial;
+                }
             }
         }
-    }
-    
-    public virtual void OnDeathEffects()
-    {
-        
+
+        public virtual void PlayDeathEffects()
+        {
+
+        }
     }
 }

@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GeneralEnemyVFXConfig")]
-public class GeneralEnemyVFXConfig : ScriptableObject
+namespace Popeye.Modules.Enemies.VFX
 {
-    [System.Serializable]
-    public class MaterialFlash
+    [CreateAssetMenu(fileName = "GeneralEnemyVFXConfig",
+        menuName = "Popeye/Enemies/VFX/GeneralEnemyVFXConfig")]
+    public class GeneralEnemyVFXConfig : ScriptableObject
     {
-        public Material _flashMaterial;
-        public float _waitTime;
+        [System.Serializable]
+        public class MaterialFlash
+        {
+            public Material _flashMaterial;
+            public float _waitTime;
+        }
+
+        public List<MaterialFlash> _flashSequence = new();
     }
-    
-    public List<MaterialFlash> _flashSequence = new();
 }

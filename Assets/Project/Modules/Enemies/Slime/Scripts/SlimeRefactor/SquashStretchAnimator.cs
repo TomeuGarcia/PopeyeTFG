@@ -22,10 +22,10 @@ namespace Popeye.Modules.Enemies.Components
 
         private Transform _transform;
 
-        protected IEnemyMediator _mediator;
+        protected AEnemyMediator _mediator;
 
 
-        public void Configure(IEnemyMediator slimeMediator,Transform transform)
+        public void Configure(AEnemyMediator slimeMediator,Transform transform)
         {
             _mediator = slimeMediator;
             _transform = transform;
