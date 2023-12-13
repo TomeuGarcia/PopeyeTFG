@@ -10,7 +10,7 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private GameObject _slimeToSpawn;
         [SerializeField] private int _numberOfSlimes;
 
-        protected SlimeMediator _mediator;
+        private SlimeMediator _mediator;
 
 
         public void Configure(SlimeMediator slimeMediator)
@@ -31,10 +31,12 @@ namespace Popeye.Modules.Enemies.Components
                     tempTransform.parent.parent);
 
                 SlimeMediator childSlimeMediator = slimeSpawned.GetComponent<SlimeMediator>();
+                childSlimeMediator.SetObjectPool(_mediator.GetObjectPool());
+                childSlimeMediator.Init();
                 childSlimeMediator.SetSlimeMind(_mediator.slimeMindEnemy);
                 childSlimeMediator.SetPlayerTransform(_mediator.playerTransform);
+                childSlimeMediator.SpawningFromDivision(dir,_mediator.GetPatrolType(),_mediator.GetPatrolWaypoints());
                 
-                childSlimeMediator.SpawningFromDivision(dir);
                 _mediator.AddSlimesToSlimeMindList(childSlimeMediator);
             }
         }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.ValueStatSystem;
+using Project.Modules.CombatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Components
@@ -7,12 +9,12 @@ namespace Popeye.Modules.Enemies.Components
     public class EnemyHealth : MonoBehaviour, IDamageHitTarget
     {
         private HealthSystem _healthSystem;
-        [SerializeField, Range(0.0f, 100.0f)] private float _maxHealth = 50.0f;
+        [SerializeField, Range(0, 100)] private int _maxHealth = 50;
 
-        private IEnemyMediator _mediator;
+        private AEnemyMediator _mediator;
 
 
-        public void Configure(IEnemyMediator slimeMediator)
+        public void Configure(AEnemyMediator slimeMediator)
         {
             _mediator = slimeMediator;
         }
@@ -29,13 +31,18 @@ namespace Popeye.Modules.Enemies.Components
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            _healthSystem.TakeDamage(damageHit.Damage);
+            int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
+            
             if (IsDead())
             {
                 _mediator.OnDeath();
             }
+            else
+            {
+                _mediator.OnHit();
+            }
 
-            return new DamageHitResult(damageHit.Damage);
+            return new DamageHitResult(this, gameObject, receivedDamage);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)
@@ -53,6 +60,9 @@ namespace Popeye.Modules.Enemies.Components
             _healthSystem.IsInvulnerable = isInvulnerable;
         }
 
-
+        public float GetValuePer1Ratio()
+        {
+            return _healthSystem.GetValuePer1Ratio();
+        }
     }
 }

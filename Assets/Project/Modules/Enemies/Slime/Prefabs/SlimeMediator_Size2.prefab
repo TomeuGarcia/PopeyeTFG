@@ -18,9 +18,12 @@ GameObject:
   - component: {fileID: 8865523304329242488}
   - component: {fileID: 7860900730581999901}
   - component: {fileID: 2150481757876597378}
-  m_Layer: 0
+  - component: {fileID: 4482571036909438060}
+  - component: {fileID: 2059279706007714612}
+  - component: {fileID: 6271575732632288993}
+  m_Layer: 11
   m_Name: Slime
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -200,8 +203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004c00fb405efd24d8de45ca5110d94c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionParticles: {fileID: 1313813982915144674, guid: 932a41c67e2ee094db5e22f14adc9c6f,
-    type: 3}
   _squashAmountY: 0.8
   _squashAmountXZ: 1.2
   _stretchAmountY: 1.2
@@ -219,10 +220,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb42af37f8e21c4283df70598facdb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speeedThreshold: {x: 5, y: 6}
   _navMeshAgent: {fileID: 6150467610471333831}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _speeedThreshold: {x: 3, y: 4}
   _spawnForce: 3
   _rb: {fileID: 7348990576285241089}
+--- !u!114 &4482571036909438060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5fe4d03f5d7434db5e2377748142c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _navMeshAgent: {fileID: 6150467610471333831}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _playerDistanceThreshold: 8
+  _wayPointDistanceThreshold: 1
+--- !u!114 &2059279706007714612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce5054a19574d26815f1a5030c2c476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageTargetsOncePerActivation: 0
+  _collider: {fileID: 1351218561991610330}
+--- !u!114 &6271575732632288993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63aeec9146340e3499f43c26974aa0b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
+  _originalMeshDatas:
+  - _mesh: {fileID: 7790051331378039978}
+    _originalMaterial: {fileID: 0}
 --- !u!1 &6668136983467904787
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 312538142261316673}
   - component: {fileID: 4924014901260253396}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SlimeMediator_Size2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,9 +318,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfcdb9b799f49ec4a964161b20f98bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slimeMovement: {fileID: 2150481757876597378}
   _enemyHealth: {fileID: 7406570661138091252}
+  _enemyVisuals: {fileID: 6271575732632288993}
+  _slimeMovement: {fileID: 2150481757876597378}
   _squashStretchAnimator: {fileID: 7860900730581999901}
   _slimeDivider: {fileID: 8865523304329242488}
+  _enemyPatrolling: {fileID: 4482571036909438060}
+  _damageTrigger: {fileID: 2059279706007714612}
+  _contactDamageHitConfig: {fileID: 11400000, guid: 3a4eb30c3fea92e4cb11f299273d17aa,
+    type: 2}
   _boxCollider: {fileID: 1351218561991610330}
+  slimeMindEnemy: {fileID: 0}
   _slimeTransform: {fileID: 6534911457466879058}

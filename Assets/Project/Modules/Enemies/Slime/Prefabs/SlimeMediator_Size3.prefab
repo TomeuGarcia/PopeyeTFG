@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4463041287585602228}
   - component: {fileID: 4735250719613439942}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SlimeMediator_Size3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,11 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfcdb9b799f49ec4a964161b20f98bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slimeMovement: {fileID: 2109834771631650075}
   _enemyHealth: {fileID: 129179429737552354}
+  _enemyVisuals: {fileID: 892496079672398938}
+  _slimeMovement: {fileID: 2109834771631650075}
   _squashStretchAnimator: {fileID: 8784783522602541844}
   _slimeDivider: {fileID: 2067100639111306409}
+  _enemyPatrolling: {fileID: 2356680394100086253}
+  _damageTrigger: {fileID: 292460232546019636}
+  _contactDamageHitConfig: {fileID: 11400000, guid: 3a4eb30c3fea92e4cb11f299273d17aa,
+    type: 2}
   _boxCollider: {fileID: 3462995563991828812}
+  slimeMindEnemy: {fileID: 0}
   _slimeTransform: {fileID: 7378742200920036401}
 --- !u!1 &3861768562356960769
 GameObject:
@@ -69,9 +75,12 @@ GameObject:
   - component: {fileID: 2067100639111306409}
   - component: {fileID: 8784783522602541844}
   - component: {fileID: 2109834771631650075}
-  m_Layer: 0
+  - component: {fileID: 2356680394100086253}
+  - component: {fileID: 292460232546019636}
+  - component: {fileID: 892496079672398938}
+  m_Layer: 11
   m_Name: Slime
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -251,8 +260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004c00fb405efd24d8de45ca5110d94c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionParticles: {fileID: 1313813982915144674, guid: 932a41c67e2ee094db5e22f14adc9c6f,
-    type: 3}
   _squashAmountY: 0.8
   _squashAmountXZ: 1.2
   _stretchAmountY: 1.2
@@ -270,7 +277,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb42af37f8e21c4283df70598facdb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speeedThreshold: {x: 3, y: 5}
   _navMeshAgent: {fileID: 5597591312320529887}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _speeedThreshold: {x: 2, y: 3}
   _spawnForce: 10
   _rb: {fileID: 4821231514884419924}
+--- !u!114 &2356680394100086253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861768562356960769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5fe4d03f5d7434db5e2377748142c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _navMeshAgent: {fileID: 5597591312320529887}
+  _speed: 0
+  _targetDistanceThreshold: 0.5
+  _playerDistanceThreshold: 8
+  _wayPointDistanceThreshold: 1
+--- !u!114 &292460232546019636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861768562356960769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce5054a19574d26815f1a5030c2c476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageTargetsOncePerActivation: 0
+  _collider: {fileID: 3462995563991828812}
+--- !u!114 &892496079672398938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861768562356960769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63aeec9146340e3499f43c26974aa0b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
+  _originalMeshDatas:
+  - _mesh: {fileID: 2635525039347396959}
+    _originalMaterial: {fileID: 0}

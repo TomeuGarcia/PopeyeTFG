@@ -5,35 +5,54 @@ using Popeye.Modules.Enemies.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System.Threading.Tasks;
+using Popeye.Core.Services.ServiceLocator;
+using Project.Modules.CombatSystem;
 using Task = System.Threading.Tasks.Task;
 
 
 namespace Popeye.Modules.Enemies
 {
-    public class SlimeMediator : MonoBehaviour , IEnemyMediator
+    public class SlimeMediator : AEnemyMediator
     {
         [SerializeField] private SlimeMovement _slimeMovement;
-        [SerializeField] private EnemyHealth _enemyHealth;
         [SerializeField] private SquashStretchAnimator _squashStretchAnimator;
         [SerializeField] private SlimeDivider _slimeDivider;
+        [SerializeField] private EnemyPatrolling _enemyPatrolling;
+        [SerializeField] private DamageTrigger _damageTrigger;
+        
+        [SerializeField] private DamageHitConfig _contactDamageHitConfig;
 
         [SerializeField] private BoxCollider _boxCollider;
-        [FormerlySerializedAs("_slimeMindEnemy")] public SlimeMindEnemy slimeMindEnemy;
+        public SlimeMindEnemy slimeMindEnemy;
         public Transform playerTransform { get; private set; }
         [SerializeField] private Transform _slimeTransform;
+        private Transform _particlePoolParent;
+        private Core.Pool.ObjectPool _objectPool;
 
-        private void Awake()
+        public void Init()
         {
+            _enemyVisuals.Configure();
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
-            _squashStretchAnimator.Configure(this,_slimeTransform);
+            _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);
             _slimeDivider.Configure(this);
-            //_slimeMindEnemy = transform.parent.GetComponent<SlimeMindEnemy>();
+            _enemyPatrolling.Configure(this);
+            _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
         }
 
         public void SetSlimeMind(SlimeMindEnemy slimeMind)
         {
             slimeMindEnemy = slimeMind;
+        }
+
+        public void SetObjectPool(Core.Pool.ObjectPool objectPool)
+        {
+            _objectPool = objectPool;
+        }
+
+        public Core.Pool.ObjectPool GetObjectPool()
+        {
+            return _objectPool;
         }
         public void PlayMoveAnimation()
         {
@@ -43,21 +62,26 @@ namespace Popeye.Modules.Enemies
         {
             playerTransform = _playerTransform;
             _slimeMovement.SetTarget(playerTransform);
+            _enemyPatrolling.SetPlayerTransform(playerTransform);
         }
 
+        public void SetWayPoints(Transform[] wayPoints)
+        {
+            _enemyPatrolling.SetWayPoints(wayPoints);
+        }
+       
         public void AddSlimesToSlimeMindList(SlimeMediator mediator)
         {
             slimeMindEnemy.AddSlimeToList();
         }
 
-        public void SpawningFromDivision(Vector3 explosionForceDir)
+        public void SpawningFromDivision(Vector3 explosionForceDir,EnemyPatrolling.PatrolType type,Transform[] wayPoints)
         {
-            ApplyDivisionExplosionForces(explosionForceDir);
+            ApplyDivisionExplosionForces(explosionForceDir,type,wayPoints);
         }
 
-        private async void ApplyDivisionExplosionForces(Vector3 explosionForceDir)
+        private async void ApplyDivisionExplosionForces(Vector3 explosionForceDir,EnemyPatrolling.PatrolType type,Transform[] wayPoints)
         {
-            //TODO: this should be unitask
             _slimeMovement.DeactivateNavigation();
             _squashStretchAnimator.PlayDeath();
             _enemyHealth.SetIsInvulnerable(true);
@@ -69,6 +93,8 @@ namespace Popeye.Modules.Enemies
             _slimeMovement.StopExplosionForce();
             _boxCollider.isTrigger = true;
             _slimeMovement.ActivateNavigation();
+            if(type == EnemyPatrolling.PatrolType.FixedWaypoints){SetWayPoints(wayPoints);}
+            else if (type == EnemyPatrolling.PatrolType.None){StartChasing();}
             PlayMoveAnimation();
             _enemyHealth.SetIsInvulnerable(false);
         }
@@ -82,14 +108,41 @@ namespace Popeye.Modules.Enemies
             Destroy(gameObject);
         }
 
-        public void OnDeath()
+        public override void OnDeath()
         {
+            base.OnDeath();
             Divide();
         }
 
-        public void OnHit()
+        public override void OnPlayerClose()
         {
-            throw new NotImplementedException();
+            StartChasing();
+        }
+
+        public override void OnPlayerFar()
+        {
+            StartPatrolling();
+        }
+
+        public void StartChasing()
+        {
+            _enemyPatrolling.SetPatrolling(false);
+            _slimeMovement.StartChasing();
+        }
+
+        public void StartPatrolling()
+        {
+            _slimeMovement.StopChasing();
+            _enemyPatrolling.SetPatrolling(true);
+        }
+
+        public EnemyPatrolling.PatrolType GetPatrolType()
+        {
+            return _enemyPatrolling.GetPatrolType();
+        }
+        public Transform[] GetPatrolWaypoints()
+        {
+            return _enemyPatrolling.GetWaypoints();
         }
     }
 }
