@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2987820258592884943}
   - component: {fileID: 2711686069890572797}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SlimeMind_Size3
   m_TagString: Untagged
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afd9b1a686da084290a01e3c64c7baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _id: {fileID: 11400000, guid: 18fef207a87485148b6527b8534e2d81, type: 2}
   _startingStartSize: 2
   _sizeToPrefab:
   - size: 0
@@ -56,3 +57,6 @@ MonoBehaviour:
     prefab: {fileID: 578154714784261611, guid: 962946fa0eec59146aa01d79c0208ab7, type: 3}
   _patrolType: 0
   _wayPoints: []
+  _transform: {fileID: 2987820258592884943}
+  _explosionParticles: {fileID: 9072919680269127024, guid: 932a41c67e2ee094db5e22f14adc9c6f,
+    type: 3}

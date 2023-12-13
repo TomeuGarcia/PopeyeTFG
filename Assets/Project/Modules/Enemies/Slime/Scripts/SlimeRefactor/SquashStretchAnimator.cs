@@ -5,13 +5,16 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening;
+using Popeye.Core.Pool;
+using Unity.Mathematics;
+using UnityEngine.Pool;
+
 namespace Popeye.Modules.Enemies.Components
 {
     public class SquashStretchAnimator : MonoBehaviour, IEnemyAnimator
     {
-
-        [SerializeField] private GameObject _explosionParticles;
-
+        private Core.Pool.ObjectPool _objectPool;
+        
         [SerializeField] private float _squashAmountY = 0.8f;
         [SerializeField] private float _squashAmountXZ = 1.2f;
         [SerializeField] private float _stretchAmountY = 1.2f;
@@ -19,27 +22,25 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private float _squashAndStretchTime = 0.5f;
 
         private bool _playAnimation = false;
-
+        
         private Transform _transform;
 
-        protected IEnemyMediator _mediator;
+        protected AEnemyMediator _mediator;
 
-
-        public void Configure(IEnemyMediator slimeMediator,Transform transform)
+        public void Configure(AEnemyMediator slimeMediator, Transform transform, ObjectPool objectPool)
         {
             _mediator = slimeMediator;
             _transform = transform;
+            _objectPool = objectPool;
+            
         }
-        
 
         private void SpawnExplosionParticles()
         {
-            Instantiate(_explosionParticles, transform.position, Quaternion.identity);
+            var obj = _objectPool.Spawn<PooledParticle>(transform.position,quaternion.identity);
+            //obj.Recycle();
         }
-
-
         
-
         private async  UniTaskVoid SquashAndStretch()
         {
             // Squash
@@ -51,6 +52,7 @@ namespace Popeye.Modules.Enemies.Components
            SquashAndStretch();
 
         }
+        
         public void PlayTakeDamage()
         {
             throw new NotImplementedException();

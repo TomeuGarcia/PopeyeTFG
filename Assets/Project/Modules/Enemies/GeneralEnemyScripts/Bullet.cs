@@ -12,46 +12,34 @@ namespace Popeye.Modules.Enemies.Bullets
 {
     public class Bullet : MonoBehaviour
     {
-        [SerializeField] private float _lifeTime;
         [SerializeField] private Transform _transform;
         private Coroutine _destroyBullet;
-        private CancellationTokenSource _cancellationTokenSource;
-        
+
         private DamageHit _contactDamageHit;
         [SerializeField] private DamageHitConfig _contactDamageConfig;
 
         private ICombatManager _combatManager;
         
-        
+        [SerializeField] private PooledBullets _bullet;
+
         private void Start()
         {
             _contactDamageHit = new DamageHit(_contactDamageConfig);
 
             _combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
-            
-            _cancellationTokenSource = new CancellationTokenSource();
-            DestroyBullet();
+
         }
 
         private void OnCollisionEnter(Collision other)
         {
-            _cancellationTokenSource.Cancel();
-            
+
             _contactDamageHit.Position = _transform.position;
-            _contactDamageHit.KnockbackDirection = 
+            _contactDamageHit.KnockbackDirection =
                 PositioningHelper.Instance.GetDirectionAlignedWithFloor(_transform.position, other.transform.position);
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
-            
-            Destroy(gameObject);
+            _bullet.Recycle();
         }
 
 
-        private async UniTaskVoid DestroyBullet()
-        {
-            await UniTask.Delay(TimeSpan.FromSeconds(_lifeTime),
-                cancellationToken: _cancellationTokenSource.Token);
-            
-            Destroy(gameObject);
-        }
     }
 }
