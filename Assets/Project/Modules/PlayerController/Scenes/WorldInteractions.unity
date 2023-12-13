@@ -6050,6 +6050,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &288311013 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2205425778900378741, guid: 0f1cb9433ad699344b8a89276f63dd45,
+    type: 3}
+  m_PrefabInstance: {fileID: 2776512423707741338}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &289247375
 Mesh:
   m_ObjectHideFlags: 0
@@ -35467,6 +35473,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1619028717}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1624003007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1624003008}
+  - component: {fileID: 1624003009}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1624003008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624003007}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.0573702, y: -6.5376773, z: 12.116467}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1624003009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624003007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04efb6c194d04c75a1d1e3870cf202e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1628669145
 Mesh:
   m_ObjectHideFlags: 0
@@ -39362,6 +39412,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3485ecb949feb9e4f8271e2ace35999d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1802162089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288311013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 288311013}
 --- !u!1001 &1804149042
 PrefabInstance:
   m_ObjectHideFlags: 0
