@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 722785323051186180}
   - component: {fileID: 6182259065415056967}
   - component: {fileID: 4305976176017049196}
+  - component: {fileID: -3095006413518802994}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Enemy
@@ -121,9 +122,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lifeTime: 5
   _transform: {fileID: 3779504105842157641}
-  _contactHitDamageAmount: 10
-  _contactHitStunDuration: 0
-  _contactHitKnockbackForce: 18
+  _contactDamageConfig: {fileID: 11400000, guid: c6614f1bb8f4db24d8bc9bee3b1beaf3,
+    type: 2}
+  _bullet: {fileID: -3095006413518802994}
 --- !u!54 &4305976176017049196
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -149,5 +150,19 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &-3095006413518802994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5804595945269757517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe7693c6a3792c4db771564af8ad4a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb: {fileID: 4305976176017049196}
+  _lifeTime: 5

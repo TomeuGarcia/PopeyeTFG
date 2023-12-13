@@ -31,6 +31,7 @@ namespace Popeye.Modules.Enemies.Components
                     tempTransform.parent.parent);
 
                 SlimeMediator childSlimeMediator = slimeSpawned.GetComponent<SlimeMediator>();
+                childSlimeMediator.SetObjectPool(_mediator.GetObjectPool());
                 childSlimeMediator.Init();
                 childSlimeMediator.SetSlimeMind(_mediator.slimeMindEnemy);
                 childSlimeMediator.SetPlayerTransform(_mediator.playerTransform);

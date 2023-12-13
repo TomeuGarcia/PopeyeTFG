@@ -24,6 +24,7 @@ public class TurretHealth : MonoBehaviour, IDamageHitTarget
     public DamageHitResult TakeHitDamage(DamageHit damageHit)
     {
         int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
+        Debug.Log("youyou");
         if (IsDead())
         {   
             //TODO: death feedback
