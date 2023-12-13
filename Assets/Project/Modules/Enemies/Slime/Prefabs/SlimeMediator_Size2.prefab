@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 2150481757876597378}
   - component: {fileID: 4482571036909438060}
   - component: {fileID: 2059279706007714612}
+  - component: {fileID: 6271575732632288993}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Enemy
@@ -256,6 +257,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damageTargetsOncePerActivation: 0
   _collider: {fileID: 1351218561991610330}
+--- !u!114 &6271575732632288993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63aeec9146340e3499f43c26974aa0b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
+  _originalMeshDatas:
+  - _mesh: {fileID: 7790051331378039978}
+    _originalMaterial: {fileID: 0}
 --- !u!1 &6668136983467904787
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,8 +318,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfcdb9b799f49ec4a964161b20f98bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slimeMovement: {fileID: 2150481757876597378}
   _enemyHealth: {fileID: 7406570661138091252}
+  _enemyVisuals: {fileID: 6271575732632288993}
+  _slimeMovement: {fileID: 2150481757876597378}
   _squashStretchAnimator: {fileID: 7860900730581999901}
   _slimeDivider: {fileID: 8865523304329242488}
   _enemyPatrolling: {fileID: 4482571036909438060}

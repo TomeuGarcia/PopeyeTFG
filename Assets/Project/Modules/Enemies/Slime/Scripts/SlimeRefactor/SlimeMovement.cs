@@ -15,10 +15,10 @@ namespace Popeye.Modules.Enemies.Components
         
         private bool _followPlayer = false;
 
-        private IEnemyMediator _mediator;
+        private AEnemyMediator _mediator;
 
 
-        public void Configure(IEnemyMediator slimeMediator)
+        public void Configure(AEnemyMediator slimeMediator)
         {
             _mediator = slimeMediator;
         }
