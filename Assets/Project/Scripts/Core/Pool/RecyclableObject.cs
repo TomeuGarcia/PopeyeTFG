@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Core.Pool
 {
@@ -15,8 +16,10 @@ namespace Popeye.Core.Pool
 
         public void Recycle()
         {
+            if(isActiveAndEnabled)
             _objectPool.RecycleGameObject(this);
         }
+        
         internal abstract void Init();
         internal abstract void Release();
     }

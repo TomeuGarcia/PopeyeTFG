@@ -15,7 +15,7 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private float _wayPointDistanceThreshold;
         private float _squaredWayPointDistanceThreshold;
         private float _squaredPlayerDistanceThreshold;
-        private IEnemyMediator _mediator;
+        private AEnemyMediator _mediator;
         private Vector3 _target;
         private bool _patrolling;
         
@@ -26,7 +26,7 @@ namespace Popeye.Modules.Enemies.Components
             Random
         }
         
-        public void Configure(IEnemyMediator slimeMediator)
+        public void Configure(AEnemyMediator slimeMediator)
         {
             _mediator = slimeMediator;
         }

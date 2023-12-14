@@ -91,7 +91,6 @@ namespace Project.Modules.PlayerAnchor
         private void Install()
         {
             // Services
-            ServiceLocator.Instance.RegisterService<ICombatManager>(new CombatManagerService());
             ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
 
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();

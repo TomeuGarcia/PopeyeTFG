@@ -11,10 +11,10 @@ namespace Popeye.Modules.Enemies.Components
         private HealthSystem _healthSystem;
         [SerializeField, Range(0, 100)] private int _maxHealth = 50;
 
-        private IEnemyMediator _mediator;
+        private AEnemyMediator _mediator;
 
 
-        public void Configure(IEnemyMediator slimeMediator)
+        public void Configure(AEnemyMediator slimeMediator)
         {
             _mediator = slimeMediator;
         }
@@ -32,9 +32,14 @@ namespace Popeye.Modules.Enemies.Components
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
             int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
+            
             if (IsDead())
             {
                 _mediator.OnDeath();
+            }
+            else
+            {
+                _mediator.OnHit();
             }
 
             return new DamageHitResult(this, gameObject, receivedDamage);
@@ -55,6 +60,9 @@ namespace Popeye.Modules.Enemies.Components
             _healthSystem.IsInvulnerable = isInvulnerable;
         }
 
-
+        public float GetValuePer1Ratio()
+        {
+            return _healthSystem.GetValuePer1Ratio();
+        }
     }
 }
