@@ -339,6 +339,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnDamageTaken()
         {
             _playerView.PlayTakeDamageAnimation();
+            SetInvulnerableForDuration(_playerGeneralConfig.InvulnerableDurationAfterHit);
         }
 
         public void OnKilledByDamageTaken()

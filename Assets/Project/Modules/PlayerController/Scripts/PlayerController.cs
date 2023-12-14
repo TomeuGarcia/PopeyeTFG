@@ -173,7 +173,7 @@ namespace Popeye.Modules.PlayerController
             _stepsSinceLastGrounded += 1;
             _velocity = _rigidbody.velocity;
 
-            if (OnGround || CheckSnapToGround() || CheckSteepContacts())
+            if (CheckSnapToGround() || OnGround || CheckSteepContacts())
             {
                 _stepsSinceLastGrounded = 0;
                 if (_groundContactCount > 1)
