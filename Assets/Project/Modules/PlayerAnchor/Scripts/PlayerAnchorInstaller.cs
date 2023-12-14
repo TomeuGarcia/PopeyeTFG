@@ -82,13 +82,12 @@ namespace Project.Modules.PlayerAnchor
         }
 
 
-        private void Awake()
+        private void Start()
         {
-            Install();
             OnValidate();
         }
 
-        private void Install()
+        public void Install()
         {
             // Services
             ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
@@ -144,8 +143,9 @@ namespace Project.Modules.PlayerAnchor
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
                 _playerGeneralConfig.PotionHealAmount);
 
-            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _playerView.Value, playerHealth, 
-                playerStamina, playerMotion, _anchor, anchorThrower, anchorPuller, anchorKicker);
+            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
+                _playerView.Value, playerHealth, playerStamina, playerMotion, 
+                _anchor, anchorThrower, anchorPuller, anchorKicker);
             _playerController.MovementInputHandler = movementInputHandler;
             
             playerStateMachine.Setup(playerStatesBlackboard);

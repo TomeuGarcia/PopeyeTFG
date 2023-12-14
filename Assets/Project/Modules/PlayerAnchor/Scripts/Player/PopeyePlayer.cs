@@ -6,6 +6,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.ValueStatSystem;
 using Project.Modules.PlayerAnchor;
 using Project.Modules.PlayerAnchor.Anchor;
+using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -23,6 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerFSM _stateMachine;
         private PlayerController.PlayerController _playerController;
         private PlayerGeneralConfig _playerGeneralConfig;
+        private AnchorGeneralConfig _anchorGeneralConfig;
 
         private IPlayerView _playerView;
         private PlayerHealth _playerHealth;
@@ -41,7 +43,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
-            PlayerGeneralConfig playerGeneralConfig, 
+            PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
             TransformMotion playerMotion,
             PopeyeAnchor anchor, 
@@ -50,6 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine = stateMachine;
             _playerController = playerController;
             _playerGeneralConfig = playerGeneralConfig;
+            _anchorGeneralConfig = anchorGeneralConfig; 
             _playerView = playerView;
             _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
@@ -93,6 +96,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public float GetDistanceFromAnchor()
         {
             return Vector3.Distance(Position, _anchor.Position);
+        }
+
+        public float GetDistanceFromAnchorRatio01()
+        {
+            return Mathf.Min(1.0f, GetDistanceFromAnchor() / _anchorGeneralConfig.ChainConfig.MaxChainLength);
         }
 
         public Vector3 GetFloorAlignedDirectionToAnchor()
@@ -196,6 +204,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 _anchor.SnapToFloor().Forget();
             }
         }
+        
         
 
         public void DashTowardsAnchor(float duration)
