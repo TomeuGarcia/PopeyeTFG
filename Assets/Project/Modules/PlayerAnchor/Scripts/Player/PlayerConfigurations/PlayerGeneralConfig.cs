@@ -1,6 +1,7 @@
 using System;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.ValueStatSystem;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,7 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
 {
     
     [CreateAssetMenu(fileName = "PlayerGeneralConfig", 
-        menuName = PlayerConfigHelper.SO_ASSETS_PATH + "PlayerGeneralConfig")]
+        menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerGeneralConfig")]
     public class PlayerGeneralConfig : ScriptableObject
     {
         [Header("Health")] 

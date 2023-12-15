@@ -1,11 +1,12 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 {
     [CreateAssetMenu(fileName = "PlayerStatesConfig", 
-        menuName = PlayerConfigHelper.SO_ASSETS_PATH + "PlayerStatesConfig")]
+        menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerStatesConfig")]
     public class PlayerStatesConfig : ScriptableObject
     {
         [Header("SPAWNING")]

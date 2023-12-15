@@ -8,6 +8,8 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
+using Popeye.Modules.Camera.CameraShake;
+using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.ValueStatSystem;
 using Project.Modules.CombatSystem;
@@ -24,6 +26,7 @@ namespace Project.Modules.PlayerAnchor
     {
         [Header("CAMERA")] 
         [SerializeField] private OrbitingCamera _isometricCamera;
+        [SerializeField] private InterfaceReference<ICameraShaker, MonoBehaviour> _cameraShaker;
         
         
         [Space(20)]
@@ -90,8 +93,13 @@ namespace Project.Modules.PlayerAnchor
         public void Install()
         {
             // Services
+            ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(new CameraFunctionalities(
+                new CameraZoomer(_isometricCamera), _cameraShaker.Value));
+            
             ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
-
+            
+            
+            ICameraFunctionalities cameraFunctionalities = ServiceLocator.Instance.GetService<ICameraFunctionalities>();
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
 
             
@@ -124,7 +132,7 @@ namespace Project.Modules.PlayerAnchor
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorView.Value, _anchorDamageDealer, _anchorChain);
+                _anchorPhysics, _anchorView.Value, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
 
             
             

@@ -1,12 +1,13 @@
 using System;
 using Project.Modules.PlayerAnchor.Anchor;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerAnchor.Chain
 {
     [CreateAssetMenu(fileName = "AnchorChainConfig", 
-        menuName = AnchorConfigHelper.SO_ASSETS_PATH + "AnchorChainConfig")]
+        menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorChainConfig")]
     public class ChainConfig : ScriptableObject
     {
         [Header("CHAIN LENGTH")]

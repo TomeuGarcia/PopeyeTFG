@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
 
 namespace Popeye.Modules.Camera
 {
@@ -14,7 +10,7 @@ namespace Popeye.Modules.Camera
         private Vector3 _focusPoint;
         [HideInInspector] public Vector3 focusPointOffset = Vector3.zero;
 
-        [SerializeField, Range(1.0f, 300.0f)] public float _distance;
+        [SerializeField, Range(1.0f, 300.0f)] private float _distance;
         [SerializeField, Range(0.0f, 10.0f)] private float _noFocusRadius;
 
         [SerializeField, Range(0.0f, 1.0f)] private float _stillFocusRecentering = 0.5f;
@@ -26,11 +22,11 @@ namespace Popeye.Modules.Camera
         private Vector3 _lookDirection;
         private Vector3 _lookPosition;
 
+        public float DefaultDistance { get; private set; }
+        public float Distance => _distance;
         public Transform CameraTransform => transform;
-
-        //Testing
-        private bool followPlayer = true;
-
+        public Transform FocusTransform => _focus;
+        
 
         private Vector3 CameraHalfExtends
         {
@@ -49,7 +45,7 @@ namespace Popeye.Modules.Camera
 
         private void Awake()
         {
-            _focusPoint = _focus.position;
+            OnValidate();
         }
 
         private void OnValidate()
@@ -61,6 +57,8 @@ namespace Popeye.Modules.Camera
                 UpdateState();
                 UpdateTransform();
             }
+
+            DefaultDistance = _distance;
         }
 
 
@@ -71,17 +69,7 @@ namespace Popeye.Modules.Camera
 
             CheckCameraObstruction();
 
-            //Testing
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                followPlayer = !followPlayer;
-            }
-
-            if (followPlayer)
-            {
-                //Original
-                UpdateTransform();
-            }
+            UpdateTransform();
         }
 
 
@@ -143,6 +131,12 @@ namespace Popeye.Modules.Camera
             }
         }
 
+        public void SetDistance(float distance)
+        {
+            _distance = distance;
+        }
+        
+        
     }
 }
 

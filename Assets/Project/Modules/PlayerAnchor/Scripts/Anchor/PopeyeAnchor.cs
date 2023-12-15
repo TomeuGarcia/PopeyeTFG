@@ -4,10 +4,15 @@ using System;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Camera;
+using Popeye.Modules.Camera.CameraShake;
+using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.Player;
 using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerAnchor.Anchor
 {
@@ -28,10 +33,15 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public Vector3 Position => _anchorMotion.Position;
 
 
+        private ICameraFunctionalities _cameraFunctionalities;
+        [SerializeField] private CameraZoomInOutConfig _pull_CameraZoomInOut;
+        [SerializeField] private CameraShakeConfig _restOnFloor_CameraShake;
+
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
             AnchorPhysics anchorPhysics, IAnchorView anchorView,
-            AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain)
+            AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain,
+            ICameraFunctionalities cameraFunctionalities)
         {
             _stateMachine = stateMachine;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
@@ -43,6 +53,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorView = anchorView;
             _anchorDamageDealer = anchorDamageDealer;
             _anchorChain = anchorChain;
+
+            _cameraFunctionalities = cameraFunctionalities;
             
             _anchorPhysics.DisableAllPhysics();
             _anchorChain.DisableTension();
@@ -80,6 +92,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 anchorPullResult.InterpolationEaseCurve);
             
             _anchorView.PlayPulledAnimation(anchorPullResult.Duration);
+
+            _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
+
         }
 
         public void SetKicked(AnchorThrowResult anchorKickResult)
@@ -112,6 +127,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
             
             _anchorView.PlayRestOnFloorAnimation();
+            
+            _cameraFunctionalities.CameraShaker.PlayShake(_restOnFloor_CameraShake);
         }
         public void SetGrabbedBySnapper(IAutoAimTarget autoAimTarget)
         {
