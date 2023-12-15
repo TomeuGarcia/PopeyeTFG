@@ -30,6 +30,10 @@ namespace Project.Modules.PlayerAnchor
         {
             _moveTransform.position = position;
         }
+        public void SetLocalPosition(Vector3 position)
+        {
+            _moveTransform.localPosition = position;
+        }
         public void SetRotation(Quaternion rotation)
         {
             _rotateTransform.rotation = rotation;

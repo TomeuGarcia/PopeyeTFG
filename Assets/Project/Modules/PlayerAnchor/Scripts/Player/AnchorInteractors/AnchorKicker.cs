@@ -15,7 +15,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         private AnchorThrowResult AnchorKickResult;
-        private bool _anchorIsBeingKicked;
         
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor,
@@ -61,9 +60,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(anchorThrowResult.LastTrajectoryPathPoint, 
                 Vector3.up, !anchorThrowResult.EndsOnVoid);
             
-            _anchorIsBeingKicked = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
-            _anchorIsBeingKicked = false;
             
             _anchorTrajectoryMaker.HideTrajectoryEndSpot();
 

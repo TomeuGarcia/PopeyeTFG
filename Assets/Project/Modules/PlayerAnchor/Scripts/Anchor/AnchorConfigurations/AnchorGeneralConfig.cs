@@ -1,11 +1,11 @@
 using Project.Modules.PlayerAnchor.Chain;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations
 {
-    
     [CreateAssetMenu(fileName = "AnchorGeneralConfig", 
-        menuName = AnchorConfigHelper.SO_ASSETS_PATH + "AnchorGeneralConfig")]
+        menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorGeneralConfig")]
     public class AnchorGeneralConfig : ScriptableObject
     {
         [Header("OTHER CONFIGURATIONS")]

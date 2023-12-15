@@ -12,13 +12,11 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         
         public void Enter()
         {
-            _blackboard.AnchorPhysics.SetImmovable();
             _blackboard.AnchorChain.EnableTension();
         }
 
         public void Exit()
         {
-            _blackboard.AnchorPhysics.SetMovable();
         }
     }
 }
