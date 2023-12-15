@@ -57,6 +57,15 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""CancelAim"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed4c441a-6c70-436c-adab-52f17a9f49f8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Throw"",
                     ""type"": ""Button"",
                     ""id"": ""78022133-4efb-4377-af08-7b12a37d300e"",
@@ -379,7 +388,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""5a1f3c3d-8e59-46ef-9ca8-de56c32863ed"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -401,7 +410,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""7dfa0d8f-c417-4b72-a5cc-85386756b77e"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -428,6 +437,28 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": ""Desktop"",
                     ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c51dd833-e0b0-4c21-8de9-026e1d15dfd5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""CancelAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5cd0a58c-a0d6-47c7-abb5-c4be184acf17"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""CancelAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -468,6 +499,7 @@ namespace InputSystem
             m_Land_Move = m_Land.FindAction("Move", throwIfNotFound: true);
             m_Land_Look = m_Land.FindAction("Look", throwIfNotFound: true);
             m_Land_Aim = m_Land.FindAction("Aim", throwIfNotFound: true);
+            m_Land_CancelAim = m_Land.FindAction("CancelAim", throwIfNotFound: true);
             m_Land_Throw = m_Land.FindAction("Throw", throwIfNotFound: true);
             m_Land_PickUp = m_Land.FindAction("PickUp", throwIfNotFound: true);
             m_Land_Pull = m_Land.FindAction("Pull", throwIfNotFound: true);
@@ -538,6 +570,7 @@ namespace InputSystem
         private readonly InputAction m_Land_Move;
         private readonly InputAction m_Land_Look;
         private readonly InputAction m_Land_Aim;
+        private readonly InputAction m_Land_CancelAim;
         private readonly InputAction m_Land_Throw;
         private readonly InputAction m_Land_PickUp;
         private readonly InputAction m_Land_Pull;
@@ -551,6 +584,7 @@ namespace InputSystem
             public InputAction @Move => m_Wrapper.m_Land_Move;
             public InputAction @Look => m_Wrapper.m_Land_Look;
             public InputAction @Aim => m_Wrapper.m_Land_Aim;
+            public InputAction @CancelAim => m_Wrapper.m_Land_CancelAim;
             public InputAction @Throw => m_Wrapper.m_Land_Throw;
             public InputAction @PickUp => m_Wrapper.m_Land_PickUp;
             public InputAction @Pull => m_Wrapper.m_Land_Pull;
@@ -575,6 +609,9 @@ namespace InputSystem
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @CancelAim.started += instance.OnCancelAim;
+                @CancelAim.performed += instance.OnCancelAim;
+                @CancelAim.canceled += instance.OnCancelAim;
                 @Throw.started += instance.OnThrow;
                 @Throw.performed += instance.OnThrow;
                 @Throw.canceled += instance.OnThrow;
@@ -606,6 +643,9 @@ namespace InputSystem
                 @Aim.started -= instance.OnAim;
                 @Aim.performed -= instance.OnAim;
                 @Aim.canceled -= instance.OnAim;
+                @CancelAim.started -= instance.OnCancelAim;
+                @CancelAim.performed -= instance.OnCancelAim;
+                @CancelAim.canceled -= instance.OnCancelAim;
                 @Throw.started -= instance.OnThrow;
                 @Throw.performed -= instance.OnThrow;
                 @Throw.canceled -= instance.OnThrow;
@@ -655,6 +695,7 @@ namespace InputSystem
             void OnMove(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
+            void OnCancelAim(InputAction.CallbackContext context);
             void OnThrow(InputAction.CallbackContext context);
             void OnPickUp(InputAction.CallbackContext context);
             void OnPull(InputAction.CallbackContext context);

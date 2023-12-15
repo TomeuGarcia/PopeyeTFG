@@ -15,18 +15,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
+            _blackboard.PlayerMediator.SetCanUseRotateInput(true);
             
             StartChargingThrow();
         }
 
         public override void Exit()
         {
+            _blackboard.PlayerMediator.SetCanUseRotateInput(false);
+            
             StopChargingThrow();
         }
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.Aim_Released())
+            if (_blackboard.MovesetInputsController.CancelAim_Pressed())
             {
                 CancelChargingThrow();
                 NextState = PlayerStates.MovingWithAnchor;

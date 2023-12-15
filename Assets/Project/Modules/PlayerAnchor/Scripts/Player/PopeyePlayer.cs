@@ -62,6 +62,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorPuller = anchorPuller;
             _anchorKicker = anchorKicker;
 
+            SetCanUseRotateInput(false);
+            
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
 
@@ -85,6 +87,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void SetMaxMovementSpeed(float maxMovementSpeed)
         {
             _playerController.MaxSpeed = maxMovementSpeed;
+        }
+
+        public void SetCanUseRotateInput(bool canUseRotateInput)
+        {
+            _playerController.useLookInput = canUseRotateInput;
         }
 
         public void SetCanRotate(bool canRotate)

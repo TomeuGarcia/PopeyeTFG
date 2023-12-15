@@ -8,6 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
 
         public void SetMaxMovementSpeed(float maxMovementSpeed);
+        public void SetCanUseRotateInput(bool canUseRotateInput);
         public void SetCanRotate(bool canRotate);
         public float GetDistanceFromAnchor();
         public float GetDistanceFromAnchorRatio01();

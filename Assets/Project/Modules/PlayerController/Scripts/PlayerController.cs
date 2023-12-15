@@ -23,7 +23,7 @@ namespace Popeye.Modules.PlayerController
 
 
         [Header("LOOK")] 
-        [SerializeField] private bool _useLookInput = true;
+        [SerializeField] public bool useLookInput = true;
         [SerializeField] private Transform _lookTransform;
         [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;
         [SerializeField, Range(0.0f, 1.0f)] private float _blendWithVelocityDirection = 0.0f;
@@ -112,7 +112,7 @@ namespace Popeye.Modules.PlayerController
         private void Update()
         {
             _movementInput = MovementInputHandler.GetMovementInput();
-            _lookInput = _useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero; 
+            _lookInput = useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero; 
 
             _desiredVelocity = _movementInput * _maxSpeed;
 

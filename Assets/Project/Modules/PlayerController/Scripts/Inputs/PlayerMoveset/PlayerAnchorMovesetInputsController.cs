@@ -5,6 +5,7 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly InputSystem.PlayerAnchorInputControls _playerInputControls;
 
         private readonly UnityEngine.InputSystem.InputAction _aim;
+        private readonly UnityEngine.InputSystem.InputAction _cancelAim;
         private readonly UnityEngine.InputSystem.InputAction _throw;
         
         private readonly UnityEngine.InputSystem.InputAction _pickUp;
@@ -32,6 +33,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             _playerInputControls.Enable();
 
             _aim = _playerInputControls.Land.Aim;
+            _cancelAim = _playerInputControls.Land.CancelAim;
+            
             _throw = _playerInputControls.Land.Throw;
             
             _pickUp = _playerInputControls.Land.PickUp;
@@ -60,6 +63,12 @@ namespace Popeye.Modules.PlayerController.Inputs
         public bool Aim_Released()
         {
             return _aim.WasReleasedThisFrame();
+        }
+        
+        
+        public bool CancelAim_Pressed()
+        {
+            return _cancelAim.WasPressedThisFrame();
         }
         
         
