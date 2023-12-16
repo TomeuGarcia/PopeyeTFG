@@ -291,13 +291,28 @@ namespace Popeye.Modules.PlayerController
         private void UpdateMoveDirectionOnLedge()
         {
             bool forwardLedge = CheckIsOnLedge(_movementInput, out Vector3 forwardLedgeNormal);
-            
-            _isOnLedge = forwardLedge;
-            if (_isOnLedge)
+            if (!forwardLedge)
             {
-                Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, forwardLedgeNormal);
-                _movementDirection = projectedMoveDirection.normalized * Mathf.Pow(projectedMoveDirection.magnitude, _ledgeFriction);
+                _isOnLedge = false;
+                return;
             }
+            
+            _isOnLedge = true;
+            Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, forwardLedgeNormal);
+            float projectedMoveMagnitude = projectedMoveDirection.magnitude;
+            projectedMoveDirection.Normalize();
+            
+            
+            bool sideLedge = CheckIsOnLedge(projectedMoveDirection, out Vector3 sideLedgeNormal);
+            if (sideLedge)
+            {
+                projectedMoveDirection -= sideLedgeNormal;
+            }
+            
+            
+            Vector3 correctedMoveDirection = projectedMoveDirection * Mathf.Pow(projectedMoveMagnitude, _ledgeFriction);
+            
+            _movementDirection = correctedMoveDirection;
         }
         
         private bool CheckIsOnLedge(Vector3 probeDirection, out Vector3 ledgeNormal)
