@@ -464,11 +464,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
 
 
-        public Vector3[] ComputeUpAndDownTrajectory(Vector3 startPosition, float distance)
+        public Vector3[] ComputeUpAndDownTrajectory(Vector3 startPosition, float distance, out RaycastHit floorHit)
         {
             Vector3[] upAndDownTrajectory = ComputeBackAndForthTrajectory(startPosition, Vector3.up, distance);
             
-            if (CheckFloorHit(upAndDownTrajectory[^1], 0.1f, FloorProbeDistance, out RaycastHit floorHit, 
+            if (CheckFloorHit(upAndDownTrajectory[^1], 0.1f, FloorProbeDistance, out floorHit, 
                     ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
             {
                 upAndDownTrajectory[^1] = floorHit.point + (floorHit.normal * 0.2f);

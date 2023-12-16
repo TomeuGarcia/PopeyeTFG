@@ -48,8 +48,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _throwConfig = throwConfig;
             _anchorAutoAimController = anchorAutoAimController;
 
-            AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve);
-            AnchorVerticalThrowResult = new AnchorThrowResult(_verticalThrowConfig.MoveInterpolationCurve);
+            AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve,
+                _throwConfig.RotateInterpolationCurve);
+            AnchorVerticalThrowResult = new AnchorThrowResult(_verticalThrowConfig.MoveInterpolationCurve,
+                _verticalThrowConfig.RotateInterpolationCurve);
             
             ResetThrowForce();
             
@@ -130,12 +132,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             float distance = _verticalThrowConfig.MaxThrowDistance;
             float duration = _verticalThrowConfig.MaxThrowMoveDuration;
             
-            Vector3[] throwTrajectory = _anchorTrajectoryMaker.ComputeUpAndDownTrajectory(_anchor.Position, distance);
-            AnchorVerticalThrowResult.Reset(throwTrajectory, Vector3.up, 
-                _verticalThrowStartRotation, _verticalThrowEndRotation, 
-                duration, false);
+            Vector3[] throwTrajectory = _anchorTrajectoryMaker.ComputeUpAndDownTrajectory(_anchor.Position, distance,
+                out RaycastHit floorHit);
             
-            _anchor.SetThrown(AnchorVerticalThrowResult);
+            AnchorVerticalThrowResult.Reset(throwTrajectory, Vector3.up, 
+                _verticalThrowStartRotation, _verticalThrowEndRotation, duration, false);
+            
+            _anchor.SetThrownVertically(AnchorVerticalThrowResult, floorHit);
             DoThrowAnchor(AnchorVerticalThrowResult).Forget();
         }
 

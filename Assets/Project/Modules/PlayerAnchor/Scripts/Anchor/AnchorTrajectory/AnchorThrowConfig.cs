@@ -35,7 +35,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         [Header("MOVEMENT")] 
         [SerializeField] private AnimationCurve _moveInterpolationCurve;
-        public AnimationCurve MoveInterpolationCurve => _moveInterpolationCurve;
+        [SerializeField] private AnimationCurve _rotateInterpolationCurve;
+        
+        public AnimationCurve MoveInterpolationCurve => _moveInterpolationCurve;        
+        public AnimationCurve RotateInterpolationCurve => _rotateInterpolationCurve;
         
         
 

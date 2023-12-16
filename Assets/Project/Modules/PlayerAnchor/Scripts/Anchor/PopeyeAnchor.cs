@@ -71,14 +71,28 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
             _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
-                anchorThrowResult.InterpolationEaseCurve);
+                anchorThrowResult.MoveEaseCurve);
             _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
-                anchorThrowResult.Duration, anchorThrowResult.InterpolationEaseCurve);
+                anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
             
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
         }
+        
+        public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
+            _anchorDamageDealer.DealVerticalLandDamage(anchorThrowResult);
+            
+            _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
+                anchorThrowResult.MoveEaseCurve);
+            _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
+                anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
+            
+            _anchorView.PlayVerticalHitAnimation(anchorThrowResult.Duration, floorHit).Forget();
+        }
+        
         
         public void SetPulled(AnchorThrowResult anchorPullResult)
         {
@@ -90,7 +104,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 AnchorPullResult.InterpolationEaseCurve);
             */
             _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
-                anchorPullResult.InterpolationEaseCurve);
+                anchorPullResult.MoveEaseCurve);
             
             _anchorView.PlayPulledAnimation(anchorPullResult.Duration);
 
@@ -104,9 +118,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorDamageDealer.DealKickDamage(anchorKickResult);
             
             _anchorMotion.MoveAlongPath(anchorKickResult.TrajectoryPathPoints, anchorKickResult.Duration, 
-                anchorKickResult.InterpolationEaseCurve);
+                anchorKickResult.MoveEaseCurve);
             _anchorMotion.RotateStartToEnd(anchorKickResult.StartLookRotation,anchorKickResult.EndLookRotation, 
-                anchorKickResult.Duration, anchorKickResult.InterpolationEaseCurve);
+                anchorKickResult.Duration, anchorKickResult.RotateEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
             

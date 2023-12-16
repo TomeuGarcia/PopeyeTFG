@@ -13,12 +13,16 @@ namespace Project.Modules.PlayerAnchor.Anchor
     {
         private AnchorDamageConfig _config;
         private Transform _damageStartTransform;
+        
         private TransformMotion _damageTriggerMotion;
         [SerializeField] private DamageTrigger _anchorThrowDamageTrigger;
+        
+        [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
 
         private DamageHit _throwDamageHit;
         private DamageHit _pullDamageHit;
         private DamageHit _kickDamageHit;
+        private DamageHit _verticalLandDamageHit;
 
         public void Configure(AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
             Transform damageStartTransform)
@@ -29,12 +33,22 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _throwDamageHit = new DamageHit(_config.AnchorThrowDamageHit); 
             _pullDamageHit = new DamageHit(_config.AnchorPullDamageHit); 
             _kickDamageHit = new DamageHit(_config.AnchorKickDamageHit); 
+            _verticalLandDamageHit = new DamageHit(_config.AnchorVerticalLandDamageHit); 
             
             _anchorThrowDamageTrigger.Configure(combatManager, _throwDamageHit);
             _anchorThrowDamageTrigger.Deactivate();
+            
+            _anchorVerticalLandDamageTrigger.Configure(combatManager, _verticalLandDamageHit);
+            _anchorVerticalLandDamageTrigger.Deactivate();
+            _anchorVerticalLandDamageTrigger.OnBeforeDamageDealt += SetPushAwayFromOriginKnockback;
 
             _damageTriggerMotion = new TransformMotion();
             _damageTriggerMotion.Configure(_anchorThrowDamageTrigger.transform);
+        }
+
+        private void OnDestroy()
+        {
+            _anchorVerticalLandDamageTrigger.OnBeforeDamageDealt -= SetPushAwayFromOriginKnockback;
         }
 
 
@@ -67,7 +81,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
                     anchorThrowResult.Duration, extraDurationBeforeDeactivate,
-                    anchorThrowResult.InterpolationEaseCurve, -1.0f)
+                    anchorThrowResult.MoveEaseCurve, -1.0f)
                 .Forget();
         }
 
@@ -79,7 +93,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
                     anchorThrowResult.Duration, extraDurationBeforeDeactivate,
-                    anchorThrowResult.InterpolationEaseCurve, 0.1f)
+                    anchorThrowResult.MoveEaseCurve, 0.1f)
                 .Forget();
         }
         
@@ -114,11 +128,42 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return t;
         }
 
-
-        private void PullDamageHitTarget(IDamageHitTarget damageHitTarget)
+        
+        
+        public void DealVerticalLandDamage(AnchorThrowResult anchorThrowResult)
         {
+            _anchorVerticalLandDamageTrigger.SetDamageHit(_verticalLandDamageHit);
+            _anchorVerticalLandDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
             
+            DealLandHitDamage(anchorThrowResult.TrajectoryPathPoints, 
+                    anchorThrowResult.Duration, _config.VerticalLandDamageExtraDuration,
+                    anchorThrowResult.MoveEaseCurve, 0.6f)
+                .Forget();
         }
+        
+        private async UniTaskVoid DealLandHitDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
+            AnimationCurve ease, float easeThreshold)
+        {
+            var wait = await WaitUntilEase(ease, duration, easeThreshold);
+            
+            _anchorVerticalLandDamageTrigger.transform.position = trajectoryPoints[^1];
+            
+            _anchorVerticalLandDamageTrigger.Activate();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
+            await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));
+            _anchorVerticalLandDamageTrigger.Deactivate();
+        }
+
+
+
+        private void SetPushAwayFromOriginKnockback(DamageTrigger damageTrigger, GameObject tryHitObject)
+        {
+            Vector3 pushDirection = tryHitObject.transform.position - damageTrigger.Position;
+            pushDirection = Vector3.ProjectOnPlane(pushDirection, Vector3.up).normalized;
+            
+            damageTrigger.UpdateDamageKnockbackDirection(pushDirection);
+        }
+        
         
     }
 }
