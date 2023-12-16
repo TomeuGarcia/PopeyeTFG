@@ -19,7 +19,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                             AimingThrowAnchor_PlayerState aimingThrowAnchor,
                             ThrowingAnchor_PlayerState throwingAnchor,
                             Healing_PlayerState healing,
-                            KickingAnchor_PlayerState kickingAnchor)
+                            KickingAnchor_PlayerState kickingAnchor,
+                            DashingDroppingAnchor_PlayerState dashingDroppingAnchor)
         {
             _states = new Dictionary<PlayerStates, APlayerState>()
             {
@@ -27,7 +28,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 { PlayerStates.AimingThrowAnchor , aimingThrowAnchor },
                 { PlayerStates.ThrowingAnchor , throwingAnchor },
                 { PlayerStates.Healing , healing },
-                { PlayerStates.KickingAnchor , kickingAnchor }
+                { PlayerStates.KickingAnchor , kickingAnchor },
+                { PlayerStates.DashingDroppingAnchor , dashingDroppingAnchor }
             };
 
         }

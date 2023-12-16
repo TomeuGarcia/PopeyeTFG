@@ -31,6 +31,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 = new AimingThrowAnchor_PlayerState(blackboard);
             ThrowingAnchor_PlayerState throwingAnchor 
                 = new ThrowingAnchor_PlayerState(blackboard);
+            DashingDroppingAnchor_PlayerState dashingDroppingAnchor
+                = new DashingDroppingAnchor_PlayerState(blackboard);
 
             MovingWithoutAnchor_PlayerState movingWithoutAnchor 
                 = new MovingWithoutAnchor_PlayerState(blackboard);
@@ -53,7 +55,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 = new Healing_PlayerState(blackboard, PlayerStates.MovingWithoutAnchor);
             
             
-            withAnchorState.Setup(movingWithAnchor, aimingThrowAnchor, throwingAnchor, healingWithAnchor, kickingAnchor);
+            withAnchorState.Setup(movingWithAnchor, aimingThrowAnchor, throwingAnchor, healingWithAnchor, kickingAnchor,
+                dashingDroppingAnchor);
             withoutAnchorState.Setup(movingWithoutAnchor, pickingUpAnchor, dashingTowardsAnchor, kickingAnchor, 
                 pullingAnchor, spinningAnchor, tired, healingWithoutAnchor);
 

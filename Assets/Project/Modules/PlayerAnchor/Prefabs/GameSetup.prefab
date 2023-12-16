@@ -1212,6 +1212,8 @@ MonoBehaviour:
   _playerHealthBehaviour: {fileID: 3583702817184964705}
   _playerGeneralConfig: {fileID: 11400000, guid: 20f5b37d2810b164385c918e8b4a4e59,
     type: 2}
+  _obstacleProbingConfig: {fileID: 11400000, guid: 5bb6f204002b53c4285d1fe069175e3e,
+    type: 2}
   _anchor: {fileID: 4028204052046435817}
   _anchorPhysics: {fileID: 7653452814856030824}
   _anchorView:
@@ -1584,6 +1586,7 @@ MonoBehaviour:
   _ledgeProbeForwardDisplacement: 0.6
   _ledgeGroundProbeDistance: 2
   _maxLedgeGroundAngle: 40
+  _ledgeFriction: 1
 --- !u!114 &3583702817184964705
 MonoBehaviour:
   m_ObjectHideFlags: 0

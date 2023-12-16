@@ -30,6 +30,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
 
+            if (PlayerCanDash())
+            {
+                NextState = PlayerStates.DashingDroppingAnchor;
+                return true;
+            }
+            
             if (PlayerCanHeal())
             {
                 NextState = PlayerStates.Healing;
@@ -43,6 +49,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private bool PlayerCanThrowAnchor()
         {
             return _blackboard.MovesetInputsController.Throw_Pressed();
+        }
+
+        private bool PlayerCanDash()
+        {
+            return _blackboard.MovesetInputsController.Dash_Pressed();
         }
 
         private bool PlayerCanHeal()

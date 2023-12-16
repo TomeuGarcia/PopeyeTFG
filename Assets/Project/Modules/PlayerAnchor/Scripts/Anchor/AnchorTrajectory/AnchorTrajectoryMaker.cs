@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
@@ -10,12 +11,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
     {
         private Vector3[] _straightLineTrajectoryPoints;
         private Vector3[] _curvedTrajectoryPoints;
-        private AnchorThrowConfig _throwConfig;
-        private LayerMask AutoTargetLayerMask => _throwConfig.AutoTargetLayerMask;
-        private LayerMask ObstaclesLayerMask => _throwConfig.ObstaclesLayerMask;
-        private AnimationCurve HeightOffsetCurve => _throwConfig.HeightDisplacementCurve;
-        private float FloorProbeDistance => _throwConfig.HeightToConsiderFloor;
-        private float FloorDotThreshold => _throwConfig.MaxSteepDotToConsiderFloor;
+        
+        private ObstacleProbingConfig _obstacleProbingConfig;
+        private LayerMask AutoTargetLayerMask => _obstacleProbingConfig.AutoTargetLayerMask;
+        private LayerMask ObstaclesLayerMask => _obstacleProbingConfig.ObstaclesLayerMask;
+        private float FloorProbeDistance => _obstacleProbingConfig.HeightToConsiderFloor;
+        private float FloorDotThreshold => _obstacleProbingConfig.MaxSteepDotToConsiderFloor;
         
         
         
@@ -30,11 +31,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public bool drawDebugLines = false;
         
         public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
-            AnchorThrowConfig anchorThrowConfig, AnchorPullConfig anchorPullConfig,
+            ObstacleProbingConfig obstacleProbingConfig, AnchorPullConfig anchorPullConfig,
             LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3)
         {
             _trajectoryEndSpot = trajectoryEndSpot;
-            _throwConfig = anchorThrowConfig;
+            _obstacleProbingConfig = obstacleProbingConfig;
             _anchorPullConfig = anchorPullConfig;
 
             _trajectoryEndSpot.Hide();
@@ -160,8 +161,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             {
                 if (autoAimTarget.CanBeAimedFromPosition(startPosition))
                 {
-                    MakeAutoTargetTrajectory(_curvedTrajectoryPoints, startPosition, floorNormal, out trajectoryDistance,
-                        autoAimTarget);
+                    MakeAutoTargetTrajectory(_curvedTrajectoryPoints, startPosition, floorNormal, heightOffsetCurve,
+                        out trajectoryDistance, autoAimTarget);
                     
                     validAutoAimTarget = true;
                     trajectoryEndsOnTheFloor = true;
@@ -361,7 +362,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
 
         private void MakeAutoTargetTrajectory(Vector3[] trajectoryPoints, Vector3 startPosition, Vector3 floorNormal, 
-            out float trajectoryDistance, IAutoAimTarget autoAimTarget)
+            AnimationCurve heightOffsetCurve, out float trajectoryDistance, IAutoAimTarget autoAimTarget)
         {
             Vector3 autoAimTargetPosition = autoAimTarget.GetAimLockPosition();
             Vector3 startToAutoAim = autoAimTargetPosition - startPosition;
@@ -370,7 +371,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             float distance = projectedStartToAutoAim.magnitude;
                 
             MakeCurvedTrajectory(trajectoryPoints, startPosition, 
-                direction, distance, floorNormal, HeightOffsetCurve, out trajectoryDistance);
+                direction, distance, floorNormal, heightOffsetCurve, out trajectoryDistance);
             RemakeTrajectoryEnd(trajectoryPoints, autoAimTargetPosition, 
                 trajectoryDistance, out trajectoryDistance);
         }
@@ -461,6 +462,56 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
             return cappedCurvedTrajectoryPoints;
         }
+
+
+        public Vector3[] ComputeUpAndDownTrajectory(Vector3 startPosition, float distance)
+        {
+            Vector3[] upAndDownTrajectory = ComputeBackAndForthTrajectory(startPosition, Vector3.up, distance);
+            
+            if (CheckFloorHit(upAndDownTrajectory[^1], 0.1f, FloorProbeDistance, out RaycastHit floorHit, 
+                    ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                upAndDownTrajectory[^1] = floorHit.point + (floorHit.normal * 0.2f);
+            }
+
+            return upAndDownTrajectory;
+        }
+
+        private Vector3[] ComputeBackAndForthTrajectory(Vector3 startPosition, Vector3 direction, float distance,
+            int numberOfSteps = 3)
+        {
+            if (numberOfSteps < 3)
+            {
+                throw new Exception("numberOfSteps must be greater than 2");
+            }
+
+            if (numberOfSteps % 2 == 0)
+            {
+                ++numberOfSteps;
+            }
+
+            
+            Vector3[] backAndForthTrajectory = new Vector3[numberOfSteps];
+            int halfNumberOfSteps = numberOfSteps / 2;
+            float distancePerStep = distance / halfNumberOfSteps;
+
+            backAndForthTrajectory[0] = startPosition;
+            for (int i = 1; i < halfNumberOfSteps; ++i)
+            {
+                backAndForthTrajectory[i] = startPosition + (direction * distancePerStep);
+            }
+            
+            Vector3 furthestPoint = startPosition + (direction * distance);
+            backAndForthTrajectory[halfNumberOfSteps] = furthestPoint;
+            
+            for (int i = halfNumberOfSteps + 1; i < numberOfSteps; ++i)
+            {
+                backAndForthTrajectory[i] = furthestPoint - (direction * distancePerStep);
+            }
+            
+            return backAndForthTrajectory;
+        }
+        
         
     }
 }

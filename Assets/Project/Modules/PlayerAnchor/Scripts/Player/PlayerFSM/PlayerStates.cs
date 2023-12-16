@@ -12,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         MovingWithAnchor,
         AimingThrowAnchor,
         ThrowingAnchor,
+        DashingDroppingAnchor,
         
         MovingWithoutAnchor,
         PickingUpAnchor,

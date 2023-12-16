@@ -31,6 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private TimeStaminaSystem _staminaSystem;
         
         private TransformMotion _playerMotion;
+        private PlayerDasher _playerDasher;
         
         private PopeyeAnchor _anchor;
         private IAnchorThrower _anchorThrower;
@@ -45,7 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
-            TransformMotion playerMotion,
+            TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker)
         {
@@ -57,6 +58,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
             _playerMotion = playerMotion;
+            _playerDasher = playerDasher;
             _anchor = anchor;
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
@@ -76,7 +78,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _stateMachine.Update(Time.deltaTime);
         }
-
 
         private void ResetAnchor()
         {
@@ -214,10 +215,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
 
-        public void DashTowardsAnchor(float duration)
+        public async UniTask DashTowardsAnchor()
         {
+            float duration = Mathf.Lerp(_playerGeneralConfig.StatesConfig.MinDashDuration, 
+                                        _playerGeneralConfig.StatesConfig.MaxDashDuration,
+                                        GetDistanceFromAnchorRatio01());
+            
             LookTowardsAnchorForDuration(duration).Forget();
-            _playerMotion.MoveToPosition(ComputeDashEndPosition(), duration, Ease.InOutQuad);
+            _playerDasher.DashTowardsAnchor(duration);
             
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
 
@@ -225,33 +230,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
             DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
             
             _playerView.PlayDashAnimation(duration);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }
 
-        private Vector3 ComputeDashEndPosition()
+        public async UniTask DashForward()
         {
-            Vector3 up = Vector3.up;
-            Vector3 toAnchor = Vector3.ProjectOnPlane((_anchor.Position - Position).normalized, up);
-            Vector3 right = Vector3.Cross(toAnchor, up).normalized;
-
-            Vector3 dashExtraDisplacement = _playerGeneralConfig.MovesetConfig.DashExtraDisplacement;
+            float duration = _playerGeneralConfig.StatesConfig.MaxRollDuration;
             
-            Vector3 extraDisplacement = toAnchor * dashExtraDisplacement.z;
-            extraDisplacement += right * dashExtraDisplacement.x;
-            extraDisplacement += up * dashExtraDisplacement.y;
+            _playerDasher.DashForward(duration, out float distanceChangeRatio01);
+            duration *= distanceChangeRatio01;
+            
+            SpendStamina(_playerGeneralConfig.MovesetConfig.RollStaminaCost);
+            
+            _anchorThrower.ThrowAnchorVertically();
 
-            Vector3 dashEndPosition = _anchor.GetDashEndPosition() + extraDisplacement;
-
-            if (_anchor.IsGrabbedBySnapper())
-            {
-                Vector3 snapExtraDisplacement = _playerGeneralConfig.MovesetConfig.SnapExtraDisplacement;
-                dashEndPosition += toAnchor * snapExtraDisplacement.z;
-                dashEndPosition += right * snapExtraDisplacement.x;
-                dashEndPosition += up * snapExtraDisplacement.y;
-            }
-
-            return dashEndPosition;
+            float invulnerableDuration = _playerGeneralConfig.StatesConfig.RollInvulnerableDuration * distanceChangeRatio01;
+            SetInvulnerableForDuration(invulnerableDuration);
+            DropTargetForEnemies(invulnerableDuration).Forget();
+            
+            _playerView.PlayDashAnimation(duration);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }
-        
 
         public void KickAnchor()
         {
@@ -298,7 +299,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void Respawn()
         {
-            _playerMotion.MoveToPosition(_playerRespawner.RespawnPosition, 0.01f);  
+            _playerMotion.SetPosition(_playerRespawner.RespawnPosition);  
             _playerHealth.HealToMax();
             ResetAnchor();
         }

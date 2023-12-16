@@ -36,6 +36,7 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
+        [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
        
         
         
@@ -116,12 +117,13 @@ namespace Project.Modules.PlayerAnchor
             
             
             anchorMotion.Configure(_anchorMoveTransform);
-            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  _anchorGeneralConfig.ThrowConfig, 
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
+                _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
                 anchorAutoAimController);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
-            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.PullConfig,
-                debugLine, debugLine2, debugLine3);
+            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
+                _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, _anchorChain, 
                 _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
@@ -144,15 +146,17 @@ namespace Project.Modules.PlayerAnchor
             PlayerFSM playerStateMachine = new PlayerFSM();
             TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
+            PlayerDasher playerDasher = new PlayerDasher();
             
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
                 _playerGeneralConfig.PotionHealAmount);
+            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, _obstacleProbingConfig);
 
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                _playerView.Value, playerHealth, playerStamina, playerMotion, 
+                _playerView.Value, playerHealth, playerStamina, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker);
             _playerController.MovementInputHandler = movementInputHandler;
             

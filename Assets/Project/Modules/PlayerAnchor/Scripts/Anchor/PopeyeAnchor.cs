@@ -79,6 +79,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
         }
+        
         public void SetPulled(AnchorThrowResult anchorPullResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
@@ -210,15 +211,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }
-
-
-        public Vector3 GetDashEndPosition()
-        {
-            Vector3 dashEndPosition = Position;
-            
-            return dashEndPosition;
-        }
-
         
     }
 }

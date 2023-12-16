@@ -76,7 +76,6 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 90.0f)] private float _maxLedgeGroundAngle = 40.0f;
         [SerializeField, Range(0.0f, 10.0f)] private float _ledgeFriction = 1.0f;
         private float _minLedgeDotProduct;
-        private bool _isOnLedge;
         
 
         private Vector3 _contactNormal;
@@ -293,11 +292,9 @@ namespace Popeye.Modules.PlayerController
             bool forwardLedge = CheckIsOnLedge(_movementInput, out Vector3 forwardLedgeNormal);
             if (!forwardLedge)
             {
-                _isOnLedge = false;
                 return;
             }
             
-            _isOnLedge = true;
             Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, forwardLedgeNormal);
             float projectedMoveMagnitude = projectedMoveDirection.magnitude;
             projectedMoveDirection.Normalize();
@@ -337,25 +334,6 @@ namespace Popeye.Modules.PlayerController
             }
             
             return true;
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = _isOnLedge ? Color.red : Color.green;
-            Vector3 origin = _rigidbody.position + (LookDirection * _ledgeProbeForwardDisplacement);
-            Vector3 to = origin + (Vector3.down * _ledgeGroundProbeDistance);
-            Gizmos.DrawLine(origin, to);
-            
-            Gizmos.color = Color.blue;
-            bool isOnLedge = CheckIsOnLedge(_movementInput, out Vector3 ledgeNormal);
-            if (isOnLedge)
-            {
-                Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, ledgeNormal);
-                Gizmos.DrawLine(origin, origin + projectedMoveDirection);
-                
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawLine(origin, origin + ledgeNormal);
-            }
         }
 
         private Vector3 ProjectOnContactPlane(Vector3 vector)
