@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerController
 {
@@ -11,6 +13,7 @@ namespace Popeye.Modules.PlayerController
         public IMovementInputHandler MovementInputHandler { get; set; }
         private Vector3 _movementInput;
         private Vector3 _lookInput;
+        private Vector3 _movementDirection;
 
         [Header("COMPONENTS")] 
         [SerializeField] private Rigidbody _rigidbody;
@@ -28,7 +31,6 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;
         [SerializeField, Range(0.0f, 1.0f)] private float _blendWithVelocityDirection = 0.0f;
         public Vector3 LookDirection => _lookTransform.forward;
-        public Vector3 ReverseLookDirection => -_lookTransform.forward;
         public bool CanRotate { get; set; }
 
 
@@ -55,8 +57,7 @@ namespace Popeye.Modules.PlayerController
 
 
         [Tooltip("Used to define ground contacts, not to limit movement slopes (use _maxAirAcceleration for that)")]
-        [SerializeField, Range(0.0f, 90.0f)]
-        private float _maxGroundAngle;
+        [SerializeField, Range(0.0f, 90.0f)] private float _maxGroundAngle;
 
         private float _minGroundDotProduct;
         [SerializeField, Range(0.0f, 100.0f)] private float _groundSnapBreakSpeed = 100.0f;
@@ -67,6 +68,16 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 90.0f)] private float _maxStairsAngle = 50.0f;
         private float _minStairsDotProduct;
 
+
+        [Header("LEDGE")] 
+        [SerializeField] private bool _checkLedges = false;
+        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeProbeForwardDisplacement = 0.6f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeGroundProbeDistance = 2.0f;
+        [SerializeField, Range(0.0f, 90.0f)] private float _maxLedgeGroundAngle = 40.0f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeFriction = 1.0f;
+        private float _minLedgeDotProduct;
+        private bool _isOnLedge;
+        
 
         private Vector3 _contactNormal;
         public Vector3 ContactNormal => _contactNormal;
@@ -86,6 +97,7 @@ namespace Popeye.Modules.PlayerController
         {
             _minGroundDotProduct = Mathf.Cos(_maxGroundAngle * Mathf.Deg2Rad);
             _minStairsDotProduct = Mathf.Cos(_maxStairsAngle * Mathf.Deg2Rad);
+            _minLedgeDotProduct = Mathf.Cos(_maxLedgeGroundAngle * Mathf.Deg2Rad);
 
             // Eliminate inconsistent _groundSnapBreakSpeed float precission
             if (Mathf.Abs(_maxSpeed - _groundSnapBreakSpeed) > SPEED_COMPARISON_THRESHOLD)
@@ -108,14 +120,19 @@ namespace Popeye.Modules.PlayerController
             CanRotate = true;
         }
 
-
         private void Update()
         {
             _movementInput = MovementInputHandler.GetMovementInput();
-            _lookInput = useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero; 
-
-            _desiredVelocity = _movementInput * _maxSpeed;
-
+            _lookInput = useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
+            _movementDirection = _movementInput;
+            
+            if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
+            {
+                UpdateMoveDirectionOnLedge();
+            }
+            
+            _desiredVelocity = _movementDirection * _maxSpeed;
+            
             //_material.SetColor("_Color", OnGround ? Color.black : Color.white);
         }
 
@@ -124,7 +141,7 @@ namespace Popeye.Modules.PlayerController
         {
             UpdateState();
             AdjustVelocity();
-
+            
             _rigidbody.velocity = _velocity;
 
             ClearState();
@@ -271,6 +288,60 @@ namespace Popeye.Modules.PlayerController
             return false;
         }
 
+        private void UpdateMoveDirectionOnLedge()
+        {
+            bool forwardLedge = CheckIsOnLedge(_movementInput, out Vector3 forwardLedgeNormal);
+            
+            _isOnLedge = forwardLedge;
+            if (_isOnLedge)
+            {
+                Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, forwardLedgeNormal);
+                _movementDirection = projectedMoveDirection.normalized * Mathf.Pow(projectedMoveDirection.magnitude, _ledgeFriction);
+            }
+        }
+        
+        private bool CheckIsOnLedge(Vector3 probeDirection, out Vector3 ledgeNormal)
+        {
+            ledgeNormal = Vector3.zero;
+            Vector3 origin = _rigidbody.position + (probeDirection * _ledgeProbeForwardDisplacement);
+            
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, _ledgeGroundProbeDistance,
+                    _groundProbeMask))
+            {
+                if (hit.normal.y >= _minLedgeDotProduct)
+                {
+                    return false;
+                }
+            }
+
+            origin += (_groundProbeDistance * Vector3.down);
+            if (Physics.Raycast(origin, -probeDirection, out RaycastHit ledgeHit, _ledgeProbeForwardDisplacement,
+                _groundProbeMask))
+            {
+                ledgeNormal = ledgeHit.normal;
+            }
+            
+            return true;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = _isOnLedge ? Color.red : Color.green;
+            Vector3 origin = _rigidbody.position + (LookDirection * _ledgeProbeForwardDisplacement);
+            Vector3 to = origin + (Vector3.down * _ledgeGroundProbeDistance);
+            Gizmos.DrawLine(origin, to);
+            
+            Gizmos.color = Color.blue;
+            bool isOnLedge = CheckIsOnLedge(_movementInput, out Vector3 ledgeNormal);
+            if (isOnLedge)
+            {
+                Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, ledgeNormal);
+                Gizmos.DrawLine(origin, origin + projectedMoveDirection);
+                
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(origin, origin + ledgeNormal);
+            }
+        }
 
         private Vector3 ProjectOnContactPlane(Vector3 vector)
         {
