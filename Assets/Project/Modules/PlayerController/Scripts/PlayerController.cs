@@ -394,5 +394,10 @@ namespace Popeye.Modules.PlayerController
             return ProjectOnPlane(LookDirection, GroundNormal).normalized;
         }
 
+        public void SetCheckLedges(bool checkLedges)
+        {
+            _checkLedges = checkLedges;
+        }
+
     }
 }

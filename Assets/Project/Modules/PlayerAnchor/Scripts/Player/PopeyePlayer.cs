@@ -65,6 +65,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorKicker = anchorKicker;
 
             SetCanUseRotateInput(false);
+            SetCanFallOffLedges(false);
             
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
@@ -100,7 +101,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = canRotate;
         }
 
-        
+        public void SetCanFallOffLedges(bool canFallOffLedges)
+        {
+            _playerController.SetCheckLedges(!canFallOffLedges);
+        }
+
+
         public float GetDistanceFromAnchor()
         {
             return Vector3.Distance(Position, _anchor.Position);

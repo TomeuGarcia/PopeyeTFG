@@ -31,7 +31,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_finishedDashing)
             {
-                NextState = PlayerStates.MovingWithoutAnchor;
+                NextState = PlayerStates.PickingUpAnchor;
+                //NextState = PlayerStates.MovingWithoutAnchor; // Player won't pick up anchor if on snap target
                 return true;
             }
 
