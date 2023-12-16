@@ -28,7 +28,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_finishedDashing)
             {
-                NextState = PlayerStates.WithoutAnchor;
+                NextState = PlayerStates.MovingWithoutAnchor;
                 return true;
             }
 

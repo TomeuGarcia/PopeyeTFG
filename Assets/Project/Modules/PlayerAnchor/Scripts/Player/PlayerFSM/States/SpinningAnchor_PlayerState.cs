@@ -13,17 +13,32 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            throw new System.NotImplementedException();
+            _blackboard.PlayerMediator.StartSpinningAnchor(_blackboard.cameFromState == PlayerStates.MovingWithAnchor);
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            _blackboard.PlayerMediator.StopSpinningAnchor();
         }
 
         public override bool Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
+            if (StillSpinning())
+            {
+                _blackboard.PlayerMediator.SpinAnchor(deltaTime);
+            }
+            else
+            {
+                NextState = PlayerStates.MovingWithoutAnchor;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool StillSpinning()
+        {
+            return _blackboard.MovesetInputsController.SpinAttack_HeldPressed();
         }
     }
 }

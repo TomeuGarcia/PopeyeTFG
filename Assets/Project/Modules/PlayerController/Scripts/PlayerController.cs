@@ -31,6 +31,7 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;
         [SerializeField, Range(0.0f, 1.0f)] private float _blendWithVelocityDirection = 0.0f;
         public Vector3 LookDirection => _lookTransform.forward;
+        public Vector3 RightDirection => _lookTransform.right;
         public bool CanRotate { get; set; }
 
 

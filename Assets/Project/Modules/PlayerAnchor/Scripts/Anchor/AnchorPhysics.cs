@@ -24,17 +24,18 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
         
 
-        public void DisableAllPhysics()
+        public void EnableTension()
+        {
+            _rigidbody.gameObject.SetActive(true);
+            _collider.enabled = true;
+        }
+        
+        public void DisableTension()
         {
             _collider.enabled = false;
             _rigidbody.gameObject.SetActive(false);
         }
         
-        public void EnableAllPhysics()
-        {
-            _rigidbody.gameObject.SetActive(true);
-            _collider.enabled = true;
-        }
         
     }
 }

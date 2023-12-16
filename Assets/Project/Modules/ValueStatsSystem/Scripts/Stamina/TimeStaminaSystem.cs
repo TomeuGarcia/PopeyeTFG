@@ -248,7 +248,7 @@ namespace Popeye.Modules.ValueStatSystem
             _isRestoringStamina = false;
             ExhaustedAllStamina = false;
             
-            _restoringCancellation.Dispose();
+            _restoringCancellation?.Dispose();
             _restoringCancellation = null;
         }
 

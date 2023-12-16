@@ -31,8 +31,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
 
         public Vector3 Position => _anchorMotion.Position;
-
-
+        
         private ICameraFunctionalities _cameraFunctionalities;
         [SerializeField] private CameraZoomInOutConfig _pull_CameraZoomInOut;
         [SerializeField] private CameraShakeConfig _restOnFloor_CameraShake;
@@ -56,7 +55,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
             _cameraFunctionalities = cameraFunctionalities;
             
-            _anchorPhysics.DisableAllPhysics();
+            _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
         }
         
@@ -64,6 +63,19 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _stateMachine.Reset();
         }
+        
+        
+        public void SetPosition(Vector3 position)
+        {
+            _anchorMotion.SetPosition(position);
+        }
+
+        public void SetRotation(Quaternion rotation)
+        {
+            _anchorMotion.SetRotation(rotation);
+        }
+
+        
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {

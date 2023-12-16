@@ -1,4 +1,5 @@
 
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
@@ -6,12 +7,19 @@ namespace Project.Modules.PlayerAnchor.Anchor
     public interface IAnchorMediator
     {
         Vector3 Position { get; }
-        
-        public bool IsBeingThrown();
-        public bool IsBeingPulled();
-        public bool IsRestingOnFloor();
 
-        public bool IsGrabbedBySnapper();
+        void SetPosition(Vector3 position);
+        void SetRotation(Quaternion rotation);
+        
+        bool IsBeingThrown();
+        bool IsBeingPulled();
+        bool IsRestingOnFloor();
+
+        bool IsGrabbedBySnapper();
+
+
+        void SetSpinning();
+        UniTaskVoid SnapToFloor();
 
     }
 }

@@ -37,7 +37,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             if (_anchorThrowFinished)
             {
-                NextState = PlayerStates.WithoutAnchor;
+                NextState = PlayerStates.MovingWithoutAnchor;
                 return true;
             }
             

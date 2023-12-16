@@ -118,6 +118,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpinAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""17d85603-1a90-47d9-917e-cc356eb35805"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -461,6 +470,28 @@ namespace InputSystem
                     ""action"": ""CancelAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23820e23-7581-4a5d-a0d0-0b94ccac9ea5"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3e4affc-fba9-4224-91f2-ef03d5e6f495"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -506,6 +537,7 @@ namespace InputSystem
             m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
             m_Land_Kick = m_Land.FindAction("Kick", throwIfNotFound: true);
             m_Land_Heal = m_Land.FindAction("Heal", throwIfNotFound: true);
+            m_Land_SpinAttack = m_Land.FindAction("SpinAttack", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -577,6 +609,7 @@ namespace InputSystem
         private readonly InputAction m_Land_Dash;
         private readonly InputAction m_Land_Kick;
         private readonly InputAction m_Land_Heal;
+        private readonly InputAction m_Land_SpinAttack;
         public struct LandActions
         {
             private @PlayerAnchorInputControls m_Wrapper;
@@ -591,6 +624,7 @@ namespace InputSystem
             public InputAction @Dash => m_Wrapper.m_Land_Dash;
             public InputAction @Kick => m_Wrapper.m_Land_Kick;
             public InputAction @Heal => m_Wrapper.m_Land_Heal;
+            public InputAction @SpinAttack => m_Wrapper.m_Land_SpinAttack;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -630,6 +664,9 @@ namespace InputSystem
                 @Heal.started += instance.OnHeal;
                 @Heal.performed += instance.OnHeal;
                 @Heal.canceled += instance.OnHeal;
+                @SpinAttack.started += instance.OnSpinAttack;
+                @SpinAttack.performed += instance.OnSpinAttack;
+                @SpinAttack.canceled += instance.OnSpinAttack;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -664,6 +701,9 @@ namespace InputSystem
                 @Heal.started -= instance.OnHeal;
                 @Heal.performed -= instance.OnHeal;
                 @Heal.canceled -= instance.OnHeal;
+                @SpinAttack.started -= instance.OnSpinAttack;
+                @SpinAttack.performed -= instance.OnSpinAttack;
+                @SpinAttack.canceled -= instance.OnSpinAttack;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -702,6 +742,7 @@ namespace InputSystem
             void OnDash(InputAction.CallbackContext context);
             void OnKick(InputAction.CallbackContext context);
             void OnHeal(InputAction.CallbackContext context);
+            void OnSpinAttack(InputAction.CallbackContext context);
         }
     }
 }

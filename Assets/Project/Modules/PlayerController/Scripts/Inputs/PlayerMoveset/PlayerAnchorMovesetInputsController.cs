@@ -18,14 +18,8 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly UnityEngine.InputSystem.InputAction _heal;
         
         private readonly UnityEngine.InputSystem.InputAction _spinAttack;
-        /*
-        private UnityEngine.InputSystem.InputAction _meleeAttack;
-        private UnityEngine.InputSystem.InputAction _melee2;
-        private UnityEngine.InputSystem.InputAction _move;
-        private UnityEngine.InputSystem.InputAction _pullAttack;
-        private UnityEngine.InputSystem.InputAction _explosionAbility;
-        private UnityEngine.InputSystem.InputAction _electricChainAbility;
-        */
+
+        
         
         public PlayerAnchorMovesetInputsController()
         {
@@ -47,7 +41,7 @@ namespace Popeye.Modules.PlayerController.Inputs
 
             _heal = _playerInputControls.Land.Heal;
             
-            _spinAttack = _playerInputControls.Land.Kick;
+            _spinAttack = _playerInputControls.Land.SpinAttack;
         }
 
         ~PlayerAnchorMovesetInputsController()

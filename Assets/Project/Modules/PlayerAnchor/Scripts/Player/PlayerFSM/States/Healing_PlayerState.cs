@@ -5,19 +5,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class Healing_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly PlayerStates _healEndNextState;
+        private PlayerStates _healEndNextState;
         private bool _finishedHealing;
         
         
-        public Healing_PlayerState(PlayerStatesBlackboard blackboard, PlayerStates healEndNextState)
+        public Healing_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _healEndNextState = healEndNextState;
+            _healEndNextState = PlayerStates.None;
         }
         
         
         protected override void DoEnter()
         {
+            _healEndNextState = _blackboard.cameFromState;
+            
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.HealingMoveSpeed);
             StartHealing().Forget();
         }

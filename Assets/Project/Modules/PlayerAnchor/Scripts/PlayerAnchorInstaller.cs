@@ -109,6 +109,7 @@ namespace Project.Modules.PlayerAnchor
             AnchorThrower anchorThrower = new AnchorThrower();
             AnchorPuller anchorPuller = new AnchorPuller();
             AnchorKicker anchorKicker = new AnchorKicker();
+            AnchorSpinner anchorSpinner = new AnchorSpinner();
             AnchorTrajectoryMaker anchorTrajectoryMaker = new AnchorTrajectoryMaker();
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
@@ -122,6 +123,7 @@ namespace Project.Modules.PlayerAnchor
                 anchorAutoAimController);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
+            anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
                 _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, _anchorChain, 
@@ -148,6 +150,7 @@ namespace Project.Modules.PlayerAnchor
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
             
+            
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
@@ -157,7 +160,7 @@ namespace Project.Modules.PlayerAnchor
 
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 _playerView.Value, playerHealth, playerStamina, playerMotion, playerDasher,
-                _anchor, anchorThrower, anchorPuller, anchorKicker);
+                _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner);
             _playerController.MovementInputHandler = movementInputHandler;
             
             playerStateMachine.Setup(playerStatesBlackboard);
