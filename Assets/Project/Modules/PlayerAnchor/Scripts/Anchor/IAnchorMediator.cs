@@ -22,8 +22,13 @@ namespace Project.Modules.PlayerAnchor.Anchor
         void SetSpinning();
         UniTaskVoid SnapToFloor();
 
+        bool IsObstructedByObstacles();
+        
         void SubscribeToOnObstacleHit(Action<Collider> callback);
         void UnsubscribeToOnObstacleHit(Action<Collider> callback);
+        void EnableObstacleHitForDuration(float duration);
+
+        void OnTryUsingWhenObstructed();
 
     }
 }

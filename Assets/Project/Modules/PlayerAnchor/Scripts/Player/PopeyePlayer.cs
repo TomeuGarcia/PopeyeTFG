@@ -331,6 +331,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _pullingAnchorFromTheVoid = true;
         }
 
+        public void OnTryUsingObstructedAnchor()
+        {
+            LookTowardsAnchor();
+            _playerView.PlayAnchorObstructedAnimation();
+            _anchor.OnTryUsingWhenObstructed();
+        }
+
         public void LookTowardsPosition(Vector3 position)
         {
             _playerController.LookTowardsPosition(position);

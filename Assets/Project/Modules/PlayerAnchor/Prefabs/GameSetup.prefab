@@ -503,6 +503,59 @@ Transform:
   m_Father: {fileID: 9056815993147974026}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &637583815471085300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8712516872593981526}
+  - component: {fileID: 5825937789515344733}
+  m_Layer: 9
+  m_Name: ObstacleObstructionBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8712516872593981526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637583815471085300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5362549251048967700}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5825937789515344733
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637583815471085300}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.2, z: 0.4}
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!1 &1232221889883083433
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,6 +623,8 @@ MonoBehaviour:
   _pullPunchDuration: 0.3
   _pullPunchScale: {x: 0, y: 0, z: 0}
   _pullPunchRotation: {x: 10, y: 0, z: 0}
+  _anchorObstructedPunchDuration: 0.3
+  _anchorObstructedPunchRotation: {x: 0, y: 45, z: 0}
 --- !u!1 &1238604703649327247
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,8 +1188,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.4, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!1 &2354845456679869484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,6 +1202,7 @@ GameObject:
   - component: {fileID: 4028204052046435817}
   - component: {fileID: 2994298811831424333}
   - component: {fileID: 7653452814856030824}
+  - component: {fileID: 1145678076955597282}
   m_Layer: 0
   m_Name: PopeyeAnchor
   m_TagString: Untagged
@@ -1208,6 +1264,7 @@ MonoBehaviour:
   _kickScalePunch: {x: -0.7, y: -0.3, z: 1.5}
   _carriedScalePunch: {x: -0.4, y: -0.4, z: 0.4}
   _restingOnFloorScalePunch: {x: 0.1, y: 0.1, z: 0.1}
+  _obstructedRotationPunch: {x: 0, y: 50, z: 30}
   _pulledDelay: 0.15
   _landHitMesh: {fileID: 4476209698891093396}
 --- !u!114 &7653452814856030824
@@ -1224,7 +1281,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 2852230885018826730}
   _collider: {fileID: 3175196758156884210}
+--- !u!114 &1145678076955597282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2354845456679869484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee94b8af6e1244219ee1f8b718a66ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _obstacleHitNotifierBehaviour: {fileID: 816213726694295431}
+  _obstructionBox: {fileID: 5825937789515344733}
 --- !u!1 &2590083445753320880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1314,6 +1384,7 @@ MonoBehaviour:
     type: 2}
   _anchor: {fileID: 4028204052046435817}
   _anchorPhysics: {fileID: 7653452814856030824}
+  _anchorCollisions: {fileID: 1145678076955597282}
   _anchorView:
     _underlyingValue: {fileID: 2994298811831424333}
   _anchorGeneralConfig: {fileID: 11400000, guid: 8bb683caed1c71040b8f9b1664b122d5,
@@ -2203,6 +2274,7 @@ Transform:
   m_Children:
   - {fileID: 3010822959880959657}
   - {fileID: 48832829904387340}
+  - {fileID: 8712516872593981526}
   m_Father: {fileID: 1104790512851379680}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -15,6 +15,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
         [SerializeField] private Vector3 _kickScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
         [SerializeField] private Vector3 _carriedScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
         [SerializeField] private Vector3 _restingOnFloorScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
+        
+        [SerializeField] private Vector3 _obstructedRotationPunch = new Vector3(0, 70, 30);
 
         [SerializeField, Range(0f, 5f)] private float _pulledDelay;
 
@@ -85,6 +87,13 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_restingOnFloorScalePunch, 0.2f, 1)
+                .SetEase(Ease.InOutQuad);
+        }
+
+        public void PlayObstructedAnimation()
+        {
+            _meshTransform.DOComplete();
+            _meshTransform.DOPunchRotation(_obstructedRotationPunch, 0.3f, 10)
                 .SetEase(Ease.InOutQuad);
         }
     }

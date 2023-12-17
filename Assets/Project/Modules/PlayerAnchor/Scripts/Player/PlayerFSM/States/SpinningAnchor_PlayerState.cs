@@ -28,6 +28,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _obstacleHit = false;
             
             _blackboard.AnchorMediator.SubscribeToOnObstacleHit(OnAnchorHitObstacle);
+            //_blackboard.AnchorMediator.EnableObstacleHitForDuration(0.1f);
         }
 
         public override void Exit()

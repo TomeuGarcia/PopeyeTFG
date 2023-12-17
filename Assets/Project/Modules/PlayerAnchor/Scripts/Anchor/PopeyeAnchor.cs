@@ -25,12 +25,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private TransformMotion _anchorMotion;
 
         private AnchorPhysics _anchorPhysics;
+        private AnchorCollisions _anchorCollisions;
         private IAnchorView _anchorView;
         private AnchorDamageDealer _anchorDamageDealer;
         private AnchorChain _anchorChain;
 
 
         public Vector3 Position => _anchorMotion.Position;
+        public Quaternion Rotation => _anchorMotion.Rotation;
         
         private ICameraFunctionalities _cameraFunctionalities;
         [SerializeField] private CameraZoomInOutConfig _pull_CameraZoomInOut;
@@ -38,7 +40,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
-            AnchorPhysics anchorPhysics, IAnchorView anchorView,
+            AnchorPhysics anchorPhysics, AnchorCollisions anchorCollisions, IAnchorView anchorView,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain,
             ICameraFunctionalities cameraFunctionalities)
         {
@@ -49,6 +51,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorMotion = anchorMotion;
 
             _anchorPhysics = anchorPhysics;
+            _anchorCollisions = anchorCollisions;
             _anchorView = anchorView;
             _anchorDamageDealer = anchorDamageDealer;
             _anchorChain = anchorChain;
@@ -220,6 +223,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
             }
         }
 
+        public bool IsObstructedByObstacles()
+        {
+            return _anchorCollisions.IsObstructedByObstacles(Position, Rotation);
+        }
+
         private bool ExistsFloorUnderAnchor()
         {
             return PositioningHelper.Instance.CheckFloorUnderneath(Position + Vector3.up*0.5f);
@@ -241,12 +249,22 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public void SubscribeToOnObstacleHit(Action<Collider> callback)
         {
-            _anchorPhysics.SubscribeToOnObstacleHit(callback);
+            _anchorCollisions.SubscribeToOnObstacleHit(callback);
         }
 
         public void UnsubscribeToOnObstacleHit(Action<Collider> callback)
         {
-            _anchorPhysics.UnsubscribeToOnObstacleHit(callback);
+            _anchorCollisions.UnsubscribeToOnObstacleHit(callback);
+        }
+
+        public void EnableObstacleHitForDuration(float duration)
+        {
+            _anchorCollisions.EnableObstacleHitForDuration(duration).Forget();
+        }
+
+        public void OnTryUsingWhenObstructed()
+        {
+            _anchorView.PlayObstructedAnimation();
         }
     }
 }

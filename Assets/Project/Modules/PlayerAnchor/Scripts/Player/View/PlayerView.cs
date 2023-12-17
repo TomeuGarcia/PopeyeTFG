@@ -48,6 +48,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Vector3 _pullPunchRotation = new Vector3(45, 0, 0);
         
         
+        [Header("ANCHOR OBSTRUCTED")]
+        [SerializeField, Range(0.0f, 5.0f)] private float _anchorObstructedPunchDuration = 0.3f;
+        [SerializeField] private Vector3 _anchorObstructedPunchRotation = new Vector3(0, 45, 0);
+        
+        
         private int _tiredId;
         private int _baseColorId;
         
@@ -136,6 +141,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _meshTransform.DOPunchScale(_pullPunchScale, _pullPunchDuration, 1)
                 .SetEase(Ease.InOutBack);
             _meshTransform.DOPunchRotation(_pullPunchRotation, _pullPunchDuration)
+                .SetEase(Ease.InOutQuad);
+        }
+
+        public void PlayAnchorObstructedAnimation()
+        {
+            _meshTransform.DOComplete();
+            _meshTransform.DOPunchRotation(_anchorObstructedPunchRotation, _anchorObstructedPunchDuration, 10)
                 .SetEase(Ease.InOutQuad);
         }
 

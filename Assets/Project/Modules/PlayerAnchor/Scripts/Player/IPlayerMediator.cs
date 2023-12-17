@@ -47,6 +47,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         void OnAnchorEndedInVoid();
+        void OnTryUsingObstructedAnchor();
 
 
         void LookTowardsPosition(Vector3 position);

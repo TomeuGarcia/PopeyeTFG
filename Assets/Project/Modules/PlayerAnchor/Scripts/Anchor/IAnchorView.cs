@@ -11,5 +11,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         void PlayKickedAnimation(float duration);
         void PlayCarriedAnimation();
         void PlayRestOnFloorAnimation();
+        
+        void PlayObstructedAnimation();
     }
 }

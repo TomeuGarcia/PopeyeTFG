@@ -36,7 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
 
-            if (PlayerCanSpinAnchor())
+            if (PlayerTriesToSpinAnchor())
             {
                 NextState = PlayerStates.SpinningAnchor;
                 return true;
@@ -62,11 +62,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return _blackboard.MovesetInputsController.Dash_Pressed();
         }
         
-        private bool PlayerCanSpinAnchor()
+        private bool PlayerTriesToSpinAnchor()
         {
             return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) && 
                    _blackboard.PlayerMediator.CanSpinAnchor();
-            // TODO check if anchor is by obstacles
         }
 
         private bool PlayerCanHeal()

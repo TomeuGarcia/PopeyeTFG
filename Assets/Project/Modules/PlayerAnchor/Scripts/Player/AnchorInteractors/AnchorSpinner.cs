@@ -61,11 +61,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorSpinConfig = anchorSpinConfig;
 
             _currentSpinStage = SpinStage.Finished;
+            _wasInterrupted = false;
         }
 
         public bool CanSpinningAnchor()
         {
-            return _currentSpinStage == SpinStage.Finished;
+            return _currentSpinStage == SpinStage.Finished && !_wasInterrupted;
         }
 
         public bool IsLockedIntoSpinningAnchor()
@@ -81,8 +82,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight)
         {
             _anchor.SetSpinning();
-
-            _wasInterrupted = false;
             
             if (startsCarryingAnchor)
             {
@@ -143,10 +142,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void InterruptSpinningAnchor()
         {
+            InterruptCooldown().Forget();
+            _anchor.SnapToFloor().Forget();
+        }
+
+        private async UniTaskVoid InterruptCooldown()
+        {
             _wasInterrupted = true;
+
+            float delay = _currentSpinStage == SpinStage.Starting ? 
+                SpinStartDuration + 0.1f : 
+                SpinStopDuration + 0.1f;
             
             _currentSpinStage = SpinStage.Finished;
-            _anchor.SnapToFloor().Forget();
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            
+            _wasInterrupted = false;
         }
 
 

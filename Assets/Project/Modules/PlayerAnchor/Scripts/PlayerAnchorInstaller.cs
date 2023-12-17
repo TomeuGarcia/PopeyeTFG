@@ -44,6 +44,7 @@ namespace Project.Modules.PlayerAnchor
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
+        [SerializeField] private AnchorCollisions _anchorCollisions;
         [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private Transform _anchorMoveTransform;
@@ -116,7 +117,6 @@ namespace Project.Modules.PlayerAnchor
             IChainPhysics chainPhysics = _chainPhysics.Value;
             AnchorAutoAimController anchorAutoAimController = new AnchorAutoAimController();
             
-            
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
@@ -131,12 +131,13 @@ namespace Project.Modules.PlayerAnchor
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorAutoAimController.Configure();
+            _anchorCollisions.Configure(_obstacleProbingConfig);
 
             _anchorDamageDealer.Configure(_anchorGeneralConfig.DamageConfig, combatManager, _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorView.Value, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
+                _anchorPhysics, _anchorCollisions, _anchorView.Value, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
 
             
             

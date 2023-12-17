@@ -50,10 +50,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
 
-            if (PlayerCanSpinAnchor())
+            if (PlayerTriesToSpinAnchor())
             {
-                NextState = PlayerStates.SpinningAnchor;
-                return true;
+                if (IsAnchorObstructed())
+                {
+                    _blackboard.PlayerMediator.OnTryUsingObstructedAnchor();
+                }
+                else
+                {
+                    NextState = PlayerStates.SpinningAnchor;
+                    return true;   
+                }
             }
             
             if (PlayerCanHeal())
@@ -95,11 +102,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                    _blackboard.PlayerMediator.GetDistanceFromAnchor() < _blackboard.PlayerStatesConfig.AnchorKickDistance;
         }
 
-        private bool PlayerCanSpinAnchor()
+        private bool PlayerTriesToSpinAnchor()
         {
-            return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) &&
+            return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) && 
                    _blackboard.PlayerMediator.CanSpinAnchor();
-            // TODO check if anchor is by obstacles
+        }
+
+        private bool IsAnchorObstructed()
+        {
+            return _blackboard.AnchorMediator.IsObstructedByObstacles();
         }
         
         private bool PlayerCanHeal()
