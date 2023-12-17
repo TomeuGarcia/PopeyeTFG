@@ -19,7 +19,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
         bool IsGrabbedBySnapper();
 
 
-        void SetSpinning();
+        void SetSpinning(bool spinningToTheRight);
+        void OnKeepSpinning();
+        void OnStopSpinning();
+        
         UniTaskVoid SnapToFloor();
 
         bool IsObstructedByObstacles();

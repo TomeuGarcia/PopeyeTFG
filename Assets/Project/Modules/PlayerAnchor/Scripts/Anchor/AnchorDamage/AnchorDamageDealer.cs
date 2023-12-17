@@ -14,14 +14,19 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private AnchorDamageConfig _config;
         private Transform _damageStartTransform;
         
-        private TransformMotion _damageTriggerMotion;
-        [SerializeField] private DamageTrigger _anchorThrowDamageTrigger;
+        private TransformMotion _throwDamageTriggerMotion;
+        private TransformMotion _spinDamageTriggerMotion;
         
+        [SerializeField] private DamageTrigger _anchorThrowDamageTrigger;
+        [SerializeField] private DamageTrigger _anchorSpinDamageTrigger;
         [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
 
+        private bool _sidewaysKnockbackIsRight;
+        
         private DamageHit _throwDamageHit;
         private DamageHit _pullDamageHit;
         private DamageHit _kickDamageHit;
+        private DamageHit _spinDamageHit;
         private DamageHit _verticalLandDamageHit;
 
         public void Configure(AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
@@ -34,16 +39,23 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _pullDamageHit = new DamageHit(_config.AnchorPullDamageHit); 
             _kickDamageHit = new DamageHit(_config.AnchorKickDamageHit); 
             _verticalLandDamageHit = new DamageHit(_config.AnchorVerticalLandDamageHit); 
+            _spinDamageHit = new DamageHit(_config.AnchorSpinDamageHit); 
             
             _anchorThrowDamageTrigger.Configure(combatManager, _throwDamageHit);
             _anchorThrowDamageTrigger.Deactivate();
+            
+            _anchorSpinDamageTrigger.Configure(combatManager, _spinDamageHit);
+            _anchorSpinDamageTrigger.Deactivate();
             
             _anchorVerticalLandDamageTrigger.Configure(combatManager, _verticalLandDamageHit);
             _anchorVerticalLandDamageTrigger.Deactivate();
             _anchorVerticalLandDamageTrigger.OnBeforeDamageDealt += SetPushAwayFromOriginKnockback;
 
-            _damageTriggerMotion = new TransformMotion();
-            _damageTriggerMotion.Configure(_anchorThrowDamageTrigger.transform);
+            _throwDamageTriggerMotion = new TransformMotion();
+            _throwDamageTriggerMotion.Configure(_anchorThrowDamageTrigger.transform);
+
+            _spinDamageTriggerMotion = new TransformMotion();
+            _spinDamageTriggerMotion.Configure(_anchorSpinDamageTrigger.transform);
         }
 
         private void OnDestroy()
@@ -102,9 +114,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private async UniTaskVoid DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
             AnimationCurve ease, float easeThreshold)
         {
-            _damageTriggerMotion.SetPosition(trajectoryPoints[0]);
-            _damageTriggerMotion.SetRotation(_damageStartTransform.rotation);
-            _damageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
+            _throwDamageTriggerMotion.SetPosition(trajectoryPoints[0]);
+            _throwDamageTriggerMotion.SetRotation(_damageStartTransform.rotation);
+            _throwDamageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
             
             var wait = await WaitUntilEase(ease, duration, easeThreshold);
             _anchorThrowDamageTrigger.Activate();
@@ -162,6 +174,36 @@ namespace Project.Modules.PlayerAnchor.Anchor
             pushDirection = Vector3.ProjectOnPlane(pushDirection, Vector3.up).normalized;
             
             damageTrigger.UpdateDamageKnockbackDirection(pushDirection);
+        }
+        
+        private void SetPushSidewaysKnockback(DamageTrigger damageTrigger, GameObject tryHitObject)
+        {
+            Vector3 pushDirection = _sidewaysKnockbackIsRight
+                ? damageTrigger.transform.right
+                : -damageTrigger.transform.right;
+
+            pushDirection = Vector3.ProjectOnPlane(pushDirection, Vector3.up).normalized;
+            
+            damageTrigger.UpdateDamageKnockbackDirection(pushDirection);
+        }
+
+        
+        public void StartDealingSpinDamage(bool spinningToTheRight)
+        {
+            _sidewaysKnockbackIsRight = spinningToTheRight;
+            _anchorSpinDamageTrigger.Activate();
+            _anchorSpinDamageTrigger.OnBeforeDamageDealt += SetPushSidewaysKnockback;
+        }
+        public void UpdateSpinningDamage(Vector3 position, Quaternion rotation)
+        {
+            _spinDamageTriggerMotion.SetPosition(position);
+            _spinDamageTriggerMotion.SetRotation(rotation);
+            
+        }
+        public void StopDealingSpinDamage()
+        {
+            _anchorSpinDamageTrigger.Deactivate();
+            _anchorSpinDamageTrigger.OnBeforeDamageDealt -= SetPushSidewaysKnockback;
         }
         
         

@@ -171,12 +171,23 @@ namespace Project.Modules.PlayerAnchor.Anchor
             }
         }
 
-        public void SetSpinning()
+        public void SetSpinning(bool spinningToTheRight)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);
+            _anchorDamageDealer.StartDealingSpinDamage(spinningToTheRight);
         }
-        
-        
+
+        public void OnKeepSpinning()
+        {
+            _anchorDamageDealer.UpdateSpinningDamage(Position, Rotation);
+        }
+
+        public void OnStopSpinning()
+        {
+            _anchorDamageDealer.StopDealingSpinDamage();
+        }
+
+
         public bool IsBeingThrown()
         {
             return _anchorThrower.AnchorIsBeingThrown();

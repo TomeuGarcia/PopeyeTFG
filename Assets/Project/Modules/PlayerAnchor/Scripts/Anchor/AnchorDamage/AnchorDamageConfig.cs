@@ -38,6 +38,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public DamageHitConfig AnchorVerticalLandDamageHit => _anchorVerticalLandDamageHit;
         public float VerticalLandDamageExtraDuration => _verticalLandDamageExtraDuration;
+        
+        
+        [Header("SPIN")]
+        [SerializeField] private DamageHitConfig _anchorSpinDamageHit;
+        public DamageHitConfig AnchorSpinDamageHit => _anchorSpinDamageHit;
 
 
 

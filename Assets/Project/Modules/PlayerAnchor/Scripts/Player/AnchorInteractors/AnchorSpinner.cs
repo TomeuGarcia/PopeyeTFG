@@ -81,7 +81,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight)
         {
-            _anchor.SetSpinning();
+            _anchor.SetSpinning(spinToTheRight);
             
             if (startsCarryingAnchor)
             {
@@ -167,6 +167,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             UpdateSpinTime(deltaTime);
 
             UpdateSpinPosition(deltaTime);
+            
+            _anchor.OnKeepSpinning();
         }
 
 
@@ -293,6 +295,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 .OnComplete(() =>
                     {
                         _currentSpinStage = SpinStage.Finished;
+                        _anchor.OnStopSpinning();
                         OnSpinStopFinish?.Invoke();
                     }
                 );

@@ -49,6 +49,7 @@ namespace Project.Modules.CombatSystem
             _damageDealer.UpdateKnockbackDirection(knockbackDirection);
         }
         
+        
         private void OnTriggerEnter(Collider other)
         {
             if (_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
@@ -65,6 +66,6 @@ namespace Project.Modules.CombatSystem
                 OnDamageDealt?.Invoke(damageHitResult);
             }
         }
-
+        
     }
 }
