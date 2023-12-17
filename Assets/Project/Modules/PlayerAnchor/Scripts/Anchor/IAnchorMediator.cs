@@ -1,4 +1,5 @@
 
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -20,6 +21,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         void SetSpinning();
         UniTaskVoid SnapToFloor();
+
+        void SubscribeToOnObstacleHit(Action<Collider> callback);
+        void UnsubscribeToOnObstacleHit(Action<Collider> callback);
 
     }
 }

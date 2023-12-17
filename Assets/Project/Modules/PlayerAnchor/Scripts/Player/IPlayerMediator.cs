@@ -38,9 +38,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void KickAnchor();
         
         bool CanSpinAnchor();
+        bool IsLockedIntoSpinningAnchor();
         void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight);
         void SpinAnchor(float deltaTime);
         void StopSpinningAnchor();
+        void InterruptSpinningAnchor();
+        bool SpinningAnchorFinished();
 
 
         void OnAnchorEndedInVoid();

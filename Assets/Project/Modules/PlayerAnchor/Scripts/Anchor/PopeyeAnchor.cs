@@ -220,15 +220,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
             }
         }
 
-        
         private bool ExistsFloorUnderAnchor()
         {
-            return PositioningHelper.Instance.CheckFloorUnderneath(Position);
+            return PositioningHelper.Instance.CheckFloorUnderneath(Position + Vector3.up*0.5f);
         }
 
         private async UniTask DoSnapToFloor()
         {
-            Vector3 floorPosition = PositioningHelper.Instance.GetFloorPositionUnderneath(Position);
+            Vector3 floorPosition = PositioningHelper.Instance.GetFloorPositionUnderneath(Position+ Vector3.up*0.5f);
             float duration = Vector3.Distance(Position, floorPosition) * 0.1f;
 
             _anchorMotion.Unparent();
@@ -238,5 +237,16 @@ namespace Project.Modules.PlayerAnchor.Anchor
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }
         
+        
+        
+        public void SubscribeToOnObstacleHit(Action<Collider> callback)
+        {
+            _anchorPhysics.SubscribeToOnObstacleHit(callback);
+        }
+
+        public void UnsubscribeToOnObstacleHit(Action<Collider> callback)
+        {
+            _anchorPhysics.UnsubscribeToOnObstacleHit(callback);
+        }
     }
 }

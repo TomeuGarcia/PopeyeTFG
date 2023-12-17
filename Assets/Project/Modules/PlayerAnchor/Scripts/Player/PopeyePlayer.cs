@@ -83,12 +83,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.Update(Time.deltaTime);
         }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(_anchorSpinner.SpinPosition, 0.2f);
-        }
-
         private void ResetAnchor()
         {
             _anchor.ResetState();
@@ -287,12 +281,21 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return _anchorSpinner.CanSpinningAnchor();
         }
-        
+
+        public bool IsLockedIntoSpinningAnchor()
+        {
+            return _anchorSpinner.IsLockedIntoSpinningAnchor();
+        }
+
 
         public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight)
         {
             _anchorSpinner.StartSpinningAnchor(startsCarryingAnchor, spinToTheRight);
+            
+            _staminaSystem.SetProgressiveSpendPerSecond(_playerGeneralConfig.MovesetConfig.AnchorSpinPerSecondStaminaCost);
             _staminaSystem.SpendProgressively().Forget();
+
+            _staminaSystem.OnValueExhausted += StopSpinningAnchor;
         }
 
         public void SpinAnchor(float deltaTime)
@@ -305,8 +308,21 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorSpinner.StopSpinningAnchor();
             
             _staminaSystem.StopSpendingProgressively();
+            _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
         }
-        
+
+        public void InterruptSpinningAnchor()
+        {
+            _anchorSpinner.InterruptSpinningAnchor();
+            
+            _staminaSystem.StopSpendingProgressively();
+            _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
+        }
+
+        public bool SpinningAnchorFinished()
+        {
+            return _anchorSpinner.SpinningAnchorFinished();
+        }
 
 
         public void OnAnchorEndedInVoid()

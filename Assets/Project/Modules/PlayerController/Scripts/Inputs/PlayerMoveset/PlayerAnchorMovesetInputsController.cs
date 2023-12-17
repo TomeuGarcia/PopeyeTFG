@@ -120,5 +120,9 @@ namespace Popeye.Modules.PlayerController.Inputs
         {
             return _spinAttack_Left.IsPressed() || _spinAttack_Right.IsPressed();
         }
+        public bool SpinAttack_Released()
+        {
+            return !_spinAttack_Left.IsPressed() && !_spinAttack_Right.IsPressed();
+        }
     }
 }

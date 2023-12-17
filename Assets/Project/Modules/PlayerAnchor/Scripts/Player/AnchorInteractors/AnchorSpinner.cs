@@ -16,21 +16,42 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private Vector3 _spinForwardDirection;
         private Vector3 _spinSideDirection;
         private Vector3 _spinCenterPosition;
-        public Vector3 SpinPosition { get; private set; }
-        private Vector3 _readyingSpinStartPosition;
-        private Vector3 _spinStartPosition;
+        public Vector3 SpinCircumferencePosition { get; private set; }
+        private Vector3 _spinCircumferenceInitialPosition;
+        
         private Vector3 _anchorSpinPosition;
+        
+        private Vector3 _startingStage_SpinPosition;
         private float _spinStartT;
+        private float _spinStopT;
+        
+        private SpinStage _currentSpinStage;
 
-        private bool _isReadyingSpin;
+        private float _currentSpinRadius;
+        private float _currentSpinSpeed;
 
-
+        
         private float SpinRadius => _anchorSpinConfig.SpinRadius;
-        private float SpinMaxSpeed => _anchorSpinConfig.SpinMaxSpeed;
-        private float SpinReadyDuration => _anchorSpinConfig.SpinReadyDuration;
+        private float SpinSpeed => _anchorSpinConfig.SpinSpeed;
+        private float SpinStartDuration => _anchorSpinConfig.SpinStartDuration;
+        private float SpinStopDuration => _anchorSpinConfig.SpinStopDuration;
+        private AnimationCurve SpinStartEase => _anchorSpinConfig.SpinStartEase;
+        private AnimationCurve SpinStopEase => _anchorSpinConfig.SpinStopEase;
+        
 
 
-        private Action OnSpinReadyFinish;
+        private Action OnSpinStartFinish;
+        private Action OnSpinStopFinish;
+        private bool _wasInterrupted;
+
+
+        private enum SpinStage
+        {
+            Starting,
+            Normal,
+            Stopping,
+            Finished
+        }
         
 
         public void Configure(IPlayerMediator player, IAnchorMediator anchor, AnchorSpinConfig anchorSpinConfig)
@@ -38,24 +59,36 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _player = player;
             _anchor = anchor;
             _anchorSpinConfig = anchorSpinConfig;
+
+            _currentSpinStage = SpinStage.Finished;
         }
 
         public bool CanSpinningAnchor()
         {
-            return !_isReadyingSpin;
+            return _currentSpinStage == SpinStage.Finished;
+        }
+
+        public bool IsLockedIntoSpinningAnchor()
+        {
+            return _currentSpinStage == SpinStage.Starting;
+        }
+
+        public bool SpinningAnchorFinished()
+        {
+            return _currentSpinStage == SpinStage.Finished;
         }
 
         public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight)
         {
-            _player.SetCanRotate(false);
-            
             _anchor.SetSpinning();
+
+            _wasInterrupted = false;
             
             if (startsCarryingAnchor)
             {
                 UpdateSpinDirections(spinToTheRight);
                 UpdateSpinStartPosition();
-                _player.LookTowardsPosition(_spinStartPosition);
+                _player.LookTowardsPosition(_spinCircumferenceInitialPosition);
             }
             else
             {
@@ -67,36 +100,58 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             
             ResetSpinTime();
-            StartReadyingSpinPosition();
+            EnterStartingStage(startsCarryingAnchor);
         }
 
         public void StopSpinningAnchor()
         {
-            if (_isReadyingSpin)
+            if (_currentSpinStage == SpinStage.Starting)
             {
-                OnSpinReadyFinish += QueueStopSpinning;
+                OnSpinStartFinish += QueueStopSpinning;
             }
             else
             {
-                _player.SetCanRotate(true);
-                _anchor.SnapToFloor().Forget();
+                OnSpinStopFinish += DoOnStopFinish;
+                EnterStoppingStage();
             }
         }
         
         private void QueueStopSpinning()
         {
-            OnSpinReadyFinish -= QueueStopSpinning;
+            OnSpinStartFinish -= QueueStopSpinning;
             StopSpinningAnchor();
         }
+        
+        private void DoOnStopFinish()
+        {
+            OnSpinStopFinish -= DoOnStopFinish;
+            
+            _anchor.SnapToFloor().Forget();
+        }
+
         
 
         public void SpinAnchor(float deltaTime)
         {
-            if (_isReadyingSpin)
+            if (_wasInterrupted)
             {
-                //return;
+                return;
             }
             
+            UpdateSpinState(deltaTime);
+        }
+
+        public void InterruptSpinningAnchor()
+        {
+            _wasInterrupted = true;
+            
+            _currentSpinStage = SpinStage.Finished;
+            _anchor.SnapToFloor().Forget();
+        }
+
+
+        private void UpdateSpinState(float deltaTime)
+        {
             UpdateSpinCenterPosition();
             UpdateSpinTime(deltaTime);
 
@@ -121,78 +176,116 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void ResetSpinTime()
         {
             _spinTime = 0;
-            _spinStartT = 0;
         }
         private void UpdateSpinTime(float deltaTime)
         {
-            _spinTime += deltaTime * SpinMaxSpeed;
+            _spinTime += deltaTime * _currentSpinSpeed;
         }
         
         private void UpdateSpinStartPosition()
         {
-            _spinStartPosition = ComputeSpinPosition(0);
+            _spinCircumferenceInitialPosition = ComputeSpinPosition(0);
         }
         
         private void UpdateSpinPosition(float deltaTime)
         {
-            SpinPosition = ComputeSpinPosition(_spinTime);
-            UpdateAnchorSpinPosition(deltaTime);
+            SpinCircumferencePosition = ComputeSpinPosition(_spinTime);
+            
+            if (_currentSpinStage != SpinStage.Starting)
+            {
+                _anchorSpinPosition = SpinCircumferencePosition;
+            }
             
             _anchor.SetPosition(_anchorSpinPosition);
 
-            Vector3 forward = (SpinPosition - _player.Position).normalized;
+            //Vector3 forward = (SpinCircumferencePosition - _player.Position).normalized;
+            Vector3 forward = (_anchor.Position - _player.Position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(forward, _player.GetFloorNormal());
             _anchor.SetRotation(lookRotation);
-            _player.LookTowardsPosition(SpinPosition);
+            _player.LookTowardsPosition(SpinCircumferencePosition);
         }
 
         private Vector3 ComputeSpinPosition(float time)
         {
             return _spinCenterPosition +
-                   ((Mathf.Cos(time) * SpinRadius) * _spinForwardDirection) +
-                   ((Mathf.Sin(time) * SpinRadius) * _spinSideDirection);
+                   ((Mathf.Cos(time) * _currentSpinRadius) * _spinForwardDirection) +
+                   ((Mathf.Sin(time) * _currentSpinRadius) * _spinSideDirection);
         }
 
 
 
-        private void StartReadyingSpinPosition()
+        private void EnterStartingStage(bool startsCarryingAnchor)
         {
-            _isReadyingSpin = true;
-            
-            _readyingSpinStartPosition = _anchor.Position;
+            _currentSpinStage = SpinStage.Starting;
+            _startingStage_SpinPosition = _anchor.Position;
 
+            float radiusStart = startsCarryingAnchor ? 0 : _player.GetDistanceFromAnchor();
+            float startSpinSpeed = startsCarryingAnchor ? SpinSpeed : 0;
+
+            _spinStartT = 0;
             DOTween.To(
-                    () => _readyingSpinStartPosition,
-                    (position) =>
+                    () => _spinStartT,
+                    (t) =>
                     {
-                        _readyingSpinStartPosition = position;
+                        _spinStartT = t;
+                        _currentSpinSpeed = Mathf.Lerp(startSpinSpeed, SpinSpeed, _spinStopT);
+                        _anchorSpinPosition = Vector3.Lerp(_startingStage_SpinPosition, SpinCircumferencePosition,
+                            _spinStartT);
+                        _currentSpinRadius = Mathf.Lerp(radiusStart, SpinRadius, _spinStartT);
                     },
-                    _spinStartPosition,
-                    SpinReadyDuration
+                    1,
+                    SpinStartDuration
                 )
-                .SetEase(Ease.OutSine)
+                .SetEase(SpinStartEase)
                 .OnComplete(() =>
                     {
-                        _isReadyingSpin = false;
-                        OnSpinReadyFinish?.Invoke();
+                        if (!_wasInterrupted)
+                        {
+                            _currentSpinStage = SpinStage.Normal;
+                        }
+                        OnSpinStartFinish?.Invoke();
+                    }
+                );
+            
+            
+            DOTween.To(
+                    () => _startingStage_SpinPosition,
+                    (position) =>
+                    {
+                        _startingStage_SpinPosition = position;
+                    },
+                    _spinCircumferenceInitialPosition,
+                    SpinStartDuration
+                )
+                .SetEase(SpinStartEase);
+        }
+
+        private void EnterStoppingStage()
+        {
+            _currentSpinStage = SpinStage.Stopping;
+
+            _spinStopT = 0;
+            DOTween.To(
+                    () => _spinStopT,
+                    (t) =>
+                    {
+                        _spinStopT = t;
+                        _currentSpinSpeed = Mathf.Lerp(SpinSpeed, 0, _spinStopT);
+                        UpdateSpinState(Time.deltaTime); // This isn't good, but I can't find a better way to keep
+                                                         // updating the state when Stopping, because the player can
+                                                         // enter the Tired State
+                    },
+                    1,
+                    SpinStopDuration
+                )
+                .SetEase(SpinStopEase)
+                .OnComplete(() =>
+                    {
+                        _currentSpinStage = SpinStage.Finished;
+                        OnSpinStopFinish?.Invoke();
                     }
                 );
         }
 
-
-
-        private void UpdateAnchorSpinPosition(float deltaTime)
-        {
-            if (_spinStartT < 1)
-            {
-                _spinStartT += deltaTime / SpinReadyDuration;
-                _anchorSpinPosition = Vector3.Lerp(_readyingSpinStartPosition, SpinPosition, _spinStartT);
-            }
-            else
-            {
-                _anchorSpinPosition = SpinPosition;
-            }
-        }
-        
     }
 }

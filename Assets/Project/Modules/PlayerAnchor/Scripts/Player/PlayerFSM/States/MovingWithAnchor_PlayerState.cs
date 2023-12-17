@@ -66,6 +66,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) && 
                    _blackboard.PlayerMediator.CanSpinAnchor();
+            // TODO check if anchor is by obstacles
         }
 
         private bool PlayerCanHeal()

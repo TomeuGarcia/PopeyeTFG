@@ -16,6 +16,10 @@ namespace Popeye.Modules.ValueStatSystem
         private bool _isWaitingToRestoreStamina;
         private bool _isRestoringStamina;
         
+        private int _progressiveSpendPerSecond = 20;
+        private bool _spendingProgressively;
+
+
         private CancellationTokenSource _waitToRestoreCancellation;
         private CancellationTokenSource _restoringCancellation;
 
@@ -84,9 +88,11 @@ namespace Popeye.Modules.ValueStatSystem
             DoSpendEnd();
         }
 
-        private int _progressiveSpendPerSecond = 20;
-        private bool _spendingProgressively;
 
+        public void SetProgressiveSpendPerSecond(int progressiveSpendPerSecond)
+        {
+            _progressiveSpendPerSecond = progressiveSpendPerSecond;
+        }
         public async UniTask SpendProgressively()
         {
             _spendingProgressively = true;
@@ -179,13 +185,6 @@ namespace Popeye.Modules.ValueStatSystem
 
         private void WaitToRestore(float waitDuration)
         {
-            /*
-            if (_isRestoringStamina)
-            {
-                CancelRestoringStamina();
-            }
-            */
-            
             if (_isWaitingToRestoreStamina)
             {
                 CancelWaitToRestoreStamina();
@@ -203,20 +202,17 @@ namespace Popeye.Modules.ValueStatSystem
             
             _isWaitingToRestoreStamina = false;
 
-            _restoringCancellation = new CancellationTokenSource();
-            StartRestoring();
+            if (!_spendingProgressively || !HasStaminaLeft())
+            {
+                _spendingProgressively = false;
+                _restoringCancellation = new CancellationTokenSource();
+                StartRestoring();
+            }
         }
 
         
         private void StartRestoring()
         {
-            /*
-            if (_isRestoringStamina)
-            {
-                CancelRestoringStamina();
-            }
-            */
-            
             float durationToFullyRecover = ComputeDurationToFullyRecover();
             DoStartRestoring(durationToFullyRecover).Forget();
             InvokeOnValueStartUpdate(durationToFullyRecover);
@@ -230,7 +226,7 @@ namespace Popeye.Modules.ValueStatSystem
 
             _temporaryRestoreT = 0f;
             
-            while (!_fullRecoverTimer.HasFinished() && _isRestoringStamina)
+            while (!_fullRecoverTimer.HasFinished() && _isRestoringStamina && !_spendingProgressively)
             {
                 float timeStep = Time.deltaTime;
 
@@ -240,7 +236,7 @@ namespace Popeye.Modules.ValueStatSystem
                 await UniTask.Yield();
             }
 
-            if (HasTemporaryRestoredStamina)
+            if (HasTemporaryRestoredStamina && !_spendingProgressively)
             {
                 RestoreTemporarilyRestoredStamina();
             }

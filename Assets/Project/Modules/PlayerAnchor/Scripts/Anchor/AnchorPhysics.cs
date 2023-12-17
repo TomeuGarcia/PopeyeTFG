@@ -1,6 +1,9 @@
 using System;
+using AYellowpaper;
+using Popeye.Modules.Notifiers;
 using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerAnchor.Anchor
 {
@@ -9,9 +12,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
-
+        
+        [SerializeField] private ColliderOnlyTriggerNotifierBehaviour _obstacleHitNotifierBehaviour;
+        
+        
         private IAnchorMediator _anchorMediator;
-
+        
 
 
         public void Configure(IAnchorMediator anchorMediator)
@@ -35,7 +41,14 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _collider.enabled = false;
             _rigidbody.gameObject.SetActive(false);
         }
-        
-        
+
+        public void SubscribeToOnObstacleHit(Action<Collider> callback)
+        {
+            _obstacleHitNotifierBehaviour.OnEnter += callback;
+        }
+        public void UnsubscribeToOnObstacleHit(Action<Collider> callback)
+        {
+            _obstacleHitNotifierBehaviour.OnEnter -= callback;
+        }
     }
 }
