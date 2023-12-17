@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Modules.PlayerAnchor.DropShadow;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
@@ -8,6 +9,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
     public class StretchAnchorView : MonoBehaviour, IAnchorView
     {
         [SerializeField] private Transform _meshTransform;
+        
+        [SerializeField] private DropShadow _dropShadow;
+
 
         [SerializeField] private Vector3 _verticalHitScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
         [SerializeField] private Vector3 _throwScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
@@ -27,11 +31,15 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _landHitMaterial = _landHitMesh.material;
             _landHitMesh.gameObject.SetActive(false);
+            
+            _dropShadow.Hide();
         }
 
 
         public async UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit)
         {
+            _dropShadow.Show();
+            
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_verticalHitScalePunch, duration, 1)
                 .SetEase(Ease.OutSine);
@@ -55,6 +63,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void PlayThrownAnimation(float duration)
         {
+            _dropShadow.Show();
+            
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_throwScalePunch, duration, 1)
                 .SetEase(Ease.InOutQuad);
@@ -64,6 +74,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_pulledDelay));
 
+            _dropShadow.Show();
+            
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_pullScalePunch, duration, 1)
                 .SetEase(Ease.InOutQuad);
@@ -78,6 +90,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void PlayCarriedAnimation()
         {
+            _dropShadow.Hide();
+            
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_carriedScalePunch, 0.2f, 1)
                 .SetEase(Ease.InOutQuad);
@@ -85,9 +99,16 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void PlayRestOnFloorAnimation()
         {
+            _dropShadow.Hide();
+            
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_restingOnFloorScalePunch, 0.2f, 1)
                 .SetEase(Ease.InOutQuad);
+        }
+
+        public void PlaySpinningAnimation()
+        {
+            _dropShadow.Show();
         }
 
         public void PlayObstructedAnimation()

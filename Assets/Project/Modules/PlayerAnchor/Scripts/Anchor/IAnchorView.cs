@@ -12,6 +12,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         void PlayCarriedAnimation();
         void PlayRestOnFloorAnimation();
         
+        void PlaySpinningAnimation();
         void PlayObstructedAnimation();
     }
 }

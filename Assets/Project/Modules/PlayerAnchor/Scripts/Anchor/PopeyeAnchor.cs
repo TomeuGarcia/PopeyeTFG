@@ -8,6 +8,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
+using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
 using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Project.Modules.PlayerAnchor.Chain;
@@ -33,6 +34,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public Vector3 Position => _anchorMotion.Position;
         public Quaternion Rotation => _anchorMotion.Rotation;
+
         
         private ICameraFunctionalities _cameraFunctionalities;
         [SerializeField] private CameraZoomInOutConfig _pull_CameraZoomInOut;
@@ -175,6 +177,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);
             _anchorDamageDealer.StartDealingSpinDamage(spinningToTheRight);
+            
+            _anchorView.PlaySpinningAnimation();
         }
 
         public void OnKeepSpinning()
