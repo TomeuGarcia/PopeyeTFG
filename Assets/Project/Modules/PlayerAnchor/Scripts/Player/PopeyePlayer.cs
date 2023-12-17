@@ -289,9 +289,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         
 
-        public void StartSpinningAnchor(bool startsCarryingAnchor)
+        public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight)
         {
-            _anchorSpinner.StartSpinningAnchor(startsCarryingAnchor);
+            _anchorSpinner.StartSpinningAnchor(startsCarryingAnchor, spinToTheRight);
             _staminaSystem.SpendProgressively().Forget();
         }
 

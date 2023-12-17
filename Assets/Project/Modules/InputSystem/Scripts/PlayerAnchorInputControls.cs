@@ -120,13 +120,22 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SpinAttack"",
+                    ""name"": ""SpinAttack_Left"",
                     ""type"": ""Button"",
                     ""id"": ""17d85603-1a90-47d9-917e-cc356eb35805"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpinAttack_Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""05aeea65-99ae-4f92-bd62-18303f77ade2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -265,7 +274,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""5ff001e8-d6d5-476a-ae81-da280269a3e9"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -364,7 +373,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""43d45cba-04aa-41b5-890c-f72a45a388de"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -474,22 +483,44 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""23820e23-7581-4a5d-a0d0-0b94ccac9ea5"",
-                    ""path"": ""<Keyboard>/ctrl"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
-                    ""action"": ""SpinAttack"",
+                    ""action"": ""SpinAttack_Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""a3e4affc-fba9-4224-91f2-ef03d5e6f495"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
-                    ""action"": ""SpinAttack"",
+                    ""action"": ""SpinAttack_Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5782112-eac4-4f93-9297-e0b4a4527aa0"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack_Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ce53902-398d-487e-a284-4cc2c0ffc1a0"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack_Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -537,7 +568,8 @@ namespace InputSystem
             m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
             m_Land_Kick = m_Land.FindAction("Kick", throwIfNotFound: true);
             m_Land_Heal = m_Land.FindAction("Heal", throwIfNotFound: true);
-            m_Land_SpinAttack = m_Land.FindAction("SpinAttack", throwIfNotFound: true);
+            m_Land_SpinAttack_Left = m_Land.FindAction("SpinAttack_Left", throwIfNotFound: true);
+            m_Land_SpinAttack_Right = m_Land.FindAction("SpinAttack_Right", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -609,7 +641,8 @@ namespace InputSystem
         private readonly InputAction m_Land_Dash;
         private readonly InputAction m_Land_Kick;
         private readonly InputAction m_Land_Heal;
-        private readonly InputAction m_Land_SpinAttack;
+        private readonly InputAction m_Land_SpinAttack_Left;
+        private readonly InputAction m_Land_SpinAttack_Right;
         public struct LandActions
         {
             private @PlayerAnchorInputControls m_Wrapper;
@@ -624,7 +657,8 @@ namespace InputSystem
             public InputAction @Dash => m_Wrapper.m_Land_Dash;
             public InputAction @Kick => m_Wrapper.m_Land_Kick;
             public InputAction @Heal => m_Wrapper.m_Land_Heal;
-            public InputAction @SpinAttack => m_Wrapper.m_Land_SpinAttack;
+            public InputAction @SpinAttack_Left => m_Wrapper.m_Land_SpinAttack_Left;
+            public InputAction @SpinAttack_Right => m_Wrapper.m_Land_SpinAttack_Right;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -664,9 +698,12 @@ namespace InputSystem
                 @Heal.started += instance.OnHeal;
                 @Heal.performed += instance.OnHeal;
                 @Heal.canceled += instance.OnHeal;
-                @SpinAttack.started += instance.OnSpinAttack;
-                @SpinAttack.performed += instance.OnSpinAttack;
-                @SpinAttack.canceled += instance.OnSpinAttack;
+                @SpinAttack_Left.started += instance.OnSpinAttack_Left;
+                @SpinAttack_Left.performed += instance.OnSpinAttack_Left;
+                @SpinAttack_Left.canceled += instance.OnSpinAttack_Left;
+                @SpinAttack_Right.started += instance.OnSpinAttack_Right;
+                @SpinAttack_Right.performed += instance.OnSpinAttack_Right;
+                @SpinAttack_Right.canceled += instance.OnSpinAttack_Right;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -701,9 +738,12 @@ namespace InputSystem
                 @Heal.started -= instance.OnHeal;
                 @Heal.performed -= instance.OnHeal;
                 @Heal.canceled -= instance.OnHeal;
-                @SpinAttack.started -= instance.OnSpinAttack;
-                @SpinAttack.performed -= instance.OnSpinAttack;
-                @SpinAttack.canceled -= instance.OnSpinAttack;
+                @SpinAttack_Left.started -= instance.OnSpinAttack_Left;
+                @SpinAttack_Left.performed -= instance.OnSpinAttack_Left;
+                @SpinAttack_Left.canceled -= instance.OnSpinAttack_Left;
+                @SpinAttack_Right.started -= instance.OnSpinAttack_Right;
+                @SpinAttack_Right.performed -= instance.OnSpinAttack_Right;
+                @SpinAttack_Right.canceled -= instance.OnSpinAttack_Right;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -742,7 +782,8 @@ namespace InputSystem
             void OnDash(InputAction.CallbackContext context);
             void OnKick(InputAction.CallbackContext context);
             void OnHeal(InputAction.CallbackContext context);
-            void OnSpinAttack(InputAction.CallbackContext context);
+            void OnSpinAttack_Left(InputAction.CallbackContext context);
+            void OnSpinAttack_Right(InputAction.CallbackContext context);
         }
     }
 }

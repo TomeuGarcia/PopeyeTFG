@@ -17,7 +17,8 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         private readonly UnityEngine.InputSystem.InputAction _heal;
         
-        private readonly UnityEngine.InputSystem.InputAction _spinAttack;
+        private readonly UnityEngine.InputSystem.InputAction _spinAttack_Left;
+        private readonly UnityEngine.InputSystem.InputAction _spinAttack_Right;
 
         
         
@@ -41,7 +42,8 @@ namespace Popeye.Modules.PlayerController.Inputs
 
             _heal = _playerInputControls.Land.Heal;
             
-            _spinAttack = _playerInputControls.Land.SpinAttack;
+            _spinAttack_Left = _playerInputControls.Land.SpinAttack_Left;
+            _spinAttack_Right = _playerInputControls.Land.SpinAttack_Right;
         }
 
         ~PlayerAnchorMovesetInputsController()
@@ -109,17 +111,14 @@ namespace Popeye.Modules.PlayerController.Inputs
         }
         
         
-        public bool SpinAttack_Pressed()
+        public bool SpinAttack_Pressed(out bool spinRight)
         {
-            return _spinAttack.WasPressedThisFrame();
+            spinRight = _spinAttack_Right.WasPressedThisFrame();
+            return spinRight || _spinAttack_Left.WasPressedThisFrame();
         }
         public bool SpinAttack_HeldPressed()
         {
-            return _spinAttack.IsPressed();
-        }
-        public bool SpinAttack_Released()
-        {
-            return _spinAttack.WasReleasedThisFrame();
+            return _spinAttack_Left.IsPressed() || _spinAttack_Right.IsPressed();
         }
     }
 }

@@ -96,13 +96,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SpinAttack",
+                    "name": "SpinAttack_Left",
                     "type": "Button",
                     "id": "17d85603-1a90-47d9-917e-cc356eb35805",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SpinAttack_Right",
+                    "type": "Button",
+                    "id": "05aeea65-99ae-4f92-bd62-18303f77ade2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -241,7 +250,7 @@
                 {
                     "name": "",
                     "id": "5ff001e8-d6d5-476a-ae81-da280269a3e9",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Desktop",
@@ -340,7 +349,7 @@
                 {
                     "name": "",
                     "id": "43d45cba-04aa-41b5-890c-f72a45a388de",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Desktop",
@@ -450,22 +459,44 @@
                 {
                     "name": "",
                     "id": "23820e23-7581-4a5d-a0d0-0b94ccac9ea5",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Desktop",
-                    "action": "SpinAttack",
+                    "action": "SpinAttack_Left",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "a3e4affc-fba9-4224-91f2-ef03d5e6f495",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Desktop",
-                    "action": "SpinAttack",
+                    "action": "SpinAttack_Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5782112-eac4-4f93-9297-e0b4a4527aa0",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "SpinAttack_Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ce53902-398d-487e-a284-4cc2c0ffc1a0",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "SpinAttack_Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

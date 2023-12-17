@@ -7,7 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         Vector3 SpinPosition { get; }
         
         public bool CanSpinningAnchor();
-        public void StartSpinningAnchor(bool startsCarryingAnchor);
+        public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight);
         public void StopSpinningAnchor();
         public void SpinAnchor(float deltaTime);
     }

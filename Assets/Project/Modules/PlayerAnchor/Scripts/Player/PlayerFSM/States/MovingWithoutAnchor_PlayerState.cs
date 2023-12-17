@@ -97,7 +97,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanSpinAnchor()
         {
-            return _blackboard.MovesetInputsController.SpinAttack_Pressed() &&
+            return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) &&
                    _blackboard.PlayerMediator.CanSpinAnchor();
         }
         

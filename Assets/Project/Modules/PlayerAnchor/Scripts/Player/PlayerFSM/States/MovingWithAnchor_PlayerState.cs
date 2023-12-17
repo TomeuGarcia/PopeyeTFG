@@ -6,7 +6,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class MovingWithAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-
+        
         public MovingWithAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
@@ -64,7 +64,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         private bool PlayerCanSpinAnchor()
         {
-            return _blackboard.MovesetInputsController.SpinAttack_Pressed() && 
+            return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) && 
                    _blackboard.PlayerMediator.CanSpinAnchor();
         }
 
