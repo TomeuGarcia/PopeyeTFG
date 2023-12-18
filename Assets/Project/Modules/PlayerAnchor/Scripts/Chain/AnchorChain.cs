@@ -20,7 +20,7 @@ namespace Project.Modules.PlayerAnchor.Chain
         }
 
 
-        private void Update()
+        private void LateUpdate()
         {
             _chainLine.SetPosition(0, _playerBindTransform.position);
             _chainLine.SetPosition(1, _anchorBindTransform.position);

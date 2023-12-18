@@ -1,5 +1,3 @@
-using System;
-using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
@@ -9,9 +7,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
-
+        
+        
+        
         private IAnchorMediator _anchorMediator;
-
+        
 
 
         public void Configure(IAnchorMediator anchorMediator)
@@ -24,17 +24,18 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
         
 
-        public void DisableAllPhysics()
-        {
-            _collider.enabled = false;
-            _rigidbody.gameObject.SetActive(false);
-        }
-        
-        public void EnableAllPhysics()
+        public void EnableTension()
         {
             _rigidbody.gameObject.SetActive(true);
             _collider.enabled = true;
         }
         
+        public void DisableTension()
+        {
+            _collider.enabled = false;
+            _rigidbody.gameObject.SetActive(false);
+        }
+
+
     }
 }

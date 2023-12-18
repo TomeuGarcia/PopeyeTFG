@@ -15,12 +15,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public bool EndsOnVoid { get; private set; }
 
         
-        public AnimationCurve InterpolationEaseCurve { get; private set; }
+        public AnimationCurve MoveEaseCurve { get; private set; }
+        public AnimationCurve RotateEaseCurve { get; private set; }
 
 
-        public AnchorThrowResult(AnimationCurve interpolationEaseCurve)
+        public AnchorThrowResult(AnimationCurve moveEaseCurve, AnimationCurve rotateEaseCurve)
         {
-            InterpolationEaseCurve = interpolationEaseCurve;
+            MoveEaseCurve = moveEaseCurve;
+            RotateEaseCurve = rotateEaseCurve;
         }
         
         public void Reset(Vector3[] throwPathPoints, Vector3 direction, Quaternion startLookRotation, Quaternion endLookRotation,

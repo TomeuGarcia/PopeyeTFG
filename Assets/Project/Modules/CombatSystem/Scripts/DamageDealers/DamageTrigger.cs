@@ -13,7 +13,10 @@ namespace Project.Modules.CombatSystem
         [SerializeField] private bool _damageTargetsOncePerActivation = false;
         [SerializeField] private Collider _collider;
 
-
+        public Vector3 Position => transform.position;
+        
+        
+        public Action<DamageTrigger, GameObject> OnBeforeDamageDealt;
         public Action<DamageHitResult> OnDamageDealt;
 
         
@@ -46,6 +49,7 @@ namespace Project.Modules.CombatSystem
             _damageDealer.UpdateKnockbackDirection(knockbackDirection);
         }
         
+        
         private void OnTriggerEnter(Collider other)
         {
             if (_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
@@ -55,12 +59,13 @@ namespace Project.Modules.CombatSystem
 
             _damageDealer.UpdatePosition(transform.position);
             
+            OnBeforeDamageDealt?.Invoke(this, other.gameObject);
             if (_damageDealer.TryDealDamage(other.gameObject, out DamageHitResult damageHitResult))
             {
                 _hitTargetsHistory.Add(damageHitResult.DamageHitTargetGameObject);
                 OnDamageDealt?.Invoke(damageHitResult);
             }
         }
-
+        
     }
 }

@@ -28,6 +28,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField, Range(0.0f, 5.0f)] private float _healPunchDuration = 0.3f;
         [SerializeField] private Vector3 _healPunchScale = new Vector3(0.2f, -0.4f, 0.2f);
         
+        [Header("DEATH")]
+        [SerializeField] private Vector3 _deathRotation = new Vector3(90, 0, 0);
+        
         [Header("DASH")]
         [SerializeField] private Vector3 _dashPunchScale = new Vector3(0.2f, -0.4f, 0.2f);
         [SerializeField] private Vector3 _dashPunchRotation = new Vector3(45, 0, 0);
@@ -46,6 +49,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField, Range(0.0f, 5.0f)] private float _pullPunchDuration = 0.3f;
         [SerializeField] private Vector3 _pullPunchScale = new Vector3(0.2f, -0.4f, 0.2f);
         [SerializeField] private Vector3 _pullPunchRotation = new Vector3(45, 0, 0);
+        
+        
+        [Header("ANCHOR OBSTRUCTED")]
+        [SerializeField, Range(0.0f, 5.0f)] private float _anchorObstructedPunchDuration = 0.3f;
+        [SerializeField] private Vector3 _anchorObstructedPunchRotation = new Vector3(0, 45, 0);
         
         
         private int _tiredId;
@@ -83,8 +91,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
             FlickBaseColor(numberOfFlicks, _takeDamageDuration/numberOfFlicks, _damagedColor).Forget();
         }
 
+        public void PlayRespawnAnimation()
+        {
+            _meshTransform.localRotation = Quaternion.identity;
+            _meshTransform.localPosition = Vector3.zero;
+        }
+
         public async UniTask PlayDeathAnimation()
         {
+            float motionDuration = _deathDuration * 0.2f;
+            _meshTransform.DORotate(_deathRotation, motionDuration)
+                .SetEase(Ease.InOutQuad);
+            _meshTransform.DOBlendableLocalMoveBy(Vector3.down*0.75f, motionDuration)
+                .SetEase(Ease.InOutQuad);
+            
             int numberOfFlicks = 2;
             await FlickBaseColor(numberOfFlicks, _deathDuration / numberOfFlicks, _damagedColor);
             SetMeshBaseColor(_damagedColor);
@@ -136,6 +156,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _meshTransform.DOPunchScale(_pullPunchScale, _pullPunchDuration, 1)
                 .SetEase(Ease.InOutBack);
             _meshTransform.DOPunchRotation(_pullPunchRotation, _pullPunchDuration)
+                .SetEase(Ease.InOutQuad);
+        }
+
+        public void PlayAnchorObstructedAnimation()
+        {
+            _meshTransform.DOComplete();
+            _meshTransform.DOPunchRotation(_anchorObstructedPunchRotation, _anchorObstructedPunchDuration, 10)
                 .SetEase(Ease.InOutQuad);
         }
 

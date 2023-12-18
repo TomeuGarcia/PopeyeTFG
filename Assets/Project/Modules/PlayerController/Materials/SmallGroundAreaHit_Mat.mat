@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: SmallGroundAreaHit_Mat
   m_Shader: {fileID: 4800000, guid: c6000ecccb53b3d4faf77b6d13f05b02, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -17,6 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -28,6 +31,7 @@ Material:
     m_Floats:
     - _StartTime: 1
     - _TimeOverwrite: -1
+    - _WaveDirection: 0
     - _WaveDuration: 2
     - _WaveFrequency: 5
     - _WaveSharpness: 0.5

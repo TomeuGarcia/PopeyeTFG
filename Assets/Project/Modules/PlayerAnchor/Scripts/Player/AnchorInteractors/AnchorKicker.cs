@@ -26,7 +26,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorKickConfig = anchorKickConfig;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
 
-            AnchorKickResult = new AnchorThrowResult(_anchorKickConfig.MoveInterpolationCurve);
+            AnchorKickResult = new AnchorThrowResult(_anchorKickConfig.MoveInterpolationCurve, 
+                _anchorKickConfig.MoveInterpolationCurve);
         }
 
 
