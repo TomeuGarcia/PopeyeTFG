@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.VFX
 {
-    [CreateAssetMenu(fileName = "GeneralEnemyVFXConfig",
-        menuName = "Popeye/Enemies/VFX/GeneralEnemyVFXConfig")]
+    [CreateAssetMenu(fileName = "GeneralEnemyVFXConfig", 
+        menuName = ScriptableObjectsHelper.VFX_ASSETS_PATH + "GeneralEnemyVFXConfig")]
+    
     public class GeneralEnemyVFXConfig : ScriptableObject
     {
         [System.Serializable]
