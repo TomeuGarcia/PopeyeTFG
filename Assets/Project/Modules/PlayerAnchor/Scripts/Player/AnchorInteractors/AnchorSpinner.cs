@@ -125,7 +125,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             OnSpinStopFinish -= DoOnStopFinish;
             
-            _anchor.SnapToFloor().Forget();
+            _anchor.SnapToFloor(_player.Position).Forget();
         }
 
         
@@ -143,7 +143,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void InterruptSpinningAnchor()
         {
             InterruptCooldown().Forget();
-            _anchor.SnapToFloor().Forget();
+            _anchor.SnapToFloor(_player.Position).Forget();
         }
 
         private async UniTaskVoid InterruptCooldown()

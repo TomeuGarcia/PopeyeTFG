@@ -224,7 +224,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
             else
             {
-                _anchor.SnapToFloor().Forget();
+                _anchor.SnapToFloor(Position).Forget();
             }
         }
         

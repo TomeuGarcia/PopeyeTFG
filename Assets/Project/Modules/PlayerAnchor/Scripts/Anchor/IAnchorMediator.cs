@@ -23,7 +23,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         void OnKeepSpinning();
         void OnStopSpinning();
         
-        UniTaskVoid SnapToFloor();
+        UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition);
 
         bool IsObstructedByObstacles();
         

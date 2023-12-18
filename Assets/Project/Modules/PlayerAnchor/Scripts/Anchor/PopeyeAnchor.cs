@@ -191,6 +191,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorDamageDealer.StopDealingSpinDamage();
         }
 
+        public UniTaskVoid SnapToFloor()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public bool IsBeingThrown()
         {
@@ -225,16 +230,18 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         
         
-        public async UniTaskVoid SnapToFloor()
+        public async UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition)
         {
             if (ExistsFloorUnderAnchor())
             {
-                await DoSnapToFloor();
+                await DoSnapToFloor(Position);
                 SetRestingOnFloor();
             }
             else
             {
                 // idk there is no floor, reset Anchor I guess
+                await DoSnapToFloor(noFloorAlternativePosition);
+                SetRestingOnFloor();
             }
         }
 
@@ -248,10 +255,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return PositioningHelper.Instance.CheckFloorUnderneath(Position + Vector3.up*0.5f);
         }
 
-        private async UniTask DoSnapToFloor()
+        private async UniTask DoSnapToFloor(Vector3 floorAtPosition)
         {
-            Vector3 floorPosition = PositioningHelper.Instance.GetFloorPositionUnderneath(Position+ Vector3.up*0.5f);
-            float duration = Vector3.Distance(Position, floorPosition) * 0.1f;
+            Vector3 floorPosition = PositioningHelper.Instance.GetFloorPositionUnderneath(floorAtPosition+ Vector3.up*0.5f);
+            float duration = Mathf.Min(0.5f,Vector3.Distance(floorAtPosition, floorPosition) * 0.1f);
 
             _anchorMotion.Unparent();
             _anchorMotion.MoveToPosition(floorPosition, duration, Ease.OutSine);
