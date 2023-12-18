@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -40,8 +41,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid StartDashing()
         {
             _finishedDashing = false;
-            _blackboard.PlayerMediator.DashTowardsAnchor(_blackboard.PlayerStatesConfig.DashDuration);
-            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.DashDuration));
+
+            
+            float duration = Mathf.Lerp(_blackboard.PlayerStatesConfig.MinDashDuration, 
+                                        _blackboard.PlayerStatesConfig.MaxDashDuration,
+                                        _blackboard.PlayerMediator.GetDistanceFromAnchorRatio01());
+            _blackboard.PlayerMediator.DashTowardsAnchor(duration);
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+
             _finishedDashing = true;
         }
     }

@@ -17,41 +17,23 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void Configure(IAnchorMediator anchorMediator)
         {
             _anchorMediator = anchorMediator;
+            
+            _rigidbody.transform.localPosition = Vector3.zero;
+            _rigidbody.interpolation = RigidbodyInterpolation.None;
+            _rigidbody.isKinematic = true;
         }
         
 
         public void DisableAllPhysics()
         {
             _collider.enabled = false;
-            UseGravity(false);
-            _rigidbody.interpolation = RigidbodyInterpolation.None;
-            SetImmovable();
+            _rigidbody.gameObject.SetActive(false);
         }
         
         public void EnableAllPhysics()
         {
+            _rigidbody.gameObject.SetActive(true);
             _collider.enabled = true;
-            UseGravity(true);
-            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-            SetMovable();
-        }
-
-
-        public void UseGravity(bool useGravity)
-        {
-            _rigidbody.useGravity = useGravity;
-
-            _rigidbody.drag = useGravity ? 0 : float.MaxValue;
-            _rigidbody.mass = useGravity ? 3 : float.MaxValue;
-        }
-        
-        public void SetMovable()
-        {
-            _rigidbody.isKinematic = false;
-        }
-        public void SetImmovable()
-        {
-            _rigidbody.isKinematic = true;
         }
         
     }

@@ -271,6 +271,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             updatedTrajectoryDistance = currentTrajectoryDistance;
             updatedTrajectoryDistance -= Vector3.Distance(secondToLastPoint, lastPoint) / 2;
+            updatedTrajectoryDistance = Mathf.Max(updatedTrajectoryDistance, 0);
             updatedTrajectoryDistance += Vector3.Distance(newSecondToLastPoint, endPosition);
         }
         

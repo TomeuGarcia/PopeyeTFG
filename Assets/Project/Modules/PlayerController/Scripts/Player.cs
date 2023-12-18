@@ -123,7 +123,7 @@ public class Player : MonoBehaviour, IHealthTarget, IDamageHitTarget
     {
         float duration = 1.0f;
 
-        CameraShake.Instance.PlayShake(0.5f, duration);
+        CameraShakerSingleton.Instance.PlayShake(0.5f, duration);
 
         await Task.Delay((int)(duration * 1000));
 

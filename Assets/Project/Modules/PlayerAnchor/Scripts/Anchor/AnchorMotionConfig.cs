@@ -1,9 +1,10 @@
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "AnchorMotionConfig", 
-        menuName = AnchorConfigHelper.SO_ASSETS_PATH + "AnchorMotionConfig")]
+        menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorMotionConfig")]
     public class AnchorMotionConfig : ScriptableObject
     {
         [Header("ROTATIONS")] 

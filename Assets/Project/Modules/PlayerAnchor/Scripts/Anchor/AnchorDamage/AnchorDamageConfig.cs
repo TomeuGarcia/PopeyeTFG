@@ -1,10 +1,11 @@
 using Project.Modules.CombatSystem;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "AnchorDamageConfig", 
-        menuName = AnchorConfigHelper.SO_ASSETS_PATH + "AnchorDamageConfig")]
+        menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorDamageConfig")]
     public class AnchorDamageConfig : ScriptableObject
     {
         [Header("THROW")]

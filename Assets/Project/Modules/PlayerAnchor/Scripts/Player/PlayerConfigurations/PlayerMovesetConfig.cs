@@ -1,10 +1,11 @@
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
 {
     [CreateAssetMenu(fileName = "PlayerMovesetConfig", 
-        menuName = PlayerConfigHelper.SO_ASSETS_PATH + "PlayerMovesetConfig")]
+        menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerMovesetConfig")]
     public class PlayerMovesetConfig : ScriptableObject
     {
         [Header("DASH DISPlACEMENT")]
