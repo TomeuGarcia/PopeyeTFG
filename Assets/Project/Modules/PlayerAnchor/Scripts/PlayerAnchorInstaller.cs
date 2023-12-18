@@ -176,5 +176,10 @@ namespace Project.Modules.PlayerAnchor
         }
 
 
+        public void Uninstall()
+        {
+            ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
+            ServiceLocator.Instance.RemoveService<IGameReferences>();
+        }
     }
 }

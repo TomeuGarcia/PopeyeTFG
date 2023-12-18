@@ -64,9 +64,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorChain.DisableTension();
         }
         
-        public void ResetState()
+        public void ResetState(Vector3 position)
         {
             _stateMachine.Reset();
+            SetPosition(position);
         }
         
         

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -387,6 +388,21 @@ namespace Popeye.Modules.PlayerController
         {
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
+        }
+        
+        public async UniTaskVoid DisableForDuration(float duration)
+        {
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
+            enabled = false;
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            
+            _rigidbody.useGravity = true;
+            _rigidbody.isKinematic = false;
+            enabled = true;
         }
 
 

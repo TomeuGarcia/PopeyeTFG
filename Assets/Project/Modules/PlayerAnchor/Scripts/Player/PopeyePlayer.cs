@@ -85,7 +85,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void ResetAnchor()
         {
-            _anchor.ResetState();
+            _anchor.ResetState(Position);
         }
         
 
@@ -368,6 +368,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerMotion.SetRotation(Quaternion.identity);
             _playerHealth.HealToMax();
             ResetAnchor();
+            
+            _playerController.DisableForDuration(0.3f).Forget();
 
             _playerView.PlayRespawnAnimation();
         }
