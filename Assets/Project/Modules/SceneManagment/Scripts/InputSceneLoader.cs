@@ -7,7 +7,8 @@ namespace Popeye.Modules.SceneManagment.Scripts
     public class InputSceneLoader : MonoBehaviour
     {
         [SerializeField] private InputSceneLoaderConfig _inputSceneLoaderConfig;
-
+        private InputSceneLoaderConfig.SceneLoadData _lastLoadedSceneLoadData;
+        
 
         private void Update()
         {
@@ -24,12 +25,21 @@ namespace Popeye.Modules.SceneManagment.Scripts
                     LoadScene(sceneLoadData);
                 }
             }
+
+            if (Input.GetKeyDown(_inputSceneLoaderConfig.ReloadCurrentSceneKeyCode))
+            {
+                ReloadCurrentScene();
+            }
         }
 
         private void LoadScene(InputSceneLoaderConfig.SceneLoadData sceneLoadData)
         {
             SceneManager.LoadScene(sceneLoadData.BuiltInSceneIndex);
         }
-        
+
+        private void ReloadCurrentScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }

@@ -20,7 +20,10 @@ namespace Popeye.Modules.SceneManagment.Scripts
 
         [SerializeField] private SceneLoadData[] _scenesData;
         public SceneLoadData[] ScenesData => _scenesData;
-
+        
+        
+        [SerializeField] private KeyCode _reloadCurrentSceneKeyCode = KeyCode.R;
+        public KeyCode ReloadCurrentSceneKeyCode => _reloadCurrentSceneKeyCode;
 
     }
 }
