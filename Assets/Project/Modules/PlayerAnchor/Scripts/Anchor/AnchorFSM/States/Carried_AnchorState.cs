@@ -21,6 +21,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
             _blackboard.TransformMotion.ParentAndUpdate(_blackboard.AnchorCarryHolder,
                 Vector3.zero, _blackboard.AnchorMotionConfig.CarriedAnchorRotation,
                 0.05f * distance, Ease.InOutSine);
+                
             
             _blackboard.AnchorPhysics.DisableAllPhysics();
             

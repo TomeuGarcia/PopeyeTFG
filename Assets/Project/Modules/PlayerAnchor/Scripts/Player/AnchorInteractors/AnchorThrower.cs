@@ -104,6 +104,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             if (_anchorAutoAimController.HasAutoAimTarget)
             {
+                AnchorThrowResult.EndLookRotation = _anchorAutoAimController.GetTargetRotation();
                 _anchorAutoAimController.UseCurrentTarget(AnchorThrowResult.Duration);
             }
 

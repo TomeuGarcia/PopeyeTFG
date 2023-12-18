@@ -1,4 +1,5 @@
 using System;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,7 +7,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     
     [CreateAssetMenu(fileName = "AnchorPullConfig", 
-        menuName = AnchorConfigHelper.SO_ASSETS_PATH + "AnchorPullConfig")]
+        menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorPullConfig")]
     public class AnchorPullConfig : ScriptableObject
     {
         

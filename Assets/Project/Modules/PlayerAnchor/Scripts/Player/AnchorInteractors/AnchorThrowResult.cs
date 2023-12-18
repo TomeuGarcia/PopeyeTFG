@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Vector3 LastTrajectoryPathPoint => TrajectoryPathPoints[^1];
         public Vector3 Direction { get; private set; }
         public Quaternion StartLookRotation { get; private set; }
-        public Quaternion EndLookRotation { get; private set; }
+        public Quaternion EndLookRotation { get; set; }
         public float Duration { get; private set; }
         public bool EndsOnVoid { get; private set; }
 

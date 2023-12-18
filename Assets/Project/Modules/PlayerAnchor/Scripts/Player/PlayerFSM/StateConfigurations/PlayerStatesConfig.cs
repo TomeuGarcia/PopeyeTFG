@@ -1,11 +1,12 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 {
     [CreateAssetMenu(fileName = "PlayerStatesConfig", 
-        menuName = PlayerConfigHelper.SO_ASSETS_PATH + "PlayerStatesConfig")]
+        menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerStatesConfig")]
     public class PlayerStatesConfig : ScriptableObject
     {
         [Header("SPAWNING")]
@@ -49,10 +50,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 
         
         [Header("DASH")]
-        [SerializeField, Range(0.01f, 10.0f)] private float _dashDuration = 0.25f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _minDashDuration = 0.05f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _maxDashDuration = 0.25f;
         [SerializeField, Range(0.01f, 10.0f)] private float _dashInvulnerableDuration = 0.5f;
         
-        public float DashDuration => _dashDuration;
+        public float MinDashDuration => _minDashDuration;
+        public float MaxDashDuration => _maxDashDuration;
         public float DashInvulnerableDuration => _dashInvulnerableDuration;
 
     }

@@ -234,7 +234,7 @@ public class AnchorDamageDealer_Old : MonoBehaviour
         hitEffect.LocalScale = scale;
         hitEffect.Duration = duration;
 
-        CameraShake.Instance.PlayShake(0.05f, shakeDuration);
+        CameraShakerSingleton.Instance.PlayShake(0.05f, shakeDuration);
     }
     
     private void PlayExplosionHitAreaAnimation(Vector3 scale, float duration, float shakeDuration)
@@ -243,7 +243,7 @@ public class AnchorDamageDealer_Old : MonoBehaviour
         hitEffect.LocalScale = scale;
         hitEffect.Duration = duration;
 
-        CameraShake.Instance.PlayShake(0.05f, shakeDuration);
+        CameraShakerSingleton.Instance.PlayShake(0.05f, shakeDuration);
     }
 
     private void SpawnHitEffect(GameObject hitTarget)
