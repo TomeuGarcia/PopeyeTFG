@@ -17,6 +17,7 @@ namespace Popeye.Modules.Camera.CameraShake
         
         public async UniTaskVoid PlayShake(CameraShakeConfig shakeConfig)
         {
+            _orbitingCamera.FocusTransform.DOComplete();
             await _orbitingCamera.FocusTransform.DOPunchPosition(
                     Vector3.down * shakeConfig.Strength, shakeConfig.Duration)
                 .SetEase(shakeConfig.EaseCurve)

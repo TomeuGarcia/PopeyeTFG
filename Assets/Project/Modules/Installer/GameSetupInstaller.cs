@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
@@ -20,11 +21,24 @@ public class GameSetupInstaller : MonoBehaviour
         Install();
     }
 
+    private void OnDestroy()
+    {
+        Uninstall();
+    }
+
     private void Install()
     {
         ServiceLocator.Instance.RegisterService<ICombatManager>(new CombatManagerService());
         ServiceLocator.Instance.RegisterService<EnemyFactory>(new EnemyFactory(Instantiate(_enemyConfiguration)));
 
         _playerAnchorInstaller.Install();
+    }
+    
+    private void Uninstall()
+    {
+        ServiceLocator.Instance.RemoveService<ICombatManager>();
+        ServiceLocator.Instance.RemoveService<EnemyFactory>();
+
+        _playerAnchorInstaller.Uninstall();
     }
 }

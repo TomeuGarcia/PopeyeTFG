@@ -57,6 +57,15 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""CancelAim"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed4c441a-6c70-436c-adab-52f17a9f49f8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Throw"",
                     ""type"": ""Button"",
                     ""id"": ""78022133-4efb-4377-af08-7b12a37d300e"",
@@ -109,6 +118,24 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpinAttack_Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""17d85603-1a90-47d9-917e-cc356eb35805"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpinAttack_Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""05aeea65-99ae-4f92-bd62-18303f77ade2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -247,7 +274,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""5ff001e8-d6d5-476a-ae81-da280269a3e9"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -346,7 +373,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""43d45cba-04aa-41b5-890c-f72a45a388de"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -379,7 +406,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""5a1f3c3d-8e59-46ef-9ca8-de56c32863ed"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -401,7 +428,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""7dfa0d8f-c417-4b72-a5cc-85386756b77e"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -428,6 +455,72 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": ""Desktop"",
                     ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c51dd833-e0b0-4c21-8de9-026e1d15dfd5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""CancelAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5cd0a58c-a0d6-47c7-abb5-c4be184acf17"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""CancelAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23820e23-7581-4a5d-a0d0-0b94ccac9ea5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack_Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3e4affc-fba9-4224-91f2-ef03d5e6f495"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack_Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5782112-eac4-4f93-9297-e0b4a4527aa0"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack_Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ce53902-398d-487e-a284-4cc2c0ffc1a0"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpinAttack_Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -468,12 +561,15 @@ namespace InputSystem
             m_Land_Move = m_Land.FindAction("Move", throwIfNotFound: true);
             m_Land_Look = m_Land.FindAction("Look", throwIfNotFound: true);
             m_Land_Aim = m_Land.FindAction("Aim", throwIfNotFound: true);
+            m_Land_CancelAim = m_Land.FindAction("CancelAim", throwIfNotFound: true);
             m_Land_Throw = m_Land.FindAction("Throw", throwIfNotFound: true);
             m_Land_PickUp = m_Land.FindAction("PickUp", throwIfNotFound: true);
             m_Land_Pull = m_Land.FindAction("Pull", throwIfNotFound: true);
             m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
             m_Land_Kick = m_Land.FindAction("Kick", throwIfNotFound: true);
             m_Land_Heal = m_Land.FindAction("Heal", throwIfNotFound: true);
+            m_Land_SpinAttack_Left = m_Land.FindAction("SpinAttack_Left", throwIfNotFound: true);
+            m_Land_SpinAttack_Right = m_Land.FindAction("SpinAttack_Right", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -538,12 +634,15 @@ namespace InputSystem
         private readonly InputAction m_Land_Move;
         private readonly InputAction m_Land_Look;
         private readonly InputAction m_Land_Aim;
+        private readonly InputAction m_Land_CancelAim;
         private readonly InputAction m_Land_Throw;
         private readonly InputAction m_Land_PickUp;
         private readonly InputAction m_Land_Pull;
         private readonly InputAction m_Land_Dash;
         private readonly InputAction m_Land_Kick;
         private readonly InputAction m_Land_Heal;
+        private readonly InputAction m_Land_SpinAttack_Left;
+        private readonly InputAction m_Land_SpinAttack_Right;
         public struct LandActions
         {
             private @PlayerAnchorInputControls m_Wrapper;
@@ -551,12 +650,15 @@ namespace InputSystem
             public InputAction @Move => m_Wrapper.m_Land_Move;
             public InputAction @Look => m_Wrapper.m_Land_Look;
             public InputAction @Aim => m_Wrapper.m_Land_Aim;
+            public InputAction @CancelAim => m_Wrapper.m_Land_CancelAim;
             public InputAction @Throw => m_Wrapper.m_Land_Throw;
             public InputAction @PickUp => m_Wrapper.m_Land_PickUp;
             public InputAction @Pull => m_Wrapper.m_Land_Pull;
             public InputAction @Dash => m_Wrapper.m_Land_Dash;
             public InputAction @Kick => m_Wrapper.m_Land_Kick;
             public InputAction @Heal => m_Wrapper.m_Land_Heal;
+            public InputAction @SpinAttack_Left => m_Wrapper.m_Land_SpinAttack_Left;
+            public InputAction @SpinAttack_Right => m_Wrapper.m_Land_SpinAttack_Right;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -575,6 +677,9 @@ namespace InputSystem
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @CancelAim.started += instance.OnCancelAim;
+                @CancelAim.performed += instance.OnCancelAim;
+                @CancelAim.canceled += instance.OnCancelAim;
                 @Throw.started += instance.OnThrow;
                 @Throw.performed += instance.OnThrow;
                 @Throw.canceled += instance.OnThrow;
@@ -593,6 +698,12 @@ namespace InputSystem
                 @Heal.started += instance.OnHeal;
                 @Heal.performed += instance.OnHeal;
                 @Heal.canceled += instance.OnHeal;
+                @SpinAttack_Left.started += instance.OnSpinAttack_Left;
+                @SpinAttack_Left.performed += instance.OnSpinAttack_Left;
+                @SpinAttack_Left.canceled += instance.OnSpinAttack_Left;
+                @SpinAttack_Right.started += instance.OnSpinAttack_Right;
+                @SpinAttack_Right.performed += instance.OnSpinAttack_Right;
+                @SpinAttack_Right.canceled += instance.OnSpinAttack_Right;
             }
 
             private void UnregisterCallbacks(ILandActions instance)
@@ -606,6 +717,9 @@ namespace InputSystem
                 @Aim.started -= instance.OnAim;
                 @Aim.performed -= instance.OnAim;
                 @Aim.canceled -= instance.OnAim;
+                @CancelAim.started -= instance.OnCancelAim;
+                @CancelAim.performed -= instance.OnCancelAim;
+                @CancelAim.canceled -= instance.OnCancelAim;
                 @Throw.started -= instance.OnThrow;
                 @Throw.performed -= instance.OnThrow;
                 @Throw.canceled -= instance.OnThrow;
@@ -624,6 +738,12 @@ namespace InputSystem
                 @Heal.started -= instance.OnHeal;
                 @Heal.performed -= instance.OnHeal;
                 @Heal.canceled -= instance.OnHeal;
+                @SpinAttack_Left.started -= instance.OnSpinAttack_Left;
+                @SpinAttack_Left.performed -= instance.OnSpinAttack_Left;
+                @SpinAttack_Left.canceled -= instance.OnSpinAttack_Left;
+                @SpinAttack_Right.started -= instance.OnSpinAttack_Right;
+                @SpinAttack_Right.performed -= instance.OnSpinAttack_Right;
+                @SpinAttack_Right.canceled -= instance.OnSpinAttack_Right;
             }
 
             public void RemoveCallbacks(ILandActions instance)
@@ -655,12 +775,15 @@ namespace InputSystem
             void OnMove(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
+            void OnCancelAim(InputAction.CallbackContext context);
             void OnThrow(InputAction.CallbackContext context);
             void OnPickUp(InputAction.CallbackContext context);
             void OnPull(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
             void OnKick(InputAction.CallbackContext context);
             void OnHeal(InputAction.CallbackContext context);
+            void OnSpinAttack_Left(InputAction.CallbackContext context);
+            void OnSpinAttack_Right(InputAction.CallbackContext context);
         }
     }
 }
