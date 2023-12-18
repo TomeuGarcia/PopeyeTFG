@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
+using FMOD.Studio;
 
 namespace Popeye.Modules.PlayerController
 {
@@ -12,7 +13,7 @@ namespace Popeye.Modules.PlayerController
         private Vector3 _movementInput;
         private Vector3 _lookInput;
 
-        [Header("COMPONENTS")] 
+        [Header("COMPONENTS")]
         [SerializeField] private Rigidbody _rigidbody;
         public Vector3 Position => _rigidbody.position;
         public Transform Transform => _rigidbody.transform;
@@ -22,7 +23,7 @@ namespace Popeye.Modules.PlayerController
         private Material _material;
 
 
-        [Header("LOOK")] 
+        [Header("LOOK")]
         [SerializeField] private bool _useLookInput = true;
         [SerializeField] private Transform _lookTransform;
         [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;
@@ -32,7 +33,7 @@ namespace Popeye.Modules.PlayerController
         public bool CanRotate { get; set; }
 
 
-        [Header("VELOCITY")] 
+        [Header("VELOCITY")]
         [SerializeField, Range(0.0f, 100.0f)] private float _maxSpeed = 10.0f;
 
         private Vector3 _velocity;
@@ -44,13 +45,13 @@ namespace Popeye.Modules.PlayerController
             set { _maxSpeed = value; }
         }
 
-        [Header("ACCELERATION")] 
+        [Header("ACCELERATION")]
         [SerializeField, Range(0.0f, 100.0f)] private float _maxAcceleration = 10.0f;
 
         [SerializeField, Range(0.0f, 100.0f)] private float _maxAirAcceleration = 5.0f;
         [SerializeField, Range(0.0f, 100.0f)] private float _airFallAcceleration = 10.0f;
 
-        [Header("GROUND")] 
+        [Header("GROUND")]
         [SerializeField] private LayerMask _groundProbeMask = -1;
 
 
@@ -112,7 +113,7 @@ namespace Popeye.Modules.PlayerController
         private void Update()
         {
             _movementInput = MovementInputHandler.GetMovementInput();
-            _lookInput = _useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero; 
+            _lookInput = _useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
 
             _desiredVelocity = _movementInput * _maxSpeed;
 
@@ -223,7 +224,7 @@ namespace Popeye.Modules.PlayerController
             {
                 return false;
             }
-            
+
             if (!Physics.Raycast(_rigidbody.position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
                     _groundProbeMask))
             {
@@ -231,14 +232,14 @@ namespace Popeye.Modules.PlayerController
                 return false;
             }
             GroundNormal = hit.normal;
-            
-            
+
+
             float speed = _velocity.magnitude;
             if (speed > _groundSnapBreakSpeed)
             {
                 return false;
             }
-            
+
             if (hit.normal.y < GetGroundCollisionMinDot(hit.collider.gameObject.layer))
             {
                 return false;
@@ -329,6 +330,5 @@ namespace Popeye.Modules.PlayerController
         {
             return ProjectOnPlane(LookDirection, GroundNormal).normalized;
         }
-
     }
 }
