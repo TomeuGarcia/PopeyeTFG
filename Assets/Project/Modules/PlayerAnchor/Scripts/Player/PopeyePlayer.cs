@@ -365,8 +365,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void Respawn()
         {
             _playerMotion.SetPosition(_playerRespawner.RespawnPosition);  
+            _playerMotion.SetRotation(Quaternion.identity);
             _playerHealth.HealToMax();
             ResetAnchor();
+
+            _playerView.PlayRespawnAnimation();
         }
 
         private async UniTaskVoid DropTargetForEnemies(float duration)

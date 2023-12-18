@@ -28,6 +28,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField, Range(0.0f, 5.0f)] private float _healPunchDuration = 0.3f;
         [SerializeField] private Vector3 _healPunchScale = new Vector3(0.2f, -0.4f, 0.2f);
         
+        [Header("DEATH")]
+        [SerializeField] private Vector3 _deathRotation = new Vector3(90, 0, 0);
+        
         [Header("DASH")]
         [SerializeField] private Vector3 _dashPunchScale = new Vector3(0.2f, -0.4f, 0.2f);
         [SerializeField] private Vector3 _dashPunchRotation = new Vector3(45, 0, 0);
@@ -88,8 +91,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
             FlickBaseColor(numberOfFlicks, _takeDamageDuration/numberOfFlicks, _damagedColor).Forget();
         }
 
+        public void PlayRespawnAnimation()
+        {
+            _meshTransform.localRotation = Quaternion.identity;
+            _meshTransform.localPosition = Vector3.zero;
+        }
+
         public async UniTask PlayDeathAnimation()
         {
+            float motionDuration = _deathDuration * 0.2f;
+            _meshTransform.DORotate(_deathRotation, motionDuration)
+                .SetEase(Ease.InOutQuad);
+            _meshTransform.DOBlendableLocalMoveBy(Vector3.down*0.75f, motionDuration)
+                .SetEase(Ease.InOutQuad);
+            
             int numberOfFlicks = 2;
             await FlickBaseColor(numberOfFlicks, _deathDuration / numberOfFlicks, _damagedColor);
             SetMeshBaseColor(_damagedColor);
