@@ -25,7 +25,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            NextState = PlayerStates.WithAnchor;
+            NextState = PlayerStates.MovingWithAnchor;
             return true;
         }
 

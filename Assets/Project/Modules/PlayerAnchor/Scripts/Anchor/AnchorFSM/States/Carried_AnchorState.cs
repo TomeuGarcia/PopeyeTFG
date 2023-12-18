@@ -23,7 +23,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
                 0.05f * distance, Ease.InOutSine);
                 
             
-            _blackboard.AnchorPhysics.DisableAllPhysics();
+            _blackboard.AnchorPhysics.DisableTension();
             
             _blackboard.AnchorChain.SetCarriedView();
         }
