@@ -6,53 +6,69 @@ namespace Popeye.Modules.PlayerAnchor.Player
 {
     public interface IPlayerMediator
     {
+        Vector3 Position { get; }
 
-        public void SetMaxMovementSpeed(float maxMovementSpeed);
-        public void SetCanRotate(bool canRotate);
-        public float GetDistanceFromAnchor();
-        public Vector3 GetFloorAlignedDirectionToAnchor();
-        public Vector3 GetLookDirection();
-        public Vector3 GetFloorAlignedLookDirection();
-        public Vector3 GetLookDirectionConsideringSteep();
-        public Vector3 GetFloorNormal();
-        public Vector3 GetAnchorThrowStartPosition();
-
-
-
-        public void PickUpAnchor();
-        public void StartChargingThrow();
-        public void ChargeThrow(float deltaTime);
-        public void StopChargingThrow();
-        public void CancelChargingThrow();
-        public void ThrowAnchor();
-        public void PullAnchor();
-        public void OnPullAnchorComplete();
-        public void DashTowardsAnchor(float duration);
-        public void KickAnchor();
-        public UniTaskVoid StartSpinningAnchor();
-        public void StopSpinningAnchor();
+        void SetMaxMovementSpeed(float maxMovementSpeed);
+        void SetCanUseRotateInput(bool canUseRotateInput);
+        void SetCanRotate(bool canRotate);
+        void SetCanFallOffLedges(bool canFallOffLedges);
+        float GetDistanceFromAnchor();
+        float GetDistanceFromAnchorRatio01();
+        Vector3 GetFloorAlignedDirectionToAnchor();
+        Vector3 GetLookDirection();
+        Vector3 GetRightDirection();
+        Vector3 GetFloorAlignedLookDirection();
+        Vector3 GetLookDirectionConsideringSteep();
+        Vector3 GetFloorNormal();
+        Vector3 GetAnchorThrowStartPosition();
 
 
-        public void OnAnchorEndedInVoid();
+
+        void PickUpAnchor();
+        void StartChargingThrow();
+        void ChargeThrow(float deltaTime);
+        void StopChargingThrow();
+        void CancelChargingThrow();
+        void ThrowAnchor();
+        void PullAnchor();
+        void OnPullAnchorComplete();
+        
+        UniTask DashTowardsAnchor();
+        UniTask DashForward();
+        void KickAnchor();
+        
+        bool CanSpinAnchor();
+        bool IsLockedIntoSpinningAnchor();
+        void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight);
+        void SpinAnchor(float deltaTime);
+        void StopSpinningAnchor();
+        void InterruptSpinningAnchor();
+        bool SpinningAnchorFinished();
 
 
-        public UniTaskVoid LookTowardsAnchorForDuration(float duration);
+        void OnAnchorEndedInVoid();
+        void OnTryUsingObstructedAnchor();
+
+
+        void LookTowardsPosition(Vector3 position);
+        void LookTowardsAnchor();
+        UniTaskVoid LookTowardsAnchorForDuration(float duration);
         
 
-        public bool HasStaminaLeft();
-        public bool HasMaxStamina();
+        bool HasStaminaLeft();
+        bool HasMaxStamina();
 
 
-        public bool CanHeal();
-        public UniTask UseHeal();
-        public void HealToMax();
+        bool CanHeal();
+        UniTask UseHeal();
+        void HealToMax();
         
-        public void OnDamageTaken();
-        public void OnKilledByDamageTaken();
-        public void OnHealed();
+        void OnDamageTaken();
+        void OnKilledByDamageTaken();
+        void OnHealed();
 
 
-        public Transform GetTargetForEnemies();
-        public void Respawn();
+        Transform GetTargetForEnemies();
+        void Respawn();
     }
 }

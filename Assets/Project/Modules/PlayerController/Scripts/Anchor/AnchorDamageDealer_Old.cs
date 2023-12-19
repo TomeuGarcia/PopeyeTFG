@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Popeye.Modules.Camera;
+using Popeye.Modules.Notifiers;
 using Project.Modules.CombatSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 public class AnchorDamageDealer_Old : MonoBehaviour
@@ -17,8 +19,9 @@ public class AnchorDamageDealer_Old : MonoBehaviour
     [SerializeField, Range(0.0f, 500.0f)] private float _throwHitKnockbackForce = 80.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _throwHitStunDuration = 0.2f;
 
+    [FormerlySerializedAs("_groundHitNotifier")]
     [Header("GROUND HIT")]
-    [SerializeField] private TriggerNotifier _groundHitNotifier;
+    [SerializeField] private TriggerNotifierBehaviour groundHitNotifierBehaviour;
     [SerializeField, Range(0.0f, 30.0f)] private int _groundHitDamage = 10;
     [SerializeField, Range(0.0f, 500.0f)] private float _groundHitKnockbackForce = 120.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _groundHitStunDuration = 0.4f;
@@ -31,7 +34,7 @@ public class AnchorDamageDealer_Old : MonoBehaviour
     [SerializeField, Range(0.0f, 30.0f)] private int _meleeHitDamage = 5;
     [SerializeField, Range(0.0f, 500.0f)] private float _meleeHitKnockbackForce = 80.0f;
     [SerializeField, Range(0.0f, 5.0f)] private float _meleeHitStunDuration = 0.4f;
-    [SerializeField] private TriggerNotifier _meleeHitBoxNotifier;
+    [FormerlySerializedAs("_meleeHitBoxNotifier")] [SerializeField] private TriggerNotifierBehaviour meleeHitBoxNotifierBehaviour;
 
     [Header("PULL BACK HIT")]
     [SerializeField, Range(0.0f, 30.0f)] private int _pullBackHitDamage = 5;
@@ -58,8 +61,8 @@ public class AnchorDamageDealer_Old : MonoBehaviour
 
     private void Awake()
     {
-        _meleeHitBoxNotifier.DisableCollider();
-        _groundHitNotifier.DisableCollider();
+        meleeHitBoxNotifierBehaviour.DisableCollider();
+        groundHitNotifierBehaviour.DisableCollider();
     }
 
     private void Start()
@@ -138,18 +141,18 @@ public class AnchorDamageDealer_Old : MonoBehaviour
 
 
         sizeMultiplier = _groundHitSizeCurve.Evaluate(sizeMultiplier);
-        _groundHitNotifier.transform.position = dealerPosition;
-        _groundHitNotifier.transform.localScale = Vector3.one * (_groundHitRadius * sizeMultiplier);
+        groundHitNotifierBehaviour.transform.position = dealerPosition;
+        groundHitNotifierBehaviour.transform.localScale = Vector3.one * (_groundHitRadius * sizeMultiplier);
         
         PlayGroundHitAreaAnimation(_groundHitScale * sizeMultiplier, _groundHitDuration, 0.3f);
 
-        _groundHitNotifier.OnEnter += TryDealGroundDamage;
-        _groundHitNotifier.EnableCollider();
+        groundHitNotifierBehaviour.OnEnter += TryDealGroundDamage;
+        groundHitNotifierBehaviour.EnableCollider();
 
         await Task.Delay((int)(_groundHitDuration / 2 * 1000));
 
-        _groundHitNotifier.OnEnter -= TryDealGroundDamage;
-        _groundHitNotifier.DisableCollider();
+        groundHitNotifierBehaviour.OnEnter -= TryDealGroundDamage;
+        groundHitNotifierBehaviour.DisableCollider();
     }
 
     private void TryDealGroundDamage(Collider collider)
@@ -165,18 +168,18 @@ public class AnchorDamageDealer_Old : MonoBehaviour
         Vector3 scale = Vector3.one * _explosionHitSize;
         float duration = 0.5f;
 
-        _groundHitNotifier.transform.position = dealerPosition;
-        _groundHitNotifier.transform.localScale = scale / 2;
+        groundHitNotifierBehaviour.transform.position = dealerPosition;
+        groundHitNotifierBehaviour.transform.localScale = scale / 2;
 
         PlayExplosionHitAreaAnimation(scale, duration, 0.5f);
 
-        _groundHitNotifier.OnEnter += TryDealExplosionDamage;
-        _groundHitNotifier.EnableCollider();
+        groundHitNotifierBehaviour.OnEnter += TryDealExplosionDamage;
+        groundHitNotifierBehaviour.EnableCollider();
 
         await Task.Delay(MathUtilities.SecondsToMilliseconds(duration));
 
-        _groundHitNotifier.OnEnter -= TryDealExplosionDamage;
-        _groundHitNotifier.DisableCollider();
+        groundHitNotifierBehaviour.OnEnter -= TryDealExplosionDamage;
+        groundHitNotifierBehaviour.DisableCollider();
     }
 
     private void TryDealExplosionDamage(Collider collider)
@@ -192,13 +195,13 @@ public class AnchorDamageDealer_Old : MonoBehaviour
 
         _meleeHit.Position = dealerPosition;
 
-        _meleeHitBoxNotifier.OnEnter += TryDealMeleeDamage;
-        _meleeHitBoxNotifier.EnableCollider();
+        meleeHitBoxNotifierBehaviour.OnEnter += TryDealMeleeDamage;
+        meleeHitBoxNotifierBehaviour.EnableCollider();
 
         await Task.Delay((int)(duration * 1000));
 
-        _meleeHitBoxNotifier.OnEnter -= TryDealMeleeDamage;
-        _meleeHitBoxNotifier.DisableCollider();
+        meleeHitBoxNotifierBehaviour.OnEnter -= TryDealMeleeDamage;
+        meleeHitBoxNotifierBehaviour.DisableCollider();
     }
 
     private void TryDealMeleeDamage(Collider collider)
@@ -234,7 +237,7 @@ public class AnchorDamageDealer_Old : MonoBehaviour
         hitEffect.LocalScale = scale;
         hitEffect.Duration = duration;
 
-        CameraShake.Instance.PlayShake(0.05f, shakeDuration);
+        CameraShakerSingleton.Instance.PlayShake(0.05f, shakeDuration);
     }
     
     private void PlayExplosionHitAreaAnimation(Vector3 scale, float duration, float shakeDuration)
@@ -243,7 +246,7 @@ public class AnchorDamageDealer_Old : MonoBehaviour
         hitEffect.LocalScale = scale;
         hitEffect.Duration = duration;
 
-        CameraShake.Instance.PlayShake(0.05f, shakeDuration);
+        CameraShakerSingleton.Instance.PlayShake(0.05f, shakeDuration);
     }
 
     private void SpawnHitEffect(GameObject hitTarget)

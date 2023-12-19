@@ -10,17 +10,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Vector3 LastTrajectoryPathPoint => TrajectoryPathPoints[^1];
         public Vector3 Direction { get; private set; }
         public Quaternion StartLookRotation { get; private set; }
-        public Quaternion EndLookRotation { get; private set; }
+        public Quaternion EndLookRotation { get; set; }
         public float Duration { get; private set; }
         public bool EndsOnVoid { get; private set; }
 
         
-        public AnimationCurve InterpolationEaseCurve { get; private set; }
+        public AnimationCurve MoveEaseCurve { get; private set; }
+        public AnimationCurve RotateEaseCurve { get; private set; }
 
 
-        public AnchorThrowResult(AnimationCurve interpolationEaseCurve)
+        public AnchorThrowResult(AnimationCurve moveEaseCurve, AnimationCurve rotateEaseCurve)
         {
-            InterpolationEaseCurve = interpolationEaseCurve;
+            MoveEaseCurve = moveEaseCurve;
+            RotateEaseCurve = rotateEaseCurve;
         }
         
         public void Reset(Vector3[] throwPathPoints, Vector3 direction, Quaternion startLookRotation, Quaternion endLookRotation,

@@ -13,35 +13,50 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PopeyeAnchor _anchor;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrowConfig _throwConfig;
+        private AnchorThrowConfig _verticalThrowConfig;
         
         private AnchorAutoAimController _anchorAutoAimController;
         
         
         private float _currentThrowForce01;
         private float _currentThrowCurveForce01;
+
+
+        private Quaternion _verticalThrowStartRotation;
+        private Quaternion _verticalThrowEndRotation;
+        
         
         public float ThrowDistance { get; private set; }
         public Vector3 ThrowDirection { get; private set; }
         private bool _anchorIsBeingThrown;
 
         public AnchorThrowResult AnchorThrowResult { get; private set; }
+        public AnchorThrowResult AnchorVerticalThrowResult { get; private set; }
 
         
             
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker,
-            AnchorThrowConfig throwConfig, AnchorAutoAimController anchorAutoAimController)
+            AnchorThrowConfig throwConfig, AnchorThrowConfig verticalThrowConfig,
+            AnchorAutoAimController anchorAutoAimController)
         {
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
+            _verticalThrowConfig = verticalThrowConfig;
             _throwConfig = throwConfig;
             _anchorAutoAimController = anchorAutoAimController;
 
-            AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve);
+            AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve,
+                _throwConfig.RotateInterpolationCurve);
+            AnchorVerticalThrowResult = new AnchorThrowResult(_verticalThrowConfig.MoveInterpolationCurve,
+                _verticalThrowConfig.RotateInterpolationCurve);
             
             ResetThrowForce();
+            
+            _verticalThrowStartRotation = Quaternion.LookRotation(Vector3.up, Vector3.right);
+            _verticalThrowEndRotation = Quaternion.LookRotation(Vector3.down, Vector3.left);
         }
 
         public bool AnchorIsBeingThrown()
@@ -104,13 +119,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             if (_anchorAutoAimController.HasAutoAimTarget)
             {
+                AnchorThrowResult.EndLookRotation = _anchorAutoAimController.GetTargetRotation();
                 _anchorAutoAimController.UseCurrentTarget(AnchorThrowResult.Duration);
             }
 
             _anchor.SetThrown(AnchorThrowResult);
             DoThrowAnchor(AnchorThrowResult).Forget();
         }
-        
+
+        public void ThrowAnchorVertically()
+        {
+            float distance = _verticalThrowConfig.MaxThrowDistance;
+            float duration = _verticalThrowConfig.MaxThrowMoveDuration;
+            
+            Vector3[] throwTrajectory = _anchorTrajectoryMaker.ComputeUpAndDownTrajectory(_anchor.Position, distance,
+                out RaycastHit floorHit);
+            
+            AnchorVerticalThrowResult.Reset(throwTrajectory, Vector3.up, 
+                _verticalThrowStartRotation, _verticalThrowEndRotation, duration, false);
+            
+            _anchor.SetThrownVertically(AnchorVerticalThrowResult, floorHit);
+            DoThrowAnchor(AnchorVerticalThrowResult).Forget();
+        }
+
         private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
         {
             _anchorIsBeingThrown = true;

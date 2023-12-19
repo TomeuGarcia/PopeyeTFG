@@ -1,9 +1,10 @@
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "AnchorKickConfig", 
-        menuName = AnchorConfigHelper.SO_ASSETS_PATH + "AnchorKickConfig")]
+        menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorKickConfig")]
     public class AnchorKickConfig : ScriptableObject
     {
         [Header("DURATIONS")]

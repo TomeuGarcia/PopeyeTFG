@@ -18,6 +18,7 @@ Shader "Unlit/AreaHitUV_Shader"
         LOD 100
 
         Blend SrcAlpha OneMinusSrcAlpha
+        Cull off
 
         Pass
         {

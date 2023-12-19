@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -31,6 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (_finishedDashing)
             {
                 NextState = PlayerStates.PickingUpAnchor;
+                //NextState = PlayerStates.MovingWithoutAnchor; // Player won't pick up anchor if on snap target
                 return true;
             }
 
@@ -40,8 +42,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid StartDashing()
         {
             _finishedDashing = false;
-            _blackboard.PlayerMediator.DashTowardsAnchor(_blackboard.PlayerStatesConfig.DashDuration);
-            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.DashDuration));
+            
+            await _blackboard.PlayerMediator.DashTowardsAnchor();
+
             _finishedDashing = true;
         }
     }
