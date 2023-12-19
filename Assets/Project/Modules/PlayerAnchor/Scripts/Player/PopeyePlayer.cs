@@ -1,4 +1,5 @@
 using System;
+using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
@@ -17,6 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _anchorGrabToThrowHolder;
         [SerializeField] private Transform _targetForEnemies;
         [SerializeField] private PlayerRespawner _playerRespawner;
+        private IPlayerAudio _playerAudio;
         
         public Transform AnchorCarryHolder => _anchorCarryHolder;
         public Transform AnchorGrabToThrowHolder => _anchorGrabToThrowHolder;
@@ -30,6 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerHealth _playerHealth;
         private TimeStaminaSystem _staminaSystem;
         
+        private PlayerMovement _playerMovement;
         private TransformMotion _playerMotion;
         private PlayerDasher _playerDasher;
         
@@ -46,8 +49,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
-            IPlayerView playerView, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
-            TransformMotion playerMotion, PlayerDasher playerDasher,
+            IPlayerView playerView, IPlayerAudio playerAudio, 
+            PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
+            PlayerMovement playerMovement, TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner)
@@ -59,6 +63,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerView = playerView;
             _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
+            _playerMovement = playerMovement;
             _playerMotion = playerMotion;
             _playerDasher = playerDasher;
             _anchor = anchor;
@@ -67,6 +72,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorKicker = anchorKicker;
             _anchorSpinner = anchorSpinner;
 
+            _playerAudio = playerAudio;
+            
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
             
@@ -81,6 +88,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void Update()
         {
             _stateMachine.Update(Time.deltaTime);
+            _playerMovement.Update();
         }
 
         private void ResetAnchor()
@@ -372,6 +380,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.DisableForDuration(0.3f).Forget();
 
             _playerView.PlayRespawnAnimation();
+        }
+
+        public void OnStartMoving()
+        {
+            _playerAudio.StartPlayingStepsSounds();
+        }
+
+        public void OnStopMoving()
+        {
+            _playerAudio.StopPlayingStepsSounds();
         }
 
         private async UniTaskVoid DropTargetForEnemies(float duration)

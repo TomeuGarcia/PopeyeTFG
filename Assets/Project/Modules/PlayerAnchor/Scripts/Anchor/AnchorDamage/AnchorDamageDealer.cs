@@ -11,6 +11,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public class AnchorDamageDealer : MonoBehaviour
     {
+        private IAnchorMediator _anchor;
         private AnchorDamageConfig _config;
         private Transform _damageStartTransform;
         
@@ -29,9 +30,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         private DamageHit _spinDamageHit;
         private DamageHit _verticalLandDamageHit;
 
-        public void Configure(AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
+        public void Configure(IAnchorMediator anchor,
+            AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
             Transform damageStartTransform)
         {
+            _anchor = anchor;
+            
             _config = anchorDamageConfig;
             _damageStartTransform = damageStartTransform;
 
@@ -43,25 +47,44 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             _anchorThrowDamageTrigger.Configure(combatManager, _throwDamageHit);
             _anchorThrowDamageTrigger.Deactivate();
-            
+
             _anchorSpinDamageTrigger.Configure(combatManager, _spinDamageHit);
             _anchorSpinDamageTrigger.Deactivate();
             
+            
             _anchorVerticalLandDamageTrigger.Configure(combatManager, _verticalLandDamageHit);
             _anchorVerticalLandDamageTrigger.Deactivate();
-            _anchorVerticalLandDamageTrigger.OnBeforeDamageDealt += SetPushAwayFromOriginKnockback;
+            
 
             _throwDamageTriggerMotion = new TransformMotion();
             _throwDamageTriggerMotion.Configure(_anchorThrowDamageTrigger.transform);
 
             _spinDamageTriggerMotion = new TransformMotion();
             _spinDamageTriggerMotion.Configure(_anchorSpinDamageTrigger.transform);
+
+            SubscribeToEvents();
         }
 
         private void OnDestroy()
         {
+            UnsubscribeToEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+            _anchorThrowDamageTrigger.OnDamageDealt += OnDamageDealt;
+            _anchorSpinDamageTrigger.OnDamageDealt += OnDamageDealt;
+            _anchorVerticalLandDamageTrigger.OnDamageDealt += OnDamageDealt;
+            _anchorVerticalLandDamageTrigger.OnBeforeDamageDealt += SetPushAwayFromOriginKnockback;
+        }
+        private void UnsubscribeToEvents()
+        {
+            _anchorThrowDamageTrigger.OnDamageDealt -= OnDamageDealt;
+            _anchorSpinDamageTrigger.OnDamageDealt -= OnDamageDealt;
+            _anchorVerticalLandDamageTrigger.OnDamageDealt -= OnDamageDealt;
             _anchorVerticalLandDamageTrigger.OnBeforeDamageDealt -= SetPushAwayFromOriginKnockback;
         }
+        
 
 
         public void DealThrowDamage(AnchorThrowResult anchorThrowResult)
@@ -205,7 +228,13 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorSpinDamageTrigger.Deactivate();
             _anchorSpinDamageTrigger.OnBeforeDamageDealt -= SetPushSidewaysKnockback;
         }
-        
+
+
+
+        private void OnDamageDealt(DamageHitResult damageHitResult)
+        {
+            _anchor.OnDamageDealt();
+        }
         
     }
 }
