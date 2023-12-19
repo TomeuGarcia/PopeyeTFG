@@ -1878,6 +1878,34 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &220954926 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6296819673629738256, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 308813588}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &220954928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220954926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63aeec9146340e3499f43c26974aa0b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
+  _originalMeshDatas:
+  - _mesh: {fileID: 307434112}
+    _originalMaterial: {fileID: 0}
+  - _mesh: {fileID: 618139986}
+    _originalMaterial: {fileID: 0}
+  - _mesh: {fileID: 688021813}
+    _originalMaterial: {fileID: 0}
+  - _mesh: {fileID: 1303689172}
+    _originalMaterial: {fileID: 0}
 --- !u!1 &224469707
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,6 +2206,12 @@ MonoBehaviour:
   _worldInteractors:
   - {fileID: 1850755673}
   - {fileID: 1546817930}
+--- !u!23 &307434112 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3104470871057553272, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 308813588}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &308813588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2227,11 +2261,26 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 2375194297602598589, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5126c960789a3764da828bd6dde15b27, type: 2}
     - target: {fileID: 2691367189758022406, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
         type: 3}
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 3051578705950110251, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5126c960789a3764da828bd6dde15b27, type: 2}
+    - target: {fileID: 3104470871057553272, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5126c960789a3764da828bd6dde15b27, type: 2}
     - target: {fileID: 3947266831124542383, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
         type: 3}
       propertyPath: m_Layer
@@ -2247,6 +2296,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 4853848099122911749, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5126c960789a3764da828bd6dde15b27, type: 2}
+    - target: {fileID: 6265768111632777584, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      propertyPath: _enemyVisuals
+      value: 
+      objectReference: {fileID: 220954928}
     - target: {fileID: 6296819673629738256, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
         type: 3}
       propertyPath: m_Layer
@@ -2340,7 +2399,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6296819673629738256, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 220954928}
   m_SourcePrefab: {fileID: 100100000, guid: 1c706ec9c3e32b2438a0466005f5a4e4, type: 3}
 --- !u!1001 &314322486
 PrefabInstance:
@@ -4713,6 +4776,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!23 &618139986 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4853848099122911749, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 308813588}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &621007502
 Mesh:
   m_ObjectHideFlags: 0
@@ -5856,6 +5925,12 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!23 &688021813 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2375194297602598589, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 308813588}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &695065369
 GameObject:
   m_ObjectHideFlags: 0
@@ -10733,7 +10808,7 @@ MonoBehaviour:
   - _delayBeforeWaveSpawning: 1
     _spawnSequence:
     - _delayBeforeSpawn: 0
-      _enemyPrefab: {fileID: 2711686069890572797, guid: 4377d212ca901e94c898446b901227b5,
+      _enemyPrefab: {fileID: 2126051418465907956, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
         type: 3}
       _spawnSpot: {fileID: 1952553761}
   - _delayBeforeWaveSpawning: 1
@@ -10746,6 +10821,10 @@ MonoBehaviour:
       _enemyPrefab: {fileID: 2711686069890572797, guid: 4377d212ca901e94c898446b901227b5,
         type: 3}
       _spawnSpot: {fileID: 757469787}
+    - _delayBeforeSpawn: 0.5
+      _enemyPrefab: {fileID: 2126051418465907956, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+        type: 3}
+      _spawnSpot: {fileID: 1095301847}
   - _delayBeforeWaveSpawning: 1
     _spawnSequence:
     - _delayBeforeSpawn: 0
@@ -10770,8 +10849,6 @@ MonoBehaviour:
       _enemyPrefab: {fileID: 5980008594002771081, guid: b0c64d3da80613f449b04033ea69b64a,
         type: 3}
       _spawnSpot: {fileID: 757469787}
-  _enemyConfiguration: {fileID: 11400000, guid: 0f9d598e6e987c643bd4a9399a2149d5,
-    type: 2}
 --- !u!4 &1068362560
 Transform:
   m_ObjectHideFlags: 0
@@ -14670,6 +14747,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!23 &1303689172 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3051578705950110251, guid: 1c706ec9c3e32b2438a0466005f5a4e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 308813588}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1314446172
 Mesh:
   m_ObjectHideFlags: 0
