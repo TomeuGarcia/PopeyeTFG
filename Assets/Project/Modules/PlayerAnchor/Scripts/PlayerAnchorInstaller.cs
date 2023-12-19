@@ -36,6 +36,7 @@ namespace Project.Modules.PlayerAnchor
         [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
+        [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
        
         
         
@@ -43,6 +44,7 @@ namespace Project.Modules.PlayerAnchor
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
+        [SerializeField] private AnchorCollisions _anchorCollisions;
         [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private Transform _anchorMoveTransform;
@@ -108,31 +110,34 @@ namespace Project.Modules.PlayerAnchor
             AnchorThrower anchorThrower = new AnchorThrower();
             AnchorPuller anchorPuller = new AnchorPuller();
             AnchorKicker anchorKicker = new AnchorKicker();
+            AnchorSpinner anchorSpinner = new AnchorSpinner();
             AnchorTrajectoryMaker anchorTrajectoryMaker = new AnchorTrajectoryMaker();
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
             AnchorAutoAimController anchorAutoAimController = new AnchorAutoAimController();
             
-            
             anchorMotion.Configure(_anchorMoveTransform);
-            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  _anchorGeneralConfig.ThrowConfig, 
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
+                _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
                 anchorAutoAimController);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
-            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.PullConfig,
-                debugLine, debugLine2, debugLine3);
+            anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
+            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
+                _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, _anchorChain, 
                 _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorAutoAimController.Configure();
+            _anchorCollisions.Configure(_obstacleProbingConfig);
 
             _anchorDamageDealer.Configure(_anchorGeneralConfig.DamageConfig, combatManager, _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorView.Value, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
+                _anchorPhysics, _anchorCollisions, _anchorView.Value, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
 
             
             
@@ -144,16 +149,19 @@ namespace Project.Modules.PlayerAnchor
             PlayerFSM playerStateMachine = new PlayerFSM();
             TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
+            PlayerDasher playerDasher = new PlayerDasher();
+            
             
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
                 _playerGeneralConfig.PotionHealAmount);
+            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, _obstacleProbingConfig);
 
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                _playerView.Value, playerHealth, playerStamina, playerMotion, 
-                _anchor, anchorThrower, anchorPuller, anchorKicker);
+                _playerView.Value, playerHealth, playerStamina, playerMotion, playerDasher,
+                _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner);
             _playerController.MovementInputHandler = movementInputHandler;
             
             playerStateMachine.Setup(playerStatesBlackboard);
@@ -168,5 +176,10 @@ namespace Project.Modules.PlayerAnchor
         }
 
 
+        public void Uninstall()
+        {
+            ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
+            ServiceLocator.Instance.RemoveService<IGameReferences>();
+        }
     }
 }

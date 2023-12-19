@@ -18,7 +18,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
                 Vector3.zero, _blackboard.AnchorMotionConfig.GrabbedToThrowAnchorRotation,
                 0.2f, Ease.InOutSine);
             
-            _blackboard.AnchorPhysics.DisableAllPhysics();
+            _blackboard.AnchorPhysics.DisableTension();
         }
         
 

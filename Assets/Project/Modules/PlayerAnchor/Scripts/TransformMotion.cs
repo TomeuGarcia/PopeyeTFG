@@ -9,6 +9,7 @@ namespace Project.Modules.PlayerAnchor
         private Transform _rotateTransform;
 
         public Vector3 Position => _moveTransform.position;
+        public Quaternion Rotation => _rotateTransform.rotation;
 
         ~TransformMotion()
         {
