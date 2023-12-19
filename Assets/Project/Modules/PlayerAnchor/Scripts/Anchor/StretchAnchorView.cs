@@ -61,6 +61,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _landHitMesh.gameObject.SetActive(false);
         }
 
+        public void ResetView()
+        {
+            _dropShadow.Hide();
+            _meshTransform.DOComplete();
+        }
+        
         public void PlayThrownAnimation(float duration)
         {
             _dropShadow.Show();
