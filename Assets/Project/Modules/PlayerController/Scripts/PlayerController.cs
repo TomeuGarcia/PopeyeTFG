@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
 
-using FMODUnity;
+
 
 using UnityEngine.Serialization;
 
@@ -15,9 +15,7 @@ namespace Popeye.Modules.PlayerController
     public class PlayerController : MonoBehaviour
     {
  
-        [SerializeField]
-        public FMODUnity.EventReference CharacterFootsteps;
-        private string CharacterFootsetepsSFX = null;
+      
 
         // Input
         public IMovementInputHandler MovementInputHandler { get; set; }

@@ -8460,11 +8460,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6729858696906676878, guid: f97430f90b7b93844aed8c92ab510464,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1488916442}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f97430f90b7b93844aed8c92ab510464, type: 3}
 --- !u!43 &232576286
 Mesh:
@@ -8812,7 +8808,7 @@ PrefabInstance:
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -63.639614
+      value: -63.639618
       objectReference: {fileID: 0}
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
@@ -8822,6 +8818,11 @@ PrefabInstance:
     - target: {fileID: 5147365875078981244, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7748692174019190634, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8858682826613895691, guid: 61359a5635263194cb04184fb741ba5e,
@@ -41355,11 +41356,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6729858696906676878, guid: f97430f90b7b93844aed8c92ab510464,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1050241946}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f97430f90b7b93844aed8c92ab510464, type: 3}
 --- !u!4 &911692910 stripped
 Transform:
@@ -50181,37 +50178,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 905965928}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1050241946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 141332763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 2122257046
-      Data2: 1247657634
-      Data3: -995587144
-      Data4: -1031131651
-    Path: event:/UI_Pause
-  Event: 
-  PlayEvent: 3
-  StopEvent: 4
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  AllowNonRigidbodyDoppler: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!43 &1050907863
 Mesh:
   m_ObjectHideFlags: 0
