@@ -1,5 +1,3 @@
-using System;
-using Project.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 
 namespace Project.Modules.PlayerAnchor.Anchor
@@ -9,50 +7,35 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
-
+        
+        
+        
         private IAnchorMediator _anchorMediator;
-
+        
 
 
         public void Configure(IAnchorMediator anchorMediator)
         {
             _anchorMediator = anchorMediator;
-        }
-        
-
-        public void DisableAllPhysics()
-        {
-            _collider.enabled = false;
-            UseGravity(false);
+            
+            _rigidbody.transform.localPosition = Vector3.zero;
             _rigidbody.interpolation = RigidbodyInterpolation.None;
-            SetImmovable();
-        }
-        
-        public void EnableAllPhysics()
-        {
-            _collider.enabled = true;
-            UseGravity(true);
-            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-            SetMovable();
-        }
-
-
-        public void UseGravity(bool useGravity)
-        {
-            _rigidbody.useGravity = useGravity;
-
-            _rigidbody.drag = useGravity ? 0 : float.MaxValue;
-            _rigidbody.mass = useGravity ? 3 : float.MaxValue;
-        }
-        
-        public void SetMovable()
-        {
-            _rigidbody.isKinematic = false;
-        }
-        public void SetImmovable()
-        {
             _rigidbody.isKinematic = true;
         }
         
+
+        public void EnableTension()
+        {
+            _rigidbody.gameObject.SetActive(true);
+            _collider.enabled = true;
+        }
+        
+        public void DisableTension()
+        {
+            _collider.enabled = false;
+            _rigidbody.gameObject.SetActive(false);
+        }
+
+
     }
 }

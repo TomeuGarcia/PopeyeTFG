@@ -18,6 +18,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
+            _blackboard.queuedAnchorPull = false;
+            
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.PullingAnchorMoveSpeed);
             StartPulling().Forget();
         }
@@ -31,7 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_anchorPullingFinished)
             {
-                NextState = PlayerStates.WithAnchor;
+                NextState = PlayerStates.MovingWithAnchor;
                 return true;
             }
             

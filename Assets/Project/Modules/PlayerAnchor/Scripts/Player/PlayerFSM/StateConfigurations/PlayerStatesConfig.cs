@@ -1,11 +1,12 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
+using Project.Scripts.ProjectHelpers;
 using UnityEngine;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 {
     [CreateAssetMenu(fileName = "PlayerStatesConfig", 
-        menuName = PlayerConfigHelper.SO_ASSETS_PATH + "PlayerStatesConfig")]
+        menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerStatesConfig")]
     public class PlayerStatesConfig : ScriptableObject
     {
         [Header("SPAWNING")]
@@ -23,6 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _throwingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _pullingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _kickingAnchorMoveSpeed = 0.5f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _spinningAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _tiredMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _healingMoveSpeed = 2.5f;
 
@@ -32,6 +34,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float ThrowingAnchorMoveSpeed => _throwingAnchorMoveSpeed;
         public float PullingAnchorMoveSpeed => _pullingAnchorMoveSpeed;
         public float KickingAnchorMoveSpeed => _kickingAnchorMoveSpeed;
+        public float SpinningAnchorMoveSpeed => _spinningAnchorMoveSpeed;
         public float TiredMoveSpeed => _tiredMoveSpeed;
         public float HealingMoveSpeed => _healingMoveSpeed;
         
@@ -49,11 +52,22 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 
         
         [Header("DASH")]
-        [SerializeField, Range(0.01f, 10.0f)] private float _dashDuration = 0.25f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _minDashDuration = 0.05f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _maxDashDuration = 0.35f;
         [SerializeField, Range(0.01f, 10.0f)] private float _dashInvulnerableDuration = 0.5f;
         
-        public float DashDuration => _dashDuration;
+        public float MinDashDuration => _minDashDuration;
+        public float MaxDashDuration => _maxDashDuration;
         public float DashInvulnerableDuration => _dashInvulnerableDuration;
+        
+        
+        [Header("ROLL")]
+        [SerializeField, Range(0.01f, 10.0f)] private float _minRollDuration = 0.05f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _maxRollDuration = 0.35f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _rollInvulnerableDuration = 0.5f;
+        public float MinRollDuration => _minRollDuration;
+        public float MaxRollDuration => _maxRollDuration;
+        public float RollInvulnerableDuration => _rollInvulnerableDuration;
 
     }
 }

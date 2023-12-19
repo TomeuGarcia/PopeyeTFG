@@ -62,7 +62,7 @@ public class FOVTest : MonoBehaviour
         Ray r = Camera.main.ScreenPointToRay(new Vector2(_cam.pixelWidth / 10, _cam.pixelHeight / 2));
         Debug.DrawRay(r.origin , r.direction * 100, Color.red, 100, true);
 
-        Vector3 pos = r.GetPoint(_camera.GetComponent<OrbitingCamera>()._distance);
+        Vector3 pos = r.GetPoint(_camera.GetComponent<OrbitingCamera>().Distance);
         Debug.Log(pos);
         Instantiate(screenMarker, pos, Quaternion.identity);
     }
@@ -72,7 +72,7 @@ public class FOVTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             fov = _cam.fieldOfView;
-            dist = _camera.GetComponent<OrbitingCamera>()._distance;
+            dist = _camera.GetComponent<OrbitingCamera>().Distance;
             
             ScreenCapture.CaptureScreenshot("screenshot_lone_" + "Fov" + fov + "_Dist" + dist + System.DateTime.Now.ToString(" MM-dd-yy (HH-mm-ss)") + ".png");
             Debug.Log("Screenshot taken" + System.DateTime.Now.ToString("MM-dd-yy (HH-mm-ss)"));

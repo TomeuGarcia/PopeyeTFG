@@ -34,10 +34,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             {
                 _blackboard.queuedDashTowardsAnchor = true;
             }
+            if (_blackboard.MovesetInputsController.Pull_Pressed())
+            {
+                _blackboard.queuedAnchorPull = true;
+            }
             
             if (_anchorThrowFinished)
             {
-                NextState = PlayerStates.WithoutAnchor;
+                NextState = PlayerStates.MovingWithoutAnchor;
                 return true;
             }
             
