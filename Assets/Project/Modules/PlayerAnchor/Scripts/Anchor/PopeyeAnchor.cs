@@ -19,6 +19,18 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {
+        [SerializeField]
+        public FMODUnity.EventReference AnchorHit;
+        private string AnchorHitSFX = null;
+
+        [SerializeField]
+        public FMODUnity.EventReference AnchorThrow;
+        private string AnchorThrowSFX = null;
+
+        [SerializeField]
+        public FMODUnity.EventReference AnchorGrab;
+        private string AnchorGrabSFX = null;
+
         private AnchorFSM _stateMachine;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrower _anchorThrower;
@@ -154,6 +166,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
             
             _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
+
+           
+
+           
         }
         
         public void SetCarried()

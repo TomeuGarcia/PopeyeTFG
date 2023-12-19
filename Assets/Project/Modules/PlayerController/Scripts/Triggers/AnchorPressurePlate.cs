@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget
 {
+   
     [Header("REFERENCES")]
     [SerializeField] private Material _triggeredMaterial;
     [SerializeField] private Material _notTriggeredMaterial;
