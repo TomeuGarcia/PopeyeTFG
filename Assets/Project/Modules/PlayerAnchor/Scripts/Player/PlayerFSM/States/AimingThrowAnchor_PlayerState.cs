@@ -14,6 +14,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
+            _blackboard.queuedAnchorThrow = false;
+            
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
             _blackboard.PlayerMediator.SetCanUseRotateInput(true);
             _blackboard.PlayerMediator.SetCanFallOffLedges(false);
