@@ -2,6 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Popeye.Core.Services.GameReferences;
+using Popeye.Core.Services.ServiceLocator;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.VFX
@@ -40,8 +44,12 @@ namespace Popeye.Modules.Enemies.VFX
         public virtual void PlayHitEffects(float healthCoef01)
         {
             _originalMeshDatas[0]._mesh.material.SetFloat("_Health", healthCoef01);
+            
+            //smallest camera shake
 
-            FlashEffect();
+
+            CircleEffect().Forget();
+            FlashEffect().Forget();
         }
 
         private async UniTaskVoid FlashEffect()
@@ -64,10 +72,37 @@ namespace Popeye.Modules.Enemies.VFX
                 }
             }
         }
+        
+        private async UniTaskVoid CircleEffect()
+        {
+            //TODO delete
+            Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
+            Vector3 spawnPos = transform.position + (player.position - transform.position) * 0.3f;
+            Transform _circle = Instantiate(_visualConfig._circlePrefab, spawnPos, quaternion.identity).transform;
+            GameObject _particles = Instantiate(_visualConfig._particlesPrefab, spawnPos, quaternion.identity);
+            
+            _circle.LookAt(player);
+            _particles.transform.LookAt(player);
+            
+            _circle.gameObject.SetActive(true);
+            _particles.gameObject.SetActive(true);
+            
+            _circle.gameObject.SetActive(true);
+            MeshRenderer circleMR = _circle.gameObject.GetComponent<MeshRenderer>();
+            circleMR.material.SetFloat("_Alpha", 1.0f);
+
+            _circle.localScale = new Vector3(_visualConfig._circleInterpolateData._startScale, _visualConfig._circleInterpolateData._startScale, _visualConfig._circleInterpolateData._startScale);
+            _circle.DOScale(new Vector3(_visualConfig._circleInterpolateData._endScale, _visualConfig._circleInterpolateData._endScale, _visualConfig._circleInterpolateData._endScale), _visualConfig._circleInterpolateData._totalTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(_visualConfig._circleInterpolateData._fadeOutDelay));
+            circleMR.material.DOFloat(0.0f, "_Alpha", _visualConfig._circleInterpolateData._fadeOutTime);
+        
+            await UniTask.Delay(TimeSpan.FromSeconds(_visualConfig._circleInterpolateData._fadeOutTime + 0.2f));
+            _circle.gameObject.SetActive(false);
+        }
 
         public virtual void PlayDeathEffects()
         {
-
+            CircleEffect().Forget();
         }
     }
 }

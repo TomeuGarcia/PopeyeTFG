@@ -44,11 +44,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
 
+            /*
             if (PlayerCanKickAnchor())
             {
                 NextState = PlayerStates.KickingAnchor;
                 return true;
             }
+            */
 
             if (PlayerTriesToSpinAnchor())
             {
@@ -81,6 +83,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanPullAnchor()
         {
+            if (_blackboard.queuedAnchorPull && _blackboard.AnchorMediator.IsRestingOnFloor())
+            {
+                _blackboard.queuedAnchorPull = false;
+                return true;
+            }
+            
             return _blackboard.MovesetInputsController.Pull_Pressed();
         }
 
