@@ -73,6 +73,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void ResetState(Vector3 position)
         {
             _stateMachine.Reset();
+            _anchorView.ResetView();
             SetPosition(position);
         }
         

@@ -54,6 +54,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanThrowAnchor()
         {
+            if (_blackboard.queuedAnchorThrow)
+            {
+                _blackboard.queuedAnchorThrow = false;
+                return true;
+            }
+            
             return _blackboard.MovesetInputsController.Throw_Pressed();
         }
 
