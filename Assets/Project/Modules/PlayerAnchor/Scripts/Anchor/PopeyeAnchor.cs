@@ -167,12 +167,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
 
-            if(AnchorHitSFX != null)
-            {
-                FMOD.Studio.EventInstance AnchorHitSFXInstance = RuntimeManager.CreateInstance(AnchorHitSFX);
-                AnchorHitSFXInstance.start();
-                AnchorHitSFXInstance.release();
-            }
+           
 
            
         }

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
-<<<<<<< HEAD
+
 using FMODUnity;
-=======
+
 using UnityEngine.Serialization;
->>>>>>> develop
+
 
 namespace Popeye.Modules.PlayerController
 {
@@ -35,13 +35,11 @@ namespace Popeye.Modules.PlayerController
         private Material _material;
 
 
-<<<<<<< HEAD
-        [Header("LOOK")]
-        [SerializeField] private bool _useLookInput = true;
-=======
+
+
         [Header("LOOK")] 
         [SerializeField] public bool useLookInput = true;
->>>>>>> develop
+
         [SerializeField] private Transform _lookTransform;
         [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;
         [SerializeField, Range(0.0f, 1.0f)] private float _blendWithVelocityDirection = 0.0f;
@@ -140,12 +138,7 @@ namespace Popeye.Modules.PlayerController
         private void Update()
         {
             _movementInput = MovementInputHandler.GetMovementInput();
-<<<<<<< HEAD
-            _lookInput = _useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
 
-            _desiredVelocity = _movementInput * _maxSpeed;
-
-=======
             _lookInput = useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
             _movementDirection = _movementInput;
             
@@ -156,7 +149,7 @@ namespace Popeye.Modules.PlayerController
             
             _desiredVelocity = _movementDirection * _maxSpeed;
             
->>>>>>> develop
+
             //_material.SetColor("_Color", OnGround ? Color.black : Color.white);
         }
 
@@ -433,14 +426,13 @@ namespace Popeye.Modules.PlayerController
         {
             return ProjectOnPlane(LookDirection, GroundNormal).normalized;
         }
-<<<<<<< HEAD
-=======
+
 
         public void SetCheckLedges(bool checkLedges)
         {
             _checkLedges = checkLedges;
         }
 
->>>>>>> develop
+
     }
 }
