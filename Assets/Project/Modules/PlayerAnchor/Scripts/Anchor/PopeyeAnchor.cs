@@ -47,7 +47,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public Vector3 Position => _anchorMotion.Position;
         public Quaternion Rotation => _anchorMotion.Rotation;
 
-        
+
+        private IAnchorAudio _anchorAudio;
+
         private ICameraFunctionalities _cameraFunctionalities;
         [SerializeField] private CameraZoomInOutConfig _pull_CameraZoomInOut;
         [SerializeField] private CameraShakeConfig _restOnFloor_CameraShake;
@@ -55,6 +57,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
             AnchorPhysics anchorPhysics, AnchorCollisions anchorCollisions, IAnchorView anchorView,
+            IAnchorAudio anchorAudio,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain,
             ICameraFunctionalities cameraFunctionalities)
         {
@@ -70,6 +73,9 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorDamageDealer = anchorDamageDealer;
             _anchorChain = anchorChain;
 
+            _anchorAudio = anchorAudio;
+            
+            
             _cameraFunctionalities = cameraFunctionalities;
             
             _anchorPhysics.DisableTension();
@@ -79,6 +85,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void ResetState(Vector3 position)
         {
             _stateMachine.Reset();
+            _anchorView.ResetView();
             SetPosition(position);
         }
         
@@ -108,6 +115,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
             
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
+            
+            _anchorAudio.PlayThrowSound();
         }
         
         public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
@@ -121,6 +130,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
             
             _anchorView.PlayVerticalHitAnimation(anchorThrowResult.Duration, floorHit).Forget();
+            
+            _anchorAudio.PlayThrowSound();
         }
         
         
@@ -171,6 +182,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Carried);
             
             _anchorView.PlayCarriedAnimation();
+            
+            _anchorAudio.PlayPickedUpSound();
         }
         public void SetGrabbedToThrow()
         {
@@ -309,6 +322,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void OnTryUsingWhenObstructed()
         {
             _anchorView.PlayObstructedAnimation();
+        }
+
+        public void OnDamageDealt()
+        {
+            _anchorAudio.PlayDealDamageSound();
         }
     }
 }

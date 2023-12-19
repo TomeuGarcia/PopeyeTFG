@@ -5,6 +5,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorView
     {
+        void ResetView();
         UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit);
         void PlayThrownAnimation(float duration);
         UniTaskVoid PlayPulledAnimation(float duration);

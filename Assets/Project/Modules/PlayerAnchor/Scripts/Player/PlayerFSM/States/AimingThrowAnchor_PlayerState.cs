@@ -14,8 +14,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
+            _blackboard.queuedAnchorThrow = false;
+            
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
             _blackboard.PlayerMediator.SetCanUseRotateInput(true);
+            _blackboard.PlayerMediator.SetCanFallOffLedges(false);
             
             StartChargingThrow();
         }
@@ -23,6 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public override void Exit()
         {
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
+            _blackboard.PlayerMediator.SetCanFallOffLedges(true);
             
             StopChargingThrow();
         }

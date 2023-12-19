@@ -33,5 +33,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         void OnTryUsingWhenObstructed();
 
+
+        void OnDamageDealt();
+
     }
 }
