@@ -75,7 +75,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerAudio = playerAudio;
             
             SetCanUseRotateInput(false);
-            SetCanFallOffLedges(false);
+            SetCanFallOffLedges(true);
             
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
