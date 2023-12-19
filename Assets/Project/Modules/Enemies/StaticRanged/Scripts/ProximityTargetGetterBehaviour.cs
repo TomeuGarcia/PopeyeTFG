@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Popeye.Modules.Enemies
 {
-   public class ProximityTargetGetterBehaviour : MonoBehaviour
+   public class ProximityTargetGetterBehaviour : AEnemy
    {
       [SerializeField] private UnityTargetableEvent onTargetFound = new UnityTargetableEvent();
       [SerializeField] private UnityEvent onTargetLost = new UnityEvent();
@@ -49,6 +49,11 @@ namespace Popeye.Modules.Enemies
 
          CurrentTarget = null;
          onTargetLost.Invoke();
+      }
+
+      public void Die()
+      {
+         InvokeOnDeathComplete();
       }
    }
 }

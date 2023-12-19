@@ -7,7 +7,7 @@ namespace Project.Modules.CombatSystem
     public class DamageHitConfig : ScriptableObject
     {
         [SerializeField] private DamageHitTargetPreset _damageHitPreset;
-        [SerializeField, Range(0, 100)] private int _damage = 10;
+        [SerializeField, Range(0, 200)] private int _damage = 10;
         [SerializeField, Range(-10f, 10f)] private float _knockbackMagnitude = 0;
         [SerializeField, Range(0f, 10f)] private float _stunDuration = 0;
         

@@ -32,7 +32,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (_finishedDashing)
             {
                 NextState = PlayerStates.PickingUpAnchor;
+                //NextState = PlayerStates.MovingWithoutAnchor; // Player won't pick up anchor if on snap target
                 return true;
+            }
+
+            if (_blackboard.MovesetInputsController.Throw_Pressed())
+            {
+                _blackboard.queuedAnchorThrow = true;
             }
 
             return false;
@@ -41,13 +47,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid StartDashing()
         {
             _finishedDashing = false;
-
             
-            float duration = Mathf.Lerp(_blackboard.PlayerStatesConfig.MinDashDuration, 
-                                        _blackboard.PlayerStatesConfig.MaxDashDuration,
-                                        _blackboard.PlayerMediator.GetDistanceFromAnchorRatio01());
-            _blackboard.PlayerMediator.DashTowardsAnchor(duration);
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await _blackboard.PlayerMediator.DashTowardsAnchor();
 
             _finishedDashing = true;
         }

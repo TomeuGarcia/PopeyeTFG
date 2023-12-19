@@ -12,15 +12,21 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void Awake()
         {
-            RespawnPosition = transform.position;
+            SetRespawnPosition(transform.position);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag(RESPAWN_TRIGGER_TAG))
             {
-                RespawnPosition = other.gameObject.GetComponent<PlayerRespawnCheckpoint_Trigger>().RespawnPosition;
+                SetRespawnPosition(
+                    other.gameObject.GetComponent<PlayerRespawnCheckpoint_Trigger>().RespawnPosition);
             }
+        }
+
+        private void SetRespawnPosition(Vector3 position)
+        {
+            RespawnPosition = position + Vector3.up;
         }
     }
 }

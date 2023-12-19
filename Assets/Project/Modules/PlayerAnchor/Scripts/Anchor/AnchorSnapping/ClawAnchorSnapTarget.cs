@@ -12,6 +12,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         [SerializeField] private Transform[] _claws;
 
         private const float ACCEPT_FROM_POSITION_MIN_DOT = 0.1f;
+        private const float ACCEPT_FROM_POSITION_MAX_HEIGHT = 1.5f;
         
         private Vector3 LookDirection => transform.up;
         private Vector3 UpDirection => -transform.right;
@@ -34,7 +35,13 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public bool CanBeAimedFromPosition(Vector3 position)
         {
-            Vector3 direction = (position - transform.position).normalized;
+            Vector3 aimToLockPosition = position - GetAimLockPosition();
+            if (Mathf.Abs(aimToLockPosition.y) > ACCEPT_FROM_POSITION_MAX_HEIGHT)
+            {
+                return false;
+            }
+            
+            Vector3 direction = aimToLockPosition.normalized;
             float dot = Vector3.Dot(direction, LookDirection);
 
             return dot > ACCEPT_FROM_POSITION_MIN_DOT;

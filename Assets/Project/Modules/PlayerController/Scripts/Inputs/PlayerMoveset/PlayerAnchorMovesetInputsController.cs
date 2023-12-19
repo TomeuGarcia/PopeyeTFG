@@ -5,6 +5,7 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly InputSystem.PlayerAnchorInputControls _playerInputControls;
 
         private readonly UnityEngine.InputSystem.InputAction _aim;
+        private readonly UnityEngine.InputSystem.InputAction _cancelAim;
         private readonly UnityEngine.InputSystem.InputAction _throw;
         
         private readonly UnityEngine.InputSystem.InputAction _pickUp;
@@ -16,15 +17,10 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         private readonly UnityEngine.InputSystem.InputAction _heal;
         
-        private readonly UnityEngine.InputSystem.InputAction _spinAttack;
-        /*
-        private UnityEngine.InputSystem.InputAction _meleeAttack;
-        private UnityEngine.InputSystem.InputAction _melee2;
-        private UnityEngine.InputSystem.InputAction _move;
-        private UnityEngine.InputSystem.InputAction _pullAttack;
-        private UnityEngine.InputSystem.InputAction _explosionAbility;
-        private UnityEngine.InputSystem.InputAction _electricChainAbility;
-        */
+        private readonly UnityEngine.InputSystem.InputAction _spinAttack_Left;
+        private readonly UnityEngine.InputSystem.InputAction _spinAttack_Right;
+
+        
         
         public PlayerAnchorMovesetInputsController()
         {
@@ -32,6 +28,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             _playerInputControls.Enable();
 
             _aim = _playerInputControls.Land.Aim;
+            _cancelAim = _playerInputControls.Land.CancelAim;
+            
             _throw = _playerInputControls.Land.Throw;
             
             _pickUp = _playerInputControls.Land.PickUp;
@@ -44,7 +42,8 @@ namespace Popeye.Modules.PlayerController.Inputs
 
             _heal = _playerInputControls.Land.Heal;
             
-            _spinAttack = _playerInputControls.Land.Kick;
+            _spinAttack_Left = _playerInputControls.Land.SpinAttack_Left;
+            _spinAttack_Right = _playerInputControls.Land.SpinAttack_Right;
         }
 
         ~PlayerAnchorMovesetInputsController()
@@ -60,6 +59,12 @@ namespace Popeye.Modules.PlayerController.Inputs
         public bool Aim_Released()
         {
             return _aim.WasReleasedThisFrame();
+        }
+        
+        
+        public bool CancelAim_Pressed()
+        {
+            return _cancelAim.WasPressedThisFrame();
         }
         
         
@@ -106,17 +111,18 @@ namespace Popeye.Modules.PlayerController.Inputs
         }
         
         
-        public bool SpinAttack_Pressed()
+        public bool SpinAttack_Pressed(out bool spinRight)
         {
-            return _spinAttack.WasPressedThisFrame();
+            spinRight = _spinAttack_Right.WasPressedThisFrame();
+            return spinRight || _spinAttack_Left.WasPressedThisFrame();
         }
         public bool SpinAttack_HeldPressed()
         {
-            return _spinAttack.IsPressed();
+            return _spinAttack_Left.IsPressed() || _spinAttack_Right.IsPressed();
         }
         public bool SpinAttack_Released()
         {
-            return _spinAttack.WasReleasedThisFrame();
+            return !_spinAttack_Left.IsPressed() && !_spinAttack_Right.IsPressed();
         }
     }
 }
