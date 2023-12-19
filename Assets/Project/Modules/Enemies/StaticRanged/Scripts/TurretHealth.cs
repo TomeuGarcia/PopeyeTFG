@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.Enemies;
 using Popeye.Modules.Enemies.VFX;
 using Popeye.Modules.ValueStatSystem;
 using Project.Modules.CombatSystem;
@@ -10,7 +11,7 @@ public class TurretHealth : MonoBehaviour, IDamageHitTarget
     private HealthSystem _healthSystem;
     [SerializeField] protected EnemyVisuals _enemyVisuals;
     [SerializeField, Range(0, 100)] private int _maxHealth = 50;
-    
+    [SerializeField] private ProximityTargetGetterBehaviour _enemy;
     
     
     private void Awake()
@@ -32,7 +33,7 @@ public class TurretHealth : MonoBehaviour, IDamageHitTarget
         Debug.Log("youyou");
         if (IsDead())
         {   
-            //TODO: death feedback
+            _enemy.Die();
             Destroy(gameObject);
         }
         else
