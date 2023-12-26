@@ -33,7 +33,7 @@ public class Barrier : AWorldInteractor
             SetStateInstantly(_deactivatedStateSpot);
         }
 
-        SetCollisionEnabled(!_startActivated);
+        SetCollisionEnabled(_startActivated);
     }
 
     protected override void EnterActivatedState()
