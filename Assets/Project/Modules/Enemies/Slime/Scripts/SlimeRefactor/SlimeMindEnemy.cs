@@ -11,6 +11,7 @@ namespace Popeye.Modules.Enemies
 {
     public class SlimeMindEnemy : AEnemy
     {
+        [Header("SLIME MIND")]
         [SerializeField] private SlimeSize _startingStartSize;
         [SerializeField] private List<SlimeData> _sizeToPrefab;
         private Dictionary<SlimeSize, GameObject> _sizeToPrefabDictionary = new Dictionary<SlimeSize, GameObject>();

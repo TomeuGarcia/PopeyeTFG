@@ -6,13 +6,14 @@ using Popeye.Modules.Enemies;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameSetupInstaller : MonoBehaviour
 {
     
     [Header("Enemy")]
     private EnemyFactory _enemyFactory;
-    [SerializeField] private EnemyConfiguration _enemyConfiguration;
+    [FormerlySerializedAs("_enemyConfiguration")] [SerializeField] private EnemyFactoryConfiguration enemyFactoryConfiguration;
     [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
     
     
@@ -29,7 +30,7 @@ public class GameSetupInstaller : MonoBehaviour
     private void Install()
     {
         ServiceLocator.Instance.RegisterService<ICombatManager>(new CombatManagerService());
-        ServiceLocator.Instance.RegisterService<EnemyFactory>(new EnemyFactory(Instantiate(_enemyConfiguration)));
+        ServiceLocator.Instance.RegisterService<EnemyFactory>(new EnemyFactory(Instantiate(enemyFactoryConfiguration)));
 
         _playerAnchorInstaller.Install();
     }
