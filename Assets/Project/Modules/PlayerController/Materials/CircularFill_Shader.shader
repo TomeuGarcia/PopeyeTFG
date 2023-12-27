@@ -31,8 +31,8 @@ Shader "Unlit/CircularFill_Shader"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "../../ShaderLibraries/Shaders/MyShaderLibraries/MyUVFunctions.cginc"
-            #include "../../ShaderLibraries/Shaders/MyShaderLibraries/MyLighting.cginc"
+            #include "../../ShaderTesting/ShaderLibraries/Shaders/MyShaderLibraries/MyUVFunctions.cginc"
+            #include "../../ShaderTesting/ShaderLibraries/Shaders/MyShaderLibraries/MyLighting.cginc"
 
             struct appdata
             {

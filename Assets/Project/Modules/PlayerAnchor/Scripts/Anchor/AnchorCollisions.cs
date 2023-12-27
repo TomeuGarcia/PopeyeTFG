@@ -1,6 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.Notifiers;
+using Popeye.CollisionNotifiers;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using UnityEngine;
 
