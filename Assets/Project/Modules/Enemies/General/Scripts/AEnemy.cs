@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using AYellowpaper;
 using Popeye.IDSystem;
+using Popeye.Modules.Enemies.General;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -14,7 +12,7 @@ namespace Popeye.Modules.Enemies
         
         
         [Header("GENERIC")]
-        [SerializeField] private IDAsset _id;
+        [SerializeField] private EnemyID _id;
         public ID Id => _id;
         
 

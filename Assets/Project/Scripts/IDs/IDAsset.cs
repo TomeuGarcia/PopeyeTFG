@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace Popeye.IDSystem
 {
+    // Commented because we don't want generic IDs for now
+    /*
     [CreateAssetMenu(fileName = "ID_NAME", 
         menuName = ScriptableObjectsHelper.ID_ASSETS_PATH + "ID Asset")]
+        */
     public class IDAsset : ScriptableObject, ID
     {
         [Header("Uid")]

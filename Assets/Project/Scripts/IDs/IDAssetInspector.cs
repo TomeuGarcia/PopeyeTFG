@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Popeye.IDSystem
 {
     
-    [CustomEditor(typeof(IDAsset))]
+    [CustomEditor(typeof(IDAsset), true)]
     public class IDAssetInspector : Editor
     {
         public override void OnInspectorGUI()
