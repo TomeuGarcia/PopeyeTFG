@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using Popeye.Core.Pool;
 using UnityEngine;
 
-public class PooledParticle : RecyclableObject
+namespace Popeye.Modules.VFX.Generic
 {
-    internal override void Init()
+    public class PooledParticle : RecyclableObject
     {
-        Invoke(nameof(Recycle),5);
-    }
+        internal override void Init()
+        {
+            Invoke(nameof(Recycle),5);
+        }
 
-    internal override void Release()
-    {
-       //release particle
+        internal override void Release()
+        {
+            //release particle
+        }
     }
 }
+
+

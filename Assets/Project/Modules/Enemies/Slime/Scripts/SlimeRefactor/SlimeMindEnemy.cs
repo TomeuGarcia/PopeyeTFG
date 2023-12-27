@@ -5,6 +5,7 @@ using Popeye.Core.Pool;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Components;
+using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -22,7 +23,7 @@ namespace Popeye.Modules.Enemies
         
         
         [SerializeField] private Transform _transform;
-        [SerializeField] private Core.Pool.ObjectPool _objectPool;
+        [SerializeField] private ObjectPool _objectPool;
         [SerializeField] private PooledParticle _explosionParticles;
         public enum SlimeSize
         {

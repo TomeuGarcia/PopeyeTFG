@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies

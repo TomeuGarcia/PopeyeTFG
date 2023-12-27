@@ -1,3 +1,4 @@
+using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem.Testing.Scripts
