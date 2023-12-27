@@ -1,4 +1,4 @@
-namespace Project.Scripts.ProjectHelpers
+namespace Popeye.ProjectHelpers
 {
     public static class ScriptableObjectsHelper
     {

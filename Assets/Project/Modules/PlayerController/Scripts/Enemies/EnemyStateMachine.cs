@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Project.Modules.PlayerController.Scripts.Enemies;
+using Popeye.Modules.PlayerController.Scripts.Enemies;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.StateMachine

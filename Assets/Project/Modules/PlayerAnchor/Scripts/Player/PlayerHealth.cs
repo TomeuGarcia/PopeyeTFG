@@ -1,4 +1,4 @@
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player

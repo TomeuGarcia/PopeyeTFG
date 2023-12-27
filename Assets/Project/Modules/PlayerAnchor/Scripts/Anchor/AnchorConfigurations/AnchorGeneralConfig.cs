@@ -1,8 +1,8 @@
-using Project.Modules.PlayerAnchor.Chain;
-using Project.Scripts.ProjectHelpers;
+using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
 {
     [CreateAssetMenu(fileName = "AnchorGeneralConfig", 
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorGeneralConfig")]

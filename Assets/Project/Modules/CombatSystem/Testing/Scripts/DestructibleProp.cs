@@ -3,10 +3,10 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.ValueStatSystem;
-using Project.Modules.PlayerAnchor;
+using Popeye.Modules.PlayerAnchor;
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem.Testing.Scripts
+namespace Popeye.Modules.CombatSystem.Testing.Scripts
 {
     public class DestructibleProp : MonoBehaviour, IDamageHitTarget
     {

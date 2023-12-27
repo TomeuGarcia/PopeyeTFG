@@ -1,7 +1,7 @@
 using Popeye.Modules.Enemies;
 using Popeye.Modules.Utilities;
 
-namespace Project.Modules.PlayerController.Scripts.Enemies
+namespace Popeye.Modules.PlayerController.Scripts.Enemies
 {
     public class EnemyStunnedState : IEnemyState
     {

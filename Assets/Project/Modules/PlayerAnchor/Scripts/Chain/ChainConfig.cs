@@ -1,10 +1,8 @@
 using System;
-using Project.Modules.PlayerAnchor.Anchor;
-using Project.Scripts.ProjectHelpers;
+using Popeye.ProjectHelpers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor.Chain
+namespace Popeye.Modules.PlayerAnchor.Chain
 {
     [CreateAssetMenu(fileName = "AnchorChainConfig", 
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorChainConfig")]

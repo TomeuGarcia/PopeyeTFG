@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 

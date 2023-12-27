@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Project.Scripts.ProjectHelpers;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.VFX

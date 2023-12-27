@@ -1,5 +1,5 @@
 
-namespace Project.Modules.PlayerAnchor.Chain
+namespace Popeye.Modules.PlayerAnchor.Chain
 {
     public interface IChainPhysics
     {

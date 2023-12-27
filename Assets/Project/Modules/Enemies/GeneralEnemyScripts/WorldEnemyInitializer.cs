@@ -4,7 +4,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies;
 using UnityEngine;
 
-namespace Project.Modules.Enemies.GeneralEnemyScripts
+namespace Popeye.Modules.Enemies.GeneralEnemyScripts
 {
     public class WorldEnemyInitializer : MonoBehaviour
     {

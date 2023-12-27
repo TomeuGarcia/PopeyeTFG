@@ -8,7 +8,7 @@ using Popeye.Modules.Enemies.StateMachine;
 using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.ValueStatSystem;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 

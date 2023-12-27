@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.DropShadow
 {
-    public class DropShadow : MonoBehaviour
+    public class DropShadowBehaviour : MonoBehaviour
     {
         [SerializeField] private DropShadowConfig _dropShadowConfig;
         [SerializeField] private Transform _ownerTransform;

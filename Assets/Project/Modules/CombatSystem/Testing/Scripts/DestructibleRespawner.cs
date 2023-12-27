@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem.Testing.Scripts
+namespace Popeye.Modules.CombatSystem.Testing.Scripts
 {
     public class DestructibleRespawner : AWorldInteractor
     {

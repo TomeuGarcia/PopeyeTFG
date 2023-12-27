@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Notifiers;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;

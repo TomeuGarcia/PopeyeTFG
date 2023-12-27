@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies;
-using Project.Modules.CombatSystem;
-using Project.Modules.PlayerAnchor;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor;
 using UnityEngine;
 
 public class GameSetupInstaller : MonoBehaviour
