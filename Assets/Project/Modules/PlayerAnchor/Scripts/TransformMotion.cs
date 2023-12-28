@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor
+namespace Popeye.Modules.PlayerAnchor
 {
     public class TransformMotion
     {

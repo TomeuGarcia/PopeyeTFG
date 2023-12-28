@@ -1,7 +1,7 @@
 using System;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.ValueStatSystem;
-using Project.Scripts.ProjectHelpers;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 

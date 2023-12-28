@@ -1,8 +1,7 @@
 using System;
-using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
-using Project.Scripts.ProjectHelpers;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.ProjectHelpers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.DropShadow
 {

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using System.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using Task = System.Threading.Tasks.Task;
 
 
