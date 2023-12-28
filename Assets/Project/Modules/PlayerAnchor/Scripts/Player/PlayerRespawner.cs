@@ -1,4 +1,5 @@
 using System;
+using Popeye.Modules.WorldElements;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player

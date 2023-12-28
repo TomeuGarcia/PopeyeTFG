@@ -1,7 +1,7 @@
 using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     public class HealthBehaviour : MonoBehaviour, IDamageHitTarget, IHealthTarget
     {

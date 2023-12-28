@@ -1,4 +1,4 @@
-using Project.Scripts.ProjectHelpers;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 

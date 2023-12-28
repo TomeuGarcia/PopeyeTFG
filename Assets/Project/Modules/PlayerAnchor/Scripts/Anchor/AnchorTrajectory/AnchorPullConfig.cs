@@ -1,9 +1,9 @@
 using System;
-using Project.Scripts.ProjectHelpers;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     
     [CreateAssetMenu(fileName = "AnchorPullConfig", 

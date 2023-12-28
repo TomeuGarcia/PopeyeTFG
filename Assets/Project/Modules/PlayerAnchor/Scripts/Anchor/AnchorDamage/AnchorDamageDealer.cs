@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
+using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Player;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class AnchorDamageDealer : MonoBehaviour
     {
