@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Popeye.IDSystem
 {
+    #if UNITY_EDITOR
     
     [CustomEditor(typeof(IDAsset), true)]
     public class IDAssetInspector : Editor
@@ -23,4 +24,6 @@ namespace Popeye.IDSystem
             }
         }
     }
+    
+    #endif
 }
