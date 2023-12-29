@@ -9,7 +9,8 @@ namespace Popeye.Modules.CombatSystem
         public int Damage { get; set; }
         public Vector3 Position  { get; set; }
     
-    
+        public Vector3 ContactPosition => Position;
+        public Vector3 ContactNormal => -KnockbackDirection;
     
         private float _knockbackMagnitude;
         public float KnockbackMagnitude

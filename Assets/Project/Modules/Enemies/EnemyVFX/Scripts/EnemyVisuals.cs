@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -12,10 +14,6 @@ namespace Popeye.Modules.Enemies.VFX
 {
     public class EnemyVisuals : MonoBehaviour
     {
-        //This is the base script, any unique additions to these
-        //effects must be done by creating a new unique script
-        //that inherits from this one.
-
         [System.Serializable]
         public class OriginalMeshData
         {
@@ -28,6 +26,8 @@ namespace Popeye.Modules.Enemies.VFX
         [SerializeField] [Tooltip("First mesh on the list will be the one that gets 'hurt'")]
         private List<OriginalMeshData> _originalMeshDatas = new();
 
+        private IParticleFactory _particleFactory;
+
         private void Awake()
         {
             foreach (var data in _originalMeshDatas)
@@ -36,23 +36,39 @@ namespace Popeye.Modules.Enemies.VFX
             }
         }
 
-        public void Configure()
+        public void Configure(IParticleFactory particleFactory)
         {
+            _particleFactory = particleFactory;
             _originalMeshDatas[0]._mesh.material.SetFloat("_Health", 1.0f);
         }
 
-        public virtual void PlayHitEffects(float healthCoef01)
+        public virtual void PlayHitEffects(float healthCoef01, DamageHit damageHit)
         {
             _originalMeshDatas[0]._mesh.material.SetFloat("_Health", healthCoef01);
-            
-            //smallest camera shake
 
-
-            CircleEffect().Forget();
-            FlashEffect().Forget();
+            ParticlesHitEffect(damageHit);
+            FlashHitEffect().Forget();
         }
 
-        private async UniTaskVoid FlashEffect()
+        public virtual void PlayDeathEffects(DamageHit damageHit)
+        {
+            ParticlesHitEffect(damageHit);
+        }
+
+        private void ParticlesHitEffect(DamageHit damageHit)
+        {
+            //TODO: FIX these two things
+            //get the    position   of the contact point
+            //get the     normal    of the contact poiint
+            
+            Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
+            Vector3 spawnPos = transform.position + (player.position - transform.position) * 0.3f; //0.3f serves as enemy width
+            
+            _particleFactory.Create(_visualConfig._splatterParticles, spawnPos, quaternion.identity).LookAt(player);
+            _particleFactory.Create(_visualConfig._waveParticles, spawnPos, quaternion.identity).LookAt(player);
+        }
+
+        private async UniTaskVoid FlashHitEffect()
         {
             foreach (var flash in _visualConfig._flashSequence)
             {
@@ -71,38 +87,6 @@ namespace Popeye.Modules.Enemies.VFX
                     data._mesh.material = data._originalMaterial;
                 }
             }
-        }
-        
-        private async UniTaskVoid CircleEffect()
-        {
-            //TODO delete
-            Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
-            Vector3 spawnPos = transform.position + (player.position - transform.position) * 0.3f;
-            Transform _circle = Instantiate(_visualConfig._circlePrefab, spawnPos, quaternion.identity).transform;
-            GameObject _particles = Instantiate(_visualConfig._particlesPrefab, spawnPos, quaternion.identity);
-            
-            _circle.LookAt(player);
-            _particles.transform.LookAt(player);
-            
-            _circle.gameObject.SetActive(true);
-            _particles.gameObject.SetActive(true);
-            
-            _circle.gameObject.SetActive(true);
-            MeshRenderer circleMR = _circle.gameObject.GetComponent<MeshRenderer>();
-            circleMR.material.SetFloat("_Alpha", 1.0f);
-
-            _circle.localScale = new Vector3(_visualConfig._circleInterpolateData._startScale, _visualConfig._circleInterpolateData._startScale, _visualConfig._circleInterpolateData._startScale);
-            _circle.DOScale(new Vector3(_visualConfig._circleInterpolateData._endScale, _visualConfig._circleInterpolateData._endScale, _visualConfig._circleInterpolateData._endScale), _visualConfig._circleInterpolateData._totalTime);
-            await UniTask.Delay(TimeSpan.FromSeconds(_visualConfig._circleInterpolateData._fadeOutDelay));
-            circleMR.material.DOFloat(0.0f, "_Alpha", _visualConfig._circleInterpolateData._fadeOutTime);
-        
-            await UniTask.Delay(TimeSpan.FromSeconds(_visualConfig._circleInterpolateData._fadeOutTime + 0.2f));
-            _circle.gameObject.SetActive(false);
-        }
-
-        public virtual void PlayDeathEffects()
-        {
-            CircleEffect().Forget();
         }
     }
 }

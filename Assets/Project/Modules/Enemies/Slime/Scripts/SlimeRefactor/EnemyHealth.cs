@@ -35,11 +35,11 @@ namespace Popeye.Modules.Enemies.Components
             
             if (IsDead())
             {
-                _mediator.OnDeath();
+                _mediator.OnDeath(damageHit);
             }
             else
             {
-                _mediator.OnHit();
+                _mediator.OnHit(damageHit);
             }
 
             return new DamageHitResult(this, gameObject, receivedDamage);

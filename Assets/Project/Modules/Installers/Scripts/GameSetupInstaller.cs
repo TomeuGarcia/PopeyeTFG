@@ -10,13 +10,9 @@ using UnityEngine.Serialization;
 
 public class GameSetupInstaller : MonoBehaviour
 {
-    
-    [Header("Enemy")]
-    private EnemyFactory _enemyFactory;
-    [FormerlySerializedAs("_enemyConfiguration")] [SerializeField] private EnemyFactoryConfiguration enemyFactoryConfiguration;
+    [SerializeField] private FactoriesInstaller _factoriesInstaller;
     [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
-    
-    
+
     void Awake()
     {
         Install();
@@ -30,7 +26,7 @@ public class GameSetupInstaller : MonoBehaviour
     private void Install()
     {
         ServiceLocator.Instance.RegisterService<ICombatManager>(new CombatManagerService());
-        ServiceLocator.Instance.RegisterService<EnemyFactory>(new EnemyFactory(Instantiate(enemyFactoryConfiguration)));
+        _factoriesInstaller.Install();
 
         _playerAnchorInstaller.Install();
     }
@@ -38,8 +34,8 @@ public class GameSetupInstaller : MonoBehaviour
     private void Uninstall()
     {
         ServiceLocator.Instance.RemoveService<ICombatManager>();
-        ServiceLocator.Instance.RemoveService<EnemyFactory>();
-
+        _factoriesInstaller.Uninstall();
+        
         _playerAnchorInstaller.Uninstall();
     }
 }
