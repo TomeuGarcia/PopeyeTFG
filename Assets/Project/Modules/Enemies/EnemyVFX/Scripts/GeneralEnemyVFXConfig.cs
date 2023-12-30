@@ -20,11 +20,14 @@ namespace Popeye.Modules.Enemies.VFX
         }
 
         [Header("ONHIT")]
-        public ParticleTypes _waveParticles;
-        public ParticleTypes _splatterParticles;
-        
+        [SerializeField] private ParticleTypes _waveParticles;
+        [SerializeField] private ParticleTypes _splatterParticles;
         
         [Header("MATERIAL BLINK")]
-        public List<MaterialFlash> _flashSequence = new();
+        [SerializeField] private List<MaterialFlash> _flashSequence = new();
+        
+        public ParticleTypes WaveParticleType => _waveParticles;
+        public ParticleTypes SplatterParticleType => _splatterParticles;
+        public List<MaterialFlash> FlashSequence => _flashSequence;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Pool;
+using Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,28 +14,8 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         [SerializeField] private MeshRenderer _meshRenderer;
         private Material _material;
 
-        [System.Serializable]
-        private class FloatSetupData
-        {
-            public string id;
-            public float initialValue;
-        }
-        
-        [System.Serializable]
-        private class FloatInterpolationData
-        {
-            public float delay;
-            
-            public string id;
-            public float duration;
-            public float endValue = 1.0f;
-            public Ease ease;
-            
-            public bool waitForCompletion;
-        }
-
-        [SerializeField] private List<FloatSetupData> _floatSetupDatas = new();
-        [SerializeField] private List<FloatInterpolationData> _floatInterpolationDatas = new();
+        [SerializeField] private MaterialFloatSetupConfig[] _floatSetupDatas;
+        [SerializeField] private MaterialFloatInterpolationConfig[] _floatInterpolationDatas;
 
         private void Awake()
         {
@@ -43,33 +24,13 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 
         internal override void Init()
         {
-            Setup();
-            FloatInterpolations();
+            ApplyInterpolations().Forget();
         }
 
-        private void Setup()
+        private async UniTaskVoid ApplyInterpolations()
         {
-            foreach (var data in _floatSetupDatas)
-            {
-                _material.SetFloat(data.id, data.initialValue);
-            }
-        }
-        
-        private async UniTaskVoid FloatInterpolations()
-        {
-            int i = 0;
-            foreach (var data in _floatInterpolationDatas)
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(data.delay));
-                _material.DOFloat(data.endValue, data.id, data.duration).SetEase(data.ease);
-                i++;
-                
-                if (data.waitForCompletion || i == (_floatInterpolationDatas.Count))
-                {
-                    await UniTask.Delay(TimeSpan.FromSeconds(data.duration));
-                }
-            }
-            
+            MaterialInterpolator.Setup(_material, _floatSetupDatas);
+            await MaterialInterpolator.ApplyInterpolations(_material, _floatInterpolationDatas);
             Recycle();
         }
 

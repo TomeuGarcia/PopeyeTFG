@@ -62,15 +62,15 @@ namespace Popeye.Modules.Enemies.VFX
             //get the     normal    of the contact poiint
             
             Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
-            Vector3 spawnPos = transform.position + (player.position - transform.position) * 0.3f; //0.3f serves as enemy width
+            Vector3 spawnPos = transform.position + (player.position - transform.position).normalized * 1.25f; //x.xf serves as enemy width
             
-            _particleFactory.Create(_visualConfig._splatterParticles, spawnPos, quaternion.identity).LookAt(player);
-            _particleFactory.Create(_visualConfig._waveParticles, spawnPos, quaternion.identity).LookAt(player);
+            _particleFactory.Create(_visualConfig.SplatterParticleType, spawnPos, quaternion.identity).LookAt(player);
+            _particleFactory.Create(_visualConfig.WaveParticleType, spawnPos, quaternion.identity).LookAt(player);
         }
 
         private async UniTaskVoid FlashHitEffect()
         {
-            foreach (var flash in _visualConfig._flashSequence)
+            foreach (var flash in _visualConfig.FlashSequence)
             {
                 foreach (var data in _originalMeshDatas)
                 {
