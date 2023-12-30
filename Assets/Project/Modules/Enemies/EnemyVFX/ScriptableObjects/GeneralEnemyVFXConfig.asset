@@ -12,15 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5112131f2a98c4fb9577e393740579, type: 3}
   m_Name: GeneralEnemyVFXConfig
   m_EditorClassIdentifier: 
-  _circlePrefab: {fileID: 2507940015931907245, guid: b6c574c382fe38045bff9a8fc0b30ad1,
-    type: 3}
-  _circleInterpolateData:
-    _startScale: 0.25
-    _endScale: 2
-    _fadeOutDelay: 0.075
-    _fadeOutTime: 0.075
-  _particlesPrefab: {fileID: 4652410827748559343, guid: 82dcd6821f81dd247bf400332b086fa6,
-    type: 3}
+  _waveParticles: 0
+  _splatterParticles: 1
   _flashSequence:
   - _flashMaterial: {fileID: 2100000, guid: 86a702cb40ddb494cba2c3e3c89b7ead, type: 2}
     _waitTime: 0.05

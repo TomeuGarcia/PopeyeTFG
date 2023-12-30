@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Core.Pool;
+using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.VFX.ParticleFactories
@@ -7,25 +9,17 @@ namespace Popeye.Modules.VFX.ParticleFactories
     public class ParticleFactory : IParticleFactory
     {
         private readonly ParticleFactoryConfig _config;
+        private Dictionary<ParticleTypes, ObjectPool> _typeToPrefab;
 
-        public ParticleFactory(ParticleFactoryConfig config)
+        public ParticleFactory(ParticleFactoryConfig config, Transform parent)
         {
             _config = config;
-        }
-        
-        public void CreateEnemyOnHitParticles()
-        {
-            
+            _typeToPrefab = _config.GetTypeToPoolDictionary(parent);
         }
 
-        public void CreateEnemyOnHitSimpleParticle()
+        public Transform Create(ParticleTypes type, Vector3 position, Quaternion rotation)
         {
-            
-        }
-
-        public void CreateEnemyOnHitCircleParticle()
-        {
-            
+            return _typeToPrefab[type].Spawn<RecyclableObject>(position, rotation).transform;
         }
     }
 }

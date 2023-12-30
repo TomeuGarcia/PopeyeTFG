@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.VFX.Generic;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -18,26 +19,15 @@ namespace Popeye.Modules.Enemies.VFX
             public float _waitTime;
         }
 
-        [System.Serializable]
-        public class VFXInterpolateData
-        {
-            public float _startScale;
-            public float _endScale;
-            public float _fadeOutDelay;
-            public float _fadeOutTime;
-            public float _totalTime => _fadeOutDelay + _fadeOutTime;
-        }
-
-        [Header("CIRCLE")]
-        public GameObject _circlePrefab; //TODO fix later
-        public VFXInterpolateData _circleInterpolateData;
-
-        [Header("PARTICLES")]
-        public GameObject _particlesPrefab; //TODO fix later
-        //saber a quina pool referirse??
-        
+        [Header("ONHIT")]
+        [SerializeField] private ParticleTypes _waveParticles;
+        [SerializeField] private ParticleTypes _splatterParticles;
         
         [Header("MATERIAL BLINK")]
-        public List<MaterialFlash> _flashSequence = new();
+        [SerializeField] private List<MaterialFlash> _flashSequence = new();
+        
+        public ParticleTypes WaveParticleType => _waveParticles;
+        public ParticleTypes SplatterParticleType => _splatterParticles;
+        public List<MaterialFlash> FlashSequence => _flashSequence;
     }
 }
