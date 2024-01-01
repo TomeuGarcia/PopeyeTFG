@@ -54,6 +54,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private CameraZoomInOutConfig _pull_CameraZoomInOut;
         [SerializeField] private CameraShakeConfig _restOnFloor_CameraShake;
 
+        [Header("TODELETE" +
+                "THROW")]
+        [SerializeField] private MeshRenderer vfxThrowHead;
+        [SerializeField] private TrailRenderer vfxThrowTrail;
+        [Header("RETRIEVE")]
+        [SerializeField] private MeshRenderer vfxRetrieve;
+
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
             AnchorPhysics anchorPhysics, AnchorCollisions anchorCollisions, IAnchorView anchorView,
@@ -104,6 +111,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {
+            //TESTING
+            //AnchorThrowVFX(anchorThrowResult).Forget();
+            //
+            
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
@@ -114,10 +125,49 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
             
-            _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
+            //_anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             
             _anchorAudio.PlayThrowSound();
         }
+        
+        //TESTING
+        private void Awake()
+        {
+            //vfxThrowTrail.emitting = false;
+        }
+
+        private async UniTask AnchorThrowVFX(AnchorThrowResult anchorThrowResult)
+        {
+            //Time.timeScale = 0.2f;
+            float fallTime = 0.05f;
+            float headFadeoutTime = 0.05f;
+
+            if (anchorThrowResult.Duration - fallTime <= 0.05f)
+            {
+                return;
+            }
+
+            //vfxThrowHead.gameObject.SetActive(true);
+            vfxThrowTrail.emitting = true;
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration - fallTime - headFadeoutTime));
+            
+            //vfxThrowHead.material.DOFloat(0.0f,"_Dissolve", headFadeoutTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(headFadeoutTime));
+            
+            //vfxThrowHead.gameObject.SetActive(false);
+            await UniTask.Delay(TimeSpan.FromSeconds(fallTime));
+            
+            vfxThrowTrail.material.DOFloat(1.0f, "_Disapear", vfxThrowTrail.time).OnComplete(() =>
+            {
+                vfxThrowTrail.emitting = false;
+                vfxThrowTrail.Clear();
+                vfxThrowTrail.material.SetFloat("_Disapear", 0.0f);
+            });
+            //await UniTask.Delay(TimeSpan.FromSeconds(vfxThrowTrail.time));
+            
+            //Time.timeScale = 1.0f;
+        }
+        //
         
         public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
         {
