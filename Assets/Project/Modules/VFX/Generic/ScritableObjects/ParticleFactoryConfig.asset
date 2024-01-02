@@ -13,11 +13,19 @@ MonoBehaviour:
   m_Name: ParticleFactoryConfig
   m_EditorClassIdentifier: 
   _particleTypeToPrefabs:
-  - _key: 0
-    _value: {fileID: 2524181712985581072, guid: b6c574c382fe38045bff9a8fc0b30ad1,
+  - _particleType: 0
+    _particlePrefab: {fileID: 2524181712985581072, guid: b6c574c382fe38045bff9a8fc0b30ad1,
       type: 3}
     _initialInstances: 10
-  - _key: 1
-    _value: {fileID: 6905591724428683078, guid: 82dcd6821f81dd247bf400332b086fa6,
+  - _particleType: 1
+    _particlePrefab: {fileID: 6905591724428683078, guid: 82dcd6821f81dd247bf400332b086fa6,
       type: 3}
     _initialInstances: 10
+  - _particleType: 2
+    _particlePrefab: {fileID: 4366639793384001998, guid: 30a1544ee0dc4db4885891e5aceb9e2a,
+      type: 3}
+    _initialInstances: 2
+  - _particleType: 3
+    _particlePrefab: {fileID: 1481539231481749310, guid: 4401236f1316e934eb9f24a9786d83c8,
+      type: 3}
+    _initialInstances: 2

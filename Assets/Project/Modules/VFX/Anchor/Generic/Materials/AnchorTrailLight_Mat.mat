@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AnchorTrail_Mat
+  m_Name: AnchorTrailLight_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 028ad536bd5a79a46be0880b0655ebfa,
     type: 3}
   m_Parent: {fileID: 0}
@@ -42,7 +42,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 0.05
+    - _BorderFadeInv: 7
     - _Disapear: 0
+    - _Disappear: 0
     - _DissolveScale: 35
     - _QueueControl: 0
     - _QueueOffset: 0

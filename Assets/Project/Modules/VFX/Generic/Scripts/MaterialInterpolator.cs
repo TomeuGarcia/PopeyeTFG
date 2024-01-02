@@ -13,7 +13,7 @@ namespace Popeye.Modules.VFX.Generic
         {
             foreach (var data in setupDatas)
             {
-                material.SetFloat(data.ID, data.InitialValue);
+                material.SetFloat(data.Name, data.InitialValue);
             }
         }
         
