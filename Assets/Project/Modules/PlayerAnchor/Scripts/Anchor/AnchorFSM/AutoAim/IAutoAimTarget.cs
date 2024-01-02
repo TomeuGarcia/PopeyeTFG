@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public interface IAutoAimTarget
     {

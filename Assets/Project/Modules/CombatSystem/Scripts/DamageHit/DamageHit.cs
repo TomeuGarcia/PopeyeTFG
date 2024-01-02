@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     public class DamageHit 
     {
         public int Damage { get; set; }
         public Vector3 Position  { get; set; }
     
-    
+        public Vector3 ContactPosition => Position;
+        public Vector3 ContactNormal => -KnockbackDirection;
     
         private float _knockbackMagnitude;
         public float KnockbackMagnitude

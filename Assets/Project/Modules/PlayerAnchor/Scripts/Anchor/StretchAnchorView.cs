@@ -4,13 +4,13 @@ using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class StretchAnchorView : MonoBehaviour, IAnchorView
     {
         [SerializeField] private Transform _meshTransform;
         
-        [SerializeField] private DropShadow _dropShadow;
+        [SerializeField] private DropShadow.DropShadowBehaviour _dropShadow;
 
 
         [SerializeField] private Vector3 _verticalHitScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);

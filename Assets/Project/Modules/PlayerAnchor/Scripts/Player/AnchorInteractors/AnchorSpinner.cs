@@ -1,7 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Project.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Anchor;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player

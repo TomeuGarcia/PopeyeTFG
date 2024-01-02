@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening;
 using Popeye.Core.Pool;
+using Popeye.Modules.VFX.Generic;
 using Unity.Mathematics;
 using UnityEngine.Pool;
 

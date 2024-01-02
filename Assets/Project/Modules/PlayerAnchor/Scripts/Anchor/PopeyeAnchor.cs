@@ -10,12 +10,12 @@ using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
-using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
-using Project.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
+using Popeye.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {

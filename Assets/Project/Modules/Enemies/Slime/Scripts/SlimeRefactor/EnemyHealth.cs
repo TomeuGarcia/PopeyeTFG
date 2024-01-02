@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Modules.ValueStatSystem;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Components
@@ -35,11 +35,11 @@ namespace Popeye.Modules.Enemies.Components
             
             if (IsDead())
             {
-                _mediator.OnDeath();
+                _mediator.OnDeath(damageHit);
             }
             else
             {
-                _mediator.OnHit();
+                _mediator.OnHit(damageHit);
             }
 
             return new DamageHitResult(this, gameObject, receivedDamage);

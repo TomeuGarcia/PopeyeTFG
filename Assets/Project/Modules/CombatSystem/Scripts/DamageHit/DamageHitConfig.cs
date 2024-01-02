@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     [CreateAssetMenu(fileName = "DamageHitConfig_AttackName", 
         menuName = "Popeye/CombatSystem/DamageHitConfig")]

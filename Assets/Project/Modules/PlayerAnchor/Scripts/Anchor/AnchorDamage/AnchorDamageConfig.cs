@@ -1,8 +1,8 @@
-using Project.Modules.CombatSystem;
-using Project.Scripts.ProjectHelpers;
+using Popeye.Modules.CombatSystem;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "AnchorDamageConfig", 
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorDamageConfig")]
