@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Popeye.Modules.VFX.Generic

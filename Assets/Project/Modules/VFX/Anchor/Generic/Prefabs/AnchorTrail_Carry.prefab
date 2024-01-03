@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7644833735669237453}
   - component: {fileID: 4366639793384001998}
   m_Layer: 0
-  m_Name: AnchorTrail_Constant
+  m_Name: AnchorTrail_Carry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 10722548387696856}
   - {fileID: 5280730127171313398}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4366639793384001998
 MonoBehaviour:
@@ -52,6 +52,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: adbd0efcdd273174691fca9311cbcb31, type: 2}
   _floatInterpolationDatas:
   - {fileID: 11400000, guid: e1c1501666785b945b5079cb698171aa, type: 2}
+  _particleSystems:
+  - {fileID: 8526338426470189395}
   _trailRenderers:
   - {fileID: 5373558955004558516}
   - {fileID: 954646074283249317}
@@ -301,6 +303,12 @@ PrefabInstance:
 --- !u!4 &5280730127171313398 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4350908971045000856, guid: 1c2bdecebbb8d044ba6d47d4dc2ffc1e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8442389727810504814}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8526338426470189395 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 250731693500629309, guid: 1c2bdecebbb8d044ba6d47d4dc2ffc1e,
     type: 3}
   m_PrefabInstance: {fileID: 8442389727810504814}
   m_PrefabAsset: {fileID: 0}

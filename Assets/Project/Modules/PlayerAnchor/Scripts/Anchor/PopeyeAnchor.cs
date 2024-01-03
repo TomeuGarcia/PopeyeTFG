@@ -60,9 +60,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         //  TESTING
         private IParticleFactory _particleFactory => ServiceLocator.Instance.GetService<IParticleFactory>();
-        [SerializeField] private ParticleTypes _constantParticleType;
-        [SerializeField] private ParticleTypes _throwParticleType;
+        [SerializeField] private ParticleTypes _carryTrailParticleType;
+        [SerializeField] private ParticleTypes _throwTrailParticleType;
+        [SerializeField] private ParticleTypes _throwHeadParticleType;
         [SerializeField] private Transform _vfxParent;
+        private InterpolatorRecycleParticle _carryTrail;
         //  TESTING
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
@@ -91,6 +93,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
+            
+            //  TESTING
+            AnchorCarryVFX();
+            //  TESTING
         }
         
         public void ResetState(Vector3 position)
@@ -116,7 +122,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {
             //  TESTING
-            AnchorVFX(anchorThrowResult).Forget();
+            AnchorThrowVFX(anchorThrowResult).Forget();
             //  TESTING
             
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
@@ -129,22 +135,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
             
-            _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
+            //_anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             
             _anchorAudio.PlayThrowSound();
         }
-        
-        //  TESTING
-        private async UniTask AnchorVFX(AnchorThrowResult anchorThrowResult)
-        {
-            Transform trail = _particleFactory.Create(_throwParticleType, Vector3.zero, quaternion.identity);
-            trail.parent = _vfxParent;
-            trail.transform.localPosition = Vector3.zero;
-            
-            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
-            trail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-        }
-        //  TESTING
         
         public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
         {
@@ -201,12 +195,42 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void SetCarried()
         {
+            //  TESTING
+            AnchorCarryVFX();
+            //  TESTING
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Carried);
             
             _anchorView.PlayCarriedAnimation();
             
             _anchorAudio.PlayPickedUpSound();
         }
+        
+        //  TESTING
+        private void AnchorCarryVFX()
+        {
+            _carryTrail = _particleFactory.Create(_carryTrailParticleType, Vector3.zero, quaternion.identity, _vfxParent)
+                .gameObject.GetComponent<InterpolatorRecycleParticle>();
+        }
+        private void PlayerLeftAnchor()
+        {
+            _carryTrail.Play();
+        }
+        private async UniTask AnchorThrowVFX(AnchorThrowResult anchorThrowResult)
+        {
+            Time.timeScale = 0.2f;
+            PlayerLeftAnchor();
+            
+            Transform trail = _particleFactory.Create(_throwTrailParticleType, Vector3.zero, quaternion.identity, _vfxParent);
+            _particleFactory.Create(_throwHeadParticleType, Vector3.zero, quaternion.identity, _vfxParent);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
+            trail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+            Time.timeScale = 1.0f;
+        }
+        //  TESTING
+        
         public void SetGrabbedToThrow()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedToThrow);
