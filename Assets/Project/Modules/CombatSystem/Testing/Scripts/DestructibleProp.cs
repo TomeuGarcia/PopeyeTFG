@@ -17,7 +17,8 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
 
         private Vector3 _spawnPosition;
         private Quaternion _spawnRotation;
-        
+
+        private Vector3 Position => transform.position;
 
         private void Awake()
         {
@@ -59,7 +60,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
                 PlayTakeDamageAnimation(damageHit);
             }
 
-            return new DamageHitResult(this, gameObject, receivedDamage);
+            return new DamageHitResult(this, gameObject, receivedDamage, Position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)

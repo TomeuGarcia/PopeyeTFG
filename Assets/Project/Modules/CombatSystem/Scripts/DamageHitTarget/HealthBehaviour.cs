@@ -8,7 +8,8 @@ namespace Popeye.Modules.CombatSystem
         private IHealthBehaviourListener _listener;
         private DamageHitTargetType _damageHitTargetType;
         public HealthSystem HealthSystem { get; private set; }
-        
+
+        private Vector3 Position => transform.position;
         
         public void Configure(IHealthBehaviourListener listener, int maxHealth, DamageHitTargetType damageHitTargetType)
         {
@@ -26,7 +27,8 @@ namespace Popeye.Modules.CombatSystem
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
             int receivedDamage = HealthSystem.TakeDamage(damageHit.Damage);
-            DamageHitResult damageHitResult = new DamageHitResult(this, gameObject, receivedDamage);
+            DamageHitResult damageHitResult = new DamageHitResult(this, gameObject, receivedDamage,
+                Position);
             
             if (IsDead())
             {

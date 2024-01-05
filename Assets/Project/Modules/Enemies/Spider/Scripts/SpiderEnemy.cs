@@ -119,7 +119,7 @@ namespace Popeye.Modules.Enemies
         {
             if (_canDealContactDamage)
             {
-                _contactDamageHit.Position = Position;
+                _contactDamageHit.DamageSourcePosition = Position;
                 _contactDamageHit.KnockbackDirection =
                     PositioningHelper.Instance.GetDirectionAlignedWithFloor(Position, other.transform.position);
 
@@ -170,7 +170,7 @@ namespace Popeye.Modules.Enemies
             
             StartTakeDamageAnimation().Forget();
 
-            return new DamageHitResult(this, gameObject, receivedDamage);
+            return new DamageHitResult(this, gameObject, receivedDamage, Position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)

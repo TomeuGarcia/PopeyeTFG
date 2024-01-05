@@ -7,9 +7,9 @@ namespace Popeye.Modules.CombatSystem
     public class DamageHit 
     {
         public int Damage { get; set; }
-        public Vector3 Position  { get; set; }
+        public Vector3 DamageSourcePosition  { get; set; }
     
-        public Vector3 ContactPosition => Position;
+        public Vector3 ContactPosition => DamageSourcePosition;
         public Vector3 ContactNormal => -KnockbackDirection;
     
         private float _knockbackMagnitude;
@@ -50,7 +50,7 @@ namespace Popeye.Modules.CombatSystem
         {
             _damageHitTargetTypeMask = config.DamageHitTargetTypeMask;
             Damage = config.Damage;
-            Position = Vector3.zero;
+            DamageSourcePosition = Vector3.zero;
             StunDuration = config.StunDuration;
     
             KnockbackMagnitude = config.KnockbackMagnitude;
@@ -61,18 +61,18 @@ namespace Popeye.Modules.CombatSystem
         {
             _damageHitTargetTypeMask = damageHitTargetTypeMask;
             Damage = damage;
-            Position = Vector3.zero;
+            DamageSourcePosition = Vector3.zero;
             StunDuration = stunDuration;
     
             KnockbackMagnitude = knockbackMagnitude;
             KnockbackDirection = Vector3.zero;
         }
         
-        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, int damage, float knockbackMagnitude, float stunDuration, Vector3 position)
+        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, int damage, float knockbackMagnitude, float stunDuration, Vector3 damageSourcePosition)
         {
             _damageHitTargetTypeMask = damageHitTargetTypeMask;
             Damage = damage;
-            Position = position;
+            DamageSourcePosition = damageSourcePosition;
             StunDuration = stunDuration;
     
             KnockbackMagnitude = knockbackMagnitude;

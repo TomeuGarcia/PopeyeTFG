@@ -20,7 +20,7 @@ namespace Popeye.Modules.CombatSystem
 
         public void UpdatePosition(Vector3 position)
         {
-            _damageHit.Position = position;
+            _damageHit.DamageSourcePosition = position;
         }
         public void UpdateKnockbackDirection(Vector3 knockbackDirection)
         {

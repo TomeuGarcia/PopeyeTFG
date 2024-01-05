@@ -33,7 +33,7 @@ namespace Popeye.Modules.Enemies.Bullets
         private void OnCollisionEnter(Collision other)
         {
 
-            _contactDamageHit.Position = _transform.position;
+            _contactDamageHit.DamageSourcePosition = _transform.position;
             _contactDamageHit.KnockbackDirection =
                 PositioningHelper.Instance.GetDirectionAlignedWithFloor(_transform.position, other.transform.position);
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
