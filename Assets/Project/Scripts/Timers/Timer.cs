@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Popeye.Modules.Utilities
+namespace Popeye.Timers
 {
     public class Timer
     {
         private float _duration;
         private float _counter;
-    
+
+        public float Time => _counter;
         
         public Timer(float duration)
         {
