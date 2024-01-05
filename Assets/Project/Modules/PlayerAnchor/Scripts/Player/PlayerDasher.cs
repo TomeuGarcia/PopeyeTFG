@@ -1,8 +1,8 @@
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
-using Project.Modules.PlayerAnchor;
-using Project.Modules.PlayerAnchor.Anchor;
-using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Modules.PlayerAnchor;
+using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player

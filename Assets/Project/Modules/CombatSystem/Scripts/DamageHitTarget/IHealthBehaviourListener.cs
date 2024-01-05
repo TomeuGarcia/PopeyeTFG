@@ -1,4 +1,4 @@
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     public interface IHealthBehaviourListener
     {

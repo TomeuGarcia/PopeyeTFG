@@ -1,13 +1,17 @@
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class AnchorAudioFMOD : MonoBehaviour, IAnchorAudio
     {
-        [SerializeField] private FMODUnity.EventReference _exampleER;
+        [SerializeField] private FMODUnity.EventReference _SFX_Hit_Anchor;
         private GameObject _anchorGameObject;
-        
-        
+
+        [SerializeField] private FMODUnity.EventReference _SFX_Throw_Anchor;
+
+        [SerializeField] private FMODUnity.EventReference _SFX_Grab_Anchor;
+
+
         public void Configure(GameObject anchorGameObject)
         {
             _anchorGameObject = anchorGameObject;
@@ -16,20 +20,20 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public void PlayThrowSound()
         {
-            // TODO
-            // PlayOneShot(_exampleER);
+            PlayOneShot(_SFX_Throw_Anchor);
+           
         }
 
         public void PlayPickedUpSound()
         {
-            // TODO
-            // PlayOneShot();
+            PlayOneShot(_SFX_Grab_Anchor);
+           
         }
 
         public void PlayDealDamageSound()
         {
-            // TODO
-            // PlayOneShot();
+            PlayOneShot(_SFX_Hit_Anchor);
+          
         }
 
 

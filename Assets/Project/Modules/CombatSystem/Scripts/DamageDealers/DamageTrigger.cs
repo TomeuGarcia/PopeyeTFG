@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Project.Modules.PlayerAnchor;
+using Popeye.Modules.PlayerAnchor;
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     public class DamageTrigger : MonoBehaviour
     {

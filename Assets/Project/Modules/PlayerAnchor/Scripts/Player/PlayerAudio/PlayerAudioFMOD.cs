@@ -4,7 +4,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 {
     public class PlayerAudioFMOD : MonoBehaviour, IPlayerAudio
     {
-        
+        [SerializeField] private FMODUnity.StudioEventEmitter _footstepsEventEmitter;
         private GameObject _playerGameObject;
         
         
@@ -15,18 +15,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void StartPlayingStepsSounds()
         {
-            // TODO
+            _footstepsEventEmitter.Play();
         }
 
         public void StopPlayingStepsSounds()
         {
-            // TODO
+            _footstepsEventEmitter.Stop();
         }
         
         
-        private void PlayOneShot(FMODUnity.EventReference soundEventReference)
-        {
-            FMODUnity.RuntimeManager.PlayOneShotAttached(soundEventReference, _playerGameObject);
-        }
     }
 }
+

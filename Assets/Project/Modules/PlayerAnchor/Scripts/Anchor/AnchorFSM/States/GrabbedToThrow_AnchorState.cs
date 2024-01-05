@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 {
     public class GrabbedToThrow_AnchorState : IAnchorState
     {

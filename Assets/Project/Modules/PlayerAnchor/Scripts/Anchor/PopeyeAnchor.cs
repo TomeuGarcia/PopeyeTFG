@@ -10,15 +10,27 @@ using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
-using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
-using Project.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
+using Popeye.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {
+        [SerializeField]
+        public FMODUnity.EventReference AnchorHit;
+        private string AnchorHitSFX = null;
+
+        [SerializeField]
+        public FMODUnity.EventReference AnchorThrow;
+        private string AnchorThrowSFX = null;
+
+        [SerializeField]
+        public FMODUnity.EventReference AnchorGrab;
+        private string AnchorGrabSFX = null;
+
         private AnchorFSM _stateMachine;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrower _anchorThrower;
@@ -154,6 +166,10 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
             
             _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
+
+           
+
+           
         }
         
         public void SetCarried()

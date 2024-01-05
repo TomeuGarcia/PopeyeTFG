@@ -1,4 +1,4 @@
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 {
     public class Spinning_AnchorState : IAnchorState
     {

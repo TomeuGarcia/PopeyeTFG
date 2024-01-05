@@ -1,5 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
-using Project.Scripts.ProjectHelpers;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 
 
