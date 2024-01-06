@@ -18,7 +18,7 @@ namespace Project.PhysicsMovement
         {
             for (int i = 0; i < _tweenObjects.Count; ++i)
             {
-                if (_tweenObjects[i].Update(Time.fixedDeltaTime))
+                if (_tweenObjects[i].FixedUpdate(fixedDeltaTime))
                 {
                     _tweenObjects.RemoveAt(i);
                     --i;

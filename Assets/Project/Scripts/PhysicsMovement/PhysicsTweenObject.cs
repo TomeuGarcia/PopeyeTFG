@@ -31,12 +31,12 @@ namespace Project.PhysicsMovement
             // a = (X - Xo - V) / (-t + 1/2*t^2)
         }
             
-        public bool Update(float deltaTime)
+        public bool FixedUpdate(float fixedDeltaTime)
         {
             Vector3 currentVelocity = _startVelocity + _acceleration * _timer.Time;
             _rigidbody.velocity = currentVelocity;
                 
-            _timer.Update(deltaTime);
+            _timer.Update(fixedDeltaTime);
             return _timer.HasFinished();
         }
     }
