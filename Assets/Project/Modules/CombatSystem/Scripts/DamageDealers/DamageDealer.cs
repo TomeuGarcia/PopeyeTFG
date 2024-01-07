@@ -22,10 +22,15 @@ namespace Popeye.Modules.CombatSystem
         {
             _damageHit.DamageSourcePosition = position;
         }
-        public void UpdateKnockbackDirection(Vector3 knockbackDirection)
+        public void UpdateKnockbackEndPosition(Vector3 knockbackEndPosition)
+        {
+            _damageHit.UpdateKnockbackEndPosition(knockbackEndPosition);
+        }
+        public void UpdateKnockbackPushDirection(Vector3 knockbackDirection)
         {
             _damageHit.UpdateKnockbackPushDirection(knockbackDirection);
         }
+
 
         public bool TryDealDamage(GameObject gameObject, out DamageHitResult damageHitResult)
         {

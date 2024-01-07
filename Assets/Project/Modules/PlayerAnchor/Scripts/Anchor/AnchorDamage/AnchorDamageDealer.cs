@@ -90,9 +90,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             DealForwardThrowDamage(anchorThrowResult, _throwDamageHit, _config.ThrowDamageExtraDuration);
         }
 
-        public void DealPullDamage(AnchorThrowResult anchorPullResult)
+        public async UniTaskVoid DealPullDamage(AnchorThrowResult anchorPullResult)
         {
-            DealBackwardThrowDamage(anchorPullResult, _pullDamageHit, _config.PullDamageExtraDuration);
+            _anchorThrowDamageTrigger.OnBeforeDamageDealt += SetPullAttackKnockbackEndPosition;
+            await DealBackwardThrowDamage(anchorPullResult, _pullDamageHit, _config.PullDamageExtraDuration);
+            _anchorThrowDamageTrigger.OnBeforeDamageDealt -= SetPullAttackKnockbackEndPosition;
         }
         
         public void DealKickDamage(AnchorThrowResult anchorKickResult)
@@ -118,21 +120,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 .Forget();
         }
 
-        private void DealBackwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit,
+        private async UniTask DealBackwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit,
             float extraDurationBeforeDeactivate)
         {
             _anchorThrowDamageTrigger.SetDamageHit(damageHit);
-            _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
-            
-            DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
-                    anchorThrowResult.Duration, extraDurationBeforeDeactivate,
-                    anchorThrowResult.MoveEaseCurve, 0.1f)
-                .Forget();
+            _anchorThrowDamageTrigger.UpdateKnockbackEndPosition(anchorThrowResult.Direction);
+
+            await DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints,
+                anchorThrowResult.Duration, extraDurationBeforeDeactivate,
+                anchorThrowResult.MoveEaseCurve, 0.1f);
         }
         
         
         
-        private async UniTaskVoid DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
+        private async UniTask DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
             AnimationCurve ease, float easeThreshold)
         {
             _throwDamageTriggerMotion.SetPosition(trajectoryPoints[0]);
@@ -197,6 +198,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             damageTrigger.UpdateDamageKnockbackDirection(pushDirection);
         }
         
+        
         private void SetPushSidewaysKnockback(DamageTrigger damageTrigger, GameObject tryHitObject)
         {
             Vector3 pushDirection = _sidewaysKnockbackIsRight
@@ -207,7 +209,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             damageTrigger.UpdateDamageKnockbackDirection(pushDirection);
         }
+        
+        private void SetPullAttackKnockbackEndPosition(DamageTrigger damageTrigger, GameObject tryHitObject)
+        {
+            Vector3 originPosition = _damageStartTransform.position;
+            Vector3 originToEndDirection = (tryHitObject.transform.position - originPosition).normalized;
+            Vector3 endPosition = originPosition + (originToEndDirection * _config.PullKnockbackDistanceFromPlayer);
+            
+            damageTrigger.UpdateKnockbackEndPosition(endPosition);
+            
+            Debug.Log(endPosition);
+        }
 
+        
+        
         
         public void StartDealingSpinDamage(bool spinningToTheRight)
         {
