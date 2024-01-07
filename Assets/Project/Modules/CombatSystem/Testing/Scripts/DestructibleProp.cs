@@ -98,7 +98,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             return true;
         }
 
-        public float GetKnockbackEffectiveness()
+        public float GetKnockbackEffectivenessMultiplier()
         {
             return (1-_knockbackResistance);
         }

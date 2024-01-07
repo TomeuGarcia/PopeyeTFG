@@ -6,6 +6,6 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
     {
         Rigidbody GetRigidbodyToKnockback();
         bool CanBeKnockbacked();
-        float GetKnockbackEffectiveness();
+        float GetKnockbackEffectivenessMultiplier();
     }
 }

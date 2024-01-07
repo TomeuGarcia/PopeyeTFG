@@ -318,7 +318,7 @@ namespace Popeye.Modules.Enemies
             return true;
         }
 
-        public float GetKnockbackEffectiveness()
+        public float GetKnockbackEffectivenessMultiplier()
         {
             return 1;
         }

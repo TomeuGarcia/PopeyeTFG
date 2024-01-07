@@ -37,7 +37,7 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
             Rigidbody rigidbody = knockbackHitTarget.GetRigidbodyToKnockback();
             Vector3 startPosition = rigidbody.position;
             Vector3 endPosition = startPosition + 
-                                  (knockbackHit.PushDisplacement * knockbackHitTarget.GetKnockbackEffectiveness());
+                                  (knockbackHit.PushDisplacement * knockbackHitTarget.GetKnockbackEffectivenessMultiplier());
 
             return DoCreatePhysicsTweenObject(rigidbody, knockbackHit.Duration, startPosition, endPosition);
         }
