@@ -6,7 +6,7 @@ using Project.PhysicsMovement;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Project.Modules.CombatSystem.Scripts.KnockbackSystem
+namespace Project.Modules.CombatSystem.KnockbackSystem
 {
     public class KnockbackTester : MonoBehaviour
     {

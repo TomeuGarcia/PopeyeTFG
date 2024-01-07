@@ -24,7 +24,7 @@ namespace Popeye.Modules.CombatSystem
         }
         public void UpdateKnockbackDirection(Vector3 knockbackDirection)
         {
-            _damageHit.KnockbackDirection = knockbackDirection;
+            _damageHit.UpdateKnockbackPushDirection(knockbackDirection);
         }
 
         public bool TryDealDamage(GameObject gameObject, out DamageHitResult damageHitResult)

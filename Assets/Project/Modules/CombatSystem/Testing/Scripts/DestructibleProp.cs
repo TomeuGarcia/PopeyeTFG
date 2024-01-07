@@ -4,12 +4,14 @@ using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor;
+using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem.Testing.Scripts
 {
-    public class DestructibleProp : MonoBehaviour, IDamageHitTarget
+    public class DestructibleProp : MonoBehaviour, IDamageHitTarget, IKnockbackHitTarget
     {
+        [SerializeField] private Rigidbody _rigidbody;
         [SerializeField, Range(0.0f, 1.0f)] private float _knockbackResistance = 0.0f;
         [SerializeField, Range(0, 100)] private int _maxHealth = 20;
         private HealthSystem _healthSystem;
@@ -48,9 +50,6 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         {
             int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
             
-            _transformMotion.MoveByDisplacement(damageHit.KnockbackForce * (1-_knockbackResistance), 0.2f,
-                Ease.OutQuart);
-            
             if (_healthSystem.IsDead())
             {
                 PlayDieAnimation().Forget();
@@ -87,6 +86,21 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             transform.DOPunchScale(Vector3.one * -0.5f, 0.4f)
                 .SetEase(Ease.OutBounce);
         }
+
         
+        public Rigidbody GetRigidbodyToKnockback()
+        {
+            return _rigidbody;
+        }
+
+        public bool CanBeKnockbacked()
+        {
+            return true;
+        }
+
+        public float GetKnockbackEffectiveness()
+        {
+            return (1-_knockbackResistance);
+        }
     }
 }

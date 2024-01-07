@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem
@@ -6,10 +7,13 @@ namespace Popeye.Modules.CombatSystem
     public class CombatManagerService : ICombatManager
     {
         private CollisionProbingConfig _hitTargetProbingConfig;
+        private IKnockbackManager _knockbackManager;
         
-        public CombatManagerService(CollisionProbingConfig hitTargetProbingConfig)
+        public CombatManagerService(CollisionProbingConfig hitTargetProbingConfig,
+            IKnockbackManager knockbackManager)
         {
             _hitTargetProbingConfig = hitTargetProbingConfig;
+            _knockbackManager = knockbackManager;
         }
         
         public bool TryDealDamage(GameObject hitObject, DamageHit damageHit, out DamageHitResult damageHitResult)
@@ -30,8 +34,12 @@ namespace Popeye.Modules.CombatSystem
                 return false;
             }
 
+            
             damageHitResult = hitTarget.TakeHitDamage(damageHit);
             SetDamageHitResultContactValues(damageHit, damageHitResult);
+
+            _knockbackManager.TryApplyKnockback(hitObject, damageHit.KnockbackHit);
+            
             return true;
         }
 

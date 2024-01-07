@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem
@@ -9,33 +10,7 @@ namespace Popeye.Modules.CombatSystem
         public int Damage { get; set; }
         public Vector3 DamageSourcePosition  { get; set; }
     
-        public Vector3 ContactPosition => DamageSourcePosition;
-        public Vector3 ContactNormal => -KnockbackDirection;
-    
-        private float _knockbackMagnitude;
-        public float KnockbackMagnitude
-        {
-            get { return _knockbackMagnitude; }
-            set { 
-                _knockbackMagnitude = value;
-                KnockbackForce = _knockbackMagnitude * _knockbackDirection;
-            }
-        }
-        
-        private Vector3 _knockbackDirection;
-        public Vector3 KnockbackDirection
-        {
-            get { return _knockbackDirection; }
-            set { 
-                _knockbackDirection = value;
-                KnockbackForce = _knockbackMagnitude * _knockbackDirection;
-            }
-        }
-    
-        public Vector3 KnockbackForce { get; private set; }
-    
-    
-    
+
         public float StunDuration  { get; set; }
     
     
@@ -44,7 +19,10 @@ namespace Popeye.Modules.CombatSystem
         {
             get { return _damageHitTargetTypeMask; }
         }
-    
+
+
+        public KnockbackHit KnockbackHit { get; private set; }
+        
     
         public DamageHit(DamageHitConfig config)
         {
@@ -52,33 +30,21 @@ namespace Popeye.Modules.CombatSystem
             Damage = config.Damage;
             DamageSourcePosition = Vector3.zero;
             StunDuration = config.StunDuration;
-    
-            KnockbackMagnitude = config.KnockbackMagnitude;
-            KnockbackDirection = Vector3.zero;
+
+            
+            KnockbackHit = new KnockbackHit(config.KnockbackHitConfig);
         }
         
-        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, int damage, float knockbackMagnitude, float stunDuration)
+        public void UpdateKnockbackPushDirection(Vector3 pushDirection)
         {
-            _damageHitTargetTypeMask = damageHitTargetTypeMask;
-            Damage = damage;
-            DamageSourcePosition = Vector3.zero;
-            StunDuration = stunDuration;
-    
-            KnockbackMagnitude = knockbackMagnitude;
-            KnockbackDirection = Vector3.zero;
+            KnockbackHit.UpdatePushDirection(pushDirection);
         }
         
-        public DamageHit(DamageHitTargetType damageHitTargetTypeMask, int damage, float knockbackMagnitude, float stunDuration, Vector3 damageSourcePosition)
+        public void UpdateKnockbackEndPosition(Vector3 endPosition)
         {
-            _damageHitTargetTypeMask = damageHitTargetTypeMask;
-            Damage = damage;
-            DamageSourcePosition = damageSourcePosition;
-            StunDuration = stunDuration;
-    
-            KnockbackMagnitude = knockbackMagnitude;
-            KnockbackDirection = Vector3.zero;
+            KnockbackHit.UpdateEndPosition(endPosition);
         }
-        
+
     }
     
 }

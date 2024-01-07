@@ -9,12 +9,13 @@ using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.CombatSystem;
+using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Popeye.Modules.Enemies
 {
-    public class SpiderEnemy : AEnemy, IDamageHitTarget, IMovementInputHandler
+    public class SpiderEnemy : AEnemy, IDamageHitTarget, IKnockbackHitTarget, IMovementInputHandler
     {
         [Header("SLIME")]
         [Header("COMPONENTS")] 
@@ -120,8 +121,9 @@ namespace Popeye.Modules.Enemies
             if (_canDealContactDamage)
             {
                 _contactDamageHit.DamageSourcePosition = Position;
-                _contactDamageHit.KnockbackDirection =
-                    PositioningHelper.Instance.GetDirectionAlignedWithFloor(Position, other.transform.position);
+                _contactDamageHit.UpdateKnockbackPushDirection(
+                    PositioningHelper.Instance.GetDirectionAlignedWithFloor(Position, other.transform.position)
+                );
 
                 _combatManager.TryDealDamage(other.gameObject, _contactDamageHit,
                     out DamageHitResult damageHitResult);
@@ -154,9 +156,6 @@ namespace Popeye.Modules.Enemies
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            //TakeKnockback(damageHit.KnockbackForce * 200f);
-            transform.DOBlendableMoveBy(damageHit.KnockbackForce * 4f, damageHit.StunDuration/2);
-
             float receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
             if (_healthSystem.IsDead())
             {
@@ -307,6 +306,21 @@ namespace Popeye.Modules.Enemies
                 _meshMaterial.color = Color.white;
                 await UniTask.Delay(MathUtilities.SecondsToMilliseconds(0.1f));
             }
+        }
+
+        public Rigidbody GetRigidbodyToKnockback()
+        {
+            return _rigidbody;
+        }
+
+        public bool CanBeKnockbacked()
+        {
+            return true;
+        }
+
+        public float GetKnockbackEffectiveness()
+        {
+            return 1;
         }
     }
 }

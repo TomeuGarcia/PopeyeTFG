@@ -1903,6 +1903,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shakeTransform: {fileID: 448417668525301830}
   _orbitingCamera: {fileID: 1167048129830977169}
+--- !u!1 &5121797991416172276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3209429531243587954}
+  - component: {fileID: 877732118828663960}
+  m_Layer: 0
+  m_Name: PhysicsTweenerBehaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3209429531243587954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121797991416172276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4693105823415062388}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &877732118828663960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121797991416172276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34924238fd14414bb999fc9eeb280d0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tweenObjectsCapacity: 15
 --- !u!1 &5218762389580436562
 GameObject:
   m_ObjectHideFlags: 0
@@ -2685,6 +2730,7 @@ Transform:
   m_Children:
   - {fileID: 255937690607324572}
   - {fileID: 6054250289298223782}
+  - {fileID: 3209429531243587954}
   m_Father: {fileID: 9056815993147974026}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2704,6 +2750,7 @@ MonoBehaviour:
   _playerAnchorInstaller: {fileID: 1255308523572352146}
   _hitTargetCollisionProbingConfig: {fileID: 11400000, guid: 8b65cc09cf609474cb68e23cb665020d,
     type: 2}
+  _physicsTweenerBehaviour: {fileID: 877732118828663960}
 --- !u!1 &6714125433013578911
 GameObject:
   m_ObjectHideFlags: 0

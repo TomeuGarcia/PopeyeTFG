@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem.Scripts.KnockbackSystem
+namespace Project.Modules.CombatSystem.KnockbackSystem
 {
     public class PushableTestBehaviour : MonoBehaviour
     {

@@ -34,8 +34,10 @@ namespace Popeye.Modules.Enemies.Bullets
         {
 
             _contactDamageHit.DamageSourcePosition = _transform.position;
-            _contactDamageHit.KnockbackDirection =
-                PositioningHelper.Instance.GetDirectionAlignedWithFloor(_transform.position, other.transform.position);
+            _contactDamageHit.UpdateKnockbackPushDirection(
+                PositioningHelper.Instance.GetDirectionAlignedWithFloor(
+                    _transform.position, other.transform.position));
+            
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
             _bullet.Recycle();
         }
