@@ -217,8 +217,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             Vector3 endPosition = originPosition + (originToEndDirection * _config.PullKnockbackDistanceFromPlayer);
             
             damageTrigger.UpdateKnockbackEndPosition(endPosition);
-            
-            Debug.Log(endPosition);
         }
 
         

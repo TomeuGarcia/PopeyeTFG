@@ -156,7 +156,7 @@ namespace Popeye.Modules.Enemies
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            float receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
+            int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
             if (_healthSystem.IsDead())
             {
                 _stateMachine.OverwriteCurrentState(ISpiderEnemyState.States.Dead);
