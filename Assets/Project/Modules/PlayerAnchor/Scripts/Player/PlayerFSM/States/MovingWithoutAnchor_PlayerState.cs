@@ -52,6 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             }
             */
 
+            /*
             if (PlayerTriesToSpinAnchor())
             {
                 if (IsAnchorObstructed())
@@ -64,6 +65,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                     return true;   
                 }
             }
+            */
             
             if (PlayerCanHeal())
             {

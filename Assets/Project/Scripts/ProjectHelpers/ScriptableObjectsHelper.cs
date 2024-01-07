@@ -16,5 +16,8 @@ namespace Popeye.ProjectHelpers
         
         
         public const string ID_ASSETS_PATH = "Popeye/ID/";
+        
+        
+        public const string COLLISIONS_PATH = "Popeye/Collisions/";
     }
 }

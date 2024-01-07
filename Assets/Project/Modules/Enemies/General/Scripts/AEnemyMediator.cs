@@ -10,6 +10,8 @@ namespace Popeye.Modules.Enemies
         [SerializeField] protected EnemyHealth _enemyHealth;
         [SerializeField] protected EnemyVisuals _enemyVisuals;
 
+        public abstract Vector3 Position { get; }
+        
         public virtual void OnHit(DamageHit damageHit)
         {
             _enemyVisuals.PlayHitEffects(_enemyHealth.GetValuePer1Ratio(), damageHit);

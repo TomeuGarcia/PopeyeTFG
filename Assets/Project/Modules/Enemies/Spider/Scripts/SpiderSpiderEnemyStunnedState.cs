@@ -1,5 +1,5 @@
 using Popeye.Modules.Enemies;
-using Popeye.Modules.Utilities;
+using Popeye.Timers;
 
 namespace Popeye.Modules.PlayerController.Scripts.Enemies
 {

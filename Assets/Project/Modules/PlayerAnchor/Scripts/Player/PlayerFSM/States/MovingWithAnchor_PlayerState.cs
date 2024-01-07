@@ -35,12 +35,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 NextState = PlayerStates.DashingDroppingAnchor;
                 return true;
             }
-
+            
+            /*
             if (PlayerTriesToSpinAnchor())
             {
                 NextState = PlayerStates.SpinningAnchor;
                 return true;
             }
+            */
             
             if (PlayerCanHeal())
             {

@@ -176,6 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 25
+  _knockbackRigidbody: {fileID: 7348990576285241089}
+  _knockbackEffectiveness: 1
 --- !u!114 &8865523304329242488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,6 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageTargetsOncePerActivation: 0
+  _isKnockbackPushOrigin: 1
   _collider: {fileID: 1351218561991610330}
 --- !u!114 &6271575732632288993
 MonoBehaviour:

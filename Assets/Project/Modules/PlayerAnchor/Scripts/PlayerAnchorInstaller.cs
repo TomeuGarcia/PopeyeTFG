@@ -160,7 +160,7 @@ namespace Popeye.Modules.PlayerAnchor
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
-                _playerGeneralConfig.PotionHealAmount);
+                _playerGeneralConfig.PotionHealAmount, _playerController.Rigidbody);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, _obstacleProbingConfig);
             playerMovement.Configure(_player, _playerController);
             playerAudio.Configure(_playerController.gameObject);

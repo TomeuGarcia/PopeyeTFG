@@ -30,6 +30,9 @@ namespace Popeye.Modules.Enemies
         private Transform _particlePoolParent;
         private Core.Pool.ObjectPool _objectPool;
 
+
+        public override Vector3 Position => transform.position;
+
         public void Init()
         {
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
