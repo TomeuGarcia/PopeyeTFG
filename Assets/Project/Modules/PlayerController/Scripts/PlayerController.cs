@@ -282,6 +282,7 @@ namespace Popeye.Modules.PlayerController
             float dot = Vector3.Dot(_velocity, hit.normal);
             if (dot > 0.0f)
             {
+                // When colliding against a wall
                 _velocity = (_velocity - hit.normal * dot).normalized * speed;
             }
 

@@ -18,7 +18,12 @@ namespace Project.PhysicsMovement
         {
             for (int i = 0; i < _tweenObjects.Count; ++i)
             {
-                if (_tweenObjects[i].FixedUpdate(fixedDeltaTime))
+                if (_tweenObjects[i].WasDestroyed())
+                {
+                    _tweenObjects.RemoveAt(i);
+                    --i;
+                }
+                else if (_tweenObjects[i].FixedUpdate(fixedDeltaTime))
                 {
                     _tweenObjects.RemoveAt(i);
                     --i;
@@ -30,6 +35,7 @@ namespace Project.PhysicsMovement
         {
             _tweenObjects.Add(physicsTweenObject);
         }
+
         
     }
 }

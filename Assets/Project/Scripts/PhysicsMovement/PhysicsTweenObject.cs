@@ -39,5 +39,10 @@ namespace Project.PhysicsMovement
             _timer.Update(fixedDeltaTime);
             return _timer.HasFinished();
         }
+
+        public bool WasDestroyed()
+        {
+            return _rigidbody == null;
+        }
     }
 }

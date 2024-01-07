@@ -10,6 +10,7 @@ namespace Popeye.Timers
         private float _counter;
 
         public float Time => _counter;
+        public float Duration => _duration;
         
         public Timer(float duration)
         {

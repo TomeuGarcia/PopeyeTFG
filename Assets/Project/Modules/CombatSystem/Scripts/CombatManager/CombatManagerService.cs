@@ -39,7 +39,7 @@ namespace Popeye.Modules.CombatSystem
             SetDamageHitResultContactValues(damageHit, damageHitResult);
 
             _knockbackManager.TryApplyKnockback(hitObject, damageHit.KnockbackHit);
-            
+
             return true;
         }
 
