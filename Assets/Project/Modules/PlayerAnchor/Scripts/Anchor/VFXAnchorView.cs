@@ -19,6 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         [Header("REFERENCES")]
         [SerializeField] private Transform _vfxParent;
+        [SerializeField] private Transform _specialMotionsTransform;
         
         [Header("PARAMETERS")]
         [SerializeField] private Vector3 _slamTrailOffset = new Vector3(-0.8f, 0.0f, -0.1f);
@@ -48,7 +49,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             float riseTime = duration / 1.5f;
             float fallTime = duration - riseTime;
             
-            await UniTask.Delay(TimeSpan.FromSeconds(riseTime));
+            await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
+            PlayTwistLoopAnimation(0.01f, 2, 0.6f);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
+            //PlayTwistLoopAnimation(0.01f, 1, 0.3f);
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
             _particleFactory.Create(_slamHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
@@ -59,6 +64,22 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             //Time.timeScale = 1.0f;
+        }
+        
+        
+        private async UniTaskVoid PlayTwistLoopAnimation(float delay, int numberOfLoops, float duration)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            
+            float durationStep = duration / (numberOfLoops * 2);
+            
+            _specialMotionsTransform.DOBlendableLocalRotateBy(new Vector3(0, 0, 180), durationStep)
+                .SetEase(Ease.Linear)
+                .OnComplete(() => 
+                    _specialMotionsTransform.DOBlendableLocalRotateBy(new Vector3(0, 0, 0), durationStep)
+                        .SetEase(Ease.Linear)
+                )
+                .SetLoops(numberOfLoops);
         }
 
         public async UniTaskVoid PlayThrownAnimation(float duration)
