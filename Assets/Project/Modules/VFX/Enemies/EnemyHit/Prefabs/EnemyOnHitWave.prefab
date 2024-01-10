@@ -46,13 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d851a0ca511405d80382f66091e70eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 5790093064680944402}
+  _interpolateOnInit: 1
   _floatSetupDatas:
   - {fileID: 11400000, guid: a97ab11e9731c924bac97778840e1c53, type: 2}
   - {fileID: 11400000, guid: 8d3530f4f2011054287955bac39d364b, type: 2}
   _floatInterpolationDatas:
   - {fileID: 11400000, guid: ced1c148e50efca42af6c342a8fdfbf5, type: 2}
   - {fileID: 11400000, guid: 682ba40c451dc00499ff8a3759de6347, type: 2}
+  _meshRenderers:
+  - {fileID: 5790093064680944402}
 --- !u!33 &5839764027890194294
 MeshFilter:
   m_ObjectHideFlags: 0
