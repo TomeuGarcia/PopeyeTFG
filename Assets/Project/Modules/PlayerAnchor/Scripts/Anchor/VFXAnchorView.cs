@@ -102,8 +102,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void PlayCarriedAnimation()
         {
-            _carryTrail = _particleFactory.Create(_carryTrailParticleType, Vector3.zero, Quaternion.identity, _vfxParent)
-                .gameObject.GetComponent<InterpolatorRecycleParticle>();
+            //_carryTrail = _particleFactory.Create(_carryTrailParticleType, Vector3.zero, Quaternion.identity, _vfxParent)
+                //.gameObject.GetComponent<InterpolatorRecycleParticle>();
+        }
+
+        public void StopCarry()
+        {
+            //_carryTrail.Play();
         }
 
         public void PlayRestOnFloorAnimation()
@@ -119,11 +124,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void PlayObstructedAnimation()
         {
             
-        }
-
-        public void StopCarry()
-        {
-            _carryTrail.Play();
         }
     }
 }
