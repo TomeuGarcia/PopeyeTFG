@@ -12,7 +12,8 @@ public class TurretHealth : MonoBehaviour, IDamageHitTarget
     [SerializeField] protected EnemyVisuals _enemyVisuals;
     [SerializeField, Range(0, 100)] private int _maxHealth = 50;
     [SerializeField] private ProximityTargetGetterBehaviour _enemy;
-    
+
+    private Vector3 Position => transform.position;
     
     private void Awake()
     {
@@ -38,7 +39,7 @@ public class TurretHealth : MonoBehaviour, IDamageHitTarget
             _enemyVisuals.PlayHitEffects(_healthSystem.GetValuePer1Ratio(), damageHit);
         }
 
-        return new DamageHitResult(this, gameObject, receivedDamage);
+        return new DamageHitResult(this, gameObject, receivedDamage, Position);
     }
 
     public bool CanBeDamaged(DamageHit damageHit)
