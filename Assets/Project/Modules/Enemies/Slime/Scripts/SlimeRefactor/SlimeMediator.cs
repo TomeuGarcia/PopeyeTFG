@@ -40,7 +40,7 @@ namespace Popeye.Modules.Enemies
             _enemyPatrolling.Configure(this);
             _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
         }
-
+  
         public void SetSlimeMind(SlimeMindEnemy slimeMind)
         {
             slimeMindEnemy = slimeMind;

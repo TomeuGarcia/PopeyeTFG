@@ -25,9 +25,7 @@ namespace Popeye.Modules.Enemies.Bullets
         private void Start()
         {
             _contactDamageHit = new DamageHit(_contactDamageConfig);
-
             _combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
-
         }
 
         private void OnCollisionEnter(Collision other)
