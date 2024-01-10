@@ -138,7 +138,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void SetPulled(AnchorThrowResult anchorPullResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
-            _anchorDamageDealer.DealPullDamage(anchorPullResult);
+            _anchorDamageDealer.DealPullDamage(anchorPullResult).Forget();
             
             /*
             _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 

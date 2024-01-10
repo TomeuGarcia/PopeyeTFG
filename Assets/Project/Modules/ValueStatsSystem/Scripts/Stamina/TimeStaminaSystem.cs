@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Timer = Popeye.Modules.Utilities.Timer;
+using Timer = Popeye.Timers.Timer;
 
 namespace Popeye.Modules.ValueStatSystem
 {
