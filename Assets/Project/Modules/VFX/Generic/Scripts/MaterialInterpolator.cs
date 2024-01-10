@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Popeye.Modules.VFX.Generic
@@ -13,7 +12,7 @@ namespace Popeye.Modules.VFX.Generic
         {
             foreach (var data in setupDatas)
             {
-                material.SetFloat(data.ID, data.InitialValue);
+                material.SetFloat(data.Name, data.InitialValue);
             }
         }
         

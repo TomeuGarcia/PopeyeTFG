@@ -12,6 +12,10 @@ using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.Generic.ParticleBehaviours;
+using Popeye.Modules.VFX.ParticleFactories;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -80,6 +84,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
+            
+            _anchorView.PlayCarriedAnimation();
         }
         
         public void ResetState(Vector3 position)
@@ -103,7 +109,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
-        {
+        {            
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
