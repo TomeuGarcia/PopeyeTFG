@@ -67,7 +67,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _meshTransform.DOComplete();
         }
         
-        public void PlayThrownAnimation(float duration)
+        public async UniTaskVoid PlayThrownAnimation(float duration)
         {
             _dropShadow.Show();
             
@@ -122,6 +122,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _meshTransform.DOComplete();
             _meshTransform.DOPunchRotation(_obstructedRotationPunch, 0.3f, 10)
                 .SetEase(Ease.InOutQuad);
+        }
+
+        public void StopCarry()
+        {
+            
         }
     }
 }

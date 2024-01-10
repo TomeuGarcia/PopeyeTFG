@@ -6,6 +6,7 @@ namespace Popeye.Modules.VFX.Generic
         EnemyOnHitSplatter,
         AnchorCarryTrail,
         AnchorThrowTrail,
-        AnchorThrowHead
+        AnchorThrowHead,
+        AnchorSlamHead
     }
 }

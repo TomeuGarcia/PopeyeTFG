@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AnchorThrow_Head_Mat
+  m_Name: TEMP_AnchorSlam_BigHead_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 2f2afc016dad8754392e2782744e7a5b,
     type: 3}
   m_Parent: {fileID: 0}
@@ -55,25 +55,25 @@ Material:
     - _BottomDissolveL2: 0.1
     - _Disappear: 0
     - _FadePow: 4
-    - _MaxAlpha: 1
+    - _MaxAlpha: 0.2
     - _NoiseScale: 20
     - _NoiseScaleL1: 35
     - _NoiseScaleL2: 35
     - _NoiseScrollSpeed: 2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SubtractionL1: 0.5
-    - _SubtractionL2: 0.5
+    - _SubtractionL1: 0
+    - _SubtractionL2: 0
     m_Colors:
     - _ColorL1: {r: 0, g: 0.60732985, b: 0.60732985, a: 0}
     - _ColorL2: {r: 0, g: 1, b: 0.19120172, a: 0}
     - _DissolveScrollSpeedL1: {r: 0, g: 1, b: 0, a: 0}
     - _DissolveScrollSpeedL2: {r: 0, g: 1, b: 0, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Scale: {r: 1.2, g: 0.6, b: 2, a: 0}
+    - _Scale: {r: 2, g: 2, b: 10, a: 0}
     - _ScrollSpeedL1: {r: 0, g: 1, b: 0, a: 0}
-    - _TextureScrollSpeedL1: {r: -1, g: 0, b: 0, a: 0}
-    - _TextureScrollSpeedL2: {r: -1, g: 0, b: 0, a: 0}
+    - _TextureScrollSpeedL1: {r: -2, g: 0, b: 0, a: 0}
+    - _TextureScrollSpeedL2: {r: -2, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2545409224128901896
 MonoBehaviour:

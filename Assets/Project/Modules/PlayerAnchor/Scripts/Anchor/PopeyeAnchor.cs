@@ -59,12 +59,19 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private CameraShakeConfig _restOnFloor_CameraShake;
 
         //  TESTING
-        private IParticleFactory _particleFactory => ServiceLocator.Instance.GetService<IParticleFactory>();
-        [SerializeField] private ParticleTypes _carryTrailParticleType;
-        [SerializeField] private ParticleTypes _throwTrailParticleType;
-        [SerializeField] private ParticleTypes _throwHeadParticleType;
-        [SerializeField] private Transform _vfxParent;
-        private InterpolatorRecycleParticle _carryTrail;
+        // private IParticleFactory _particleFactory => ServiceLocator.Instance.GetService<IParticleFactory>();
+        // [SerializeField] private ParticleTypes _carryTrailParticleType;
+        // [SerializeField] private ParticleTypes _throwTrailParticleType;
+        // [SerializeField] private ParticleTypes _throwHeadParticleType;
+        // [SerializeField] private Transform _vfxParent;
+        // [SerializeField] private Vector3 _slamTrailOffset;
+        // private Vector3 _slamTrailFlipOffset;
+        // private InterpolatorRecycleParticle _carryTrail;
+        
+        // private void Awake()
+        // {
+        //     _slamTrailFlipOffset = new Vector3(-_slamTrailOffset.x, -_slamTrailOffset.y, _slamTrailOffset.z);
+        // }
         //  TESTING
 
         public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
@@ -94,8 +101,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
             
+            _anchorView.PlayCarriedAnimation();
+            
             //  TESTING
-            AnchorCarryVFX();
+            //StartCarry();
             //  TESTING
         }
         
@@ -122,7 +131,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {
             //  TESTING
-            AnchorThrowVFX(anchorThrowResult).Forget();
+            //Throw(anchorThrowResult).Forget();
             //  TESTING
             
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
@@ -135,13 +144,17 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
             
-            //_anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
+            _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             
             _anchorAudio.PlayThrowSound();
         }
         
         public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
         {
+            //  TESTING
+            //Slam(anchorThrowResult).Forget();
+            //  TESTING
+            
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealVerticalLandDamage(anchorThrowResult);
             
@@ -151,6 +164,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
             
             _anchorView.PlayVerticalHitAnimation(anchorThrowResult.Duration, floorHit).Forget();
+            //  TESTING
             
             _anchorAudio.PlayThrowSound();
         }
@@ -196,7 +210,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void SetCarried()
         {
             //  TESTING
-            AnchorCarryVFX();
+            //StartCarry();
             //  TESTING
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Carried);
             
@@ -206,29 +220,55 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         
         //  TESTING
-        private void AnchorCarryVFX()
-        {
-            _carryTrail = _particleFactory.Create(_carryTrailParticleType, Vector3.zero, quaternion.identity, _vfxParent)
-                .gameObject.GetComponent<InterpolatorRecycleParticle>();
-        }
-        private void PlayerLeftAnchor()
-        {
-            _carryTrail.Play();
-        }
-        private async UniTask AnchorThrowVFX(AnchorThrowResult anchorThrowResult)
-        {
-            Time.timeScale = 0.2f;
-            PlayerLeftAnchor();
-            
-            Transform trail = _particleFactory.Create(_throwTrailParticleType, Vector3.zero, quaternion.identity, _vfxParent);
-            _particleFactory.Create(_throwHeadParticleType, Vector3.zero, quaternion.identity, _vfxParent);
-
-            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
-            trail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            
-            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            Time.timeScale = 1.0f;
-        }
+        // private void StartCarry()
+        // {
+        //     _carryTrail = _particleFactory.Create(_carryTrailParticleType, Vector3.zero, Quaternion.identity, _vfxParent)
+        //         .gameObject.GetComponent<InterpolatorRecycleParticle>();
+        // }
+        // private void StopCarry()
+        // {
+        //     _carryTrail.Play();
+        // }
+        // private async UniTask Throw(AnchorThrowResult anchorThrowResult)
+        // {
+        //     //Time.timeScale = 0.2f;
+        //     StopCarry();
+        //         
+        //     //Transform trail = _particleFactory.Create(_throwTrailParticleType, Vector3.zero, quaternion.identity, _vfxParent);
+        //     Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, quaternion.identity, _vfxParent);
+        //     Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, quaternion.identity, _vfxParent);
+        //     _particleFactory.Create(_throwHeadParticleType, Vector3.zero, quaternion.identity, _vfxParent);
+        //
+        //     await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
+        //     //trail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+        //     rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+        //     leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+        //     
+        //     //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+        //     //Time.timeScale = 1.0f;
+        // }
+        // private async UniTask Slam(AnchorThrowResult anchorThrowResult)
+        // {
+        //     //Time.timeScale = 0.2f;
+        //     StopCarry();
+        //
+        //     _particleFactory.Create(_throwHeadParticleType, Vector3.zero, quaternion.identity, _vfxParent);
+        //     // Delete this when the able to acces specific times properly?
+        //     float riseTime = anchorThrowResult.Duration / 1.5f;
+        //     float fallTime = anchorThrowResult.Duration - riseTime;
+        //     
+        //     await UniTask.Delay(TimeSpan.FromSeconds(riseTime));
+        //     Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, quaternion.identity, _vfxParent);
+        //     Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, quaternion.identity, _vfxParent);
+        //     _particleFactory.Create(_throwHeadParticleType, Vector3.zero, quaternion.identity, _vfxParent);
+        //
+        //     await UniTask.Delay(TimeSpan.FromSeconds(fallTime));
+        //     rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+        //     leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+        //     
+        //     //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+        //     Time.timeScale = 1.0f;
+        // }
         //  TESTING
         
         public void SetGrabbedToThrow()

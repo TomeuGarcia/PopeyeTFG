@@ -7,7 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     {
         void ResetView();
         UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit);
-        void PlayThrownAnimation(float duration);
+        UniTaskVoid PlayThrownAnimation(float duration);
         UniTaskVoid PlayPulledAnimation(float duration);
         void PlayKickedAnimation(float duration);
         void PlayCarriedAnimation();
@@ -15,5 +15,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         void PlaySpinningAnimation();
         void PlayObstructedAnimation();
+        void StopCarry();
     }
 }
