@@ -2,7 +2,7 @@ using System;
 using Popeye.Core.Services.ServiceLocator;
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem.Testing.Scripts
+namespace Popeye.Modules.CombatSystem.Testing.Scripts
 {
     public class DamageTriggerTester : MonoBehaviour
     {

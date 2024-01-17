@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     public interface IDamageHitTarget
     {

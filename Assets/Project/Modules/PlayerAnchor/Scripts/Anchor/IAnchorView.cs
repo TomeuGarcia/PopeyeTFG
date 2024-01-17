@@ -1,13 +1,13 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorView
     {
         void ResetView();
         UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit);
-        void PlayThrownAnimation(float duration);
+        UniTaskVoid PlayThrownAnimation(float duration);
         UniTaskVoid PlayPulledAnimation(float duration);
         void PlayKickedAnimation(float duration);
         void PlayCarriedAnimation();
@@ -15,5 +15,6 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         void PlaySpinningAnimation();
         void PlayObstructedAnimation();
+        void StopCarry();
     }
 }

@@ -1,4 +1,4 @@
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -10,13 +10,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private int _potionHealAmount;
         
         public void Configure(IPlayerMediator playerMediator, HealthBehaviour playerHealthBehaviour, int maxHealth,
-            int potionHealAmount)
+            int potionHealAmount, Rigidbody knockbackRigidbody)
         {
             _playerMediator = playerMediator;
             _potionHealAmount = potionHealAmount;
 
             _playerHealthBehaviour = playerHealthBehaviour;
-            _playerHealthBehaviour.Configure(this, maxHealth, DamageHitTargetType.Player);
+            _playerHealthBehaviour.Configure(this, maxHealth, DamageHitTargetType.Player, knockbackRigidbody);
         }
 
         public void OnDamageTaken(DamageHitResult damageHitResult)

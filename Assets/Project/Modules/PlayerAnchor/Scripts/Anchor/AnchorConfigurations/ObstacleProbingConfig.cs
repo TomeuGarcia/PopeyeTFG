@@ -1,7 +1,7 @@
-using Project.Scripts.ProjectHelpers;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
 {
     [CreateAssetMenu(fileName = "ObstacleProbingConfig", 
         menuName = ScriptableObjectsHelper.PLAYER_ANCHOR_ASSETS_PATH + "ObstacleProbingConfig")]

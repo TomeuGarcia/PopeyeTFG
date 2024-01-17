@@ -1,4 +1,4 @@
-using Project.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Anchor;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {

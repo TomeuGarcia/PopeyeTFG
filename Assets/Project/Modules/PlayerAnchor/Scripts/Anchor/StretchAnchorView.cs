@@ -4,25 +4,40 @@ using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class StretchAnchorView : MonoBehaviour, IAnchorView
     {
         [SerializeField] private Transform _meshTransform;
+        [SerializeField] private Transform _specialMotionsTransform;
         
-        [SerializeField] private DropShadow _dropShadow;
+        [SerializeField] private DropShadow.DropShadowBehaviour _dropShadow;
 
-
+        [Header("VERTICAL HIT")]
         [SerializeField] private Vector3 _verticalHitScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
+        [SerializeField, Min(0.01f)] private float _verticalTwistDelay = 0.15f;
+        [SerializeField, Min(0.01f)] private float _verticalTwistDuration = 1.0f;
+        [SerializeField, Range(1, 10)] private int _verticalTwistLoops = 6;
+        
+        [Header("THROW")]
         [SerializeField] private Vector3 _throwScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
+        
+        [Header("PULL")]
         [SerializeField] private Vector3 _pullScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
+        [SerializeField, Range(0f, 5f)] private float _pulledDelay;
+ 
+        [Header("KICK")]
         [SerializeField] private Vector3 _kickScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
+        
+        [Header("CARRIED")]
         [SerializeField] private Vector3 _carriedScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
+        
+        [Header("RESTING ON FLOOR")]
         [SerializeField] private Vector3 _restingOnFloorScalePunch = new Vector3(-0.7f, -0.3f, 1.5f);
         
+        [Header("OBSTRUCTED")]
         [SerializeField] private Vector3 _obstructedRotationPunch = new Vector3(0, 70, 30);
 
-        [SerializeField, Range(0f, 5f)] private float _pulledDelay;
 
         [SerializeField] private MeshRenderer _landHitMesh;
         private Material _landHitMaterial;
@@ -43,6 +58,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_verticalHitScalePunch, duration, 1)
                 .SetEase(Ease.OutSine);
+            PlayTwistLoopAnimation(_verticalTwistDelay, _verticalTwistLoops, _verticalTwistDuration).Forget();
 
             duration += 0.2f;
             float delayBeforeHit = duration * 0.7f;
@@ -59,6 +75,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             await UniTask.Delay(TimeSpan.FromSeconds(delayAfterHit));
             _landHitMesh.gameObject.SetActive(false);
+            
+
         }
 
         public void ResetView()
@@ -67,7 +85,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _meshTransform.DOComplete();
         }
         
-        public void PlayThrownAnimation(float duration)
+        public async UniTaskVoid PlayThrownAnimation(float duration)
         {
             _dropShadow.Show();
             
@@ -123,5 +141,27 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _meshTransform.DOPunchRotation(_obstructedRotationPunch, 0.3f, 10)
                 .SetEase(Ease.InOutQuad);
         }
+
+        public void StopCarry()
+        {
+            
+        }
+
+
+        private async UniTaskVoid PlayTwistLoopAnimation(float delay, int numberOfLoops, float duration)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            
+            float durationStep = duration / (numberOfLoops * 2);
+            
+            _specialMotionsTransform.DOBlendableLocalRotateBy(new Vector3(0, 0, 180), durationStep)
+                .SetEase(Ease.Linear)
+                .OnComplete(() => 
+                    _specialMotionsTransform.DOBlendableLocalRotateBy(new Vector3(0, 0, 0), durationStep)
+                        .SetEase(Ease.Linear)
+                    )
+                .SetLoops(numberOfLoops);
+        }
+        
     }
 }

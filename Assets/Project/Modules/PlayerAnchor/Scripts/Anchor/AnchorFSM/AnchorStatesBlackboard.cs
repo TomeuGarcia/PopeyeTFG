@@ -1,7 +1,7 @@
-using Project.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates
 {
     public class AnchorStatesBlackboard
     {
