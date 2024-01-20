@@ -10,6 +10,10 @@ namespace Popeye.ProjectHelpers
         
         public const string CAMERA_ASSETS_PATH = "Popeye/Camera/";
         
+        
+        public const string TIME_ASSETS_PATH = "Popeye/Time/";
+        public const string HITSTOP_ASSETS_PATH = TIME_ASSETS_PATH + "HitStop/";
+        
         public const string VFX_ASSETS_PATH = "Popeye/VFX/";
         
         public const string SCENELOADING_ASSETS_PATH = "Popeye/SceneLoading/";
