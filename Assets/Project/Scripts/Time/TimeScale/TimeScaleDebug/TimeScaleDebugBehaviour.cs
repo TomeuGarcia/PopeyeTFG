@@ -1,6 +1,7 @@
 using System.Collections;
 using Popeye.Core.Services.ServiceLocator;
 using Project.Scripts.Time.TimeFunctionalities;
+using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 
 namespace Project.Scripts.Time.TimeScale
