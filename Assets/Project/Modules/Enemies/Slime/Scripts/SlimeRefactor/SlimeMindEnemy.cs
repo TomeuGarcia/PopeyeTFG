@@ -5,6 +5,7 @@ using Popeye.Core.Pool;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Components;
+using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 using FMODUnity;
 
@@ -12,10 +13,7 @@ namespace Popeye.Modules.Enemies
 {
     public class SlimeMindEnemy : AEnemy
     {
-        //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX_Slime_Mov",GetComponent<Transform>().position);
-
-
-
+        [Header("SLIME MIND")]
         [SerializeField] private SlimeSize _startingStartSize;
         [SerializeField] private List<SlimeData> _sizeToPrefab;
         private Dictionary<SlimeSize, GameObject> _sizeToPrefabDictionary = new Dictionary<SlimeSize, GameObject>();
@@ -26,7 +24,7 @@ namespace Popeye.Modules.Enemies
         
         
         [SerializeField] private Transform _transform;
-        [SerializeField] private Core.Pool.ObjectPool _objectPool;
+        [SerializeField] private ObjectPool _objectPool;
         [SerializeField] private PooledParticle _explosionParticles;
         public enum SlimeSize
         {

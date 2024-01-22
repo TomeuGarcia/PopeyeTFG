@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class ClawAnchorSnapTarget : MonoBehaviour, IAnchorSnapTarget
     {

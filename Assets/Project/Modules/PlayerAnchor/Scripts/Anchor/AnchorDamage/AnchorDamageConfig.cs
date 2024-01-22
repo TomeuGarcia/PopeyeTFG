@@ -1,8 +1,8 @@
-using Project.Modules.CombatSystem;
-using Project.Scripts.ProjectHelpers;
+using Popeye.Modules.CombatSystem;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "AnchorDamageConfig", 
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorDamageConfig")]
@@ -19,9 +19,11 @@ namespace Project.Modules.PlayerAnchor.Anchor
         [Header("PULL")]
         [SerializeField] private DamageHitConfig _anchorPullDamageHit;
         [SerializeField, Range(0f, 5.0f)] private float _pullDamageExtraDuration = 0.2f;
+        [SerializeField, Range(0f, 20.0f)] private float _pullKnockbackDistanceFromPlayer = 7.0f;
         
         public DamageHitConfig AnchorPullDamageHit => _anchorPullDamageHit;
         public float PullDamageExtraDuration => _pullDamageExtraDuration;
+        public float PullKnockbackDistanceFromPlayer => _pullKnockbackDistanceFromPlayer;
         
         
         [Header("KICK")]

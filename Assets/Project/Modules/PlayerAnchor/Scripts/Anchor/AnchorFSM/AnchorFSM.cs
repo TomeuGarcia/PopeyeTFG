@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
-using Project.Modules.PlayerAnchor.Anchor.AnchorStates.States;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States;
 
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates
 {
     public class AnchorFSM
     {

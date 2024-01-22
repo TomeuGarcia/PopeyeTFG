@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     public class DamageDealer
     {
@@ -20,12 +20,17 @@ namespace Project.Modules.CombatSystem
 
         public void UpdatePosition(Vector3 position)
         {
-            _damageHit.Position = position;
+            _damageHit.DamageSourcePosition = position;
         }
-        public void UpdateKnockbackDirection(Vector3 knockbackDirection)
+        public void UpdateKnockbackEndPosition(Vector3 knockbackEndPosition)
         {
-            _damageHit.KnockbackDirection = knockbackDirection;
+            _damageHit.UpdateKnockbackEndPosition(knockbackEndPosition);
         }
+        public void UpdateKnockbackPushDirection(Vector3 knockbackDirection)
+        {
+            _damageHit.UpdateKnockbackPushDirection(knockbackDirection);
+        }
+
 
         public bool TryDealDamage(GameObject gameObject, out DamageHitResult damageHitResult)
         {

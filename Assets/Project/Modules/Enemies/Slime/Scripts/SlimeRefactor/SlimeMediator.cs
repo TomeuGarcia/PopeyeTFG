@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using System.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.VFX.ParticleFactories;
 using Task = System.Threading.Tasks.Task;
 
 
@@ -29,9 +30,12 @@ namespace Popeye.Modules.Enemies
         private Transform _particlePoolParent;
         private Core.Pool.ObjectPool _objectPool;
 
+
+        public override Vector3 Position => transform.position;
+
         public void Init()
         {
-            _enemyVisuals.Configure();
+            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
             _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);
@@ -108,9 +112,9 @@ namespace Popeye.Modules.Enemies
             Destroy(gameObject);
         }
 
-        public override void OnDeath()
+        public override void OnDeath(DamageHit damageHit)
         {
-            base.OnDeath();
+            base.OnDeath(damageHit);
             Divide();
         }
 

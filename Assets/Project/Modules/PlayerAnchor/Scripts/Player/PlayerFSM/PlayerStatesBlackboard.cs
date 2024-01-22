@@ -1,7 +1,7 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerController.Inputs;
-using Project.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Anchor;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {

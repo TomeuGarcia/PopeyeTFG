@@ -10,12 +10,16 @@ using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
-using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
-using Project.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
+using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.Generic.ParticleBehaviours;
+using Popeye.Modules.VFX.ParticleFactories;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {
@@ -80,6 +84,8 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
+            
+            _anchorView.PlayCarriedAnimation();
         }
         
         public void ResetState(Vector3 position)
@@ -103,7 +109,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
-        {
+        {            
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
@@ -138,7 +144,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public void SetPulled(AnchorThrowResult anchorPullResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
-            _anchorDamageDealer.DealPullDamage(anchorPullResult);
+            _anchorDamageDealer.DealPullDamage(anchorPullResult).Forget();
             
             /*
             _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 

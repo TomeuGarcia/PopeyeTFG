@@ -1,26 +1,23 @@
-using System;
 using AYellowpaper;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.PlayerAnchor.Player;
-using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
-using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
+using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.ValueStatSystem;
-using Project.Modules.CombatSystem;
-using Project.Modules.PlayerAnchor.Anchor;
-using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
-using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
-using Project.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
+using Popeye.Modules.PlayerAnchor.Chain;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor
+namespace Popeye.Modules.PlayerAnchor
 {
     public class PlayerAnchorInstaller : MonoBehaviour
     {
@@ -163,7 +160,7 @@ namespace Project.Modules.PlayerAnchor
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
-                _playerGeneralConfig.PotionHealAmount);
+                _playerGeneralConfig.PotionHealAmount, _playerController.Rigidbody);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, _obstacleProbingConfig);
             playerMovement.Configure(_player, _playerController);
             playerAudio.Configure(_playerController.gameObject);
