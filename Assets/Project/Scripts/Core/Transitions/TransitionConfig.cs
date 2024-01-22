@@ -1,10 +1,11 @@
 using DG.Tweening;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 
 namespace Project.Scripts.Core.Transitions
 {
     [CreateAssetMenu(fileName = "TransitionConfig_NAME", 
-        menuName = "Popeye/Core/TransitionConfig")]
+        menuName = ScriptableObjectsHelper.CORE_ASSETS_PATH + "TransitionConfig")]
     public class TransitionConfig : ScriptableObject
     {
         [SerializeField, Range(0.001f, 10.0f)] private float _transitionInDuration = 0.2f;

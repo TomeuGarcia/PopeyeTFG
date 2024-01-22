@@ -2,6 +2,8 @@ namespace Popeye.ProjectHelpers
 {
     public static class ScriptableObjectsHelper
     {
+        public const string CORE_ASSETS_PATH = "Popeye/Core/";
+        
         public const string PLAYER_ANCHOR_ASSETS_PATH = "Popeye/PlayerAnchor/";
         public const string ANCHOR_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Anchor/";
         public const string PLAYER_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Player/";
