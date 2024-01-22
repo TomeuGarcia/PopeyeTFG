@@ -7,6 +7,9 @@ using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using Project.PhysicsMovement;
+using Project.Scripts.Time.TimeFunctionalities;
+using Project.Scripts.Time.TimeHitStop;
+using Project.Scripts.Time.TimeScale;
 using UnityEngine;
 
 
@@ -17,6 +20,8 @@ public class GameSetupInstaller : MonoBehaviour
 
     [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
     [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
+    
+    [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
 
     void Awake()
     {
@@ -32,8 +37,12 @@ public class GameSetupInstaller : MonoBehaviour
     {
         CombatManagerService combatManagerService = 
             new CombatManagerService(_hitTargetCollisionProbingConfig, new KnockbackManager(_physicsTweenerBehaviour));
-        
         ServiceLocator.Instance.RegisterService<ICombatManager>(combatManagerService);
+
+        ITimeScaleManager timeScaleManager = new UnityTimeScaleManager();
+        TimeFunctionalities timeFunctionalities =
+            new TimeFunctionalities(timeScaleManager, new HitStopManager(_hitStopManagerConfig, timeScaleManager));
+        ServiceLocator.Instance.RegisterService<ITimeFunctionalities>(timeFunctionalities);
         
         _factoriesInstaller.Install();
         _playerAnchorInstaller.Install();
@@ -42,6 +51,7 @@ public class GameSetupInstaller : MonoBehaviour
     private void Uninstall()
     {
         ServiceLocator.Instance.RemoveService<ICombatManager>();
+        ServiceLocator.Instance.RemoveService<ITimeFunctionalities>();
         
         _factoriesInstaller.Uninstall();
         _playerAnchorInstaller.Uninstall();
