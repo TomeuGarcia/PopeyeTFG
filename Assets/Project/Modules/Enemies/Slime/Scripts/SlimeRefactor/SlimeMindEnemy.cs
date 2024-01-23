@@ -7,6 +7,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.VFX.Generic;
 using UnityEngine;
+using FMODUnity;
 
 namespace Popeye.Modules.Enemies
 {
