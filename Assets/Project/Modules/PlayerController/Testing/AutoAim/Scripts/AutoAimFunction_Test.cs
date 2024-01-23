@@ -1,6 +1,7 @@
 using System;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 {
@@ -15,15 +16,18 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
         [Header("FUNCTION")] 
         [SerializeField] private Transform _functionOrigin;
-        [SerializeField] private LineRenderer _functionLine;
+        [SerializeField] private LineRenderer _orientationFunctionLine;
 
-        [SerializeField] private Vector3 _functionSize = new Vector3(10, 0, 10);
+        private Vector2 _functionLineSize = new Vector2(10, 10);
 
         private float _angleToFunctionSize = 360f /10f;
 
-        [SerializeField] private float extra = 10;
+        [SerializeField, Range(0f, 1f)] private float _flattening = 0f;
         
-        private Vector3[] points;
+        private Vector2[] _functionPoints;
+
+        [Header("TARGETER")] 
+        [SerializeField] private Transform _lookRepresentation;
         
         
         private void Update()
@@ -38,46 +42,74 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             
             AutoAimTargetData_Test[] autoAimTargets = _autoAimWorldTest.AimTargetsData;
 
-            points = new Vector3[2 + (autoAimTargets.Length * 3)];
+            _functionPoints = new Vector2[2 + (autoAimTargets.Length * 5)];
             
-            points[0] = AngleToFunctionPoint(0, 0);
-            points[_functionLine.positionCount-1] = AngleToFunctionPoint(360, 0);
+            _functionPoints[0] = AngleToFunctionPoint(0, 0);
+            _functionPoints[_orientationFunctionLine.positionCount-1] = AngleToFunctionPoint(360, 0);
             
             for (int i = 0; i < autoAimTargets.Length; ++i)
             {
                 AutoAimTargetData_Test autoAimTargetData = autoAimTargets[i];
-                Vector3 functionPosition = AngleToFunctionPoint(autoAimTargetData.AngleAtCenter, 0);
+                Vector2 functionPosition = AngleToFunctionPoint(autoAimTargetData.AngularPosition, 0);
 
-                float angleA = autoAimTargetData.AngleAtCenter - autoAimTargetData.HalfAngleSize;
-                float angleB = autoAimTargetData.AngleAtCenter + autoAimTargetData.HalfAngleSize;
-                Vector3 functionPositionA = AngleToFunctionPoint(angleA, -extra);
-                Vector3 functionPositionB = AngleToFunctionPoint(angleB, extra);
+                float targetRegionAngularDifference =
+                    autoAimTargetData.HalfAngularTargetRegion - autoAimTargetData.HalfAngularSize;
                 
-                int index = 1 + (i * 3);
-                points[index] = functionPositionA;
-                points[index + 1] = functionPosition;
-                points[index + 2] = functionPositionB;
+                float angleA = autoAimTargetData.AngularPosition - autoAimTargetData.HalfAngularSize;
+                float angleB = autoAimTargetData.AngularPosition + autoAimTargetData.HalfAngularSize;
+                Vector2 functionPositionA = AngleToFunctionPoint(angleA, -targetRegionAngularDifference);
+                Vector2 functionPositionB = AngleToFunctionPoint(angleB, targetRegionAngularDifference);
+                
+                int index = 1 + (i * 5);
+                _functionPoints[index]     = functionPositionA;
+                _functionPoints[index + 1] = new Vector2(functionPositionA.x, Mathf.Lerp(functionPositionA.y, functionPosition.y, _flattening)); //
+                _functionPoints[index + 2] = functionPosition;
+                _functionPoints[index + 3] = new Vector2(functionPositionB.x, Mathf.Lerp(functionPositionB.y, functionPosition.y, _flattening)); //
+                _functionPoints[index + 4] = functionPositionB;
                 
                 
-                autoAimTargetData.HelpViewerA.position = functionPositionA;
-                autoAimTargetData.HelpViewer.position = functionPosition;
-                autoAimTargetData.HelpViewerB.position = functionPositionB;
+                
+                autoAimTargetData.HelpViewerA.position = FunctionPointToLinePosition(functionPositionA);
+                autoAimTargetData.HelpViewer.position = FunctionPointToLinePosition(functionPosition);
+                autoAimTargetData.HelpViewerB.position = FunctionPointToLinePosition(functionPositionB);
             }
 
-            _functionLine.positionCount = points.Length;
-            _functionLine.SetPositions(points);
+
+            UpdateOrientationFunctionLine(_functionPoints);
+
+            _lookRepresentation.position =
+                FunctionPointToLinePosition(Sample(_autoAimWorldTest.TargeterLookAngle));
         }
 
-        
-        private Vector3 AngleToFunctionPoint(float angle, float YtoXRatio)
+        private void UpdateOrientationFunctionLine(Vector2[] points)
         {
-            Vector3 functionSize = _functionSize;
-            functionSize.x *= (angle + YtoXRatio) / 360f;
-            functionSize.z *= angle / 360f;
-            return functionSize + _functionOrigin.position;
+            _orientationFunctionLine.positionCount = points.Length;
+            for (int i = 0; i < _orientationFunctionLine.positionCount; ++i)
+            {
+                _orientationFunctionLine.SetPosition(i, FunctionPointToLinePosition(points[i]));
+            }
+        }
+        
+        private Vector2 AngleToFunctionPoint(float angle, float YtoXScale)
+        {
+            Vector2 functionPoint = _functionLineSize;
+            functionPoint.x *= (angle + YtoXScale) / 360f;
+            functionPoint.y *= angle / 360f;
+            return functionPoint;
+        }
+
+        private Vector3 FunctionPointToLinePosition(Vector2 functionPoint)
+        {
+            return (Vector3.right * functionPoint.x) + 
+                   (Vector3.forward * functionPoint.y) + 
+                   _functionOrigin.position;
         }
 
 
-        
+        private Vector2 Sample(float x)
+        {
+            
+            return AngleToFunctionPoint(x, 0);
+        }
     }
 }

@@ -5,7 +5,14 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 {
     public class AutoAimWorld_Test : MonoBehaviour
     {
+        [Header("TARGETER")]
         [SerializeField] private Transform _targeter;
+
+        [SerializeField, Range(0f, 360f)] private float _targeterLookAngle = 0f;
+        public float TargeterLookAngle => _targeterLookAngle;
+        
+        
+        [Header("TARGETS")]
         [SerializeField] private Transform _aimTargetsParent;
 
         private Vector3 startLookDirection = Vector3.forward;
@@ -13,6 +20,14 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
         public AutoAimTargetData_Test[] AimTargetsData { get; private set; }
 
+
+        private void OnValidate()
+        {
+            if (_targeterLookAngle > 359.9f)
+            {
+                _targeterLookAngle = 0f;
+            }
+        }
 
         public void DoUpdate()
         {
@@ -25,7 +40,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             }
             
             // Sort by angle
-            Array.Sort(AimTargetsData, (x, y) => x.AngleAtCenter < y.AngleAtCenter ? 0 : 1);
+            Array.Sort(AimTargetsData, (x, y) => x.AngularPosition < y.AngularPosition ? 0 : 1);
             
         }
 

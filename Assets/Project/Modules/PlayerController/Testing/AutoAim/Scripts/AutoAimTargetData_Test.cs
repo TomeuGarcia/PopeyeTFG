@@ -5,10 +5,13 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
     public class AutoAimTargetData_Test : MonoBehaviour
     {
         public Vector3 Position => transform.position;
-        public float AngleAtCenter { get; private set; }
-        public float AngleSize => 20f;
-        public float HalfAngleSize => AngleSize / 2;
+        public float AngularPosition { get; private set; }
+        
+        public float HalfAngularSize => _config.HalfAngularSize;
+        public float HalfAngularTargetRegion => _config.HalfAngularTargetRegion;
 
+        
+        [SerializeField] private AutoAimTargetDataConfig_Test _config;
         
         [SerializeField] private Transform _helpViewer;
         [SerializeField] private Transform _helpViewerA;
@@ -20,7 +23,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
         public void SetAngleAtCenter(float angle)
         {
-            AngleAtCenter = angle;
+            AngularPosition = angle;
         }
     }
 }
