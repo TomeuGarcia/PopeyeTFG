@@ -6,7 +6,6 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
     {
         public class Segment
         {
-            private readonly float _x;
             public float X { get; private set; }
             public float Y { get; private set; }
             public float M { get; private set; }
@@ -99,10 +98,16 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 if (alpha < 0) tangents[i] = 0;
                 if (beta < 0) tangents[i + 1] = 0;
 
-                if (alpha <= 3 && beta <= 3)
+
+                float alpha2 = alpha * alpha;
+                float beta2 = beta * beta;
+                if (alpha2 + beta2 > 9)
                 {
-                    tangents[i] = 3 * secantSlopes[i];
+                    float constraint = 3f / Mathf.Sqrt(alpha2 + beta2);
+                    tangents[i] = constraint * alpha * secantSlopes[i];
+                    tangents[i+1] = constraint * beta * secantSlopes[i];
                 }
+                
             }
 
 
