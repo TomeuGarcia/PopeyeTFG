@@ -1,6 +1,7 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using Popeye.Modules.PlayerController.AutoAim;
 using Project.Scripts.Core.DataStructures;
 using Project.Scripts.Math.Functions;
 using UnityEngine;
@@ -29,16 +30,71 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
         private ArrayBuffer<Vector2> _functionDataTable = new ArrayBuffer<Vector2>(300);
         private MonotoneCubicFunction _f = new MonotoneCubicFunction();
-        
-        
-        
+
+        [SerializeField] private AutoAimCreator _autoAimCreator;
+        private AutoAimController _autoAimController;
+
+        [SerializeField] private Transform _targeter;
+
+        private void Start()
+        {
+            _autoAimController = _autoAimCreator.Create(_targeter, Vector3.forward, Vector3.right);
+        }
+
         private void Update()
         {
+            if (_autoAimController == null)
+            {
+                _autoAimController = _autoAimCreator.Create(_targeter, Vector3.forward, Vector3.right);
+            }
+            
             DoUpdate();
         }
 
         private void DoUpdate()
         {
+            _autoAimWorldTest.DoUpdate();
+            
+            float lookX = _autoAimWorldTest.TargeterLookAngle;
+            float lookY = _autoAimController.CorrectLookAngle(lookX);
+            _autoAimWorldTest.SetTargeterLookDirection(lookY);
+            
+            // Draw
+            _lookRepresentation.position = AnglesToDrawPosition(lookX, lookY, 0.1f);
+            
+            DrawOrientationFunctionLine(_orientationFunctionLine, _autoAimController.OrientationRemapFunction, _smoothCount);
+
+            
+            AutoAimTargetData[] autoAimTargetDatas = _autoAimController.AutoAimTargetsData;
+            for (int i = 0; i < autoAimTargetDatas.Length; ++i)
+            {
+                AutoAimTargetData_Test autoAimTargetData = autoAimTargetDatas[i].GameObject.GetComponent<AutoAimTargetData_Test>();
+                
+                
+                float angle_X_center = autoAimTargetData.AngularPosition;
+                
+                float targetRegionAngularDifference =
+                    autoAimTargetData.HalfAngularTargetRegion - autoAimTargetData.HalfAngularSize;
+                // Limit in
+                float angle_Y_leftLimitIn = autoAimTargetData.AngularPosition - autoAimTargetData.HalfAngularSize;
+                float angle_Y_rightLimitIn = autoAimTargetData.AngularPosition + autoAimTargetData.HalfAngularSize;
+                
+                float angle_X_leftLimitIn = angle_Y_leftLimitIn - targetRegionAngularDifference;
+                float angle_X_rightLimitIn = angle_Y_rightLimitIn + targetRegionAngularDifference;
+                
+                autoAimTargetData.HelpViewerA.position = 
+                    AnglesToDrawPosition(angle_X_leftLimitIn, angle_Y_leftLimitIn, 0.1f);
+                autoAimTargetData.HelpViewer.position = 
+                    AnglesToDrawPosition(angle_X_center, angle_X_center, 0f);
+                autoAimTargetData.HelpViewerB.position = 
+                    AnglesToDrawPosition(angle_X_rightLimitIn, angle_Y_rightLimitIn, 0.1f);
+                    
+            }
+
+
+            return;
+                
+            
             bool updateTargeterLook = _autoAimWorldTest.DoUpdate();
             
             UpdateFunctionDataTable();

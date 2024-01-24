@@ -31,8 +31,9 @@ namespace Popeye.Modules.PlayerController.AutoAim
             }
 
             Vector3 toTargetDirection = (autoAimTarget.Position - targeterPosition).normalized;
-            if (!IsInsideFieldOfView(toTargetDirection, targeterForwardDirection))
+            if (IsOutsideFieldOfView(toTargetDirection, targeterForwardDirection))
             {
+                Debug.Log("outside " + autoAimTarget.GameObject.name);
                 return false;
             }
             
@@ -50,9 +51,9 @@ namespace Popeye.Modules.PlayerController.AutoAim
         }
 
 
-        private bool IsInsideFieldOfView(Vector3 toTargetDirection, Vector3 targeterLookForwardDirection)
+        private bool IsOutsideFieldOfView(Vector3 toTargetDirection, Vector3 targeterLookForwardDirection)
         {
-            return Vector3.Dot(toTargetDirection, targeterLookForwardDirection) > AcceptanceFieldOfViewDot;
+            return Vector3.Dot(toTargetDirection, targeterLookForwardDirection) < AcceptanceFieldOfViewDot;
         }
 
         private bool IsInsideAcceptanceHeight(IAutoAimTarget autoAimTarget, Vector3 targeterPosition)

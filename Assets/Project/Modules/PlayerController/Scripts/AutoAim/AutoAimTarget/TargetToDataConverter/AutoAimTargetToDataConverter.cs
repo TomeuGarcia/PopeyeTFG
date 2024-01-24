@@ -28,6 +28,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
                 AutoAimTargetData autoAimTargetData  = new AutoAimTargetData();
                 autoAimTargetData.Configure(
                     autoAimTarget.DataConfig,
+                    autoAimTarget.GameObject,
                     autoAimTarget.Position,
                     ComputeAngularPositionFromPosition(autoAimTarget.Position)
                     );

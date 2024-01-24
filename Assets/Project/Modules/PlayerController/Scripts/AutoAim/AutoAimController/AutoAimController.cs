@@ -10,21 +10,28 @@ namespace Popeye.Modules.PlayerController.AutoAim
         private const float ANGLE_LIMIT_DELTA = 0.01f;
         
         private AutoAimControllerConfig _config;
-        private ArrayBuffer<Vector2> _functionDataTable;
-        private MonotoneCubicFunction _orientationRemapFunction;
-
         private AutoAimTargetsController _autoAimTargetsController;
+        
+        private ArrayBuffer<Vector2> _functionDataTable;
+        public MonotoneCubicFunction OrientationRemapFunction { get; private set; }
+        public AutoAimTargetData[] AutoAimTargetsData { get; private set; }
+
 
         public void Configure(AutoAimControllerConfig config, AutoAimTargetsController autoAimTargetsController)
         {
             _config = config;
+            _autoAimTargetsController = autoAimTargetsController;
+            
             _functionDataTable = new ArrayBuffer<Vector2>(_config.MaxDataCapacity);
-            _orientationRemapFunction = new MonotoneCubicFunction();
+            OrientationRemapFunction = new MonotoneCubicFunction();
         }
         
         public float CorrectLookAngle(float lookAngle)
         {
-            _autoAimTargetsController.Update();
+            if (!_autoAimTargetsController.Update())
+            {
+                return lookAngle;
+            }
             
             UpdateDataTable();
             UpdateFunctionWithDataTable();
@@ -34,18 +41,18 @@ namespace Popeye.Modules.PlayerController.AutoAim
 
         private void UpdateDataTable()
         {
-            AutoAimTargetData[] autoAimTargetsData = _autoAimTargetsController.GetAimTargetsData();
+            AutoAimTargetsData = _autoAimTargetsController.GetAimTargetsData();
             
-            int numAngles = 2 + (autoAimTargetsData.Length * 6);
+            int numAngles = 2 + (AutoAimTargetsData.Length * 6);
             
             _functionDataTable.ClearAndResize(numAngles);
 
             _functionDataTable.Elements[0] = Vector2.zero;
             _functionDataTable.Elements[numAngles - 1] = Vector2.one * 360f;
             
-            for (int i = 0; i < autoAimTargetsData.Length; ++i)
+            for (int i = 0; i < AutoAimTargetsData.Length; ++i)
             {
-                AutoAimTargetData autoAimTargetData = autoAimTargetsData[i];
+                AutoAimTargetData autoAimTargetData = AutoAimTargetsData[i];
                 
                 // Center
                 float angle_X_center = autoAimTargetData.AngularPosition;
@@ -107,7 +114,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         
         private void UpdateFunctionWithDataTable()
         {
-            _orientationRemapFunction.Update(_functionDataTable.ToArray());
+            OrientationRemapFunction.Update(_functionDataTable.ToArray());
         }
         
         private float RemapLookAngle(float lookAngle)
@@ -117,7 +124,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         
         private float EvaluateOrientationRemap(float x)
         {
-            return Mathf.Lerp(_orientationRemapFunction.Evaluate(x), x, _config.BlendWithIdentity);
+            return Mathf.Lerp(OrientationRemapFunction.Evaluate(x), x, _config.BlendWithIdentity);
         }
     }
 }

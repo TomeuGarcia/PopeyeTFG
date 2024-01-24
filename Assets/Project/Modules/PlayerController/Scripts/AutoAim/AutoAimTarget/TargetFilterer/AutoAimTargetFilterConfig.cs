@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
     public class AutoAimTargetFilterConfig : ScriptableObject
     {
         [Header("Field of View")]
-        [SerializeField, Range(0f, 360f)] private float _acceptanceFieldOfView = 180f;
+        [SerializeField, Range(0f, 360f)] private float _acceptanceFieldOfView = 120f;
         
         [Header("Height")]
         [SerializeField, Range(0f, 10f)] private float _acceptanceHeightDistance = 2.5f;

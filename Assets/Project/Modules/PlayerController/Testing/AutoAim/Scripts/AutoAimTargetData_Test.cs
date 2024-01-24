@@ -3,9 +3,17 @@ using UnityEngine;
 
 namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 {
-    public class AutoAimTargetData_Test : MonoBehaviour
+    public class AutoAimTargetData_Test : MonoBehaviour, IAutoAimTarget
     {
+        public AutoAimTargetDataConfig DataConfig => _config;
         public Vector3 Position => transform.position;
+        public GameObject GameObject => gameObject;
+        public bool CanBeAimedAt(Vector3 aimFromPosition)
+        {
+            return true;
+        }
+        
+
         public float AngularPosition { get; private set; }
         
         public float HalfAngularSize => _config.HalfAngularSize;

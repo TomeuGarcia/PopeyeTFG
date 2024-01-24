@@ -6,6 +6,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
     {
         private AutoAimTargetDataConfig _config;
         
+        public GameObject GameObject { get; private set; }
         public Vector3 Position { get; private set; }
         public float AngularPosition { get; private set; }
         
@@ -14,9 +15,10 @@ namespace Popeye.Modules.PlayerController.AutoAim
         public float HalfFlatCenterAngularTargetRegion => _config.HalfFlatCenterAngularTargetRegion;
         
 
-        public void Configure(AutoAimTargetDataConfig config, Vector3 position, float angularPosition)
+        public void Configure(AutoAimTargetDataConfig config, GameObject gameObject, Vector3 position, float angularPosition)
         {
             _config = config;
+            GameObject = gameObject;
             Position = position;
             AngularPosition = angularPosition;
         }
