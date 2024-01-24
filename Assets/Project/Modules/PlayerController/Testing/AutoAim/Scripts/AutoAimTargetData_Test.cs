@@ -1,3 +1,4 @@
+using Popeye.Modules.PlayerController.AutoAim;
 using UnityEngine;
 
 namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
@@ -14,7 +15,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
 
         
-        [SerializeField] private AutoAimTargetDataConfig_Test _config;
+        [SerializeField] private AutoAimTargetDataConfig _config;
         
         [SerializeField] private Transform _helpViewer;
         [SerializeField] private Transform _helpViewerA;

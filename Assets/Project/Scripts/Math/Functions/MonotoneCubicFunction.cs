@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.Scripts.Math.Functions
@@ -6,7 +7,7 @@ namespace Project.Scripts.Math.Functions
     {
         private Interval[] _intervals;
         
-        public MonotoneCubicFunction(Vector2[] points)
+        public void Update(Vector2[] points)
         {
             SetupInterpolantSelection(points, out float[] tangents);
             SetupIntervals(points, tangents);

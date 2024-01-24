@@ -1,4 +1,7 @@
 using System;
+using System.Buffers;
+using System.Collections.Generic;
+using Project.Scripts.Core.DataStructures;
 using Project.Scripts.Math.Functions;
 using UnityEngine;
 
@@ -24,8 +27,9 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         private static readonly Vector2 FUNCTION_LINE_SIZE = new Vector2(10, 10);
         private const float ANGLE_LIMIT_DELTA = 0.01f;
         
-        private Vector2[] _functionDataTable;
-        private MonotoneCubicFunction _f;
+        private ArrayBuffer<Vector2> _functionDataTable = new ArrayBuffer<Vector2>(300);
+        private MonotoneCubicFunction _f = new MonotoneCubicFunction();
+        
         
         
         private void Update()
@@ -38,7 +42,6 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             bool updateTargeterLook = _autoAimWorldTest.DoUpdate();
             
             UpdateFunctionDataTable();
-            //Array.Sort(_functionDataTable, (a,b) => a.y < b.y ? -1 : 1);
             
             UpdateFunctionWithDataTable();
 
@@ -53,10 +56,11 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             AutoAimTargetData_Test[] autoAimTargets = _autoAimWorldTest.AimTargetsData;
             
             int numAngles = 2 + (autoAimTargets.Length * 6);
-            _functionDataTable = new Vector2[numAngles];
+            
+            _functionDataTable.ClearAndResize(numAngles);
 
-            _functionDataTable[0] = Vector2.zero;
-            _functionDataTable[^1] = Vector2.one * 360f;
+            _functionDataTable.Elements[0] = Vector2.zero;
+            _functionDataTable.Elements[numAngles - 1] = Vector2.one * 360f;
             
             for (int i = 0; i < autoAimTargets.Length; ++i)
             {
@@ -85,16 +89,28 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 
                 float angle_X_leftLimitOut = angle_Y_leftLimitOut - targetRegionAngularDifference;
                 float angle_X_rightLimitOut = angle_Y_rightLimitOut + targetRegionAngularDifference;
-                
 
-                int index = 1 + (i * 6);
-                _functionDataTable[index]     = new Vector2(angle_X_leftLimitOut, angle_Y_leftLimitOut);
-                _functionDataTable[index + 1] = new Vector2(angle_X_leftLimitIn, angle_Y_leftLimitIn);
-                _functionDataTable[index + 2] = new Vector2(angle_X_leftCenter, angle_X_center);
-                _functionDataTable[index + 3] = new Vector2(angle_X_rightCenter, angle_X_center);
-                _functionDataTable[index + 4] = new Vector2(angle_X_rightLimitIn, angle_Y_rightLimitIn);
-                _functionDataTable[index + 5] = new Vector2(angle_X_rightLimitOut, angle_Y_rightLimitOut);
+
                 
+                int index = 1 + (i * 6);
+                
+                _functionDataTable.Elements[index].x     = angle_X_leftLimitOut;
+                _functionDataTable.Elements[index].y     = angle_Y_leftLimitOut;
+                
+                _functionDataTable.Elements[index + 1].x = angle_X_leftLimitIn;
+                _functionDataTable.Elements[index + 1].y = angle_Y_leftLimitIn;
+                
+                _functionDataTable.Elements[index + 2].x = angle_X_leftCenter;
+                _functionDataTable.Elements[index + 2].y = angle_X_center;
+                
+                _functionDataTable.Elements[index + 3].x = angle_X_rightCenter;
+                _functionDataTable.Elements[index + 3].y = angle_X_center;
+                
+                _functionDataTable.Elements[index + 4].x = angle_X_rightLimitIn;
+                _functionDataTable.Elements[index + 4].y = angle_Y_rightLimitIn;
+                
+                _functionDataTable.Elements[index + 5].x = angle_X_rightLimitOut;
+                _functionDataTable.Elements[index + 5].y = angle_Y_rightLimitOut;
                 
 
                 // Draw
@@ -109,7 +125,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
         private void UpdateFunctionWithDataTable()
         {
-            _f = new MonotoneCubicFunction(_functionDataTable);
+            _f.Update(_functionDataTable.ToArray());
         }
 
         private void UpdateTargeterLook()
