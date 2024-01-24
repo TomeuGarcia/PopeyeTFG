@@ -9,6 +9,9 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
         public float HalfAngularSize => _config.HalfAngularSize;
         public float HalfAngularTargetRegion => _config.HalfAngularTargetRegion;
+        public float HalfFlatCenterAngularTargetRegion => _config.HalfFlatCenterAngularTargetRegion;
+        
+        
 
         
         [SerializeField] private AutoAimTargetDataConfig_Test _config;

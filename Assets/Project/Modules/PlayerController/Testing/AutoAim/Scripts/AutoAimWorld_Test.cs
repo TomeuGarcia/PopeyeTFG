@@ -9,6 +9,8 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
     {
         [Header("TARGETER")]
         [SerializeField] private Transform _targeter;
+        [SerializeField] private float _targeterMoveSpeed = 50f;
+        [SerializeField] private float _targeterRotationSpeed = 2000f;
 
         public float TargeterLookAngle { get; private set; }
     
@@ -28,7 +30,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             _movementInput = new WorldAxisMovementInput();
         }
 
-        public void DoUpdate()
+        public bool DoUpdate()
         {
             AimTargetsData = new AutoAimTargetData_Test[_aimTargetsParent.childCount];
             for (int i = 0; i < _aimTargetsParent.childCount; ++i)
@@ -44,8 +46,17 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
             if (_movementInput != null)
             {
-                TargeterLookAngle = GetAngleFromDirection(_movementInput.GetLookInput());
+                Vector3 movementInput = _movementInput.GetMovementInput();
+                _targeter.position += movementInput * (Time.deltaTime * _targeterMoveSpeed);
+
+                Vector3 lookInput = _movementInput.GetLookInput();
+                bool isLooking = lookInput.sqrMagnitude > 0.1f;
+                TargeterLookAngle = GetAngleFromDirection(isLooking ? lookInput : movementInput);
+
+                return isLooking;
             }
+
+            return false;
         }
 
         private float GetAngleFromTargeterPosition(Vector3 position)
@@ -64,10 +75,12 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 angle;
         }
 
-
         public void SetTargeterLookDirection(float angle)
         {
-            _targeter.forward = Quaternion.AngleAxis(angle, Vector3.up) * startLookDirection;
+            _targeter.rotation =
+                Quaternion.RotateTowards(_targeter.rotation, Quaternion.AngleAxis(angle, Vector3.up),
+                    Time.deltaTime * _targeterRotationSpeed);
+
         }
     }
 }

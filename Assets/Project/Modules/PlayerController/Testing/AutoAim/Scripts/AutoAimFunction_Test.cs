@@ -1,34 +1,31 @@
 using System;
-using NaughtyAttributes;
+using Project.Scripts.Math.Functions;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 {
     [ExecuteInEditMode]
     public class AutoAimFunction_Test : MonoBehaviour
     {
-        [Button("Update")]
-        private void UpdateButton() {DoUpdate();}
-
         [Header("WORLD")] 
         [SerializeField] private AutoAimWorld_Test _autoAimWorldTest;
         
         [Header("FUNCTION")] 
         [SerializeField] private Transform _functionOrigin;
         [SerializeField] private LineRenderer _orientationFunctionLine;
-        [SerializeField] private LineRenderer _orientationFunctionLine_Smooth;
+        [SerializeField, Range(10, 200)] private int _smoothCount = 100;
 
-        private Vector2 _functionLineSize = new Vector2(10, 10);
-
-        private float _angleToFunctionSize = 360f /10f;
-
-        [SerializeField, Range(0f, 1f)] private float _flattening = 0f;
+        [Header("Function Configuration")]
+        [SerializeField, Range(0f, 1f)] private float _blendWithIdentity = 0f;
         
-        private Vector2[] _functionPoints;
-
         [Header("TARGETER")] 
         [SerializeField] private Transform _lookRepresentation;
+        
+        private static readonly Vector2 FUNCTION_LINE_SIZE = new Vector2(10, 10);
+        private const float ANGLE_LIMIT_DELTA = 0.01f;
+        
+        private Vector2[] _functionDataTable;
+        private MonotoneCubicFunction _f;
         
         
         private void Update()
@@ -38,124 +35,135 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
         private void DoUpdate()
         {
-            _autoAimWorldTest.DoUpdate();
+            bool updateTargeterLook = _autoAimWorldTest.DoUpdate();
             
+            UpdateFunctionDataTable();
+            //Array.Sort(_functionDataTable, (a,b) => a.y < b.y ? -1 : 1);
             
-            AutoAimTargetData_Test[] autoAimTargets = _autoAimWorldTest.AimTargetsData;
+            UpdateFunctionWithDataTable();
 
-            int numPoints = 2 + (autoAimTargets.Length * 5);
-            _functionPoints = new Vector2[numPoints];
-            int numAngles = 2 + (autoAimTargets.Length * 3);
-            Vector2[] anglesXY = new Vector2[numAngles];
+            if (updateTargeterLook) UpdateTargeterLook();
             
-            _functionPoints[0] = AngleToFunctionPoint(0, 0, out float angleX);
-            _functionPoints[^1] = AngleToFunctionPoint(360, 0, out angleX);
-            anglesXY[0] = Vector2.zero;
-            anglesXY[^1] = Vector2.one * 360f;
+            DrawOrientationFunctionLine(_orientationFunctionLine, _f, _smoothCount);
+        }
+
+
+        private void UpdateFunctionDataTable()
+        {
+            AutoAimTargetData_Test[] autoAimTargets = _autoAimWorldTest.AimTargetsData;
+            
+            int numAngles = 2 + (autoAimTargets.Length * 6);
+            _functionDataTable = new Vector2[numAngles];
+
+            _functionDataTable[0] = Vector2.zero;
+            _functionDataTable[^1] = Vector2.one * 360f;
             
             for (int i = 0; i < autoAimTargets.Length; ++i)
             {
                 AutoAimTargetData_Test autoAimTargetData = autoAimTargets[i];
-                Vector2 functionPosition = AngleToFunctionPoint(autoAimTargetData.AngularPosition, 0, out angleX);
-
+                
+                // Center
+                float angle_X_center = autoAimTargetData.AngularPosition;
+                float angle_X_leftCenter = angle_X_center - autoAimTargetData.HalfFlatCenterAngularTargetRegion;
+                float angle_X_rightCenter = angle_X_center + autoAimTargetData.HalfFlatCenterAngularTargetRegion;
+                
                 float targetRegionAngularDifference =
                     autoAimTargetData.HalfAngularTargetRegion - autoAimTargetData.HalfAngularSize;
                 
-                float angleA = autoAimTargetData.AngularPosition - autoAimTargetData.HalfAngularSize;
-                float angleB = autoAimTargetData.AngularPosition + autoAimTargetData.HalfAngularSize;
-                Vector2 functionPositionA = AngleToFunctionPoint(angleA, -targetRegionAngularDifference, out float angleAX);
-                Vector2 functionPositionB = AngleToFunctionPoint(angleB, targetRegionAngularDifference, out float angleBX);
-
-                functionPositionA.y = Mathf.Lerp(functionPositionA.y, functionPosition.y, _flattening);
-                functionPositionB.y = Mathf.Lerp(functionPositionB.y, functionPosition.y, _flattening);
-
-
-                angleA = Mathf.Lerp(angleA, autoAimTargetData.AngularPosition, _flattening);
-                angleB = Mathf.Lerp(angleB, autoAimTargetData.AngularPosition, _flattening);
-
-                float angleDelta = 0.01f;
-                float angleA2 = angleA - angleDelta;
-                float angleB2 = angleB + angleDelta;
-                Vector2 functionPositionA2 = AngleToFunctionPoint(angleA2, -targetRegionAngularDifference, out float angleA2X);
-                Vector2 functionPositionB2 = AngleToFunctionPoint(angleB2, targetRegionAngularDifference, out float angleB2X);
                 
-                int index = 1 + (i * 5);
-                _functionPoints[index]     = functionPositionA2;
-                _functionPoints[index + 1] = functionPositionA; //
-                _functionPoints[index + 2] = functionPosition;
-                _functionPoints[index + 3] = functionPositionB; //
-                _functionPoints[index + 4] = functionPositionB2;
+                // Limit in
+                float angle_Y_leftLimitIn = autoAimTargetData.AngularPosition - autoAimTargetData.HalfAngularSize;
+                float angle_Y_rightLimitIn = autoAimTargetData.AngularPosition + autoAimTargetData.HalfAngularSize;
                 
+                float angle_X_leftLimitIn = angle_Y_leftLimitIn - targetRegionAngularDifference;
+                float angle_X_rightLimitIn = angle_Y_rightLimitIn + targetRegionAngularDifference;
                 
 
-                index = 1 + (i * 3);
-                //anglesXY[index]     = new Vector2(angleA2X, angleA2);
-                anglesXY[index]     = new Vector2(angleAX, angleA);
-                anglesXY[index + 1] = new Vector2(angleX, autoAimTargetData.AngularPosition);
-                anglesXY[index + 2] = new Vector2(angleBX, angleB);
-                //anglesXY[index + 4] = new Vector2(angleB2X, angleB2);
+                // Limit out
+                float angle_Y_leftLimitOut = angle_Y_leftLimitIn - ANGLE_LIMIT_DELTA;
+                float angle_Y_rightLimitOut = angle_Y_rightLimitIn + ANGLE_LIMIT_DELTA;
+                
+                float angle_X_leftLimitOut = angle_Y_leftLimitOut - targetRegionAngularDifference;
+                float angle_X_rightLimitOut = angle_Y_rightLimitOut + targetRegionAngularDifference;
+                
 
-                autoAimTargetData.HelpViewerA.position = FunctionPointToLinePosition(functionPositionA);
-                autoAimTargetData.HelpViewer.position = FunctionPointToLinePosition(functionPosition);
-                autoAimTargetData.HelpViewerB.position = FunctionPointToLinePosition(functionPositionB);
+                int index = 1 + (i * 6);
+                _functionDataTable[index]     = new Vector2(angle_X_leftLimitOut, angle_Y_leftLimitOut);
+                _functionDataTable[index + 1] = new Vector2(angle_X_leftLimitIn, angle_Y_leftLimitIn);
+                _functionDataTable[index + 2] = new Vector2(angle_X_leftCenter, angle_X_center);
+                _functionDataTable[index + 3] = new Vector2(angle_X_rightCenter, angle_X_center);
+                _functionDataTable[index + 4] = new Vector2(angle_X_rightLimitIn, angle_Y_rightLimitIn);
+                _functionDataTable[index + 5] = new Vector2(angle_X_rightLimitOut, angle_Y_rightLimitOut);
+                
+                
+
+                // Draw
+                autoAimTargetData.HelpViewerA.position = 
+                    AnglesToDrawPosition(angle_X_leftLimitIn, angle_Y_leftLimitIn, 0.1f);
+                autoAimTargetData.HelpViewer.position = 
+                    AnglesToDrawPosition(angle_X_center, angle_X_center, 0f);
+                autoAimTargetData.HelpViewerB.position = 
+                    AnglesToDrawPosition(angle_X_rightLimitIn, angle_Y_rightLimitIn, 0.1f);
             }
-
-
-            UpdateOrientationFunctionLine(_functionPoints, anglesXY);
         }
 
-        private void UpdateOrientationFunctionLine(Vector2[] points, Vector2[] angles)
+        private void UpdateFunctionWithDataTable()
         {
-            _orientationFunctionLine.positionCount = points.Length;
-            for (int i = 0; i < _orientationFunctionLine.positionCount; ++i)
-            {
-                _orientationFunctionLine.SetPosition(i, FunctionPointToLinePosition(points[i]));
-            }
+            _f = new MonotoneCubicFunction(_functionDataTable);
+        }
 
-            int smoothCount = 100;
-            _orientationFunctionLine_Smooth.positionCount = smoothCount;
-            MathematicalFunction_Test f = new MathematicalFunction_Test(angles);
+        private void UpdateTargeterLook()
+        {
+            float lookX = _autoAimWorldTest.TargeterLookAngle;
+            float lookY = EvaluateFunction(_f, lookX);
+            _autoAimWorldTest.SetTargeterLookDirection(lookY);
+            
+            // Draw
+            _lookRepresentation.position = AnglesToDrawPosition(lookX, lookY, 0.1f);
+        }
+        
+        
+        
+        private void DrawOrientationFunctionLine(LineRenderer line, MonotoneCubicFunction f, int smoothCount)
+        {
+            line.positionCount = smoothCount;
+            line.SetPosition(0, AnglesToDrawPosition(0, 0, 0.1f));
             
             float step = 360f / (smoothCount-1);
             for (int i = 1; i < smoothCount; ++i)
             {
                 float x = step * i;
-                float y = f.Evaluate(x);
-                Vector3 position = FunctionPointToLinePosition(AnglesToFunctionPoint(x, y)) + Vector3.up * 0.2f;
-                _orientationFunctionLine_Smooth.SetPosition(i, position);
+                float y = EvaluateFunction(f, x);
+                Vector3 position = AnglesToDrawPosition(x, y, 0.1f) ;
+                line.SetPosition(i, position);
             }
-            _orientationFunctionLine_Smooth.SetPosition(0, FunctionPointToLinePosition(Vector2.zero));
-            
-            
-            
-            float lookX = _autoAimWorldTest.TargeterLookAngle;
-            float lookY = f.Evaluate(lookX);
-            _lookRepresentation.position = FunctionPointToLinePosition(AnglesToFunctionPoint(lookX, lookY)) + Vector3.up * 0.2f;
-
-            _autoAimWorldTest.SetTargeterLookDirection(lookY);
         }
 
+
+        private Vector3 AnglesToDrawPosition(float angleX, float angleY, float drawOffset)
+        {
+            return FunctionPointToDrawPosition(AnglesToFunctionPoint(angleX, angleY), drawOffset);
+        }
+        
         private Vector2 AnglesToFunctionPoint(float angleX, float angleY)
         {
-            Vector2 functionPoint = _functionLineSize;
-            functionPoint.x *= angleX / 360f;
-            functionPoint.y *= angleY / 360f;
-            return functionPoint;
-        }
-        private Vector2 AngleToFunctionPoint(float angleY, float YtoXScale, out float angleX)
-        {
-            Vector2 functionPoint = _functionLineSize;
-            angleX = angleY + YtoXScale;
+            Vector2 functionPoint = FUNCTION_LINE_SIZE;
             functionPoint.x *= angleX / 360f;
             functionPoint.y *= angleY / 360f;
             return functionPoint;
         }
 
-        private Vector3 FunctionPointToLinePosition(Vector2 functionPoint)
+        private Vector3 FunctionPointToDrawPosition(Vector2 functionPoint, float drawOffset)
         {
-            return (Vector3.right * functionPoint.x) + 
-                   (Vector3.forward * functionPoint.y) + 
+            return (Vector3.right * functionPoint.x) +
+                   (Vector3.forward * functionPoint.y) +
+                   (Vector3.up * drawOffset) +
                    _functionOrigin.position;
+        }
+
+        private float EvaluateFunction(MonotoneCubicFunction function, float x)
+        {
+            return Mathf.Lerp(function.Evaluate(x), x, _blendWithIdentity);
         }
     }
 }
