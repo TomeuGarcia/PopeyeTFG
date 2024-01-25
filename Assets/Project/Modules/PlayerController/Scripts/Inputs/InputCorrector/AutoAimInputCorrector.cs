@@ -16,7 +16,7 @@ namespace Popeye.Modules.PlayerController.Inputs
         public Vector3 CorrectLookInput(Vector3 lookInput, Vector3 forwardDirection, Vector3 rightDirection)
         {
             float lookX = GetAngleFromDirection(lookInput, forwardDirection, rightDirection);
-            float lookY = _autoAimController.CorrectLookAngle(lookX);
+            float lookY = _autoAimController.CorrectLookAngle(lookX, forwardDirection, rightDirection);
             
             return GetDirectionFromAngle(lookY, forwardDirection, rightDirection);
         }

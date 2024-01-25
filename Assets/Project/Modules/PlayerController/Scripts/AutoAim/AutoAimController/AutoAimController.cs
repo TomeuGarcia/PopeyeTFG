@@ -28,9 +28,9 @@ namespace Popeye.Modules.PlayerController.AutoAim
             OrientationRemapFunction = new MonotoneCubicFunction();
         }
         
-        public float CorrectLookAngle(float lookAngle)
+        public float CorrectLookAngle(float lookAngle, Vector3 forwardDirection, Vector3 rightDirection)
         {
-            if (!_autoAimTargetsController.Update())
+            if (!_autoAimTargetsController.Update(forwardDirection, rightDirection))
             {
                 return lookAngle;
             }

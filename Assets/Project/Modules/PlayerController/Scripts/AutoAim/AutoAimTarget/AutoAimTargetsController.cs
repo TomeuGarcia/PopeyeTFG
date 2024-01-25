@@ -26,7 +26,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         }
         
         
-        public bool Update()
+        public bool Update(Vector3 forwardDirection, Vector3 rightDirection)
         {
              bool foundTargets = _autoAimTargetFinder.GetAutoAimTargetsData(out IAutoAimTarget[] autoAimTargets);
              if (!foundTargets)
@@ -34,7 +34,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
                  return false;
              }
 
-             _autoAimTargetResults = _autoAimTargetToResultConverter.Convert(autoAimTargets);
+             _autoAimTargetResults = _autoAimTargetToResultConverter.Convert(autoAimTargets, forwardDirection, rightDirection);
              _autoAimTargetResults = _autoAimTargetResultsFilterer.Filter(_autoAimTargetResults, TargeterPosition);
              
              SortByAngularPosition();

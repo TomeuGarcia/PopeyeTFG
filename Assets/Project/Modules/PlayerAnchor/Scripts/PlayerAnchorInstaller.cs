@@ -15,6 +15,7 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerController.AutoAim;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor
@@ -36,6 +37,8 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
         [SerializeField] private InterfaceReference<IPlayerAudio, MonoBehaviour> _playerAudioRef;
 
+        [Header("Player - AutoAim")] 
+        [SerializeField] private AutoAimCreator _autoAimCreator;
 
         [Space(20)] 
         [Header("ANCHOR")] 
@@ -169,6 +172,9 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovement, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner);
             _playerController.MovementInputHandler = movementInputHandler;
+            _playerController.InputCorrector =
+                new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
+            
             
             playerStateMachine.Setup(playerStatesBlackboard);
             

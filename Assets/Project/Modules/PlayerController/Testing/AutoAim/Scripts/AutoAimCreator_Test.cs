@@ -13,8 +13,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
 
 
-        public AutoAimController Create(Transform targeter, Vector3 startForwardDirection, Vector3 startRightDirection,
-            Transform autoAimTargetsParent)
+        public AutoAimController Create(Transform targeter, Transform autoAimTargetsParent)
         {
             AutoAimController autoAimController = new AutoAimController();
 
@@ -30,7 +29,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 autoAimTargetResultsFilterer, targeter);
             autoAimTargetResultsFilterer.Configure(_autoAimTargetResultFiltererConfig);
             autoAimTargetFilterer.Configure(_autoAimTargetFilterConfig, _autoAimCollisionProbingConfig);
-            autoAimTargetToResultConverter.Configure(targeter, startForwardDirection, startRightDirection);
+            autoAimTargetToResultConverter.Configure(targeter);
             autoAimTargetFinder.Configure(autoAimTargetsParent);
 
             return autoAimController;

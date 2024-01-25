@@ -9,7 +9,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
     public class AutoAimTargetDataConfig : ScriptableObject
     {
         [SerializeField, Range(0f, 90f)] private float _angularSize = 20f;
-        [SerializeField, Range(0f, 90f)] private float _angularTargetRegion = 20f;
+        [SerializeField, Range(0f, 90f)] private float _angularTargetRegion = 40f;
         [SerializeField, Range(0f, 1f)] public float _centerFlattening = 0.3f;
         
         

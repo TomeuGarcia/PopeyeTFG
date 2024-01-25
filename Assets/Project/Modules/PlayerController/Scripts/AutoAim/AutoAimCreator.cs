@@ -13,7 +13,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         [SerializeField] private CollisionProbingConfig _autoAimCollisionProbingConfig;
         
         
-        public AutoAimController Create(Transform targeter, Vector3 startForwardDirection, Vector3 startRightDirection)
+        public AutoAimController Create(Transform targeter)
         {
             AutoAimController autoAimController = new AutoAimController();
 
@@ -31,7 +31,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
             autoAimTargetFinder.Configure(_autoAimTargetFinderConfig, _autoAimCollisionProbingConfig, 
                 autoAimTargetFilterer, targeter);
             autoAimTargetFilterer.Configure(_autoAimTargetFilterConfig, _autoAimCollisionProbingConfig);
-            autoAimTargetToResultConverter.Configure(targeter, startForwardDirection, startRightDirection);
+            autoAimTargetToResultConverter.Configure(targeter);
 
             return autoAimController;
         }

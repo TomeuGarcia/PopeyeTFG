@@ -41,8 +41,8 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         private void InitAutoAimController()
         {
             _autoAimController =  _findTargetsWithPhysics ?
-                _autoAimCreator_Physics.Create(Targeter, Vector3.forward, Vector3.right) :
-                _autoAimCreator_References.Create(Targeter, Vector3.forward, Vector3.right, _autoAimWorldTest.AimTargetsParent);
+                _autoAimCreator_Physics.Create(Targeter) :
+                _autoAimCreator_References.Create(Targeter, _autoAimWorldTest.AimTargetsParent);
         }
         
 
@@ -62,7 +62,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             float lookX = 0, lookY = 0;
             bool lookChanged = _autoAimWorldTest.DoUpdate();
             lookX = _autoAimWorldTest.TargeterLookAngle;
-            lookY = _autoAimController.CorrectLookAngle(lookX);
+            lookY = _autoAimController.CorrectLookAngle(lookX, Vector3.forward, Vector3.right);
             
             if (lookChanged)
             {
