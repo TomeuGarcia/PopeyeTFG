@@ -16,6 +16,8 @@ namespace Popeye.Modules.PlayerController.AutoAim
         public MonotoneCubicFunction OrientationRemapFunction { get; private set; }
         public AutoAimTargetData[] AutoAimTargetsData { get; private set; }
 
+        public AutoAimControllerConfig Config => _config;
+
 
         public void Configure(AutoAimControllerConfig config, AutoAimTargetsController autoAimTargetsController)
         {

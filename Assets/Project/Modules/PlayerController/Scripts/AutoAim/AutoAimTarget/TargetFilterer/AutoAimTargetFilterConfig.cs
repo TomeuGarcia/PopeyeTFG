@@ -27,7 +27,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
 
         private void OnValidate()
         {
-            AcceptanceFieldOfViewDot = Mathf.Cos(_acceptanceFieldOfView / 2);
+            AcceptanceFieldOfViewDot = Mathf.Cos( (Mathf.Deg2Rad * _acceptanceFieldOfView) / 2);
         }
 
         private void Awake()

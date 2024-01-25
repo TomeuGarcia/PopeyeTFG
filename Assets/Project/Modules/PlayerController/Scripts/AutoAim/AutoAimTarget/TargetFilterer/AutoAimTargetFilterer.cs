@@ -33,7 +33,6 @@ namespace Popeye.Modules.PlayerController.AutoAim
             Vector3 toTargetDirection = (autoAimTarget.Position - targeterPosition).normalized;
             if (IsOutsideFieldOfView(toTargetDirection, targeterForwardDirection))
             {
-                Debug.Log("outside " + autoAimTarget.GameObject.name);
                 return false;
             }
             
@@ -64,15 +63,19 @@ namespace Popeye.Modules.PlayerController.AutoAim
         private bool IsViewObstructed(IAutoAimTarget autoAimTarget, Vector3 targeterPosition, 
             Vector3 toTargetDirection, Vector3 targeterUpDirection)
         {
+            // Zig-zag order
+            
             Vector3 right = Vector3.Cross(toTargetDirection, targeterUpDirection).normalized;
-
+            
             int numberOfRays = NumberOfLineOfSightRays;
-            int stepCount = numberOfRays - 1;
-            int halfStepCount = stepCount / 2;
-            float step = stepCount > 0 ? LineOfSighRaysDistanceRange / stepCount : 0f;
+            int halfStepCount = numberOfRays / 2;
+            int stepCount = halfStepCount * 2;
+            float halfLineOfSighRaysDistanceRange = stepCount > 0 ? LineOfSighRaysDistanceRange / 2 : 0;
+            float step = stepCount > 0 ? LineOfSighRaysDistanceRange / (numberOfRays-1) : 0f;
+            
             for (int i = 0; i < numberOfRays; ++i)
             {
-                Vector3 lateralDisplacement = right * (step * (i % 2 == 0 ? -1 : 1) * (halfStepCount - (int)(i / 2)));
+                Vector3 lateralDisplacement = right * ((i % 2 == 0 ? -1 : 1) * (halfLineOfSighRaysDistanceRange - (step * (int)(i / 2))));
                 Vector3 origin = targeterPosition + lateralDisplacement;
                 Vector3 end = autoAimTarget.Position + lateralDisplacement;
                 Vector3 originToEnd = (end - origin);

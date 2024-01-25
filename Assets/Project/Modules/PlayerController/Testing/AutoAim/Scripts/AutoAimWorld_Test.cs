@@ -12,11 +12,13 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         [SerializeField] private float _targeterMoveSpeed = 50f;
         [SerializeField] private float _targeterRotationSpeed = 2000f;
 
+        public Transform Targeter => _targeter;
         public float TargeterLookAngle { get; private set; }
     
         
         [Header("TARGETS")]
         [SerializeField] private Transform _aimTargetsParent;
+        public Transform AimTargetsParent => _aimTargetsParent;
 
         private Vector3 startLookDirection = Vector3.forward;
         private Vector3 startRightDirection = Vector3.right;
@@ -32,6 +34,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
         public bool DoUpdate()
         {
+            /*
             AimTargetsData = new AutoAimTargetData_Test[_aimTargetsParent.childCount];
             for (int i = 0; i < _aimTargetsParent.childCount; ++i)
             {
@@ -42,7 +45,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             
             // Sort by angle
             Array.Sort(AimTargetsData, (x, y) => x.AngularPosition < y.AngularPosition ? 0 : 1);
-
+*/
 
             if (_movementInput != null)
             {
@@ -82,5 +85,6 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                     Time.deltaTime * _targeterRotationSpeed);
 
         }
+        
     }
 }

@@ -13,13 +13,9 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             return true;
         }
         
-
-        public float AngularPosition { get; private set; }
         
         public float HalfAngularSize => _config.HalfAngularSize;
         public float HalfAngularTargetRegion => _config.HalfAngularTargetRegion;
-        public float HalfFlatCenterAngularTargetRegion => _config.HalfFlatCenterAngularTargetRegion;
-        
         
 
         
@@ -33,9 +29,5 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         public Transform HelpViewerB => _helpViewerB;
 
 
-        public void SetAngleAtCenter(float angle)
-        {
-            AngularPosition = angle;
-        }
     }
 }

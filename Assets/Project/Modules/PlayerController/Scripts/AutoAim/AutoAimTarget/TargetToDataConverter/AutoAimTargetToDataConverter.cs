@@ -23,22 +23,23 @@ namespace Popeye.Modules.PlayerController.AutoAim
 
             for (int i = 0; i < autoAimTargetDatas.Length; ++i)
             {
-                IAutoAimTarget autoAimTarget = autoAimTargets[i];
-                
-                AutoAimTargetData autoAimTargetData  = new AutoAimTargetData();
-                autoAimTargetData.Configure(
-                    autoAimTarget.DataConfig,
-                    autoAimTarget.GameObject,
-                    autoAimTarget.Position,
-                    ComputeAngularPositionFromPosition(autoAimTarget.Position)
-                    );
-
-                autoAimTargetDatas[i] = autoAimTargetData;
+                autoAimTargetDatas[i] = Convert(autoAimTargets[i]);
             }
 
             return autoAimTargetDatas;
         }
 
+        public AutoAimTargetData Convert(IAutoAimTarget autoAimTarget)
+        {
+            AutoAimTargetData autoAimTargetData  = new AutoAimTargetData();
+            autoAimTargetData.Configure(
+                autoAimTarget,
+                ComputeAngularPositionFromPosition(autoAimTarget.Position)
+            );
+
+            return autoAimTargetData;
+        }
+        
         
         private float ComputeAngularPositionFromPosition(Vector3 position)
         {

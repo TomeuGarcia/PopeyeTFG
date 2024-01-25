@@ -8,12 +8,11 @@ namespace Popeye.Modules.PlayerController.AutoAim
     {
         private IAutoAimTargetFinder _autoAimTargetFinder;
         private IAutoAimTargetToDataConverter _autoAimTargetToDataConverter;
-        
+
         private AutoAimTargetData[] _autoAimTargetsData;
         
         
-        public void Configure(IAutoAimTargetFinder autoAimTargetFinder,
-                              IAutoAimTargetToDataConverter autoAimTargetToDataConverter)
+        public void Configure(IAutoAimTargetFinder autoAimTargetFinder, IAutoAimTargetToDataConverter autoAimTargetToDataConverter)
         {
             _autoAimTargetFinder = autoAimTargetFinder;
             _autoAimTargetToDataConverter = autoAimTargetToDataConverter;
@@ -22,13 +21,14 @@ namespace Popeye.Modules.PlayerController.AutoAim
         
         public bool Update()
         {
-             bool foundTargets = _autoAimTargetFinder.GetAutoAimTargets(out IAutoAimTarget[] autoAimTargets);
+             bool foundTargets = _autoAimTargetFinder.GetAutoAimTargetsData(out IAutoAimTarget[] autoAimTargets);
              if (!foundTargets)
              {
                  return false;
              }
-             
+
              _autoAimTargetsData = _autoAimTargetToDataConverter.Convert(autoAimTargets);
+             
              SortByAngularPosition();
 
              return true;
@@ -38,6 +38,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         {
             return _autoAimTargetsData;
         }
+        
 
         private void SortByAngularPosition()
         {

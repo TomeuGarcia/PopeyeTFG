@@ -34,7 +34,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         }
         
         
-        public bool GetAutoAimTargets(out IAutoAimTarget[] targets)
+        public bool GetAutoAimTargetsData(out IAutoAimTarget[] targets)
         {
             int size = Physics.OverlapSphereNonAlloc(TargeterPosition, Radius, _colliders, 
                 LayerMask, QueryTriggerInteraction);
@@ -53,7 +53,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
                 {
                     continue;
                 }
-                
+
                 hitTargets.Add(autoAimTarget);
             }
 
