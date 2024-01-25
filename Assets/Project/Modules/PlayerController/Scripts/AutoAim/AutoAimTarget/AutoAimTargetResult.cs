@@ -2,11 +2,12 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.AutoAim
 {
-    public class AutoAimTargetData
+    public class AutoAimTargetResult
     {
         private IAutoAimTarget _autoAimTarget;
 
         public GameObject GameObject => _autoAimTarget.GameObject;
+        public Vector3 Position => _autoAimTarget.Position;
         public float AngularPosition { get; private set; }
         
         public float HalfAngularSize => _autoAimTarget.DataConfig.HalfAngularSize;

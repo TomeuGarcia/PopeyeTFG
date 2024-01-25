@@ -1,5 +1,4 @@
 using System;
-using Project.Modules.PlayerController.Testing.AutoAim.Scripts;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.AutoAim
@@ -7,15 +6,23 @@ namespace Popeye.Modules.PlayerController.AutoAim
     public class AutoAimTargetsController
     {
         private IAutoAimTargetFinder _autoAimTargetFinder;
-        private IAutoAimTargetToDataConverter _autoAimTargetToDataConverter;
+        private IAutoAimTargetToResultConverter _autoAimTargetToResultConverter;
+        private IAutoAimTargetResultsFilterer _autoAimTargetResultsFilterer;
 
-        private AutoAimTargetData[] _autoAimTargetsData;
+        private Transform _targeter;
+        
+        private AutoAimTargetResult[] _autoAimTargetResults;
+
+        private Vector3 TargeterPosition => _targeter.position;
         
         
-        public void Configure(IAutoAimTargetFinder autoAimTargetFinder, IAutoAimTargetToDataConverter autoAimTargetToDataConverter)
+        public void Configure(IAutoAimTargetFinder autoAimTargetFinder, IAutoAimTargetToResultConverter autoAimTargetToResultConverter,
+            IAutoAimTargetResultsFilterer autoAimTargetResultsFilterer, Transform targeter)
         {
             _autoAimTargetFinder = autoAimTargetFinder;
-            _autoAimTargetToDataConverter = autoAimTargetToDataConverter;
+            _autoAimTargetToResultConverter = autoAimTargetToResultConverter;
+            _autoAimTargetResultsFilterer = autoAimTargetResultsFilterer;
+            _targeter = targeter;
         }
         
         
@@ -27,22 +34,23 @@ namespace Popeye.Modules.PlayerController.AutoAim
                  return false;
              }
 
-             _autoAimTargetsData = _autoAimTargetToDataConverter.Convert(autoAimTargets);
+             _autoAimTargetResults = _autoAimTargetToResultConverter.Convert(autoAimTargets);
+             _autoAimTargetResults = _autoAimTargetResultsFilterer.Filter(_autoAimTargetResults, TargeterPosition);
              
              SortByAngularPosition();
 
              return true;
         }
 
-        public AutoAimTargetData[] GetAimTargetsData()
+        public AutoAimTargetResult[] GetAimTargetsData()
         {
-            return _autoAimTargetsData;
+            return _autoAimTargetResults;
         }
         
 
         private void SortByAngularPosition()
         {
-            Array.Sort(_autoAimTargetsData, 
+            Array.Sort(_autoAimTargetResults, 
                 (a, b) => 
                     a.AngularPosition < b.AngularPosition ? 0 : 1);
         }

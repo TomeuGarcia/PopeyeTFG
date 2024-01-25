@@ -34,18 +34,14 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
         public bool DoUpdate()
         {
-            /*
-            AimTargetsData = new AutoAimTargetData_Test[_aimTargetsParent.childCount];
-            for (int i = 0; i < _aimTargetsParent.childCount; ++i)
+            if (AimTargetsData == null || AimTargetsData.Length != _aimTargetsParent.childCount)
             {
-                AutoAimTargetData_Test aimTarget = _aimTargetsParent.GetChild(i).GetComponent<AutoAimTargetData_Test>();
-                AimTargetsData[i] = aimTarget;
-                AimTargetsData[i].SetAngleAtCenter(GetAngleFromTargeterPosition(aimTarget.Position));
+                AimTargetsData = new AutoAimTargetData_Test[_aimTargetsParent.childCount];
+                for (int i = 0; i < _aimTargetsParent.childCount; ++i)
+                {
+                    AimTargetsData[i] = _aimTargetsParent.GetChild(i).GetComponent<AutoAimTargetData_Test>();
+                }
             }
-            
-            // Sort by angle
-            Array.Sort(AimTargetsData, (x, y) => x.AngularPosition < y.AngularPosition ? 0 : 1);
-*/
 
             if (_movementInput != null)
             {

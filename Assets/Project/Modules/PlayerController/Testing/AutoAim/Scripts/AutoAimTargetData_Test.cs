@@ -21,6 +21,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
         [SerializeField] private AutoAimTargetDataConfig _config;
         
+        [SerializeField] private GameObject _helpersHolder;
         [SerializeField] private Transform _helpViewer;
         [SerializeField] private Transform _helpViewerA;
         [SerializeField] private Transform _helpViewerB;
@@ -29,5 +30,14 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         public Transform HelpViewerB => _helpViewerB;
 
 
+        public void IsBeingTargeted()
+        {
+            _helpersHolder.SetActive(true);
+        }
+        public void IsNotBeingTargeted()
+        {
+            _helpersHolder.SetActive(false);
+        }
+        
     }
 }

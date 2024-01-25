@@ -8,6 +8,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
     {
         [SerializeField] private AutoAimControllerConfig _autoAimControllerConfig;
         [SerializeField] private AutoAimTargetFilterConfig _autoAimTargetFilterConfig;
+        [SerializeField] private AutoAimTargetResultFiltererConfig _autoAimTargetResultFiltererConfig;
         [SerializeField] private CollisionProbingConfig _autoAimCollisionProbingConfig;
 
 
@@ -20,13 +21,16 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             AutoAimTargetsController autoAimTargetsController = new AutoAimTargetsController();
             AutoAimTargetFinder_DirectReferences autoAimTargetFinder = new AutoAimTargetFinder_DirectReferences();
             AutoAimTargetFilterer autoAimTargetFilterer = new AutoAimTargetFilterer();
+            AutoAimTargetResultsFilterer autoAimTargetResultsFilterer = new AutoAimTargetResultsFilterer();
 
-            AutoAimTargetToDataConverter autoAimTargetToDataConverter = new AutoAimTargetToDataConverter();
+            AutoAimTargetToResultConverter autoAimTargetToResultConverter = new AutoAimTargetToResultConverter();
 
             autoAimController.Configure(_autoAimControllerConfig, autoAimTargetsController);
-            autoAimTargetsController.Configure(autoAimTargetFinder, autoAimTargetToDataConverter);
+            autoAimTargetsController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
+                autoAimTargetResultsFilterer, targeter);
+            autoAimTargetResultsFilterer.Configure(_autoAimTargetResultFiltererConfig);
             autoAimTargetFilterer.Configure(_autoAimTargetFilterConfig, _autoAimCollisionProbingConfig);
-            autoAimTargetToDataConverter.Configure(targeter, startForwardDirection, startRightDirection);
+            autoAimTargetToResultConverter.Configure(targeter, startForwardDirection, startRightDirection);
             autoAimTargetFinder.Configure(autoAimTargetsParent);
 
             return autoAimController;

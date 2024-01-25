@@ -93,12 +93,34 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
         private void DrawAutoAimTargets()
         {
-            AutoAimTargetData[] autoAimTargetDatas = _autoAimController.AutoAimTargetsData;
-            for (int i = 0; i < autoAimTargetDatas.Length; ++i)
+            AutoAimTargetResult[] autoAimTargetDatas = _autoAimController.AutoAimTargetsData;
+            AutoAimTargetData_Test[] autoAimTargetDataTests = _autoAimWorldTest.AimTargetsData;
+            
+            foreach (var autoAimTargetDataTest in autoAimTargetDataTests)
             {
-                AutoAimTargetData_Test autoAimTargetData = autoAimTargetDatas[i].GameObject.GetComponent<AutoAimTargetData_Test>();
+                int dataTestIndex = -1;
+                for (int i = 0; i < autoAimTargetDatas.Length; ++i)
+                {
+                    if (autoAimTargetDataTest.GameObject == autoAimTargetDatas[i].GameObject)
+                    {
+                        dataTestIndex = i;
+                        break;
+                    }
+                }
                 
-                float angularPosition = autoAimTargetDatas[i].AngularPosition;
+                
+                if (dataTestIndex == -1)
+                {
+                    autoAimTargetDataTest.IsNotBeingTargeted();
+                    continue;
+                }
+                
+                
+                autoAimTargetDataTest.IsBeingTargeted();
+
+                AutoAimTargetData_Test autoAimTargetData = autoAimTargetDataTest.GameObject.GetComponent<AutoAimTargetData_Test>();
+                
+                float angularPosition = autoAimTargetDatas[dataTestIndex].AngularPosition;
                 float angle_X_center = angularPosition;
                 
                 float targetRegionAngularDifference =
@@ -117,7 +139,6 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                     AnglesToDrawPosition(angle_X_center, angle_X_center, 0f);
                 autoAimTargetData.HelpViewerB.position = 
                     AnglesToDrawPosition(angle_X_rightLimitIn, angle_Y_rightLimitIn, 0.1f);
-                    
             }
             
         }

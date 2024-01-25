@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Popeye.Modules.PlayerController.AutoAim
 {
     public interface IAutoAimTargetFinder

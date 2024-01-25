@@ -14,7 +14,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         
         private ArrayBuffer<Vector2> _functionDataTable;
         public MonotoneCubicFunction OrientationRemapFunction { get; private set; }
-        public AutoAimTargetData[] AutoAimTargetsData { get; private set; }
+        public AutoAimTargetResult[] AutoAimTargetsData { get; private set; }
 
         public AutoAimControllerConfig Config => _config;
 
@@ -54,20 +54,20 @@ namespace Popeye.Modules.PlayerController.AutoAim
             
             for (int i = 0; i < AutoAimTargetsData.Length; ++i)
             {
-                AutoAimTargetData autoAimTargetData = AutoAimTargetsData[i];
+                AutoAimTargetResult autoAimTargetResult = AutoAimTargetsData[i];
                 
                 // Center
-                float angle_X_center = autoAimTargetData.AngularPosition;
-                float angle_X_leftCenter = angle_X_center - autoAimTargetData.HalfFlatCenterAngularTargetRegion;
-                float angle_X_rightCenter = angle_X_center + autoAimTargetData.HalfFlatCenterAngularTargetRegion;
+                float angle_X_center = autoAimTargetResult.AngularPosition;
+                float angle_X_leftCenter = angle_X_center - autoAimTargetResult.HalfFlatCenterAngularTargetRegion;
+                float angle_X_rightCenter = angle_X_center + autoAimTargetResult.HalfFlatCenterAngularTargetRegion;
                 
                 float targetRegionAngularDifference =
-                    autoAimTargetData.HalfAngularTargetRegion - autoAimTargetData.HalfAngularSize;
+                    autoAimTargetResult.HalfAngularTargetRegion - autoAimTargetResult.HalfAngularSize;
                 
                 
                 // Limit in
-                float angle_Y_leftLimitIn = autoAimTargetData.AngularPosition - autoAimTargetData.HalfAngularSize;
-                float angle_Y_rightLimitIn = autoAimTargetData.AngularPosition + autoAimTargetData.HalfAngularSize;
+                float angle_Y_leftLimitIn = autoAimTargetResult.AngularPosition - autoAimTargetResult.HalfAngularSize;
+                float angle_Y_rightLimitIn = autoAimTargetResult.AngularPosition + autoAimTargetResult.HalfAngularSize;
                 
                 float angle_X_leftLimitIn = angle_Y_leftLimitIn - targetRegionAngularDifference;
                 float angle_X_rightLimitIn = angle_Y_rightLimitIn + targetRegionAngularDifference;

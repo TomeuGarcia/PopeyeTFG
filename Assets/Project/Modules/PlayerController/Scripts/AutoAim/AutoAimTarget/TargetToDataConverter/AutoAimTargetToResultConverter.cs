@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.AutoAim
 {
-    public class AutoAimTargetToDataConverter : IAutoAimTargetToDataConverter
+    public class AutoAimTargetToResultConverter : IAutoAimTargetToResultConverter
     {
         private Transform _targeter;
         private Vector3 _startForwardDirection;
@@ -17,9 +17,9 @@ namespace Popeye.Modules.PlayerController.AutoAim
             _startRightDirection = startRightDirection;
         }
         
-        public AutoAimTargetData[] Convert(IAutoAimTarget[] autoAimTargets)
+        public AutoAimTargetResult[] Convert(IAutoAimTarget[] autoAimTargets)
         {
-            AutoAimTargetData[] autoAimTargetDatas = new AutoAimTargetData[autoAimTargets.Length];
+            AutoAimTargetResult[] autoAimTargetDatas = new AutoAimTargetResult[autoAimTargets.Length];
 
             for (int i = 0; i < autoAimTargetDatas.Length; ++i)
             {
@@ -29,15 +29,15 @@ namespace Popeye.Modules.PlayerController.AutoAim
             return autoAimTargetDatas;
         }
 
-        public AutoAimTargetData Convert(IAutoAimTarget autoAimTarget)
+        public AutoAimTargetResult Convert(IAutoAimTarget autoAimTarget)
         {
-            AutoAimTargetData autoAimTargetData  = new AutoAimTargetData();
-            autoAimTargetData.Configure(
+            AutoAimTargetResult autoAimTargetResult  = new AutoAimTargetResult();
+            autoAimTargetResult.Configure(
                 autoAimTarget,
                 ComputeAngularPositionFromPosition(autoAimTarget.Position)
             );
 
-            return autoAimTargetData;
+            return autoAimTargetResult;
         }
         
         

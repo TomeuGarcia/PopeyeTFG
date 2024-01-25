@@ -1,5 +1,6 @@
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerController.AutoAim
 {
@@ -8,6 +9,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         [SerializeField] private AutoAimControllerConfig _autoAimControllerConfig;
         [SerializeField] private AutoAimTargetFinderConfig _autoAimTargetFinderConfig;
         [SerializeField] private AutoAimTargetFilterConfig _autoAimTargetFilterConfig;
+        [SerializeField] private AutoAimTargetResultFiltererConfig autoAimTargetResultFilterConfig;
         [SerializeField] private CollisionProbingConfig _autoAimCollisionProbingConfig;
         
         
@@ -18,15 +20,18 @@ namespace Popeye.Modules.PlayerController.AutoAim
             AutoAimTargetsController autoAimTargetsController = new AutoAimTargetsController();
             AutoAimTargetFinder_PhysicsCast autoAimTargetFinder = new AutoAimTargetFinder_PhysicsCast();
             AutoAimTargetFilterer autoAimTargetFilterer = new AutoAimTargetFilterer();
+            AutoAimTargetResultsFilterer autoAimTargetResultsFilterer = new AutoAimTargetResultsFilterer();
 
-            AutoAimTargetToDataConverter autoAimTargetToDataConverter = new AutoAimTargetToDataConverter();
+            AutoAimTargetToResultConverter autoAimTargetToResultConverter = new AutoAimTargetToResultConverter();
 
             autoAimController.Configure(_autoAimControllerConfig, autoAimTargetsController);
-            autoAimTargetsController.Configure(autoAimTargetFinder, autoAimTargetToDataConverter);
+            autoAimTargetsController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
+                autoAimTargetResultsFilterer, targeter);
+            autoAimTargetResultsFilterer.Configure(autoAimTargetResultFilterConfig);
             autoAimTargetFinder.Configure(_autoAimTargetFinderConfig, _autoAimCollisionProbingConfig, 
                 autoAimTargetFilterer, targeter);
             autoAimTargetFilterer.Configure(_autoAimTargetFilterConfig, _autoAimCollisionProbingConfig);
-            autoAimTargetToDataConverter.Configure(targeter, startForwardDirection, startRightDirection);
+            autoAimTargetToResultConverter.Configure(targeter, startForwardDirection, startRightDirection);
 
             return autoAimController;
         }

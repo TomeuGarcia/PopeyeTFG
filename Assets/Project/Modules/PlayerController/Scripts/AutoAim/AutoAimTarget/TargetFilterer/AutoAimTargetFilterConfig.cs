@@ -1,7 +1,6 @@
 using System;
 using Popeye.ProjectHelpers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerController.AutoAim
 {

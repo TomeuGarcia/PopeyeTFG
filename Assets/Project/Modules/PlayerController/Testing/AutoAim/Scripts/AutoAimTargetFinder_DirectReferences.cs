@@ -7,8 +7,6 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
     {
         private IAutoAimTarget[] _autoAimTargets;
 
-        
-        
         public void Configure(Transform referencesParent)
         {
             _autoAimTargets = new IAutoAimTarget[referencesParent.childCount];
