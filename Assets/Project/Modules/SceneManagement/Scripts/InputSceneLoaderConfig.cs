@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Popeye.Modules.SceneManagement.Scripts
         [System.Serializable]
         public class SceneLoadData
         {
-            [SerializeField, Min(0)] private int _builtInSceneIndex;
+            [Scene] [SerializeField, Min(0)] private int _builtInSceneIndex;
             [SerializeField] private KeyCode _loadKeyCode;
 
             public int BuiltInSceneIndex => _builtInSceneIndex;
