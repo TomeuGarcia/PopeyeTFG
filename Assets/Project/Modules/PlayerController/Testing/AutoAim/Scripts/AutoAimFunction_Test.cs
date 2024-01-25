@@ -59,11 +59,16 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         private void DoUpdate()
         {
             // Update
-            _autoAimWorldTest.DoUpdate();
-            float lookX = _autoAimWorldTest.TargeterLookAngle;
-            float lookY = _autoAimController.CorrectLookAngle(lookX);
-            _autoAimWorldTest.SetTargeterLookDirection(lookY);
+            float lookX = 0, lookY = 0;
+            bool lookChanged = _autoAimWorldTest.DoUpdate();
+            lookX = _autoAimWorldTest.TargeterLookAngle;
+            lookY = _autoAimController.CorrectLookAngle(lookX);
             
+            if (lookChanged)
+            {
+                _autoAimWorldTest.SetTargeterLookDirection(lookY);
+            }
+
             // Draw
             DrawLookRepresentation(lookX, lookY);
             DrawOrientationFunctionLine(_orientationFunctionLine, _autoAimController.OrientationRemapFunction, _smoothCount);

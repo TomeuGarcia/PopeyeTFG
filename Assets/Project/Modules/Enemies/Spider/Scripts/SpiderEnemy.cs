@@ -279,6 +279,9 @@ namespace Popeye.Modules.Enemies
         }
 
 
+        public Vector3 ForwardAxis => Vector3.forward;
+        public Vector3 RightAxis => Vector3.right;
+
         public Vector3 GetMovementInput()
         {
             if (!_canMove)

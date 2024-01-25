@@ -9,9 +9,10 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
     {
         [Header("TARGETER")]
         [SerializeField] private Transform _targeter;
+        [SerializeField] private TrailRenderer _aimTrail;
         [SerializeField] private float _targeterMoveSpeed = 50f;
         [SerializeField] private float _targeterRotationSpeed = 2000f;
-
+        
         public Transform Targeter => _targeter;
         public float TargeterLookAngle { get; private set; }
     
@@ -49,8 +50,19 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 _targeter.position += movementInput * (Time.deltaTime * _targeterMoveSpeed);
 
                 Vector3 lookInput = _movementInput.GetLookInput();
-                bool isLooking = lookInput.sqrMagnitude > 0.1f;
-                TargeterLookAngle = GetAngleFromDirection(isLooking ? lookInput : movementInput);
+                bool isLooking = lookInput.sqrMagnitude > 0.9f;
+
+                if (isLooking)
+                {
+                    TargeterLookAngle = GetAngleFromDirection(isLooking ? lookInput : movementInput);
+                }
+                else if (movementInput.sqrMagnitude > 0.1f)
+                {
+                    SetTargeterLookToDirection(movementInput.normalized);
+                }
+
+                _aimTrail.emitting = isLooking;
+                
 
                 return isLooking;
             }
@@ -79,7 +91,12 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             _targeter.rotation =
                 Quaternion.RotateTowards(_targeter.rotation, Quaternion.AngleAxis(angle, Vector3.up),
                     Time.deltaTime * _targeterRotationSpeed);
-
+        }
+        private void SetTargeterLookToDirection(Vector3 direction)
+        {
+            _targeter.rotation =
+                Quaternion.RotateTowards(_targeter.rotation, Quaternion.LookRotation(direction, Vector3.up),
+                    Time.deltaTime * _targeterRotationSpeed);
         }
         
     }
