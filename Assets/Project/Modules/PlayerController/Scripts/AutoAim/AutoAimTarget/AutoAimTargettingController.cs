@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.AutoAim
 {
-    public class AutoAimTargetsController
+    public class AutoAimTargettingController
     {
         private IAutoAimTargetFinder _autoAimTargetFinder;
         private IAutoAimTargetToResultConverter _autoAimTargetToResultConverter;

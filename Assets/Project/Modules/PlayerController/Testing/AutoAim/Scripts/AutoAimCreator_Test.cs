@@ -17,15 +17,15 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         {
             AutoAimController autoAimController = new AutoAimController();
 
-            AutoAimTargetsController autoAimTargetsController = new AutoAimTargetsController();
+            AutoAimTargettingController autoAimTargettingController = new AutoAimTargettingController();
             AutoAimTargetFinder_DirectReferences autoAimTargetFinder = new AutoAimTargetFinder_DirectReferences();
             AutoAimTargetFilterer autoAimTargetFilterer = new AutoAimTargetFilterer();
             AutoAimTargetResultsFilterer autoAimTargetResultsFilterer = new AutoAimTargetResultsFilterer();
 
             AutoAimTargetToResultConverter autoAimTargetToResultConverter = new AutoAimTargetToResultConverter();
 
-            autoAimController.Configure(_autoAimControllerConfig, autoAimTargetsController);
-            autoAimTargetsController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
+            autoAimController.Configure(_autoAimControllerConfig, autoAimTargettingController);
+            autoAimTargettingController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
                 autoAimTargetResultsFilterer, targeter);
             autoAimTargetResultsFilterer.Configure(_autoAimTargetResultFiltererConfig);
             autoAimTargetFilterer.Configure(_autoAimTargetFilterConfig, _autoAimCollisionProbingConfig);

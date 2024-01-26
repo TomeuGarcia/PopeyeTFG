@@ -10,7 +10,11 @@ namespace Popeye.Modules.PlayerController.AutoAim
     {
         [SerializeField, Range(0f, 90f)] private float _angularSize = 20f;
         [SerializeField, Range(0f, 90f)] private float _angularTargetRegion = 40f;
-        [SerializeField, Range(0f, 1f)] public float _centerFlattening = 0.3f;
+        [SerializeField, Range(0f, 1f)] private float _centerFlattening = 0.3f;
+
+        public float AngularSize => _angularSize;
+        public float AngularTargetRegion => _angularTargetRegion;
+        public float FlatCenterAngularTargetRegion => _centerFlattening;
         
         
         public float HalfAngularSize { get; private set; }
@@ -28,6 +32,23 @@ namespace Popeye.Modules.PlayerController.AutoAim
 
         private void Awake()
         {
+            OnValidate();
+        }
+
+
+        public void ResetAngularSize(float angularSize)
+        {
+            _angularSize = angularSize;
+            OnValidate();
+        }
+        public void ResetAngularTargetRegion(float angularTargetRegion)
+        {
+            _angularTargetRegion = angularTargetRegion;
+            OnValidate();
+        }
+        public void ResetCenterFlattening(float centerFlattening)
+        {
+            _centerFlattening = Mathf.Lerp(0f, 0.99f, centerFlattening);
             OnValidate();
         }
     }

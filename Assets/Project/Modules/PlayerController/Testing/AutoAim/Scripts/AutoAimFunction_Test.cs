@@ -78,7 +78,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
         private void DrawLookRepresentation(float lookX, float lookY)
         {
-            _lookRepresentation.position = AnglesToDrawPosition(lookX, lookY, 0.1f);
+            _lookRepresentation.position = AnglesToDrawPosition(lookX, lookY, 0.15f);
         }
         
         private void DrawOrientationFunctionLine(LineRenderer line, MonotoneCubicFunction f, int smoothCount)
@@ -141,7 +141,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 autoAimTargetData.HelpViewerA.position = 
                     AnglesToDrawPosition(angle_X_leftLimitIn, angle_Y_leftLimitIn, 0.1f);
                 autoAimTargetData.HelpViewer.position = 
-                    AnglesToDrawPosition(angle_X_center, angle_X_center, 0f);
+                    AnglesToDrawPosition(angle_X_center, angle_X_center, 0.1f);
                 autoAimTargetData.HelpViewerB.position = 
                     AnglesToDrawPosition(angle_X_rightLimitIn, angle_Y_rightLimitIn, 0.1f);
             }

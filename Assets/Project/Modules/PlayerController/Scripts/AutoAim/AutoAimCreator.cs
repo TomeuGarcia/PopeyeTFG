@@ -17,15 +17,15 @@ namespace Popeye.Modules.PlayerController.AutoAim
         {
             AutoAimController autoAimController = new AutoAimController();
 
-            AutoAimTargetsController autoAimTargetsController = new AutoAimTargetsController();
+            AutoAimTargettingController autoAimTargettingController = new AutoAimTargettingController();
             AutoAimTargetFinder_PhysicsCast autoAimTargetFinder = new AutoAimTargetFinder_PhysicsCast();
             AutoAimTargetFilterer autoAimTargetFilterer = new AutoAimTargetFilterer();
             AutoAimTargetResultsFilterer autoAimTargetResultsFilterer = new AutoAimTargetResultsFilterer();
 
             AutoAimTargetToResultConverter autoAimTargetToResultConverter = new AutoAimTargetToResultConverter();
 
-            autoAimController.Configure(_autoAimControllerConfig, autoAimTargetsController);
-            autoAimTargetsController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
+            autoAimController.Configure(_autoAimControllerConfig, autoAimTargettingController);
+            autoAimTargettingController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
                 autoAimTargetResultsFilterer, targeter);
             autoAimTargetResultsFilterer.Configure(autoAimTargetResultFilterConfig);
             autoAimTargetFinder.Configure(_autoAimTargetFinderConfig, _autoAimCollisionProbingConfig, 

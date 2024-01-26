@@ -1,6 +1,7 @@
 using System;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 {
@@ -98,6 +99,21 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 Quaternion.RotateTowards(_targeter.rotation, Quaternion.LookRotation(direction, Vector3.up),
                     Time.deltaTime * _targeterRotationSpeed);
         }
-        
+
+
+        public void RandomizeTargetPositions()
+        {
+            foreach (var autoAimTargetDataTest in AimTargetsData)
+            {
+                int x = Random.Range(-4, 5);
+                int y = 0;
+                int z = Random.Range(-4, 5);
+
+                autoAimTargetDataTest.transform.localPosition =
+                    new Vector3(x, y, z);
+            }
+            
+
+        }
     }
 }
