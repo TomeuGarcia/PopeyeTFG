@@ -89,7 +89,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             float step = 360f / (smoothCount-1);
             for (int i = 1; i < smoothCount; ++i)
             {
-                float x = step * i;
+                float x = (step * i);
                 float y = EvaluateFunction(f, x);
                 Vector3 position = AnglesToDrawPosition(x, y, 0.1f) ;
                 line.SetPosition(i, position);

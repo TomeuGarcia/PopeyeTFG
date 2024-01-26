@@ -101,16 +101,6 @@ namespace Popeye.Modules.PlayerController.AutoAim
                 
                 _functionDataTable.Elements[index + 5].x = angle_X_rightLimitOut;
                 _functionDataTable.Elements[index + 5].y = angle_Y_rightLimitOut;
-                
-                /*
-                // Draw
-                autoAimTargetData.HelpViewerA.position = 
-                    AnglesToDrawPosition(angle_X_leftLimitIn, angle_Y_leftLimitIn, 0.1f);
-                autoAimTargetData.HelpViewer.position = 
-                    AnglesToDrawPosition(angle_X_center, angle_X_center, 0f);
-                autoAimTargetData.HelpViewerB.position = 
-                    AnglesToDrawPosition(angle_X_rightLimitIn, angle_Y_rightLimitIn, 0.1f);
-                */
             } 
         }
         

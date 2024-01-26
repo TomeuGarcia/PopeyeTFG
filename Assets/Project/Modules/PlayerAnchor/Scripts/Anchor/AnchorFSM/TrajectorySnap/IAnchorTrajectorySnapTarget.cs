@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
-    public interface IAutoAimTarget
+    public interface IAnchorTrajectorySnapTarget
     {
         Vector3 GetAimLockPosition();
         Vector3 GetLookDirectionForAimedTargeter();
@@ -10,6 +10,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         Transform GetParentTransformForTargeter();
         bool CanBeAimedFromPosition(Vector3 position);
 
+        Vector3 GetDashEndPosition();
+        
 
         void OnAddedAsAimTarget();
         void OnRemovedFromAimTarget();

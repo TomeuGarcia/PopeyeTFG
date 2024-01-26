@@ -116,14 +116,14 @@ namespace Popeye.Modules.PlayerAnchor
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
-            AnchorAutoAimController anchorAutoAimController = new AnchorAutoAimController();
+            AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
             IAnchorAudio anchorAudio = _anchorAudioRef.Value;
             
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
-                anchorAutoAimController);
+                anchorTrajectorySnapController);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
@@ -133,7 +133,7 @@ namespace Popeye.Modules.PlayerAnchor
                 _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
-            anchorAutoAimController.Configure();
+            anchorTrajectorySnapController.Configure();
             _anchorCollisions.Configure(_obstacleProbingConfig);
             anchorAudio.Configure(_anchorMoveTransform.gameObject);
 
