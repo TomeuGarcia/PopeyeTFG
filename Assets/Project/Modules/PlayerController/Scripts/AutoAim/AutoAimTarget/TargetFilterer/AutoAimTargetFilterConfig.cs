@@ -1,15 +1,13 @@
-using System;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.AutoAim
 {
-    [CreateAssetMenu(fileName = "AutoAimTargetFilterConfig", 
-        menuName = ScriptableObjectsHelper.AUTOAIM_ASSETS_PATH + "AutoAimTargetFilterConfig")]
-    public class AutoAimTargetFilterConfig : ScriptableObject
+    [System.Serializable]
+    public class AutoAimTargetFilterConfig
     {
         [Header("Field of View")]
-        [SerializeField, Range(0f, 360f)] private float _acceptanceFieldOfView = 120f;
+        [SerializeField, Range(0f, 360f)] private float _acceptanceFieldOfView = 360f;
         
         [Header("Height")]
         [SerializeField, Range(0f, 10f)] private float _acceptanceHeightDistance = 2.5f;
@@ -24,14 +22,16 @@ namespace Popeye.Modules.PlayerController.AutoAim
         public float LineOfSighRaysDistanceRange => _lineOfSighRaysDistanceRange; 
 
 
-        private void OnValidate()
+        public AutoAimTargetFilterConfig()
+        {
+            OnValidate();
+        }
+        
+        public void OnValidate()
         {
             AcceptanceFieldOfViewDot = Mathf.Cos( (Mathf.Deg2Rad * _acceptanceFieldOfView) / 2);
         }
 
-        private void Awake()
-        {
-            OnValidate();
-        }
+
     }
 }

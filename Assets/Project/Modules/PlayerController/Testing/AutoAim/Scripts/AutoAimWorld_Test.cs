@@ -1,4 +1,5 @@
 using System;
+using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,8 +12,14 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         [Header("TARGETER")]
         [SerializeField] private Transform _targeter;
         [SerializeField] private TrailRenderer _aimTrail;
+        [SerializeField] private Transform _targeterDefault;
+        [SerializeField] private TrailRenderer _aimTrailDefault;
         [SerializeField] private float _targeterMoveSpeed = 50f;
         [SerializeField] private float _targeterRotationSpeed = 2000f;
+
+        [SerializeField] private AutoAimTargetDataConfig _targetsConfig;
+
+        public bool DefaultLookIsVisible { get; private set; } = true;
         
         public Transform Targeter => _targeter;
         public float TargeterLookAngle { get; private set; }
@@ -25,6 +32,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         private Vector3 startLookDirection = Vector3.forward;
         private Vector3 startRightDirection = Vector3.right;
         
+        
         public AutoAimTargetData_Test[] AimTargetsData { get; private set; }
 
         private WorldAxisMovementInput _movementInput;
@@ -32,9 +40,10 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         private void Awake()
         {
             _movementInput = new WorldAxisMovementInput();
+            SetupAimTargetsData();
         }
 
-        public bool DoUpdate()
+        private void SetupAimTargetsData()
         {
             if (AimTargetsData == null || AimTargetsData.Length != _aimTargetsParent.childCount)
             {
@@ -42,14 +51,21 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 for (int i = 0; i < _aimTargetsParent.childCount; ++i)
                 {
                     AimTargetsData[i] = _aimTargetsParent.GetChild(i).GetComponent<AutoAimTargetData_Test>();
+                    AimTargetsData[i].SetAutoAimTargetDataConfig(_targetsConfig);
                 }
             }
+        }
+        
+        public bool DoUpdate()
+        {
+            SetupAimTargetsData();
 
             if (_movementInput != null)
             {
                 Vector3 movementInput = _movementInput.GetMovementInput();
                 _targeter.position += movementInput * (Time.deltaTime * _targeterMoveSpeed);
-
+                _targeterDefault.position = _targeter.position;
+                
                 Vector3 lookInput = _movementInput.GetLookInput();
                 bool isLooking = lookInput.sqrMagnitude > 0.9f;
 
@@ -63,7 +79,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 }
 
                 _aimTrail.emitting = isLooking;
-                
+                _aimTrailDefault.emitting = isLooking && DefaultLookIsVisible;
 
                 return isLooking;
             }
@@ -87,10 +103,14 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 angle;
         }
 
-        public void SetTargeterLookDirection(float angle)
+        public void SetTargeterLookDirection(float defaultAngle, float modifiedAngle)
         {
             _targeter.rotation =
-                Quaternion.RotateTowards(_targeter.rotation, Quaternion.AngleAxis(angle, Vector3.up),
+                Quaternion.RotateTowards(_targeter.rotation, Quaternion.AngleAxis(modifiedAngle, Vector3.up),
+                    Time.deltaTime * _targeterRotationSpeed);
+            
+            _targeterDefault.rotation =
+                Quaternion.RotateTowards(_targeterDefault.rotation, Quaternion.AngleAxis(defaultAngle, Vector3.up),
                     Time.deltaTime * _targeterRotationSpeed);
         }
         private void SetTargeterLookToDirection(Vector3 direction)
@@ -112,8 +132,17 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
                 autoAimTargetDataTest.transform.localPosition =
                     new Vector3(x, y, z);
             }
-            
+        }
 
+
+        public void SetDefaultLookIsVisible(bool isVisible)
+        {
+            DefaultLookIsVisible = isVisible;
+        }
+
+        public void SetTargetsAutoAimTargetDataConfig(AutoAimTargetDataConfig config)
+        {
+            _targetsConfig = config;
         }
     }
 }

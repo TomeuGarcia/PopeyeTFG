@@ -9,17 +9,17 @@ namespace Popeye.Modules.PlayerController.AutoAim
     {
         private const float ANGLE_LIMIT_DELTA = 0.01f;
         
-        private AutoAimControllerConfig _config;
+        private AutoAimFunctionConfig _config;
         private AutoAimTargettingController _autoAimTargettingController;
         
         private ArrayBuffer<Vector2> _functionDataTable;
         public MonotoneCubicFunction OrientationRemapFunction { get; private set; }
         public AutoAimTargetResult[] AutoAimTargetsData { get; private set; }
 
-        public AutoAimControllerConfig Config => _config;
+        public AutoAimFunctionConfig Config => _config;
 
 
-        public void Configure(AutoAimControllerConfig config, AutoAimTargettingController autoAimTargettingController)
+        public void Configure(AutoAimFunctionConfig config, AutoAimTargettingController autoAimTargettingController)
         {
             _config = config;
             _autoAimTargettingController = autoAimTargettingController;

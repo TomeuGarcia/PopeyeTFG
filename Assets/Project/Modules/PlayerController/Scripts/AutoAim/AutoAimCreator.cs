@@ -6,12 +6,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
 {
     public class AutoAimCreator : MonoBehaviour
     {
-        [SerializeField] private AutoAimControllerConfig _autoAimControllerConfig;
-        [SerializeField] private AutoAimTargetFinderConfig _autoAimTargetFinderConfig;
-        [SerializeField] private AutoAimTargetFilterConfig _autoAimTargetFilterConfig;
-        [SerializeField] private AutoAimTargetResultFiltererConfig autoAimTargetResultFilterConfig;
-        [SerializeField] private CollisionProbingConfig _autoAimCollisionProbingConfig;
-        
+        [SerializeField] private AutoAimControllerGeneralConfig _autoAimControllerGeneralConfig;
         
         public AutoAimController Create(Transform targeter)
         {
@@ -24,13 +19,21 @@ namespace Popeye.Modules.PlayerController.AutoAim
 
             AutoAimTargetToResultConverter autoAimTargetToResultConverter = new AutoAimTargetToResultConverter();
 
-            autoAimController.Configure(_autoAimControllerConfig, autoAimTargettingController);
+            
+            autoAimController.Configure(_autoAimControllerGeneralConfig.FunctionConfig, 
+                autoAimTargettingController);
+            
             autoAimTargettingController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
                 autoAimTargetResultsFilterer, targeter);
-            autoAimTargetResultsFilterer.Configure(autoAimTargetResultFilterConfig);
-            autoAimTargetFinder.Configure(_autoAimTargetFinderConfig, _autoAimCollisionProbingConfig, 
-                autoAimTargetFilterer, targeter);
-            autoAimTargetFilterer.Configure(_autoAimTargetFilterConfig, _autoAimCollisionProbingConfig);
+            
+            autoAimTargetResultsFilterer.Configure(_autoAimControllerGeneralConfig.TargetResultFiltererConfig);
+            
+            autoAimTargetFinder.Configure(_autoAimControllerGeneralConfig.TargetFinderConfig, 
+                _autoAimControllerGeneralConfig.CollisionProbingConfig, autoAimTargetFilterer, targeter);
+            
+            autoAimTargetFilterer.Configure(_autoAimControllerGeneralConfig.TargetFilterConfig, 
+                _autoAimControllerGeneralConfig.CollisionProbingConfig);
+            
             autoAimTargetToResultConverter.Configure(targeter);
 
             return autoAimController;

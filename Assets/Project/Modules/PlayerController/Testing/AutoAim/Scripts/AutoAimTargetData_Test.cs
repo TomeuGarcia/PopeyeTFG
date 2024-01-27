@@ -19,7 +19,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
 
         
-        [SerializeField] private AutoAimTargetDataConfig _config;
+        private AutoAimTargetDataConfig _config;
         
         [SerializeField] private GameObject _helpersHolder;
         [SerializeField] private Transform _helpViewer;
@@ -38,6 +38,11 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         {
             _helpersHolder.SetActive(false);
         }
-        
+
+
+        public void SetAutoAimTargetDataConfig(AutoAimTargetDataConfig config)
+        {
+            _config = config;
+        }
     }
 }

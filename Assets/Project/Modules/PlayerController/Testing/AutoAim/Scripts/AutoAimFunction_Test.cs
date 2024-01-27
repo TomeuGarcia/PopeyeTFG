@@ -23,6 +23,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         
         [Header("TARGETER")] 
         [SerializeField] private Transform _lookRepresentation;
+        [SerializeField] private Transform _lookRepresentationDefault;
         
         private static readonly Vector2 FUNCTION_LINE_SIZE = new Vector2(10, 10);
 
@@ -66,7 +67,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             
             if (lookChanged)
             {
-                _autoAimWorldTest.SetTargeterLookDirection(lookY);
+                _autoAimWorldTest.SetTargeterLookDirection(lookX, lookY);
             }
 
             // Draw
@@ -79,6 +80,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         private void DrawLookRepresentation(float lookX, float lookY)
         {
             _lookRepresentation.position = AnglesToDrawPosition(lookX, lookY, 0.15f);
+            _lookRepresentationDefault.position = AnglesToDrawPosition(lookX, lookX, 0.14f);
         }
         
         private void DrawOrientationFunctionLine(LineRenderer line, MonotoneCubicFunction f, int smoothCount)
@@ -174,6 +176,13 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         private float EvaluateFunction(MonotoneCubicFunction function, float x)
         {
             return Mathf.Lerp(function.Evaluate(x), x, _autoAimController.Config.BlendWithIdentity);
+        }
+
+
+
+        public void SetDefaultLookIsVisible(bool isVisible)
+        {
+            _lookRepresentationDefault.gameObject.SetActive(isVisible);
         }
     }
 }

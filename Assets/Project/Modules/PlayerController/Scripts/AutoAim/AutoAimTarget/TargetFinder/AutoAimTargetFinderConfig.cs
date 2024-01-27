@@ -3,13 +3,21 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.AutoAim
 {
-    
-    [CreateAssetMenu(fileName = "AutoAimTargetFinderConfig", 
-        menuName = ScriptableObjectsHelper.AUTOAIM_ASSETS_PATH + "AutoAimTargetFinderConfig")]
-    public class AutoAimTargetFinderConfig : ScriptableObject
+    [System.Serializable]
+    public class AutoAimTargetFinderConfig
     {
         [SerializeField, Range(0.0f, 30.0f)] private float _radiusDistance = 8.0f;
 
         public float RadiusDistance => _radiusDistance;
+        
+        public AutoAimTargetFinderConfig()
+        {
+            OnValidate();
+        }
+        
+        public void OnValidate()
+        {
+            
+        }
     }
 }

@@ -1,17 +1,13 @@
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerController.AutoAim;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 {
     public class AutoAimCreator_Test : MonoBehaviour
     {
-        [SerializeField] private AutoAimControllerConfig _autoAimControllerConfig;
-        [SerializeField] private AutoAimTargetFilterConfig _autoAimTargetFilterConfig;
-        [SerializeField] private AutoAimTargetResultFiltererConfig _autoAimTargetResultFiltererConfig;
-        [SerializeField] private CollisionProbingConfig _autoAimCollisionProbingConfig;
-
-
+        [SerializeField] private AutoAimControllerGeneralConfig _autoAimControllerGeneralConfig;
 
         public AutoAimController Create(Transform targeter, Transform autoAimTargetsParent)
         {
@@ -24,11 +20,13 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
             AutoAimTargetToResultConverter autoAimTargetToResultConverter = new AutoAimTargetToResultConverter();
 
-            autoAimController.Configure(_autoAimControllerConfig, autoAimTargettingController);
+            autoAimController.Configure(_autoAimControllerGeneralConfig.FunctionConfig, 
+                autoAimTargettingController);
             autoAimTargettingController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
                 autoAimTargetResultsFilterer, targeter);
-            autoAimTargetResultsFilterer.Configure(_autoAimTargetResultFiltererConfig);
-            autoAimTargetFilterer.Configure(_autoAimTargetFilterConfig, _autoAimCollisionProbingConfig);
+            autoAimTargetResultsFilterer.Configure(_autoAimControllerGeneralConfig.TargetResultFiltererConfig);
+            autoAimTargetFilterer.Configure(_autoAimControllerGeneralConfig.TargetFilterConfig, 
+                _autoAimControllerGeneralConfig.CollisionProbingConfig);
             autoAimTargetToResultConverter.Configure(targeter);
             autoAimTargetFinder.Configure(autoAimTargetsParent);
 
