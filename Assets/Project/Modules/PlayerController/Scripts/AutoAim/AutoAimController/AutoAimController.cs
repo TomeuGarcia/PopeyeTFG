@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         private const float ANGLE_LIMIT_DELTA = 0.01f;
         
         private AutoAimFunctionConfig _config;
-        private AutoAimTargettingController _autoAimTargettingController;
+        private AutoAimTargetingController _autoAimTargetingController;
         
         private ArrayBuffer<Vector2> _functionDataTable;
         public MonotoneCubicFunction OrientationRemapFunction { get; private set; }
@@ -19,10 +19,10 @@ namespace Popeye.Modules.PlayerController.AutoAim
         public AutoAimFunctionConfig Config => _config;
 
 
-        public void Configure(AutoAimFunctionConfig config, AutoAimTargettingController autoAimTargettingController)
+        public void Configure(AutoAimFunctionConfig config, AutoAimTargetingController autoAimTargetingController)
         {
             _config = config;
-            _autoAimTargettingController = autoAimTargettingController;
+            _autoAimTargetingController = autoAimTargetingController;
             
             _functionDataTable = new ArrayBuffer<Vector2>(_config.MaxDataCapacity);
             OrientationRemapFunction = new MonotoneCubicFunction();
@@ -30,7 +30,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
         
         public float CorrectLookAngle(float lookAngle, Vector3 forwardDirection, Vector3 rightDirection)
         {
-            if (!_autoAimTargettingController.Update(forwardDirection, rightDirection))
+            if (!_autoAimTargetingController.Update(forwardDirection, rightDirection))
             {
                 return lookAngle;
             }
@@ -43,7 +43,7 @@ namespace Popeye.Modules.PlayerController.AutoAim
 
         private void UpdateDataTable()
         {
-            AutoAimTargetsData = _autoAimTargettingController.GetAimTargetsData();
+            AutoAimTargetsData = _autoAimTargetingController.GetAimTargetsData();
             
             int numAngles = 2 + (AutoAimTargetsData.Length * 6);
             

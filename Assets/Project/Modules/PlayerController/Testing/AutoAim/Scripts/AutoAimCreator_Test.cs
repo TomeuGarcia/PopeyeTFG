@@ -13,7 +13,7 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
         {
             AutoAimController autoAimController = new AutoAimController();
 
-            AutoAimTargettingController autoAimTargettingController = new AutoAimTargettingController();
+            AutoAimTargetingController autoAimTargetingController = new AutoAimTargetingController();
             AutoAimTargetFinder_DirectReferences autoAimTargetFinder = new AutoAimTargetFinder_DirectReferences();
             AutoAimTargetFilterer autoAimTargetFilterer = new AutoAimTargetFilterer();
             AutoAimTargetResultsFilterer autoAimTargetResultsFilterer = new AutoAimTargetResultsFilterer();
@@ -21,8 +21,8 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
             AutoAimTargetToResultConverter autoAimTargetToResultConverter = new AutoAimTargetToResultConverter();
 
             autoAimController.Configure(_autoAimControllerGeneralConfig.FunctionConfig, 
-                autoAimTargettingController);
-            autoAimTargettingController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
+                autoAimTargetingController);
+            autoAimTargetingController.Configure(autoAimTargetFinder, autoAimTargetToResultConverter,
                 autoAimTargetResultsFilterer, targeter);
             autoAimTargetResultsFilterer.Configure(_autoAimControllerGeneralConfig.TargetResultFiltererConfig);
             autoAimTargetFilterer.Configure(_autoAimControllerGeneralConfig.TargetFilterConfig, 
