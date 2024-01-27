@@ -38,7 +38,10 @@ namespace Popeye.Modules.PlayerController.AutoAim
 
             return autoAimController;
         }
-        
-        
+
+        public void SetAutoAimControllerGeneralConfig(AutoAimControllerGeneralConfig config)
+        {
+            _autoAimControllerGeneralConfig = config;
+        }
     }
 }

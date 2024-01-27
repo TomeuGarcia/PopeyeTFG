@@ -32,5 +32,10 @@ namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 
             return autoAimController;
         }
+        
+        public void SetAutoAimControllerGeneralConfig(AutoAimControllerGeneralConfig config)
+        {
+            _autoAimControllerGeneralConfig = config;
+        }
     }
 }

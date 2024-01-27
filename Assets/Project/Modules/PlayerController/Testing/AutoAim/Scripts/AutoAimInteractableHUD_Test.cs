@@ -15,6 +15,8 @@ namespace Project.Modules.PlayerController.Testing.AutoAim
         [SerializeField] private AutoAimTargetDataConfig _autoAimTargetDataConfig;
         [SerializeField] private AutoAimWorld_Test _autoAimWorldTest;
         [SerializeField] private AutoAimFunction_Test _autoAimFunctionTest;
+        [SerializeField] private AutoAimCreator _autoAimCreator;
+        [SerializeField] private AutoAimCreator_Test _autoAimCreatorTest;
         
         [Header("DATA CONFIG")]
         [SerializeField] private Slider _sliderAngularSize;
@@ -96,6 +98,10 @@ namespace Project.Modules.PlayerController.Testing.AutoAim
 
             _autoAimWorldTest.SetTargetsAutoAimTargetDataConfig(_autoAimTargetDataConfig);
             UpdateShowHideDefaultLookButton(_autoAimWorldTest.DefaultLookIsVisible);
+            
+            
+            _autoAimCreator.SetAutoAimControllerGeneralConfig(_autoAimControllerGeneralConfig);
+            _autoAimCreatorTest.SetAutoAimControllerGeneralConfig(_autoAimControllerGeneralConfig);
         }
 
 
