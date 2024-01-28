@@ -19,6 +19,7 @@ namespace Popeye.Modules.PlayerController
 
         // Input
         public IMovementInputHandler MovementInputHandler { get; set; }
+        public IInputCorrector InputCorrector { get; set; }
         private Vector3 _movementInput;
         private Vector3 _lookInput;
         private Vector3 _movementDirection;
@@ -113,7 +114,7 @@ namespace Popeye.Modules.PlayerController
             _minStairsDotProduct = Mathf.Cos(_maxStairsAngle * Mathf.Deg2Rad);
             _minLedgeDotProduct = Mathf.Cos(_maxLedgeGroundAngle * Mathf.Deg2Rad);
 
-            // Eliminate inconsistent _groundSnapBreakSpeed float precission
+            // Eliminate inconsistent _groundSnapBreakSpeed float precision
             if (Mathf.Abs(_maxSpeed - _groundSnapBreakSpeed) > SPEED_COMPARISON_THRESHOLD)
             {
                 _groundSnapBreakSpeed = _maxSpeed + SPEED_COMPARISON_THRESHOLD;
@@ -129,6 +130,11 @@ namespace Popeye.Modules.PlayerController
             if (MovementInputHandler == null)
             {
                 MovementInputHandler = new WorldAxisMovementInput();
+            }
+
+            if (InputCorrector == null)
+            {
+                InputCorrector = new DefaultInputCorrector();
             }
 
             CanRotate = true;
@@ -372,9 +378,17 @@ namespace Popeye.Modules.PlayerController
 
         private void UpdateLookTransform()
         {
-            Vector3 lookDirection = _lookInput.magnitude > 0.1f ? _lookInput : _movementInput;
+            bool usingLookInput = _lookInput.sqrMagnitude > 0.1f;
+            Vector3 lookDirection = usingLookInput ? _lookInput : _movementInput;
 
             if (lookDirection.sqrMagnitude < 0.01f) return;
+
+            if (usingLookInput)
+            {
+                lookDirection = InputCorrector.CorrectLookInput(lookDirection,
+                    MovementInputHandler.ForwardAxis, MovementInputHandler.RightAxis);
+            }
+            
 
             Vector3 velocityDirection = _velocity.normalized;
             velocityDirection *= 1.0f - Mathf.Abs(Vector3.Dot(velocityDirection, Vector3.up));

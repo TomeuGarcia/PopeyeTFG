@@ -1654,7 +1654,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8311757634096858984}
   m_Father: {fileID: 4693105823415062388}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1684,6 +1685,7 @@ MonoBehaviour:
     type: 2}
   _playerAudioRef:
     _underlyingValue: {fileID: 3420790557839773268}
+  _autoAimCreator: {fileID: 8848642327143216598}
   _anchor: {fileID: 4028204052046435817}
   _anchorPhysics: {fileID: 7653452814856030824}
   _anchorCollisions: {fileID: 1145678076955597282}
@@ -2386,6 +2388,60 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5912889593542942882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8311757634096858984}
+  - component: {fileID: 8848642327143216598}
+  m_Layer: 0
+  m_Name: AutoAimCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8311757634096858984
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912889593542942882}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6054250289298223782}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8848642327143216598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912889593542942882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9d9c7292cbd44bfbdc64c937cc4899f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoAimControllerConfig: {fileID: 11400000, guid: cf6cc74fb69ea8c41b908c0c706b29e6,
+    type: 2}
+  _autoAimTargetFinderConfig: {fileID: 11400000, guid: bca84872a54d9004ab6e3fc8ebf1204e,
+    type: 2}
+  _autoAimTargetFilterConfig: {fileID: 11400000, guid: 1869b4fbf1f730542a8eac589c061448,
+    type: 2}
+  autoAimTargetResultFilterConfig: {fileID: 11400000, guid: 6dc5f349ad5f3ed47bc82a93dec8c3f7,
+    type: 2}
+  _autoAimCollisionProbingConfig: {fileID: 11400000, guid: 8f74da0f132dae94c8e0716fd5657cf2,
+    type: 2}
 --- !u!1 &5919239990643611861
 GameObject:
   m_ObjectHideFlags: 0
@@ -2770,7 +2826,6 @@ MonoBehaviour:
   _physicsTweenerBehaviour: {fileID: 877732118828663960}
   _hitStopManagerConfig: {fileID: 11400000, guid: c0c88fa8e73f8da4888b6089d21a8f20,
     type: 2}
-  _testHitStopConfig: {fileID: 11400000, guid: 5f482b146d660cc41a044e08e394967d, type: 2}
 --- !u!1 &6714125433013578911
 GameObject:
   m_ObjectHideFlags: 0

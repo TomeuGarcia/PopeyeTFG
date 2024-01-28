@@ -1,12 +1,14 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Modules.PlayerController.AutoAim;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
-    public class ClawAnchorSnapTarget : MonoBehaviour, IAnchorSnapTarget
+    public class ClawAnchorSnapTarget : MonoBehaviour, IAnchorSnapTarget, IAutoAimTarget
     {
+        [SerializeField] private Transform _dashEndSpot;
         [SerializeField] private Transform _snapSpot;
         [SerializeField] private Transform _clawsTransform;
         [SerializeField] private Transform[] _claws;
@@ -45,6 +47,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             float dot = Vector3.Dot(direction, LookDirection);
 
             return dot > ACCEPT_FROM_POSITION_MIN_DOT;
+        }
+
+        public Vector3 GetDashEndPosition()
+        {
+            return _dashEndSpot.position;
         }
 
         public Vector3 GetLookDirection()
@@ -115,6 +122,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             }
         }
 
-        
+
+        [SerializeField] private AutoAimTargetDataConfig _autoAimTargetDataConfig;
+        public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;
+        public Vector3 Position => GetAimLockPosition();
+        public GameObject GameObject => gameObject;
+        public bool CanBeAimedAt(Vector3 aimFromPosition)
+        {
+            return CanBeAimedFromPosition(aimFromPosition);
+        }
     }
 }
