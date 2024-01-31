@@ -89,6 +89,8 @@ namespace Popeye.Modules.PlayerController
         [SerializeField] private bool _checkLedges = false;
         [SerializeField, Range(0.0f, 10.0f)] private float _ledgeProbeForwardDisplacement = 0.6f;
         [SerializeField, Range(0.0f, 10.0f)] private float _ledgeGroundProbeDistance = 2.0f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeDistance = 0.3f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeStartStopDistance = 0.5f;
         [SerializeField, Range(0.0f, 90.0f)] private float _maxLedgeGroundAngle = 40.0f;
         [SerializeField, Range(0.0f, 10.0f)] private float _ledgeFriction = 1.0f;
         private float _minLedgeDotProduct;
@@ -147,20 +149,18 @@ namespace Popeye.Modules.PlayerController
             _lookInput = useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
             _movementDirection = _movementInput;
             
-            if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
-            {
-                UpdateMoveDirectionOnLedge();
-            }
-            
             _desiredVelocity = _movementDirection * _maxSpeed;
-            
-
-            //_material.SetColor("_Color", OnGround ? Color.black : Color.white);
         }
 
 
         private void FixedUpdate()
         {
+            if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
+            {
+                UpdateMoveDirectionOnLedge();
+                _desiredVelocity = _movementDirection * _maxSpeed;
+            }
+            
             UpdateState();
             AdjustVelocity();
             
@@ -310,39 +310,88 @@ namespace Popeye.Modules.PlayerController
 
             return false;
         }
-
+        
         private void UpdateMoveDirectionOnLedge()
         {
-            bool forwardLedge = CheckIsOnLedge(_movementInput, out Vector3 forwardLedgeNormal);
-            if (!forwardLedge)
+            bool isHeadingTowardsLedge = CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge);
+            if (!isHeadingTowardsLedge)
+            {
+                return;                
+            }
+
+            float movementLedgeNormalDot = Vector3.Dot(_movementInput, ledgeNormal);
+
+            if (movementLedgeNormalDot < 0)
             {
                 return;
             }
             
-            Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, forwardLedgeNormal);
-            float projectedMoveMagnitude = projectedMoveDirection.magnitude;
-            projectedMoveDirection.Normalize();
+            float tFromLedge = Mathf.Clamp01((distanceFromLedge-_ledgeDistance) / _ledgeStartStopDistance);
             
             
-            bool sideLedge = CheckIsOnLedge(projectedMoveDirection, out Vector3 sideLedgeNormal);
+            Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, ledgeNormal);
+            bool sideLedge = CheckIsOnLedge(projectedMoveDirection.normalized, 
+                out Vector3 sideLedgeNormal, out float sideDistanceFromLedge);
             if (sideLedge)
             {
-                projectedMoveDirection -= sideLedgeNormal;
+                projectedMoveDirection -= sideLedgeNormal *
+                                    (1-Mathf.Clamp01((sideDistanceFromLedge-_ledgeDistance)  / _ledgeStartStopDistance));
             }
+
             
-            
-            Vector3 correctedMoveDirection = projectedMoveDirection * Mathf.Pow(projectedMoveMagnitude, _ledgeFriction);
-            
+            bool alignedWithLedge = movementLedgeNormalDot > 0.95f;
+            Vector3 correctedMoveDirection = alignedWithLedge ? _movementInput * tFromLedge : projectedMoveDirection;
+            correctedMoveDirection = Vector3.LerpUnclamped(correctedMoveDirection, _movementInput * tFromLedge, 
+                Mathf.Pow(tFromLedge, _ledgeFriction));
+
             _movementDirection = correctedMoveDirection;
         }
+
+        private bool CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge)
+        {
+            bool forwardLedge = CheckIsOnLedge(_movementInput, out ledgeNormal, out distanceFromLedge);
+            if (forwardLedge)
+            {
+                return true;
+            }
+            
+            Vector3 leftMovementInput = Quaternion.AngleAxis(-90f, Vector3.up) * _movementInput;
+            bool leftLedge = CheckIsOnLedge(leftMovementInput, out ledgeNormal, out distanceFromLedge);
+            if (leftLedge)
+            {
+                return true;
+            }
+            
+            Vector3 rightMovementInput = Quaternion.AngleAxis(-90f, Vector3.up) * _movementInput;
+            bool rightLedge = CheckIsOnLedge(rightMovementInput, out ledgeNormal, out distanceFromLedge);
+            if (rightLedge)
+            {
+                return true;
+            }
+
+            return false;
+        }
         
-        private bool CheckIsOnLedge(Vector3 probeDirection, out Vector3 ledgeNormal)
+        private Vector3 _projectedMoveDirection;
+        private Vector3 _correctedMoveDirection;
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(Position, Position + _projectedMoveDirection);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(Position, Position + _correctedMoveDirection);
+        }
+
+        private bool CheckIsOnLedge(Vector3 probeDirection, out Vector3 ledgeNormal, out float distanceFromLedge)
         {
             ledgeNormal = Vector3.zero;
-            Vector3 origin = _rigidbody.position + (probeDirection * _ledgeProbeForwardDisplacement);
+            distanceFromLedge = 0;
             
-            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, _ledgeGroundProbeDistance,
-                    _groundProbeMask))
+            Vector3 origin = Position + (probeDirection * _ledgeProbeForwardDisplacement);
+            
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 
+                    _ledgeGroundProbeDistance, _groundProbeMask))
             {
                 if (hit.normal.y >= _minLedgeDotProduct)
                 {
@@ -351,12 +400,17 @@ namespace Popeye.Modules.PlayerController
             }
 
             origin += (_groundProbeDistance * Vector3.down);
-            if (Physics.Raycast(origin, -probeDirection, out RaycastHit ledgeHit, _ledgeProbeForwardDisplacement,
-                _groundProbeMask))
+            probeDirection = -probeDirection;
+            if (Physics.Raycast(origin, probeDirection, out RaycastHit ledgeHit, 
+                    _ledgeProbeForwardDisplacement, _groundProbeMask))
             {
                 ledgeNormal = ledgeHit.normal;
+
+                Vector3 projectedLedgePosition = Vector3.ProjectOnPlane(ledgeHit.point, GroundNormal);
+                Vector3 projectedPlayerPosition = Vector3.ProjectOnPlane(Position, GroundNormal);
+                distanceFromLedge = Vector3.Distance(projectedLedgePosition, projectedPlayerPosition);
             }
-            
+
             return true;
         }
 

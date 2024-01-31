@@ -496,7 +496,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8375710433621453077}
-  - {fileID: 669936100857600168}
   - {fileID: 2947591969064500147}
   - {fileID: 6277468705217273969}
   - {fileID: 5811398296010217030}
@@ -1710,37 +1709,6 @@ MonoBehaviour:
   debugLine2: {fileID: 5343189848841074486}
   debugLine3: {fileID: 5259585967861404135}
   drawDebugLines: 1
---- !u!1 &4106710890523074346
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 669936100857600168}
-  m_Layer: 0
-  m_Name: CameraShake_Transform
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &669936100857600168
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4106710890523074346}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1151401866870032477}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4514555569282133939
 GameObject:
   m_ObjectHideFlags: 0
@@ -2175,10 +2143,12 @@ MonoBehaviour:
     m_Bits: 0
   _maxStairsAngle: 50
   _checkLedges: 1
-  _ledgeProbeForwardDisplacement: 0.6
+  _ledgeProbeForwardDisplacement: 2
   _ledgeGroundProbeDistance: 2
+  _ledgeDistance: 0.3
+  _ledgeStartStopDistance: 0.5
   _maxLedgeGroundAngle: 40
-  _ledgeFriction: 1
+  _ledgeFriction: 2
 --- !u!114 &3583702817184964705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2753,7 +2723,6 @@ MonoBehaviour:
   _orbitingCamera: {fileID: 7531898491009611764}
   _impulseListener: {fileID: 311997964734853724}
   _impulseSource: {fileID: 5135524630254300633}
-  cs: {fileID: 11400000, guid: 8616ad9acd9d4a64891bc5d2eec02db3, type: 2}
 --- !u!114 &5135524630254300633
 MonoBehaviour:
   m_ObjectHideFlags: 0
