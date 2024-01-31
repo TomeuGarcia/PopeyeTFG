@@ -16,9 +16,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private ParticleTypes _throwTrailParticleType;
         [SerializeField] private ParticleTypes _throwHeadParticleType;
         [SerializeField] private ParticleTypes _slamHeadParticleType;
+        [SerializeField] private ParticleTypes _slamGroundHitParticleType;
+        [SerializeField] private ParticleTypes _slamGroundDecalParticleType;
         
         [Header("REFERENCES")]
         [SerializeField] private Transform _vfxParent;
+        [SerializeField] private Transform _unparentedVFXHolder;
         [SerializeField] private Transform _specialMotionsTransform;
         
         [Header("PARAMETERS")]
@@ -54,13 +57,21 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
             //PlayTwistLoopAnimation(0.01f, 1, 0.3f);
-            Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
-            Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
+            //Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
+            //Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
             _particleFactory.Create(_slamHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
 
             await UniTask.Delay(TimeSpan.FromSeconds(fallTime));
-            rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+            //rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+            //leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+            
+            Transform groundHit = _particleFactory.Create(_slamGroundHitParticleType, _vfxParent.position, Quaternion.identity, _unparentedVFXHolder);
+            Transform groundDecal = _particleFactory.Create(_slamGroundDecalParticleType, _vfxParent.position, Quaternion.identity, _unparentedVFXHolder);
+            
+            RaycastHit raycastHit;
+            Physics.Raycast(_vfxParent.position, Vector3.down, out raycastHit, 1.0f);
+            groundHit.up = raycastHit.normal;
+            groundDecal.up = raycastHit.normal;
             
             //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             //Time.timeScale = 1.0f;

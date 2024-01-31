@@ -22,7 +22,7 @@ namespace Popeye.Modules.VFX.Generic
             foreach (var data in interpolationDatas)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(data.Delay));
-                material.DOFloat(data.EndValue, data.ID, data.Duration).SetEase(data.Ease);
+                material.DOFloat(data.EndValue, data.Name, data.Duration).SetEase(data.Ease);
                 i++;
                 
                 if (data.WaitForCompletion || i == (interpolationDatas.Length))
