@@ -11,6 +11,7 @@ namespace Popeye.Modules.Camera
         [SerializeField] private CinemachineVirtualCamera _cmVirtualCamera;
         private Cinemachine3rdPersonFollow _cmBodyComponent;
 
+        public CinemachineVirtualCamera VirtualCamera => _cmVirtualCamera;
 
         public float Distance => _cmBodyComponent.CameraDistance;
         public float DefaultDistance { get; private set; }
@@ -21,21 +22,8 @@ namespace Popeye.Modules.Camera
         {
             _cmBodyComponent = (Cinemachine3rdPersonFollow)_cmVirtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
 
-            DefaultDistance = _cmBodyComponent.CameraDistance;
+            DefaultDistance = Distance;
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                SetDistance(DefaultDistance);
-            }
-            else if (Input.GetKeyDown(KeyCode.V))
-            {
-                SetDistance(DefaultDistance - 20);
-            }
-        }
-
 
         public void SetDistance(float distance)
         {
