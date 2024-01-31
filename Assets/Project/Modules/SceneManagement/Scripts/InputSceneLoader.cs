@@ -30,6 +30,10 @@ namespace Popeye.Modules.SceneManagement.Scripts
             {
                 ReloadCurrentScene();
             }
+            else if (Input.GetKeyDown(_inputSceneLoaderConfig.QuitApplicationKeyCode))
+            {
+                Quit();
+            }
         }
 
         private void LoadScene(InputSceneLoaderConfig.SceneLoadData sceneLoadData)
@@ -40,6 +44,11 @@ namespace Popeye.Modules.SceneManagement.Scripts
         private void ReloadCurrentScene()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        
+        private void Quit()
+        {
+            Application.Quit();
         }
     }
 }

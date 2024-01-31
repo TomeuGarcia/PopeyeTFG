@@ -55,6 +55,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private Vector3 ComputeDashEndAnchorPosition(Vector3 toAnchorDirection, Vector3 right, Vector3 up)
         {
+            if (_anchor.IsGrabbedBySnapper())
+            {
+                return _anchor.CurrentTrajectorySnapTarget.GetDashEndPosition();
+            }
+            
             Vector3 dashExtraDisplacement = _playerGeneralConfig.MovesetConfig.DashExtraDisplacement;
             
             Vector3 extraDisplacement = toAnchorDirection * dashExtraDisplacement.z;
@@ -62,14 +67,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             extraDisplacement += up * dashExtraDisplacement.y;
             
             Vector3 dashEndPosition = _anchor.Position + extraDisplacement;
-            
-            if (_anchor.IsGrabbedBySnapper())
-            {
-                Vector3 snapExtraDisplacement = _playerGeneralConfig.MovesetConfig.SnapExtraDisplacement;
-                dashEndPosition += toAnchorDirection * snapExtraDisplacement.z;
-                dashEndPosition += right * snapExtraDisplacement.x;
-                dashEndPosition += up * snapExtraDisplacement.y;
-            }
 
             return dashEndPosition;
         }

@@ -2133,7 +2133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2348634658881912033}
   - component: {fileID: 4728304115999458812}
-  - component: {fileID: 5782874022871526297}
+  - component: {fileID: 9023894693143302225}
   m_Layer: 15
   m_Name: ClawAnchorSnapTarget
   m_TagString: Untagged
@@ -2153,6 +2153,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7352494130366840268}
   - {fileID: 1065461061985698554}
   - {fileID: 7833543038857322775}
   m_Father: {fileID: 0}
@@ -2170,6 +2171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f5bc7fc6214cbd91cc603fe23d67c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dashEndSpot: {fileID: 7352494130366840268}
   _snapSpot: {fileID: 1065461061985698554}
   _clawsTransform: {fileID: 3606680010233596122}
   _claws:
@@ -2177,8 +2179,10 @@ MonoBehaviour:
   - {fileID: 3889843717799959206}
   - {fileID: 5259384719778202193}
   - {fileID: 3148774519094897354}
---- !u!135 &5782874022871526297
-SphereCollider:
+  _autoAimTargetDataConfig: {fileID: 11400000, guid: 1758178793e1ab841a032a15814bd842,
+    type: 2}
+--- !u!136 &9023894693143302225
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2192,12 +2196,14 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &5781068600408370810
 GameObject:
   m_ObjectHideFlags: 0
@@ -2623,6 +2629,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2348634658881912033}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7203821711727681318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7352494130366840268}
+  m_Layer: 15
+  m_Name: DashEndSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7352494130366840268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203821711727681318}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.5, z: 2.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2348634658881912033}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7366908203046080161
 GameObject:
