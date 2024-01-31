@@ -23,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor
     public class PlayerAnchorInstaller : MonoBehaviour
     {
         [Header("CAMERA")] 
-        [SerializeField] private OrbitingCamera _isometricCamera;
+        [SerializeField] private InterfaceReference<ICameraController, MonoBehaviour> _isometricCamera;
         [SerializeField] private InterfaceReference<ICameraShaker, MonoBehaviour> _cameraShaker;
         
         
@@ -97,7 +97,7 @@ namespace Popeye.Modules.PlayerAnchor
         {
             // Services
             ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(new CameraFunctionalities(
-                new CameraZoomer(_isometricCamera), _cameraShaker.Value));
+                new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value));
             
             ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
             
@@ -147,7 +147,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             
             // Player
-            IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.CameraTransform);
+            IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
             PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController();
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
