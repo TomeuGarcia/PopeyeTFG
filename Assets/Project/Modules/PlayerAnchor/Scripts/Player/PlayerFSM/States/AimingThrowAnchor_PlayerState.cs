@@ -26,7 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public override void Exit()
         {
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
-            _blackboard.PlayerMediator.SetCanFallOffLedges(true, true);
+            _blackboard.PlayerMediator.SetCanFallOffLedges(false, true);
             
             StopChargingThrow();
         }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class Tired_PlayerState : APlayerState
@@ -14,11 +16,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.TiredMoveSpeed);
+            _blackboard.PlayerMediator.SetCanRotate(true);
             _blackboard.PlayerView.StartTired();
         }
 
         public override void Exit()
         {
+            _blackboard.PlayerMediator.SetCanRotate(true);
             _blackboard.PlayerView.EndTired();
         }
 

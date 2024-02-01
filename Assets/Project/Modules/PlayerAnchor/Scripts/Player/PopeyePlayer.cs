@@ -222,6 +222,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             {
                 _anchor.SetCarried();
                 _pullingAnchorFromTheVoid = false;
+
+                if (!HasStaminaLeft())
+                {
+                    _anchor.SnapToFloor(Position).Forget();
+                    EnterTiredState();
+                }
+                
                 return;
             }
             

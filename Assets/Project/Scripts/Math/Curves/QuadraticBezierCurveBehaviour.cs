@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Scripts.Math.Curves
 {
@@ -9,16 +11,24 @@ namespace Project.Scripts.Math.Curves
         [SerializeField] private LineRenderer _line;
         [SerializeField, Range(1, 100)] private int _numberOfSegments = 50;    
 
-        [SerializeField] private Transform t0;
-        [SerializeField] private Transform t1;
-        [SerializeField] private Transform t2;
-        [SerializeField] private Transform t3;
+        [SerializeField] private Transform _t0;
+        [SerializeField] private Transform _t1;
+        [SerializeField] private Transform _t2;
+        [SerializeField] private Transform _t3;
     
-        public Transform T0 => t0;
-        public Transform T1 => t1;
-        public Transform T2 => t2;
-        public Transform T3 => t3;
+        public Transform T0 => _t0;
+        public Transform T1 => _t1;
+        public Transform T2 => _t2;
+        public Transform T3 => _t3;
 
+        private void OnValidate()
+        {
+            if (HasAllReferences())
+            {
+                Awake();
+                Update();
+            }
+        }
 
         private void Awake()
         {
@@ -57,6 +67,11 @@ namespace Project.Scripts.Math.Curves
                 _line.SetPosition(i, _curve.GetPoint(t));
                 t += step;
             }
+        }
+
+        private bool HasAllReferences()
+        {
+            return T0 && T1 && T2 && T3 && _line;
         }
     }
 }

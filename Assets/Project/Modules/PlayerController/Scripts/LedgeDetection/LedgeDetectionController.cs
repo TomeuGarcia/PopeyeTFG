@@ -32,7 +32,7 @@ namespace Popeye.Modules.PlayerController
         private readonly Quaternion _leftPerpendicular;
         private readonly Quaternion _rightPerpendicular;
 
-        private string _currentIgnoreLedgeTag;
+        private bool _checkingIgnoreLedges;
 
 
         public LedgeDetectionController(LedgeDetectionConfig ledgeDetectionLedgeDetectionConfig,
@@ -50,7 +50,7 @@ namespace Popeye.Modules.PlayerController
 
         public void SetCheckingIgnoreLedges(bool checkingIgnoreLedges)
         {
-            _currentIgnoreLedgeTag = checkingIgnoreLedges ? IgnoreLedgeTag : "";
+            _checkingIgnoreLedges = checkingIgnoreLedges;
         }
 
         public Vector3 UpdateMovementDirectionFromMovementInput(Vector3 position, Vector3 groundNormal,
@@ -165,7 +165,8 @@ namespace Popeye.Modules.PlayerController
 
         private bool IgnoreLedgeHit(RaycastHit ledgeHit)
         {
-            return ledgeHit.collider.CompareTag(_currentIgnoreLedgeTag);
+            return _checkingIgnoreLedges && 
+                   ledgeHit.collider.CompareTag(IgnoreLedgeTag);
         }
         
     }

@@ -23,7 +23,8 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 90.0f)] private float _maxLedgeGroundAngle = 40.0f;
 
         [Space(15)]
-        [Tag] private string _ignoreLedgeTag;
+        [Tag] [SerializeField] private string _ignoreLedgeTag;
+        
         
         public float LedgeProbeForwardDisplacement => _ledgeProbeForwardDisplacement;
         public float LedgeGroundProbeDistance => _ledgeGroundProbeDistance;
