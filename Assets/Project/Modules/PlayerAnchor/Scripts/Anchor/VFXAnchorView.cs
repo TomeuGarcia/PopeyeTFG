@@ -26,6 +26,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         [Header("PARAMETERS")]
         [SerializeField] private Vector3 _slamTrailOffset = new Vector3(-0.8f, 0.0f, -0.1f);
+        [SerializeField] private float _throwTrailSpawnDelay = 0.2f;
+        [SerializeField] private float _retrieveTrailSpawnDelay = 0.2f;
         private Vector3 _slamTrailFlipOffset;
         
         private IParticleFactory _particleFactory => ServiceLocator.Instance.GetService<IParticleFactory>();
@@ -49,7 +51,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
             // Delete this when the able to acces specific times properly?
-            float riseTime = duration / 1.5f;
+            float riseTime = duration / 2.0f;
             float fallTime = duration - riseTime;
             
             await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
@@ -72,6 +74,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             Physics.Raycast(_vfxParent.position, Vector3.down, out raycastHit, 1.0f);
             groundHit.up = raycastHit.normal;
             groundDecal.up = raycastHit.normal;
+            groundDecal.RotateAround(groundDecal.up, UnityEngine.Random.Range(0.0f, 360.0f));
             
             //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             //Time.timeScale = 1.0f;
@@ -98,11 +101,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             //Time.timeScale = 0.2f;
             StopCarry();
             
+            await UniTask.Delay(TimeSpan.FromSeconds(_throwTrailSpawnDelay));
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(duration - _throwTrailSpawnDelay));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             
@@ -115,11 +119,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             //Time.timeScale = 0.2f;
             StopCarry();
             
+            await UniTask.Delay(TimeSpan.FromSeconds(_retrieveTrailSpawnDelay));
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(duration - _retrieveTrailSpawnDelay));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             
