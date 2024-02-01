@@ -33,22 +33,24 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.CancelAim_Pressed())
+            if (_blackboard.MovesetInputsController.Aim_Released())
             {
                 CancelChargingThrow();
                 NextState = PlayerStates.MovingWithAnchor;
                 return true;
             }
             
-            if (_blackboard.MovesetInputsController.Throw_HeldPressed())
-            {
-                ChargeThrow(deltaTime);
-            }
-            else if (_blackboard.MovesetInputsController.Throw_Released())
+            if (_blackboard.MovesetInputsController.Throw_Pressed())
             {
                 NextState = PlayerStates.ThrowingAnchor;
                 return true;
             }
+            
+            if (_blackboard.MovesetInputsController.Aim_HeldPressed())
+            {
+                ChargeThrow(deltaTime);
+            }
+            
             
             return false;
         }
