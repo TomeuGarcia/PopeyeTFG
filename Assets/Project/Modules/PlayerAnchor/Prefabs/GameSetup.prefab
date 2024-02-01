@@ -2131,7 +2131,7 @@ MonoBehaviour:
   _maxSpeed: 8
   _maxAcceleration: 60
   _maxAirAcceleration: 1
-  _airFallAcceleration: 50
+  _airFallAcceleration: 100
   _groundProbeMask:
     serializedVersion: 2
     m_Bits: 17
@@ -2143,12 +2143,10 @@ MonoBehaviour:
     m_Bits: 0
   _maxStairsAngle: 50
   _checkLedges: 1
-  _ledgeProbeForwardDisplacement: 2
-  _ledgeGroundProbeDistance: 2
-  _ledgeDistance: 0.3
-  _ledgeStartStopDistance: 0.5
-  _maxLedgeGroundAngle: 40
-  _ledgeFriction: 2
+  _ledgeGroundCollisionProbingConfig: {fileID: 11400000, guid: 9f6e989e7af6e86488dfc1af7f4f2738,
+    type: 2}
+  _ledgeDetectionConfig: {fileID: 11400000, guid: cc5eb6bc64e48c143ad84db3dbf5b7b3,
+    type: 2}
 --- !u!114 &3583702817184964705
 MonoBehaviour:
   m_ObjectHideFlags: 0

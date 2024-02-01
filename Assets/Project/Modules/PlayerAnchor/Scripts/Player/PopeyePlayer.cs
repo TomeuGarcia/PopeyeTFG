@@ -112,9 +112,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = canRotate;
         }
 
-        public void SetCanFallOffLedges(bool canFallOffLedges)
+        public void SetCanFallOffLedges(bool canFallOffLedges, bool checkingIgnoreLedges = true)
         {
-            _playerController.SetCheckLedges(!canFallOffLedges);
+            _playerController.SetCheckLedges(!canFallOffLedges, checkingIgnoreLedges);
         }
 
 
