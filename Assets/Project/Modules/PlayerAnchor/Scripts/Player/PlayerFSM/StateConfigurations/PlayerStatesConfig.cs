@@ -1,6 +1,7 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.ProjectHelpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
@@ -37,6 +38,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float SpinningAnchorMoveSpeed => _spinningAnchorMoveSpeed;
         public float TiredMoveSpeed => _tiredMoveSpeed;
         public float HealingMoveSpeed => _healingMoveSpeed;
+        
+        
+        [Header("ANCHOR THROW")]
+        [SerializeField, Range(0.01f, 5.0f)] private float _anchorLateThrowTime = 0.1f;
+        [SerializeField, Range(0.01f, 5.0f)] private float anchorAimHeldWaitWaitTime = 0.2f;
+        
+        public float AnchorLateThrowTime => _anchorLateThrowTime;
+        public float AnchorAimHeldWaitTime => anchorAimHeldWaitWaitTime;
         
         
         [Header("ANCHOR PICK UP")]

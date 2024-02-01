@@ -75,7 +75,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerAudio = playerAudio;
             
             SetCanUseRotateInput(false);
-            SetCanFallOffLedges(true);
+            SetCanFallOffLedges(false);
             
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
@@ -112,9 +112,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = canRotate;
         }
 
-        public void SetCanFallOffLedges(bool canFallOffLedges)
+        public void SetCanFallOffLedges(bool canFallOffLedges, bool checkingIgnoreLedges = true)
         {
-            _playerController.SetCheckLedges(!canFallOffLedges);
+            _playerController.SetCheckLedges(!canFallOffLedges, checkingIgnoreLedges);
         }
 
 
@@ -222,6 +222,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             {
                 _anchor.SetCarried();
                 _pullingAnchorFromTheVoid = false;
+
+                if (!HasStaminaLeft())
+                {
+                    _anchor.SnapToFloor(Position).Forget();
+                    EnterTiredState();
+                }
+                
                 return;
             }
             

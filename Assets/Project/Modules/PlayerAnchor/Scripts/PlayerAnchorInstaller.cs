@@ -75,7 +75,6 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private LineRenderer debugLine3;
         [SerializeField] private bool drawDebugLines = true;
         private AnchorTrajectoryMaker trajectoryMaker;
-        private AnchorThrower AanchorThrower;
 
         
         
@@ -184,7 +183,6 @@ namespace Popeye.Modules.PlayerAnchor
             
             // Debug
             trajectoryMaker = anchorTrajectoryMaker;
-            AanchorThrower = anchorThrower;
         }
 
 

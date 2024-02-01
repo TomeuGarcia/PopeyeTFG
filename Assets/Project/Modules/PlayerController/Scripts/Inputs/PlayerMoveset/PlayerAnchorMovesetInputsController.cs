@@ -56,6 +56,10 @@ namespace Popeye.Modules.PlayerController.Inputs
         {
             return _aim.WasPressedThisFrame();
         }
+        public bool Aim_HeldPressed()
+        {
+            return _aim.IsPressed();
+        }
         public bool Aim_Released()
         {
             return _aim.WasReleasedThisFrame();
@@ -64,7 +68,8 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         public bool CancelAim_Pressed()
         {
-            return _cancelAim.WasPressedThisFrame();
+            return _cancelAim.WasReleasedThisFrame();
+            //return _cancelAim.WasPressedThisFrame();
         }
         
         
