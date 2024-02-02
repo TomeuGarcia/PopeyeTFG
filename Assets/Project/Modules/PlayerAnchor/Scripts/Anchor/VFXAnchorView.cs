@@ -16,22 +16,32 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private ParticleTypes _throwTrailParticleType;
         [SerializeField] private ParticleTypes _throwHeadParticleType;
         [SerializeField] private ParticleTypes _slamHeadParticleType;
+        [SerializeField] private ParticleTypes _slamGroundHitParticleType;
+        [SerializeField] private ParticleTypes _slamGroundDecalParticleType;
         
         [Header("REFERENCES")]
         [SerializeField] private Transform _vfxParent;
         [SerializeField] private Transform _specialMotionsTransform;
-        
+
         [Header("PARAMETERS")]
         [SerializeField] private Vector3 _slamTrailOffset = new Vector3(-0.8f, 0.0f, -0.1f);
+        [SerializeField] private float _throwTrailSpawnDelay = 0.2f;
+        [SerializeField] private float _retrieveTrailSpawnDelay = 0.2f;
         private Vector3 _slamTrailFlipOffset;
         
-        private IParticleFactory _particleFactory => ServiceLocator.Instance.GetService<IParticleFactory>();
+        private IParticleFactory _particleFactory;
+        private Transform _unparentedVFXHolder;
 
         private InterpolatorRecycleParticle _carryTrail;
-        
-        private void Awake()
+
+        public void Configure(IParticleFactory particleFactory)
         {
+            _particleFactory = particleFactory;
+            _unparentedVFXHolder = _particleFactory.ParticleParent;
+            
             _slamTrailFlipOffset = new Vector3(-_slamTrailOffset.x, -_slamTrailOffset.y, _slamTrailOffset.z);
+            
+            PlayCarriedAnimation();
         }
         
         public void ResetView()
@@ -41,29 +51,28 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
 
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
-            // Delete this when the able to acces specific times properly?
-            float riseTime = duration / 1.5f;
+            
+            float riseTime = duration / 2.0f;
             float fallTime = duration - riseTime;
             
             await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
             PlayTwistLoopAnimation(0.01f, 2, 0.6f);
             
             await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
-            //PlayTwistLoopAnimation(0.01f, 1, 0.3f);
-            Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
-            Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
             _particleFactory.Create(_slamHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
 
             await UniTask.Delay(TimeSpan.FromSeconds(fallTime));
-            rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+            Transform groundHit = _particleFactory.Create(_slamGroundHitParticleType, _vfxParent.position, Quaternion.identity, _unparentedVFXHolder);
+            Transform groundDecal = _particleFactory.Create(_slamGroundDecalParticleType, _vfxParent.position, Quaternion.identity, _unparentedVFXHolder);
             
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
+            RaycastHit raycastHit;
+            Physics.Raycast(_vfxParent.position, Vector3.down, out raycastHit, 1.0f);
+            groundHit.up = raycastHit.normal;
+            groundDecal.up = raycastHit.normal;
+            groundDecal.RotateAround(groundDecal.up, UnityEngine.Random.Range(0.0f, 360.0f));
         }
         
         
@@ -84,36 +93,30 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayThrownAnimation(float duration)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
             
+            await UniTask.Delay(TimeSpan.FromSeconds(_throwTrailSpawnDelay));
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(duration - _throwTrailSpawnDelay));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
         }
 
         public async UniTaskVoid PlayPulledAnimation(float duration)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
             
+            await UniTask.Delay(TimeSpan.FromSeconds(_retrieveTrailSpawnDelay));
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(duration - _retrieveTrailSpawnDelay, 0)));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
         }
 
         public void PlayKickedAnimation(float duration)
