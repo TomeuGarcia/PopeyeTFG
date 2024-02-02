@@ -86,7 +86,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
             
-            _anchorView.PlayCarriedAnimation();
+            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
         }
         
         public void ResetState(Vector3 position)
