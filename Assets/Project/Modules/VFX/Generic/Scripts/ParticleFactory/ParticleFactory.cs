@@ -11,15 +11,29 @@ namespace Popeye.Modules.VFX.ParticleFactories
         private readonly ParticleFactoryConfig _config;
         private Dictionary<ParticleTypes, ObjectPool> _typeToPrefab;
 
+        private Transform _particleParent;
+
         public ParticleFactory(ParticleFactoryConfig config, Transform parent)
         {
             _config = config;
-            _typeToPrefab = _config.GetTypeToPoolDictionary(parent);
+            _particleParent = parent;
+            
+            _typeToPrefab = _config.GetTypeToPoolDictionary(_particleParent);
         }
 
-        public Transform Create(ParticleTypes type, Vector3 position, Quaternion rotation)
+        public Transform ParticleParent => _particleParent;
+
+        public Transform Create(ParticleTypes type, Vector3 position, Quaternion rotation, Transform parent = null)
         {
-            return _typeToPrefab[type].Spawn<RecyclableObject>(position, rotation).transform;
+            Transform transform = _typeToPrefab[type].Spawn<RecyclableObject>(position, rotation).transform;
+            if (parent != null)
+            {
+                transform.parent = parent;
+                transform.localPosition = position;
+                transform.localRotation = rotation;
+            }
+            
+            return transform;
         }
     }
 }

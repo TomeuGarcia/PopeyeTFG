@@ -14,6 +14,7 @@ namespace Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration
         private int _property;
 
         public int ID => _property;
+        public string Name => _name;
         public float InitialValue => _initialValue;
 
         private void Awake()

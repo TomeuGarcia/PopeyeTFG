@@ -21,7 +21,8 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         [SerializeField] private AWorldInteractor[] _worldInteractors;
     
         protected bool _isTriggered;
-    
+
+        private Vector3 Position => transform.position;
     
     
         private void Awake()
@@ -49,7 +50,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         {
             OnTakeAnchorHit();
     
-            return new DamageHitResult(this, gameObject, 0);
+            return new DamageHitResult(this, gameObject, 0, Position);
         }
     
         protected virtual bool CanBeTriggered(DamageHit damageHit)

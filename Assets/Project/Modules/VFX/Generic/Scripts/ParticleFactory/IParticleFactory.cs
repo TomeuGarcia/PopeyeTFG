@@ -5,6 +5,7 @@ namespace Popeye.Modules.VFX.ParticleFactories
 {
     public interface IParticleFactory
     {
-        Transform Create(ParticleTypes type, Vector3 position, Quaternion rotation);
+        Transform ParticleParent { get; }
+        Transform Create(ParticleTypes type, Vector3 position, Quaternion rotation, Transform parent = null);
     }
 }

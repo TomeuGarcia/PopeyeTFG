@@ -2,16 +2,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
-using Popeye.Modules.Enemies;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Project.Modules.CombatSystem.KnockbackSystem;
+using Project.PhysicsMovement;
+using Project.Scripts.Time.TimeFunctionalities;
+using Project.Scripts.Time.TimeHitStop;
+using Project.Scripts.Time.TimeScale;
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 public class GameSetupInstaller : MonoBehaviour
 {
     [SerializeField] private FactoriesInstaller _factoriesInstaller;
     [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
+
+    [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
+    [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
+    [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
+    
+    [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
 
     void Awake()
     {
@@ -25,17 +36,26 @@ public class GameSetupInstaller : MonoBehaviour
 
     private void Install()
     {
-        ServiceLocator.Instance.RegisterService<ICombatManager>(new CombatManagerService());
-        _factoriesInstaller.Install();
+        CombatManagerService combatManagerService = 
+            new CombatManagerService(_hitTargetCollisionProbingConfig, 
+                new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig));
+        ServiceLocator.Instance.RegisterService<ICombatManager>(combatManagerService);
 
+        ITimeScaleManager timeScaleManager = new UnityTimeScaleManager();
+        TimeFunctionalities timeFunctionalities =
+            new TimeFunctionalities(timeScaleManager, new HitStopManager(_hitStopManagerConfig, timeScaleManager));
+        ServiceLocator.Instance.RegisterService<ITimeFunctionalities>(timeFunctionalities);
+        
+        _factoriesInstaller.Install();
         _playerAnchorInstaller.Install();
     }
     
     private void Uninstall()
     {
         ServiceLocator.Instance.RemoveService<ICombatManager>();
-        _factoriesInstaller.Uninstall();
+        ServiceLocator.Instance.RemoveService<ITimeFunctionalities>();
         
+        _factoriesInstaller.Uninstall();
         _playerAnchorInstaller.Uninstall();
     }
 }

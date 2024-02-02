@@ -8,6 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     public interface IAnchorMediator
     {
         Vector3 Position { get; }
+        IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; }
 
         void SetPosition(Vector3 position);
         void SetRotation(Quaternion rotation);

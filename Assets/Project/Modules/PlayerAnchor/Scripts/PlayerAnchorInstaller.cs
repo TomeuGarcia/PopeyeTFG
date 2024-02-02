@@ -15,6 +15,7 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerController.AutoAim;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor
@@ -22,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor
     public class PlayerAnchorInstaller : MonoBehaviour
     {
         [Header("CAMERA")] 
-        [SerializeField] private OrbitingCamera _isometricCamera;
+        [SerializeField] private InterfaceReference<ICameraController, MonoBehaviour> _isometricCamera;
         [SerializeField] private InterfaceReference<ICameraShaker, MonoBehaviour> _cameraShaker;
         
         
@@ -34,8 +35,11 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
+        [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
         [SerializeField] private InterfaceReference<IPlayerAudio, MonoBehaviour> _playerAudioRef;
 
+        [Header("Player - AutoAim")] 
+        [SerializeField] private AutoAimCreator _autoAimCreator;
 
         [Space(20)] 
         [Header("ANCHOR")] 
@@ -72,7 +76,6 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private LineRenderer debugLine3;
         [SerializeField] private bool drawDebugLines = true;
         private AnchorTrajectoryMaker trajectoryMaker;
-        private AnchorThrower AanchorThrower;
 
         
         
@@ -94,7 +97,7 @@ namespace Popeye.Modules.PlayerAnchor
         {
             // Services
             ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(new CameraFunctionalities(
-                new CameraZoomer(_isometricCamera), _cameraShaker.Value));
+                new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value));
             
             ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
             
@@ -113,14 +116,14 @@ namespace Popeye.Modules.PlayerAnchor
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
-            AnchorAutoAimController anchorAutoAimController = new AnchorAutoAimController();
+            AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
             IAnchorAudio anchorAudio = _anchorAudioRef.Value;
             
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
-                anchorAutoAimController);
+                anchorTrajectorySnapController);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
@@ -130,7 +133,7 @@ namespace Popeye.Modules.PlayerAnchor
                 _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
             anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
-            anchorAutoAimController.Configure();
+            anchorTrajectorySnapController.Configure();
             _anchorCollisions.Configure(_obstacleProbingConfig);
             anchorAudio.Configure(_anchorMoveTransform.gameObject);
 
@@ -144,7 +147,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             
             // Player
-            IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.CameraTransform);
+            IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
             PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController();
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
@@ -160,8 +163,9 @@ namespace Popeye.Modules.PlayerAnchor
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
-                _playerGeneralConfig.PotionHealAmount);
-            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, _obstacleProbingConfig);
+                _playerGeneralConfig.PotionHealAmount, _playerController.Rigidbody);
+            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
+                _obstacleProbingConfig, _dashFloorProbingConfig);
             playerMovement.Configure(_player, _playerController);
             playerAudio.Configure(_playerController.gameObject);
 
@@ -169,6 +173,9 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovement, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner);
             _playerController.MovementInputHandler = movementInputHandler;
+            _playerController.InputCorrector =
+                new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
+            
             
             playerStateMachine.Setup(playerStatesBlackboard);
             
@@ -178,7 +185,6 @@ namespace Popeye.Modules.PlayerAnchor
             
             // Debug
             trajectoryMaker = anchorTrajectoryMaker;
-            AanchorThrower = anchorThrower;
         }
 
 

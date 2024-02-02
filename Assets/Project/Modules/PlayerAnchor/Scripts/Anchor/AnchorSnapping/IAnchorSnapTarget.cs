@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
-    public interface IAnchorSnapTarget : IAutoAimTarget
+    public interface IAnchorSnapTarget : IAnchorTrajectorySnapTarget
     {
         public Vector3 GetLookDirection();
     }

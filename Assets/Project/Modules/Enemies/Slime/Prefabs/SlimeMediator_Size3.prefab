@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 2356680394100086253}
   - component: {fileID: 292460232546019636}
   - component: {fileID: 892496079672398938}
+  - component: {fileID: 7551603848275166186}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Enemy
@@ -233,6 +234,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 50
+  _knockbackRigidbody: {fileID: 4821231514884419924}
+  _knockbackEffectiveness: 1
 --- !u!114 &2067100639111306409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageTargetsOncePerActivation: 0
+  _isKnockbackPushOrigin: 1
   _collider: {fileID: 3462995563991828812}
 --- !u!114 &892496079672398938
 MonoBehaviour:
@@ -330,3 +334,17 @@ MonoBehaviour:
   _originalMeshDatas:
   - _mesh: {fileID: 2635525039347396959}
     _originalMaterial: {fileID: 0}
+--- !u!114 &7551603848275166186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861768562356960769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a7c802f72147a78d03c4fbee936b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoAimTargetDataConfig: {fileID: 11400000, guid: 94e08f1580ee27f47aafd53bc7cfde02,
+    type: 2}

@@ -10,10 +10,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
     {
         [Header("DASH")]
         [SerializeField] private Vector3 _dashExtraDisplacement = new Vector3(0.0f, 1.0f, 0.5f);
-        [SerializeField] private Vector3 _snapExtraDisplacement = new Vector3(0.0f, 1.0f, 1.0f);
         
         public Vector3 DashExtraDisplacement => _dashExtraDisplacement;
-        public Vector3 SnapExtraDisplacement => _snapExtraDisplacement;
 
         
         [Header("ROLL")]
@@ -25,6 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         [Header("STAMINA COSTS")] 
         [SerializeField, Range(0, 100)] private int _anchorThrowStaminaCost = 0;
         [SerializeField, Range(0, 100)] private int _anchorPullStaminaCost = 0;
+        [SerializeField, Range(0, 100)] private int _anchorAutoPullStaminaCost = 0;
         [SerializeField, Range(0, 100)] private int _anchorPickUpStaminaCost = 0;
         [SerializeField, Range(0, 100)] private int _anchorDashStaminaCost = 20;
         [SerializeField, Range(0, 100)] private int _rollStaminaCost = 20;
@@ -33,6 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
 
         public int AnchorThrowStaminaCost => _anchorThrowStaminaCost;
         public int AnchorPullStaminaCost => _anchorPullStaminaCost;
+        public int AnchorAutoPullStaminaCost => _anchorAutoPullStaminaCost;
         public int AnchorPickUpStaminaCost => _anchorPickUpStaminaCost;
         public int AnchorDashStaminaCost => _anchorDashStaminaCost;
         public int RollStaminaCost => _rollStaminaCost;

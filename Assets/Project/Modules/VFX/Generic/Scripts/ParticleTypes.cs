@@ -3,6 +3,12 @@ namespace Popeye.Modules.VFX.Generic
     public enum ParticleTypes
     {
         EnemyOnHitWave,
-        EnemyOnHitSplatter
+        EnemyOnHitSplatter,
+        AnchorCarryTrail,
+        AnchorThrowTrail,
+        AnchorThrowHead,
+        AnchorSlamHead,
+        AnchorSlamGroundHit,
+        AnchorSlamGroundDecal
     }
 }

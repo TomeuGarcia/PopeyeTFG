@@ -4,12 +4,15 @@ using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor;
+using Popeye.Modules.PlayerController.AutoAim;
+using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem.Testing.Scripts
 {
-    public class DestructibleProp : MonoBehaviour, IDamageHitTarget
+    public class DestructibleProp : MonoBehaviour, IDamageHitTarget, IKnockbackHitTarget, IAutoAimTarget
     {
+        [SerializeField] private Rigidbody _rigidbody;
         [SerializeField, Range(0.0f, 1.0f)] private float _knockbackResistance = 0.0f;
         [SerializeField, Range(0, 100)] private int _maxHealth = 20;
         private HealthSystem _healthSystem;
@@ -17,7 +20,21 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
 
         private Vector3 _spawnPosition;
         private Quaternion _spawnRotation;
+
         
+        
+        [SerializeField] private AutoAimTargetDataConfig _autoAimTargetDataConfig;
+        public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;
+        Vector3 IAutoAimTarget.Position => Position;
+        public GameObject GameObject => gameObject;
+        public bool CanBeAimedAt(Vector3 aimFromPosition)
+        {
+            return true;
+        }
+
+        
+        
+        private Vector3 Position => transform.position;
 
         private void Awake()
         {
@@ -35,6 +52,11 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             transform.rotation = _spawnRotation;
             gameObject.SetActive(true);
             _healthSystem.HealToMax();
+
+            if (!_rigidbody.isKinematic)
+            {
+                _rigidbody.velocity = Vector3.zero;
+            }
         }
         
 
@@ -47,9 +69,6 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         {
             int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
             
-            _transformMotion.MoveByDisplacement(damageHit.KnockbackForce * (1-_knockbackResistance), 0.2f,
-                Ease.OutQuart);
-            
             if (_healthSystem.IsDead())
             {
                 PlayDieAnimation().Forget();
@@ -59,7 +78,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
                 PlayTakeDamageAnimation(damageHit);
             }
 
-            return new DamageHitResult(this, gameObject, receivedDamage);
+            return new DamageHitResult(this, gameObject, receivedDamage, Position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)
@@ -86,6 +105,21 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             transform.DOPunchScale(Vector3.one * -0.5f, 0.4f)
                 .SetEase(Ease.OutBounce);
         }
+
         
+        public Rigidbody GetRigidbodyToKnockback()
+        {
+            return _rigidbody;
+        }
+
+        public bool CanBeKnockbacked()
+        {
+            return true;
+        }
+
+        public float GetKnockbackEffectivenessMultiplier()
+        {
+            return (1-_knockbackResistance);
+        }
     }
 }

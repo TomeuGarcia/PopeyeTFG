@@ -9,12 +9,13 @@ using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.CombatSystem;
+using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Popeye.Modules.Enemies
 {
-    public class SpiderEnemy : AEnemy, IDamageHitTarget, IMovementInputHandler
+    public class SpiderEnemy : AEnemy, IDamageHitTarget, IKnockbackHitTarget, IMovementInputHandler
     {
         [Header("SLIME")]
         [Header("COMPONENTS")] 
@@ -119,9 +120,10 @@ namespace Popeye.Modules.Enemies
         {
             if (_canDealContactDamage)
             {
-                _contactDamageHit.Position = Position;
-                _contactDamageHit.KnockbackDirection =
-                    PositioningHelper.Instance.GetDirectionAlignedWithFloor(Position, other.transform.position);
+                _contactDamageHit.DamageSourcePosition = Position;
+                _contactDamageHit.UpdateKnockbackPushDirection(
+                    PositioningHelper.Instance.GetDirectionAlignedWithFloor(Position, other.transform.position)
+                );
 
                 _combatManager.TryDealDamage(other.gameObject, _contactDamageHit,
                     out DamageHitResult damageHitResult);
@@ -154,10 +156,7 @@ namespace Popeye.Modules.Enemies
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            //TakeKnockback(damageHit.KnockbackForce * 200f);
-            transform.DOBlendableMoveBy(damageHit.KnockbackForce * 4f, damageHit.StunDuration/2);
-
-            float receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
+            int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
             if (_healthSystem.IsDead())
             {
                 _stateMachine.OverwriteCurrentState(ISpiderEnemyState.States.Dead);
@@ -170,7 +169,7 @@ namespace Popeye.Modules.Enemies
             
             StartTakeDamageAnimation().Forget();
 
-            return new DamageHitResult(this, gameObject, receivedDamage);
+            return new DamageHitResult(this, gameObject, receivedDamage, Position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)
@@ -280,6 +279,9 @@ namespace Popeye.Modules.Enemies
         }
 
 
+        public Vector3 ForwardAxis => Vector3.forward;
+        public Vector3 RightAxis => Vector3.right;
+
         public Vector3 GetMovementInput()
         {
             if (!_canMove)
@@ -307,6 +309,21 @@ namespace Popeye.Modules.Enemies
                 _meshMaterial.color = Color.white;
                 await UniTask.Delay(MathUtilities.SecondsToMilliseconds(0.1f));
             }
+        }
+
+        public Rigidbody GetRigidbodyToKnockback()
+        {
+            return _rigidbody;
+        }
+
+        public bool CanBeKnockbacked()
+        {
+            return true;
+        }
+
+        public float GetKnockbackEffectivenessMultiplier()
+        {
+            return 1;
         }
     }
 }
