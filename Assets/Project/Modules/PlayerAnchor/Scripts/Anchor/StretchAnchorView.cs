@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.VFX.ParticleFactories;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -77,6 +78,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _landHitMesh.gameObject.SetActive(false);
             
 
+        }
+
+        public void Configure(IParticleFactory particleFactory)
+        {
+            
         }
 
         public void ResetView()
