@@ -52,6 +52,11 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             transform.rotation = _spawnRotation;
             gameObject.SetActive(true);
             _healthSystem.HealToMax();
+
+            if (!_rigidbody.isKinematic)
+            {
+                _rigidbody.velocity = Vector3.zero;
+            }
         }
         
 
