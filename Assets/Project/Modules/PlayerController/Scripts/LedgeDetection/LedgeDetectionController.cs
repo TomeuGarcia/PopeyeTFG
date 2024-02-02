@@ -63,11 +63,27 @@ namespace Popeye.Modules.PlayerController
             
             return _movementDirection;
         }
-        
+
+        public void Draw(Vector3 position, Vector3 groundNormal, Vector3 movementInput)
+        {
+            Vector3 origin = position + (movementInput * LedgeProbeForwardDisplacement);
+            origin += (GroundProbeDistance * Vector3.down);
+            Vector3 end = origin - (movementInput * LedgeProbeForwardDisplacement);
+            
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawSphere(origin, 0.2f);
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(origin, end);
+            
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(end, 0.1f);
+        }
         
         private void UpdateMoveDirectionOnLedge()
         {
             bool isHeadingTowardsLedge = CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge);
+            Debug.Log("isHeadingTowardsLedge: " + isHeadingTowardsLedge);
             if (!isHeadingTowardsLedge)
             {
                 return;                
@@ -144,7 +160,9 @@ namespace Popeye.Modules.PlayerController
 
             origin += (GroundProbeDistance * Vector3.down);
             probeDirection = -probeDirection;
-            if (Physics.Raycast(origin, probeDirection, out RaycastHit ledgeHit, 
+            /*if (Physics.Raycast(origin, probeDirection, out RaycastHit ledgeHit, 
+                    LedgeProbeForwardDisplacement, GroundProbeMask, GroundQueryTriggerInteraction))*/
+            if (Physics.SphereCast(origin, 0.2f, probeDirection, out RaycastHit ledgeHit, 
                     LedgeProbeForwardDisplacement, GroundProbeMask, GroundQueryTriggerInteraction))
             {
                 if (IgnoreLedgeHit(ledgeHit))

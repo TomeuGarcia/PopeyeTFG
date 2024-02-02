@@ -152,6 +152,10 @@ namespace Popeye.Modules.PlayerController
             _desiredVelocity = _movementDirection * _maxSpeed;
         }
 
+        private void OnDrawGizmos()
+        {
+            _ledgeDetectionController?.Draw(Position, GroundNormal, _movementInput.normalized);
+        }
 
         private void FixedUpdate()
         {
