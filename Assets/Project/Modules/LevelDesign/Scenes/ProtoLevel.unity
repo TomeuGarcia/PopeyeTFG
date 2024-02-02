@@ -8802,23 +8802,33 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1847930109772210772, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
+      propertyPath: _SFX_Hit_Anchor.Path
+      value: event:/SFX/PlayerAnchor/SFX_Hit_Anchor
+      objectReference: {fileID: 0}
+    - target: {fileID: 1847930109772210772, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: _SFX_Throw_Anchor.Path
+      value: event:/SFX/PlayerAnchor/SFX_Throw_Anchor
+      objectReference: {fileID: 0}
+    - target: {fileID: 1847930109772210772, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
       propertyPath: _SFX_Throw_Anchor.Guid.Data1
-      value: -2120091536
+      value: 1928778239
       objectReference: {fileID: 0}
     - target: {fileID: 1847930109772210772, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: _SFX_Throw_Anchor.Guid.Data2
-      value: 1160980024
+      value: 1314098825
       objectReference: {fileID: 0}
     - target: {fileID: 1847930109772210772, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: _SFX_Throw_Anchor.Guid.Data3
-      value: 1426721195
+      value: 221596067
       objectReference: {fileID: 0}
     - target: {fileID: 1847930109772210772, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: _SFX_Throw_Anchor.Guid.Data4
-      value: 214903402
+      value: 1258358617
       objectReference: {fileID: 0}
     - target: {fileID: 2354845456679869484, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
@@ -8915,6 +8925,16 @@ PrefabInstance:
       propertyPath: AnchorThrow.Guid.Data4
       value: 214903402
       objectReference: {fileID: 0}
+    - target: {fileID: 4192418099274772970, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4192418099274772970, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5147365875078981244, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -8995,6 +9015,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1982821104}
+    - targetCorrespondingSourceObject: {fileID: 8634197004593527464, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 454376191}
   m_SourcePrefab: {fileID: 100100000, guid: 61359a5635263194cb04184fb741ba5e, type: 3}
 --- !u!4 &236390209 stripped
 Transform:
@@ -19358,6 +19382,43 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1428431227}
   m_SourcePrefab: {fileID: 100100000, guid: f6d3365f6d86c6e42b018f61372cdba9, type: 3}
+--- !u!1 &454376186 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8634197004593527464, guid: 61359a5635263194cb04184fb741ba5e,
+    type: 3}
+  m_PrefabInstance: {fileID: 236390208}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &454376191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454376186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1103760496
+      Data2: 1114518131
+      Data3: -802694235
+      Data4: -972190526
+    Path: event:/AMBIENT/AMBIENT_Zone1
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &457053043
 PrefabInstance:
   m_ObjectHideFlags: 0
