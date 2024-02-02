@@ -12,7 +12,7 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         [SerializeField] internal bool _interpolateOnInit;
         [SerializeField] internal InterpolatorRecycleParticleData[] _interpolations;
         
-        //TODO this list is never used
+        //TODO this list is never used -> it is required for a fix
         internal List<TrailRenderer> _trailRenderers = new();
         
         private int _completedInterpolations;
