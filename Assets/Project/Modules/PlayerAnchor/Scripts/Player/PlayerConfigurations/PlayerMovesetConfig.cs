@@ -10,10 +10,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
     {
         [Header("DASH")]
         [SerializeField] private Vector3 _dashExtraDisplacement = new Vector3(0.0f, 1.0f, 0.5f);
-        [SerializeField] private Vector3 _snapExtraDisplacement = new Vector3(0.0f, 1.0f, 1.0f);
         
         public Vector3 DashExtraDisplacement => _dashExtraDisplacement;
-        public Vector3 SnapExtraDisplacement => _snapExtraDisplacement;
 
         
         [Header("ROLL")]

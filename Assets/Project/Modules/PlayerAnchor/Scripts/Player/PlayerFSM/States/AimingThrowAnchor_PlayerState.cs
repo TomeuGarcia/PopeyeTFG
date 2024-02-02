@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
             _blackboard.PlayerMediator.SetCanUseRotateInput(true);
-            _blackboard.PlayerMediator.SetCanFallOffLedges(false);
+            _blackboard.PlayerMediator.SetCanFallOffLedges(false, false);
             
             StartChargingThrow();
         }
@@ -26,29 +26,31 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public override void Exit()
         {
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
-            _blackboard.PlayerMediator.SetCanFallOffLedges(true);
+            _blackboard.PlayerMediator.SetCanFallOffLedges(false, true);
             
             StopChargingThrow();
         }
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.CancelAim_Pressed())
+            if (_blackboard.MovesetInputsController.Aim_Released())
             {
                 CancelChargingThrow();
                 NextState = PlayerStates.MovingWithAnchor;
                 return true;
             }
             
-            if (_blackboard.MovesetInputsController.Throw_HeldPressed())
-            {
-                ChargeThrow(deltaTime);
-            }
-            else if (_blackboard.MovesetInputsController.Throw_Released())
+            if (_blackboard.MovesetInputsController.Throw_Pressed())
             {
                 NextState = PlayerStates.ThrowingAnchor;
                 return true;
             }
+            
+            if (_blackboard.MovesetInputsController.Aim_HeldPressed())
+            {
+                ChargeThrow(deltaTime);
+            }
+            
             
             return false;
         }

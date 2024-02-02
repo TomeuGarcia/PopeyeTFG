@@ -3,6 +3,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Project.Scripts.Math.Curves;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -22,7 +23,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         private AnchorTrajectoryEndSpot _trajectoryEndSpot;
         private AnchorPullConfig _anchorPullConfig;
-        
+
+        private QuadraticBezierCurve _pointsCurve;
 
         private LineRenderer _debugLine;
         private LineRenderer _debugLine2;
@@ -41,12 +43,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _trajectoryEndSpot.Hide();
             
             _straightLineTrajectoryPoints = new Vector3[2];
-            _curvedTrajectoryPoints = new Vector3[10];
+            _curvedTrajectoryPoints = new Vector3[20];
             
             
             _debugLine = debugLine;
             _debugLine2 = debugLine2;
             _debugLine3 = debugLine3;
+
+            _pointsCurve = new QuadraticBezierCurve();
         }
 
         public void DrawDebugLines()
@@ -152,19 +156,18 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public Vector3[] ComputeUpdatedTrajectoryWithAutoAim(Vector3 startPosition, Vector3 direction, Vector3 floorNormal, 
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance, out bool trajectoryEndsOnTheFloor, 
-            out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget, 
+            out IAnchorTrajectorySnapTarget snapTarget, out bool validSnapTarget, 
             out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle)
         {
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             
-            if (CheckForAutoAimTarget(_straightLineTrajectoryPoints, out autoAimTarget))
+            if (CheckForAutoAimTarget(_straightLineTrajectoryPoints, out snapTarget))
             {
-                if (autoAimTarget.CanBeAimedFromPosition(startPosition))
+                if (snapTarget.CanBeAimedFromPosition(startPosition))
                 {
-                    MakeAutoTargetTrajectory(_curvedTrajectoryPoints, startPosition, floorNormal, heightOffsetCurve,
-                        out trajectoryDistance, autoAimTarget);
-                    
-                    validAutoAimTarget = true;
+                    MakeSnapTargetTrajectory(_curvedTrajectoryPoints, startPosition, out trajectoryDistance, snapTarget);
+
+                    validSnapTarget = true;
                     trajectoryEndsOnTheFloor = true;
                     obstacleHit = default;
                     trajectoryHitsObstacle = false;
@@ -173,7 +176,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 }
             }
 
-            validAutoAimTarget = false;
+            validSnapTarget = false;
             return ComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
                 out obstacleHit, out trajectoryHitsObstacle);
@@ -260,6 +263,24 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             }
         }
 
+        private void MakeTrajectoryFromCurve(Vector3[] trajectoryPoints, QuadraticBezierCurve curve,
+            out float trajectoryDistance)
+        {
+            trajectoryPoints[0] = curve.GetPoint(0);
+            
+            trajectoryDistance = 0f;
+
+            float tStep = 1.0f / (trajectoryPoints.Length - 1);
+            
+            for (int i = 1; i < trajectoryPoints.Length; ++i)
+            {
+                trajectoryPoints[i] = curve.GetPoint(tStep * i);
+
+                trajectoryDistance += Vector3.Distance(trajectoryPoints[i - 1], trajectoryPoints[i]);
+            }
+            
+        }
+
         private void RemakeTrajectoryEnd(Vector3[] trajectoryPoints, Vector3 endPosition,
             float currentTrajectoryDistance, out float updatedTrajectoryDistance)
         {
@@ -278,12 +299,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
 
-        private bool CheckForAutoAimTarget(Vector3[] trajectoryPoints, out IAutoAimTarget autoAimTarget)
+        private bool CheckForAutoAimTarget(Vector3[] trajectoryPoints, out IAnchorTrajectorySnapTarget snapTarget)
         {
             if (CheckAtopHitInTrajectoryPoint(trajectoryPoints, 0, 0.5f, out RaycastHit hit,
                     AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
-                if (CheckHitIsAutoAimTarget(hit, out autoAimTarget))
+                if (CheckHitIsAutoAimTarget(hit, out snapTarget))
                 {
                     return true;
                 }
@@ -292,19 +313,19 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             if (CheckFirstHitInTrajectory(trajectoryPoints, 0.5f, out int lastIndexBeforeCollision, 
                     out hit, AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
-                if (CheckHitIsAutoAimTarget(hit, out autoAimTarget))
+                if (CheckHitIsAutoAimTarget(hit, out snapTarget))
                 {
                     return true;
                 }
             }
 
-            autoAimTarget = null;
+            snapTarget = null;
             return false;
         }
 
-        private bool CheckHitIsAutoAimTarget(RaycastHit hit, out IAutoAimTarget autoAimTarget)
+        private bool CheckHitIsAutoAimTarget(RaycastHit hit, out IAnchorTrajectorySnapTarget snapTarget)
         {
-            return hit.collider.gameObject.TryGetComponent<IAutoAimTarget>(out autoAimTarget);
+            return hit.collider.gameObject.TryGetComponent<IAnchorTrajectorySnapTarget>(out snapTarget);
         }
 
         private bool CheckFirstHitInTrajectory(Vector3[] trajectoryPoints, float extraDistance, out int lastIndexBeforeCollision,
@@ -361,19 +382,21 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         
 
-        private void MakeAutoTargetTrajectory(Vector3[] trajectoryPoints, Vector3 startPosition, Vector3 floorNormal, 
-            AnimationCurve heightOffsetCurve, out float trajectoryDistance, IAutoAimTarget autoAimTarget)
+        private void MakeSnapTargetTrajectory(Vector3[] trajectoryPoints, Vector3 startPosition, 
+            out float trajectoryDistance, IAnchorTrajectorySnapTarget snapTarget)
         {
-            Vector3 autoAimTargetPosition = autoAimTarget.GetAimLockPosition();
-            Vector3 startToAutoAim = autoAimTargetPosition - startPosition;
-            Vector3 projectedStartToAutoAim = Vector3.ProjectOnPlane(startToAutoAim, floorNormal); 
-            Vector3 direction = projectedStartToAutoAim.normalized;
-            float distance = projectedStartToAutoAim.magnitude;
-                
-            MakeCurvedTrajectory(trajectoryPoints, startPosition, 
-                direction, distance, floorNormal, heightOffsetCurve, out trajectoryDistance);
-            RemakeTrajectoryEnd(trajectoryPoints, autoAimTargetPosition, 
-                trajectoryDistance, out trajectoryDistance);
+            Vector3 snapTargetPosition = snapTarget.GetAimLockPosition();
+            Vector3 snapTargetToStartDirection = (startPosition - snapTargetPosition).normalized;
+            Vector3 lastPointControl = snapTargetPosition + snapTargetToStartDirection;
+            lastPointControl.y = startPosition.y;
+            Vector3 firstPointControl = Vector3.Lerp(startPosition, lastPointControl, 0.5f);
+
+            _pointsCurve.P0 = startPosition;
+            _pointsCurve.P1 = firstPointControl;
+            _pointsCurve.P2 = lastPointControl;
+            _pointsCurve.P3 = snapTargetPosition;
+
+            MakeTrajectoryFromCurve(trajectoryPoints, _pointsCurve, out trajectoryDistance);
         }
 
         private bool RemakeTrajectoryAfterCollisionHit(Vector3[] trajectoryPoints, int lastIndexBeforeCollision,
