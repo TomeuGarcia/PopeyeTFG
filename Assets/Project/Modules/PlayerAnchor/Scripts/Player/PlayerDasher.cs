@@ -52,7 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             dashEndPosition = ComputeEndPositionCheckingForObstacles(_player.Position, dashEndPosition,
                 out float distanceChangeRatio01_Obstacle);
 
-            dashEndPosition = _floorPlatformChecker.ComputeEndPositionCheckingForFloor(_player.Position, 
+            dashEndPosition = _floorPlatformChecker.ComputeEndPosition_FrontRear(_player.Position, 
                 dashEndPosition, out float distanceChangeRatio01_NoFloor);
 
             float distanceChangeRatio01 = distanceChangeRatio01_Obstacle * distanceChangeRatio01_NoFloor;

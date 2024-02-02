@@ -8,7 +8,6 @@ namespace Popeye.Modules.PlayerController
     {
         private readonly LedgeDetectionConfig _ledgeDetectionConfig;
         private float LedgeProbeForwardDisplacement => _ledgeDetectionConfig.LedgeProbeForwardDisplacement;
-        private float LedgeGroundProbeDistance => _ledgeDetectionConfig.LedgeGroundProbeDistance;
         private float LedgeDistance => _ledgeDetectionConfig.LedgeDistance;
         private float LedgeStartStopDistance => _ledgeDetectionConfig.LedgeStartStopDistance;
         private float LedgeFriction => _ledgeDetectionConfig.LedgeFriction;
@@ -135,7 +134,7 @@ namespace Popeye.Modules.PlayerController
             Vector3 origin = _position + (probeDirection * LedgeProbeForwardDisplacement);
             
             if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 
-                    LedgeGroundProbeDistance, GroundProbeMask, GroundQueryTriggerInteraction))
+                    GroundProbeDistance, GroundProbeMask, GroundQueryTriggerInteraction))
             {
                 if (hit.normal.y >= MinLedgeDotProduct)
                 {

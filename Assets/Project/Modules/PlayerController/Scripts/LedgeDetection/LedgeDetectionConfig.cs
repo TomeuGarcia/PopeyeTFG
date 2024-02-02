@@ -10,7 +10,6 @@ namespace Popeye.Modules.PlayerController
     public class LedgeDetectionConfig : ScriptableObject
     {
         [SerializeField, Range(0.0f, 10.0f)] private float _ledgeProbeForwardDisplacement = 0.6f;
-        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeGroundProbeDistance = 2.0f;
         
         [Space(15)]
         [SerializeField, Range(0.0f, 10.0f)] private float _ledgeDistance = 0.3f;
@@ -27,7 +26,6 @@ namespace Popeye.Modules.PlayerController
         
         
         public float LedgeProbeForwardDisplacement => _ledgeProbeForwardDisplacement;
-        public float LedgeGroundProbeDistance => _ledgeGroundProbeDistance;
         public float LedgeDistance => _ledgeDistance;
         public float LedgeStartStopDistance => _ledgeStartStopDistance;
         public float LedgeFriction => _ledgeFriction;
