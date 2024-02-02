@@ -8,6 +8,7 @@ namespace Popeye.Modules.PlayerController
     {
         private readonly LedgeDetectionConfig _ledgeDetectionConfig;
         private float LedgeProbeForwardDisplacement => _ledgeDetectionConfig.LedgeProbeForwardDisplacement;
+        private float LedgeProbeBackwardDisplacement => _ledgeDetectionConfig.LedgeProbeBackwardDisplacement;
         private float LedgeDistance => _ledgeDetectionConfig.LedgeDistance;
         private float LedgeStartStopDistance => _ledgeDetectionConfig.LedgeStartStopDistance;
         private float LedgeFriction => _ledgeDetectionConfig.LedgeFriction;
@@ -24,7 +25,6 @@ namespace Popeye.Modules.PlayerController
         
         
         private Vector3 _position;
-        private Vector3 _groundNormal;
         private Vector3 _movementInput;
         private Vector3 _movementDirection;
 
@@ -52,38 +52,20 @@ namespace Popeye.Modules.PlayerController
             _checkingIgnoreLedges = checkingIgnoreLedges;
         }
 
-        public Vector3 UpdateMovementDirectionFromMovementInput(Vector3 position, Vector3 groundNormal,
-            Vector3 movementInput)
+        public Vector3 UpdateMovementDirectionFromMovementInput(Vector3 position, Vector3 movementInput)
         {
             _position = position;
-            _groundNormal = groundNormal;
             _movementDirection = _movementInput = movementInput;
             
             UpdateMoveDirectionOnLedge();
             
             return _movementDirection;
         }
-
-        public void Draw(Vector3 position, Vector3 groundNormal, Vector3 movementInput)
-        {
-            Vector3 origin = position + (movementInput * LedgeProbeForwardDisplacement);
-            origin += (GroundProbeDistance * Vector3.down);
-            Vector3 end = origin - (movementInput * LedgeProbeForwardDisplacement);
-            
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawSphere(origin, 0.2f);
-            
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(origin, end);
-            
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(end, 0.1f);
-        }
+        
         
         private void UpdateMoveDirectionOnLedge()
         {
             bool isHeadingTowardsLedge = CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge);
-            Debug.Log("isHeadingTowardsLedge: " + isHeadingTowardsLedge);
             if (!isHeadingTowardsLedge)
             {
                 return;                
@@ -97,7 +79,6 @@ namespace Popeye.Modules.PlayerController
             }
             
             float tFromLedge = Mathf.Clamp01((distanceFromLedge-LedgeDistance) / LedgeStartStopDistance);
-            
             
             Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, ledgeNormal);
             bool sideLedge = CheckIsOnLedge(projectedMoveDirection.normalized, 
@@ -119,20 +100,22 @@ namespace Popeye.Modules.PlayerController
 
         private bool CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge)
         {
-            bool forwardLedge = CheckIsOnLedge(_movementInput, out ledgeNormal, out distanceFromLedge);
+            Vector3 movementInput = _movementInput;
+            
+            bool forwardLedge = CheckIsOnLedge(movementInput, out ledgeNormal, out distanceFromLedge);
             if (forwardLedge)
             {
                 return true;
             }
             
-            Vector3 leftMovementInput = _leftPerpendicular * _movementInput;
+            Vector3 leftMovementInput = _leftPerpendicular * movementInput;
             bool leftLedge = CheckIsOnLedge(leftMovementInput, out ledgeNormal, out distanceFromLedge);
             if (leftLedge)
             {
                 return true;
             }
             
-            Vector3 rightMovementInput = _rightPerpendicular * _movementInput;
+            Vector3 rightMovementInput = _rightPerpendicular * movementInput;
             bool rightLedge = CheckIsOnLedge(rightMovementInput, out ledgeNormal, out distanceFromLedge);
             if (rightLedge)
             {
@@ -160,10 +143,8 @@ namespace Popeye.Modules.PlayerController
 
             origin += (GroundProbeDistance * Vector3.down);
             probeDirection = -probeDirection;
-            /*if (Physics.Raycast(origin, probeDirection, out RaycastHit ledgeHit, 
-                    LedgeProbeForwardDisplacement, GroundProbeMask, GroundQueryTriggerInteraction))*/
-            if (Physics.SphereCast(origin, 0.2f, probeDirection, out RaycastHit ledgeHit, 
-                    LedgeProbeForwardDisplacement, GroundProbeMask, GroundQueryTriggerInteraction))
+            if (Physics.Raycast(origin, probeDirection, out RaycastHit ledgeHit, 
+                    LedgeProbeBackwardDisplacement, GroundProbeMask, GroundQueryTriggerInteraction))
             {
                 if (IgnoreLedgeHit(ledgeHit))
                 {
@@ -172,8 +153,8 @@ namespace Popeye.Modules.PlayerController
                 
                 ledgeNormal = ledgeHit.normal;
 
-                Vector3 projectedLedgePosition = Vector3.ProjectOnPlane(ledgeHit.point, _groundNormal);
-                Vector3 projectedPlayerPosition = Vector3.ProjectOnPlane(_position, _groundNormal);
+                Vector3 projectedLedgePosition = Vector3.ProjectOnPlane(ledgeHit.point, Vector3.up);
+                Vector3 projectedPlayerPosition = Vector3.ProjectOnPlane(_position, Vector3.up);
                 distanceFromLedge = Vector3.Distance(projectedLedgePosition, projectedPlayerPosition);
             }
 
