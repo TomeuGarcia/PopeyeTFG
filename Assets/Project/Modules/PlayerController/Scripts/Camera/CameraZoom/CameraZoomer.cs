@@ -7,9 +7,9 @@ namespace Popeye.Modules.Camera.CameraZoom
 {
     public class CameraZoomer : ICameraZoomer
     {
-        private readonly OrbitingCamera _orbitingCamera;
+        private readonly ICameraController _orbitingCamera;
 
-        public CameraZoomer(OrbitingCamera orbitingCamera)
+        public CameraZoomer(ICameraController orbitingCamera)
         {
             _orbitingCamera = orbitingCamera;
         }
