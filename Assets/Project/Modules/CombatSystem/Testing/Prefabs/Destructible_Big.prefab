@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7884205140975860153}
   - component: {fileID: 4195115493236115412}
   m_Layer: 11
-  m_Name: Cylinder
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ Transform:
   m_Children:
   - {fileID: 2203319750395819931}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3728112857281340458
 MonoBehaviour:
@@ -134,6 +134,8 @@ MonoBehaviour:
   _rigidbody: {fileID: 7908422940646918678}
   _knockbackResistance: 0.5
   _maxHealth: 60
+  _autoAimTargetDataConfig: {fileID: 11400000, guid: a47bfb9ef5ab8d14c9f2fc6c4d434917,
+    type: 2}
 --- !u!208 &1976870891066741932
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -144,7 +146,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 1, y: 1, z: 1}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1
@@ -157,7 +159,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8170056248722184048}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 7e5a960c122c6834d9bcb5eeb27537d9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -179,7 +181,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8170056248722184048}
   serializedVersion: 4
-  m_Mass: 20
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -194,7 +196,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0

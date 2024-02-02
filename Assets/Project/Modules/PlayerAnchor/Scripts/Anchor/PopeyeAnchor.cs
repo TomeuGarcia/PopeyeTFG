@@ -47,7 +47,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private AnchorDamageDealer _anchorDamageDealer;
         private AnchorChain _anchorChain;
 
-
+        public IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; private set; }
+        
         public Vector3 Position => _anchorMotion.Position;
         public Quaternion Rotation => _anchorMotion.Rotation;
 
@@ -85,7 +86,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
             
-            _anchorView.PlayCarriedAnimation();
+            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
         }
         
         public void ResetState(Vector3 position)
@@ -198,11 +199,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _cameraFunctionalities.CameraShaker.PlayShake(_restOnFloor_CameraShake);
         }
-        public void SetGrabbedBySnapper(IAutoAimTarget autoAimTarget)
+        public void SetGrabbedBySnapper(IAnchorTrajectorySnapTarget anchorTrajectorySnapTarget)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
 
-            Transform parentTransform = autoAimTarget.GetParentTransformForTargeter();
+            CurrentTrajectorySnapTarget = anchorTrajectorySnapTarget;
+            Transform parentTransform = anchorTrajectorySnapTarget.GetParentTransformForTargeter();
+                
             if (parentTransform != null)
             {
                 _anchorMotion.Parent(parentTransform);

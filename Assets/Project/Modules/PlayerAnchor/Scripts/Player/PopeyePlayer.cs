@@ -75,7 +75,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerAudio = playerAudio;
             
             SetCanUseRotateInput(false);
-            SetCanFallOffLedges(true);
+            SetCanFallOffLedges(false);
             
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
@@ -112,9 +112,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = canRotate;
         }
 
-        public void SetCanFallOffLedges(bool canFallOffLedges)
+        public void SetCanFallOffLedges(bool canFallOffLedges, bool checkingIgnoreLedges = true)
         {
-            _playerController.SetCheckLedges(!canFallOffLedges);
+            _playerController.SetCheckLedges(!canFallOffLedges, checkingIgnoreLedges);
         }
 
 
@@ -220,8 +220,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             if (_pullingAnchorFromTheVoid)
             {
-                _anchor.SetCarried();
                 _pullingAnchorFromTheVoid = false;
+
+                SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorAutoPullStaminaCost);
+                if (!HasStaminaLeft())
+                {
+                    _anchor.SnapToFloor(Position).Forget();
+                    EnterTiredState();
+                }
+                else
+                {
+                    _anchor.SetCarried();
+                }
+                
                 return;
             }
             
@@ -240,7 +251,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public async UniTask DashTowardsAnchor()
         {
-            float duration = Mathf.Lerp(_playerGeneralConfig.StatesConfig.MinDashDuration, 
+            float minDuration = _anchor.IsGrabbedBySnapper() ? 
+                _playerGeneralConfig.StatesConfig.MinUtilityDashDuration : 
+                _playerGeneralConfig.StatesConfig.MinDashDuration;
+
+            float duration = Mathf.Lerp(minDuration, 
                                         _playerGeneralConfig.StatesConfig.MaxDashDuration,
                                         GetDistanceFromAnchorRatio01());
             
@@ -254,27 +269,28 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _playerView.PlayDashAnimation(duration);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
         }
 
         public async UniTask DashForward()
         {
-            float duration = _playerGeneralConfig.StatesConfig.MaxRollDuration;
-            
-            _playerDasher.DashForward(duration, out float distanceChangeRatio01);
-            duration *= distanceChangeRatio01;
+            _playerDasher.DashForward(_playerGeneralConfig.StatesConfig.MinRollDuration,
+                                        _playerGeneralConfig.StatesConfig.MaxRollDuration, 
+                            out float duration);
             
             SpendStamina(_playerGeneralConfig.MovesetConfig.RollStaminaCost);
             
             _anchorThrower.ThrowAnchorVertically();
 
-            float invulnerableDuration = _playerGeneralConfig.StatesConfig.RollInvulnerableDuration * distanceChangeRatio01;
+            float invulnerableDuration = _playerGeneralConfig.StatesConfig.RollInvulnerableDuration;
             SetInvulnerableForDuration(invulnerableDuration);
             DropTargetForEnemies(invulnerableDuration).Forget();
             
             _playerView.PlayDashAnimation(duration);
             
+            _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            _playerController.enabled = true;
         }
 
         public void KickAnchor()

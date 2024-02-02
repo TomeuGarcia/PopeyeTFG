@@ -19,6 +19,7 @@ public class GameSetupInstaller : MonoBehaviour
     [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
 
     [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
+    [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
     [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
     
     [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
@@ -36,7 +37,8 @@ public class GameSetupInstaller : MonoBehaviour
     private void Install()
     {
         CombatManagerService combatManagerService = 
-            new CombatManagerService(_hitTargetCollisionProbingConfig, new KnockbackManager(_physicsTweenerBehaviour));
+            new CombatManagerService(_hitTargetCollisionProbingConfig, 
+                new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig));
         ServiceLocator.Instance.RegisterService<ICombatManager>(combatManagerService);
 
         ITimeScaleManager timeScaleManager = new UnityTimeScaleManager();

@@ -9,6 +9,29 @@ namespace Project.PhysicsMovement
         private readonly Timer _timer;
         private readonly Vector3 _startVelocity;
         private readonly Vector3 _acceleration;
+        private readonly BodyState _initialBodyState;
+
+        private struct BodyState
+        {
+            public BodyState(Rigidbody rigidbody)
+            {
+                _drag = rigidbody.drag;
+                _useGravity = rigidbody.useGravity;
+                _isKinematic = rigidbody.isKinematic;
+            }
+
+            public void ApplyBodyState(Rigidbody rigidbody)
+            {
+                rigidbody.drag = _drag;
+                rigidbody.useGravity = _useGravity;
+                rigidbody.isKinematic = _isKinematic;
+            }
+
+            private float _drag;
+            private bool _useGravity;
+            private bool _isKinematic;
+        }
+        
 
         public PhysicsTweenObject(Rigidbody rigidbody, float duration, 
             Vector3 startPosition, Vector3 endPosition)
@@ -29,6 +52,9 @@ namespace Project.PhysicsMovement
             // (X - Xo - V*t) / (- 1/2*t^2) = a
             
             // a = (X - Xo - V) / (-t + 1/2*t^2)
+
+            _initialBodyState = new BodyState(_rigidbody);
+            SetupRigidbodyForTweening();
         }
             
         public bool FixedUpdate(float fixedDeltaTime)
@@ -44,5 +70,18 @@ namespace Project.PhysicsMovement
         {
             return _rigidbody == null;
         }
+        
+        public void OnTweeningCompleted()
+        {
+            _initialBodyState.ApplyBodyState(_rigidbody);
+        }
+        
+        private void SetupRigidbodyForTweening()
+        {
+            _rigidbody.drag = 0;
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = false;
+        }
+        
     }
 }

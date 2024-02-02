@@ -18,13 +18,15 @@ namespace Project.PhysicsMovement
         {
             for (int i = 0; i < _tweenObjects.Count; ++i)
             {
-                if (_tweenObjects[i].WasDestroyed())
+                PhysicsTweenObject tweenObject = _tweenObjects[i];
+                if (tweenObject.WasDestroyed())
                 {
                     _tweenObjects.RemoveAt(i);
                     --i;
                 }
-                else if (_tweenObjects[i].FixedUpdate(fixedDeltaTime))
+                else if (tweenObject.FixedUpdate(fixedDeltaTime))
                 {
+                    tweenObject.OnTweeningCompleted();
                     _tweenObjects.RemoveAt(i);
                     --i;
                 }

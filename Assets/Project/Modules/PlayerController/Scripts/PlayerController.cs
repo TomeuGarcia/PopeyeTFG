@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerController.Inputs;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Popeye.Modules.PlayerController
 
         // Input
         public IMovementInputHandler MovementInputHandler { get; set; }
+        public IInputCorrector InputCorrector { get; set; }
         private Vector3 _movementInput;
         private Vector3 _lookInput;
         private Vector3 _movementDirection;
@@ -86,12 +88,11 @@ namespace Popeye.Modules.PlayerController
 
         [Header("LEDGE")] 
         [SerializeField] private bool _checkLedges = false;
-        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeProbeForwardDisplacement = 0.6f;
-        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeGroundProbeDistance = 2.0f;
-        [SerializeField, Range(0.0f, 90.0f)] private float _maxLedgeGroundAngle = 40.0f;
-        [SerializeField, Range(0.0f, 10.0f)] private float _ledgeFriction = 1.0f;
-        private float _minLedgeDotProduct;
-        
+        [SerializeField] private CollisionProbingConfig _ledgeGroundCollisionProbingConfig;
+        [SerializeField] private LedgeDetectionConfig _ledgeDetectionConfig;
+        private LedgeDetectionController _ledgeDetectionController;
+
+
 
         private Vector3 _contactNormal;
         public Vector3 ContactNormal => _contactNormal;
@@ -111,9 +112,8 @@ namespace Popeye.Modules.PlayerController
         {
             _minGroundDotProduct = Mathf.Cos(_maxGroundAngle * Mathf.Deg2Rad);
             _minStairsDotProduct = Mathf.Cos(_maxStairsAngle * Mathf.Deg2Rad);
-            _minLedgeDotProduct = Mathf.Cos(_maxLedgeGroundAngle * Mathf.Deg2Rad);
 
-            // Eliminate inconsistent _groundSnapBreakSpeed float precission
+            // Eliminate inconsistent _groundSnapBreakSpeed float precision
             if (Mathf.Abs(_maxSpeed - _groundSnapBreakSpeed) > SPEED_COMPARISON_THRESHOLD)
             {
                 _groundSnapBreakSpeed = _maxSpeed + SPEED_COMPARISON_THRESHOLD;
@@ -131,6 +131,14 @@ namespace Popeye.Modules.PlayerController
                 MovementInputHandler = new WorldAxisMovementInput();
             }
 
+            if (InputCorrector == null)
+            {
+                InputCorrector = new DefaultInputCorrector();
+            }
+
+            _ledgeDetectionController =
+                new LedgeDetectionController(_ledgeDetectionConfig, _ledgeGroundCollisionProbingConfig);
+
             CanRotate = true;
         }
 
@@ -141,20 +149,19 @@ namespace Popeye.Modules.PlayerController
             _lookInput = useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
             _movementDirection = _movementInput;
             
-            if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
-            {
-                UpdateMoveDirectionOnLedge();
-            }
-            
             _desiredVelocity = _movementDirection * _maxSpeed;
-            
-
-            //_material.SetColor("_Color", OnGround ? Color.black : Color.white);
         }
-
-
+        
         private void FixedUpdate()
         {
+            if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
+            {
+                _movementDirection = _ledgeDetectionController.
+                    UpdateMovementDirectionFromMovementInput(Position, _movementInput);
+                
+                _desiredVelocity = _movementDirection * _maxSpeed;
+            }
+            
             UpdateState();
             AdjustVelocity();
             
@@ -304,55 +311,7 @@ namespace Popeye.Modules.PlayerController
 
             return false;
         }
-
-        private void UpdateMoveDirectionOnLedge()
-        {
-            bool forwardLedge = CheckIsOnLedge(_movementInput, out Vector3 forwardLedgeNormal);
-            if (!forwardLedge)
-            {
-                return;
-            }
-            
-            Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, forwardLedgeNormal);
-            float projectedMoveMagnitude = projectedMoveDirection.magnitude;
-            projectedMoveDirection.Normalize();
-            
-            
-            bool sideLedge = CheckIsOnLedge(projectedMoveDirection, out Vector3 sideLedgeNormal);
-            if (sideLedge)
-            {
-                projectedMoveDirection -= sideLedgeNormal;
-            }
-            
-            
-            Vector3 correctedMoveDirection = projectedMoveDirection * Mathf.Pow(projectedMoveMagnitude, _ledgeFriction);
-            
-            _movementDirection = correctedMoveDirection;
-        }
         
-        private bool CheckIsOnLedge(Vector3 probeDirection, out Vector3 ledgeNormal)
-        {
-            ledgeNormal = Vector3.zero;
-            Vector3 origin = _rigidbody.position + (probeDirection * _ledgeProbeForwardDisplacement);
-            
-            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, _ledgeGroundProbeDistance,
-                    _groundProbeMask))
-            {
-                if (hit.normal.y >= _minLedgeDotProduct)
-                {
-                    return false;
-                }
-            }
-
-            origin += (_groundProbeDistance * Vector3.down);
-            if (Physics.Raycast(origin, -probeDirection, out RaycastHit ledgeHit, _ledgeProbeForwardDisplacement,
-                _groundProbeMask))
-            {
-                ledgeNormal = ledgeHit.normal;
-            }
-            
-            return true;
-        }
 
         private Vector3 ProjectOnContactPlane(Vector3 vector)
         {
@@ -372,9 +331,17 @@ namespace Popeye.Modules.PlayerController
 
         private void UpdateLookTransform()
         {
-            Vector3 lookDirection = _lookInput.magnitude > 0.1f ? _lookInput : _movementInput;
+            bool usingLookInput = _lookInput.sqrMagnitude > 0.1f;
+            Vector3 lookDirection = usingLookInput ? _lookInput : _movementInput;
 
             if (lookDirection.sqrMagnitude < 0.01f) return;
+
+            if (usingLookInput)
+            {
+                lookDirection = InputCorrector.CorrectLookInput(lookDirection,
+                    MovementInputHandler.ForwardAxis, MovementInputHandler.RightAxis);
+            }
+            
 
             Vector3 velocityDirection = _velocity.normalized;
             velocityDirection *= 1.0f - Mathf.Abs(Vector3.Dot(velocityDirection, Vector3.up));
@@ -428,9 +395,10 @@ namespace Popeye.Modules.PlayerController
         }
 
 
-        public void SetCheckLedges(bool checkLedges)
+        public void SetCheckLedges(bool checkLedges, bool checkingIgnoreLedges)
         {
             _checkLedges = checkLedges;
+            _ledgeDetectionController.SetCheckingIgnoreLedges(checkingIgnoreLedges);
         }
 
 

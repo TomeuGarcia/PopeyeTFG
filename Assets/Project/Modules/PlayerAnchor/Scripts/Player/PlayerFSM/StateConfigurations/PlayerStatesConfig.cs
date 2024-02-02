@@ -1,6 +1,7 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.ProjectHelpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
@@ -39,6 +40,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float HealingMoveSpeed => _healingMoveSpeed;
         
         
+        [Header("ANCHOR THROW")]
+        [SerializeField, Range(0.01f, 5.0f)] private float _anchorLateThrowTime = 0.1f;
+        [SerializeField, Range(0.01f, 5.0f)] private float anchorAimHeldWaitWaitTime = 0.2f;
+        
+        public float AnchorLateThrowTime => _anchorLateThrowTime;
+        public float AnchorAimHeldWaitTime => anchorAimHeldWaitWaitTime;
+        
+        
         [Header("ANCHOR PICK UP")]
         [SerializeField, Range(0.0f, 20.0f)] private float _anchorPickUpDistance = 2.0f;
         
@@ -52,10 +61,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 
         
         [Header("DASH")]
+        [SerializeField, Range(0.01f, 10.0f)] private float _minUtilityDashDuration = 0.2f;
         [SerializeField, Range(0.01f, 10.0f)] private float _minDashDuration = 0.05f;
         [SerializeField, Range(0.01f, 10.0f)] private float _maxDashDuration = 0.35f;
         [SerializeField, Range(0.01f, 10.0f)] private float _dashInvulnerableDuration = 0.5f;
         
+        public float MinUtilityDashDuration => _minUtilityDashDuration;
         public float MinDashDuration => _minDashDuration;
         public float MaxDashDuration => _maxDashDuration;
         public float DashInvulnerableDuration => _dashInvulnerableDuration;
