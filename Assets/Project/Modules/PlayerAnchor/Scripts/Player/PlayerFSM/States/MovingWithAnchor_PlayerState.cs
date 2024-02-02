@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using Popeye.Timers;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -6,15 +7,27 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class MovingWithAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
+        private readonly Timer _lateAnchorThrowTimer;
+        private readonly Timer _anchorHeldAimTimer;
+        
         
         public MovingWithAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
+
+            _lateAnchorThrowTimer = new Timer(_blackboard.PlayerStatesConfig.AnchorLateThrowTime);
+            _anchorHeldAimTimer = new Timer(_blackboard.PlayerStatesConfig.AnchorAimHeldWaitTime);
         }
         
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithAnchorMoveSpeed);
+            
+            _lateAnchorThrowTimer.SetDuration(_blackboard.PlayerStatesConfig.AnchorLateThrowTime);
+            _lateAnchorThrowTimer.Clear();
+            
+            _anchorHeldAimTimer.SetDuration(_blackboard.PlayerStatesConfig.AnchorAimHeldWaitTime);
+            _anchorHeldAimTimer.Clear();
         }
 
         public override void Exit()
@@ -24,17 +37,33 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (PlayerCanThrowAnchor())
+            if (PlayerCanAimAnchor())
             {
                 NextState = PlayerStates.AimingThrowAnchor;
                 return true;
             }
-
+            
+            
+            if (PlayerHoldingAim(deltaTime))
+            {
+                NextState = PlayerStates.AimingThrowAnchor;
+                return true;
+            }
+            
+            
             if (PlayerCanDash())
             {
                 NextState = PlayerStates.DashingDroppingAnchor;
                 return true;
             }
+            
+            /* // This is very bugged
+            if (LateAnchorThrow(deltaTime))
+            {
+                NextState = PlayerStates.ThrowingAnchor;
+                return true;
+            }
+            */
             
             /*
             if (PlayerTriesToSpinAnchor())
@@ -54,20 +83,43 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         }
 
 
-        private bool PlayerCanThrowAnchor()
+        private bool PlayerCanAimAnchor()
         {
-            if (_blackboard.queuedAnchorThrow)
+            if (_blackboard.queuedAnchorAim)
             {
-                _blackboard.queuedAnchorThrow = false;
+                _blackboard.queuedAnchorAim = false;
                 return true;
             }
             
-            return _blackboard.MovesetInputsController.Throw_Pressed();
+            return _blackboard.MovesetInputsController.Aim_Pressed();
         }
+
+        private bool PlayerHoldingAim(float deltaTime)
+        {
+            if (_anchorHeldAimTimer.HasFinished())
+            {
+                return _blackboard.MovesetInputsController.Aim_HeldPressed();
+            }
+            
+            _anchorHeldAimTimer.Update(deltaTime);
+            return false;
+        }
+        
 
         private bool PlayerCanDash()
         {
             return _blackboard.MovesetInputsController.Dash_Pressed();
+        }
+
+        private bool LateAnchorThrow(float deltaTime)
+        {
+            if (_lateAnchorThrowTimer.HasFinished())
+            {
+                return false;
+            }
+            _lateAnchorThrowTimer.Update(deltaTime);
+            
+            return _blackboard.MovesetInputsController.Throw_Pressed();
         }
         
         private bool PlayerTriesToSpinAnchor()

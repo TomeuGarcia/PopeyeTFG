@@ -1,3 +1,4 @@
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Project.PhysicsMovement;
 using UnityEngine;
 
@@ -9,10 +10,10 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
         private PhysicsTweenObjectMakerForKnockback _physicsTweenObjectMakerForKnockback;
 
         
-        public KnockbackManager(PhysicsTweenerBehaviour physicsTweener)
+        public KnockbackManager(PhysicsTweenerBehaviour physicsTweener, CollisionProbingConfig floorPlatformsProbingConfig)
         {
             _physicsTweener = physicsTweener;
-            _physicsTweenObjectMakerForKnockback = new PhysicsTweenObjectMakerForKnockback();
+            _physicsTweenObjectMakerForKnockback = new PhysicsTweenObjectMakerForKnockback(floorPlatformsProbingConfig);
         }
 
 
@@ -32,10 +33,10 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
             {
                 return false;
             }
-            
 
-            _physicsTweener.AddObject(_physicsTweenObjectMakerForKnockback.CreatePhysicsTweenObject(
-                knockbackHitTarget, knockbackHit)
+
+            _physicsTweener.AddObject(
+                _physicsTweenObjectMakerForKnockback.CreatePhysicsTweenObject(knockbackHitTarget, knockbackHit)
             );
             return true;
         }

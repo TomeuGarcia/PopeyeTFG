@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2039193611434562804}
-  - component: {fileID: 2524181712985581072}
+  - component: {fileID: 9221686459424737862}
   - component: {fileID: 5839764027890194294}
   - component: {fileID: 5790093064680944402}
   m_Layer: 0
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2524181712985581072
+--- !u!114 &9221686459424737862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,18 +43,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2507940015931907245}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d851a0ca511405d80382f66091e70eb, type: 3}
+  m_Script: {fileID: 11500000, guid: ea7bc4a544214a72a963011d1c80d70a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolateOnInit: 1
-  _floatSetupDatas:
-  - {fileID: 11400000, guid: a97ab11e9731c924bac97778840e1c53, type: 2}
-  - {fileID: 11400000, guid: 8d3530f4f2011054287955bac39d364b, type: 2}
-  _floatInterpolationDatas:
-  - {fileID: 11400000, guid: ced1c148e50efca42af6c342a8fdfbf5, type: 2}
-  - {fileID: 11400000, guid: 682ba40c451dc00499ff8a3759de6347, type: 2}
-  _meshRenderers:
-  - {fileID: 5790093064680944402}
+  _interpolations:
+  - _floatSetupDatas:
+    - {fileID: 11400000, guid: a97ab11e9731c924bac97778840e1c53, type: 2}
+    - {fileID: 11400000, guid: 8d3530f4f2011054287955bac39d364b, type: 2}
+    _floatInterpolationDatas:
+    - {fileID: 11400000, guid: ced1c148e50efca42af6c342a8fdfbf5, type: 2}
+    - {fileID: 11400000, guid: 682ba40c451dc00499ff8a3759de6347, type: 2}
+    _renderers:
+    - {fileID: 5790093064680944402}
+    _meshSources:
+    - {fileID: 2507940015931907245}
 --- !u!33 &5839764027890194294
 MeshFilter:
   m_ObjectHideFlags: 0

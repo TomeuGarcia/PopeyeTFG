@@ -22,6 +22,7 @@ namespace Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration
         private int _property;
 
         public float Delay => _delay;
+        public string Name => _name;
         public int ID => _property;
         public float Duration => _duration;
         public float EndValue => _endValue;
