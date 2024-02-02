@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 8856671318642120423}
   - component: {fileID: 5731476548914574290}
   - component: {fileID: 8177322979651808629}
+  - component: {fileID: 8692202689089856036}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Enemy
@@ -275,6 +276,20 @@ MonoBehaviour:
   _originalMeshDatas:
   - _mesh: {fileID: 7790051331378039978}
     _originalMaterial: {fileID: 0}
+--- !u!114 &8692202689089856036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a7c802f72147a78d03c4fbee936b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoAimTargetDataConfig: {fileID: 11400000, guid: 94e08f1580ee27f47aafd53bc7cfde02,
+    type: 2}
 --- !u!1 &6668136983467904787
 GameObject:
   m_ObjectHideFlags: 0
