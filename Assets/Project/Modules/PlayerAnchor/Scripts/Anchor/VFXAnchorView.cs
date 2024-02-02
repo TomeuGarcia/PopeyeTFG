@@ -51,11 +51,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
 
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
-            // Delete this when the able to acces specific times properly?
+            
             float riseTime = duration / 2.0f;
             float fallTime = duration - riseTime;
             
@@ -74,9 +73,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             groundHit.up = raycastHit.normal;
             groundDecal.up = raycastHit.normal;
             groundDecal.RotateAround(groundDecal.up, UnityEngine.Random.Range(0.0f, 360.0f));
-            
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
         }
         
         
@@ -97,7 +93,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayThrownAnimation(float duration)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
             
             await UniTask.Delay(TimeSpan.FromSeconds(_throwTrailSpawnDelay));
@@ -108,14 +103,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             await UniTask.Delay(TimeSpan.FromSeconds(duration - _throwTrailSpawnDelay));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
         }
 
         public async UniTaskVoid PlayPulledAnimation(float duration)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
             
             await UniTask.Delay(TimeSpan.FromSeconds(_retrieveTrailSpawnDelay));
@@ -126,9 +117,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(duration - _retrieveTrailSpawnDelay, 0)));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
         }
 
         public void PlayKickedAnimation(float duration)
