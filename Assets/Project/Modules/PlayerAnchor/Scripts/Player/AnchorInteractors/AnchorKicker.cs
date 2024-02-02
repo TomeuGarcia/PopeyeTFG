@@ -44,9 +44,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 out float trajectoryDistance, out bool trajectoryEndsOnTheFloor, 
                 out RaycastHit obstacleHit, out bool trajectoryHitsObstacle);
             
-            float duration = (_anchorKickConfig.AnchorKickMoveDuration / distance) * trajectoryDistance;
             
-            AnchorKickResult.Reset(trajectoryPoints, direction, floorNormal, duration, !trajectoryEndsOnTheFloor);
+            float correctedDuration = (_anchorKickConfig.AnchorKickMoveDuration / distance) * trajectoryDistance;
+            float correctedDurationHitObstacle = trajectoryHitsObstacle ? 
+                (Vector3.Distance(obstacleHit.point, trajectoryPoints[0]) * (_anchorKickConfig.AnchorKickMoveDuration/distance))
+                : correctedDuration;
+                
+            
+            AnchorKickResult.Reset(trajectoryPoints, direction, floorNormal, 
+                correctedDuration, correctedDurationHitObstacle, !trajectoryEndsOnTheFloor);
 
             
             _anchor.SetKicked(AnchorKickResult);

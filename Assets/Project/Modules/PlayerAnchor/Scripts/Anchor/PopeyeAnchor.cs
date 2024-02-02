@@ -110,7 +110,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
-        {            
+        {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
@@ -120,6 +120,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
+            _anchorChain.SetThrownView(anchorThrowResult);
             
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             
@@ -173,10 +174,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
             
             _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
-
-           
-
-           
         }
         
         public void SetCarried()

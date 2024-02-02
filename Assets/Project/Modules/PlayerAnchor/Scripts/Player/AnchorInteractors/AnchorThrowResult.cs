@@ -12,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Quaternion StartLookRotation { get; private set; }
         public Quaternion EndLookRotation { get; set; }
         public float Duration { get; private set; }
+        public float DurationHitObstacle { get; private set; }
         public bool EndsOnVoid { get; private set; }
 
         
@@ -37,7 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         
         public void Reset(Vector3[] throwPathPoints, Vector3 direction, Vector3 floorNormal,
-            float duration, bool endsOnVoid)
+            float duration, float durationHitObstacle, bool endsOnVoid)
         {
             TrajectoryPathPoints = throwPathPoints;
             Direction = direction;
@@ -48,6 +49,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 TrajectoryPathPoints.Length-1, right);
             
             Duration = duration;
+            DurationHitObstacle = durationHitObstacle;
             EndsOnVoid = endsOnVoid;
         }
         
