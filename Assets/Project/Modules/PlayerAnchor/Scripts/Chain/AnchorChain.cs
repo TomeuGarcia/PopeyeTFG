@@ -7,6 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
     public class AnchorChain : MonoBehaviour
     {
         [SerializeField] private LineRenderer _chainLine;
+        [SerializeField] private Transform _chainIK;
         private Transform _playerBindTransform;
         private Transform _anchorBindTransform;
         
@@ -29,7 +30,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             _thrownChainView = new SpiralThrowChainView(_chainLine, spiralThrowChainViewConfig);
             _pullChainView = new SpiralThrowChainView(_chainLine, spiralPullChainViewConfig);
-            _restingOnGroundChainView = new HangingPhysicsChainView(_chainLine, hangingPhysicsChainViewConfig);
+            _restingOnGroundChainView = new HangingPhysicsChainView(_chainLine, hangingPhysicsChainViewConfig, _chainIK);
             _carriedChainView = new StraightLineChainView(_chainLine);
             _currentChainView = _carriedChainView;
         }

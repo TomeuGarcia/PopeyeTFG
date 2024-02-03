@@ -8,7 +8,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private readonly HangingPhysicsChainViewConfig _config;
 
         private int _chainBoneCountMinusOne;
-        
+
+        private Transform _chainIK;
         
         private LayerMask CollisionLayerMask => _config.CollisionProbingConfig.CollisionLayerMask;
         private float ProbingDistance => _config.CollisionProbingConfig.ProbeDistance;
@@ -21,20 +22,28 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private AnimationCurve BendingWeightCurve => _config.BendingWeightCurve;
         
         
-        public HangingPhysicsChainView(LineRenderer chainLine, HangingPhysicsChainViewConfig config)
+        public HangingPhysicsChainView(LineRenderer chainLine, HangingPhysicsChainViewConfig config, Transform chainIK)
         {
             _chainLine = chainLine;
             _config = config;
+
+            _chainIK = chainIK;
+            _chainIK.gameObject.SetActive(false);
         }
 
         public void OnViewEnter()
         {
             _chainLine.positionCount = ChainBoneCount;
             _chainBoneCountMinusOne = ChainBoneCount - 1;
+
+            _chainLine.enabled = false;
+            _chainIK.gameObject.SetActive(true);
         }
 
         public void LateUpdate(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
+            return;
+            
             _chainLine.SetPosition(0, playerBindPosition);
             _chainLine.SetPosition(_chainBoneCountMinusOne, anchorBindPosition);
 
@@ -71,7 +80,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void OnViewExit()
         {
-            
+            _chainLine.enabled = true;
+            _chainIK.gameObject.SetActive(false);
         }
         
     }
