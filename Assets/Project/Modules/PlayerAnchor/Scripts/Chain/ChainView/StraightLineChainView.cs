@@ -10,15 +10,19 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _chainLine = chainLine;
         }
-        
-        public void LateUpdate(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
+
+        public void OnViewEnter()
         {
             _chainLine.positionCount = 2;
+        }
+
+        public void LateUpdate(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
+        {
             _chainLine.SetPosition(0, playerBindPosition);
             _chainLine.SetPosition(1, anchorBindPosition);
         }
 
-        public void OnViewSwapped()
+        public void OnViewExit()
         {
             
         }

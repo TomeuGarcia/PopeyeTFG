@@ -52,7 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 
             
             AnchorKickResult.Reset(trajectoryPoints, direction, floorNormal, 
-                correctedDuration, correctedDurationHitObstacle, !trajectoryEndsOnTheFloor);
+                correctedDuration, correctedDurationHitObstacle, !trajectoryEndsOnTheFloor, trajectoryHitsObstacle);
 
             
             _anchor.SetKicked(AnchorKickResult);

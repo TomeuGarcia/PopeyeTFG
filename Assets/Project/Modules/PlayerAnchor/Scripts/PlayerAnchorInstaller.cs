@@ -62,6 +62,8 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private AnchorChain _anchorChain;
         [SerializeField] private InterfaceReference<IChainPhysics, MonoBehaviour> _chainPhysics;
         [SerializeField] private SpiralThrowChainViewConfig _spiralThrowChainViewConfig;
+        [SerializeField] private SpiralThrowChainViewConfig _spiralPullChainViewConfig;
+        [SerializeField] private HangingPhysicsChainViewConfig _hangingPhysicsChainViewConfig;
         
         [SerializeField] private Transform _chainPlayerBindTransform;
         [SerializeField] private Transform _chainAnchorBindTransform;
@@ -141,7 +143,7 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform,
-                _spiralThrowChainViewConfig);
+                _spiralThrowChainViewConfig, _spiralPullChainViewConfig, _hangingPhysicsChainViewConfig);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
 

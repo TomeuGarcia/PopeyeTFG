@@ -14,9 +14,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private Vector3 _spiralUp;
         private Vector3 _spiralRight;
         private float _time;
-        
+        private float _effectMultiplier;
         
         private float Duration => _throwResult.Duration;
+        private float DurationHitObstacle => _throwResult.DurationHitObstacle;
         
         private int ChainBoneCount => _config.ChainBoneCount;
         private int _chainBoneCountMinusOne;
@@ -25,6 +26,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private float MaxAmplitude => _config.MaxAmplitude;
         private float SpinSpeed =>_config.SpinSpeed;
         private float PhaseOffset =>_config.PhaseOffset;
+        private AnimationCurve AmplitudeBoneWeightCurve =>_config.AmplitudeBoneWeightCurve;
+        private AnimationCurve SpeedOverTimeCurve =>_config.SpeedOverTimeCurve;
+        private AnimationCurve AmplitudeOverTimeCurve =>_config.AmplitudeOverTimeCurve;
+        private AnimationCurve ObstacleHitMultiplierCurve =>_config.ObstacleHitMultiplierCurve;
 
 
         public SpiralThrowChainView(LineRenderer chainLine, SpiralThrowChainViewConfig config)
@@ -33,23 +38,23 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _config = config;
         }
         
-        public void Setup(AnchorThrowResult throwResult)
+        public void EnterSetup(AnchorThrowResult throwResult)
         {
             _throwResult = throwResult;
             _chainLine.enabled = true;
-            _chainLine.positionCount = ChainBoneCount;
-
-            _chainBoneCountMinusOne = ChainBoneCount - 1;
 
             _spiralUp = Vector3.up;
             _spiralRight = Vector3.Cross(throwResult.Direction, _spiralUp).normalized;
-
-            _time = 0;
         }
 
 
-        private float m;
-        
+        public void OnViewEnter()
+        {
+            _chainLine.positionCount = ChainBoneCount;
+            _chainBoneCountMinusOne = ChainBoneCount - 1;
+            _time = 0;
+        }
+
         public void LateUpdate(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
 
@@ -62,7 +67,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             float distanceStep = playerToAnchorDistance / _chainBoneCountMinusOne;
             
-            m = _config.ObstacleHitMultiplierCurve.Evaluate(Mathf.Min(_time/_throwResult.DurationHitObstacle, 1));
+            _effectMultiplier = _throwResult.HitsObstacle ? 
+                ObstacleHitMultiplierCurve.Evaluate(Mathf.Min(_time/DurationHitObstacle, 1)) :
+                1;
             
             for (int i = 1; i < ChainBoneCount - 1; ++i)
             {
@@ -71,8 +78,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 float t = i / (float)_chainBoneCountMinusOne;
                 float time = _time + (t * PhaseOffset);
 
-                float spread = t * LoopSpread - CurrentSpeedOverTime(time) *m;
-                float size = ChainBoneAmplitudeWeight(t) * CurrentAmplitudeOverTime(time) *m;
+                float spread = t * LoopSpread - CurrentSpeedOverTime(time);
+                float size = ChainBoneAmplitudeWeight(t) * CurrentAmplitudeOverTime(time) * _effectMultiplier;
                 
                 Vector3 spiralOffset = _spiralUp * (Mathf.Sin(spread) * size) +
                                        _spiralRight * (Mathf.Cos(spread) * size);
@@ -85,24 +92,24 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _time += deltaTime;
         }
 
-        public void OnViewSwapped()
+        public void OnViewExit()
         {
             
         }
 
         private float ChainBoneAmplitudeWeight(float chainT)
         {
-            return _config.AmplitudeBoneWeightCurve.Evaluate(chainT);
+            return AmplitudeBoneWeightCurve.Evaluate(chainT);
         }
 
         private float CurrentSpeedOverTime(float time)
         {
-            return _config.SpeedOverTimeCurve.Evaluate(Mathf.Min(1f, time / Duration)) * SpinSpeed * time;
+            return SpeedOverTimeCurve.Evaluate(Mathf.Min(1f, time / Duration)) * SpinSpeed * time;
         }
 
         private float CurrentAmplitudeOverTime(float time)
         {
-            return _config.AmplitudeOverTimeCurve.Evaluate(Mathf.Min(1f, time / Duration)) * MaxAmplitude;
+            return AmplitudeOverTimeCurve.Evaluate(Mathf.Min(1f, time / Duration)) * MaxAmplitude;
         }
         
     }

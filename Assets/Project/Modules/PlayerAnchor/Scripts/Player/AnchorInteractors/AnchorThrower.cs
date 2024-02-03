@@ -88,7 +88,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 : correctedDuration;
             
             AnchorThrowResult.Reset(trajectoryPoints, direction, floorNormal, 
-                correctedDuration, correctedDurationHitObstacle, !trajectoryEndsOnFloor);
+                correctedDuration, correctedDurationHitObstacle, !trajectoryEndsOnFloor, trajectoryHitsObstacle);
             
             
             if (validSnapTarget)
