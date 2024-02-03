@@ -23,6 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         [Header("STAMINA COSTS")] 
         [SerializeField, Range(0, 100)] private int _anchorThrowStaminaCost = 0;
         [SerializeField, Range(0, 100)] private int _anchorPullStaminaCost = 0;
+        [SerializeField, Range(0, 100)] private int _anchorAutoPullStaminaCost = 0;
         [SerializeField, Range(0, 100)] private int _anchorPickUpStaminaCost = 0;
         [SerializeField, Range(0, 100)] private int _anchorDashStaminaCost = 20;
         [SerializeField, Range(0, 100)] private int _rollStaminaCost = 20;
@@ -31,6 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
 
         public int AnchorThrowStaminaCost => _anchorThrowStaminaCost;
         public int AnchorPullStaminaCost => _anchorPullStaminaCost;
+        public int AnchorAutoPullStaminaCost => _anchorAutoPullStaminaCost;
         public int AnchorPickUpStaminaCost => _anchorPickUpStaminaCost;
         public int AnchorDashStaminaCost => _anchorDashStaminaCost;
         public int RollStaminaCost => _rollStaminaCost;

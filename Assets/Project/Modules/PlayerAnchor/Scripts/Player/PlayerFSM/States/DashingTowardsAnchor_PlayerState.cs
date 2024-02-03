@@ -38,7 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
             if (_blackboard.MovesetInputsController.Aim_Pressed())
             {
-                _blackboard.queuedAnchorThrow = true;
+                _blackboard.queuedAnchorAim = true;
             }
 
             return false;

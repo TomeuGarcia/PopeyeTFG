@@ -17,7 +17,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         // Queues
         public bool queuedDashTowardsAnchor;
         public bool queuedAnchorPull;
-        public bool queuedAnchorThrow;
+        public bool queuedAnchorAim;
         
         public bool spinAttackTowardsRight;
         

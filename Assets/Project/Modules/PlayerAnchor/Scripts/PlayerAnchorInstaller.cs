@@ -35,6 +35,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
+        [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
         [SerializeField] private InterfaceReference<IPlayerAudio, MonoBehaviour> _playerAudioRef;
 
         [Header("Player - AutoAim")] 
@@ -163,7 +164,8 @@ namespace Popeye.Modules.PlayerAnchor
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
                 _playerGeneralConfig.PotionHealAmount, _playerController.Rigidbody);
-            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, _obstacleProbingConfig);
+            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
+                _obstacleProbingConfig, _dashFloorProbingConfig);
             playerMovement.Configure(_player, _playerController);
             playerAudio.Configure(_playerController.gameObject);
 
