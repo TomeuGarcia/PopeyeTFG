@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Popeye.InverseKinematics.FABRIK
@@ -63,7 +62,7 @@ namespace Popeye.InverseKinematics.FABRIK
         {
             for (int i = 0; i < jointChain.NumberOfJoints; ++i)
             {
-                jointChain.positionCopies[i] = jointChain.joints[i].position;
+                jointChain.PositionCopies[i] = jointChain.Joints[i].position;
             }
         }
 
@@ -72,12 +71,12 @@ namespace Popeye.InverseKinematics.FABRIK
             for (int i = 0; i < jointChain.NumberOfJoints - 1; ++i)
             {
                 // Find the distance between the target and the joint
-                float targetToJointDist = Vector3.Distance(jointChain.TargetPosition, jointChain.positionCopies[i]);
-                float ratio = jointChain.distances[i] / targetToJointDist;
+                float targetToJointDist = Vector3.Distance(jointChain.TargetPosition, jointChain.PositionCopies[i]);
+                float ratio = jointChain.Distances[i] / targetToJointDist;
 
                 // Find the new joint position
-                jointChain.positionCopies[i + 1] =
-                    (1 - ratio) * jointChain.positionCopies[i] + ratio * jointChain.TargetPosition;
+                jointChain.PositionCopies[i + 1] =
+                    (1 - ratio) * jointChain.PositionCopies[i] + ratio * jointChain.TargetPosition;
             }
         }
 
@@ -85,35 +84,35 @@ namespace Popeye.InverseKinematics.FABRIK
         private void ForwardReaching(FABRIKJointChain jointChain)
         {
             // Set end effector as target
-            jointChain.positionCopies[jointChain.NumberOfJoints - 1] = jointChain.TargetPosition;
+            jointChain.PositionCopies[jointChain.NumberOfJoints - 1] = jointChain.TargetPosition;
 
             for (int i = jointChain.NumberOfJoints - 2; i >= 0; --i)
             {
                 // Find the distance between the new joint position (i+1) and the current joint (i)
                 float distanceBetweenJoints =
-                    Vector3.Distance(jointChain.positionCopies[i], jointChain.positionCopies[i + 1]);
-                float ratio = jointChain.distances[i] / distanceBetweenJoints;
+                    Vector3.Distance(jointChain.PositionCopies[i], jointChain.PositionCopies[i + 1]);
+                float ratio = jointChain.Distances[i] / distanceBetweenJoints;
 
                 // Find the new joint position
-                jointChain.positionCopies[i] = (1 - ratio) * jointChain.positionCopies[i + 1] +
-                                               ratio * jointChain.positionCopies[i];
+                jointChain.PositionCopies[i] = (1 - ratio) * jointChain.PositionCopies[i + 1] +
+                                               ratio * jointChain.PositionCopies[i];
             }
         }
 
         private void BackwardReaching(FABRIKJointChain jointChain)
         {
             // Set the root its initial position
-            jointChain.positionCopies[0] = jointChain.joints[0].position;
+            jointChain.PositionCopies[0] = jointChain.Joints[0].position;
 
             for (int i = 1; i < jointChain.NumberOfJoints - 1; ++i)
             {
                 // Find the distance between the new joint position (i+1) and the current joint (i)
-                float distanceJoints = Vector3.Distance(jointChain.positionCopies[i - 1], jointChain.positionCopies[i]);
-                float ratio = jointChain.distances[i - 1] / distanceJoints;
+                float distanceJoints = Vector3.Distance(jointChain.PositionCopies[i - 1], jointChain.PositionCopies[i]);
+                float ratio = jointChain.Distances[i - 1] / distanceJoints;
 
                 // Find the new joint position
-                jointChain.positionCopies[i] = (1 - ratio) * jointChain.positionCopies[i - 1] +
-                                               ratio * jointChain.positionCopies[i];
+                jointChain.PositionCopies[i] = (1 - ratio) * jointChain.PositionCopies[i - 1] +
+                                               ratio * jointChain.PositionCopies[i];
             }
         }
 
@@ -121,15 +120,15 @@ namespace Popeye.InverseKinematics.FABRIK
         {
             for (int i = 0; i < jointChain.NumberOfJoints - 1; i++)
             {
-                Vector3 oldDirection = (jointChain.joints[i + 1].position - jointChain.joints[i].position).normalized;
-                Vector3 newDirection = (jointChain.positionCopies[i + 1] - jointChain.positionCopies[i]).normalized;
+                Vector3 oldDirection = (jointChain.Joints[i + 1].position - jointChain.Joints[i].position).normalized;
+                Vector3 newDirection = (jointChain.PositionCopies[i + 1] - jointChain.PositionCopies[i]).normalized;
 
                 Vector3 axis = Vector3.Cross(oldDirection, newDirection).normalized;
                 float angle = Mathf.Acos(Vector3.Dot(oldDirection, newDirection)) * Mathf.Rad2Deg;
 
                 if (angle > _angleThreshold)
                 {
-                    jointChain.joints[i].rotation = Quaternion.AngleAxis(angle, axis) * jointChain.joints[i].rotation;
+                    jointChain.Joints[i].rotation = Quaternion.AngleAxis(angle, axis) * jointChain.Joints[i].rotation;
                 }
             }
         }

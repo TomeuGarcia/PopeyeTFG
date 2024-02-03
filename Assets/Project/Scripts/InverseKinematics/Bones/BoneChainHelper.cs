@@ -1,12 +1,10 @@
-
-using Popeye.InverseKinematics.FABRIK;
 using UnityEngine;
 
 namespace Popeye.InverseKinematics.Bones
 {
     public static class BoneChainHelper
     {
-        public static FABRIKJointChain FABRIKJointChainFromBoneArm(BoneChain boneChain, Transform target)
+        public static Transform[] JointChainFromBoneChain(BoneChain boneChain)
         {
             Bone[] bones = boneChain.Bones;
 
@@ -16,8 +14,9 @@ namespace Popeye.InverseKinematics.Bones
                 joints[i] = bones[i].BoneRoot;
             }
 
-            return new FABRIKJointChain(joints, target);
+            return joints;
         }
+
     }
     
 }

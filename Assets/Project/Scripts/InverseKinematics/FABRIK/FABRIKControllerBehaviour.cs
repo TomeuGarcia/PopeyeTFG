@@ -12,7 +12,7 @@ namespace Popeye.InverseKinematics.FABRIK
 
         private void OnDestroy()
         {
-            _boneChain.OnGenerationUpdate -= ResetFABRIKController;
+            _boneChain.OnGenerationUpdate -= ResetController;
         }
         
         public void AwakeInit(BoneChain boneChain, Transform target)
@@ -20,9 +20,9 @@ namespace Popeye.InverseKinematics.FABRIK
             _boneChain = boneChain;
             _target = target;
             _controller = new FABRIKController();
-            ResetFABRIKController();
+            ResetController();
 
-            _boneChain.OnGenerationUpdate += ResetFABRIKController;
+            _boneChain.OnGenerationUpdate += ResetController;
         }
 
 
@@ -32,10 +32,11 @@ namespace Popeye.InverseKinematics.FABRIK
         }
 
 
-        private void ResetFABRIKController()
+        private void ResetController()
         {
             _controller.RemoveJointChains();
-            _controller.AddJointChain(BoneChainHelper.FABRIKJointChainFromBoneArm(_boneChain, _target));
+            _controller.AddJointChain(
+                new FABRIKJointChain(BoneChainHelper.JointChainFromBoneChain(_boneChain), _target));
         }
     }
 }

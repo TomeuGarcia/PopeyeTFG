@@ -5,10 +5,10 @@ namespace Popeye.InverseKinematics.FABRIK
 {
     public class FABRIKInstaller : MonoBehaviour
     {
+        [SerializeField] private FABRIKControllerBehaviour _FABRIKControllerBehaviour;
         [SerializeField] private BoneChain _boneChain;
         [SerializeField] private Transform _target;
 
-        [SerializeField] private FABRIKControllerBehaviour _FABRIKControllerBehaviour;
 
         private void Awake()
         {

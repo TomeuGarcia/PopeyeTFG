@@ -740,6 +740,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1553028990544831572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4877881031040878615}
+  m_Layer: 6
+  m_Name: TargetForIK
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4877881031040878615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553028990544831572}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8397785993026938708}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1570717101172121136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1477,7 +1508,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4877881031040878615}
   m_Father: {fileID: 172118550184393647}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1769,7 +1801,7 @@ MonoBehaviour:
     type: 3}
   _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: 30ee97334199af943a349e931342e2f1,
     type: 3}
-  _numberOfBones: 44
+  _numberOfBones: 28
   _firstBoneParent: {fileID: 6172617056675568626}
   autoUpdateBoneGeneration: 0
 --- !u!1 &4514555569282133939
@@ -3440,9 +3472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0787dc4fc8bee49afaedd7d95c9def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boneChain: {fileID: 5612155314268022033}
-  _target: {fileID: 8397785993026938708}
   _FABRIKControllerBehaviour: {fileID: 6132698310706980790}
+  _boneChain: {fileID: 5612155314268022033}
+  _target: {fileID: 4877881031040878615}
 --- !u!1 &7844042421698275073
 GameObject:
   m_ObjectHideFlags: 0
