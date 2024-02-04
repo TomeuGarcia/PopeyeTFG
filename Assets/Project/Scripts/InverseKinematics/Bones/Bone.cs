@@ -10,6 +10,7 @@ namespace Popeye.InverseKinematics.Bones
         [SerializeField] private Transform _boneEnd;
         public Transform BoneRoot => _boneRoot;
         public Transform BoneEnd => _boneEnd;
+        public Vector3 Position => BoneRoot.position;
 
 
         public void SetLocalRotation(Quaternion localRotation)

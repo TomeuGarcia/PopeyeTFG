@@ -1,3 +1,4 @@
+using Popeye.InverseKinematics.Bones;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Chain
@@ -10,6 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private int _chainBoneCountMinusOne;
 
         private Transform _chainIK;
+        private BoneChain _boneChainIK;
         
         private LayerMask CollisionLayerMask => _config.CollisionProbingConfig.CollisionLayerMask;
         private float ProbingDistance => _config.CollisionProbingConfig.ProbeDistance;
@@ -22,26 +24,44 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private AnimationCurve BendingWeightCurve => _config.BendingWeightCurve;
         
         
-        public HangingPhysicsChainView(LineRenderer chainLine, HangingPhysicsChainViewConfig config, Transform chainIK)
+        public HangingPhysicsChainView(LineRenderer chainLine, HangingPhysicsChainViewConfig config, int chainBoneCount,
+            Transform chainIK, BoneChain boneChain)
         {
             _chainLine = chainLine;
             _config = config;
 
             _chainIK = chainIK;
             _chainIK.gameObject.SetActive(false);
+
+            _boneChainIK = boneChain;
         }
 
         public void OnViewEnter()
         {
-            _chainLine.positionCount = ChainBoneCount;
-            _chainBoneCountMinusOne = ChainBoneCount - 1;
+            //_chainLine.positionCount = ChainBoneCount;
+            //_chainBoneCountMinusOne = ChainBoneCount - 1;
 
-            _chainLine.enabled = false;
-            _chainIK.gameObject.SetActive(true);
+            //_chainLine.enabled = false;
+            //_chainIK.gameObject.SetActive(true);
+            
+            
+            _chainLine.positionCount = _boneChainIK.NumberOfBones;
+            _chainBoneCountMinusOne = _boneChainIK.NumberOfBones - 1;
+            
+            _chainLine.enabled = true;
+            _chainIK.gameObject.SetActive(false);
         }
 
         public void LateUpdate(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
+            _chainLine.SetPosition(0, anchorBindPosition);
+            //_chainLine.SetPosition(_boneChainIK.NumberOfBones - 1, playerBindPosition);
+            for (int i = 1; i < _boneChainIK.NumberOfBones; ++i)
+            {
+                _chainLine.SetPosition(i, _boneChainIK.Bones[i].Position);
+            }
+            
+            
             return;
             
             _chainLine.SetPosition(0, playerBindPosition);
@@ -80,6 +100,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void OnViewExit()
         {
+            //_chainLine.enabled = true;
+            //_chainIK.gameObject.SetActive(false);
+            
+            
             _chainLine.enabled = true;
             _chainIK.gameObject.SetActive(false);
         }

@@ -1843,11 +1843,7 @@ MonoBehaviour:
   _anchorChain: {fileID: 2223938708714666153}
   _chainPhysics:
     _underlyingValue: {fileID: 6405983057515278388}
-  _spiralThrowChainViewConfig: {fileID: 11400000, guid: c0fbf7c65486f3a4bb224e353e87a4aa,
-    type: 2}
-  _spiralPullChainViewConfig: {fileID: 11400000, guid: 68381f41c708a1f48a0166e6701e869a,
-    type: 2}
-  _hangingPhysicsChainViewConfig: {fileID: 11400000, guid: 9b7cb8dde1461304aa14e46a4ce9ed40,
+  _chainViewGeneralConfig: {fileID: 11400000, guid: bfd756a02267760439db99dd7edce59f,
     type: 2}
   _chainPlayerBindTransform: {fileID: 8397785993026938708}
   _chainAnchorBindTransform: {fileID: 6172617056675568626}
@@ -2468,6 +2464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chainLine: {fileID: 4763874378844247995}
   _chainIK: {fileID: 6172617056675568626}
+  _boneChainIK: {fileID: 5612155314268022033}
 --- !u!114 &6405983057515278388
 MonoBehaviour:
   m_ObjectHideFlags: 0

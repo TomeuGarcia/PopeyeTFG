@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.ProjectHelpers;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
     public class HangingPhysicsChainViewConfig : ScriptableObject
     {
         [Header("COLLISIONS")]
+        [Expandable]
         [SerializeField] private CollisionProbingConfig _collisionProbingConfig;
 
         [Header("CHAIN BONES")]

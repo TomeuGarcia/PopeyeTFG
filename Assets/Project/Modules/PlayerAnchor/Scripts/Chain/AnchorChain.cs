@@ -1,4 +1,5 @@
 using System;
+using Popeye.InverseKinematics.Bones;
 using Popeye.Modules.PlayerAnchor.Player;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
     {
         [SerializeField] private LineRenderer _chainLine;
         [SerializeField] private Transform _chainIK;
+        [SerializeField] private BoneChain _boneChainIK;
         private Transform _playerBindTransform;
         private Transform _anchorBindTransform;
         
@@ -16,21 +18,21 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private IChainView _currentChainView;
         private SpiralThrowChainView _thrownChainView;
         private SpiralThrowChainView _pullChainView;
-        private HangingPhysicsChainView _restingOnGroundChainView;
+        private HangingPhysicsChainView _restingOnFloorChainView;
         private IChainView _carriedChainView;
 
         
         public void Configure(IChainPhysics chainPhysics, Transform playerBindTransform, Transform anchorBindTransform,
-            SpiralThrowChainViewConfig spiralThrowChainViewConfig, SpiralThrowChainViewConfig spiralPullChainViewConfig,
-            HangingPhysicsChainViewConfig hangingPhysicsChainViewConfig)
+            ChainViewGeneralConfig chainViewGeneralConfig)
         {
             _chainPhysics = chainPhysics;
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
 
-            _thrownChainView = new SpiralThrowChainView(_chainLine, spiralThrowChainViewConfig);
-            _pullChainView = new SpiralThrowChainView(_chainLine, spiralPullChainViewConfig);
-            _restingOnGroundChainView = new HangingPhysicsChainView(_chainLine, hangingPhysicsChainViewConfig, _chainIK);
+            _thrownChainView = new SpiralThrowChainView(_chainLine, chainViewGeneralConfig.ThrowViewConfig, chainViewGeneralConfig.ChainBoneCount);
+            _pullChainView = new SpiralThrowChainView(_chainLine, chainViewGeneralConfig.PullViewConfig, chainViewGeneralConfig.ChainBoneCount);
+            _restingOnFloorChainView = new HangingPhysicsChainView(_chainLine, chainViewGeneralConfig.RestingOnFloorViewConfig, 
+                chainViewGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK);
             _carriedChainView = new StraightLineChainView(_chainLine);
             _currentChainView = _carriedChainView;
         }
@@ -58,7 +60,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public void SetRestingOnFloorView()
         {
             _currentChainView.OnViewExit();
-            _currentChainView = _restingOnGroundChainView;
+            _currentChainView = _restingOnFloorChainView;
             _currentChainView.OnViewEnter();
         }
         public void SetCarriedView()

@@ -17,6 +17,7 @@ namespace Popeye.InverseKinematics.Bones
         [SerializeField] private Transform _firstBoneParent;
         [SerializeField] public bool autoUpdateBoneGeneration = true;
         public Bone[] Bones { get; private set; }
+        public int NumberOfBones => Bones.Length;
 
         public delegate void BoneArmEvent();
 

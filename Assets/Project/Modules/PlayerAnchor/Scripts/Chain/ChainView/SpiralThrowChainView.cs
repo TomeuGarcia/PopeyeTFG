@@ -32,7 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private AnimationCurve ObstacleHitMultiplierCurve =>_config.ObstacleHitMultiplierCurve;
 
 
-        public SpiralThrowChainView(LineRenderer chainLine, SpiralThrowChainViewConfig config)
+        public SpiralThrowChainView(LineRenderer chainLine, SpiralThrowChainViewConfig config, int chainBoneCount)
         {
             _chainLine = chainLine;
             _config = config;
