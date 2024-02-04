@@ -17,6 +17,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerController.AutoAim;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor
 {
@@ -61,7 +62,7 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("CHAIN")]
         [SerializeField] private AnchorChain _anchorChain;
         [SerializeField] private InterfaceReference<IChainPhysics, MonoBehaviour> _chainPhysics;
-        [SerializeField] private ChainViewGeneralConfig _chainViewGeneralConfig;
+        [FormerlySerializedAs("_chainViewGeneralConfig")] [SerializeField] private ChainViewLogicGeneralConfig chainViewLogicGeneralConfig;
 
         
         [SerializeField] private Transform _chainPlayerBindTransform;
@@ -141,7 +142,7 @@ namespace Popeye.Modules.PlayerAnchor
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
-            _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform, _chainViewGeneralConfig);
+            _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform, chainViewLogicGeneralConfig);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
 

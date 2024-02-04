@@ -5,7 +5,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 {
     [CreateAssetMenu(fileName = "SpiralThrowChainViewConfig", 
         menuName = ScriptableObjectsHelper.ANCHORCHAIN_ASSETS_PATH + "SpiralThrowChainViewConfig")]
-    public class SpiralThrowChainViewConfig : ScriptableObject
+    public class SpiralThrowChainViewLogicConfig : ScriptableObject
     {
         [Header("CHAIN BONES")]
         [SerializeField, Range(-0.5f, 0.5f)] private float _phaseOffset = 0.01f;

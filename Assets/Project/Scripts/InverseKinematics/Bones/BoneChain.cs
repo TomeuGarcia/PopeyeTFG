@@ -24,7 +24,13 @@ namespace Popeye.InverseKinematics.Bones
         public BoneArmEvent OnGenerationUpdate;
 
 
-        public void AwakeInit()
+        public void AwakeConfigure(int numberOfBones)
+        {
+            _numberOfBones = numberOfBones;
+        }
+        
+
+        public void StartInit()
         {
             _oldNumberOfBones = -1;
             Bones = new Bone[0];

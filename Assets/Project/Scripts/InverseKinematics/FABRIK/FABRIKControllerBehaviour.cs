@@ -15,7 +15,7 @@ namespace Popeye.InverseKinematics.FABRIK
             _boneChain.OnGenerationUpdate -= ResetController;
         }
         
-        public void AwakeInit(BoneChain boneChain, Transform target)
+        public void StartInit(BoneChain boneChain, Transform target)
         {
             _boneChain = boneChain;
             _target = target;

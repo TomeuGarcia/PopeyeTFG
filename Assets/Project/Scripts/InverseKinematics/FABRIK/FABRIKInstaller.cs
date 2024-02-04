@@ -10,10 +10,10 @@ namespace Popeye.InverseKinematics.FABRIK
         [SerializeField] private Transform _target;
 
 
-        private void Awake()
+        private void Start()
         {
-            _boneChain.AwakeInit();
-            _FABRIKControllerBehaviour.AwakeInit(_boneChain, _target);
+            _boneChain.StartInit();
+            _FABRIKControllerBehaviour.StartInit(_boneChain, _target);
         }
 
     }

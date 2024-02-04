@@ -5,44 +5,48 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Chain
 {
-    public class SpiralThrowChainView : IChainView
+    public class SpiralThrowChainViewLogic : IChainViewLogic
     {
         private AnchorThrowResult _throwResult;
-        private readonly LineRenderer _chainLine;
-        private readonly SpiralThrowChainViewConfig _config;
+        private readonly SpiralThrowChainViewLogicConfig _logicConfig;
+        
+        private readonly int _chainBoneCount;
+        private readonly int _chainBoneCountMinusOne;
+
+        private readonly Vector3[] _chainPositions;
 
         private Vector3 _spiralUp;
         private Vector3 _spiralRight;
         private float _time;
         private float _effectMultiplier;
         
+        
         private float Duration => _throwResult.Duration;
         private float DurationHitObstacle => _throwResult.DurationHitObstacle;
         
-        private int _chainBoneCount;
-        private int _chainBoneCountMinusOne;
 
-        private float LoopSpread => _config.LoopSpread;
-        private float MaxAmplitude => _config.MaxAmplitude;
-        private float SpinSpeed =>_config.SpinSpeed;
-        private float PhaseOffset =>_config.PhaseOffset;
-        private AnimationCurve AmplitudeBoneWeightCurve =>_config.AmplitudeBoneWeightCurve;
-        private AnimationCurve SpeedOverTimeCurve =>_config.SpeedOverTimeCurve;
-        private AnimationCurve AmplitudeOverTimeCurve =>_config.AmplitudeOverTimeCurve;
-        private AnimationCurve ObstacleHitMultiplierCurve =>_config.ObstacleHitMultiplierCurve;
+        private float LoopSpread => _logicConfig.LoopSpread;
+        private float MaxAmplitude => _logicConfig.MaxAmplitude;
+        private float SpinSpeed =>_logicConfig.SpinSpeed;
+        private float PhaseOffset =>_logicConfig.PhaseOffset;
+        private AnimationCurve AmplitudeBoneWeightCurve =>_logicConfig.AmplitudeBoneWeightCurve;
+        private AnimationCurve SpeedOverTimeCurve =>_logicConfig.SpeedOverTimeCurve;
+        private AnimationCurve AmplitudeOverTimeCurve =>_logicConfig.AmplitudeOverTimeCurve;
+        private AnimationCurve ObstacleHitMultiplierCurve =>_logicConfig.ObstacleHitMultiplierCurve;
 
 
-        public SpiralThrowChainView(LineRenderer chainLine, SpiralThrowChainViewConfig config, int chainBoneCount)
+        public SpiralThrowChainViewLogic(SpiralThrowChainViewLogicConfig logicConfig, int chainBoneCount)
         {
-            _chainLine = chainLine;
-            _config = config;
+            _logicConfig = logicConfig;
             _chainBoneCount = chainBoneCount;
+            _chainBoneCountMinusOne = _chainBoneCount - 1;
+
+            _chainPositions = new Vector3[_chainBoneCount];
         }
         
         public void EnterSetup(AnchorThrowResult throwResult)
         {
             _throwResult = throwResult;
-            _chainLine.enabled = true;
 
             _spiralUp = Vector3.up;
             _spiralRight = Vector3.Cross(throwResult.Direction, _spiralUp).normalized;
@@ -51,16 +55,14 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void OnViewEnter()
         {
-            _chainLine.positionCount = _chainBoneCount;
-            _chainBoneCountMinusOne = _chainBoneCount - 1;
             _time = 0;
         }
 
-        public void LateUpdate(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
+        public void UpdateChainPositions(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
 
-            _chainLine.SetPosition(0, playerBindPosition);
-            _chainLine.SetPosition(_chainBoneCount-1, anchorBindPosition);
+            _chainPositions[0] = playerBindPosition;
+            _chainPositions[^1] = anchorBindPosition;
 
             Vector3 playerToAnchor = anchorBindPosition - playerBindPosition;
             float playerToAnchorDistance = playerToAnchor.magnitude;
@@ -87,7 +89,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
                 chainBonePosition += spiralOffset;
                 
-                _chainLine.SetPosition(i, chainBonePosition);
+                _chainPositions[i] = chainBonePosition;
             }
 
             _time += deltaTime;
@@ -96,6 +98,11 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public void OnViewExit()
         {
             
+        }
+
+        public Vector3[] GetChainPositions()
+        {
+            return _chainPositions;
         }
 
         private float ChainBoneAmplitudeWeight(float chainT)

@@ -14,61 +14,67 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private Transform _anchorBindTransform;
         
         private IChainPhysics _chainPhysics;
+
+        private IChainView _chainView;
         
-        private IChainView _currentChainView;
-        private SpiralThrowChainView _thrownChainView;
-        private SpiralThrowChainView _pullChainView;
-        private HangingPhysicsChainView _restingOnFloorChainView;
-        private IChainView _carriedChainView;
+        private IChainViewLogic _currentChainViewLogic;
+        private SpiralThrowChainViewLogic _thrownChainViewLogic;
+        private SpiralThrowChainViewLogic _pullChainViewLogic;
+        private BoneChainChainViewLogic _restingOnFloorChainViewLogic;
+        private IChainViewLogic _carriedChainViewLogic;
 
         
         public void Configure(IChainPhysics chainPhysics, Transform playerBindTransform, Transform anchorBindTransform,
-            ChainViewGeneralConfig chainViewGeneralConfig)
+            ChainViewLogicGeneralConfig chainViewLogicGeneralConfig)
         {
             _chainPhysics = chainPhysics;
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
 
-            _thrownChainView = new SpiralThrowChainView(_chainLine, chainViewGeneralConfig.ThrowViewConfig, chainViewGeneralConfig.ChainBoneCount);
-            _pullChainView = new SpiralThrowChainView(_chainLine, chainViewGeneralConfig.PullViewConfig, chainViewGeneralConfig.ChainBoneCount);
-            _restingOnFloorChainView = new HangingPhysicsChainView(_chainLine, chainViewGeneralConfig.RestingOnFloorViewConfig, 
-                chainViewGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK);
-            _carriedChainView = new StraightLineChainView(_chainLine);
-            _currentChainView = _carriedChainView;
+            _chainView = new LineRendererChainView(_chainLine);
+            
+            _thrownChainViewLogic = new SpiralThrowChainViewLogic(chainViewLogicGeneralConfig.ThrowViewLogicConfig, chainViewLogicGeneralConfig.ChainBoneCount);
+            _pullChainViewLogic = new SpiralThrowChainViewLogic(chainViewLogicGeneralConfig.PullViewLogicConfig, chainViewLogicGeneralConfig.ChainBoneCount);
+            _restingOnFloorChainViewLogic = new BoneChainChainViewLogic(chainViewLogicGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK);
+            _carriedChainViewLogic = new StraightLineChainViewLogic(chainViewLogicGeneralConfig.ChainBoneCount);
+            _currentChainViewLogic = _carriedChainViewLogic;
+            
+            _boneChainIK.AwakeConfigure(chainViewLogicGeneralConfig.ChainBoneCount);
         }
 
 
         private void LateUpdate()
         {
-            _currentChainView.LateUpdate(Time.deltaTime, _playerBindTransform.position, _anchorBindTransform.position);
+            _currentChainViewLogic.UpdateChainPositions(Time.deltaTime, _playerBindTransform.position, _anchorBindTransform.position);
+            _chainView.Update(_currentChainViewLogic.GetChainPositions());
         }
 
         public void SetThrownView(AnchorThrowResult throwResult)
         {
-            _currentChainView.OnViewExit();
-            _thrownChainView.EnterSetup(throwResult);
-            _currentChainView = _thrownChainView;
-            _currentChainView.OnViewEnter();
+            _currentChainViewLogic.OnViewExit();
+            _thrownChainViewLogic.EnterSetup(throwResult);
+            _currentChainViewLogic = _thrownChainViewLogic;
+            _currentChainViewLogic.OnViewEnter();
         }
         public void SetPulledView(AnchorThrowResult pullResult)
         {
-            _pullChainView.EnterSetup(pullResult);
-            _currentChainView.OnViewExit();
-            _currentChainView = _pullChainView;
-            _currentChainView.OnViewEnter();
+            _pullChainViewLogic.EnterSetup(pullResult);
+            _currentChainViewLogic.OnViewExit();
+            _currentChainViewLogic = _pullChainViewLogic;
+            _currentChainViewLogic.OnViewEnter();
         }
         public void SetRestingOnFloorView()
         {
-            _currentChainView.OnViewExit();
-            _currentChainView = _restingOnFloorChainView;
-            _currentChainView.OnViewEnter();
+            _currentChainViewLogic.OnViewExit();
+            _currentChainViewLogic = _restingOnFloorChainViewLogic;
+            _currentChainViewLogic.OnViewEnter();
         }
         public void SetCarriedView()
         {
             _chainLine.enabled = true;
-            _currentChainView.OnViewExit();
-            _currentChainView = _carriedChainView;
-            _currentChainView.OnViewEnter();
+            _currentChainViewLogic.OnViewExit();
+            _currentChainViewLogic = _carriedChainViewLogic;
+            _currentChainViewLogic.OnViewEnter();
         }
 
 

@@ -15,8 +15,8 @@ namespace Project.Scripts.InverseKinematics.CCD
 
         private void Awake()
         {
-            _boneChain.AwakeInit();
-            _CCDControllerBehaviour.AwakeInit(_boneChain, _target, _clampedAnglesMin, _clampedAnglesMax, _clampAxis);
+            _boneChain.StartInit();
+            _CCDControllerBehaviour.StartInit(_boneChain, _target, _clampedAnglesMin, _clampedAnglesMax, _clampAxis);
         }
 
     }

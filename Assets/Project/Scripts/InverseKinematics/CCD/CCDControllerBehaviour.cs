@@ -20,7 +20,7 @@ namespace Project.Scripts.InverseKinematics.CCD
             _boneChain.OnGenerationUpdate -= ResetController;
         }
         
-        public void AwakeInit(BoneChain boneChain, Transform target, 
+        public void StartInit(BoneChain boneChain, Transform target, 
             Vector3 clampedAnglesMin, Vector3 clampedAnglesMax, Vector3 clampAxis)
         {
             _boneChain = boneChain;

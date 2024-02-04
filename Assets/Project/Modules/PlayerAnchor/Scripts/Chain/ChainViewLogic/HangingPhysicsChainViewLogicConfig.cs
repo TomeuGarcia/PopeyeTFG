@@ -7,7 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 {
     [CreateAssetMenu(fileName = "HangingPhysicsChainViewConfig", 
         menuName = ScriptableObjectsHelper.ANCHORCHAIN_ASSETS_PATH + "HangingPhysicsChainViewConfig")]
-    public class HangingPhysicsChainViewConfig : ScriptableObject
+    public class HangingPhysicsChainViewLogicConfig : ScriptableObject
     {
         [Header("COLLISIONS")]
         [Expandable]
