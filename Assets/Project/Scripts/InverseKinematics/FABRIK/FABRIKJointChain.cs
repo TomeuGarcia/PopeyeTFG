@@ -8,14 +8,15 @@ namespace Popeye.InverseKinematics.FABRIK
     public class FABRIKJointChain
     {
         private readonly Transform _target;
-        private readonly float _distancesSum;
 
         public Transform[] Joints { get; private set; }
         public Vector3[] PositionCopies { get; private set; }
         public float[] Distances { get; private set; }
+        public float DistancesSum { get; private set; }
 
         public int NumberOfJoints => Joints.Length;
         public Vector3 TargetPosition => _target.position;
+        public Vector3 RootToTarget => (_target.position - Joints[0].position).normalized;
 
 
 
@@ -32,23 +33,23 @@ namespace Popeye.InverseKinematics.FABRIK
                 Distances[i] = Vector3.Distance(joints[i].position, joints[i + 1].position);
             }
 
-            _distancesSum = Distances.Sum();
+            DistancesSum = Distances.Sum();
         }
 
 
-        private float RootCopyToTargetDistance()
+        private float RootCopyToTargetDistance(Vector3 targetPosition)
         {
-            return Vector3.Distance(PositionCopies[0], TargetPosition);
+            return Vector3.Distance(PositionCopies[0], targetPosition);
         }
 
-        public float EndEffectorCopyToTargetDistance()
+        public float EndEffectorCopyToTargetDistance(Vector3 targetPosition)
         {
-            return Vector3.Distance(PositionCopies[NumberOfJoints - 1], TargetPosition);
+            return Vector3.Distance(PositionCopies[NumberOfJoints - 1], targetPosition);
         }
         
         public bool IsTargetUnreachable()
         {
-            return RootCopyToTargetDistance() > _distancesSum;
+            return RootCopyToTargetDistance(TargetPosition) > DistancesSum;
         }
 
 

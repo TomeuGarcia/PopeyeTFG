@@ -17,7 +17,7 @@ namespace Project.Scripts.InverseKinematics.CCD
             _jointChains = new List<CCDJointChain>(1);
         }
 
-        public void AddJointChain(CCDJointChain jointChain, int triesPerIteration = 10)
+        public void AddJointChain(CCDJointChain jointChain)
         {
             _jointChains.Add(jointChain);
         }
@@ -34,49 +34,38 @@ namespace Project.Scripts.InverseKinematics.CCD
                 UpdateJointChain(jointChain);
             }
         }
-
         
-
         void UpdateJointChain(CCDJointChain jointChain)
         {
             Transform[] joints = jointChain.Joints;
             Vector3 targetPosition = jointChain.TargetPosition;
 
 
-            bool done = false;
-            if (!done)
+            Vector3 targetToEffector = joints[^1].position - targetPosition;
+            bool done = targetToEffector.magnitude < _distanceToEndEffectorTolerance;
+            
+            // the target has moved, reset tries to 0 and change PreviousTargetPosition
+            if (targetPosition != jointChain.PreviousTargetPosition)
             {
-
-                if (jointChain.IterationTriesCounter <= jointChain.MaxIterationTries)
+                jointChain.IterationTriesCounter = 0;
+                jointChain.PreviousTargetPosition = targetPosition;
+            }
+            
+            
+            if (!done && jointChain.IterationTriesCounter <= jointChain.MaxIterationTries)
+            {
+                for (int i = jointChain.NumberOfJoints - 2; i >= 0; i--)
                 {
-                    for (int i = jointChain.NumberOfJoints - 2; i >= 0; i--)
-                    {
-                        Quaternion rotationBetweenTargetAndEndEffector = ComputeRotationBetweenTargetAndEndEffector(
-                                joints[i].position, targetPosition, joints[^1].position);
+                    Quaternion rotationBetweenTargetAndEndEffector = ComputeRotationBetweenTargetAndEndEffector(
+                        joints[i].position, targetPosition, joints[^1].position);
 
-                        joints[i].rotation = rotationBetweenTargetAndEndEffector * joints[i].rotation;
+                    joints[i].rotation = rotationBetweenTargetAndEndEffector * joints[i].rotation;
                         
-                        QuaternionsHelper.ClampBoneRotation(joints[i].transform, 
-                            jointChain.ClampedAnglesMin, jointChain.ClampedAnglesMax, jointChain.ClampAxis);
+                    QuaternionsHelper.ClampBoneRotation(joints[i].transform, 
+                        jointChain.ClampedAnglesMin, jointChain.ClampedAnglesMax, jointChain.ClampAxis);
 
-                    }
-                    ++jointChain.IterationTriesCounter;
                 }
-
-                // find the difference in the positions of the end effector and the target
-                Vector3 targetToEffector = joints[^1].position - targetPosition;
-
-
-                done = targetToEffector.magnitude < _distanceToEndEffectorTolerance;
-
-
-                // the target has moved, reset tries to 0 and change tpos
-                if (targetPosition != jointChain.PreviousTargetPosition)
-                {
-                    jointChain.IterationTriesCounter = 0;
-                    jointChain.PreviousTargetPosition = targetPosition;
-                }
-
+                ++jointChain.IterationTriesCounter;
             }
             
         }

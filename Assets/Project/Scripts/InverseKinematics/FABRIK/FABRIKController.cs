@@ -6,15 +6,17 @@ namespace Popeye.InverseKinematics.FABRIK
 
     public class FABRIKController
     {
-        private float _angleThreshold;
-        private float _distanceToEndEffectorTolerance;
+        private readonly float _angleThreshold;
+        private readonly float _distanceToEndEffectorTolerance;
+        private readonly int _maxTries;
 
-        private List<FABRIKJointChain> _jointChains;
+        private readonly List<FABRIKJointChain> _jointChains;
 
-        public FABRIKController()
+        public FABRIKController(int maxTries = 10)
         {
             _angleThreshold = 1.0f;
             _distanceToEndEffectorTolerance = 0.01f;
+            _maxTries = maxTries;
 
             _jointChains = new List<FABRIKJointChain>();
         }
@@ -33,25 +35,27 @@ namespace Popeye.InverseKinematics.FABRIK
         {
             foreach (FABRIKJointChain jointChain in _jointChains)
             {
-                UpdateJointChain(jointChain);
+                UpdateJointChain2(jointChain);
             }
         }
 
-        private void UpdateJointChain(FABRIKJointChain jointChain)
+
+        private void UpdateJointChain2(FABRIKJointChain jointChain)
         {
             ResetPositionCopies(jointChain);
 
-            if (jointChain.IsTargetUnreachable())
+
+            Vector3 targetPosition = jointChain.IsTargetUnreachable() ? 
+                jointChain.RootToTarget * (jointChain.DistancesSum + _distanceToEndEffectorTolerance) : 
+                jointChain.TargetPosition;
+
+            int tries = 0;
+            
+            while (jointChain.EndEffectorCopyToTargetDistance(targetPosition) > _distanceToEndEffectorTolerance
+                   && tries++ < _maxTries)
             {
-                SetPositionsStraight(jointChain);
-            }
-            else
-            {
-                while (jointChain.EndEffectorCopyToTargetDistance() > _distanceToEndEffectorTolerance)
-                {
-                    ForwardReaching(jointChain);
-                    BackwardReaching(jointChain);
-                }
+                ForwardReaching(jointChain);
+                BackwardReaching(jointChain);
             }
 
             UpdateJoints(jointChain);
