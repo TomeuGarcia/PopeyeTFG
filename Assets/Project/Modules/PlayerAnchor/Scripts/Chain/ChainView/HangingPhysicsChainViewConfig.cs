@@ -12,9 +12,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [Header("COLLISIONS")]
         [Expandable]
         [SerializeField] private CollisionProbingConfig _collisionProbingConfig;
-
-        [Header("CHAIN BONES")]
-        [SerializeField, Range(2, 100)] private int _chainBoneCount = 50;
         
         
         [Header("HANGING")]
@@ -26,7 +23,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         public CollisionProbingConfig CollisionProbingConfig => _collisionProbingConfig;
         
-        public int ChainBoneCount => _chainBoneCount;
         public float VerticalOffsetFromFloor => _verticalOffsetFromFloor;
         public float FullStraightDistance => _fullStraightDistance;
         

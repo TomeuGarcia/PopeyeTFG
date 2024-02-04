@@ -8,7 +8,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
     public class SpiralThrowChainViewConfig : ScriptableObject
     {
         [Header("CHAIN BONES")]
-        [SerializeField, Range(2, 100)] private int _chainBoneCount = 20;
         [SerializeField, Range(-0.5f, 0.5f)] private float _phaseOffset = 0.01f;
         
         [Header("LOOPS")]
@@ -27,7 +26,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [SerializeField] private AnimationCurve _obstacleHitMultiplierCurve = AnimationCurve.EaseInOut(0, 1, 1, 1);
 
         
-        public int ChainBoneCount => _chainBoneCount;
         public float LoopSpread => _loopSpread;
         public float SpinSpeed => _spinSpeed;
         public float MaxAmplitude => _maxAmplitude;

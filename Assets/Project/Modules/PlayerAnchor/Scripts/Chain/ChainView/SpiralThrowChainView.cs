@@ -19,7 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private float Duration => _throwResult.Duration;
         private float DurationHitObstacle => _throwResult.DurationHitObstacle;
         
-        private int ChainBoneCount => _config.ChainBoneCount;
+        private int _chainBoneCount;
         private int _chainBoneCountMinusOne;
 
         private float LoopSpread => _config.LoopSpread;
@@ -36,6 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _chainLine = chainLine;
             _config = config;
+            _chainBoneCount = chainBoneCount;
         }
         
         public void EnterSetup(AnchorThrowResult throwResult)
@@ -50,8 +51,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void OnViewEnter()
         {
-            _chainLine.positionCount = ChainBoneCount;
-            _chainBoneCountMinusOne = ChainBoneCount - 1;
+            _chainLine.positionCount = _chainBoneCount;
+            _chainBoneCountMinusOne = _chainBoneCount - 1;
             _time = 0;
         }
 
@@ -59,7 +60,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
 
             _chainLine.SetPosition(0, playerBindPosition);
-            _chainLine.SetPosition(ChainBoneCount-1, anchorBindPosition);
+            _chainLine.SetPosition(_chainBoneCount-1, anchorBindPosition);
 
             Vector3 playerToAnchor = anchorBindPosition - playerBindPosition;
             float playerToAnchorDistance = playerToAnchor.magnitude;
@@ -71,7 +72,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 ObstacleHitMultiplierCurve.Evaluate(Mathf.Min(_time/DurationHitObstacle, 1)) :
                 1;
             
-            for (int i = 1; i < ChainBoneCount - 1; ++i)
+            for (int i = 1; i < _chainBoneCount - 1; ++i)
             {
                 Vector3 chainBonePosition = playerBindPosition + (playerToAnchorDirection * (i * distanceStep));
 

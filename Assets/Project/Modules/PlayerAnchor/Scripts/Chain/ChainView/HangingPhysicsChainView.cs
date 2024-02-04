@@ -8,6 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private readonly LineRenderer _chainLine;
         private readonly HangingPhysicsChainViewConfig _config;
 
+        private int _chainBoneCount;
         private int _chainBoneCountMinusOne;
 
         private Transform _chainIK;
@@ -18,7 +19,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private QueryTriggerInteraction QueryTriggerInteraction => _config.CollisionProbingConfig.QueryTriggerInteraction;
 
 
-        private int ChainBoneCount => _config.ChainBoneCount;
         private float VerticalOffsetFromFloor => _config.VerticalOffsetFromFloor;
         private float FullStraightDistance => _config.FullStraightDistance;
         private AnimationCurve BendingWeightCurve => _config.BendingWeightCurve;
@@ -29,6 +29,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _chainLine = chainLine;
             _config = config;
+            _chainBoneCount = chainBoneCount;
 
             _chainIK = chainIK;
             _chainIK.gameObject.SetActive(false);
