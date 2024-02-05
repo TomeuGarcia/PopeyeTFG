@@ -1,6 +1,7 @@
 
 using System;
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -35,7 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         void OnTryUsingWhenObstructed();
 
 
-        void OnDamageDealt();
+        void OnDamageDealt(DamageHitResult damageHitResult);
 
     }
 }

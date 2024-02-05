@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6166305667037113824}
   - component: {fileID: 6189895260367947796}
   m_Layer: 0
-  m_Name: AnchorThrow_Trail
+  m_Name: AnchorThrow_SoftTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,6 +129,11 @@ PrefabInstance:
       propertyPath: m_Time
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 7375140003675854822, guid: 1f0bba3bbf90167488f152816e3f0112,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f838a67d679b2bd4cb13ccb8be6f1311, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -219,6 +224,11 @@ PrefabInstance:
       propertyPath: m_Time
       value: 0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 3069201185080424899, guid: 0a5eba5f33a852346ab240e8e712b51b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f838a67d679b2bd4cb13ccb8be6f1311, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba9bd416ca354042a927faa26f144e3e, type: 3}
-  m_Name: MF_InterpolationConfig_AnchorTrail
+  m_Script: {fileID: 11500000, guid: fb48b32297a14e0ea0c320201bdd66e7, type: 3}
+  m_Name: HitStopConfig_DamageTaken
   m_EditorClassIdentifier: 
-  _delay: 0.2
-  _name: _Disappear
-  _duration: 1
-  _endValue: 1
-  _ease: 1
-  _waitForCompletion: 0
+  _transitionType: 0
+  _realtimeDuration: 0.2
+  _timeScale: 0.1
+  _transitionConfig: {fileID: 0}

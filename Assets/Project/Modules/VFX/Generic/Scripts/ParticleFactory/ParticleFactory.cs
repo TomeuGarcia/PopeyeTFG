@@ -17,6 +17,7 @@ namespace Popeye.Modules.VFX.ParticleFactories
         {
             _config = config;
             _particleParent = parent;
+            _particleParent.position = Vector3.zero;
             
             _typeToPrefab = _config.GetTypeToPoolDictionary(_particleParent);
         }
