@@ -11,18 +11,23 @@ namespace Popeye.InverseKinematics.Bones
         public Transform BoneRoot => _boneRoot;
         public Transform BoneEnd => _boneEnd;
         public Vector3 Position => BoneRoot.position;
+        public Quaternion Rotation => BoneRoot.rotation;
 
-
-        public void SetLocalRotation(Quaternion localRotation)
-        {
-            _boneRoot.localRotation = localRotation;
-        }
 
         public void SetWorldRotation(Quaternion worldRotation)
         {
             _boneRoot.rotation = worldRotation;
         }
+        public void SetLocalRotation(Quaternion localRotation)
+        {
+            _boneRoot.localRotation = localRotation;
+        }
 
+
+        public void SetWorldPosition(Vector3 worldPosition)
+        {
+            _boneRoot.position = worldPosition;
+        }
         public void SetLocalPosition(Vector3 localPosition)
         {
             _boneRoot.localPosition = localPosition;

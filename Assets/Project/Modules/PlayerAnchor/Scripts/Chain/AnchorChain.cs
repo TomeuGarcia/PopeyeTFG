@@ -65,6 +65,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
         public void SetRestingOnFloorView()
         {
+            _restingOnFloorChainViewLogic.EnterSetup(_currentChainViewLogic.GetChainPositions(), 
+                _playerBindTransform.position, _anchorBindTransform.position);
             _currentChainViewLogic.OnViewExit();
             _currentChainViewLogic = _restingOnFloorChainViewLogic;
             _currentChainViewLogic.OnViewEnter();
