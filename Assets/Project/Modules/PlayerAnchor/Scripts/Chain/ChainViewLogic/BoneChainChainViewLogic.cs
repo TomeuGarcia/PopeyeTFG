@@ -27,7 +27,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void OnViewEnter()
         {
-            _chainIK.gameObject.SetActive(false);
+            //_chainIK.gameObject.SetActive(false);
         }
 
         public void UpdateChainPositions(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
@@ -42,7 +42,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void OnViewExit()
         {
-            _chainIK.gameObject.SetActive(false);
+            //_chainIK.gameObject.SetActive(false);
         }
 
         public Vector3[] GetChainPositions()
