@@ -18,24 +18,23 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         [Header("CONFIGURATIONS")]
         [Expandable]
-        [SerializeField] private SpiralThrowChainViewLogicConfig throwViewLogicConfig;
+        [SerializeField] private SpiralThrowChainViewLogicConfig _throwViewLogicConfig;
         [FormerlySerializedAs("_pullViewConfig")]
         [Space(20)]
         
         [Expandable]
-        [SerializeField] private SpiralThrowChainViewLogicConfig pullViewLogicConfig;
-        [FormerlySerializedAs("_restingOnFloorViewConfig")]
+        [SerializeField] private SpiralThrowChainViewLogicConfig _pullViewLogicConfig;
         [Space(20)]
-        
+
         [Expandable]
-        [SerializeField] private HangingPhysicsChainViewLogicConfig restingOnFloorViewLogicConfig;
+        [SerializeField] private BoneChainChainViewLogicConfig _restingOnFloorViewLogicConfig;
 
 
 
         public int ChainBoneCount => _chainBoneCount;
         
-        public SpiralThrowChainViewLogicConfig ThrowViewLogicConfig => throwViewLogicConfig;
-        public SpiralThrowChainViewLogicConfig PullViewLogicConfig => pullViewLogicConfig;
-        public HangingPhysicsChainViewLogicConfig RestingOnFloorViewLogicConfig => restingOnFloorViewLogicConfig;
+        public SpiralThrowChainViewLogicConfig ThrowViewLogicConfig => _throwViewLogicConfig;
+        public SpiralThrowChainViewLogicConfig PullViewLogicConfig => _pullViewLogicConfig;
+        public BoneChainChainViewLogicConfig RestingOnFloorViewLogicConfig => _restingOnFloorViewLogicConfig;
     }
 }

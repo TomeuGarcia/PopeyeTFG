@@ -33,10 +33,22 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             _chainView = new LineRendererChainView(_chainLine);
             
-            _thrownChainViewLogic = new SpiralThrowChainViewLogic(chainViewLogicGeneralConfig.ThrowViewLogicConfig, chainViewLogicGeneralConfig.ChainBoneCount);
-            _pullChainViewLogic = new SpiralThrowChainViewLogic(chainViewLogicGeneralConfig.PullViewLogicConfig, chainViewLogicGeneralConfig.ChainBoneCount);
-            _restingOnFloorChainViewLogic = new BoneChainChainViewLogic(chainViewLogicGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK);
-            _carriedChainViewLogic = new StraightLineChainViewLogic(chainViewLogicGeneralConfig.ChainBoneCount);
+            
+            _thrownChainViewLogic = 
+                new SpiralThrowChainViewLogic(chainViewLogicGeneralConfig.ThrowViewLogicConfig, 
+                    chainViewLogicGeneralConfig.ChainBoneCount);
+            
+            _pullChainViewLogic = 
+                new SpiralThrowChainViewLogic(chainViewLogicGeneralConfig.PullViewLogicConfig, 
+                    chainViewLogicGeneralConfig.ChainBoneCount);
+            
+            _restingOnFloorChainViewLogic = 
+                new BoneChainChainViewLogic(chainViewLogicGeneralConfig.RestingOnFloorViewLogicConfig, 
+                    chainViewLogicGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK);
+            
+            _carriedChainViewLogic = 
+                new StraightLineChainViewLogic(chainViewLogicGeneralConfig.ChainBoneCount);
+            
             _currentChainViewLogic = _carriedChainViewLogic;
             
             _boneChainIK.AwakeConfigure(chainViewLogicGeneralConfig.ChainBoneCount);
