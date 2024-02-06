@@ -24,18 +24,18 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void UpdateChainPositions(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
-            Vector3 playerToAnchor = anchorBindPosition - playerBindPosition;
-            float playerToAnchorDistance = playerToAnchor.magnitude;
-            Vector3 playerToAnchorDirection = playerToAnchor / playerToAnchorDistance;
-            float distanceStep = playerToAnchorDistance / _chainBoneCountMinusOne;
+            Vector3 anchorToPlayer = playerBindPosition - anchorBindPosition;
+            float anchorToPlayerDistance = anchorToPlayer.magnitude;
+            Vector3 anchorToPlayerDirection = anchorToPlayer / anchorToPlayerDistance;
+            float distanceStep = anchorToPlayerDistance / _chainBoneCountMinusOne;
 
             
-            _chainPositions[0] = playerBindPosition;
-            _chainPositions[^1] = anchorBindPosition;
+            _chainPositions[0] = anchorBindPosition;
+            _chainPositions[^1] = playerBindPosition;
 
             for (int i = 1; i < _chainBoneCount - 1; ++i)
             {
-                _chainPositions[i] = playerBindPosition + (playerToAnchorDirection * (i * distanceStep));
+                _chainPositions[i] = playerBindPosition + (anchorToPlayerDirection * (i * distanceStep));
             }
             
         }

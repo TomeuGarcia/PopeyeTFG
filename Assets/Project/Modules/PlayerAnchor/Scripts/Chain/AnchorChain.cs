@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
     public class AnchorChain : MonoBehaviour
     {
         [SerializeField] private LineRenderer _chainLine;
-        [SerializeField] private Transform _chainIK;
+        [SerializeField] private BoneChain _boneChain;
         [SerializeField] private BoneChain _boneChainIK;
         [SerializeField] private FABRIKControllerBehaviour _controllerIK;
         private Transform _playerBindTransform;
@@ -35,6 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
 
+            //_chainView = new BoneChainChainView(_boneChain, chainViewLogicGeneralConfig.ChainBoneCount);
             _chainView = new LineRendererChainView(_chainLine);
             
             
@@ -48,7 +49,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             _restingOnFloorChainViewLogic = 
                 new BoneChainChainViewLogic(chainViewLogicGeneralConfig.RestingOnFloorViewLogicConfig, 
-                    chainViewLogicGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK, _controllerIK);
+                    chainViewLogicGeneralConfig.ChainBoneCount, _boneChainIK, _controllerIK);
             
             _carriedChainViewLogic = 
                 new StraightLineChainViewLogic(chainViewLogicGeneralConfig.ChainBoneCount);

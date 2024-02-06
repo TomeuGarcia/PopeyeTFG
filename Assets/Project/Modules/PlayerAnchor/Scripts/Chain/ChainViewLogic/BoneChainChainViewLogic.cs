@@ -15,7 +15,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         private readonly Vector3[] _chainPositions;
         
-        private readonly Transform _chainIK;
         private readonly BoneChain _boneChainIK;
         private readonly FABRIKControllerBehaviour _controllerIK;
         private readonly BoneChainChainViewLogicConfig _config;
@@ -39,27 +38,27 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private float MaxWaveAmplitude => _config.MaxWaveAmplitude;
 
 
-        public BoneChainChainViewLogic(BoneChainChainViewLogicConfig config, int chainBoneCount, Transform chainIK,
+        public BoneChainChainViewLogic(BoneChainChainViewLogicConfig config, int chainBoneCount,
             BoneChain boneChainIK, FABRIKControllerBehaviour controllerIK)
         {
             _chainBoneCount = chainBoneCount;
             _chainBoneCountMinusOne = _chainBoneCount - 1;
             
             _config = config;
-            _chainIK = chainIK;
             _boneChainIK = boneChainIK;
             _controllerIK = controllerIK;
 
             _chainPositions = new Vector3[_chainBoneCount];
 
             _controllerIK.enabled = false;
-            _chainIK.gameObject.SetActive(false);
+            
+            //_boneChainIK.Bones[0].gameObject.SetActive(false);
         }
 
 
         public void EnterSetup(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
-            System.Array.Reverse(previousStateChainPositions);
+            //System.Array.Reverse(previousStateChainPositions);
 
             _previousStateChainPositions = previousStateChainPositions;
             
@@ -86,17 +85,16 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void UpdateChainPositions(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
-            _chainPositions[0] = anchorBindPosition;
-                
-            for (int i = 1; i < _chainBoneCount; ++i)
+            for (int i = 0; i < _chainBoneCountMinusOne; ++i)
             {
                 _chainPositions[i] = Vector3.LerpUnclamped(_previousStateChainPositions[i],_boneChainIK.Bones[i].Position, _transitionT);
             }
+            _chainPositions[_chainBoneCountMinusOne] = playerBindPosition;
         }
 
         public void OnViewExit()
         {
-            _chainIK.gameObject.SetActive(false);
+            //_boneChainIK.Bones[0].gameObject.SetActive(false);
             _controllerIK.enabled = false;
         }
 

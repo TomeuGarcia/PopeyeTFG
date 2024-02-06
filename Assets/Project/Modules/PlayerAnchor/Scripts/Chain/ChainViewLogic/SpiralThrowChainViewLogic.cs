@@ -61,14 +61,14 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public void UpdateChainPositions(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
 
-            _chainPositions[0] = playerBindPosition;
-            _chainPositions[^1] = anchorBindPosition;
+            _chainPositions[0] = anchorBindPosition;
+            _chainPositions[^1] = playerBindPosition;
 
-            Vector3 playerToAnchor = anchorBindPosition - playerBindPosition;
-            float playerToAnchorDistance = playerToAnchor.magnitude;
-            Vector3 playerToAnchorDirection = playerToAnchor / playerToAnchorDistance;
+            Vector3 anchorToPlayer = playerBindPosition - anchorBindPosition;
+            float anchorToPlayerDistance = anchorToPlayer.magnitude;
+            Vector3 anchorToPlayerDirection = anchorToPlayer / anchorToPlayerDistance;
 
-            float distanceStep = playerToAnchorDistance / _chainBoneCountMinusOne;
+            float distanceStep = anchorToPlayerDistance / _chainBoneCountMinusOne;
             
             _effectMultiplierAddition = _throwResult.HitsObstacle ? 
                 ObstacleHitMultiplierCurve.Evaluate(Mathf.Min(_time/DurationHitObstacle, 1)) :
@@ -76,7 +76,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             for (int i = 1; i < _chainBoneCount - 1; ++i)
             {
-                Vector3 chainBonePosition = playerBindPosition + (playerToAnchorDirection * (i * distanceStep));
+                Vector3 chainBonePosition = anchorBindPosition + (anchorToPlayerDirection * (i * distanceStep));
 
                 float t = i / (float)_chainBoneCountMinusOne;
                 float time = _time + (t * PhaseOffset);

@@ -450,7 +450,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d2086a1711bd13e4eb36587338105395, type: 2}
+  - {fileID: 2100000, guid: e40d2a0fbed4ee646882c488b86b0796, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -525,7 +525,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 3
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -2376,7 +2376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bonePrefab: {fileID: 5144887323695516696, guid: b3e64eb0cc23ae441b66a39a08038097,
     type: 3}
-  _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: 30ee97334199af943a349e931342e2f1,
+  _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: cab2029e08f634345b9a25d728517bad,
     type: 3}
   _numberOfBones: 19
   _firstBoneParent: {fileID: 6172617056675568626}
@@ -2905,6 +2905,7 @@ GameObject:
   - component: {fileID: 6635669741451734058}
   - component: {fileID: 2223938708714666153}
   - component: {fileID: 6405983057515278388}
+  - component: {fileID: 3849039036042762599}
   m_Layer: 0
   m_Name: Chain
   m_TagString: Untagged
@@ -2941,7 +2942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chainLine: {fileID: 4763874378844247995}
-  _chainIK: {fileID: 6172617056675568626}
+  _boneChain: {fileID: 3849039036042762599}
   _boneChainIK: {fileID: 5612155314268022033}
   _controllerIK: {fileID: 6132698310706980790}
 --- !u!114 &6405983057515278388
@@ -2957,6 +2958,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _springJoint: {fileID: 148515704002207951}
+--- !u!114 &3849039036042762599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5622108045594571558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d13797f5f9330a84d834190aedcd7e2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bonePrefab: {fileID: 5144887323695516696, guid: 74e1b027bb5f4b84c8c8c20c422549d5,
+    type: 3}
+  _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: 8989dd080297fe04f84131bb52a0423b,
+    type: 3}
+  _numberOfBones: 10
+  _firstBoneParent: {fileID: 6172617056675568626}
+  autoUpdateBoneGeneration: 0
 --- !u!1 &5759862739316320781
 GameObject:
   m_ObjectHideFlags: 0
