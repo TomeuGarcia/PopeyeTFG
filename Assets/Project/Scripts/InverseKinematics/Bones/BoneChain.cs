@@ -86,5 +86,23 @@ namespace Popeye.InverseKinematics.Bones
             Destroy(Bones[0].gameObject);
         }
 
+
+        public void FromPositions(Vector3[] positions)
+        {
+            int numberOfBonesMinusOne = _numberOfBones - 1;
+            for (int i = 0; i < numberOfBonesMinusOne; ++i)
+            {
+                Vector3 oldDirection = (Bones[i + 1].Position - Bones[i].Position).normalized;
+                Vector3 newDirection = (positions[i + 1] - positions[i]).normalized;
+                
+                Vector3 axis = Vector3.Cross(oldDirection, newDirection).normalized;
+                float angle = Mathf.Acos(Vector3.Dot(oldDirection, newDirection)) * Mathf.Rad2Deg;
+                
+                if (angle > 1.0f)
+                {
+                    Bones[i].SetWorldRotation(Quaternion.AngleAxis(angle, axis) * Bones[i].Rotation);
+                }
+            }
+        }
     }
 }

@@ -163,6 +163,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         }
 
+        public void OnDashedAt(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashedAtView(duration, dashEase);
+        }
+
         public void SetKicked(AnchorThrowResult anchorKickResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);

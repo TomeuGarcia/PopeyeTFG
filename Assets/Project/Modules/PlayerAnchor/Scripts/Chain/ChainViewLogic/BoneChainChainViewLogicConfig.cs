@@ -29,9 +29,13 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [SerializeField, Range(2, 10)] private int _minBonesPerCircle = 6;
         [SerializeField, Range(2, 10)] private int _maxBonesPerCircle = 8;
         [SerializeField, Range(0f, 360f)] private float _fullCircleAngles = 360f;
+
+
+        [Header("WAVE")] 
+        [SerializeField] private AnimationCurve _waveCurve;
+        [SerializeField, Range(0f, 5f)] private float _maxWaveAmplitude = 2.0f;
         
-
-
+        
         public CollisionProbingConfig FloorCollisionProbingConfig => _floorCollisionProbingConfig;
         public float MaxChainLength => _chainConfig.MaxChainLength;
         
@@ -44,6 +48,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public int RandomBonesPerCircle => Random.Range(_minBonesPerCircle, _maxBonesPerCircle + 1);
         public float FullCircleAngles => _fullCircleAngles;
 
+
+        public AnimationCurve WaveCurve => _waveCurve;
+        public float MaxWaveAmplitude => _maxWaveAmplitude;
+        
         
         private void OnValidate()
         {

@@ -28,7 +28,11 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         [Expandable]
         [SerializeField] private BoneChainChainViewLogicConfig _restingOnFloorViewLogicConfig;
+        [Space(20)]
 
+        [Expandable]
+        [SerializeField] private FoldingChainViewLogicConfig _dashingViewLogicConfig;
+        
 
 
         public int ChainBoneCount => _chainBoneCount;
@@ -36,5 +40,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public SpiralThrowChainViewLogicConfig ThrowViewLogicConfig => _throwViewLogicConfig;
         public SpiralThrowChainViewLogicConfig PullViewLogicConfig => _pullViewLogicConfig;
         public BoneChainChainViewLogicConfig RestingOnFloorViewLogicConfig => _restingOnFloorViewLogicConfig;
+        public FoldingChainViewLogicConfig DashingViewLogicConfig => _dashingViewLogicConfig;
     }
 }

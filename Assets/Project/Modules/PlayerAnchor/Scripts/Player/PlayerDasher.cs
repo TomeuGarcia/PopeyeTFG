@@ -41,7 +41,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void DashTowardsAnchor(float duration)
         {
-            _playerMotion.MoveToPosition(ComputeDashTowardsAnchorPosition(), duration, Ease.InOutQuad);
+            Ease ease = Ease.InOutQuad;
+            _playerMotion.MoveToPosition(ComputeDashTowardsAnchorPosition(), duration, ease);
+            _anchor.OnDashedAt(duration, ease);
         }
         
         public void DashForward(float minDuration, float maxDuration, out float resultDuration)

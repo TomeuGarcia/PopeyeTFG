@@ -1,5 +1,7 @@
 using System;
+using DG.Tweening;
 using Popeye.InverseKinematics.Bones;
+using Popeye.InverseKinematics.FABRIK;
 using Popeye.Modules.PlayerAnchor.Player;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [SerializeField] private LineRenderer _chainLine;
         [SerializeField] private Transform _chainIK;
         [SerializeField] private BoneChain _boneChainIK;
+        [SerializeField] private FABRIKControllerBehaviour _controllerIK;
         private Transform _playerBindTransform;
         private Transform _anchorBindTransform;
         
@@ -21,6 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private SpiralThrowChainViewLogic _thrownChainViewLogic;
         private SpiralThrowChainViewLogic _pullChainViewLogic;
         private BoneChainChainViewLogic _restingOnFloorChainViewLogic;
+        private FoldingChainViewLogic _dashingChainViewLogic;
         private IChainViewLogic _carriedChainViewLogic;
 
         
@@ -44,10 +48,14 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             _restingOnFloorChainViewLogic = 
                 new BoneChainChainViewLogic(chainViewLogicGeneralConfig.RestingOnFloorViewLogicConfig, 
-                    chainViewLogicGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK);
+                    chainViewLogicGeneralConfig.ChainBoneCount, _chainIK, _boneChainIK, _controllerIK);
             
             _carriedChainViewLogic = 
                 new StraightLineChainViewLogic(chainViewLogicGeneralConfig.ChainBoneCount);
+
+            _dashingChainViewLogic =
+                new FoldingChainViewLogic(chainViewLogicGeneralConfig.DashingViewLogicConfig,
+                    chainViewLogicGeneralConfig.ChainBoneCount);
             
             _currentChainViewLogic = _carriedChainViewLogic;
             
@@ -88,6 +96,13 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainLine.enabled = true;
             _currentChainViewLogic.OnViewExit();
             _currentChainViewLogic = _carriedChainViewLogic;
+            _currentChainViewLogic.OnViewEnter();
+        }
+        public void SetDashedAtView(float dashDuration, Ease dashEase)
+        {
+            _dashingChainViewLogic.EnterSetup(_currentChainViewLogic.GetChainPositions(), dashDuration, dashEase);
+            _currentChainViewLogic.OnViewExit();
+            _currentChainViewLogic = _dashingChainViewLogic;
             _currentChainViewLogic.OnViewEnter();
         }
 

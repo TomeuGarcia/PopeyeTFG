@@ -1,6 +1,6 @@
-using System;
 using DG.Tweening;
 using Popeye.InverseKinematics.Bones;
+using Popeye.InverseKinematics.FABRIK;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,6 +17,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         private readonly Transform _chainIK;
         private readonly BoneChain _boneChainIK;
+        private readonly FABRIKControllerBehaviour _controllerIK;
         private readonly BoneChainChainViewLogicConfig _config;
 
         private Vector3[] _previousStateChainPositions;
@@ -33,35 +34,46 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private int RandomBonesStraight => _config.RandomBonesStraight;
         private float FullCircleAngles => _config.FullCircleAngles;
         
+        
+        private AnimationCurve WaveCurve => _config.WaveCurve;
+        private float MaxWaveAmplitude => _config.MaxWaveAmplitude;
 
-        public BoneChainChainViewLogic(BoneChainChainViewLogicConfig config, int chainBoneCount, Transform chainIK, BoneChain boneChainIK)
+
+        public BoneChainChainViewLogic(BoneChainChainViewLogicConfig config, int chainBoneCount, Transform chainIK,
+            BoneChain boneChainIK, FABRIKControllerBehaviour controllerIK)
         {
             _chainBoneCount = chainBoneCount;
             _chainBoneCountMinusOne = _chainBoneCount - 1;
             
+            _config = config;
             _chainIK = chainIK;
             _boneChainIK = boneChainIK;
-            _config = config;
+            _controllerIK = controllerIK;
 
             _chainPositions = new Vector3[_chainBoneCount];
 
+            _controllerIK.enabled = false;
             _chainIK.gameObject.SetActive(false);
         }
 
 
         public void EnterSetup(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
-            Array.Reverse(previousStateChainPositions);
+            System.Array.Reverse(previousStateChainPositions);
 
             _previousStateChainPositions = previousStateChainPositions;
             
-            MakeLoopingChain(playerBindPosition, anchorBindPosition);
+            //MakeLoopingChain(playerBindPosition, anchorBindPosition);
+            //MakeChainRestOnFloor();
+
+            MakeChainMatchCurve(playerBindPosition, anchorBindPosition, WaveCurve, MaxWaveAmplitude);
             MakeChainRestOnFloor();
         }
         
         public void OnViewEnter()
         {
             //_chainIK.gameObject.SetActive(true);
+            _controllerIK.enabled = true;
 
             _transitionT = 0f;
             DOTween.To(
@@ -85,6 +97,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public void OnViewExit()
         {
             _chainIK.gameObject.SetActive(false);
+            _controllerIK.enabled = false;
         }
 
         public Vector3[] GetChainPositions()
@@ -230,22 +243,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
      
         
         
-        private void MakeStraightChain(Vector3[] previousStateChainPositions)
-        {
-            for (int i = 0; i < _chainBoneCountMinusOne; ++i)
-            {
-                Vector3 oldDirection = (_boneChainIK.Bones[i + 1].Position - _boneChainIK.Bones[i].Position).normalized;
-                Vector3 newDirection = (previousStateChainPositions[i + 1] - previousStateChainPositions[i]).normalized;
-                
-                Vector3 axis = Vector3.Cross(oldDirection, newDirection).normalized;
-                float angle = Mathf.Acos(Vector3.Dot(oldDirection, newDirection)) * Mathf.Rad2Deg;
-                
-                if (angle > 1.0f)
-                {
-                    _boneChainIK.Bones[i].SetWorldRotation(Quaternion.AngleAxis(angle, axis) * _boneChainIK.Bones[i].Rotation);
-                }
-            }
-        }
 
         private void MakeZigZagChain(Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
@@ -263,16 +260,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             for (int i = 0; i < _chainBoneCountMinusOne; ++i)
             {
-                Vector3 oldDirection = (_boneChainIK.Bones[i + 1].Position - _boneChainIK.Bones[i].Position).normalized;
-                Vector3 newDirection = (i % 2 == 0 ? zigZagLeftRotation : zigZagRightRotation) * anchorToPlayerDirection;
-                
-                Vector3 axis = Vector3.Cross(oldDirection, newDirection).normalized;
-                float angle = Mathf.Acos(Vector3.Dot(oldDirection, newDirection)) * Mathf.Rad2Deg;
-                
-                if (angle > 1.0f)
-                {
-                    _boneChainIK.Bones[i].SetWorldRotation(Quaternion.AngleAxis(angle, axis) * _boneChainIK.Bones[i].Rotation);
-                }
+                SetZigZagDirection(i, anchorToPlayerDirection, zigZagLeftRotation, zigZagRightRotation);
             }
         }
         
@@ -288,8 +276,33 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             {
                 _boneChainIK.Bones[i].SetWorldRotation(Quaternion.AngleAxis(angle, axis) * _boneChainIK.Bones[i].Rotation);
             }
-            
-            Debug.Log(newDirection);
+        }
+
+        
+        private void MakeChainMatchCurve(Vector3 playerBindPosition, Vector3 anchorBindPosition, 
+            AnimationCurve waveCurve, float maxWaveAmplitude)
+        {
+            Vector3 anchorToPlayer = playerBindPosition - anchorBindPosition;
+            float anchorToPlayerDistance = anchorToPlayer.magnitude;
+            Vector3 anchorToPlayerDirection = anchorToPlayer / anchorToPlayerDistance;
+
+
+            int direction = Random.Range(0, 2) < 1 ? 1 : -1;
+
+            Vector3 right = Vector3.Cross(anchorToPlayerDirection, Vector3.up).normalized * direction;
+
+
+            Vector3[] curvePoints = new Vector3[_chainBoneCount];
+            float sampleStep = 1f / _chainBoneCountMinusOne;
+
+            for (int i = 0; i < _chainBoneCount; ++i)
+            {
+                float t = i * sampleStep;
+                Vector3 tangentialOffset = right * (maxWaveAmplitude * waveCurve.Evaluate(t));
+                curvePoints[i] = (anchorToPlayerDirection * t) + tangentialOffset;
+            }
+
+            _boneChainIK.FromPositions(curvePoints);
         }
 
         
