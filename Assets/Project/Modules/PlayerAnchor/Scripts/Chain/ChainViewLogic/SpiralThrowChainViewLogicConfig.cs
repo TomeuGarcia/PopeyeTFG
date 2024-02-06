@@ -23,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [SerializeField] private AnimationCurve _amplitudeBoneWeightCurve = AnimationCurve.EaseInOut(0, 1, 1, 1);
         
         [Header("MULTIPLIER")]
-        [SerializeField] private AnimationCurve _obstacleHitMultiplierCurve = AnimationCurve.EaseInOut(0, 1, 1, 1);
+        [SerializeField] private AnimationCurve _obstacleHitMultiplierCurve = AnimationCurve.EaseInOut(0, 0, 1, 0);
 
         
         public float LoopSpread => _loopSpread;

@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private Vector3 _spiralUp;
         private Vector3 _spiralRight;
         private float _time;
-        private float _effectMultiplier;
+        private float _effectMultiplierAddition;
         
         
         private float Duration => _throwResult.Duration;
@@ -70,9 +70,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             float distanceStep = playerToAnchorDistance / _chainBoneCountMinusOne;
             
-            _effectMultiplier = _throwResult.HitsObstacle ? 
+            _effectMultiplierAddition = _throwResult.HitsObstacle ? 
                 ObstacleHitMultiplierCurve.Evaluate(Mathf.Min(_time/DurationHitObstacle, 1)) :
-                1;
+                0;
             
             for (int i = 1; i < _chainBoneCount - 1; ++i)
             {
@@ -82,7 +82,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 float time = _time + (t * PhaseOffset);
 
                 float spread = t * LoopSpread - CurrentSpeedOverTime(time);
-                float size = ChainBoneAmplitudeWeight(t) * CurrentAmplitudeOverTime(time) * _effectMultiplier;
+                float size = ChainBoneAmplitudeWeight(t) * CurrentAmplitudeOverTime(time) + _effectMultiplierAddition;
                 
                 Vector3 spiralOffset = _spiralUp * (Mathf.Sin(spread) * size) +
                                        _spiralRight * (Mathf.Cos(spread) * size);
