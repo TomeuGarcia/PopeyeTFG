@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TEMP_AnchorSlam_BigHead_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 2f2afc016dad8754392e2782744e7a5b,
+  m_Name: AnchorThrow_BrokenGround
+  m_Shader: {fileID: -6465566751694194690, guid: 8b4ec41176041d142bd5af09cf6a63b1,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,16 +24,16 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainText_L1:
-        m_Texture: {fileID: 2800000, guid: 9366cd92f63e29c46b414a7a10012ced, type: 3}
+    - _DepthTexture:
+        m_Texture: {fileID: 2800000, guid: 0f3e2f17460162d4faeb01cf190f5347, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainText_L2:
-        m_Texture: {fileID: 2800000, guid: 9366cd92f63e29c46b414a7a10012ced, type: 3}
+    - _OutlineTexture:
+        m_Texture: {fileID: 2800000, guid: 6784db283305df14dae44af167d5771f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Texture2DAsset_e05d0663ea1c4eb3b8fca83425a51fda_Out_0_Texture2D:
-        m_Texture: {fileID: 10307, guid: 0000000000000000f000000000000000, type: 0}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 09c38403df9f26648b8cc9819ec949f1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -50,32 +50,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaClip: 0.05
-    - _BottomDissolveL1: 0.5
-    - _BottomDissolveL2: 0.1
+    - _Appear: 1
+    - _DecalMeshBiasType: 0
+    - _DecalMeshDepthBias: 0
+    - _DecalMeshViewBias: 0
+    - _Depth: 0
+    - _DepthLayerAlpha: 0.5
+    - _DepthLayerInterval: 0.00005
+    - _DepthMaxAlpha: 1
     - _Disappear: 0
-    - _FadePow: 4
-    - _MaxAlpha: 0.5
-    - _NoiseScale: 20
-    - _NoiseScaleL1: 35
-    - _NoiseScaleL2: 35
-    - _NoiseScrollSpeed: 2
-    - _QueueControl: 0
-    - _QueueOffset: 0
-    - _SubtractionL1: 0
-    - _SubtractionL2: 0
+    - _DrawOrder: 0
+    - _MaxOutlineAlpha: 0.2
     m_Colors:
-    - _ColorL1: {r: 0, g: 0.60732985, b: 0.60732985, a: 0}
-    - _ColorL2: {r: 0, g: 1, b: 0.19120172, a: 0}
-    - _DissolveScrollSpeedL1: {r: 0, g: 1, b: 0, a: 0}
-    - _DissolveScrollSpeedL2: {r: 0, g: 1, b: 0, a: 0}
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Scale: {r: 2, g: 2, b: 10, a: 0}
-    - _ScrollSpeedL1: {r: 0, g: 1, b: 0, a: 0}
-    - _TextureScrollSpeedL1: {r: -2, g: 0, b: 0, a: 0}
-    - _TextureScrollSpeedL2: {r: -2, g: 0, b: 0, a: 0}
+    - _AlphaClamp: {r: 0, g: 1, b: 0, a: 0}
+    - _DepthColor: {r: 0.09385012, g: 0.3490566, b: 0.27928793, a: 0}
+    - _MainColor: {r: 0, g: 0, b: 0, a: 0}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SecondaryColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2545409224128901896
+--- !u!114 &5960305794912650432
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

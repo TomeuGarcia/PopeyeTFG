@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestTriplanar
-  m_Shader: {fileID: -6465566751694194690, guid: 9ed0876b280859d4380475c413cedb88,
+  m_Name: AnchorTrailLight_Soft_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 028ad536bd5a79a46be0880b0655ebfa,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,20 +24,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SideTexNormalMap:
-        m_Texture: {fileID: 2800000, guid: 12283693317eea643877e36bae339adc, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SideTexture:
-        m_Texture: {fileID: 2800000, guid: fde544abd57510146a8d32ac692f52ee, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TopTexNormalMap:
-        m_Texture: {fileID: 2800000, guid: a8ef71351a4181948ab74a93ea41b3a7, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TopTexture:
-        m_Texture: {fileID: 2800000, guid: 18e121926b5b4874db0ecb4dd0f52448, type: 3}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: e31c90fda95de8e4c83f913c20c21708, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -54,17 +42,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AmbientOcclusion: 1
-    - _Blend: 1
-    - _Metallic: 0
-    - _NormalStrength: 1
+    - _AlphaClip: 0.05
+    - _BorderFadeInv: 7
+    - _Disapear: 0
+    - _Disappear: 0
+    - _DissolveScale: 35
+    - _MaxAlpha: 0.15
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 0.5
-    - _Tiling: 0.05
-    m_Colors: []
+    m_Colors:
+    - _DissolveSpeed: {r: -0.5, g: 0, b: 0, a: 0}
+    - _EndColor: {r: 0, g: 1, b: 0.4736843, a: 0}
+    - _MainTexSpeed: {r: -1, g: 0, b: 0, a: 0}
+    - _TipColor: {r: 0.2880918, g: 0.735849, b: 0.72492814, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &8426829696783460495
+--- !u!114 &8718692759882701734
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
