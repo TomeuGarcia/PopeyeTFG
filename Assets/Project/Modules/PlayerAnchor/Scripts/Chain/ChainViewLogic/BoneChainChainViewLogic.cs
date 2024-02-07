@@ -28,14 +28,18 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
 
         private float TransitionDuration => _config.StateTransitionDuration;
+        private float DistanceThresholdToUseWave => _config.DistanceThresholdToUseWave;
         private Ease TransitionEase => _config.StateTransitionEase;
         private int RandomBonesPerCircle => _config.RandomBonesPerCircle;
         private int RandomBonesStraight => _config.RandomBonesStraight;
         private float FullCircleAngles => _config.FullCircleAngles;
         
         
-        private AnimationCurve WaveCurve => _config.WaveCurve;
-        private float MaxWaveAmplitude => _config.MaxWaveAmplitude;
+        private int RandomStartBonesStraight => _config.RandomStartBonesStraight;
+        private int BonesPerWave => _config.BonesPerWave;
+        private float StartHalfWaveAngle => _config.StartHalfWaveAngle;
+        private float MinHalfWaveAngle => _config.MinHalfWaveAngle;
+        private float SubtractAnglePerWave => _config.SubtractAnglePerWave;
 
 
         public BoneChainChainViewLogic(BoneChainChainViewLogicConfig config, int chainBoneCount,
@@ -58,14 +62,16 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void EnterSetup(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
-            //System.Array.Reverse(previousStateChainPositions);
-
             _previousStateChainPositions = previousStateChainPositions;
-            
-            //MakeLoopingChain(playerBindPosition, anchorBindPosition);
-            //MakeChainRestOnFloor();
 
-            MakeChainMatchCurve(playerBindPosition, anchorBindPosition, WaveCurve, MaxWaveAmplitude);
+            if (Vector3.Distance(playerBindPosition, anchorBindPosition) > DistanceThresholdToUseWave)
+            {
+                MakeWaveChain(playerBindPosition, anchorBindPosition);
+            }
+            else
+            {
+                MakeLoopingChain(playerBindPosition, anchorBindPosition);
+            }
             MakeChainRestOnFloor();
         }
         
@@ -277,30 +283,69 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
 
         
-        private void MakeChainMatchCurve(Vector3 playerBindPosition, Vector3 anchorBindPosition, 
-            AnimationCurve waveCurve, float maxWaveAmplitude)
+
+        private void MakeWaveChain(Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
             Vector3 anchorToPlayer = playerBindPosition - anchorBindPosition;
             float anchorToPlayerDistance = anchorToPlayer.magnitude;
             Vector3 anchorToPlayerDirection = anchorToPlayer / anchorToPlayerDistance;
+            
 
-
-            int direction = Random.Range(0, 2) < 1 ? 1 : -1;
-
-            Vector3 right = Vector3.Cross(anchorToPlayerDirection, Vector3.up).normalized * direction;
-
-
-            Vector3[] curvePoints = new Vector3[_chainBoneCount];
-            float sampleStep = 1f / _chainBoneCountMinusOne;
-
-            for (int i = 0; i < _chainBoneCount; ++i)
+            int i = 0;
+            int lastIndex = RandomStartBonesStraight;
+            for (; i < 1; ++i)
             {
-                float t = i * sampleStep;
-                Vector3 tangentialOffset = right * (maxWaveAmplitude * waveCurve.Evaluate(t));
-                curvePoints[i] = (anchorToPlayerDirection * t) + tangentialOffset;
+                SetStraightDirection(i, anchorToPlayerDirection);
             }
 
-            _boneChainIK.FromPositions(curvePoints);
+            int bonesPerHalfWave = 3;
+            float halfCircleAngle = StartHalfWaveAngle;
+
+            
+            int bonesPerWave = BonesPerWave;
+            
+            Vector3 tangent = Vector3.Cross(anchorToPlayer, Vector3.up).normalized;
+            
+            int waveDirection = Random.Range(0,2) < 1 ? 1 : -1;
+            
+            while (i + bonesPerWave < _chainBoneCount)
+            {
+                int bonesPerHalfCircle = bonesPerWave / 2;
+                
+                
+                float angleStep = halfCircleAngle / (bonesPerHalfCircle + 1);
+                Quaternion stepRotation = Quaternion.AngleAxis(angleStep * waveDirection, Vector3.up);
+                Vector3 accumulatedCircleDirection = tangent * waveDirection;
+                
+                
+                // left
+                lastIndex = i + bonesPerHalfCircle;
+                for (; i < lastIndex; ++i)
+                {
+                    SetCircleDirection(i, ref accumulatedCircleDirection, stepRotation);
+                }
+                
+                
+                halfCircleAngle = Mathf.Max(MinHalfWaveAngle, halfCircleAngle - SubtractAnglePerWave);
+                angleStep = halfCircleAngle / (bonesPerHalfCircle + 1);
+                Quaternion stepRotationInverse = Quaternion.AngleAxis(-angleStep * waveDirection, Vector3.up);
+                accumulatedCircleDirection = -tangent * waveDirection;
+                
+                
+                //right
+                lastIndex = i + bonesPerHalfCircle;
+                for (; i < lastIndex; ++i)
+                {
+                    SetCircleDirection(i, ref accumulatedCircleDirection, stepRotationInverse);
+                }
+                
+                halfCircleAngle = Mathf.Max(MinHalfWaveAngle, halfCircleAngle - SubtractAnglePerWave);
+            }
+            
+            for (; i < _chainBoneCountMinusOne; ++i)
+            {
+                SetStraightDirection(i, anchorToPlayerDirection);
+            }
         }
 
         
