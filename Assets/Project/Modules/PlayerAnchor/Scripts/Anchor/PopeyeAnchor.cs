@@ -165,7 +165,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void OnDashedAt(float duration, Ease dashEase)
         {
-            _anchorChain.SetDashedAtView(duration, dashEase);
+            _anchorChain.SetDashingTowardsView(duration, dashEase);
+        }
+        public void OnDashedAwayFrom(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashingAwayView(duration, dashEase);
         }
 
         public void SetKicked(AnchorThrowResult anchorKickResult)

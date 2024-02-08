@@ -61,7 +61,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             resultDuration = Mathf.Lerp(minDuration, maxDuration, distanceChangeRatio01);
 
-            _playerMotion.MoveToPosition(dashEndPosition, resultDuration, Ease.InOutQuad);
+            Ease ease = Ease.InOutQuad;
+            _playerMotion.MoveToPosition(dashEndPosition, resultDuration, ease);
+            _anchor.OnDashedAwayFrom(resultDuration, ease);
         }
         
         

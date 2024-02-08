@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player;
 using UnityEngine;
 
@@ -7,24 +8,22 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 {
     public class SpiralThrowChainViewLogic : IChainViewLogic
     {
-        private AnchorThrowResult _throwResult;
         private readonly SpiralThrowChainViewLogicConfig _logicConfig;
         
         private readonly int _chainBoneCount;
         private readonly int _chainBoneCountMinusOne;
 
         private readonly Vector3[] _chainPositions;
+        private Vector3[] _previousStateChainPositions;
+        private float _previousStateTransitionT;
 
-        private Vector3 _spiralUp;
-        private Vector3 _spiralRight;
+        private float _duration;
         private float _time;
-        private float _effectMultiplierAddition;
-        
-        
-        private float Duration => _throwResult.Duration;
-        private float DurationHitObstacle => _throwResult.DurationHitObstacle;
+
         
 
+        private float StateTransitionDuration => _logicConfig.StateTransitionDuration;
+        private Ease StateTransitionEase => _logicConfig.StateTransitionEase;
         private float LoopSpread => _logicConfig.LoopSpread;
         private float MaxAmplitude => _logicConfig.MaxAmplitude;
         private float SpinSpeed =>_logicConfig.SpinSpeed;
@@ -32,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private AnimationCurve AmplitudeBoneWeightCurve =>_logicConfig.AmplitudeBoneWeightCurve;
         private AnimationCurve SpeedOverTimeCurve =>_logicConfig.SpeedOverTimeCurve;
         private AnimationCurve AmplitudeOverTimeCurve =>_logicConfig.AmplitudeOverTimeCurve;
-        private AnimationCurve ObstacleHitMultiplierCurve =>_logicConfig.ObstacleHitMultiplierCurve;
+        private float DurationMultiplier =>_logicConfig.DurationMultiplier;
 
 
         public SpiralThrowChainViewLogic(SpiralThrowChainViewLogicConfig logicConfig, int chainBoneCount)
@@ -44,18 +43,25 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainPositions = new Vector3[_chainBoneCount];
         }
         
-        public void EnterSetup(AnchorThrowResult throwResult)
+        public void EnterSetup(float duration)
         {
-            _throwResult = throwResult;
-
-            _spiralUp = Vector3.up;
-            _spiralRight = Vector3.Cross(throwResult.Direction, _spiralUp).normalized;
+            _duration = duration * DurationMultiplier;
         }
 
 
-        public void OnViewEnter()
+        public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
             _time = 0;
+
+            _previousStateChainPositions = previousStateChainPositions;
+            
+            _previousStateTransitionT = 0;
+            DOTween.To(
+                () => _previousStateTransitionT,
+                (value) => _previousStateTransitionT = value,
+                1.0f,
+                StateTransitionDuration
+            ).SetEase(StateTransitionEase);
         }
 
         public void UpdateChainPositions(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
@@ -70,9 +76,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             float distanceStep = anchorToPlayerDistance / _chainBoneCountMinusOne;
             
-            _effectMultiplierAddition = _throwResult.HitsObstacle ? 
-                ObstacleHitMultiplierCurve.Evaluate(Mathf.Min(_time/DurationHitObstacle, 1)) :
-                0;
+            
+            Vector3 spiralUp = Vector3.up;
+            Vector3 spiralRight = Vector3.Cross(anchorToPlayer, spiralUp).normalized;
+            spiralUp = Vector3.Cross(spiralRight, anchorToPlayer).normalized;
             
             for (int i = 1; i < _chainBoneCount - 1; ++i)
             {
@@ -82,10 +89,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 float time = _time + (t * PhaseOffset);
 
                 float spread = t * LoopSpread - CurrentSpeedOverTime(time);
-                float size = ChainBoneAmplitudeWeight(t) * CurrentAmplitudeOverTime(time) + _effectMultiplierAddition;
+                float size = ChainBoneAmplitudeWeight(t) * CurrentAmplitudeOverTime(time);
                 
-                Vector3 spiralOffset = _spiralUp * (Mathf.Sin(spread) * size) +
-                                       _spiralRight * (Mathf.Cos(spread) * size);
+                Vector3 spiralOffset = spiralUp * (Mathf.Sin(spread) * size) +
+                                       spiralRight * (Mathf.Cos(spread) * size);
 
                 chainBonePosition += spiralOffset;
                 
@@ -93,6 +100,16 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             }
 
             _time += deltaTime;
+
+
+            if (_previousStateTransitionT < 1)
+            {
+                for (int i = 0; i < _chainBoneCount; ++i)
+                {
+                    _chainPositions[i] = Vector3.Lerp(_previousStateChainPositions[i], _chainPositions[i],
+                        _previousStateTransitionT);
+                }
+            }
         }
 
         public void OnViewExit()
@@ -112,12 +129,12 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         private float CurrentSpeedOverTime(float time)
         {
-            return SpeedOverTimeCurve.Evaluate(Mathf.Min(1f, time / Duration)) * SpinSpeed * time;
+            return SpeedOverTimeCurve.Evaluate(Mathf.Min(1f, time / _duration)) * SpinSpeed * time;
         }
 
         private float CurrentAmplitudeOverTime(float time)
         {
-            return AmplitudeOverTimeCurve.Evaluate(Mathf.Min(1f, time / Duration)) * MaxAmplitude;
+            return AmplitudeOverTimeCurve.Evaluate(Mathf.Min(1f, time / _duration)) * MaxAmplitude;
         }
         
     }

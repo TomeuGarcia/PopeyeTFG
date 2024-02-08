@@ -17,7 +17,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainPositions = new Vector3[_chainBoneCount];
         }
 
-        public void OnViewEnter()
+        public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
             
         }
@@ -35,7 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             for (int i = 1; i < _chainBoneCount - 1; ++i)
             {
-                _chainPositions[i] = playerBindPosition + (anchorToPlayerDirection * (i * distanceStep));
+                _chainPositions[i] = anchorBindPosition + (anchorToPlayerDirection * (i * distanceStep));
             }
             
         }

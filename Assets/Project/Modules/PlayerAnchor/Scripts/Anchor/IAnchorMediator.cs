@@ -26,6 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         void OnStopSpinning();
         
         void OnDashedAt(float duration, Ease dashEase);
+        void OnDashedAwayFrom(float duration, Ease dashEase);
         
         UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition);
 

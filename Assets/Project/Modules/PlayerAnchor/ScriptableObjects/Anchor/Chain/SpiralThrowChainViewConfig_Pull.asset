@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c324fe2db06143fb81c375a9e5fd1069, type: 3}
   m_Name: SpiralThrowChainViewConfig_Pull
   m_EditorClassIdentifier: 
+  _stateTransitionDuration: 0.1
+  _stateTransitionEase: 4
   _phaseOffset: -0.02
   _loopSpread: 18
   _spinSpeed: 30
@@ -48,7 +50,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _maxAmplitude: 0.3
+  _maxAmplitude: 0.4
   _amplitudeOverTimeCurve:
     serializedVersion: 2
     m_Curve:
@@ -133,27 +135,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _obstacleHitMultiplierCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _durationMultiplier: 1

@@ -60,7 +60,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
 
 
-        public void EnterSetup(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
+
+        public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
             _previousStateChainPositions = previousStateChainPositions;
 
@@ -73,10 +74,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 MakeLoopingChain(playerBindPosition, anchorBindPosition);
             }
             MakeChainRestOnFloor();
-        }
-        
-        public void OnViewEnter()
-        {
+            
+            
+            
             //_chainIK.gameObject.SetActive(true);
             _controllerIK.enabled = true;
 

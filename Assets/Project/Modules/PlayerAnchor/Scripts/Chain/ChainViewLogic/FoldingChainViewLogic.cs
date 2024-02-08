@@ -32,9 +32,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
 
 
-        public void EnterSetup(Vector3[] previousStateChainPositions, float dashDuration, Ease dashEase)
+        public void EnterSetup(float dashDuration, Ease dashEase)
         {
-            _previousStateChainPositions = previousStateChainPositions;
             _duration = dashDuration;
 
             _globalT = 0;
@@ -46,8 +45,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             ).SetEase(dashEase);
         }
         
-        public void OnViewEnter()
+        public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
+            _previousStateChainPositions = previousStateChainPositions;
             _time = 0;
         }
 
@@ -60,6 +60,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             for (int i = 0; i < _chainBoneCount; ++i)
             {
+                _chainPositions[i] = Vector3.Lerp(_previousStateChainPositions[i], anchorBindPosition, _globalT);
+                continue;
+                
                 float localT = t * i;
                 if (localT > _globalT)
                 {
