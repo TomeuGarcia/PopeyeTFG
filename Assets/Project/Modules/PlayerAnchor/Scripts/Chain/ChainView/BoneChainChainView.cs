@@ -23,6 +23,16 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _positions = positions;
 
+            /*
+            float positionsDistance = 0f;
+            for (int i = 1; i < _positions.Length; ++i)
+            {
+                positionsDistance += Vector3.Distance(_positions[i - 1], _positions[i]);
+            }
+
+            float scaler = _chainDistance / positionsDistance;
+            */
+
             
             int numberOfBonesMinusOne = _boneChain.NumberOfBones - 1;
             for (int i = 0; i < numberOfBonesMinusOne; i++)
