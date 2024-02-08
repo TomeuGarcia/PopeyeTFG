@@ -10,8 +10,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         menuName = ScriptableObjectsHelper.ANCHORCHAIN_ASSETS_PATH + "ChainViewGeneralConfig")]
     public class ChainViewLogicGeneralConfig : ScriptableObject
     {
-        [Header("CHAIN BONES")]
+        [Header("CHAIN")]
         [SerializeField, Range(2, 100)] private int _chainBoneCount = 20;
+        [SerializeField] private ChainConfig _chainConfig;
         [Space(20)]
         
         
@@ -38,6 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
 
         public int ChainBoneCount => _chainBoneCount;
+        public float MaxChainLength => _chainConfig.MaxChainLength;
         
         public SpiralThrowChainViewLogicConfig ThrowViewLogicConfig => _throwViewLogicConfig;
         public SpiralThrowChainViewLogicConfig PullViewLogicConfig => _pullViewLogicConfig;

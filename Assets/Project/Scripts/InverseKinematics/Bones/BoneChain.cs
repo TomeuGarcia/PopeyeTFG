@@ -12,6 +12,8 @@ namespace Popeye.InverseKinematics.Bones
         [SerializeField] private Bone _boneEndEffectorPrefab;
         [SerializeField, Range(1, 50)] private int _numberOfBones = 10;
         private int _oldNumberOfBones;
+        [SerializeField] private bool _startVisible = true;
+        public float BoneLength { get; private set; } = -1f;
 
 
         [SerializeField] private Transform _firstBoneParent;
@@ -24,9 +26,12 @@ namespace Popeye.InverseKinematics.Bones
         public BoneArmEvent OnGenerationUpdate;
 
 
-        public void AwakeConfigure(int numberOfBones)
+        public void AwakeConfigure(int numberOfBones, bool startVisible, float boneLength)
         {
             _numberOfBones = numberOfBones;
+            _startVisible = startVisible;
+
+            BoneLength = boneLength;
         }
         
 
@@ -43,6 +48,21 @@ namespace Popeye.InverseKinematics.Bones
             if (autoUpdateBoneGeneration)
             {
                 UpdateBoneGeneration();
+            }
+        }
+
+        public void Show()
+        {
+            foreach (Bone bone in Bones)
+            {
+                bone.Show();
+            }
+        }
+        public void Hide()
+        {
+            foreach (Bone bone in Bones)
+            {
+                bone.Hide();
             }
         }
 
@@ -77,6 +97,23 @@ namespace Popeye.InverseKinematics.Bones
             {
                 Bones[_numberOfBones - 1] = Instantiate(_boneEndEffectorPrefab, Bones[_numberOfBones - 2].BoneEnd);
             }
+
+            if (BoneLength > 0)
+            {
+                for (int i = 0; i < _numberOfBones - 1; ++i)
+                {
+                    Bones[i].SetBoneLength(BoneLength);
+                }
+            }
+
+            if (_startVisible)
+            {
+                Show();
+            }
+            else
+            {
+                Hide();
+            }
         }
 
         private void DestroyBones()
@@ -89,11 +126,11 @@ namespace Popeye.InverseKinematics.Bones
 
         public void FromPositions(Vector3[] positions)
         {
-            int numberOfBonesMinusOne = _numberOfBones - 1;
-            for (int i = 0; i < numberOfBonesMinusOne; ++i)
+            int numberOfBonesMinusOne = NumberOfBones - 1;
+            for (int i = 0; i < numberOfBonesMinusOne; i++)
             {
                 Vector3 oldDirection = (Bones[i + 1].Position - Bones[i].Position).normalized;
-                Vector3 newDirection = positions[i + 1] - positions[i];
+                Vector3 newDirection = (positions[i + 1] - positions[i]).normalized;
 
                 UpdateBonePosition(i, oldDirection, newDirection);
             }
@@ -103,7 +140,7 @@ namespace Popeye.InverseKinematics.Bones
         {
             Vector3 axis = Vector3.Cross(oldDirection, newDirection).normalized;
             float angle = Mathf.Acos(Vector3.Dot(oldDirection, newDirection)) * Mathf.Rad2Deg;
-                
+
             if (angle > 1.0f)
             {
                 Bones[boneIndex].SetWorldRotation(Quaternion.AngleAxis(angle, axis) * Bones[boneIndex].Rotation);

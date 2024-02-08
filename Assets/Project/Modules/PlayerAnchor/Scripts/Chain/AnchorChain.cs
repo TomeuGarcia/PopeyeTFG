@@ -40,8 +40,11 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
 
-            //_chainView = new BoneChainChainView(_boneChain, chainViewLogicGeneralConfig.ChainBoneCount);
-            _chainView = new LineRendererChainView(_chainLine);
+            float boneLength = chainViewLogicGeneralConfig.MaxChainLength / (chainViewLogicGeneralConfig.ChainBoneCount-1);
+            
+            _chainView = new BoneChainChainView(_boneChain, chainViewLogicGeneralConfig.ChainBoneCount,
+                chainViewLogicGeneralConfig.MaxChainLength, boneLength);
+            //_chainView = new LineRendererChainView(_chainLine);
             
             
             _thrownChainViewLogic = 
@@ -69,7 +72,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             _currentChainViewLogic = _carriedChainViewLogic;
             
-            _boneChainIK.AwakeConfigure(chainViewLogicGeneralConfig.ChainBoneCount);
+            _boneChainIK.AwakeConfigure(chainViewLogicGeneralConfig.ChainBoneCount, false, boneLength);
         }
 
 
@@ -77,6 +80,11 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _currentChainViewLogic.UpdateChainPositions(Time.deltaTime, PlayerBindPosition, AnchorBindPosition);
             _chainView.Update(_currentChainViewLogic.GetChainPositions());
+        }
+
+        private void OnDrawGizmos()
+        {
+            _chainView?.DrawGizmos();
         }
 
         public void SetThrownView(AnchorThrowResult throwResult)

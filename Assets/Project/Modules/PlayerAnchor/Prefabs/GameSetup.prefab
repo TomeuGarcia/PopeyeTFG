@@ -1480,6 +1480,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 3425565904136139631}
   _staminaBar: {fileID: 7964917748118997120}
+--- !u!1 &1871318786155812323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 664233148813954658}
+  - component: {fileID: 1882260842280776802}
+  m_Layer: 0
+  m_Name: TransformBoneChain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &664233148813954658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871318786155812323}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1104790512851379680}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1882260842280776802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871318786155812323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d13797f5f9330a84d834190aedcd7e2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bonePrefab: {fileID: 5144887323695516696, guid: 74e1b027bb5f4b84c8c8c20c422549d5,
+    type: 3}
+  _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: 8989dd080297fe04f84131bb52a0423b,
+    type: 3}
+  _numberOfBones: 10
+  _firstBoneParent: {fileID: 6172617056675568626}
+  autoUpdateBoneGeneration: 0
 --- !u!1 &1904472212946506311
 GameObject:
   m_ObjectHideFlags: 0
@@ -1869,6 +1920,7 @@ Transform:
   - {fileID: 3897295970152054766}
   - {fileID: 6635669741451734058}
   - {fileID: 8835330105511205860}
+  - {fileID: 664233148813954658}
   m_Father: {fileID: 5811398296010217030}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2374,9 +2426,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13797f5f9330a84d834190aedcd7e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bonePrefab: {fileID: 5144887323695516696, guid: 74e1b027bb5f4b84c8c8c20c422549d5,
+  _bonePrefab: {fileID: 5144887323695516696, guid: b3e64eb0cc23ae441b66a39a08038097,
     type: 3}
-  _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: 8989dd080297fe04f84131bb52a0423b,
+  _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: cab2029e08f634345b9a25d728517bad,
     type: 3}
   _numberOfBones: 19
   _firstBoneParent: {fileID: 6172617056675568626}
@@ -2905,7 +2957,6 @@ GameObject:
   - component: {fileID: 6635669741451734058}
   - component: {fileID: 2223938708714666153}
   - component: {fileID: 6405983057515278388}
-  - component: {fileID: 3849039036042762599}
   m_Layer: 0
   m_Name: Chain
   m_TagString: Untagged
@@ -2942,7 +2993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chainLine: {fileID: 4763874378844247995}
-  _boneChain: {fileID: 3849039036042762599}
+  _boneChain: {fileID: 1882260842280776802}
   _boneChainIK: {fileID: 5612155314268022033}
   _controllerIK: {fileID: 6132698310706980790}
 --- !u!114 &6405983057515278388
@@ -2958,25 +3009,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _springJoint: {fileID: 148515704002207951}
---- !u!114 &3849039036042762599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5622108045594571558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d13797f5f9330a84d834190aedcd7e2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bonePrefab: {fileID: 5144887323695516696, guid: 74e1b027bb5f4b84c8c8c20c422549d5,
-    type: 3}
-  _boneEndEffectorPrefab: {fileID: 7492902988731439195, guid: 8989dd080297fe04f84131bb52a0423b,
-    type: 3}
-  _numberOfBones: 10
-  _firstBoneParent: {fileID: 6172617056675568626}
-  autoUpdateBoneGeneration: 0
 --- !u!1 &5759862739316320781
 GameObject:
   m_ObjectHideFlags: 0

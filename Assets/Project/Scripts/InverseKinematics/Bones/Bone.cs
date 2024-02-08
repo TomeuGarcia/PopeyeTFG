@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,11 +9,66 @@ namespace Popeye.InverseKinematics.Bones
     {
         [SerializeField] private Transform _boneRoot;
         [SerializeField] private Transform _boneEnd;
+        [SerializeField] private GameObject _meshHolder;
+        [SerializeField, Range(0f, 2.0f)] private float _boneLength = 0.5f;
+        [SerializeField] private bool _isEndEffector = false;
+        
         public Transform BoneRoot => _boneRoot;
         public Transform BoneEnd => _boneEnd;
+        public Vector3 Up => BoneRoot.up;
         public Vector3 Forward => BoneRoot.forward;
         public Vector3 Position => BoneRoot.position;
         public Quaternion Rotation => BoneRoot.rotation;
+
+        public void SetBoneLength(float boneLength)
+        {
+            _boneLength = boneLength;
+            OnValidate();
+        }
+
+        private void Awake()
+        {
+            OnValidate();
+        }
+
+        private void OnValidate()
+        {
+            if (_boneEnd && _boneEnd && _meshHolder)
+            {
+                if (_isEndEffector)
+                {
+                    _boneEnd.localPosition = Vector3.zero;
+                    _meshHolder.transform.localScale = Vector3.one;
+                }
+                else
+                {
+                    _boneEnd.position = _boneRoot.position + (Forward * _boneLength);
+                    _meshHolder.transform.localScale = Vector3.one * _boneLength;
+                }
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Vector3 boneStart = _boneRoot.position;
+            Vector3 boneEnd = _boneEnd.position;
+            Vector3 endToStartScaledDirection = (boneStart - boneEnd).normalized * 0.2f;  
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(boneStart, boneEnd);
+            Gizmos.DrawLine(boneEnd, boneEnd + Quaternion.AngleAxis(30.0f, Up) * endToStartScaledDirection);
+            Gizmos.DrawLine(boneEnd, boneEnd + Quaternion.AngleAxis(-30.0f, Up) * endToStartScaledDirection);
+        }
+
+
+        public void Show()
+        {
+            _meshHolder.SetActive(true);
+        }
+        public void Hide()
+        {
+            _meshHolder.SetActive(false);
+        }
 
 
         public void SetWorldRotation(Quaternion worldRotation)
@@ -81,8 +137,7 @@ namespace Popeye.InverseKinematics.Bones
 
             return offsetRotation * _boneRoot.rotation;
         }
-
-
+        
     }
     
 }
