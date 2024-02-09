@@ -13,10 +13,12 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [SerializeField] private BoneChain _boneChain;
         [SerializeField] private BoneChain _boneChainIK;
         [SerializeField] private FABRIKControllerBehaviour _controllerIK;
+        [SerializeField] private Material _chainSharedMaterial;
         private Transform _playerBindTransform;
         private Transform _anchorBindTransform;
         
         private IChainPhysics _chainPhysics;
+        private IVFXChainView _vfxChainView;
 
         private IChainView _chainView;
         
@@ -41,6 +43,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _anchorBindTransform = anchorBindTransform;
 
             float boneLength = chainViewLogicGeneralConfig.MaxChainLength / (chainViewLogicGeneralConfig.ChainBoneCount-1);
+
+            _vfxChainView = new VFXChainView(chainViewLogicGeneralConfig.ObstacleCollisionProbingConfig, _chainSharedMaterial);
             
             _chainView = new BoneChainChainView(_boneChain, chainViewLogicGeneralConfig.ChainBoneCount,
                 chainViewLogicGeneralConfig.MaxChainLength, boneLength);
@@ -79,7 +83,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private void LateUpdate()
         {
             _currentChainViewLogic.UpdateChainPositions(Time.deltaTime, PlayerBindPosition, AnchorBindPosition);
-            _chainView.Update(_currentChainViewLogic.GetChainPositions());
+
+            Vector3[] newChainPositions = _currentChainViewLogic.GetChainPositions();
+            _chainView.Update(newChainPositions);
+            _vfxChainView.Update(newChainPositions);
         }
 
         public void SetThrownView(AnchorThrowResult throwResult)

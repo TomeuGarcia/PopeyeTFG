@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -13,6 +14,12 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [Header("CHAIN")]
         [SerializeField, Range(2, 100)] private int _chainBoneCount = 20;
         [SerializeField] private ChainConfig _chainConfig;
+        [Space(20)]
+        
+        
+        [Header("COLLISIONS")]
+        [Expandable]
+        [SerializeField] private CollisionProbingConfig _obstacleCollisionProbingConfig;
         [Space(20)]
         
         
@@ -40,6 +47,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public int ChainBoneCount => _chainBoneCount;
         public float MaxChainLength => _chainConfig.MaxChainLength;
+
+        public CollisionProbingConfig ObstacleCollisionProbingConfig => _obstacleCollisionProbingConfig;
         
         public SpiralThrowChainViewLogicConfig ThrowViewLogicConfig => _throwViewLogicConfig;
         public SpiralThrowChainViewLogicConfig PullViewLogicConfig => _pullViewLogicConfig;
