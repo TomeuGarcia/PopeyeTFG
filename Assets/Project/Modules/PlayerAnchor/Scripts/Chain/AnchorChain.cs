@@ -82,11 +82,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainView.Update(_currentChainViewLogic.GetChainPositions());
         }
 
-        private void OnDrawGizmos()
-        {
-            _chainView?.DrawGizmos();
-        }
-
         public void SetThrownView(AnchorThrowResult throwResult)
         {
             Vector3[] previousStateChainPositions = _currentChainViewLogic.GetChainPositions();
