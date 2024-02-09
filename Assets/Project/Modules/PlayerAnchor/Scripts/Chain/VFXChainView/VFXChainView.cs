@@ -12,9 +12,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private QueryTriggerInteraction QueryTriggerInteraction => _obstacleCollisionProbingConfig.QueryTriggerInteraction;
 
 
-        private Vector3 _nowherePosition;
-        private int _forwardObstaclePosition1_ID;
-        private int _backwardObstaclePosition1_ID;
+        private static readonly Vector3 NOWHERE_POSITION = new (0, -10000, 0);
+        private const int NUM_TRACKED_OBSTACLES = 2;
+        private Vector3[] _obstacleHitPositions;
+        private int[] _obstaclePositionIDs;
 
         
         public VFXChainView(CollisionProbingConfig obstacleCollisionProbingConfig, 
@@ -23,16 +24,20 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _obstacleCollisionProbingConfig = obstacleCollisionProbingConfig;
             _chainSharedMaterial = chainSharedMaterial;
 
-            _nowherePosition = new Vector3(0, -10000, 0);
-            _forwardObstaclePosition1_ID = Shader.PropertyToID("_ForwardObstaclePosition1");
-            _backwardObstaclePosition1_ID = Shader.PropertyToID("_BackwardObstaclePosition1");
+            _obstacleHitPositions = new Vector3[NUM_TRACKED_OBSTACLES * 2];
+            _obstaclePositionIDs = new int[]
+            {
+                Shader.PropertyToID("_ForwardObstaclePosition1"),
+                Shader.PropertyToID("_BackwardObstaclePosition1"),
+                Shader.PropertyToID("_ForwardObstaclePosition2"),
+                Shader.PropertyToID("_BackwardObstaclePosition2")
+            };
         }
         
         
         public void Update(Vector3[] chainPositions)
         {
-            bool hitObstacle = false;
-            
+            int numHitsForward = 0;
             
             for (int i = 1; i < chainPositions.Length; ++i)
             {
@@ -44,19 +49,16 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 if (Physics.Raycast(origin, toNextDirection, out RaycastHit hit,
                         toNextDistance, CollisionLayerMask, QueryTriggerInteraction))
                 {
-                    hitObstacle = true;
-                    
-                    _chainSharedMaterial.SetVector(_forwardObstaclePosition1_ID, hit.point);
-                    break;
+                    _obstacleHitPositions[numHitsForward] = hit.point;
+                    ++numHitsForward;
+                    if (numHitsForward == NUM_TRACKED_OBSTACLES)
+                    {
+                        break;
+                    }
                 }
             }
 
-            if (!hitObstacle)
-            {
-                _chainSharedMaterial.SetVector(_forwardObstaclePosition1_ID, _nowherePosition);
-            }
-            
-            
+            int numHits = numHitsForward;
             
             for (int i = chainPositions.Length-2; i >= 0; --i)
             {
@@ -68,15 +70,33 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 if (Physics.Raycast(origin, toNextDirection, out RaycastHit hit,
                         toNextDistance, CollisionLayerMask, QueryTriggerInteraction))
                 {
-                    hitObstacle = true;
-                    
-                    _chainSharedMaterial.SetVector(_backwardObstaclePosition1_ID, hit.point);
-                    break;
+                    _obstacleHitPositions[(NUM_TRACKED_OBSTACLES*2) - numHitsForward] = hit.point;
+                    --numHitsForward;
+                    if (numHitsForward == 0)
+                    {
+                        break;
+                    }
                 }
             }
-            if (!hitObstacle)
+            
+
+            // Apply changes
+            for (int i = 0; i < numHits; ++i)
             {
-                _chainSharedMaterial.SetVector(_backwardObstaclePosition1_ID, _nowherePosition);
+                _chainSharedMaterial.SetVector(_obstaclePositionIDs[i], _obstacleHitPositions[i]);
+            }
+            for (int i = NUM_TRACKED_OBSTACLES; i < NUM_TRACKED_OBSTACLES + numHits; ++i)
+            {
+                _chainSharedMaterial.SetVector(_obstaclePositionIDs[i], _obstacleHitPositions[i]);
+            }
+            
+            for (int i = numHits; i < NUM_TRACKED_OBSTACLES; ++i)
+            {
+                _chainSharedMaterial.SetVector(_obstaclePositionIDs[i], NOWHERE_POSITION);
+            }
+            for (int i = NUM_TRACKED_OBSTACLES + numHits; i < NUM_TRACKED_OBSTACLES + numHits; ++i)
+            {
+                _chainSharedMaterial.SetVector(_obstaclePositionIDs[i], NOWHERE_POSITION);
             }
             
         }
