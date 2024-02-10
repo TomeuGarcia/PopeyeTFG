@@ -26,12 +26,23 @@ namespace Popeye.InverseKinematics.Bones
         public BoneArmEvent OnGenerationUpdate;
 
 
-        public void AwakeConfigure(int numberOfBones, bool startVisible, float boneLength)
+        public void AwakeConfigure(int numberOfBones, bool startVisible, float boneLength,
+            Bone bonePrefab = null, Bone boneEndEffectorPrefab = null)
         {
             _numberOfBones = numberOfBones;
             _startVisible = startVisible;
 
             BoneLength = boneLength;
+
+            if (bonePrefab != null)
+            {
+                _bonePrefab = bonePrefab;
+            }
+
+            if (boneEndEffectorPrefab != null)
+            {
+                _boneEndEffectorPrefab = boneEndEffectorPrefab;
+            }
         }
         
 

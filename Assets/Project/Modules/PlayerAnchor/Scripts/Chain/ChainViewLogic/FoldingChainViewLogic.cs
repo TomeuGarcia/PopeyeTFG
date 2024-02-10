@@ -7,7 +7,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
     {
         private readonly FoldingChainViewLogicConfig _config;
         private readonly int _chainBoneCount;
-        private readonly int _chainBoneCountMinusOne;
         
         private readonly Vector3[] _chainPositions;
 
@@ -18,15 +17,13 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         private float _globalT;
         
-        private float PhaseOffset => _config.PhaseOffset;
-        private AnimationCurve PhaseWeightCurve => _config.PhaseWeightCurve;
+        private float DurationMultiplier => _config.DurationMultiplier;
 
 
         public FoldingChainViewLogic(FoldingChainViewLogicConfig config, int chainBoneCount)
         {
             _config = config;
             _chainBoneCount = chainBoneCount;
-            _chainBoneCountMinusOne = _chainBoneCount - 1;
 
             _chainPositions = new Vector3[_chainBoneCount];
         }
@@ -41,7 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 () => _globalT,
                 (value) => _globalT = value,
                 1.0f,
-                _duration
+                _duration * (1-DurationMultiplier)
             ).SetEase(dashEase);
         }
         
@@ -54,27 +51,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public void UpdateChainPositions(float deltaTime, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
             if (_time > _duration) return;
-
-            float t = PhaseOffset / _chainBoneCountMinusOne;
-            
             
             for (int i = 0; i < _chainBoneCount; ++i)
             {
                 _chainPositions[i] = Vector3.Lerp(_previousStateChainPositions[i], anchorBindPosition, _globalT);
-                continue;
-                
-                float localT = t * i;
-                if (localT > _globalT)
-                {
-                    _chainPositions[i] = _previousStateChainPositions[i];
-                    continue;
-                }
-
-                float lerp = (_globalT - localT) / (1f - localT);
-
-                _chainPositions[i] = Vector3.Lerp(_previousStateChainPositions[i], anchorBindPosition, lerp);
-
-
             }
 
             _time += deltaTime;

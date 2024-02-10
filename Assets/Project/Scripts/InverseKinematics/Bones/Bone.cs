@@ -10,6 +10,7 @@ namespace Popeye.InverseKinematics.Bones
         [SerializeField] private Transform _boneRoot;
         [SerializeField] private Transform _boneEnd;
         [SerializeField] private GameObject _meshHolder;
+        [SerializeField] private MeshRenderer[] _meshes;
         [SerializeField, Range(0f, 2.0f)] private float _boneLength = 0.5f;
         [SerializeField] private bool _isEndEffector = false;
         
@@ -24,6 +25,13 @@ namespace Popeye.InverseKinematics.Bones
         {
             _boneLength = boneLength;
             OnValidate();
+        }
+        public void SetMaterial(Material material)
+        {
+            foreach (MeshRenderer mesh in _meshes)
+            {
+                mesh.sharedMaterial = material;
+            }
         }
 
         private void Awake()

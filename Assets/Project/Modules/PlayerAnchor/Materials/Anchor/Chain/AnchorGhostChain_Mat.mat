@@ -51,16 +51,32 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _GhostSpread: 1.03
-    - _GhostTransitionSharpness: 3
+    - _DispalcementMaxAmplitude: 0
+    - _DisplacementContinuity: 1.2
+    - _DisplacementSpeed: 2.5
+    - _GhostFadeT: 0.5
+    - _GhostInOutT: 0.5
+    - _GhostInToOutSharpness: 3
+    - _GhostInteriorToExteriorSharpness: 2
+    - _GhostMidT: 0.5
+    - _GhostSpread: 1.5
+    - _GhostSpreadDistance: 1.5
+    - _GhostToBaseSharpness: 1.2
+    - _GhostTransitionSharpness: 1.5
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _clip: 0.3
     m_Colors:
-    - _BackwardObstaclePosition1: {r: 1.3914356, g: 1.5309981, b: 10.14, a: 0}
-    - _BackwardObstaclePosition2: {r: 1.6225494, g: 1.517387, b: 11.14, a: 0}
-    - _BaseColor: {r: 0.24528292, g: 0.24528292, b: 0.24528292, a: 0}
+    - _BackwardObstaclePosition1: {r: 0, g: -10000, b: 0, a: 0}
+    - _BackwardObstaclePosition2: {r: 0, g: -10000, b: 0, a: 0}
+    - _BaseColor: {r: 0.24528289, g: 0.24528289, b: 0.24528289, a: 1}
     - _ForwardHitPosition1: {r: 4.9480624, g: 1.8906678, b: -3, a: 0}
-    - _ForwardObstaclePosition1: {r: 0.48767087, g: 1.4777563, b: 6.8900003, a: 0}
-    - _ForwardObstaclePosition2: {r: 2.1340322, g: 1.3848984, b: 13.86, a: 0}
+    - _ForwardObstaclePosition1: {r: -1.648735, g: 1.4012184, b: 7, a: 0}
+    - _ForwardObstaclePosition2: {r: -3.9458294, g: 1, b: -2.4694858, a: 0}
     - _GhostColor: {r: 0, g: 0.7735849, b: 0.5934795, a: 0}
+    - _GhostColor2: {r: 0, g: 0.91761875, b: 0.94509804, a: 0}
+    - _GhostExteriorColor: {r: 0, g: 0.7735849, b: 0.5934795, a: 0}
+    - _GhostInColor: {r: 0, g: 0.7516299, b: 0.85882354, a: 0.23529412}
+    - _GhostInteriorColor: {r: 0.031372547, g: 0.6875712, b: 0.7058824, a: 0}
+    - _GhostOutColor: {r: 0, g: 0.764151, b: 0.4501372, a: 1}
   m_BuildTextureStacks: []

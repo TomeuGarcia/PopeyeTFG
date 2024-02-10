@@ -116,7 +116,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             {
                 Vector3 boneStartPosition = _boneChainIK.Bones[i].Position;
                 Vector3 nextBonePosition = _boneChainIK.Bones[i + 1].Position;
-                Vector3 origin = nextBonePosition + (Vector3.up * 1.0f);
+                Vector3 origin = nextBonePosition + (Vector3.up * 2.0f);
 
                 if (!Physics.Raycast(origin, Vector3.down, out RaycastHit floorHit, 
                         FloorProbeDistance, FloorLayerMask, FloorQueryTriggerInteraction))
@@ -124,9 +124,12 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                     continue;
                 }
 
-                Vector3 oldDirection = (nextBonePosition - boneStartPosition).normalized;
+                Vector3 toNext = nextBonePosition - boneStartPosition;
+                float toNextDistance = toNext.magnitude;
+                
+                Vector3 oldDirection = toNext / toNextDistance;
                 Vector3 newDirection = (floorHit.point + floorHit.normal * 0.1f - boneStartPosition).normalized;
-
+                
 
                 Vector3 axis = Vector3.Cross(oldDirection, newDirection).normalized;
                 float angle = Mathf.Acos(Vector3.Dot(oldDirection, newDirection)) * Mathf.Rad2Deg;
