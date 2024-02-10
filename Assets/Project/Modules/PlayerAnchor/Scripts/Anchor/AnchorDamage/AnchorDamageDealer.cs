@@ -244,7 +244,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private void OnDamageDealt(DamageHitResult damageHitResult)
         {
-            _anchor.OnDamageDealt();
+            _anchor.OnDamageDealt(damageHitResult);
         }
         
     }

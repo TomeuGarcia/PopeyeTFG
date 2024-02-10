@@ -8,6 +8,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
@@ -15,6 +16,7 @@ using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.Generic.ParticleBehaviours;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Scripts.Time.TimeFunctionalities;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -86,7 +88,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
             
-            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(),
+                ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
+                cameraFunctionalities.CameraShaker);
         }
         
         public void ResetState(Vector3 position)
@@ -339,9 +343,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlayObstructedAnimation();
         }
 
-        public void OnDamageDealt()
+        public void OnDamageDealt(DamageHitResult damageHitResult)
         {
             _anchorAudio.PlayDealDamageSound();
+            _anchorView.OnDamageDealt(damageHitResult);
         }
     }
 }
