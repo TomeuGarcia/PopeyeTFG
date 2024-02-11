@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Popeye.Modules.WorldElements.PullableBlocks.GridMovement
+namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
     [System.Serializable]
     public class RectangularArea
@@ -29,6 +29,9 @@ namespace Popeye.Modules.WorldElements.PullableBlocks.GridMovement
         public RectangularArea(Transform centerTransform)
         {
             _centerTransform = centerTransform;
+            _centerOffset = Vector2Int.zero;
+            _size = Vector2Int.one * 2;
+            
             UpdateState();
         }
 

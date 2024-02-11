@@ -45,6 +45,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private bool _pullingAnchorFromTheVoid;
         
         public Vector3 Position => _playerController.Position;
+        public Transform PositionTransform => _playerController.Transform;
         
         
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,

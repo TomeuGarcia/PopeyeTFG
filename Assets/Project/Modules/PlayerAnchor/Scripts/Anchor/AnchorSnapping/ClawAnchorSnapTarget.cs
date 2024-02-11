@@ -13,6 +13,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private Transform _clawsTransform;
         [SerializeField] private Transform[] _claws;
 
+        private Transform _user;
+        
+        
+        [SerializeField] private AutoAimTargetDataConfig _autoAimTargetDataConfig;
+        public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;
+        public Vector3 Position => GetAimLockPosition();
+        public GameObject GameObject => gameObject;
+
+        
+        
         private const float ACCEPT_FROM_POSITION_MIN_DOT = 0.1f;
         private const float ACCEPT_FROM_POSITION_MAX_HEIGHT = 1.5f;
         
@@ -20,6 +30,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private Vector3 UpDirection => -transform.right;
 
 
+        public delegate void UsedEvents();
+
+        public UsedEvents OnStartBeingUsedEvent;
+        public UsedEvents OnStopBeingUsedEvent;
+        
+        
         public Transform GetParentTransformForTargeter()
         {
             return _snapSpot;
@@ -54,6 +70,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             return _dashEndSpot.position;
         }
 
+        public Vector3 GetUserPosition()
+        {
+            return _user.position;
+        }
+
+        public bool CanBeAimedAt(Vector3 aimFromPosition)
+        {
+            return CanBeAimedFromPosition(aimFromPosition);
+        }
+        
         public Vector3 GetLookDirection()
         {
             return LookDirection;
@@ -65,12 +91,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             return Quaternion.AngleAxis(45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
         }
         
-
-        public bool CanSnapFromPosition(Vector3 position)
-        {
-            return CanBeAimedFromPosition(position);
-        }
-
         
         public void OnAddedAsAimTarget()
         {
@@ -82,9 +102,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             PlayCloseAnimation(0.2f);
         }
 
-        public void OnUsedAsAimTarget(float delay)
+
+        public void OnUsedAsAimTarget(float delay, Transform user)
         {
             PlaySnapAnimation(delay).Forget();
+            _user = user;
+            
+            OnStartBeingUsedEvent?.Invoke();
+        }
+
+        public void OnFinishBeingUsed()
+        {
+            _user = null;
+            
+            OnStopBeingUsedEvent?.Invoke();
         }
 
         private async UniTaskVoid PlaySnapAnimation(float delay)
@@ -123,13 +154,5 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
 
 
-        [SerializeField] private AutoAimTargetDataConfig _autoAimTargetDataConfig;
-        public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;
-        public Vector3 Position => GetAimLockPosition();
-        public GameObject GameObject => gameObject;
-        public bool CanBeAimedAt(Vector3 aimFromPosition)
-        {
-            return CanBeAimedFromPosition(aimFromPosition);
-        }
     }
 }

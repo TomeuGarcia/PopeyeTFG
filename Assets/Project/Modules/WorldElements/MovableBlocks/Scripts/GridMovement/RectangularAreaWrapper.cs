@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Popeye.Modules.WorldElements.PullableBlocks.GridMovement
+namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
     [System.Serializable]
     public class RectangularAreaWrapper

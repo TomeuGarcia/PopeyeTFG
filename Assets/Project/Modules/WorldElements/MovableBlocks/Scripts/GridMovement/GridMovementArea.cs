@@ -5,7 +5,7 @@ using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace Popeye.Modules.WorldElements.PullableBlocks.GridMovement
+namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
     public class GridMovementArea : MonoBehaviour, IGridMovementArea
     {
@@ -86,8 +86,9 @@ namespace Popeye.Modules.WorldElements.PullableBlocks.GridMovement
         }
         
         
-        public bool CanMoveTowardsDirection(Rect actorBounds, Vector2 movementDisplacement)
+        public bool CanMoveAfterDisplacement(IGridMovementActor gridMovementActor, Vector2 movementDisplacement)
         {
+            Rect actorBounds = gridMovementActor.AreaBounds;
             actorBounds.center += movementDisplacement;
             
             for (int i = 0; i < _areaWrappers.Count; ++i)
@@ -105,7 +106,7 @@ namespace Popeye.Modules.WorldElements.PullableBlocks.GridMovement
 
                         if (secondRectangularArea.AreaContainsPoint(secondCorner))
                         {
-                            return true;
+                            return !OverlapsWithOtherActors(gridMovementActor, firstCorner, secondCorner);
                         }
                     }
                 }
@@ -113,5 +114,26 @@ namespace Popeye.Modules.WorldElements.PullableBlocks.GridMovement
 
             return false;
         }
+
+        private bool OverlapsWithOtherActors(IGridMovementActor gridMovementActor, Vector2 firstCorner, Vector2 secondCorner)
+        {
+            for (int i = 0; i < _gridMovementActors.Length; ++i)
+            {
+                IGridMovementActor other = _gridMovementActors[i].Value;
+                if (gridMovementActor == other)
+                {
+                    continue;
+                }
+
+                if (other.RectangularArea.AreaContainsPoint(firstCorner) ||
+                    other.RectangularArea.AreaContainsPoint(secondCorner))
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
     }
 }
