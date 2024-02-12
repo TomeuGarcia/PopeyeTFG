@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
@@ -11,6 +13,12 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         [SerializeField] private RectangularArea _rectangularArea;
 
         public RectangularArea RectangularArea => _rectangularArea;
+        
+#if UNITY_EDITOR
+        private const float INVISIBLE_DISTANCE = 40;
+        private const float START_FADING_DISTANCE = 15;
+#endif
+        
         
         public RectangularAreaWrapper(RectangularArea rectangularArea)
         {
@@ -34,8 +42,29 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 _rectangularArea.Corner_LeftBack,
                 _rectangularArea.Corner_LeftForward
             };
-                
-            Handles.color = _drawColor;
+
+            Color drawColor = _drawColor;
+            
+#if UNITY_EDITOR
+            float distanceToEditorCamera = 
+                Vector3.Distance(SceneView.currentDrawingSceneView.camera.transform.position, _rectangularArea.Center);
+
+            if (distanceToEditorCamera > INVISIBLE_DISTANCE)
+            {
+                return;
+            }
+            
+            if (distanceToEditorCamera > START_FADING_DISTANCE)
+            {
+                float transparency = 1f - ((distanceToEditorCamera - START_FADING_DISTANCE) /
+                                            (INVISIBLE_DISTANCE - START_FADING_DISTANCE));
+
+                drawColor.a = transparency;
+            }
+#endif
+            
+            
+            Handles.color = drawColor;
             for (int i = 0; i < corners.Length; ++i)
             {
                 Handles.DrawLine(corners[i], corners[(i+1)% corners.Length], 3.0f);

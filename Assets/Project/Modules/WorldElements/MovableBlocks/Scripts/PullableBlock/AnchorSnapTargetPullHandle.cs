@@ -23,6 +23,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         
         private float RequiredDistanceToPull => _config.RequiredDistanceToPull;
         private float RequiredTimePulling => _config.RequiredTimePulling;
+        private float RequiredDotForPulling => _config.RequiredDotForPulling;
 
         private bool UsingInputDirection => !_directionAlwaysMatchesClaw;
 
@@ -79,7 +80,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
 
         private void UpdateCheckPulling()
         {
-            if (_checkPulling && DistanceRequirementIsMet())
+            if (CanPull())
             {
                 if (_pullingTimer.HasFinished())
                 {
@@ -93,6 +94,13 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             }
         }
 
+        private bool CanPull()
+        {
+            return _checkPulling &&
+                   DistanceRequirementIsMet() &&
+                   AngleRequirementIsMet();
+        }
+
         private bool DistanceRequirementIsMet()
         {
             float distancePlayerAnchorSnapTarget =
@@ -101,6 +109,15 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             return distancePlayerAnchorSnapTarget > RequiredDistanceToPull;
         }
 
+        private bool AngleRequirementIsMet()
+        {
+            Vector3 toUserDirection = (_anchorSnapTarget.GetUserPosition() - _anchorSnapTarget.Position).normalized;
+
+            float dot = Vector3.Dot(toUserDirection, _anchorSnapTarget.GetLookDirection());
+
+            return dot > RequiredDotForPulling;
+        }
+        
         private void Pull()
         {
             _pullableBlock.TryPullTowardsDirection(_pullDirection);

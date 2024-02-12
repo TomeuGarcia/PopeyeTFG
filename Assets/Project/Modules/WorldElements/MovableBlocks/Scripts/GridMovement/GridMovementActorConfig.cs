@@ -14,6 +14,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         [SerializeField] private Ease _moveEase = Ease.InOutSine;
         
         [SerializeField, Range(0f, 2f)] private float _delayBetweenMoves = 0.1f;
+        
 
         public int MoveAmount => _moveAmount;
         public float MoveDuration => _moveDuration;

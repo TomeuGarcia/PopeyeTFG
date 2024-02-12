@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using AYellowpaper;
 using NaughtyAttributes;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
     public class GridMovementArea : MonoBehaviour, IGridMovementArea
     {
+        [SerializeField] private GridMovementAreaViewConfig _viewConfig;
+        
+        [Space(20)]
         [SerializeField] private InterfaceReference<IGridMovementActor, MonoBehaviour>[] _gridMovementActors;
         
         [Space(20)]
@@ -16,9 +19,9 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         [SerializeField] private List<RectangularAreaWrapper> _areaWrappers;
 
         
+        private GridMovementAreaView _view;
+        
         private static Vector2 BOUNDS_OFFSET = Vector2.one * 0.05f;
-
-
         
         
         private void OnValidate()
@@ -29,6 +32,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             }
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             if (!_showAreas)
@@ -41,7 +45,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 _areaWrappers[i].DrawGizmos();
             }
         }
-
+#endif
         private void Awake()
         {
             foreach (var gridMovementActorReference in _gridMovementActors)
@@ -50,6 +54,13 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             }
 
             OnValidate();
+            
+            _view = new GridMovementAreaView(_viewConfig);
+            for (int i = 0; i < _areaWrappers.Count; ++i)
+            {
+                RectangularArea rectangularArea = _areaWrappers[i].RectangularArea;
+                _view.CreateRectangularAreaView(transform, rectangularArea, Vector3.up * 0.01f);
+            }
         }
 
         private void SetupGridMovementActor(IGridMovementActor gridMovementActor)

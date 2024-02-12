@@ -50,10 +50,13 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         {
             _rectangularAreaWrapper?.OnValidateUpdateState();
         }
+        
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             _rectangularAreaWrapper?.DrawGizmos();
         }
+#endif
         
         [Button("Reset Area")]
         private void ResetArea()
@@ -69,25 +72,6 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             _queuedMoves = new Queue<MovementStep>();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                QueueMove(Vector2.left);
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                QueueMove(Vector2.right);
-            }
-            else if (Input.GetKeyDown(KeyCode.W))
-            {
-                QueueMove(Vector2.up);
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                QueueMove(Vector2.down);
-            }
-        }
 
         public void QueueMove(Vector2 direction)
         {
