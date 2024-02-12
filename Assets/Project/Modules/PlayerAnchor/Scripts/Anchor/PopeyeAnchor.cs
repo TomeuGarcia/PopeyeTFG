@@ -114,7 +114,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
-        {            
+        {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
@@ -124,6 +124,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
+            _anchorChain.SetThrownView(anchorThrowResult);
             
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             
@@ -158,10 +159,21 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
                 anchorPullResult.MoveEaseCurve);
             
+            _anchorChain.SetPulledView(anchorPullResult);
+            
             _anchorView.PlayPulledAnimation(anchorPullResult.Duration);
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
 
+        }
+
+        public void OnDashedAt(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashingTowardsView(duration, dashEase);
+        }
+        public void OnDashedAwayFrom(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashingAwayView(duration, dashEase);
         }
 
         public void SetKicked(AnchorThrowResult anchorKickResult)
@@ -177,10 +189,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
             
             _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
-
-           
-
-           
         }
         
         public void SetCarried()
@@ -200,6 +208,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
             
             _anchorView.PlayRestOnFloorAnimation();
+            _anchorChain.SetRestingOnFloorView();
             
             _cameraFunctionalities.CameraShaker.PlayShake(_restOnFloor_CameraShake);
         }
@@ -213,6 +222,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             {
                 _anchorMotion.Parent(parentTransform);
             }
+            
+            _anchorChain.SetRestingOnFloorView();
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
         }
 
