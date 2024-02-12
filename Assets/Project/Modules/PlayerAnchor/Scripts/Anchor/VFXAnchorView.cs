@@ -121,7 +121,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration - _throwTrailSpawnDelay - _throwTrailFallnDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _throwTrailSpawnDelay - _throwTrailFallnDelay)));
             Transform fallTrail = _particleFactory.Create(_throwTrailSoftParticleType, _throwTrailFallnoffset, Quaternion.identity, _vfxParent);
 
             await UniTask.Delay(TimeSpan.FromSeconds(_throwTrailFallnDelay));

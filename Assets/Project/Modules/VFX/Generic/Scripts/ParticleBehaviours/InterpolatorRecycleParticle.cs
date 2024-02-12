@@ -29,7 +29,7 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
                 }
             }
 
-            //TrailEmission(false);
+            TrailEmission(false);
         }
 
         internal override void Init()
@@ -54,13 +54,13 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 
         private void TrailEmission(bool emission)
         {
-            /*
+            
             foreach (var trail in _trailRenderers)
             {
-                trail.Clear();
-                trail.emitting = emission;
+                //trail.Clear();
+                //trail.emitting = emission;
             }
-            */
+            
         }
 
         private void Setup(Material material, MaterialFloatSetupConfig[] setupConfigs)

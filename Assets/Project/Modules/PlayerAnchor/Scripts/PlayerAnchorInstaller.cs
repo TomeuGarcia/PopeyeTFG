@@ -143,7 +143,6 @@ namespace Popeye.Modules.PlayerAnchor
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
-                //_cameraShaker, _hitStop);
 
             
             
