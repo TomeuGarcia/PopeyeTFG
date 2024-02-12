@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ee079d2d63b4caa965cb39139f5eb93, type: 3}
-  m_Name: Default_PullableBlockPullHandleConfig
+  m_Script: {fileID: 11500000, guid: ee80ffba3ec44dd6833f388a8e4afe6a, type: 3}
+  m_Name: ClawAnchorSnapTargetConfig
   m_EditorClassIdentifier: 
-  _requiredDistanceToPull: 10
-  _requiredTimePulling: 0.5
+  _floorCollisionProbing: {fileID: 11400000, guid: fe781d398af7571499f4602c4acaeaf8,
+    type: 2}
+  _heightDistanceFromFloor: 2
+  _forwardDistanceFromClaw: -2

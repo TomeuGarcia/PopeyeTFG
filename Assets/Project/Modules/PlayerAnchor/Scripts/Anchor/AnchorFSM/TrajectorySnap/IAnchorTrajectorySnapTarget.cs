@@ -15,7 +15,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         void OnAddedAsAimTarget();
         void OnRemovedFromAimTarget();
-        void OnUsedAsAimTarget(float delay, Transform user);
+        void OnUsedAsAimTarget(float delay);
+        void OnStartBeingUsed(Transform user);
         void OnFinishBeingUsed();
     }
 }

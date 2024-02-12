@@ -53,9 +53,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             ClearState();
         }
         
-        public void UseCurrentTarget(float durationBeforeReachingTarget, Transform user)
+        public void UseCurrentTarget(float durationBeforeReachingTarget)
         {
-            _currentSnapTarget.OnUsedAsAimTarget(durationBeforeReachingTarget, user);
+            _currentSnapTarget.OnUsedAsAimTarget(durationBeforeReachingTarget);
         }
 
         

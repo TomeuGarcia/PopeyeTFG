@@ -54,6 +54,11 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             _anchorSnapTarget.OnStopBeingUsedEvent -= StopCheckPulling;
         }
 
+        private void Update()
+        {
+            UpdateCheckPulling();
+        }
+        
         public void Configure(IPullableBlock pullableBlock)
         {
             _pullableBlock = pullableBlock;
@@ -66,18 +71,13 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             
             _pullingTimer.SetDuration(RequiredTimePulling);
             _pullingTimer.Clear();
-            
-            //CheckPulling().Forget();
-            
-            Debug.Log("start");
         }
         private void StopCheckPulling()
         {
             _checkPulling = false;
-            Debug.Log("stop");
         }
 
-        private void Update()
+        private void UpdateCheckPulling()
         {
             if (_checkPulling && DistanceRequirementIsMet())
             {
@@ -104,7 +104,6 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         private void Pull()
         {
             _pullableBlock.TryPullTowardsDirection(_pullDirection);
-            Debug.Log("pull");
         }
         
     }

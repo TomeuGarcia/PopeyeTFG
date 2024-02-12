@@ -205,15 +205,15 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         public void SetGrabbedBySnapper(IAnchorTrajectorySnapTarget anchorTrajectorySnapTarget)
         {
-            _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
-
             CurrentTrajectorySnapTarget = anchorTrajectorySnapTarget;
+
             Transform parentTransform = anchorTrajectorySnapTarget.GetParentTransformForTargeter();
                 
             if (parentTransform != null)
             {
                 _anchorMotion.Parent(parentTransform);
             }
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
         }
 
         public void SetSpinning(bool spinningToTheRight)
