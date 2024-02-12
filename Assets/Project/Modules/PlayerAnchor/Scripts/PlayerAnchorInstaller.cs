@@ -134,7 +134,6 @@ namespace Popeye.Modules.PlayerAnchor
                 _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
-            anchorStateMachine.Setup(anchorStatesBlackboard);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorTrajectorySnapController.Configure();
             _anchorCollisions.Configure(_obstacleProbingConfig);
@@ -147,9 +146,9 @@ namespace Popeye.Modules.PlayerAnchor
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
                 //_cameraShaker, _hitStop);
-
             anchorStateMachine.Setup(anchorStatesBlackboard);
-            
+
+                
             
             // Player
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
