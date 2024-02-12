@@ -2,6 +2,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -24,6 +25,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         void SetSpinning(bool spinningToTheRight);
         void OnKeepSpinning();
         void OnStopSpinning();
+        
+        void OnDashedAt(float duration, Ease dashEase);
+        void OnDashedAwayFrom(float duration, Ease dashEase);
         
         UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition);
 

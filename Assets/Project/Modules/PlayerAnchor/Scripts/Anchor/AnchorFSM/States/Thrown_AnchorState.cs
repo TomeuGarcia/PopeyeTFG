@@ -14,7 +14,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
             _blackboard.AnchorPhysics.EnableTension();
             _blackboard.TransformMotion.Unparent();
             
-            _blackboard.AnchorChain.SetThrownView();
             //_blackboard.AnchorChain.DisableTension();
         }
 
