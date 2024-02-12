@@ -15,8 +15,8 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         public RectangularArea RectangularArea => _rectangularArea;
         
 #if UNITY_EDITOR
-        private const float INVISIBLE_DISTANCE = 40;
-        private const float START_FADING_DISTANCE = 15;
+        private const float INVISIBLE_DISTANCE = 35;
+        private const float START_FADING_DISTANCE = 30;
 #endif
         
         
@@ -31,6 +31,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             _rectangularArea.UpdateState();
         }
 
+#if UNITY_EDITOR
         public void DrawGizmos()
         {
             if (!_showArea) return;
@@ -45,7 +46,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 
             Color drawColor = _drawColor;
             
-#if UNITY_EDITOR
+
             float distanceToEditorCamera = 
                 Vector3.Distance(SceneView.currentDrawingSceneView.camera.transform.position, _rectangularArea.Center);
 
@@ -61,9 +62,8 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 
                 drawColor.a = transparency;
             }
-#endif
-            
-            
+
+
             Handles.color = drawColor;
             for (int i = 0; i < corners.Length; ++i)
             {
@@ -74,6 +74,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             DrawOutline(corners, 3.0f);
             DrawGrid(2.0f, 2.0f);
         }
+        
 
         private void DrawOutline(Vector3[] corners, float thickness)
         {
@@ -112,6 +113,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 sizeOffset += gridSize;
             }
         }
+#endif
         
     }
 }

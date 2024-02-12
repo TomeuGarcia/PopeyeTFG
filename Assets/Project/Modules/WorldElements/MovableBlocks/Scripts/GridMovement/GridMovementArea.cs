@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using AYellowpaper;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
@@ -18,8 +16,6 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         [SerializeField] private bool _showAreas = true;
         [SerializeField] private List<RectangularAreaWrapper> _areaWrappers;
 
-        
-        private GridMovementAreaView _view;
         
         private static Vector2 BOUNDS_OFFSET = Vector2.one * 0.05f;
         
@@ -46,6 +42,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             }
         }
 #endif
+        
         private void Awake()
         {
             foreach (var gridMovementActorReference in _gridMovementActors)
@@ -55,11 +52,11 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 
             OnValidate();
             
-            _view = new GridMovementAreaView(_viewConfig);
             for (int i = 0; i < _areaWrappers.Count; ++i)
             {
                 RectangularArea rectangularArea = _areaWrappers[i].RectangularArea;
-                _view.CreateRectangularAreaView(transform, rectangularArea, Vector3.up * 0.01f);
+                GridMovementAreaViewHelper.CreateRectangularAreaView(_viewConfig, transform, rectangularArea, 
+                    Vector3.up * 0.01f);
             }
         }
 

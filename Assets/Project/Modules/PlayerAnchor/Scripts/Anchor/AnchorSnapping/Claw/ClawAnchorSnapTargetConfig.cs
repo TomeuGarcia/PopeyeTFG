@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField, Range(-5.0f, 5.0f)] private float _forwardDistanceFromClaw = -3.0f;
 
         [Header("USER INTERACTIONS")] 
-        [SerializeField, Range(-1.0f, 1.0f)] private float _minDotToAcceptUser = 0.1f;
+        [SerializeField, Range(0.0f, 180.0f)] private float _minAngleToAcceptUser = 85.0f;
         [SerializeField, Range(0f, 5.0f)] private float _heightDistanceToAcceptUser = 1.5f; 
         
         public CollisionProbingConfig FloorCollisionProbingConfig => _floorCollisionProbing;
@@ -27,9 +27,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public float ForwardDistanceFromClaw => _forwardDistanceFromClaw;
 
 
-        public float MinDotToAcceptUser => _minDotToAcceptUser;
+        public float MinDotToAcceptUser { get; private set; }
         public float HeightDistanceToAcceptUser => _heightDistanceToAcceptUser;
 
 
+        private void OnValidate()
+        {
+            MinDotToAcceptUser = Mathf.Cos(_minAngleToAcceptUser * Mathf.Rad2Deg);
+        }
     }
 }
