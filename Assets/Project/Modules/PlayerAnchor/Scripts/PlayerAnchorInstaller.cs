@@ -160,6 +160,7 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerAudio playerAudio = _playerAudioRef.Value;
             
             
+            _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);

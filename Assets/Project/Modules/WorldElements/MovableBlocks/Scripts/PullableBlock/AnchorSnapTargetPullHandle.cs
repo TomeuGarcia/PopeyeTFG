@@ -40,8 +40,8 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         {
             Vector3 snapTargetLookDirection = _anchorSnapTarget.GetLookDirection();
             _pullDirection = new Vector2(
-                Mathf.Ceil(snapTargetLookDirection.x),
-                Mathf.Ceil(snapTargetLookDirection.z));
+                Mathf.Ceil(snapTargetLookDirection.x - 0.1f),
+                Mathf.Ceil(snapTargetLookDirection.z - 0.1f));
         }
 
         private void OnEnable()
@@ -97,6 +97,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         private bool CanPull()
         {
             return _checkPulling &&
+                   !_pullableBlock.IsMoving &&
                    DistanceRequirementIsMet() &&
                    AngleRequirementIsMet();
         }

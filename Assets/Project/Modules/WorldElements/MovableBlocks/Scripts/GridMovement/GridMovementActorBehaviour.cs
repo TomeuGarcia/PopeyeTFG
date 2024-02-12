@@ -10,7 +10,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
     public class GridMovementActorBehaviour : MonoBehaviour, IGridMovementActor
     {
-        private class MovementStep
+        public class MovementStep
         {
             public Vector2 Direction { get; private set; }
             public Vector2 MoveDisplacement { get; private set; }
@@ -30,7 +30,9 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         private GridMovementArea _associatedMovementArea;
         private Queue<MovementStep> _queuedMoves;
         private bool _processingQueuedMoves;
-            
+        
+        
+        public bool IsMoving { get; private set; }
 
         public RectangularArea RectangularArea => _rectangularAreaWrapper.RectangularArea;
         public Rect AreaBounds => _rectangularAreaWrapper.RectangularArea.AreaBounds;
@@ -40,8 +42,9 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         private float DelayBetweenMoves => _gridMovementActorConfig.DelayBetweenMoves;
 
 
-        public delegate void MovementActorEvent();
+        public delegate void MovementActorEvent(MovementStep movementStep);
 
+        public MovementActorEvent OnMoveStarted;
         public MovementActorEvent OnMoveFinished;
         public MovementActorEvent OnMoveFailed;
 
@@ -70,6 +73,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         {
             _associatedMovementArea = associatedMovementArea;
             _queuedMoves = new Queue<MovementStep>();
+            RectangularArea.UpdateState();
         }
 
 
@@ -95,13 +99,13 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 if (CanMove(movementStep))
                 {
                     await Move(movementStep);
-                    OnMoved();
+                    OnMoved(movementStep);
                     
                     await UniTask.Delay(TimeSpan.FromSeconds(DelayBetweenMoves));
                 }
                 else
                 {
-                    MoveFailed();
+                    MoveFailed(movementStep);
                 }
             }
 
@@ -115,21 +119,26 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         
         private async UniTask Move(MovementStep movementStep)
         {
+            IsMoving = true;
+            OnMoveStarted?.Invoke(movementStep);
+            
             Vector3 endPosition = transform.position + movementStep.MoveWorldDisplacement;
 
             await transform.DOMove(endPosition, MoveDuration)
                 .SetEase(MoveEase)
                 .AsyncWaitForCompletion();
+
+            IsMoving = false;
         }
         
-        private void OnMoved()
+        private void OnMoved(MovementStep movementStep)
         {
             _rectangularAreaWrapper.RectangularArea.UpdateState();
-            OnMoveFinished?.Invoke();
+            OnMoveFinished?.Invoke(movementStep);
         }
-        private void MoveFailed()
+        private void MoveFailed(MovementStep movementStep)
         {
-            OnMoveFailed?.Invoke();
+            OnMoveFailed?.Invoke(movementStep);
         }
     }
 }

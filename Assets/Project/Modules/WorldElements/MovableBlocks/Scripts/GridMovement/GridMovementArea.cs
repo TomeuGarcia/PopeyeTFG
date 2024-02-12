@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AYellowpaper;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
@@ -10,14 +11,14 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         [SerializeField] private GridMovementAreaViewConfig _viewConfig;
         
         [Space(20)]
-        [SerializeField] private InterfaceReference<IGridMovementActor, MonoBehaviour>[] _gridMovementActors;
+        [SerializeField] private InterfaceReference<IGridMovementActor, MonoBehaviour>[] _gridMovementActorReferences;
         
         [Space(20)]
         [SerializeField] private bool _showAreas = true;
         [SerializeField] private List<RectangularAreaWrapper> _areaWrappers;
 
         
-        private static Vector2 BOUNDS_OFFSET = Vector2.one * 0.05f;
+        private static Vector2 BOUNDS_ACCEPTANCE_OFFSET = Vector2.one * 0.05f;
         
         
         private void OnValidate()
@@ -45,20 +46,21 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         
         private void Awake()
         {
-            foreach (var gridMovementActorReference in _gridMovementActors)
+            foreach (var gridMovementActorReference in _gridMovementActorReferences)
             {
                 SetupGridMovementActor(gridMovementActorReference.Value);
             }
-
-            OnValidate();
             
             for (int i = 0; i < _areaWrappers.Count; ++i)
             {
                 RectangularArea rectangularArea = _areaWrappers[i].RectangularArea;
+                rectangularArea.UpdateState();
+                
                 GridMovementAreaViewHelper.CreateRectangularAreaView(_viewConfig, transform, rectangularArea, 
-                    Vector3.up * 0.01f);
+                    Vector3.up * 0.005f);
             }
         }
+        
 
         private void SetupGridMovementActor(IGridMovementActor gridMovementActor)
         {
@@ -90,7 +92,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 }
             }
 
-            _gridMovementActors = _references.ToArray();
+            _gridMovementActorReferences = _references.ToArray();
         }
         
         
@@ -99,15 +101,16 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             Rect actorBounds = gridMovementActor.AreaBounds;
             actorBounds.center += movementDisplacement;
             
+            Vector2 firstCorner = actorBounds.min + BOUNDS_ACCEPTANCE_OFFSET;
+            Vector2 secondCorner = actorBounds.max - BOUNDS_ACCEPTANCE_OFFSET;
+
             for (int i = 0; i < _areaWrappers.Count; ++i)
             {
                 RectangularArea rectangularArea = _areaWrappers[i].RectangularArea;
 
-                Vector2 firstCorner = actorBounds.min + BOUNDS_OFFSET;
-                Vector2 secondCorner = actorBounds.max - BOUNDS_OFFSET;
-
                 if (rectangularArea.AreaContainsPoint(firstCorner))
                 {
+                    
                     for (int j = 0; j < _areaWrappers.Count; ++j)
                     {
                         RectangularArea secondRectangularArea = _areaWrappers[j].RectangularArea;
@@ -125,9 +128,9 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 
         private bool OverlapsWithOtherActors(IGridMovementActor gridMovementActor, Vector2 firstCorner, Vector2 secondCorner)
         {
-            for (int i = 0; i < _gridMovementActors.Length; ++i)
+            for (int i = 0; i < _gridMovementActorReferences.Length; ++i)
             {
-                IGridMovementActor other = _gridMovementActors[i].Value;
+                IGridMovementActor other = _gridMovementActorReferences[i].Value;
                 if (gridMovementActor == other)
                 {
                     continue;

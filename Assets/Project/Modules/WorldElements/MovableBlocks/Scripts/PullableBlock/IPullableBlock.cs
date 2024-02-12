@@ -5,7 +5,8 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
 {
     public interface IPullableBlock
     {
-        public void TryPullTowardsDirection(Vector2 pullDirection);
+        bool IsMoving { get; }
+        void TryPullTowardsDirection(Vector2 pullDirection);
 
     }
 }
