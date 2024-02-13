@@ -16,7 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     public class VFXAnchorView : MonoBehaviour, IAnchorView
     {
         [Header("PARTICLE TYPES")]
-        [SerializeField] private ParticleTypes _carryTrailParticleType;
+        [SerializeField] private ParticleTypes _retrieveTrailParticleType;
         [SerializeField] private ParticleTypes _throwTrailParticleType;
         [SerializeField] private ParticleTypes _throwTrailSoftParticleType;
         [SerializeField] private ParticleTypes _throwHeadParticleType;
@@ -114,6 +114,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayThrownAnimation(float duration)
         {
+            //Time.timeScale = 0.1f;
+            
             StopCarry();
             
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
@@ -121,7 +123,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration - _throwTrailSpawnDelay - _throwTrailFallnDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _throwTrailSpawnDelay - _throwTrailFallnDelay)));
             Transform fallTrail = _particleFactory.Create(_throwTrailSoftParticleType, _throwTrailFallnoffset, Quaternion.identity, _vfxParent);
 
             await UniTask.Delay(TimeSpan.FromSeconds(_throwTrailFallnDelay));
@@ -135,8 +137,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             Physics.Raycast(_vfxParent.position, Vector3.down, out raycastHit, 1.0f);
             throwDecal.up = raycastHit.normal;
             throwDecal.RotateAround(throwDecal.up, UnityEngine.Random.Range(0.0f, 360.0f));
-            
-            _cameraShaker.PlayShake(_shakeConfigDamageDealt);
         }
         
         public async UniTaskVoid PlayPulledAnimation(float duration)
@@ -144,9 +144,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             StopCarry();
             
             await UniTask.Delay(TimeSpan.FromSeconds(_retrieveTrailSpawnDelay));
-            Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
-            Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
-            _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            Transform rightTrail = _particleFactory.Create(_retrieveTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
+            Transform leftTrail = _particleFactory.Create(_retrieveTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
 
             await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(duration - _retrieveTrailSpawnDelay, 0)));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();

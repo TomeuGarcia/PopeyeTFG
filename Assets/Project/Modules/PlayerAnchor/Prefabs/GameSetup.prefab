@@ -1499,7 +1499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b43c4ce15d5466a9c8e2602b3297c0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carryTrailParticleType: 2
+  _retrieveTrailParticleType: 2
   _throwTrailParticleType: 3
   _throwTrailSoftParticleType: 9
   _throwHeadParticleType: 4
@@ -1515,7 +1515,7 @@ MonoBehaviour:
   _specialMotionsTransform: {fileID: 7089435655413419375}
   _slamTrailOffset: {x: -0.8, y: 0, z: 0.1}
   _throwTrailFallnoffset: {x: 0, y: -0.2, z: 0.75}
-  _throwTrailSpawnDelay: 0.035
+  _throwTrailSpawnDelay: 0.015
   _throwTrailFallnDelay: 0.25
   _retrieveTrailSpawnDelay: 0.1
 --- !u!114 &7653452814856030824
@@ -2425,12 +2425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2259574bc7194459a9a2dd6959b5904e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chainLine: {fileID: 4763874378844247995}
   _boneChain: {fileID: 1882260842280776802}
   _boneChainIK: {fileID: 5612155314268022033}
   _controllerIK: {fileID: 6132698310706980790}
-  _chainSharedMaterial: {fileID: 2100000, guid: b254fbe2692ad024395a3b1b7589f430,
-    type: 2}
 --- !u!114 &6405983057515278388
 MonoBehaviour:
   m_ObjectHideFlags: 0
