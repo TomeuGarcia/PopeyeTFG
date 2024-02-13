@@ -8,6 +8,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
@@ -15,6 +16,7 @@ using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.Generic.ParticleBehaviours;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Scripts.Time.TimeFunctionalities;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -86,7 +88,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorPhysics.DisableTension();
             _anchorChain.DisableTension();
             
-            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(),
+                ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
+                cameraFunctionalities.CameraShaker);
         }
         
         public void ResetState(Vector3 position)
@@ -110,7 +114,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
-        {            
+        {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
@@ -120,6 +124,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
+            _anchorChain.SetThrownView(anchorThrowResult);
             
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             
@@ -154,10 +159,21 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
                 anchorPullResult.MoveEaseCurve);
             
+            _anchorChain.SetPulledView(anchorPullResult);
+            
             _anchorView.PlayPulledAnimation(anchorPullResult.Duration);
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
 
+        }
+
+        public void OnDashedAt(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashingTowardsView(duration, dashEase);
+        }
+        public void OnDashedAwayFrom(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashingAwayView(duration, dashEase);
         }
 
         public void SetKicked(AnchorThrowResult anchorKickResult)
@@ -173,10 +189,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
             
             _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
-
-           
-
-           
         }
         
         public void SetCarried()
@@ -196,6 +208,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
             
             _anchorView.PlayRestOnFloorAnimation();
+            _anchorChain.SetRestingOnFloorView();
             
             _cameraFunctionalities.CameraShaker.PlayShake(_restOnFloor_CameraShake);
         }
@@ -210,6 +223,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             {
                 _anchorMotion.Parent(parentTransform);
             }
+            
+            _anchorChain.SetRestingOnFloorView();
         }
 
         public void SetSpinning(bool spinningToTheRight)
@@ -328,9 +343,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlayObstructedAnimation();
         }
 
-        public void OnDamageDealt()
+        public void OnDamageDealt(DamageHitResult damageHitResult)
         {
             _anchorAudio.PlayDealDamageSound();
+            _anchorView.OnDamageDealt(damageHitResult);
         }
     }
 }

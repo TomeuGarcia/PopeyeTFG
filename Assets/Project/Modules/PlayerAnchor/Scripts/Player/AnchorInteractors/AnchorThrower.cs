@@ -82,10 +82,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
                     out IAnchorTrajectorySnapTarget snapTarget, out bool validSnapTarget, 
                     out RaycastHit obstacleHit, out bool trajectoryHitsObstacle);
 
-            duration = (duration / ThrowDistance) * finalTrajectoryDistance;
+            float correctedDuration = (duration / ThrowDistance) * finalTrajectoryDistance;
+            float correctedDurationHitObstacle = trajectoryHitsObstacle ? 
+                duration * (Vector3.Distance(obstacleHit.point, trajectoryPoints[0]) / ThrowDistance) 
+                : correctedDuration;
             
-            AnchorThrowResult.Reset(trajectoryPoints, direction, floorNormal, duration, !trajectoryEndsOnFloor);
-
+            AnchorThrowResult.Reset(trajectoryPoints, direction, floorNormal, 
+                correctedDuration, correctedDurationHitObstacle, !trajectoryEndsOnFloor, trajectoryHitsObstacle);
             
             
             if (validSnapTarget)

@@ -1,6 +1,11 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Camera;
+using Popeye.Modules.Camera.CameraShake;
+using Project.Scripts.Time.TimeFunctionalities;
+using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -23,6 +28,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [Header("TAKE DAMAGE")]
         [SerializeField, Range(0.0f, 5.0f)] private float _takeDamagePunchDuration = 0.3f;
         [SerializeField] private Vector3 _takeDamagePunchScale = new Vector3(-0.2f, 0.4f, -0.2f);
+        [SerializeField] private HitStopConfig _hitStopDamageTaken;
+        [SerializeField] private CameraShakeConfig _shakeConfigDamageTaken;
         
         [Header("HEAL")]
         [SerializeField, Range(0.0f, 5.0f)] private float _healPunchDuration = 0.3f;
@@ -55,6 +62,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField, Range(0.0f, 5.0f)] private float _anchorObstructedPunchDuration = 0.3f;
         [SerializeField] private Vector3 _anchorObstructedPunchRotation = new Vector3(0, 45, 0);
         
+        private IHitStopManager _hitStopManager;
+        private ICameraShaker _cameraShaker;
         
         private int _tiredId;
         private int _baseColorId;
@@ -70,6 +79,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetMeshBaseColor(_normalColor);
         }
 
+        private void Start()
+        {
+            _hitStopManager = ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager; 
+            _cameraShaker = ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker; 
+        }
 
         public void StartTired()
         {
@@ -83,6 +97,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayTakeDamageAnimation()
         {
+            _hitStopManager.QueueHitStop(_hitStopDamageTaken);
+            _cameraShaker.PlayShake(_shakeConfigDamageTaken);
+            
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_takeDamagePunchScale, _takeDamagePunchDuration, 2)
                 .SetEase(Ease.InOutSine);
