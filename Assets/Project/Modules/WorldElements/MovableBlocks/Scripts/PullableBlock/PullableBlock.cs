@@ -9,7 +9,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
     [RequireComponent(typeof(GridMovementActorBehaviour))]
     public class PullableBlock : MonoBehaviour, IPullableBlock
     {
-        [SerializeField] private GridMovementActorBehaviour _gridMovementActorBehaviour;
+        private GridMovementActorBehaviour _gridMovementActorBehaviour;
         [SerializeField] private InterfaceReference<IPullableBlockPullHandle, MonoBehaviour>[] _handles;
         private PullableBlockView _pullableBlockView;
         
@@ -17,6 +17,8 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         
         private void Awake()
         {
+            _gridMovementActorBehaviour = GetComponent<GridMovementActorBehaviour>();
+            
             for (int i = 0; i < _handles.Length; ++i)
             {
                 _handles[i].Value.Configure(this);
