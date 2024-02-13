@@ -8,6 +8,7 @@ using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 using FMODUnity;
+using Popeye.Modules.Enemies.EnemyFactories;
 
 namespace Popeye.Modules.Enemies
 {
@@ -42,15 +43,38 @@ namespace Popeye.Modules.Enemies
 
         private void Start()
         {
-            foreach (var slimeData in _sizeToPrefab)
+           /* foreach (var slimeData in _sizeToPrefab)
             {
                 _sizeToPrefabDictionary.Add(slimeData.size, slimeData.prefab);
             }
             InstantiateFirstSlime();
             _currentSlimesCount++;
+            */
         }
 
-        
+        public ObjectPool GetParticlePool()
+        {
+            return _objectPool;
+        }
+
+        public Transform GetPlayerTransform()
+        {
+            return _attackTarget;
+        }
+        public void InitAfterSpawn(SlimeMediator slimeMediator)
+        {
+            _objectPool = new ObjectPool(_explosionParticles, _transform);
+            _objectPool.Init(15);
+            slimeMediator.InitAfterSpawn();
+            _attackTarget = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
+            slimeMediator.SetPlayerTransform(_attackTarget);
+            slimeMediator.SetSlimeMind(this);
+            slimeMediator.PlayMoveAnimation();
+            if(_patrolType == EnemyPatrolling.PatrolType.FixedWaypoints){slimeMediator.SetWayPoints(_wayPoints);}
+            if(_patrolType == EnemyPatrolling.PatrolType.None){slimeMediator.StartChasing();}
+        }
+
+
         public void AddSlimeToList()
         {
             _currentSlimesCount++;
@@ -73,13 +97,24 @@ namespace Popeye.Modules.Enemies
             _objectPool = new ObjectPool(_explosionParticles, _transform);
             _objectPool.Init(15);
             mediator.SetObjectPool(_objectPool);
-            mediator.Init();
+            mediator.InitAfterSpawn();
             _attackTarget = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
             mediator.SetPlayerTransform(_attackTarget);
             mediator.SetSlimeMind(this);
             mediator.PlayMoveAnimation();
             if(_patrolType == EnemyPatrolling.PatrolType.FixedWaypoints){mediator.SetWayPoints(_wayPoints);}
             if(_patrolType == EnemyPatrolling.PatrolType.None){mediator.StartChasing();}
+        }
+
+        internal override void Init()
+        {
+            _currentSlimesCount = 1;
+            
+        }
+
+        internal override void Release()
+        {
+            throw new NotImplementedException();
         }
     }
 }
