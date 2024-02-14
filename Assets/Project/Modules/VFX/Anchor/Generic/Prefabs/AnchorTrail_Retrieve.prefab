@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7644833735669237453}
   - component: {fileID: 6925703933275419869}
   m_Layer: 0
-  m_Name: AnchorTrail_Carry
+  m_Name: AnchorTrail_Retrieve
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,10 +52,7 @@ MonoBehaviour:
   - _floatSetupDatas:
     - {fileID: 11400000, guid: adbd0efcdd273174691fca9311cbcb31, type: 2}
     _floatInterpolationDatas:
-    - {fileID: 11400000, guid: e1c1501666785b945b5079cb698171aa, type: 2}
-    _renderers:
-    - {fileID: 5373558955004558516}
-    - {fileID: 954646074283249317}
+    - {fileID: 11400000, guid: 5feabed7caa8a9341bf6b2d0efa8016a, type: 2}
     _meshSources:
     - {fileID: 806774328718867947}
     - {fileID: 4386186730715433278}
@@ -135,12 +132,6 @@ PrefabInstance:
 --- !u!4 &10722548387696856 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2850342768097535934, guid: 0a5eba5f33a852346ab240e8e712b51b,
-    type: 3}
-  m_PrefabInstance: {fileID: 2857652420965758822}
-  m_PrefabAsset: {fileID: 0}
---- !u!96 &954646074283249317 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 3069201185080424899, guid: 0a5eba5f33a852346ab240e8e712b51b,
     type: 3}
   m_PrefabInstance: {fileID: 2857652420965758822}
   m_PrefabAsset: {fileID: 0}
@@ -232,12 +223,6 @@ GameObject:
 --- !u!4 &2469707192432201250 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1048595715566282096, guid: 1f0bba3bbf90167488f152816e3f0112,
-    type: 3}
-  m_PrefabInstance: {fileID: 3227802905771060050}
-  m_PrefabAsset: {fileID: 0}
---- !u!96 &5373558955004558516 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 7375140003675854822, guid: 1f0bba3bbf90167488f152816e3f0112,
     type: 3}
   m_PrefabInstance: {fileID: 3227802905771060050}
   m_PrefabAsset: {fileID: 0}
