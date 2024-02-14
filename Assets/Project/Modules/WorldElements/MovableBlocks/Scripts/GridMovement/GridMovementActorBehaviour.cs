@@ -24,6 +24,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             }
         }
         
+        [Required("Assign - ScriptableObject")] 
         [Expandable] [SerializeField] private GridMovementActorConfig _gridMovementActorConfig;
         [SerializeField] private RectangularAreaWrapper _rectangularAreaWrapper;
 

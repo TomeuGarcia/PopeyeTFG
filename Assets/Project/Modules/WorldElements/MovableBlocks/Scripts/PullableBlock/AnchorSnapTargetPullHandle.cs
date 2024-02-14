@@ -10,9 +10,12 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
 {
     public class AnchorSnapTargetPullHandle : MonoBehaviour, IPullableBlockPullHandle
     {
-
+        [Required("Assign - ScriptableObject")] 
         [Expandable] [SerializeField] private PullableBlockPullHandleConfig _config;
+        
+        [Required("Assign - MonoBehaviour")] 
         [SerializeField] private ClawAnchorSnapTarget _anchorSnapTarget;
+        
         [SerializeField] private bool _directionAlwaysMatchesClaw = true;
         [ShowIf("UsingInputDirection")] [SerializeField] private Vector2 _pullDirection;
 

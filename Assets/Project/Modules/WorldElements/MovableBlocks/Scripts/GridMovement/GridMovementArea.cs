@@ -8,6 +8,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 {
     public class GridMovementArea : MonoBehaviour, IGridMovementArea
     {
+        [Required("Assign - ScriptableObject")] 
         [SerializeField] private GridMovementAreaViewConfig _viewConfig;
         
         [Space(20)]
