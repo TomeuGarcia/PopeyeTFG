@@ -16,6 +16,10 @@ namespace Popeye.ProjectHelpers
         public const string AUTOAIM_ASSETS_PATH = "Popeye/AutoAim/";
         
         
+        public const string WORLDELEMENTS_ASSETS_PATH = "Popeye/WorldElements/";
+        public const string GRIDMOVEMENT_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "GridMovement/";
+        
+        
         public const string TIME_ASSETS_PATH = "Popeye/Time/";
         public const string HITSTOP_ASSETS_PATH = TIME_ASSETS_PATH + "HitStop/";
         

@@ -7,6 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public interface IPlayerMediator
     {
         Vector3 Position { get; }
+        Transform PositionTransform { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
         void SetCanUseRotateInput(bool canUseRotateInput);

@@ -120,7 +120,7 @@ namespace Popeye.Modules.PlayerController
             }
         }
 
-        private void Awake()
+        public void AwakeConfigure()
         {
             OnValidate();
 

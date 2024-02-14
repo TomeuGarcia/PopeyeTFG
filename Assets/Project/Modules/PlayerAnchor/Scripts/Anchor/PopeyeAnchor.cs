@@ -214,9 +214,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         public void SetGrabbedBySnapper(IAnchorTrajectorySnapTarget anchorTrajectorySnapTarget)
         {
-            _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
-
             CurrentTrajectorySnapTarget = anchorTrajectorySnapTarget;
+
             Transform parentTransform = anchorTrajectorySnapTarget.GetParentTransformForTargeter();
                 
             if (parentTransform != null)
@@ -225,6 +224,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             }
             
             _anchorChain.SetRestingOnFloorView();
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
         }
 
         public void SetSpinning(bool spinningToTheRight)

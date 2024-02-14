@@ -1,3 +1,6 @@
+
+using UnityEngine;
+
 namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 {
     public class GrabbedBySnapper_AnchorState : IAnchorState
@@ -14,11 +17,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
         {
             _blackboard.AnchorPhysics.EnableTension();
             _blackboard.AnchorChain.EnableTension();
+            
+            _blackboard.AnchorMediator.CurrentTrajectorySnapTarget.OnStartBeingUsed(_blackboard.PlayerPositionTransform);
         }
 
         public void Exit()
         {
             _blackboard.TransformMotion.Unparent();
+            _blackboard.AnchorMediator.CurrentTrajectorySnapTarget.OnFinishBeingUsed();
         }
         
         

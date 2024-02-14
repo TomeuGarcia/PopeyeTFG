@@ -132,8 +132,8 @@ namespace Popeye.Modules.PlayerAnchor
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
                 _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
-            anchorStatesBlackboard.Configure(anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, _anchorChain, 
-                _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
+            anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
+                _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorTrajectorySnapController.Configure();
             _anchorCollisions.Configure(_obstacleProbingConfig);
@@ -146,9 +146,9 @@ namespace Popeye.Modules.PlayerAnchor
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
                 //_cameraShaker, _hitStop);
-
             anchorStateMachine.Setup(anchorStatesBlackboard);
-            
+
+                
             
             // Player
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
@@ -163,6 +163,7 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerAudio playerAudio = _playerAudioRef.Value;
             
             
+            _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
