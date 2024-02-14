@@ -114,8 +114,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayThrownAnimation(float duration)
         {
-            //Time.timeScale = 0.1f;
-            
             StopCarry();
             
             _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
