@@ -64,6 +64,11 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         {
             _pullableBlock = pullableBlock;
             _pullingTimer = new Timer(RequiredTimePulling);
+
+            if (_directionAlwaysMatchesClaw)
+            {
+                UpdatePullDirectionWithClawDirection();
+            }
         }
 
         private void StartCheckPulling()
