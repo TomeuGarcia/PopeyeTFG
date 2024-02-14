@@ -7,7 +7,6 @@ using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
-using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.CombatSystem;
@@ -16,6 +15,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 using UnityEngine.Serialization;
 

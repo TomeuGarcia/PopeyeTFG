@@ -1,7 +1,7 @@
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
-namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
+namespace Popeye.Scripts.Collisions
 {
     [CreateAssetMenu(fileName = "CollisionProbingConfig", 
         menuName = ScriptableObjectsHelper.COLLISIONS_PATH + "CollisionProbingConfig")]

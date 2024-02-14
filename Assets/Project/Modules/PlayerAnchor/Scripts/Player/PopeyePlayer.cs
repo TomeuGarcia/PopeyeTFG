@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _anchorCarryHolder;
         [SerializeField] private Transform _anchorGrabToThrowHolder;
         [SerializeField] private Transform _targetForEnemies;
-        [SerializeField] private CheckpointTriggerChecker _respawnCheckpointChecker;
+        [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
         private IPlayerAudio _playerAudio;
         
         public Transform AnchorCarryHolder => _anchorCarryHolder;
@@ -390,7 +390,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void Respawn()
         {
-            _playerMotion.SetPosition(_respawnCheckpointChecker.LastSafePosition);  
+            _playerMotion.SetPosition(_respawnCheckpointChecker.Value.LastSafePosition);  
             _playerMotion.SetRotation(Quaternion.identity);
             _playerHealth.HealToMax();
             ResetAnchor();

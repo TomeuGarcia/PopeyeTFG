@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Scripts.Collisions;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using Project.PhysicsMovement;
 using Project.Scripts.Time.TimeFunctionalities;

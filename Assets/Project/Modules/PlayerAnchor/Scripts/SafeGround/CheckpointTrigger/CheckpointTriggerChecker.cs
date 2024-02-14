@@ -1,5 +1,3 @@
-using Popeye.Modules.WorldElements;
-using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.SafeGround
