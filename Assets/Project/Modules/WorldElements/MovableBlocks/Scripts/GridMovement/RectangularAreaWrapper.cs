@@ -15,15 +15,15 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         public RectangularArea RectangularArea => _rectangularArea;
         
 #if UNITY_EDITOR
-        private const float INVISIBLE_DISTANCE = 35;
-        private const float START_FADING_DISTANCE = 30;
+        private const float INVISIBLE_DISTANCE = 40;
+        private const float START_FADING_DISTANCE = 15;
 #endif
         
         
         public RectangularAreaWrapper(RectangularArea rectangularArea)
         {
             _rectangularArea = rectangularArea;
-            _drawColor = Color.red;
+            _drawColor = Color.grey;
         }
 
         public void OnValidateUpdateState()
