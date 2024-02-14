@@ -2236,7 +2236,7 @@ GameObject:
   - component: {fileID: 6471500728717117320}
   - component: {fileID: 4985301570362846217}
   - component: {fileID: 3583702817184964705}
-  - component: {fileID: 3055528164865983722}
+  - component: {fileID: 3647650685258767436}
   - component: {fileID: 658266594029084344}
   - component: {fileID: 5110396480977639139}
   m_Layer: 6
@@ -2317,7 +2317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _knockbackEffectiveness: 1
---- !u!114 &3055528164865983722
+--- !u!114 &3647650685258767436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2326,7 +2326,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5582950802665560812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b24188f72274011913c155241acf234, type: 3}
+  m_Script: {fileID: 11500000, guid: 06ea99601c154ba495b0caa28604592a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!54 &658266594029084344
@@ -2425,12 +2425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2259574bc7194459a9a2dd6959b5904e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chainLine: {fileID: 4763874378844247995}
   _boneChain: {fileID: 1882260842280776802}
   _boneChainIK: {fileID: 5612155314268022033}
   _controllerIK: {fileID: 6132698310706980790}
-  _chainSharedMaterial: {fileID: 2100000, guid: b254fbe2692ad024395a3b1b7589f430,
-    type: 2}
 --- !u!114 &6405983057515278388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3156,7 +3153,7 @@ MonoBehaviour:
   _anchorCarryHolder: {fileID: 8424165755597080937}
   _anchorGrabToThrowHolder: {fileID: 221564249131811060}
   _targetForEnemies: {fileID: 1716097085659780291}
-  _playerRespawner: {fileID: 3055528164865983722}
+  _respawnCheckpointChecker: {fileID: 3647650685258767436}
 --- !u!1 &7115234147671322642
 GameObject:
   m_ObjectHideFlags: 0
