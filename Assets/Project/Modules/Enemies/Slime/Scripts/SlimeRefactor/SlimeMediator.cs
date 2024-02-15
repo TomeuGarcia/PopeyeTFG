@@ -46,6 +46,7 @@ namespace Popeye.Modules.Enemies
             _slimeDivider.Configure(this);
             _enemyPatrolling.Configure(this);
             _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
+            PlayMoveAnimation();
         }
 
         public void SetSlimeMind(SlimeMindEnemy slimeMind)

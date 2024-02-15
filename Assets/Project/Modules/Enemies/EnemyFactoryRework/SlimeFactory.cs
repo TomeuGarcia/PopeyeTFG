@@ -9,13 +9,16 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     {
         private Dictionary<SlimeSizeID, ObjectPool> _slimeSizeToPool;
         private Dictionary<SlimeSizeID, SlimeChildSpawnData> _slimeSizeToNextSize;
+        
+        [System.Serializable]
         public struct SlimeChildSpawnData
         {
             public SlimeSizeID slimeSizeId;
             public int childsToSpawn;
         }
 
-        public SlimeFactory(Dictionary<SlimeSizeID, ObjectPool> slimeSizeToPool,Dictionary<SlimeSizeID, SlimeChildSpawnData> slimeSizeToNextSize)
+        public SlimeFactory(Dictionary<SlimeSizeID, ObjectPool> slimeSizeToPool, 
+            Dictionary<SlimeSizeID, SlimeChildSpawnData> slimeSizeToNextSize)
         {
             _slimeSizeToPool = slimeSizeToPool;
             _slimeSizeToNextSize = slimeSizeToNextSize;
@@ -24,14 +27,8 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         public SlimeMediator CreateNew(SlimeSizeID slimeSizeID, SlimeMindEnemy ownerMind,Vector3 position,Quaternion rotation)
         {
             SlimeMediator slimeMediator = _slimeSizeToPool[slimeSizeID].Spawn<SlimeMediator>(position, rotation);
-            InitializeSlimeMediator(slimeMediator, ownerMind.GetParticlePool(), ownerMind, slimeSizeID,
-                ownerMind.GetPlayerTransform());
-            _objectPool = new ObjectPool(_explosionParticles, _transform);
-            _objectPool.Init(15);
-            slimeMediator.PlayMoveAnimation();
-            if(_patrolType == EnemyPatrolling.PatrolType.FixedWaypoints){slimeMediator.SetWayPoints(_wayPoints);}
-            if(_patrolType == EnemyPatrolling.PatrolType.None){slimeMediator.StartChasing();}
-            
+            InitializeSlimeMediator(slimeMediator, ownerMind.GetParticlePool(), ownerMind, slimeSizeID, ownerMind.GetPlayerTransform());
+
             return slimeMediator;
         }
 
@@ -70,7 +67,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
         public bool CanSpawnNextSize(SlimeSizeID slimeSizeID)
         {
-            return _slimeSizeToNextSize.ContainsKey(slimeSizeID);
+            return _slimeSizeToNextSize[slimeSizeID].childsToSpawn > 0;
         }
     }
 }

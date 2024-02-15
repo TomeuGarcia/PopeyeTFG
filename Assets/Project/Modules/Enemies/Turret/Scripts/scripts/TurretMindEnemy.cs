@@ -21,13 +21,12 @@ namespace Popeye.Modules.Enemies
         {
             _projectilePool = new ObjectPool(_parabolicProjectile, _transform);
             _projectilePool.Init(5);
-            InstantiateTurret();
         }
 
         public void Die()
         {
             InvokeOnDeathComplete();
-            Destroy(gameObject);
+            Recycle();
         }
         private void InstantiateTurret()
         {
@@ -45,6 +44,16 @@ namespace Popeye.Modules.Enemies
             }
             
             _turretMediator.Init();
+        }
+
+        internal override void Init()
+        {
+            InstantiateTurret();
+        }
+
+        internal override void Release()
+        {
+            
         }
     }
 }

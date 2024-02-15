@@ -17,12 +17,19 @@ namespace Popeye.Modules.Enemies
         
         private Core.Pool.ObjectPool _projectilePool;
         private TurretMindEnemy _turretMind;
-        public void Init()
+
+        internal override void Init()
         {
             _turretShooting.Configure(this,_projectilePool,playerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
         }
+
+        internal override void Release()
+        {
+            
+        }
+
         public void SetTurretMind(TurretMindEnemy turretMind)
         {
             _turretMind = turretMind;
@@ -52,6 +59,7 @@ namespace Popeye.Modules.Enemies
         {
             base.OnDeath(damageHit);
             _turretMind.Die();
+            Recycle();
         }
     }
 }

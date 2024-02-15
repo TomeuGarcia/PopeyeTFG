@@ -8,7 +8,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     {
         private readonly Dictionary<EnemyID,IEnemyMindFactoryCreator> _enemyTypeToFactoryCreator;
 
-        MindCreatorsEnemyFactory(Dictionary<EnemyID, IEnemyMindFactoryCreator> enemyTypeToFactoryCreator)
+        public MindCreatorsEnemyFactory(Dictionary<EnemyID, IEnemyMindFactoryCreator> enemyTypeToFactoryCreator)
         {
             _enemyTypeToFactoryCreator = enemyTypeToFactoryCreator;
         }
