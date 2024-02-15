@@ -8,7 +8,7 @@ using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
-using Popeye.Modules.PlayerAnchor.SafeGround;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player

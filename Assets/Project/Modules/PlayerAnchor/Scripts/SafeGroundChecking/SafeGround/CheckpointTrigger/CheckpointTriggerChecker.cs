@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Popeye.Modules.PlayerAnchor.SafeGround
+namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
 {
     public class CheckpointTriggerChecker : MonoBehaviour, ISafeGroundChecker
     {
