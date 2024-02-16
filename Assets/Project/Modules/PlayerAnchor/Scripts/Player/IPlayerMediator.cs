@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -8,6 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         Vector3 Position { get; }
         Transform PositionTransform { get; }
+        IPlayerView PlayerView { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
         void SetCanUseRotateInput(bool canUseRotateInput);
@@ -48,6 +51,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         void OnAnchorEndedInVoid();
+        void OnPlayerFellOnVoid();
+        bool TakeFellOnVoidDamage();
+        void RespawnToLastSafeGround();
         void OnTryUsingObstructedAnchor();
 
 
@@ -70,10 +76,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         Transform GetTargetForEnemies();
-        void Respawn();
+        void RespawnFromDeath();
 
 
         void OnStartMoving();
         void OnStopMoving();
+
+
+        void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
     }
 }

@@ -17,6 +17,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         UniTaskVoid PlayPullAnimation(float duration);
         
         void PlayAnchorObstructedAnimation();
-
+        
     }
 }

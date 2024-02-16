@@ -123,6 +123,13 @@ namespace Popeye.Modules.ValueStatSystem
     
         private void FillBar(Image fillImage, float newFillValue, float duration, Ease ease)
         {
+            if (duration < 0.01f)
+            {
+                fillImage.fillAmount = newFillValue;
+                return;
+            }
+            
+            fillImage.DOKill();
             fillImage.DOComplete();
             fillImage.DOFillAmount(newFillValue, duration)
                 .SetEase(ease);

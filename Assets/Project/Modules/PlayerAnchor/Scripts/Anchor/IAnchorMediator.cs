@@ -3,6 +3,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
 using DG.Tweening;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -11,6 +12,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     {
         Vector3 Position { get; }
         IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; }
+        
+        IOnVoidChecker OnVoidChecker { get; }
 
         void SetPosition(Vector3 position);
         void SetRotation(Quaternion rotation);

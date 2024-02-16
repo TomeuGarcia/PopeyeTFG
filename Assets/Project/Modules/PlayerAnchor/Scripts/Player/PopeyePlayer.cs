@@ -1,14 +1,13 @@
 using System;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.ValueStatSystem;
-using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -18,6 +17,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _anchorCarryHolder;
         [SerializeField] private Transform _anchorGrabToThrowHolder;
         [SerializeField] private Transform _targetForEnemies;
+        [SerializeField] private Transform _targetForCamera;
         [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
         private IPlayerAudio _playerAudio;
         
@@ -29,11 +29,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerGeneralConfig _playerGeneralConfig;
         private AnchorGeneralConfig _anchorGeneralConfig;
 
-        private IPlayerView _playerView;
+        public IPlayerView PlayerView { get; private set; }
         private PlayerHealth _playerHealth;
         private TimeStaminaSystem _staminaSystem;
         
-        private PlayerMovement _playerMovement;
+        private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
         private PlayerDasher _playerDasher;
         
@@ -43,29 +43,34 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IAnchorKicker _anchorKicker;
         private IAnchorSpinner _anchorSpinner;
 
+        private ISafeGroundChecker _safeGroundChecker;
+        private IOnVoidChecker _onVoidChecker;
+        
         private bool _pullingAnchorFromTheVoid;
         
         public Vector3 Position => _playerController.Position;
         public Transform PositionTransform => _playerController.Transform;
-        
-        
+
+
+
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
             PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
-            PlayerMovement playerMovement, TransformMotion playerMotion, PlayerDasher playerDasher,
+            PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
-            IAnchorSpinner anchorSpinner)
+            IAnchorSpinner anchorSpinner,
+            ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
             _playerGeneralConfig = playerGeneralConfig;
             _anchorGeneralConfig = anchorGeneralConfig; 
-            _playerView = playerView;
+            PlayerView = playerView;
             _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
-            _playerMovement = playerMovement;
+            _playerMovementChecker = playerMovementChecker;
             _playerMotion = playerMotion;
             _playerDasher = playerDasher;
             _anchor = anchor;
@@ -75,6 +80,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorSpinner = anchorSpinner;
 
             _playerAudio = playerAudio;
+
+            _safeGroundChecker = safeGroundChecker;
+            _onVoidChecker = onVoidChecker;
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
@@ -90,7 +98,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void Update()
         {
             _stateMachine.Update(Time.deltaTime);
-            _playerMovement.Update();
+            _playerMovementChecker.Update();
         }
 
         private void ResetAnchor()
@@ -207,7 +215,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorThrower.ThrowAnchor();
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorThrowStaminaCost);
             
-            _playerView.PlayThrowAnimation();
+            PlayerView.PlayThrowAnimation();
         }
 
         public void PullAnchor()
@@ -215,7 +223,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorPuller.PullAnchor();
             LookTowardsAnchorForDuration(0.3f).Forget();
             
-            _playerView.PlayPullAnimation(0.3f);
+            PlayerView.PlayPullAnimation(0.3f);
         }
 
         public void OnPullAnchorComplete()
@@ -269,7 +277,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
             DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
             
-            _playerView.PlayDashAnimation(duration);
+            PlayerView.PlayDashAnimation(duration);
 
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
         }
@@ -288,7 +296,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetInvulnerableForDuration(invulnerableDuration);
             DropTargetForEnemies(invulnerableDuration).Forget();
             
-            _playerView.PlayDashAnimation(duration);
+            PlayerView.PlayDashAnimation(duration);
             
             _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
@@ -300,7 +308,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorKicker.KickAnchor();
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorKickStaminaCost);
 
-            _playerView.PlayKickAnimation();
+            PlayerView.PlayKickAnimation();
         }
 
         public bool CanSpinAnchor()
@@ -353,14 +361,30 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void OnAnchorEndedInVoid()
         {
+            _anchor.OnVoidChecker.ClearState();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);
             _pullingAnchorFromTheVoid = true;
+        }
+
+        public void OnPlayerFellOnVoid()
+        {
+            _onVoidChecker.ClearState();
+            _stateMachine.OverwriteState(PlayerStates.PlayerStates.FallingOnVoid);
+
+            DropTargetForCamera(_stateMachine.Blackboard.PlayerStatesConfig.FallingOnVoidDuration + 0.2f).Forget();
+            _anchor.DisableChainTensionForDuration(_stateMachine.Blackboard.PlayerStatesConfig.FallingOnVoidDuration + 0.2f);
+        }
+
+        public bool TakeFellOnVoidDamage()
+        {
+            _playerHealth.TakeVoidFallDamage();
+            return _playerHealth.IsDead();
         }
 
         public void OnTryUsingObstructedAnchor()
         {
             LookTowardsAnchor();
-            _playerView.PlayAnchorObstructedAnimation();
+            PlayerView.PlayAnchorObstructedAnimation();
             _anchor.OnTryUsingWhenObstructed();
         }
 
@@ -388,8 +412,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _targetForEnemies;
         }
 
-        public void Respawn()
+        public void RespawnToLastSafeGround()
         {
+            _playerController.ResetRigidbody();
+            _playerMotion.SetPosition(_safeGroundChecker.LastSafePosition + Vector3.up*2);  
+            _playerMotion.SetRotation(Quaternion.identity);
+            
+            //ResetAnchor();
+        }
+        public void RespawnFromDeath()
+        {
+            _playerController.ResetRigidbody();
             _playerMotion.SetPosition(_respawnCheckpointChecker.Value.LastSafePosition);  
             _playerMotion.SetRotation(Quaternion.identity);
             _playerHealth.HealToMax();
@@ -397,7 +430,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _playerController.DisableForDuration(0.3f).Forget();
 
-            _playerView.PlayRespawnAnimation();
+            PlayerView.PlayRespawnAnimation();
         }
 
         public void OnStartMoving()
@@ -410,12 +443,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerAudio.StopPlayingStepsSounds();
         }
 
+        public void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid)
+        {
+            _safeGroundChecker.UpdateChecking(deltaTime);
+            _onVoidChecker.UpdateChecking(deltaTime);
+            _anchor.OnVoidChecker.UpdateChecking(deltaTime);
+
+            playerIsOnVoid = _onVoidChecker.IsOnVoid;
+            anchorIsOnVoid = _anchor.OnVoidChecker.IsOnVoid;
+        }
+
         private async UniTaskVoid DropTargetForEnemies(float duration)
         {
             _targetForEnemies.SetParent(null);
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             _targetForEnemies.SetParent(_playerController.Transform);
             _targetForEnemies.localPosition = Vector3.zero;
+        }
+        private async UniTaskVoid DropTargetForCamera(float duration)
+        {
+            _targetForCamera.SetParent(null);
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            _targetForCamera.SetParent(_playerController.Transform);
+            _targetForCamera.localPosition = Vector3.zero;
         }
         
 
@@ -442,7 +492,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public async UniTask UseHeal()
         {
             _playerHealth.UseHeal();
-            await _playerView.PlayHealAnimation();
+            await PlayerView.PlayHealAnimation();
         }
 
         public void HealToMax()
@@ -452,19 +502,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void OnDamageTaken()
         {
-            _playerView.PlayTakeDamageAnimation();
+            PlayerView.PlayTakeDamageAnimation();
             SetInvulnerableForDuration(_playerGeneralConfig.InvulnerableDurationAfterHit);
         }
 
         public void OnKilledByDamageTaken()
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
-            _playerView.PlayDeathAnimation();
         }
 
         public void OnHealed()
         {
-            _playerView.PlayHealAnimation();
+            PlayerView.PlayHealAnimation();
         }
         
 

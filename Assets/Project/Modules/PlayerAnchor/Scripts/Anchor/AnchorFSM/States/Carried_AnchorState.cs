@@ -23,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
                 0.05f * distance, Ease.InOutSine);
                 
             
-            _blackboard.AnchorPhysics.DisableTension();
+            _blackboard.AnchorPhysics.DisableCollision();
             
             _blackboard.AnchorChain.SetCarriedView();
         }

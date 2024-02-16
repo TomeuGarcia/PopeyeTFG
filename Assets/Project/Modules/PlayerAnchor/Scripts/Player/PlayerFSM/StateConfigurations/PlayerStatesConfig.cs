@@ -18,6 +18,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float BeforeRespawnDuration => _beforeRespawnDuration;
         
         
+        [Header("FALL ON VOID")]
+        [SerializeField, Range(0.01f, 10.0f)] private float _fallingOnVoidDuration = 0.2f;
+
+        public float FallingOnVoidDuration => _fallingOnVoidDuration;
+        
+        
+        
+        
         [Header("MOVEMENT")]
         [SerializeField, Range(0.0f, 20.0f)]private float _withoutAnchorMoveSpeed = 10.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _withAnchorMoveSpeed = 8.0f;

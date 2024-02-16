@@ -4,5 +4,6 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid
     {
         bool IsOnVoid { get; }
         void UpdateChecking(float deltaTime);
+        void ClearState();
     }
 }

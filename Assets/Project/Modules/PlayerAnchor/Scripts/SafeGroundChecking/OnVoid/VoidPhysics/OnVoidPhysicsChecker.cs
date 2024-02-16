@@ -15,6 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics
         {
             _physicsCaster = physicsCaster;
             _checkVoidTimer = new Timer(checkFrequencyInSeconds);
+            ClearState();
         }
         
         public void UpdateChecking(float deltaTime)
@@ -25,6 +26,12 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics
                 _checkVoidTimer.Clear();
                 UpdateIsOnVoid();
             }
+        }
+
+        public void ClearState()
+        {
+            IsOnVoid = false;
+            _checkVoidTimer.Clear();
         }
 
         private void UpdateIsOnVoid()

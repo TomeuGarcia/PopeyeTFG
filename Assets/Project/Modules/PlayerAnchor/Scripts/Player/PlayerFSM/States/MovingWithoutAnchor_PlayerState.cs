@@ -25,6 +25,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
+            _blackboard.PlayerMediator.UpdateSafeGroundChecking(deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+            if (anchorIsOnVoid)
+            {
+                _blackboard.PlayerMediator.OnAnchorEndedInVoid();
+                return false;
+            }
+
+            if (playerIsOnVoid)
+            {
+                _blackboard.PlayerMediator.OnPlayerFellOnVoid();
+                return false;
+            }
+            
+            
+            
             //if (_blackboard.MovesetInputsController.PickUp_Pressed() && PlayerCanPickUpAnchor())
             if (PlayerCanPickUpAnchor())
             {

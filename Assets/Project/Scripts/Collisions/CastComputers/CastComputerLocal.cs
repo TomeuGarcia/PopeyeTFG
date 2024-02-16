@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace Popeye.Scripts.Collisions
 {
-    public class CastComputer
+    public class CastComputerLocal : ICastComputer
     {
         private readonly Transform _castOriginTransform;
         private readonly Vector3 _originLocalOffset;
         private readonly Vector3 _castLocalDirection;
 
         
-        public CastComputer(Transform castOriginTransform,
+        public CastComputerLocal(Transform castOriginTransform,
             Vector3 originLocalOffset, Vector3 castLocalDirection)
         {
             _castOriginTransform = castOriginTransform;

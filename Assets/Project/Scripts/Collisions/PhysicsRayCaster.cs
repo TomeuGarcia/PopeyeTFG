@@ -4,10 +4,10 @@ namespace Popeye.Scripts.Collisions
 {
     public class PhysicsRayCaster : IPhysicsCaster
     {
-        private readonly CastComputer _castComputer;
+        private readonly ICastComputer _castComputer;
         private readonly CollisionProbingConfig _probingConfig;
 
-        public PhysicsRayCaster(CastComputer castComputer, CollisionProbingConfig probingConfig)
+        public PhysicsRayCaster(ICastComputer castComputer, CollisionProbingConfig probingConfig)
         {
             _castComputer = castComputer;
             _probingConfig = probingConfig;

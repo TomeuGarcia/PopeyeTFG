@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
-    public class PlayerMovement
+    public class PlayerMovementChecker
     {
         private IPlayerMediator _player;
         private PlayerController.PlayerController _playerController;

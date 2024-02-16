@@ -13,6 +13,7 @@ using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.Generic.ParticleBehaviours;
 using Popeye.Modules.VFX.ParticleFactories;
@@ -51,6 +52,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; private set; }
         
+        public IOnVoidChecker OnVoidChecker { get; private set; }
+
         public Vector3 Position => _anchorMotion.Position;
         public Quaternion Rotation => _anchorMotion.Rotation;
 
@@ -66,7 +69,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             AnchorPhysics anchorPhysics, AnchorCollisions anchorCollisions, IAnchorView anchorView,
             IAnchorAudio anchorAudio,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain,
-            ICameraFunctionalities cameraFunctionalities)
+            ICameraFunctionalities cameraFunctionalities,
+            IOnVoidChecker onVoidChecker)
         {
             _stateMachine = stateMachine;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
@@ -84,8 +88,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             
             _cameraFunctionalities = cameraFunctionalities;
+
+            OnVoidChecker = onVoidChecker;
             
-            _anchorPhysics.DisableTension();
+            _anchorPhysics.DisableCollision();
             _anchorChain.DisableTension();
             
             _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(),
@@ -111,7 +117,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorMotion.SetRotation(rotation);
         }
 
-        
+        public void DisableChainTensionForDuration(float duration)
+        {
+            _anchorChain.DisableTensionForDuration(duration).Forget();
+        }
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {
