@@ -414,12 +414,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void RespawnToLastSafeGround()
         {
             _playerController.ResetRigidbody();
-            _playerMotion.SetPosition(_safeGroundChecker.LastSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset);
+            _playerMotion.SetPosition(_safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset);
         }
         public void RespawnFromDeath()
         {
             _playerController.ResetRigidbody();
-            _playerMotion.SetPosition(_respawnCheckpointChecker.Value.LastSafePosition);  
+            _playerMotion.SetPosition(_respawnCheckpointChecker.Value.BestSafePosition);  
             _playerMotion.SetRotation(Quaternion.identity);
             _playerHealth.HealToMax();
             ResetAnchor();

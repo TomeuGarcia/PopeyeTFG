@@ -10,19 +10,20 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         private readonly Transform _positionTrackingTransform;
         private readonly IPhysicsCaster _physicsCaster;
         private readonly Timer _checkGroundTimer;
-        private readonly ISafeGroundPhysicsRequirement[] _requirements;
+        private float _bestSafePositionDistanceStep;
 
         public Vector3 LastSafePosition { get; private set; }
-        
+        public Vector3 BestSafePosition => ComputeBestSafePosition();
+
+
 
         public SafeGroundPhysicsChecker(Transform positionTrackingTransform, IPhysicsCaster physicsCaster,
-             float checkFrequencyInSeconds, ISafeGroundPhysicsRequirement[] requirements = null)
+             float checkFrequencyInSeconds, float bestSafePositionDistanceStep)
         {
             _positionTrackingTransform = positionTrackingTransform;
             _physicsCaster = physicsCaster;
+            _bestSafePositionDistanceStep = bestSafePositionDistanceStep;
             _checkGroundTimer = new Timer(checkFrequencyInSeconds);
-            
-            _requirements = requirements ?? Array.Empty<ISafeGroundPhysicsRequirement>();
         }
         
         
@@ -41,19 +42,45 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         {
             if (_physicsCaster.CheckHit(out RaycastHit groundHit))
             {
-                foreach (ISafeGroundPhysicsRequirement requirement in _requirements)
-                {
-                    if (!requirement.MeetsRequirement(groundHit))
-                    {
-                        return;
-                    }
-                }
-                
                 LastSafePosition = _positionTrackingTransform.position;
             }
         }
-        
-        
+
+        private Vector3 ComputeBestSafePosition()
+        {
+            Vector3 currentPosition = _positionTrackingTransform.position;
+            currentPosition.y = LastSafePosition.y;
+
+            Vector3 lastSafeToCurrent = currentPosition - LastSafePosition;
+            float distanceLastSafeToCurrent = lastSafeToCurrent.magnitude;
+            Vector3 lastSafeToCurrentDirection = lastSafeToCurrent / distanceLastSafeToCurrent;
+
+
+            float distanceCounter = _bestSafePositionDistanceStep;
+
+            Vector3 beforePreviousSimulatedPosition = LastSafePosition;
+            Vector3 previousSimulatedPosition = LastSafePosition;
+
+            float checkDistance = distanceLastSafeToCurrent - _bestSafePositionDistanceStep;
+            
+            while (distanceCounter < checkDistance)
+            {
+                Vector3 simulatedPosition = LastSafePosition + (lastSafeToCurrentDirection * distanceCounter);
+
+                if (!_physicsCaster.CheckHitAtPosition(out RaycastHit groundHit, simulatedPosition))
+                {
+                    break;
+                }
+
+                beforePreviousSimulatedPosition = previousSimulatedPosition;
+                previousSimulatedPosition = simulatedPosition;
+
+                
+                distanceCounter += _bestSafePositionDistanceStep;
+            }
+            
+            return Vector3.Lerp(beforePreviousSimulatedPosition, previousSimulatedPosition, 0.5f);
+        }
         
     }
 }

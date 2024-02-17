@@ -215,7 +215,8 @@ namespace Popeye.Modules.PlayerAnchor
             return new OnVoidPhysicsChecker(
                 new PhysicsSphereCaster(
                     new CastComputerGlobal(castOriginTransform, Vector3.up * 1, Vector3.down),
-                    voidProbingConfig, 0.5f),
+                    voidProbingConfig, 0.5f,
+                    new PhysicsCastRequirementsProcessor()),
                 0.15f
             );
         }
@@ -223,16 +224,18 @@ namespace Popeye.Modules.PlayerAnchor
         private ISafeGroundChecker CreateSafeGroundChecker(Transform trackingTransform, 
             CollisionProbingConfig groundProbingConfig, ObjectTypeAsset safeGroundIgnoreType)
         {
-            ISafeGroundPhysicsRequirement[] safeGroundRequirements =
+            IPhysicsCastRequirement[] physicsCastRequirements =
             {
-                new IgnoreTypeSafeGroundRequirement(safeGroundIgnoreType)
+                new IgnoreObjectTypeRequirement(safeGroundIgnoreType)
             };
             
             return new SafeGroundPhysicsChecker(trackingTransform,
                 new PhysicsRayCaster(new CastComputerGlobal(trackingTransform, Vector3.up * 2, Vector3.down),
-                    groundProbingConfig),
-                0.15f,
-                safeGroundRequirements
+                    groundProbingConfig,
+                    new PhysicsCastRequirementsProcessor(physicsCastRequirements)), 
+                1.0f,
+                1.0f
+                
             );
         }
     }

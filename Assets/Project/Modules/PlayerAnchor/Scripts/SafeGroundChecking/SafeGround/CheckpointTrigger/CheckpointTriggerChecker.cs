@@ -5,6 +5,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
     public class CheckpointTriggerChecker : MonoBehaviour, ISafeGroundChecker
     {
         public Vector3 LastSafePosition { get; private set; }
+        public Vector3 BestSafePosition => LastSafePosition;
 
 
         public void UpdateChecking(float deltaTime)
