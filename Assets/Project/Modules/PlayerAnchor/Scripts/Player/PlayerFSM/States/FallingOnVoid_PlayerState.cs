@@ -20,6 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _recoverFromFallTimer.Clear();
             
             _blackboard.PlayerMediator.DropTargetForCamera();
+            _blackboard.PlayerMediator.SetInvulnerable(true);
         }
 
         public override void Exit()
@@ -32,6 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _recoverFromFallTimer.Update(deltaTime);
             if (_recoverFromFallTimer.HasFinished())
             {
+                _blackboard.PlayerMediator.SetInvulnerable(false);
                 bool diedAfterFall = _blackboard.PlayerMediator.TakeFellOnVoidDamage();
 
                 if (diedAfterFall)

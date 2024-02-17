@@ -416,7 +416,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void RespawnToLastSafeGround()
         {
             _playerController.ResetRigidbody();
-            _playerMotion.SetPosition(_safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset);
+            Vector3 respawnPosition = _safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset;
+            _playerMotion.SetPosition(respawnPosition);
         }
         public void RespawnFromDeath()
         {
@@ -467,8 +468,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _targetForCamera.SetParent(_playerController.Transform);
             _targetForCamera.localPosition = Vector3.zero;
         }
-        
 
+
+        public void SetInvulnerable(bool isInvulnerable)
+        {
+            _playerHealth.SetInvulnerable(isInvulnerable);
+        }
         public void SetInvulnerableForDuration(float duration)
         {
             _playerHealth.SetInvulnerableForDuration(duration);

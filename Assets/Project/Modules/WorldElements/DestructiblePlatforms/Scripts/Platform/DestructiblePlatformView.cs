@@ -39,16 +39,16 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         
         public void PlayBreakAnimation()
         {
-            PlayShaderAnimation(0, 1, _config.BreakingDuration, _config.BreakingColor);
+            PlayShaderAnimation(0, 1, _config.BreakingDuration, _config.BreakingColor, Ease.InOutSine);
         }
 
         public void PlayRegenerateAnimation()
         {
-            PlayShaderAnimation(1, 0, _config.RegeneratingDuration, _config.RegeneratingColor);
+            PlayShaderAnimation(1, 0, _config.RegeneratingDuration, _config.RegeneratingColor, Ease.InOutCubic);
         }
 
 
-        private void PlayShaderAnimation(float start, float end, float duration, Color color)
+        private void PlayShaderAnimation(float start, float end, float duration, Color color, Ease ease)
         {
             _meshMaterial.SetColor(_config.ColorPropertyID, color);
             
@@ -63,7 +63,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
                     end,
                     duration
                 )
-                .SetEase(Ease.InOutSine);
+                .SetEase(ease);
         }
         
     }

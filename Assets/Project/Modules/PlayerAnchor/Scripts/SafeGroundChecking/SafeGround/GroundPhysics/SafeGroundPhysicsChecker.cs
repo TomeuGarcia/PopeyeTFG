@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         private readonly Transform _positionTrackingTransform;
         private readonly IPhysicsCaster _physicsCaster;
         private readonly Timer _checkGroundTimer;
-        private float _bestSafePositionDistanceStep;
+        private readonly float _bestSafePositionDistanceStep;
 
         public Vector3 LastSafePosition { get; private set; }
         public Vector3 BestSafePosition => ComputeBestSafePosition();
