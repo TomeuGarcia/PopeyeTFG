@@ -9,8 +9,8 @@ namespace Popeye.Scripts.Collisions
         private readonly float _radius;
         private readonly PhysicsCastRequirementsProcessor _requirementsProcessor;
 
-        public PhysicsSphereCaster(ICastComputer castComputer, CollisionProbingConfig probingConfig, float radius,
-            PhysicsCastRequirementsProcessor requirementsProcessor)
+        public PhysicsSphereCaster(ICastComputer castComputer, CollisionProbingConfig probingConfig,
+            PhysicsCastRequirementsProcessor requirementsProcessor, float radius)
         {
             _castComputer = castComputer;
             _probingConfig = probingConfig;

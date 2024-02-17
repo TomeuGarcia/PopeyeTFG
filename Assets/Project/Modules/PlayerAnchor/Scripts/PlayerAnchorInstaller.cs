@@ -210,33 +210,38 @@ namespace Popeye.Modules.PlayerAnchor
 
 
 
-        private IOnVoidChecker CreateOnVoidChecker(Transform castOriginTransform, CollisionProbingConfig voidProbingConfig)
+        private IOnVoidChecker CreateOnVoidChecker(Transform castOriginTransform, CollisionProbingConfig voidProbingConfig,
+            float checkFrequency = 0.15f)
         {
-            return new OnVoidPhysicsChecker(
-                new PhysicsSphereCaster(
-                    new CastComputerGlobal(castOriginTransform, Vector3.up * 1, Vector3.down),
-                    voidProbingConfig, 0.5f,
-                    new PhysicsCastRequirementsProcessor()),
-                0.15f
-            );
+            ICastComputer castComputer = new CastComputerGlobal(castOriginTransform, Vector3.up * 1, Vector3.down);
+            PhysicsCastRequirementsProcessor castRequirementsProcessor = new PhysicsCastRequirementsProcessor();
+            
+            IPhysicsCaster physicsCaster = 
+                new PhysicsSphereCaster(castComputer, voidProbingConfig, castRequirementsProcessor, 0.5f);
+
+            IOnVoidChecker onVoidChecker = new OnVoidPhysicsChecker(physicsCaster, checkFrequency); 
+            
+            return onVoidChecker;
         }
         
         private ISafeGroundChecker CreateSafeGroundChecker(Transform trackingTransform, 
-            CollisionProbingConfig groundProbingConfig, ObjectTypeAsset safeGroundIgnoreType)
+            CollisionProbingConfig groundProbingConfig, ObjectTypeAsset safeGroundIgnoreType,
+            float checkFrequency = 1.0f)
         {
+            ICastComputer castComputer = new CastComputerGlobal(trackingTransform, Vector3.up * 2, Vector3.down);
+            
             IPhysicsCastRequirement[] physicsCastRequirements =
             {
                 new IgnoreObjectTypeRequirement(safeGroundIgnoreType)
             };
+            PhysicsCastRequirementsProcessor castRequirementsProcessor =
+                new PhysicsCastRequirementsProcessor(physicsCastRequirements);
+
+            IPhysicsCaster physicsCaster =
+                new PhysicsRayCaster(castComputer, groundProbingConfig, castRequirementsProcessor);
             
-            return new SafeGroundPhysicsChecker(trackingTransform,
-                new PhysicsRayCaster(new CastComputerGlobal(trackingTransform, Vector3.up * 2, Vector3.down),
-                    groundProbingConfig,
-                    new PhysicsCastRequirementsProcessor(physicsCastRequirements)), 
-                1.0f,
-                1.0f
-                
-            );
+            
+            return new SafeGroundPhysicsChecker(trackingTransform, physicsCaster, checkFrequency, 1.0f);
         }
     }
 }
