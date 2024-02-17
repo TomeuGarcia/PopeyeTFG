@@ -415,9 +415,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void RespawnToLastSafeGround()
         {
             _playerController.ResetRigidbody();
-            _playerMotion.SetPosition(_safeGroundChecker.LastSafePosition + Vector3.up*2);  
-            _playerMotion.SetRotation(Quaternion.identity);
-            
+            _playerMotion.SetPosition(_safeGroundChecker.LastSafePosition + Vector3.up*2);
+
             //ResetAnchor();
         }
         public void RespawnFromDeath()
@@ -469,7 +468,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         
 
-        private void SetInvulnerableForDuration(float duration)
+        public void SetInvulnerableForDuration(float duration)
         {
             _playerHealth.SetInvulnerableForDuration(duration);
         }

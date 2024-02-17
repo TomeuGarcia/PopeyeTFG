@@ -1,3 +1,4 @@
+using System;
 using Popeye.Scripts.Collisions;
 using Popeye.Timers;
 using UnityEngine;
@@ -9,16 +10,19 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         private readonly Transform _positionTrackingTransform;
         private readonly IPhysicsCaster _physicsCaster;
         private readonly Timer _checkGroundTimer;
+        private readonly ISafeGroundPhysicsRequirement[] _requirements;
 
         public Vector3 LastSafePosition { get; private set; }
         
 
         public SafeGroundPhysicsChecker(Transform positionTrackingTransform, IPhysicsCaster physicsCaster,
-             float checkFrequencyInSeconds)
+             float checkFrequencyInSeconds, ISafeGroundPhysicsRequirement[] requirements = null)
         {
             _positionTrackingTransform = positionTrackingTransform;
             _physicsCaster = physicsCaster;
             _checkGroundTimer = new Timer(checkFrequencyInSeconds);
+            
+            _requirements = requirements ?? Array.Empty<ISafeGroundPhysicsRequirement>();
         }
         
         
@@ -37,11 +41,17 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         {
             if (_physicsCaster.CheckHit(out RaycastHit groundHit))
             {
+                foreach (ISafeGroundPhysicsRequirement requirement in _requirements)
+                {
+                    if (!requirement.MeetsRequirement(groundHit))
+                    {
+                        return;
+                    }
+                }
+                
                 LastSafePosition = _positionTrackingTransform.position;
             }
         }
-        
-        
         
         
         

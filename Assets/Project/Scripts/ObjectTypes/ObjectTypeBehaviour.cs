@@ -4,12 +4,17 @@ namespace Popeye.Scripts.ObjectTypes
 {
     public class ObjectTypeBehaviour : MonoBehaviour, IObjectType
     {
-        [SerializeField] private ObjectTypesAsset _objectType;
+        [SerializeField] private ObjectTypeAsset[] _objectTypes;
 
 
-        public bool IsOfType(ObjectTypes typeToCompare)
+        public bool IsOfType(ObjectTypeAsset objectTypeToCompare)
         {
-            return _objectType.ObjectType.HasFlag(typeToCompare);
+            foreach (ObjectTypeAsset objectType in _objectTypes)
+            {
+                if (objectType == objectTypeToCompare) return true;
+            }
+
+            return false;
         }
     }
 }

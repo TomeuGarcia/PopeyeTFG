@@ -38,6 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 }
                 
                 _blackboard.PlayerMediator.RespawnToLastSafeGround();
+                _blackboard.PlayerMediator.SetInvulnerableForDuration(_blackboard.PlayerStatesConfig.InvulnerableTimeAfterVoidFallRespawn);
                 
                 if (_blackboard.cameFromState == PlayerStates.MovingWithAnchor)
                 {

@@ -66,6 +66,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         bool HasMaxStamina();
 
 
+        void SetInvulnerableForDuration(float duration);
         bool CanHeal();
         UniTask UseHeal();
         void HealToMax();

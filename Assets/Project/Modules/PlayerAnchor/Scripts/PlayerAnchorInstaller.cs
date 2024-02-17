@@ -19,6 +19,7 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Scripts.Collisions;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -165,7 +166,8 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerDasher playerDasher = new PlayerDasher();
             PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
             IPlayerAudio playerAudio = _playerAudioRef.Value;
-            ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, _playerGeneralConfig.SafeGroundProbingConfig);
+            ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
+                _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
             
             
@@ -218,12 +220,19 @@ namespace Popeye.Modules.PlayerAnchor
             );
         }
         
-        private ISafeGroundChecker CreateSafeGroundChecker(Transform trackingTransform, CollisionProbingConfig groundProbingConfig)
+        private ISafeGroundChecker CreateSafeGroundChecker(Transform trackingTransform, 
+            CollisionProbingConfig groundProbingConfig, ObjectTypeAsset safeGroundIgnoreType)
         {
+            ISafeGroundPhysicsRequirement[] safeGroundRequirements =
+            {
+                new IgnoreTypeSafeGroundRequirement(safeGroundIgnoreType)
+            };
+            
             return new SafeGroundPhysicsChecker(trackingTransform,
                 new PhysicsRayCaster(new CastComputerGlobal(trackingTransform, Vector3.up * 2, Vector3.down),
                     groundProbingConfig),
-                0.0f
+                0.15f,
+                safeGroundRequirements
             );
         }
     }
