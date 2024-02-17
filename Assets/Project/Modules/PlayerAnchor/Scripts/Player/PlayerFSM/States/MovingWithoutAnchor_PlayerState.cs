@@ -16,11 +16,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
         }
 
         public override bool Update(float deltaTime)

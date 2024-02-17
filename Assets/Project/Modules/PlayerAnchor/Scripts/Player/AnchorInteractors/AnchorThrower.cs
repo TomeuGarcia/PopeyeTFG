@@ -141,7 +141,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             AnchorVerticalThrowResult.Reset(throwTrajectory, Vector3.up, 
                 _verticalThrowStartRotation, _verticalThrowEndRotation, duration, false);
             
-            _anchor.SetThrownVertically(AnchorVerticalThrowResult, floorHit);
+            _anchor.SetThrownVertically(AnchorVerticalThrowResult, floorHit).Forget();
             DoThrowAnchor(AnchorVerticalThrowResult).Forget();
         }
 

@@ -136,7 +136,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorAudio.PlayThrowSound();
         }
         
-        public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
+        public async UniTaskVoid SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealVerticalLandDamage(anchorThrowResult);
@@ -149,6 +149,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlayVerticalHitAnimation(anchorThrowResult.Duration, floorHit).Forget();
             
             _anchorAudio.PlayThrowSound();
+            
+            
+            DestructiblePlatformBreaker.SetEnabled(true);
+            DestructiblePlatformBreaker.SetBreakInstantlyMode();
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
+            DestructiblePlatformBreaker.SetEnabled(false);
         }
         
         
