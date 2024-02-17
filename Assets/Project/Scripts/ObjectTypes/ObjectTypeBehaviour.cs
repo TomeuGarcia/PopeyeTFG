@@ -16,5 +16,18 @@ namespace Popeye.Scripts.ObjectTypes
 
             return false;
         }
+
+        public bool IsOfAnyType(ObjectTypeAsset[] objectTypesToCompare)
+        {
+            foreach (ObjectTypeAsset objectTypeToCompare in objectTypesToCompare)
+            {
+                if (IsOfType(objectTypeToCompare))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
