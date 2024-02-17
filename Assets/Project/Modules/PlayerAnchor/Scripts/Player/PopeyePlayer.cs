@@ -8,6 +8,7 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -19,6 +20,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _targetForEnemies;
         [SerializeField] private Transform _targetForCamera;
         [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
+        [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
+        
         private IPlayerAudio _playerAudio;
         
         public Transform AnchorCarryHolder => _anchorCarryHolder;
@@ -50,8 +53,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public Vector3 Position => _playerController.Position;
         public Transform PositionTransform => _playerController.Transform;
-
-
+        public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
 
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,

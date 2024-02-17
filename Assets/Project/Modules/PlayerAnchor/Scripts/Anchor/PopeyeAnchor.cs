@@ -1,7 +1,4 @@
-
-
 using System;
-using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
@@ -9,18 +6,14 @@ using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.CombatSystem;
-using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
-using Popeye.Modules.VFX.Generic;
-using Popeye.Modules.VFX.Generic.ParticleBehaviours;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using Project.Scripts.Time.TimeFunctionalities;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
@@ -57,7 +50,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public Vector3 Position => _anchorMotion.Position;
         public Quaternion Rotation => _anchorMotion.Rotation;
 
-
+        [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
+        public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
+        
+        
         private IAnchorAudio _anchorAudio;
 
         private ICameraFunctionalities _cameraFunctionalities;

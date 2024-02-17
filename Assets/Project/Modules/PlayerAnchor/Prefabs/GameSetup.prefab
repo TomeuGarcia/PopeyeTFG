@@ -1347,6 +1347,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  _destructiblePlatformBreaker: {fileID: 3236880299506616856}
   _pull_CameraZoomInOut: {fileID: 11400000, guid: 17be9d73010c2554c88e46ce1f5d67d0,
     type: 2}
   _restOnFloor_CameraShake: {fileID: 11400000, guid: 5b7caef9786ee4e4fb9023be44f20a5b,
@@ -2147,6 +2148,7 @@ GameObject:
   - component: {fileID: 3583702817184964705}
   - component: {fileID: 3647650685258767436}
   - component: {fileID: 1225035422823375072}
+  - component: {fileID: 3553759036865030607}
   - component: {fileID: 658266594029084344}
   - component: {fileID: 5110396480977639139}
   m_Layer: 6
@@ -2253,6 +2255,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _objectTypes:
   - {fileID: 11400000, guid: d917dcf72f074a544b82d1ccae9c0332, type: 2}
+--- !u!114 &3553759036865030607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5582950802665560812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80aded7ecbda44e986804a2881bda83f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _breakMode: 0
+  _startEnabled: 0
 --- !u!54 &658266594029084344
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3081,6 +3097,7 @@ MonoBehaviour:
   _targetForCamera: {fileID: 7874819296728632930}
   _respawnCheckpointChecker:
     _underlyingValue: {fileID: 3647650685258767436}
+  _destructiblePlatformBreaker: {fileID: 3553759036865030607}
 --- !u!1 &7115234147671322642
 GameObject:
   m_ObjectHideFlags: 0
@@ -4542,6 +4559,18 @@ SphereCollider:
     type: 3}
   m_PrefabInstance: {fileID: 4443499507157653224}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3236880299506616856 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1243501719615970544, guid: 4e84f29c78a65b6499f7729f1ea4a091,
+    type: 3}
+  m_PrefabInstance: {fileID: 4443499507157653224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80aded7ecbda44e986804a2881bda83f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6172617056675568626 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7495100011918347546, guid: 4e84f29c78a65b6499f7729f1ea4a091,

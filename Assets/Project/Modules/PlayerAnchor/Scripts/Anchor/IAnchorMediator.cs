@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -12,6 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     {
         Vector3 Position { get; }
         IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; }
+        DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
         
         IOnVoidChecker OnVoidChecker { get; }
 

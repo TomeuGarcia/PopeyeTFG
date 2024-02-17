@@ -1,7 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
-using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
-using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -11,6 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         Vector3 Position { get; }
         Transform PositionTransform { get; }
         IPlayerView PlayerView { get; }
+        DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
         void SetCanUseRotateInput(bool canUseRotateInput);
