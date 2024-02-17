@@ -60,6 +60,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void LookTowardsPosition(Vector3 position);
         void LookTowardsAnchor();
         UniTaskVoid LookTowardsAnchorForDuration(float duration);
+
+
+        void DropTargetForCamera();
+        void ResetTargetForCamera();
         
 
         bool HasStaminaLeft();

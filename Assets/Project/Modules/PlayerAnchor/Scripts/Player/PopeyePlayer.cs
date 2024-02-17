@@ -371,8 +371,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _onVoidChecker.ClearState();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.FallingOnVoid);
 
-            DropTargetForCamera(_stateMachine.Blackboard.PlayerStatesConfig.FallingOnVoidDuration + 0.2f).Forget();
-            _anchor.DisableChainTensionForDuration(_stateMachine.Blackboard.PlayerStatesConfig.FallingOnVoidDuration + 0.2f);
+            //_anchor.DisableChainTensionForDuration(_stateMachine.Blackboard.PlayerStatesConfig.FallingOnVoidDuration + 0.2f);
         }
 
         public bool TakeFellOnVoidDamage()
@@ -415,9 +414,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void RespawnToLastSafeGround()
         {
             _playerController.ResetRigidbody();
-            _playerMotion.SetPosition(_safeGroundChecker.LastSafePosition + Vector3.up*2);
-
-            //ResetAnchor();
+            _playerMotion.SetPosition(_safeGroundChecker.LastSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset);
         }
         public void RespawnFromDeath()
         {
@@ -459,10 +456,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _targetForEnemies.SetParent(_playerController.Transform);
             _targetForEnemies.localPosition = Vector3.zero;
         }
-        private async UniTaskVoid DropTargetForCamera(float duration)
+        public void DropTargetForCamera()
         {
             _targetForCamera.SetParent(null);
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+        }
+        public void ResetTargetForCamera()
+        {
             _targetForCamera.SetParent(_playerController.Transform);
             _targetForCamera.localPosition = Vector3.zero;
         }

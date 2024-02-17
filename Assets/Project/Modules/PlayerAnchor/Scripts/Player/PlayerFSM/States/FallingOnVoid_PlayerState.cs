@@ -18,6 +18,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _recoverFromFallTimer.Clear();
+            
+            _blackboard.PlayerMediator.DropTargetForCamera();
         }
 
         public override void Exit()
@@ -37,6 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                     return false;
                 }
                 
+                _blackboard.PlayerMediator.ResetTargetForCamera();
                 _blackboard.PlayerMediator.RespawnToLastSafeGround();
                 _blackboard.PlayerMediator.SetInvulnerableForDuration(_blackboard.PlayerStatesConfig.InvulnerableTimeAfterVoidFallRespawn);
                 
