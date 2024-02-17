@@ -21,7 +21,7 @@ using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 namespace Popeye.Modules.PlayerAnchor
 {

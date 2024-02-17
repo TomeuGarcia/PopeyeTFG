@@ -41,9 +41,12 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         
         private void Start()
         {
+            _meshRenderer.sharedMaterial = _config.AnimationConfig.SharedMaterial;
+            
             _collider = new DestructiblePlatformCollider(_groundColliders);
             _view = new DestructiblePlatformView(_meshRenderer.transform, _meshRenderer.material,
-                ServiceLocator.Instance.GetService<IParticleFactory>());
+                ServiceLocator.Instance.GetService<IParticleFactory>(),
+                _config.AnimationConfig);
             _audio = new DestructiblePlatformAudio();
 
             _currentState = State.Intact;
