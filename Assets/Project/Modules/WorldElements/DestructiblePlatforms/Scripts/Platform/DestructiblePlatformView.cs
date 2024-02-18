@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.VFX.ParticleFactories;
 using UnityEngine;
@@ -23,18 +24,24 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             _meshMaterial.SetFloat(_config.AnimationPropertyID, 0.0f);
         }
 
-        public void StartPlayingBreakingOverTimeAnimation(float duration)
+        public async UniTaskVoid StartPlayingBreakingOverTimeAnimation(float duration)
         {
             float punchDuration = duration * 0.4f;
-            _meshTransform.DOPunchPosition(Vector3.down * 0.2f, punchDuration, 8)
+            float remainingDuration = duration - punchDuration;
+            
+            _meshTransform.DOPunchPosition(Vector3.down * 0.1f, duration, 8)
                 .SetEase(Ease.InOutSine);
-            _meshTransform.DOPunchRotation(Vector3.up * 5.0f, punchDuration, 8)
-                .SetEase(Ease.InOutSine);
+            await _meshTransform.DOPunchRotation(Vector3.up * 5.0f, punchDuration, 8)
+                .SetEase(Ease.InOutSine).AsyncWaitForCompletion();
+            
+            _meshTransform.DOPunchPosition(Vector3.down * 0.1f, remainingDuration, 8)
+                .SetEase(Ease.OutSine);
         }
         
         public void FinishPlayingBreakingOverTimeAnimation()
         {
-            
+            _meshTransform.DOPunchRotation(Vector3.up * 5.0f, _config.BreakingDuration, 8)
+                .SetEase(Ease.InOutSine);
         }
         
         public void PlayBreakAnimation()

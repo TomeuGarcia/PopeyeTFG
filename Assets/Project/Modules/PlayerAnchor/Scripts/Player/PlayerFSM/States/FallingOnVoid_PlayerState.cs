@@ -19,6 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             _recoverFromFallTimer.Clear();
             
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.FallingOnVoidMoveSpeed);
             _blackboard.PlayerMediator.DropTargetForCamera();
             _blackboard.PlayerMediator.SetInvulnerable(true);
         }

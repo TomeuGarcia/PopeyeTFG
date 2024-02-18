@@ -73,7 +73,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             
             await UniTask.Delay(TimeSpan.FromSeconds(BreakOverTimeStartDelay));
             
-            _view.StartPlayingBreakingOverTimeAnimation(BreakOverTimeDuration);
+            _view.StartPlayingBreakingOverTimeAnimation(BreakOverTimeDuration).Forget();
 
             await UniTask.Delay(TimeSpan.FromSeconds(BreakOverTimeDuration));
 
