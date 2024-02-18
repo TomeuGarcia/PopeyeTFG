@@ -499,6 +499,7 @@ Transform:
   - {fileID: 2947591969064500147}
   - {fileID: 6277468705217273969}
   - {fileID: 5811398296010217030}
+  - {fileID: 7873757471914328869}
   - {fileID: 2636654417802789064}
   m_Father: {fileID: 9056815993147974026}
   m_RootOrder: -1
@@ -1512,6 +1513,7 @@ MonoBehaviour:
   _shakeConfigDamageDealt: {fileID: 11400000, guid: 8d3e508d5775ba146a9245e9c1b386e1,
     type: 2}
   _vfxParent: {fileID: 2494004984099391779}
+  _anchorThrowHeadFollower: {fileID: 7873757471914328869}
   _specialMotionsTransform: {fileID: 7089435655413419375}
   _slamTrailOffset: {x: -0.8, y: 0, z: 0.1}
   _throwTrailFallnoffset: {x: 0, y: -0.2, z: 0.75}
@@ -3539,6 +3541,51 @@ MonoBehaviour:
   _FABRIKControllerBehaviour: {fileID: 6132698310706980790}
   _boneChain: {fileID: 5612155314268022033}
   _target: {fileID: 4877881031040878615}
+--- !u!1 &7421186618995902117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7873757471914328869}
+  - component: {fileID: 972627966001843131}
+  m_Layer: 0
+  m_Name: AnchorFollower
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7873757471914328869
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7421186618995902117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1151401866870032477}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &972627966001843131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7421186618995902117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6446dddfb5147559186aeedf7513de8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anchorMoveRotate: {fileID: 5362549251048967700}
 --- !u!1 &7844042421698275073
 GameObject:
   m_ObjectHideFlags: 0

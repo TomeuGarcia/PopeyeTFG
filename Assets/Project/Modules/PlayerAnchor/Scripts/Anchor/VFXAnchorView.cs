@@ -33,6 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         [Header("REFERENCES")]
         [SerializeField] private Transform _vfxParent;
+        [SerializeField] private Transform _anchorThrowHeadFollower;
         [SerializeField] private Transform _specialMotionsTransform;
 
         [Header("PARAMETERS")]
@@ -116,7 +117,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             StopCarry();
             
-            _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            Transform head = _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            
+            //Used for different way to move the effect pending of more feedback in order to make a decision
+            //head.transform.parent = _anchorThrowHeadFollower.transform;
+            //_anchorThrowHeadFollower.gameObject.SetActive(true);
+            
             await UniTask.Delay(TimeSpan.FromSeconds(_throwTrailSpawnDelay));
             Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
             Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
