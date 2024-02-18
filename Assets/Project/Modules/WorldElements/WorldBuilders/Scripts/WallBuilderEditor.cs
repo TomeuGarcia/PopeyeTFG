@@ -11,12 +11,16 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
     {
         private WallBuilder _wallBuilder;
         private Vector3[] _points;
+        
         private Transform _handleTransform;
         private Quaternion _handleRotation;
+        
         private int selectedIndex = -1;
-        private readonly float _buttonSize = 0.05f;
-        private readonly float _buttonPickSize = 0.07f;
-        private readonly float _lineThickness = 2.0f;
+
+        private WallBuilderConfig.EditorViewConfig _editorView;
+        private readonly float _buttonSize = 0.2f;
+        private readonly float _buttonPickSize = 0.25f;
+        private float LineThickness => _editorView.LineThickness;
 
 
         public override void OnInspectorGUI()
@@ -38,7 +42,14 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         private void OnSceneGUI()
         {
             _wallBuilder = target as WallBuilder;
-            _points = _wallBuilder.points;
+
+            if (!_wallBuilder.IsReadyForEditor())
+            {
+                return;
+            }
+            
+            _points = _wallBuilder.Points;
+            _editorView = _wallBuilder.EditorView;
 
             _handleTransform = _wallBuilder.transform;
             _handleRotation = Tools.pivotRotation == PivotRotation.Local
@@ -51,24 +62,43 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             
             for (int i = 0; i < _points.Length; ++i)
             {
-                Handles.color = Color.blue;
+                Handles.color = _editorView.CornerButtonColor;
                 drawSpacePoints[i] = DrawPoint(i);
-                DrawBlock(_wallBuilder.cornerBlock, drawSpacePoints[i], Quaternion.identity);
+                Handles.color = _editorView.CornerBlockColor;
+                
+                DrawBlock(_wallBuilder.CornerBlock, drawSpacePoints[i], Quaternion.identity);
             }
-            
-            
+
+
             for (int i = 1; i < _points.Length; ++i)
             {
-                Handles.color = Color.red;
-                Handles.DrawLine(drawSpacePoints[i - 1], drawSpacePoints[i], _lineThickness);
+                Vector3 previousPoint = drawSpacePoints[i - 1];
+                Vector3 currentPoint = drawSpacePoints[i];
 
-                Vector3 direction = (drawSpacePoints[i] - drawSpacePoints[i - 1]).normalized;
-                Quaternion offsetRotation = Quaternion.LookRotation(direction, Vector3.up);
+                Handles.color = _editorView.FillLineColor;
+                Handles.DrawLine(previousPoint, currentPoint, LineThickness);
+
+                if (_wallBuilder.FillBlock.Length < 0.01f)
+                {
+                    continue;
+                }
+
+                Vector3 previousToCurrent = currentPoint - previousPoint;
+                float previousToCurrentDistance = previousToCurrent.magnitude;
+                Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
                 
+                Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
                 
-                Handles.color = Color.yellow;
-                Vector3 center = Vector3.Lerp(drawSpacePoints[i - 1], drawSpacePoints[i], 0.5f);
-                DrawBlock(_wallBuilder.fillBlock, center, offsetRotation);
+                Handles.color = _editorView.FillBlockColor;
+
+                float lineLength = previousToCurrentDistance - _wallBuilder.CornerBlock.Length;
+                float distanceCounter = _wallBuilder.CornerBlock.Length / 2 + _wallBuilder.FillBlock.Length / 2;
+
+                for (; distanceCounter < lineLength; distanceCounter += _wallBuilder.FillBlock.Length)
+                {
+                    Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
+                    DrawBlock(_wallBuilder.FillBlock, fillPosition, offsetRotation);
+                }
             }
         }
 
@@ -102,7 +132,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Vector3[] framePoints = block.ToFrame(center, rotation);
             for (int i = 0; i < framePoints.Length; ++i)
             {
-                Handles.DrawLine(framePoints[i], framePoints[(i + 1) % framePoints.Length]);
+                Handles.DrawLine(framePoints[i], framePoints[(i + 1) % framePoints.Length], LineThickness);
             }
 
             Vector3 lookA = Vector3.Lerp(framePoints[0], framePoints[1], 0.5f);
