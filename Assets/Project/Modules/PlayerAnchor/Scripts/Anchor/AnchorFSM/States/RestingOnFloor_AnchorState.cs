@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 {
     public class RestingOnFloor_AnchorState : IAnchorState

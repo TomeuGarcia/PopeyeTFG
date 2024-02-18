@@ -28,12 +28,34 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             DrawDefaultInspector();
             
             _wallBuilder = target as WallBuilder;
+            _points = _wallBuilder.Points;
 
-            GUILayout.Space(20);
+            GUILayout.Space(10);
             if (GUILayout.Button("Add Point"))
             {
                 Undo.RecordObject(_wallBuilder, "Add Point");
                 _wallBuilder.AddPoint();
+                EditorUtility.SetDirty(_wallBuilder);
+            }
+            
+            GUILayout.Space(15);
+            if (GUILayout.Button("Center Around Pivot"))
+            {
+                Undo.RecordObject(_wallBuilder, "Center Around Pivot");
+                _wallBuilder.CenterAroundPivot();
+                EditorUtility.SetDirty(_wallBuilder);
+            }
+            
+            GUILayout.Space(15);
+            _wallBuilder.moveBy = EditorGUILayout.Vector2Field("Move By Amount", _wallBuilder.moveBy);
+            Vector2Int pointsRange = EditorGUILayout.Vector2IntField("Selected Points Range", _wallBuilder.selectedPointsRange);
+            pointsRange.x = Mathf.Max(pointsRange.x, 0);
+            pointsRange.y = Mathf.Min(pointsRange.y, _points.Length);
+            _wallBuilder.selectedPointsRange = pointsRange;
+            if (GUILayout.Button("Move Points By Amount"))
+            {
+                Undo.RecordObject(_wallBuilder, "Move Selected Points Range By Amount");
+                _wallBuilder.MovePointsRangeByAmount(_wallBuilder.moveBy, pointsRange.x, pointsRange.y);
                 EditorUtility.SetDirty(_wallBuilder);
             }
         }

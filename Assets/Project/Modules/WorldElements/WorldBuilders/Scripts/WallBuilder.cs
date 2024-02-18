@@ -52,8 +52,9 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         public Block CornerBlock => _config.CornerBlock;
         public Block FillBlock => _config.FillBlock;
         public WallBuilderConfig.EditorViewConfig EditorView => _config.EditorView;
-        
-        
+
+        [HideInInspector] public Vector2 moveBy = Vector2.zero;
+        [HideInInspector] public Vector2Int selectedPointsRange = Vector2Int.zero;
 
 
         private void OnValidate()
@@ -76,15 +77,25 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void Start()
         {
-            FillWalls();
-            CreateFakeMesh();
+            if (_points.Length > 0)
+            {
+                FillWalls();
+                CreateFakeMesh();
+            }
         }
 
         public void AddPoint()
         {
             Array.Resize(ref _points, _points.Length + 1);
 
-            _points[^1] = _points[^2] + Vector3.right;
+            if (_points.Length > 1)
+            {
+                _points[^1] = _points[^2] + Vector3.right;    
+            }
+            else
+            {
+                _points[0] = Vector3.right;
+            }
         }
 
         public bool IsReadyForEditor()
@@ -182,5 +193,35 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             meshRenderer.material = _config.FakeMeshMaterial;
             meshRenderer.enabled = false;
         }
+
+
+        public void CenterAroundPivot()
+        {
+            Vector2 minimums = Vector2.one * float.MaxValue;
+            Vector2 maximums = Vector2.one * float.MinValue;
+            
+            foreach (Vector3 point in _points)
+            {
+                if (point.x < minimums.x) minimums.x = point.x;
+                if (point.z < minimums.y) minimums.y = point.z;
+                
+                if (point.x > maximums.x) maximums.x = point.x;
+                if (point.z > maximums.y) maximums.y = point.z;
+            }
+
+            
+            Vector2 offset = (minimums + maximums) / 2;
+
+            MovePointsRangeByAmount(offset, 0, _points.Length);
+        }
+
+        public void MovePointsRangeByAmount(Vector2 moveAmount, int startInclusive, int endExclusive)
+        {
+            for (int i = startInclusive; i < endExclusive; ++i)
+            {
+                _points[i] -= new Vector3(moveAmount.x, 0, moveAmount.y);
+            }
+        }
+        
     }
 }
