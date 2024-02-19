@@ -76,6 +76,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                     generalConfig.ChainBoneCount);
             
             _currentChainViewLogic = _carriedChainViewLogic;
+            SetCarriedView();
             
             _boneChainIK.AwakeConfigure(generalConfig.ChainBoneCount, false, boneLength);
         }

@@ -15,6 +15,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerGeneralConfig")]
     public class PlayerGeneralConfig : ScriptableObject
     {
+        [Header("FLAGS")] 
+        [SerializeField] private bool _isTutorial;
+        public bool IsTutorial => _isTutorial;
+        
+        
         [Header("Health")] 
         [SerializeField, Range(0, 300)] private int _maxHealth = 100;
         [SerializeField, Range(0, 300)] private int _potionHealAmount = 30;

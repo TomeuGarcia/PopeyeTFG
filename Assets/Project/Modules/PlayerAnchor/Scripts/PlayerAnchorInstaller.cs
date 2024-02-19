@@ -151,7 +151,11 @@ namespace Popeye.Modules.PlayerAnchor
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, 
                 cameraFunctionalities, anchorOnVoidChecker);
-            anchorStateMachine.Setup(anchorStatesBlackboard);
+
+            IAnchorStatesCreator anchorStatesCreator = _playerGeneralConfig.IsTutorial
+                ? new TutorialAnchorStatesCreator()
+                : new DefaultAnchorStatesCreator();
+            anchorStateMachine.Configure(anchorStatesBlackboard, anchorStatesCreator);
 
                 
             
@@ -182,16 +186,21 @@ namespace Popeye.Modules.PlayerAnchor
             playerMovementChecker.Configure(_player, _playerController);
             playerAudio.Configure(_playerController.gameObject);
 
-            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
-                _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker);
+
             _playerController.MovementInputHandler = movementInputHandler;
             _playerController.InputCorrector =
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
-            
-            playerStateMachine.Setup(playerStatesBlackboard);
+            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
+                _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
+                _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
+                playerSafeGroundChecker, playerOnVoidChecker);
+
+
+            IPlayerStatesCreator playerStatesCreator = _playerGeneralConfig.IsTutorial
+                ? new TutorialPlayerStatesCreator()
+                : new DefaultPlayerStatesCreator();
+            playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);
