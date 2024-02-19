@@ -17,7 +17,7 @@ Material:
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -64,6 +64,7 @@ Material:
     - _QueueOffset: 0
     - _SubtractionL1: 0.5
     - _SubtractionL2: 0.5
+    - _TipBottomDissolve: 7.5
     m_Colors:
     - _ColorL1: {r: 0, g: 0.60732985, b: 0.60732985, a: 0}
     - _ColorL2: {r: 0, g: 1, b: 0.19120172, a: 0}
@@ -74,6 +75,7 @@ Material:
     - _ScrollSpeedL1: {r: 0, g: 1, b: 0, a: 0}
     - _TextureScrollSpeedL1: {r: -1, g: 0, b: 0, a: 0}
     - _TextureScrollSpeedL2: {r: -1, g: 0, b: 0, a: 0}
+    - _TipColor: {r: 0.049494557, g: 10.492821, b: 1.0336831, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2545409224128901896
 MonoBehaviour:

@@ -142,7 +142,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             var wait = await WaitUntilEase(ease, duration, easeThreshold);
             _anchorThrowDamageTrigger.Activate();
-            await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(duration * (1f-wait), 0.1f)));
             await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));
             _anchorThrowDamageTrigger.Deactivate();
         }
@@ -244,7 +244,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private void OnDamageDealt(DamageHitResult damageHitResult)
         {
-            _anchor.OnDamageDealt();
+            _anchor.OnDamageDealt(damageHitResult);
         }
         
     }

@@ -1,9 +1,9 @@
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
-using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.Utilities.Scripts.Collisions;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -41,7 +41,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void DashTowardsAnchor(float duration)
         {
-            _playerMotion.MoveToPosition(ComputeDashTowardsAnchorPosition(), duration, Ease.InOutQuad);
+            Ease ease = Ease.InOutQuad;
+            _playerMotion.MoveToPosition(ComputeDashTowardsAnchorPosition(), duration, ease);
+            _anchor.OnDashedAt(duration, ease);
         }
         
         public void DashForward(float minDuration, float maxDuration, out float resultDuration)
@@ -59,7 +61,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             resultDuration = Mathf.Lerp(minDuration, maxDuration, distanceChangeRatio01);
 
-            _playerMotion.MoveToPosition(dashEndPosition, resultDuration, Ease.InOutQuad);
+            Ease ease = Ease.InOutQuad;
+            _playerMotion.MoveToPosition(dashEndPosition, resultDuration, ease);
+            _anchor.OnDashedAwayFrom(resultDuration, ease);
         }
         
         

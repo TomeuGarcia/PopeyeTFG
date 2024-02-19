@@ -12,7 +12,6 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         [SerializeField] internal bool _interpolateOnInit;
         [SerializeField] internal InterpolatorRecycleParticleData[] _interpolations;
         
-        //TODO this list is never used -> it is required for a fix
         internal List<TrailRenderer> _trailRenderers = new();
         
         private int _completedInterpolations;
@@ -29,14 +28,12 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
                 }
             }
 
-            //TrailEmission(false);
+            TrailEmission(false);
         }
 
         internal override void Init()
         {
             _completedInterpolations = 0;
-            
-            TrailEmission(true);
 
             foreach (var interpolation in _interpolations)
             {
@@ -50,17 +47,23 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
                     }
                 }
             }
+
+            TrailInit().Forget();
+        }
+
+        private async UniTaskVoid TrailInit()
+        {
+            await UniTask.WaitForEndOfFrame();
+            TrailEmission(true);
         }
 
         private void TrailEmission(bool emission)
         {
-            /*
             foreach (var trail in _trailRenderers)
             {
                 trail.Clear();
                 trail.emitting = emission;
             }
-            */
         }
 
         private void Setup(Material material, MaterialFloatSetupConfig[] setupConfigs)

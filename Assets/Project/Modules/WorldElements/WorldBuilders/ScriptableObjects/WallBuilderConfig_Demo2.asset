@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61e841b53ed4978b8ebb0c7a2ddff58, type: 3}
+  m_Name: WallBuilderConfig_Demo2
+  m_EditorClassIdentifier: 
+  _editorView:
+    _cornerButtonColor: {r: 0, g: 0.74509805, b: 0.78431374, a: 1}
+    _cornerBlockColor: {r: 0, g: 0.509434, b: 0.20570411, a: 1}
+    _fillBlockColor: {r: 0.25444272, g: 0.015686274, b: 1, a: 1}
+    _fillLineColor: {r: 0, g: 0.03872156, b: 1, a: 1}
+    _lineThickness: 2.5
+  _cornerBlock:
+    _size: {x: 2, y: 2}
+  _fillBlock:
+    _size: {x: 1, y: 3}
+  _cornerBlockPrefab: {fileID: 3221932706478820892, guid: 6084c07e1f0e7b14ebbba247f9eaf8d2,
+    type: 3}
+  _fillBlockPrefab: {fileID: 4407190998663603906, guid: 5bdf8c64a78dbea469465c474b6f5765,
+    type: 3}
+  _colliderWidth: 1
+  _colliderHeight: 2
+  _fakeMeshMaterial: {fileID: 2100000, guid: 10695b673dcd8bb49ba3a14430fcc8a3, type: 2}

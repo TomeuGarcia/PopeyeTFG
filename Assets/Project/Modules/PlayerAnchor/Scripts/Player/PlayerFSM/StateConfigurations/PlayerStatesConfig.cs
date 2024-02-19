@@ -18,8 +18,18 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float BeforeRespawnDuration => _beforeRespawnDuration;
         
         
+        [Header("FALL ON VOID")]
+        [SerializeField, Range(0.01f, 10.0f)] private float _fallingOnVoidDuration = 0.2f;
+        [SerializeField, Range(0.01f, 10.0f)] private float _invulnerableTimeAfterVoidFallRespawn = 1.5f;
+
+        public float FallingOnVoidDuration => _fallingOnVoidDuration;
+        public float InvulnerableTimeAfterVoidFallRespawn => _invulnerableTimeAfterVoidFallRespawn;
+        
+        
+        
+        
         [Header("MOVEMENT")]
-        [SerializeField, Range(0.0f, 20.0f)]private float _withoutAnchorMoveSpeed = 10.0f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _withoutAnchorMoveSpeed = 10.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _withAnchorMoveSpeed = 8.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _aimingMoveSpeed = 5.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _throwingAnchorMoveSpeed = 0.5f;
@@ -28,6 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _spinningAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _tiredMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _healingMoveSpeed = 2.5f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _fallingOnVoidMoveSpeed = 0.0f;
 
         public float WithoutAnchorMoveSpeed => _withoutAnchorMoveSpeed;
         public float WithAnchorMoveSpeed => _withAnchorMoveSpeed;
@@ -38,6 +49,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float SpinningAnchorMoveSpeed => _spinningAnchorMoveSpeed;
         public float TiredMoveSpeed => _tiredMoveSpeed;
         public float HealingMoveSpeed => _healingMoveSpeed;
+        public float FallingOnVoidMoveSpeed => _fallingOnVoidMoveSpeed;
         
         
         [Header("ANCHOR THROW")]

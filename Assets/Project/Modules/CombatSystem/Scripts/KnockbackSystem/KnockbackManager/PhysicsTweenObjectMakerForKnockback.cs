@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.Utilities.Scripts.Collisions;
+using Popeye.Scripts.Collisions;
 using Project.PhysicsMovement;
 using UnityEngine;
 

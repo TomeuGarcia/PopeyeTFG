@@ -1,23 +1,19 @@
-
-
 using System;
-using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
-using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
-using Popeye.Modules.VFX.Generic;
-using Popeye.Modules.VFX.Generic.ParticleBehaviours;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.VFX.ParticleFactories;
-using Unity.Mathematics;
+using Project.Modules.WorldElements.DestructiblePlatforms;
+using Project.Scripts.Time.TimeFunctionalities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
@@ -49,10 +45,15 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; private set; }
         
+        public IOnVoidChecker OnVoidChecker { get; private set; }
+
         public Vector3 Position => _anchorMotion.Position;
         public Quaternion Rotation => _anchorMotion.Rotation;
 
-
+        [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
+        public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
+        
+        
         private IAnchorAudio _anchorAudio;
 
         private ICameraFunctionalities _cameraFunctionalities;
@@ -64,7 +65,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             AnchorPhysics anchorPhysics, AnchorCollisions anchorCollisions, IAnchorView anchorView,
             IAnchorAudio anchorAudio,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain,
-            ICameraFunctionalities cameraFunctionalities)
+            ICameraFunctionalities cameraFunctionalities,
+            IOnVoidChecker onVoidChecker)
         {
             _stateMachine = stateMachine;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
@@ -82,11 +84,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             
             _cameraFunctionalities = cameraFunctionalities;
+
+            OnVoidChecker = onVoidChecker;
             
-            _anchorPhysics.DisableTension();
-            _anchorChain.DisableTension();
             
-            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(),
+                ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
+                cameraFunctionalities.CameraShaker);
         }
         
         public void ResetState(Vector3 position)
@@ -107,10 +111,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorMotion.SetRotation(rotation);
         }
 
-        
+        public void DisableChainTensionForDuration(float duration)
+        {
+            _anchorChain.DisableTensionForDuration(duration).Forget();
+        }
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
-        {            
+        {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
             
@@ -120,13 +127,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
+            _anchorChain.SetThrownView(anchorThrowResult);
             
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             
             _anchorAudio.PlayThrowSound();
         }
         
-        public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
+        public async UniTaskVoid SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealVerticalLandDamage(anchorThrowResult);
@@ -139,6 +147,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlayVerticalHitAnimation(anchorThrowResult.Duration, floorHit).Forget();
             
             _anchorAudio.PlayThrowSound();
+            
+            
+            DestructiblePlatformBreaker.SetEnabled(true);
+            DestructiblePlatformBreaker.SetBreakInstantlyMode();
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
+            DestructiblePlatformBreaker.SetEnabled(false);
         }
         
         
@@ -154,10 +168,21 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
                 anchorPullResult.MoveEaseCurve);
             
+            _anchorChain.SetPulledView(anchorPullResult);
+            
             _anchorView.PlayPulledAnimation(anchorPullResult.Duration);
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
 
+        }
+
+        public void OnDashedAt(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashingTowardsView(duration, dashEase);
+        }
+        public void OnDashedAwayFrom(float duration, Ease dashEase)
+        {
+            _anchorChain.SetDashingAwayView(duration, dashEase);
         }
 
         public void SetKicked(AnchorThrowResult anchorKickResult)
@@ -173,10 +198,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
             
             _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
-
-           
-
-           
         }
         
         public void SetCarried()
@@ -196,20 +217,23 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
             
             _anchorView.PlayRestOnFloorAnimation();
+            _anchorChain.SetRestingOnFloorView();
             
             _cameraFunctionalities.CameraShaker.PlayShake(_restOnFloor_CameraShake);
         }
         public void SetGrabbedBySnapper(IAnchorTrajectorySnapTarget anchorTrajectorySnapTarget)
         {
-            _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
-
             CurrentTrajectorySnapTarget = anchorTrajectorySnapTarget;
+
             Transform parentTransform = anchorTrajectorySnapTarget.GetParentTransformForTargeter();
                 
             if (parentTransform != null)
             {
                 _anchorMotion.Parent(parentTransform);
             }
+            
+            _anchorChain.SetRestingOnFloorView();
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
         }
 
         public void SetSpinning(bool spinningToTheRight)
@@ -328,9 +352,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlayObstructedAnimation();
         }
 
-        public void OnDamageDealt()
+        public void OnDamageDealt(DamageHitResult damageHitResult)
         {
             _anchorAudio.PlayDealDamageSound();
+            _anchorView.OnDamageDealt(damageHitResult);
         }
     }
 }

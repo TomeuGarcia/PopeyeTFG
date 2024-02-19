@@ -5,6 +5,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         None,
         
         Spawning,
+        SpawningWithAnchorOnFloor,
         Dead,
         
         MovingWithAnchor,
@@ -20,6 +21,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         SpinningAnchor,
         Tired,
         
-        Healing
+        Healing,
+        FallingOnVoid
     }
 }
