@@ -10,6 +10,7 @@ using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameState.GaneralGameState;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
@@ -21,12 +22,16 @@ using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Popeye.Modules.PlayerAnchor
 {
     public class PlayerAnchorInstaller : MonoBehaviour
     {
+        [Header("GAME STATE")] 
+        [SerializeField] private GeneralGameStateData _generalGameStateData;
+        
         [Header("CAMERA")] 
         [SerializeField] private InterfaceReference<ICameraController, MonoBehaviour> _isometricCamera;
         [SerializeField] private InterfaceReference<ICameraShaker, MonoBehaviour> _cameraShaker;
@@ -152,7 +157,7 @@ namespace Popeye.Modules.PlayerAnchor
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, 
                 cameraFunctionalities, anchorOnVoidChecker);
 
-            IAnchorStatesCreator anchorStatesCreator = _playerGeneralConfig.IsTutorial
+            IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial
                 ? new TutorialAnchorStatesCreator()
                 : new DefaultAnchorStatesCreator();
             anchorStateMachine.Configure(anchorStatesBlackboard, anchorStatesCreator);
@@ -197,7 +202,7 @@ namespace Popeye.Modules.PlayerAnchor
                 playerSafeGroundChecker, playerOnVoidChecker);
 
 
-            IPlayerStatesCreator playerStatesCreator = _playerGeneralConfig.IsTutorial
+            IPlayerStatesCreator playerStatesCreator = _generalGameStateData.IsTutorial
                 ? new TutorialPlayerStatesCreator()
                 : new DefaultPlayerStatesCreator();
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
