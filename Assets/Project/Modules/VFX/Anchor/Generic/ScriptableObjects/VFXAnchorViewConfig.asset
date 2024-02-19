@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23e0531e3cc488f9b2619cab6b36b65, type: 3}
+  m_Name: VFXAnchorViewConfig
+  m_EditorClassIdentifier: 
+  _retrieveTrailParticleType: 2
+  _throwTrailParticleType: 3
+  _throwTrailSoftParticleType: 9
+  _throwHeadParticleType: 4
+  _slamHeadParticleType: 5
+  _slamGroundHitParticleType: 6
+  _slamGroundDecalParticleType: 7
+  _throwGroundDecalParticleType: 8
+  _hitStopDamageDealt: {fileID: 11400000, guid: e23ae1a867079014ba25b912ede0e719,
+    type: 2}
+  _shakeConfigDamageDealt: {fileID: 11400000, guid: 8d3e508d5775ba146a9245e9c1b386e1,
+    type: 2}
+  _slamTrailOffset: {x: -0.8, y: 0, z: 0.1}
+  _throwTrailFallnoffset: {x: 0, y: -0.2, z: 0.75}
+  _throwTrailSpawnDelay: 0.015
+  _throwTrailFallnDelay: 0.25
+  _retrieveTrailSpawnDelay: 0.1
