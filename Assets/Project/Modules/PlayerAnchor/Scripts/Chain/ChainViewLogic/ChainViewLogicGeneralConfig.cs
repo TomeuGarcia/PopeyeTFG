@@ -1,10 +1,8 @@
-using System;
 using NaughtyAttributes;
 using Popeye.InverseKinematics.Bones;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Chain
 {

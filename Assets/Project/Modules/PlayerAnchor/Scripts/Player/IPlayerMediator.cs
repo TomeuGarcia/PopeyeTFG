@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -8,6 +8,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         Vector3 Position { get; }
         Transform PositionTransform { get; }
+        IPlayerView PlayerView { get; }
+        DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
         void SetCanUseRotateInput(bool canUseRotateInput);
@@ -48,18 +50,27 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         void OnAnchorEndedInVoid();
+        void OnPlayerFellOnVoid();
+        bool TakeFellOnVoidDamage();
+        void RespawnToLastSafeGround();
         void OnTryUsingObstructedAnchor();
 
 
         void LookTowardsPosition(Vector3 position);
         void LookTowardsAnchor();
         UniTaskVoid LookTowardsAnchorForDuration(float duration);
+
+
+        void DropTargetForCamera();
+        void ResetTargetForCamera();
         
 
         bool HasStaminaLeft();
         bool HasMaxStamina();
 
 
+        void SetInvulnerable(bool isInvulnerable);
+        void SetInvulnerableForDuration(float duration);
         bool CanHeal();
         UniTask UseHeal();
         void HealToMax();
@@ -70,10 +81,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         Transform GetTargetForEnemies();
-        void Respawn();
+        void RespawnFromDeath();
 
 
         void OnStartMoving();
         void OnStopMoving();
+
+
+        void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
     }
 }

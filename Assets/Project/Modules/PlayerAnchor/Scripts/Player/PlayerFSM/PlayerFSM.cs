@@ -49,6 +49,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             Healing_PlayerState healing
                 = new Healing_PlayerState(blackboard);
 
+            FallingOnVoid_PlayerState fallingOnVoid
+                = new FallingOnVoid_PlayerState(blackboard);
+
 
             _states = new Dictionary<PlayerStates, APlayerState>()
             {
@@ -69,6 +72,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 { PlayerStates.Tired , tired },
                 
                 { PlayerStates.Healing , healing },
+                { PlayerStates.FallingOnVoid , fallingOnVoid },
             };
 
 

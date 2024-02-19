@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Popeye.Modules.WorldElements.WorldInteractors;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 namespace Popeye.Modules.WorldElements.AnchorTriggerables
@@ -12,14 +13,14 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
     public class TimerPlayerPressurePlate : MonoBehaviour
     {
-        [Header("REFERENCES")] [SerializeField]
-        private MeshRenderer _buttonMesh;
+        [Header("REFERENCES")] 
+        [SerializeField] private MeshRenderer _buttonMesh;
 
         private Material _timerMaterial;
         [SerializeField] private Transform _buttonTransform;
 
-        [Header("TIMER")] [SerializeField, Range(0.0f, 30.0f)]
-        private float _pressedDuration = 3.0f;
+        [Header("TIMER")] 
+        [SerializeField, Range(0.0f, 30.0f)] private float _pressedDuration = 3.0f;
 
         [SerializeField] private bool _triggerAllOnce = false;
         private bool _triggeredAllOnceAlready;
@@ -32,6 +33,10 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private int _triggeredCount;
 
         CancellationTokenSource _pressedCancellationSource;
+
+
+        [Header("ACCEPT TYPES")] 
+        [SerializeField] private ObjectTypeAsset[] _acceptTypes;
 
 
         private void OnEnable()
@@ -74,9 +79,8 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private void OnTriggerEnter(Collider other)
         {
             if (_triggeredAllOnceAlready) return;
-
-            if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG) ||
-                other.gameObject.CompareTag(TagUtilities.ANCHOR_TAG))
+            
+            if (AcceptsOtherCollider(other))
             {
                 if (_triggeredCount++ > 0) return;
 
@@ -95,13 +99,17 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         {
             if (_triggeredAllOnceAlready) return;
 
-            if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG) ||
-                other.gameObject.CompareTag(TagUtilities.ANCHOR_TAG))
+            if (AcceptsOtherCollider(other))
             {
                 if (--_triggeredCount > 0) return;
             }
         }
 
+        private bool AcceptsOtherCollider(Collider other)
+        {
+            if (!other.TryGetComponent(out IObjectType otherObjectType)) return false;
+            return otherObjectType.IsOfAnyType(_acceptTypes);
+        }
 
 
         private void SetTriggeredState()
