@@ -87,8 +87,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             OnVoidChecker = onVoidChecker;
             
-            _anchorPhysics.DisableCollision();
-            _anchorChain.DisableTension();
             
             _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(),
                 ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,

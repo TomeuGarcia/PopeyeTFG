@@ -10,6 +10,7 @@ using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameState.GaneralGameState;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
@@ -21,12 +22,16 @@ using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Popeye.Modules.PlayerAnchor
 {
     public class PlayerAnchorInstaller : MonoBehaviour
     {
+        [Header("GAME STATE")] 
+        [SerializeField] private GeneralGameStateData _generalGameStateData;
+        
         [Header("CAMERA")] 
         [SerializeField] private InterfaceReference<ICameraController, MonoBehaviour> _isometricCamera;
         [SerializeField] private InterfaceReference<ICameraShaker, MonoBehaviour> _cameraShaker;
@@ -151,7 +156,11 @@ namespace Popeye.Modules.PlayerAnchor
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, 
                 cameraFunctionalities, anchorOnVoidChecker);
-            anchorStateMachine.Setup(anchorStatesBlackboard);
+
+            IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial
+                ? new TutorialAnchorStatesCreator()
+                : new DefaultAnchorStatesCreator();
+            anchorStateMachine.Configure(anchorStatesBlackboard, anchorStatesCreator);
 
                 
             
@@ -182,16 +191,21 @@ namespace Popeye.Modules.PlayerAnchor
             playerMovementChecker.Configure(_player, _playerController);
             playerAudio.Configure(_playerController.gameObject);
 
-            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
-                _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker);
+
             _playerController.MovementInputHandler = movementInputHandler;
             _playerController.InputCorrector =
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
-            
-            playerStateMachine.Setup(playerStatesBlackboard);
+            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
+                _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
+                _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
+                playerSafeGroundChecker, playerOnVoidChecker);
+
+
+            IPlayerStatesCreator playerStatesCreator = _generalGameStateData.IsTutorial
+                ? new TutorialPlayerStatesCreator()
+                : new DefaultPlayerStatesCreator();
+            playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);

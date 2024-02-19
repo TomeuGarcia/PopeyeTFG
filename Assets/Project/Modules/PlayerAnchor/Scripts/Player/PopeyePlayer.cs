@@ -88,6 +88,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
+            SetInstantRotation(false);
             
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
@@ -117,6 +118,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void SetCanUseRotateInput(bool canUseRotateInput)
         {
             _playerController.useLookInput = canUseRotateInput;
+        }
+
+        public void SetInstantRotation(bool instantRotation)
+        {
+            if (instantRotation)
+            {
+                _playerController.SetInstantRotationMode();
+            }
+            else
+            {
+                _playerController.SetOverTimeRotationMode();
+            }
         }
 
         public void SetCanRotate(bool canRotate)

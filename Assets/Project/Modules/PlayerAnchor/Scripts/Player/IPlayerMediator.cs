@@ -13,6 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
         void SetCanUseRotateInput(bool canUseRotateInput);
+        void SetInstantRotation(bool instantRotation);
         void SetCanRotate(bool canRotate);
         void SetCanFallOffLedges(bool canFallOffLedges, bool checkingIgnoreLedges = true);
         float GetDistanceFromAnchor();

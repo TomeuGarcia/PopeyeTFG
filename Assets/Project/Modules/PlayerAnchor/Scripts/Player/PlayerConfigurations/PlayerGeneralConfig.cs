@@ -6,7 +6,7 @@ using Popeye.ProjectHelpers;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
 {

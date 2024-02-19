@@ -169,16 +169,23 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Vector3 colliderSize = rotation * 
                                    (new Vector3(_config.ColliderWidth, _config.ColliderHeight, previousToCurrentDistance)); 
                 
-            BoxCollider boxCollider = _collidersParent.AddComponent<BoxCollider>();
-            boxCollider.center = colliderPosition + (Vector3.up * _config.HalfColliderHeight);
-            boxCollider.size = colliderSize;
+            DoCreateCollider(colliderPosition, colliderSize);
         }
         
         private void CreateColliderForLast()
         {
             Vector3 colliderPosition = _points[^1];
-            Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length); 
-                
+            Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length);
+
+            DoCreateCollider(colliderPosition, colliderSize);
+        }
+
+        private void DoCreateCollider(Vector3 colliderPosition, Vector3 colliderSize)
+        {
+            colliderSize.x = Mathf.Abs(colliderSize.x);
+            colliderSize.y = Mathf.Abs(colliderSize.y);
+            colliderSize.z = Mathf.Abs(colliderSize.z);
+            
             BoxCollider boxCollider = _collidersParent.AddComponent<BoxCollider>();
             boxCollider.center = colliderPosition + (Vector3.up * _config.HalfColliderHeight);
             boxCollider.size = colliderSize;

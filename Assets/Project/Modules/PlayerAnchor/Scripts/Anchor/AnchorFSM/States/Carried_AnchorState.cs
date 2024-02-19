@@ -28,6 +28,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
             _blackboard.AnchorPhysics.DisableCollision();
             
             _blackboard.AnchorChain.SetCarriedView();
+            
+            _blackboard.AnchorChain.DisableTension();
+            _blackboard.AnchorPhysics.DisableCollision();
         }
 
         public void Exit()

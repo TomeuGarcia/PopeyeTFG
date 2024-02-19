@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerController.Inputs;
+using Popeye.Modules.PlayerController.LookRotation;
 using Popeye.Scripts.Collisions;
 using UnityEngine;
 
@@ -38,13 +39,18 @@ namespace Popeye.Modules.PlayerController
 
         [Header("LOOK")] 
         [SerializeField] public bool useLookInput = true;
-
         [SerializeField] private Transform _lookTransform;
-        [SerializeField, Range(0.0f, 1000.0f)] private float _lookSpeed = 700.0f;
-        [SerializeField, Range(0.0f, 1.0f)] private float _blendWithVelocityDirection = 0.0f;
+        [SerializeField] private OverTimeLookRotationUpdater.Configuration _lookOverTimeConfig;
+        
+        
         public Vector3 LookDirection => _lookTransform.forward;
         public Vector3 RightDirection => _lookTransform.right;
         public bool CanRotate { get; set; }
+
+        private ILookRotationUpdater _currentLookRotationUpdater;
+        private ILookRotationUpdater _instantLookRotationUpdater;
+        private ILookRotationUpdater _overTimeLookRotationUpdater;
+        
 
 
         [Header("VELOCITY")]
@@ -138,6 +144,10 @@ namespace Popeye.Modules.PlayerController
                 new LedgeDetectionController(_ledgeDetectionConfig, _ledgeGroundCollisionProbingConfig);
 
             CanRotate = true;
+
+            _instantLookRotationUpdater = new InstantLookRotationUpdater(_lookTransform);
+            _overTimeLookRotationUpdater = new OverTimeLookRotationUpdater(_lookTransform, _lookOverTimeConfig);
+            SetOverTimeRotationMode();
         }
 
         private void Update()
@@ -340,15 +350,8 @@ namespace Popeye.Modules.PlayerController
                     MovementInputHandler.ForwardAxis, MovementInputHandler.RightAxis);
             }
             
-
-            Vector3 velocityDirection = _velocity.normalized;
-            velocityDirection *= 1.0f - Mathf.Abs(Vector3.Dot(velocityDirection, Vector3.up));
-
-            lookDirection = Vector3.Lerp(lookDirection, velocityDirection, _blendWithVelocityDirection);
-
             Quaternion goalRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
-            _lookTransform.localRotation = Quaternion.RotateTowards(_lookTransform.localRotation, goalRotation,
-                Time.deltaTime * _lookSpeed);
+            _currentLookRotationUpdater.UpdateLocalRotation(goalRotation);
         }
 
         public void LookTowardsPosition(Vector3 lookPosition)
@@ -399,6 +402,16 @@ namespace Popeye.Modules.PlayerController
             _ledgeDetectionController.SetCheckingIgnoreLedges(checkingIgnoreLedges);
         }
 
+        public void SetInstantRotationMode()
+        {
+            _currentLookRotationUpdater = _instantLookRotationUpdater;
+        }
+        
+        public void SetOverTimeRotationMode()
+        {
+            _currentLookRotationUpdater = _overTimeLookRotationUpdater;
+        }
+        
 
     }
 }

@@ -5,6 +5,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         None,
         
         Spawning,
+        SpawningWithAnchorOnFloor,
         Dead,
         
         MovingWithAnchor,

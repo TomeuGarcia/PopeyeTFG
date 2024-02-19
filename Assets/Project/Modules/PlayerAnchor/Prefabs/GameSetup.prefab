@@ -1637,6 +1637,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dab8fd025814a77b8698e4c77af4254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _generalGameStateData: {fileID: 11400000, guid: 257078ab86b69884f8250884810c66c7,
+    type: 2}
   _isometricCamera:
     _underlyingValue: {fileID: 7531898491009611764}
   _cameraShaker:
@@ -2195,8 +2197,8 @@ MonoBehaviour:
   _renderer: {fileID: 337526627272404461}
   useLookInput: 1
   _lookTransform: {fileID: 172118550184393647}
-  _lookSpeed: 995
-  _blendWithVelocityDirection: 0
+  _lookOverTimeConfig:
+    _rotationSpeed: 1000
   _maxSpeed: 8
   _maxAcceleration: 60
   _maxAirAcceleration: 1
@@ -3035,7 +3037,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6813187857162566563}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 1.24}
+  m_LocalPosition: {x: 1, y: -0.99998, z: 5.5001087}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -17,16 +17,23 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.queuedAnchorAim = false;
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
+            _blackboard.PlayerMediator.SetInstantRotation(true);
             _blackboard.PlayerMediator.SetCanUseRotateInput(true);
             _blackboard.PlayerMediator.SetCanFallOffLedges(false, false);
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
             
             StartChargingThrow();
         }
 
         public override void Exit()
         {
+            _blackboard.PlayerMediator.SetInstantRotation(false);
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
             _blackboard.PlayerMediator.SetCanFallOffLedges(false, true);
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
             
             StopChargingThrow();
         }
