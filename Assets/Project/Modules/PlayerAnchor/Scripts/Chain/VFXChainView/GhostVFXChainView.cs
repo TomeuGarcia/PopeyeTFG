@@ -1,5 +1,5 @@
 using System;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Chain

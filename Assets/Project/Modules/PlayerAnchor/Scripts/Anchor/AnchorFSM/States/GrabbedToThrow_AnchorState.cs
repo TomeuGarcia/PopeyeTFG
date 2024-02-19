@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
                 Vector3.zero, _blackboard.AnchorMotionConfig.GrabbedToThrowAnchorRotation,
                 0.2f, Ease.InOutSine);
             
-            _blackboard.AnchorPhysics.DisableTension();
+            _blackboard.AnchorPhysics.DisableCollision();
         }
         
 

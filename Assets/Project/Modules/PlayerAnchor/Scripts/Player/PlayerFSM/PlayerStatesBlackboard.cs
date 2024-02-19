@@ -1,4 +1,3 @@
-using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.PlayerAnchor.Anchor;
@@ -13,7 +12,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public PlayerAnchorMovesetInputsController MovesetInputsController { get; private set;  }
         public IAnchorMediator AnchorMediator { get; private set;  }
 
-        
         // Queues
         public bool queuedDashTowardsAnchor;
         public bool queuedAnchorPull;

@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.InverseKinematics.Bones;
 using Popeye.InverseKinematics.FABRIK;
@@ -49,7 +50,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
                 generalConfig.MaxChainLength, boneLength,
                 generalConfig.BonePrefab, generalConfig.BoneEndEffectorPrefab);
-            
             
             _thrownChainViewLogic = 
                 new SpiralThrowChainViewLogic(generalConfig.ThrowViewLogicConfig, 
@@ -140,6 +140,13 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public void DisableTension()
         {
             _chainPhysics.DisableTension();
+        }
+
+        public async UniTaskVoid DisableTensionForDuration(float duration)
+        {
+            DisableTension();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            EnableTension();
         }
 
         public void SetFailedThrow(bool failedThrow)

@@ -8,15 +8,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IPlayerMediator _playerMediator;
         private HealthBehaviour _playerHealthBehaviour;
         private int _potionHealAmount;
+        private DamageHit _voidDamageHit;
         
         public void Configure(IPlayerMediator playerMediator, HealthBehaviour playerHealthBehaviour, int maxHealth,
-            int potionHealAmount, Rigidbody knockbackRigidbody)
+            int potionHealAmount, Rigidbody knockbackRigidbody, DamageHitConfig voidDamageHitConfig)
         {
             _playerMediator = playerMediator;
             _potionHealAmount = potionHealAmount;
 
             _playerHealthBehaviour = playerHealthBehaviour;
             _playerHealthBehaviour.Configure(this, maxHealth, DamageHitTargetType.Player, knockbackRigidbody);
+
+            _voidDamageHit = new DamageHit(voidDamageHitConfig);
         }
 
         public void OnDamageTaken(DamageHitResult damageHitResult)
@@ -57,6 +60,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return _playerHealthBehaviour.IsMaxHealth();
         }
-        
+
+        public bool IsDead()
+        {
+            return _playerHealthBehaviour.IsDead();
+        }
+
+
+        public void TakeVoidFallDamage()
+        {
+            _playerHealthBehaviour.TakeHitDamage(_voidDamageHit);
+        }
     }
 }

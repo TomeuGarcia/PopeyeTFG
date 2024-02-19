@@ -28,15 +28,25 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             _anchorHeldAimTimer.SetDuration(_blackboard.PlayerStatesConfig.AnchorAimHeldWaitTime);
             _anchorHeldAimTimer.Clear();
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
         }
 
         public override bool Update(float deltaTime)
         {
+            _blackboard.PlayerMediator.UpdateSafeGroundChecking(deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+            if (playerIsOnVoid)
+            {
+                _blackboard.PlayerMediator.OnPlayerFellOnVoid();
+                return false;
+            }
+            
             if (PlayerCanAimAnchor())
             {
                 NextState = PlayerStates.AimingThrowAnchor;
