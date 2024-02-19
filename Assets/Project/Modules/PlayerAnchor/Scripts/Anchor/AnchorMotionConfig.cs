@@ -15,6 +15,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public Quaternion GrabbedToThrowAnchorRotation { get; private set; }
 
         
+        [SerializeField, Range(0.01f, 2.0f)] private float _maxCarriedDuration = 0.15f;
+
+        public float MaxCarriedDuration => _maxCarriedDuration;
+        
         private void OnValidate()
         {
             CarriedAnchorRotation = Quaternion.Euler(_carriedAnchorRotation);

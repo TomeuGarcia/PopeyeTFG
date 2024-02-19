@@ -1,7 +1,4 @@
-
-
 using System;
-using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
@@ -9,17 +6,14 @@ using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.CombatSystem;
-using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
-using Popeye.Modules.VFX.Generic;
-using Popeye.Modules.VFX.Generic.ParticleBehaviours;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using Project.Scripts.Time.TimeFunctionalities;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
@@ -51,10 +45,15 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; private set; }
         
+        public IOnVoidChecker OnVoidChecker { get; private set; }
+
         public Vector3 Position => _anchorMotion.Position;
         public Quaternion Rotation => _anchorMotion.Rotation;
 
-
+        [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
+        public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
+        
+        
         private IAnchorAudio _anchorAudio;
 
         private ICameraFunctionalities _cameraFunctionalities;
@@ -66,7 +65,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             AnchorPhysics anchorPhysics, AnchorCollisions anchorCollisions, IAnchorView anchorView,
             IAnchorAudio anchorAudio,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain,
-            ICameraFunctionalities cameraFunctionalities)
+            ICameraFunctionalities cameraFunctionalities,
+            IOnVoidChecker onVoidChecker)
         {
             _stateMachine = stateMachine;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
@@ -84,9 +84,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             
             _cameraFunctionalities = cameraFunctionalities;
+
+            OnVoidChecker = onVoidChecker;
             
-            _anchorPhysics.DisableTension();
-            _anchorChain.DisableTension();
             
             _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(),
                 ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
@@ -111,7 +111,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorMotion.SetRotation(rotation);
         }
 
-        
+        public void DisableChainTensionForDuration(float duration)
+        {
+            _anchorChain.DisableTensionForDuration(duration).Forget();
+        }
         
         public void SetThrown(AnchorThrowResult anchorThrowResult)
         {
@@ -131,7 +134,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorAudio.PlayThrowSound();
         }
         
-        public void SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
+        public async UniTaskVoid SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealVerticalLandDamage(anchorThrowResult);
@@ -144,6 +147,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlayVerticalHitAnimation(anchorThrowResult.Duration, floorHit).Forget();
             
             _anchorAudio.PlayThrowSound();
+            
+            
+            DestructiblePlatformBreaker.SetEnabled(true);
+            DestructiblePlatformBreaker.SetBreakInstantlyMode();
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
+            DestructiblePlatformBreaker.SetEnabled(false);
         }
         
         

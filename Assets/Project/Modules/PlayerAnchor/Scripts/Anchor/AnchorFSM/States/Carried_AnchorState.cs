@@ -17,15 +17,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
         {
             float distance = Vector3.Distance(_blackboard.TransformMotion.Position,
                 _blackboard.AnchorCarryHolder.position);
+
+            float duration = Mathf.Min(0.05f * distance, _blackboard.AnchorMotionConfig.MaxCarriedDuration); 
             
             _blackboard.TransformMotion.ParentAndUpdate(_blackboard.AnchorCarryHolder,
                 Vector3.zero, _blackboard.AnchorMotionConfig.CarriedAnchorRotation,
-                0.05f * distance, Ease.InOutSine);
+                duration, Ease.InOutSine);
                 
             
-            _blackboard.AnchorPhysics.DisableTension();
+            _blackboard.AnchorPhysics.DisableCollision();
             
             _blackboard.AnchorChain.SetCarriedView();
+            
+            _blackboard.AnchorChain.DisableTension();
+            _blackboard.AnchorPhysics.DisableCollision();
         }
 
         public void Exit()
