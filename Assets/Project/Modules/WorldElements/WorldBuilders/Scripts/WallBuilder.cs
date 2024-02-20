@@ -1,7 +1,6 @@
 using System;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.WorldBuilders
 {
@@ -81,6 +80,15 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             {
                 FillWalls();
                 CreateFakeMesh();
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = _config.EditorView.FillLineColor;
+            for (int i = 1; i < _points.Length; ++i)
+            {
+                Gizmos.DrawLine(transform.TransformPoint(_points[i-1]), transform.TransformPoint(_points[i]));
             }
         }
 

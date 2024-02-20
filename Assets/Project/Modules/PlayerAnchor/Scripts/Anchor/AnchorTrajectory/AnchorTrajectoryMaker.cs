@@ -70,7 +70,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 _debugLine3.positionCount = trajectory2.Length;
                 _debugLine3.SetPositions(trajectory2);
             }
-
         }
 
         
@@ -263,24 +262,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             }
         }
 
-        private void MakeTrajectoryFromCurve(Vector3[] trajectoryPoints, QuadraticBezierCurve curve,
-            out float trajectoryDistance)
-        {
-            trajectoryPoints[0] = curve.GetPoint(0);
-            
-            trajectoryDistance = 0f;
-
-            float tStep = 1.0f / (trajectoryPoints.Length - 1);
-            
-            for (int i = 1; i < trajectoryPoints.Length; ++i)
-            {
-                trajectoryPoints[i] = curve.GetPoint(tStep * i);
-
-                trajectoryDistance += Vector3.Distance(trajectoryPoints[i - 1], trajectoryPoints[i]);
-            }
-            
-        }
-
         private void RemakeTrajectoryEnd(Vector3[] trajectoryPoints, Vector3 endPosition,
             float currentTrajectoryDistance, out float updatedTrajectoryDistance)
         {
@@ -395,8 +376,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _pointsCurve.P1 = firstPointControl;
             _pointsCurve.P2 = lastPointControl;
             _pointsCurve.P3 = snapTargetPosition;
-
-            MakeTrajectoryFromCurve(trajectoryPoints, _pointsCurve, out trajectoryDistance);
+            
+            _pointsCurve.FillPointsFromCurve(trajectoryPoints, out trajectoryDistance);
         }
 
         private bool RemakeTrajectoryAfterCollisionHit(Vector3[] trajectoryPoints, int lastIndexBeforeCollision,
