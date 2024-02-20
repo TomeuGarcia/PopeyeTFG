@@ -21,7 +21,6 @@ namespace Popeye.Modules.VFX.Testing
         private void Awake()
         {
             _sceneLightingColors.Insert(0, RenderSettings.ambientLight);
-            Debug.Log(RenderSettings.ambientLight);
         }
 
         void Update()
@@ -51,8 +50,9 @@ namespace Popeye.Modules.VFX.Testing
         {
             _currentColorIndex = (_currentColorIndex + indexDisplacement) % _sceneLightingColors.Count;
             if (_currentColorIndex == -1) { _currentColorIndex = _sceneLightingColors.Count - 1; }
-            Debug.Log(_currentColorIndex);
             RenderSettings.ambientLight = _sceneLightingColors[_currentColorIndex];
+            
+            Debug.Log("Current light color index: " + _currentColorIndex);
         }
     }
 }
