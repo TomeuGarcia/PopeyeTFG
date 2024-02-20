@@ -48,8 +48,7 @@ namespace Popeye.Modules.VFX.Testing
 
         private void UpdateLight(int indexDisplacement)
         {
-            _currentColorIndex = (_currentColorIndex + indexDisplacement) % _sceneLightingColors.Count;
-            if (_currentColorIndex == -1) { _currentColorIndex = _sceneLightingColors.Count - 1; }
+            _currentColorIndex = (_currentColorIndex + indexDisplacement + _sceneLightingColors.Count) % _sceneLightingColors.Count;
             RenderSettings.ambientLight = _sceneLightingColors[_currentColorIndex];
             
             Debug.Log("Current light color index: " + _currentColorIndex);
