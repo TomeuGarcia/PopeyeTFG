@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4075138981284743871}
+  - component: {fileID: 9027568205825936884}
   m_Layer: 0
   m_Name: Lighting
   m_TagString: Untagged
@@ -33,6 +34,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9027568205825936884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7475104475800612250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba3b053b63ccc44cbb34c0b67a015e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _directionalLight: {fileID: 3794559101565112897}
+  _cookieScale: {x: 100, y: 0, z: 100}
+  _cookieScrollSpeed: {x: 1.1, y: 0, z: -0.6}
+  _sceneLightingColors:
+  - {r: 0.43316126, g: 0.4923786, b: 0.5849056, a: 0}
+  - {r: 0.26517445, g: 0.4572529, b: 0.5566038, a: 0}
+  - {r: 0.4221698, g: 0.473467, b: 0.5, a: 0}
+  - {r: 0.38047346, g: 0.4716981, b: 0.4240125, a: 0}
+  - {r: 0.2798149, g: 0.391039, b: 0.4528302, a: 0}
+  - {r: 0.2784314, g: 0.32458603, b: 0.4509804, a: 0}
+  - {r: 0.18569775, g: 0.23539595, b: 0.3679245, a: 0}
 --- !u!1 &7613815324098371921
 GameObject:
   m_ObjectHideFlags: 0
