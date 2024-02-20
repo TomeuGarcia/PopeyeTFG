@@ -34,6 +34,7 @@ namespace Popeye.Modules.VFX.Anchor.Generic
         [SerializeField] private float _throwTrailSpawnDelay = 0.2f;
         [SerializeField] private float _throwTrailFallnDelay = 0.05f;
         [SerializeField] private float _retrieveTrailSpawnDelay = 0.2f;
+        [SerializeField] private float _fallImpactDelay = 0.075f;
 
         public ParticleTypes RetrieveTrailParticleType => _retrieveTrailParticleType;
         public ParticleTypes ThrowTrailParticleType => _throwTrailParticleType;
@@ -53,6 +54,7 @@ namespace Popeye.Modules.VFX.Anchor.Generic
         public Vector3 SlamTrailFlipOffset => new Vector3(-_slamTrailOffset.x, -_slamTrailOffset.y, _slamTrailOffset.z);
         public float ThrowTrailSpawnDelay => _throwTrailSpawnDelay;
         public float ThrowTrailFallnDelay => _throwTrailFallnDelay;
-        public float RetrieveTrailSpawnDelay =>_retrieveTrailSpawnDelay;
+        public float RetrieveTrailSpawnDelay => _retrieveTrailSpawnDelay;
+        public float FallImpactDelay => _fallImpactDelay;
     }
 }
