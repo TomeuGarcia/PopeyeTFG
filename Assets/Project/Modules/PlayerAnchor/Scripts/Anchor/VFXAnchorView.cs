@@ -110,7 +110,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _vfxAnchorViewConfig.ThrowTrailSpawnDelay - _vfxAnchorViewConfig.ThrowTrailFallnDelay)));
             Transform fallTrail = _particleFactory.Create(_vfxAnchorViewConfig.ThrowTrailSoftParticleType, _vfxAnchorViewConfig.ThrowTrailFallnoffset, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(_vfxAnchorViewConfig.ThrowTrailFallnDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, _vfxAnchorViewConfig.ThrowTrailFallnDelay - _vfxAnchorViewConfig.FallImpactDelay)));
+            //Insert displacement effect
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, _vfxAnchorViewConfig.FallImpactDelay)));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             fallTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
