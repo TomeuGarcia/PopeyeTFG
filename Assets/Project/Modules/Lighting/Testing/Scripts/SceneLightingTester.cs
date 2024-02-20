@@ -16,7 +16,7 @@ namespace Popeye.Modules.VFX.Testing
         
         [Header("GENERAL LIGHTING COLORS")]
         [SerializeField] private List<Color> _sceneLightingColors = new();
-        private int _currentColorIndex = 0;
+        public int _currentColorIndex = 0;
 
         private void Awake()
         {
@@ -32,6 +32,10 @@ namespace Popeye.Modules.VFX.Testing
             else if (Input.GetKeyDown(KeyCode.Alpha9))
             {
                 UpdateLight(1);
+            }
+            else
+            {
+                UpdateLight(0);
             }
 
             _directionalLight.position += _cookieScrollSpeed * Time.deltaTime;
