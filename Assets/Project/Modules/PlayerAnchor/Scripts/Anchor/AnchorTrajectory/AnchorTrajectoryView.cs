@@ -10,21 +10,60 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private readonly QuadraticBezierCurve _curve;
         private readonly Vector3[] _points;
 
+        private int LinePoints => _points.Length;
+
         public AnchorTrajectoryView(LineRenderer firstLine, LineRenderer secondLine, int linePoints)
         {
             _firstLine = firstLine;
             _secondLine = secondLine;
             _curve = new QuadraticBezierCurve();
             _points = new Vector3[linePoints];
-
-            _firstLine.positionCount = linePoints;
-            _secondLine.positionCount = linePoints;
         }
 
-        public void DrawTrajectory(Vector3[] trajectoryPoints, bool trajectoryHitsObstacle, RaycastHit obstacleHit)
+        public void Hide()
         {
-            Vector3 startPosition = trajectoryPoints[0];
-            Vector3 endPosition = trajectoryPoints[^1];
+            _firstLine.positionCount = 0;
+            _secondLine.positionCount = 0;
+        }
+
+        public void DrawTrajectory(Vector3[] trajectoryPoints, RaycastHit obstacleHit, 
+            bool trajectoryHitsObstacle, int lastIndexBeforeCollision)
+        {
+            if (trajectoryHitsObstacle)
+            {
+                DrawObstacleHitTrajectory(trajectoryPoints, obstacleHit, lastIndexBeforeCollision);
+            }
+            else
+            {
+                DrawSingleLineTrajectory(trajectoryPoints);    
+            }
+        }
+
+        private void DrawSingleLineTrajectory(Vector3[] trajectoryPoints)
+        {
+            FillLine(_firstLine, trajectoryPoints, 0, trajectoryPoints.Length - 1);
+            
+            _secondLine.positionCount = 0;
+        }
+
+        private void DrawObstacleHitTrajectory(Vector3[] trajectoryPoints, RaycastHit obstacleHit, int lastIndexBeforeCollision)
+        {
+            if (lastIndexBeforeCollision == trajectoryPoints.Length - 1)
+            {
+                DrawSingleLineTrajectory(trajectoryPoints);
+                return;
+            }
+            
+            FillLine(_firstLine, trajectoryPoints, 0, lastIndexBeforeCollision);
+            FillLine(_secondLine, trajectoryPoints, lastIndexBeforeCollision + 1, trajectoryPoints.Length-1);
+        }
+        
+        
+        private void FillLine(LineRenderer line, Vector3[] trajectoryPoints, 
+            int trajectoryStartIndex, int trajectoryLastIndex)
+        {
+            Vector3 startPosition = trajectoryPoints[trajectoryStartIndex];
+            Vector3 endPosition = trajectoryPoints[trajectoryLastIndex];
             Vector3 startToEndDirection = (startPosition - endPosition).normalized;
             Vector3 lastPointControl = endPosition + startToEndDirection;
             lastPointControl.y = startPosition.y;
@@ -35,8 +74,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _curve.P2 = lastPointControl;
             _curve.P3 = endPosition;
             
-            _curve.FillPointsFromCurve(_points, out float dist);
-            _firstLine.SetPositions(_points);
+            int numberOfPositions = (trajectoryLastIndex - trajectoryStartIndex) + 1;
+            Vector3[] points = new Vector3[numberOfPositions];
+            
+            _curve.FillPointsFromCurve(points, out float dist);
+            
+            line.positionCount = numberOfPositions;
+            line.SetPositions(points);
         }
+        
     }
 }

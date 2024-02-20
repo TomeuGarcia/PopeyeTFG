@@ -145,18 +145,18 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public Vector3[] ComputeUpdatedTrajectory(Vector3 startPosition, Vector3 direction, Vector3 floorNormal,
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance,
             out bool trajectoryEndsOnTheFloor,
-            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             return DoComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
-                out obstacleHit, out trajectoryHitsObstacle);
+                out obstacleHit, out trajectoryHitsObstacle, out lastIndexBeforeCollision);
         }
         
         public Vector3[] ComputeUpdatedTrajectoryWithAutoAim(Vector3 startPosition, Vector3 direction, Vector3 floorNormal, 
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance, out bool trajectoryEndsOnTheFloor, 
             out IAnchorTrajectorySnapTarget snapTarget, out bool validSnapTarget, 
-            out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             
@@ -170,6 +170,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                     trajectoryEndsOnTheFloor = true;
                     obstacleHit = default;
                     trajectoryHitsObstacle = false;
+                    lastIndexBeforeCollision = -1;
                     
                     return _curvedTrajectoryPoints;
                 }
@@ -178,20 +179,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             validSnapTarget = false;
             return ComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
-                out obstacleHit, out trajectoryHitsObstacle);
+                out obstacleHit, out trajectoryHitsObstacle, out lastIndexBeforeCollision);
         }
 
         private Vector3[] DoComputeUpdatedTrajectory(Vector3 startPosition, Vector3 direction, Vector3 floorNormal,
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance,
             out bool trajectoryEndsOnTheFloor,
-            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeCurvedTrajectory(_curvedTrajectoryPoints, startPosition, direction, distance, 
                 floorNormal, heightOffsetCurve, out trajectoryDistance);
 
             
             bool obstacleInTheWayOfTheTrajectory =
-                CheckFirstHitInTrajectory(_curvedTrajectoryPoints, 0.1f, out int lastIndexBeforeCollision,
+                CheckFirstHitInTrajectory(_curvedTrajectoryPoints, 0.1f, out lastIndexBeforeCollision,
                     out obstacleHit, ObstaclesLayerMask, QueryTriggerInteraction.Ignore);
             if (obstacleInTheWayOfTheTrajectory)
             {
