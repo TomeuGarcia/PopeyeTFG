@@ -25,16 +25,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private AnchorPullConfig _anchorPullConfig;
 
         private QuadraticBezierCurve _pointsCurve;
-
-        private LineRenderer _debugLine;
-        private LineRenderer _debugLine2;
-        private LineRenderer _debugLine3;
-
-        public bool drawDebugLines = false;
+        
         
         public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
             ObstacleProbingConfig obstacleProbingConfig, AnchorPullConfig anchorPullConfig,
-            LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3)
+            int numberOfPoints)
         {
             _trajectoryEndSpot = trajectoryEndSpot;
             _obstacleProbingConfig = obstacleProbingConfig;
@@ -43,47 +38,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _trajectoryEndSpot.Hide();
             
             _straightLineTrajectoryPoints = new Vector3[2];
-            _curvedTrajectoryPoints = new Vector3[20];
+            _curvedTrajectoryPoints = new Vector3[numberOfPoints];
             
-            
-            _debugLine = debugLine;
-            _debugLine2 = debugLine2;
-            _debugLine3 = debugLine3;
 
             _pointsCurve = new QuadraticBezierCurve();
         }
-
-        public void DrawDebugLines()
-        {
-            DrawDebugLines(_straightLineTrajectoryPoints, _curvedTrajectoryPoints);
-        }
-        private void DrawDebugLines(Vector3[] trajectory1, Vector3[] trajectory2, Vector3[] trajectory3 = null)
-        {
-            _debugLine.positionCount = trajectory1.Length;
-            _debugLine.SetPositions(trajectory1);
-            
-            _debugLine2.positionCount = trajectory2.Length;
-            _debugLine2.SetPositions(trajectory2);
-
-            if (trajectory3 != null)
-            {
-                _debugLine3.positionCount = trajectory2.Length;
-                _debugLine3.SetPositions(trajectory2);
-            }
-
-        }
-
         
         
         public void ShowTrajectoryEndSpot()
         {
             _trajectoryEndSpot.Show();
-            _debugLine2.gameObject.SetActive(true);
         }
         public void HideTrajectoryEndSpot()
         {
             _trajectoryEndSpot.Hide();
-            _debugLine2.gameObject.SetActive(false);
         }
 
 
@@ -146,18 +114,18 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public Vector3[] ComputeUpdatedTrajectory(Vector3 startPosition, Vector3 direction, Vector3 floorNormal,
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance,
             out bool trajectoryEndsOnTheFloor,
-            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             return DoComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
-                out obstacleHit, out trajectoryHitsObstacle);
+                out obstacleHit, out trajectoryHitsObstacle, out lastIndexBeforeCollision);
         }
         
         public Vector3[] ComputeUpdatedTrajectoryWithAutoAim(Vector3 startPosition, Vector3 direction, Vector3 floorNormal, 
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance, out bool trajectoryEndsOnTheFloor, 
             out IAnchorTrajectorySnapTarget snapTarget, out bool validSnapTarget, 
-            out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             
@@ -171,6 +139,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                     trajectoryEndsOnTheFloor = true;
                     obstacleHit = default;
                     trajectoryHitsObstacle = false;
+                    lastIndexBeforeCollision = -1;
                     
                     return _curvedTrajectoryPoints;
                 }
@@ -179,20 +148,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             validSnapTarget = false;
             return ComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
-                out obstacleHit, out trajectoryHitsObstacle);
+                out obstacleHit, out trajectoryHitsObstacle, out lastIndexBeforeCollision);
         }
 
         private Vector3[] DoComputeUpdatedTrajectory(Vector3 startPosition, Vector3 direction, Vector3 floorNormal,
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance,
             out bool trajectoryEndsOnTheFloor,
-            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeCurvedTrajectory(_curvedTrajectoryPoints, startPosition, direction, distance, 
                 floorNormal, heightOffsetCurve, out trajectoryDistance);
 
             
             bool obstacleInTheWayOfTheTrajectory =
-                CheckFirstHitInTrajectory(_curvedTrajectoryPoints, 0.1f, out int lastIndexBeforeCollision,
+                CheckFirstHitInTrajectory(_curvedTrajectoryPoints, 0.1f, out lastIndexBeforeCollision,
                     out obstacleHit, ObstaclesLayerMask, QueryTriggerInteraction.Ignore);
             if (obstacleInTheWayOfTheTrajectory)
             {
@@ -261,24 +230,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
                 trajectoryDistance += offset;
             }
-        }
-
-        private void MakeTrajectoryFromCurve(Vector3[] trajectoryPoints, QuadraticBezierCurve curve,
-            out float trajectoryDistance)
-        {
-            trajectoryPoints[0] = curve.GetPoint(0);
-            
-            trajectoryDistance = 0f;
-
-            float tStep = 1.0f / (trajectoryPoints.Length - 1);
-            
-            for (int i = 1; i < trajectoryPoints.Length; ++i)
-            {
-                trajectoryPoints[i] = curve.GetPoint(tStep * i);
-
-                trajectoryDistance += Vector3.Distance(trajectoryPoints[i - 1], trajectoryPoints[i]);
-            }
-            
         }
 
         private void RemakeTrajectoryEnd(Vector3[] trajectoryPoints, Vector3 endPosition,
@@ -395,8 +346,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _pointsCurve.P1 = firstPointControl;
             _pointsCurve.P2 = lastPointControl;
             _pointsCurve.P3 = snapTargetPosition;
-
-            MakeTrajectoryFromCurve(trajectoryPoints, _pointsCurve, out trajectoryDistance);
+            
+            _pointsCurve.FillPointsFromCurve(trajectoryPoints, out trajectoryDistance);
         }
 
         private bool RemakeTrajectoryAfterCollisionHit(Vector3[] trajectoryPoints, int lastIndexBeforeCollision,

@@ -23,6 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             WaitForSpawnToFinish().Forget();
             _blackboard.PlayerMediator.SetMaxMovementSpeed(0);
             _blackboard.PlayerMediator.SetCanRotate(false);
+            _blackboard.PlayerMediator.ResetTargetForCamera();
         }
 
         public override void Exit()

@@ -4,11 +4,13 @@ namespace Popeye.Modules.VFX.Generic
     {
         EnemyOnHitWave,
         EnemyOnHitSplatter,
-        AnchorCarryTrail,
+        AnchorRetrieveTrail,
         AnchorThrowTrail,
         AnchorThrowHead,
         AnchorSlamHead,
         AnchorSlamGroundHit,
-        AnchorSlamGroundDecal
+        AnchorSlamGroundDecal,
+        AnchorHitGroundDecal,
+        AnchorThrowSoftTrail
     }
 }

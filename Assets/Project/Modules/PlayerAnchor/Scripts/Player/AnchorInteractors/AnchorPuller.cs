@@ -31,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _pullConfig = pullConfig;
 
             AnchorPullResult = new AnchorThrowResult(_pullConfig.MoveInterpolationCurve,
-                _pullConfig.MoveInterpolationCurve);
+                _pullConfig.RotateInterpolationCurve);
         }
 
 
@@ -49,8 +49,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Vector3[] trajectoryPath = _anchorTrajectoryMaker.ComputeCurvedTrajectory(anchorPosition, 
                 playerPosition, 10, out float trajectoryDistance);
             float duration = ComputePullDuration(trajectoryDistance);
+
+            Vector3 currentForward = _anchor.Forward;
+            Vector3 goalForward = -pullDirection;
             
-            AnchorPullResult.Reset(trajectoryPath, pullDirection, Quaternion.identity, Quaternion.identity, 
+            
+            Quaternion startRotation = _anchor.Rotation;
+
+            Vector3 forwardRotationAxis = Vector3.Cross(currentForward, goalForward).normalized;
+            float forwardRotationAngle = Mathf.Acos(Vector3.Dot(currentForward, goalForward)) * Mathf.Rad2Deg;
+            Quaternion forwardOffsetRotation = Quaternion.AngleAxis(forwardRotationAngle, forwardRotationAxis);
+            Quaternion endRotation = forwardOffsetRotation * startRotation;
+            
+
+            AnchorPullResult.Reset(trajectoryPath, pullDirection, startRotation, endRotation, 
                 duration, false);
 
             
@@ -60,8 +72,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private async UniTaskVoid DoPullAnchor(AnchorThrowResult anchorPullResult)
         {
-
-            
             _anchorIsBeingPulled = true;
             await UniTask.Delay(TimeSpan.FromSeconds(anchorPullResult.Duration));
             

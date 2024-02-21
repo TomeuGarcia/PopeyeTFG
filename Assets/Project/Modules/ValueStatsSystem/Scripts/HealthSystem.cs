@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Popeye.Modules.ValueStatSystem
@@ -19,13 +20,16 @@ namespace Popeye.Modules.ValueStatSystem
             get { return _isInvulnerable; } 
             set { _isInvulnerable = value;}
         }
-    
-    
+        private Queue<float> _queuedInvulnerableDurations;
+
+
         public HealthSystem(int maxHealth)
         {
             _maxHealth = maxHealth;
             _currentHealth = maxHealth;
             _isInvulnerable = false;
+
+            _queuedInvulnerableDurations = new Queue<float>(3);
         }
     
     
@@ -79,16 +83,31 @@ namespace Popeye.Modules.ValueStatSystem
         {
             _isInvulnerable = isInvulnerable;
         }
-        public async void SetInvulnerableForDuration(float duration, bool setVulnerableEvenIfDead = false)
+        public void SetInvulnerableForDuration(float duration)
+        {
+            bool alreadyProcessingInvulnerableForDuration = _queuedInvulnerableDurations.Count > 0;
+            _queuedInvulnerableDurations.Enqueue(duration);
+            
+            if (alreadyProcessingInvulnerableForDuration)
+            {
+                return;
+            }
+            
+            ProcessInvulnerableForDuration().Forget();
+        }
+
+        private async UniTaskVoid ProcessInvulnerableForDuration()
         {
             SetInvulnerable(true);
-    
-            await Task.Delay(TimeSpan.FromSeconds(duration));
-    
-            if (!IsDead() || setVulnerableEvenIfDead)
+            
+            while (_queuedInvulnerableDurations.Count > 0)
             {
-                SetInvulnerable(false);
-            }        
+                await Task.Delay(TimeSpan.FromSeconds(_queuedInvulnerableDurations.Peek()));
+
+                _queuedInvulnerableDurations.Dequeue();
+            }
+            
+            SetInvulnerable(false); 
         }
     
         public override float GetValuePer1Ratio()

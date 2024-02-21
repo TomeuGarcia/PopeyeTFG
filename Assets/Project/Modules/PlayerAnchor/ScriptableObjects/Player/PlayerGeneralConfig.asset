@@ -12,11 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8ad3a82442483d8288f53edd72363a, type: 3}
   m_Name: PlayerGeneralConfig
   m_EditorClassIdentifier: 
+  _isTutorial: 0
   _maxHealth: 100
   _potionHealAmount: 30
+  _invulnerableDurationAfterHit: 1
   _playerMovesetConfig: {fileID: 11400000, guid: e065df1b0ca8c5046a8ba8d6bf58e49c,
     type: 2}
   _playerStatesConfig: {fileID: 11400000, guid: 496b9998974105540925c59743ad07e8,
     type: 2}
   _playerStaminaConfig: {fileID: 11400000, guid: f27082ed321ee93429f68d65295b9719,
     type: 2}
+  _safeGroundProbingConfig: {fileID: 11400000, guid: fe781d398af7571499f4602c4acaeaf8,
+    type: 2}
+  _onVoidProbingConfig: {fileID: 11400000, guid: 262a972c72a790743a028568c17665a8,
+    type: 2}
+  _voidFallDamageConfig: {fileID: 11400000, guid: 9aef6e30c92914040a0f35447a8c2453,
+    type: 2}
+  _notSafeGroundType: {fileID: 11400000, guid: 30b9036eda8cb6142bab2e15d363ddbe, type: 2}
+  _respawnFromVoidPositionOffset: {x: 0, y: 2, z: 0}
