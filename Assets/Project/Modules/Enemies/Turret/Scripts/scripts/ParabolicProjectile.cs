@@ -5,7 +5,9 @@ using Cysharp.Threading.Tasks;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
+using Popeye.Scripts.Collisions;
 using Unity.Mathematics;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ParabolicProjectile : RecyclableObject
@@ -18,7 +20,7 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] private float _height;
     [SerializeField] private float speed;
     private Transform _playerTransform;
-    [SerializeField] private GameObject bulletBody;
+    [SerializeField] private MeshRenderer bulletBody;
     private bool shoot = false;
     private bool aiming = false;
 
@@ -30,7 +32,7 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] private Material _lineShootingMat;
     
     [SerializeField] private GameObject _damageableArea;
-    
+    [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
     private void Update()
     {
         if (_playerTransform != null)
@@ -47,13 +49,13 @@ public class ParabolicProjectile : RecyclableObject
             {
                 
                 CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
-                DrawPath(groundDirection.normalized, v0, angle, time, _step);
+                //DrawPath(groundDirection.normalized, v0, angle, time, _step);
                 if (shoot)
                 {
                     shoot = false;
                     aiming = false;
                     //float angle = _angle * Mathf.Deg2Rad;
-                    bulletBody.SetActive(true);
+                    bulletBody.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
             }
@@ -69,9 +71,9 @@ public class ParabolicProjectile : RecyclableObject
         _firePoint = firePoint;
         aiming = false;
         _playerTransform = playerTransform;
-        _line.enabled = false;
+        //_line.enabled = false;
         _line.material = _lineAimingMat;
-        bulletBody.SetActive(false);
+        bulletBody.enabled = false;
         gameObject.SetActive(true);
     }
 
@@ -83,7 +85,7 @@ public class ParabolicProjectile : RecyclableObject
 
     public void StartAiming()
     {
-        _line.enabled = true;
+        //_line.enabled = true;
         aiming = true;
     }
     public void Shoot()
@@ -171,20 +173,19 @@ public class ParabolicProjectile : RecyclableObject
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.transform.tag != "Enemy")
-        { 
+        
+            Debug.Log(other.transform.name);
             _contactDamageHit.DamageSourcePosition = transform.position;
             _contactDamageHit.UpdateKnockbackPushDirection(PositioningHelper.Instance.GetDirectionAlignedWithFloor(transform.position, other.transform.position));
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
-            bulletBody.SetActive(false);
+            bulletBody.enabled = false;
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down ), out hit, 1.5f) && hit.transform.tag != "Player")
+            if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
             {
                 var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
                 Instantiate(_damageableArea, hit.point, startRot);
             }
             Recycle();
-        }
     }
 
     internal override void Release()

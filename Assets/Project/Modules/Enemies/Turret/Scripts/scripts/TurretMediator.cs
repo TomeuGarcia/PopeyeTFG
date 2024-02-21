@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
@@ -17,9 +18,11 @@ namespace Popeye.Modules.Enemies
         
         private Core.Pool.ObjectPool _projectilePool;
         private TurretMindEnemy _turretMind;
-
+        [SerializeField] private ParabolicProjectile _parabolicProjectile;
         internal override void Init()
         {
+            _projectilePool = new ObjectPool(_parabolicProjectile);
+            _projectilePool.Init(15);
             _turretShooting.Configure(this,_projectilePool,playerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
@@ -57,9 +60,8 @@ namespace Popeye.Modules.Enemies
 
         public override void OnDeath(DamageHit damageHit)
         {
-            base.OnDeath(damageHit);
             _turretMind.Die();
-            Recycle();
+            _enemyVisuals.PlayDeathEffects(damageHit);
         }
     }
 }

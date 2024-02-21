@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 19295844562393105}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: BulletSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,9 @@ GameObject:
   - component: {fileID: 5585137727194799300}
   - component: {fileID: 6891017323650486759}
   - component: {fileID: 4656662251084337943}
-  m_Layer: 0
+  - component: {fileID: 1156818105874790195}
+  - component: {fileID: 386968618821554870}
+  m_Layer: 11
   m_Name: ParabolicTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +70,7 @@ Transform:
   m_Children:
   - {fileID: 19295844562393105}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2709943792336354793
 MeshFilter:
@@ -178,6 +180,8 @@ MonoBehaviour:
   _enemyHealth: {fileID: 4656662251084337943}
   _enemyVisuals: {fileID: 6891017323650486759}
   _turretShooting: {fileID: 4154660649507637291}
+  _parabolicProjectile: {fileID: 7378326224867316411, guid: 4e338e253182bdf49a70eaa39a367679,
+    type: 3}
 --- !u!114 &6891017323650486759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,5 +211,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 50
-  _knockbackRigidbody: {fileID: 0}
+  _knockbackRigidbody: {fileID: 1156818105874790195}
   _knockbackEffectiveness: 0
+--- !u!54 &1156818105874790195
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8057627024655104793}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 126
+  m_CollisionDetection: 1
+--- !u!114 &386968618821554870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8057627024655104793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27d1112c39bceee42bf304a760413899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: {fileID: 11400000, guid: 6a5b2670b18abdb4e8d0c143fed48ec0, type: 2}
+  _transform: {fileID: 2118420718226513159}
+  _parabolicProjectile: {fileID: 7378326224867316411, guid: 4e338e253182bdf49a70eaa39a367679,
+    type: 3}
+  _turretMediator: {fileID: 5585137727194799300}

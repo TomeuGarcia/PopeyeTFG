@@ -11,11 +11,10 @@ namespace Popeye.Modules.Enemies
     public class TurretMindEnemy : AEnemy
     {
         [SerializeField] private Transform _transform;
-        [SerializeField] private GameObject _turret;
-        
+
         private Core.Pool.ObjectPool _projectilePool;
         [SerializeField] private ParabolicProjectile _parabolicProjectile;
-        private TurretMediator _turretMediator;
+        [SerializeField] private TurretMediator _turretMediator;
         
         private void Start()
         {
@@ -26,12 +25,9 @@ namespace Popeye.Modules.Enemies
         public void Die()
         {
             InvokeOnDeathComplete();
-            Recycle();
         }
         private void InstantiateTurret()
         {
-            GameObject go = Instantiate(_turret, _transform);
-            _turretMediator = go.GetComponent<TurretMediator>();
             _turretMediator.SetTurretMind(this);
             _turretMediator.SetObjectPool(_projectilePool);
             if (_attackTarget != null)
