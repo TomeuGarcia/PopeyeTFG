@@ -17,7 +17,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private AnchorTrajectorySnapController _anchorTrajectorySnapController;
 
-        private AnchorTrajectoryView _trajectoryView;
+        private IAnchorTrajectoryView _trajectoryView;
         
         
         private float _currentThrowForce01;
@@ -41,8 +41,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrowConfig throwConfig, AnchorThrowConfig verticalThrowConfig,
-            AnchorTrajectorySnapController anchorTrajectorySnapController
-            /*AnchorTrajectoryView trajectoryView*/)
+            AnchorTrajectorySnapController anchorTrajectorySnapController,
+            IAnchorTrajectoryView trajectoryView)
         {
             _player = player;
             _anchor = anchor;
@@ -50,7 +50,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _verticalThrowConfig = verticalThrowConfig;
             _throwConfig = throwConfig;
             _anchorTrajectorySnapController = anchorTrajectorySnapController;
-            /*_trajectoryView = trajectoryView;*/
+            _trajectoryView = trajectoryView;
 
             AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve,
                 _throwConfig.RotateInterpolationCurve);
@@ -119,7 +119,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 
             }
 
-            _anchorTrajectoryMaker.DrawDebugLines(); // TODO remove this line once AnchorTrajectoryView works
+            //_anchorTrajectoryMaker.DrawDebugLines(); // TODO remove this line once AnchorTrajectoryView works
             _trajectoryView.DrawTrajectory(trajectoryPoints, obstacleHit, trajectoryHitsObstacle, lastIndexBeforeCollision);
         }
         
@@ -133,6 +133,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _anchor.SetThrown(AnchorThrowResult);
             DoThrowAnchor(AnchorThrowResult).Forget();
+            
+            _trajectoryView.Hide();
         }
 
         public void ThrowAnchorVertically()

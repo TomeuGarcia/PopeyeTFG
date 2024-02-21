@@ -34,7 +34,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
             ObstacleProbingConfig obstacleProbingConfig, AnchorPullConfig anchorPullConfig,
-            LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3)
+            LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3,
+            int numberOfPoints)
         {
             _trajectoryEndSpot = trajectoryEndSpot;
             _obstacleProbingConfig = obstacleProbingConfig;
@@ -43,7 +44,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _trajectoryEndSpot.Hide();
             
             _straightLineTrajectoryPoints = new Vector3[2];
-            _curvedTrajectoryPoints = new Vector3[20];
+            _curvedTrajectoryPoints = new Vector3[numberOfPoints];
             
             
             _debugLine = debugLine;

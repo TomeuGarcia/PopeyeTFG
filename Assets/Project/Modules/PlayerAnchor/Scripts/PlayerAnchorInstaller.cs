@@ -60,6 +60,8 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private Transform _anchorMoveTransform;
         [SerializeField] private InterfaceReference<IAnchorAudio, MonoBehaviour> _anchorAudioRef;
+        [SerializeField] private LineRenderer _anchorTrajectoryLine1;
+        [SerializeField] private LineRenderer _anchorTrajectoryLine2;
 
         
         [Header("Anchor Damage")] 
@@ -131,17 +133,20 @@ namespace Popeye.Modules.PlayerAnchor
             AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
             IAnchorAudio anchorAudio = _anchorAudioRef.Value;
             IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchorMoveTransform, _anchorGeneralConfig.OnVoidProbingConfig);
+            IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
+                _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
+                _anchorGeneralConfig.TrajectoryConfig.ViewConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
-                anchorTrajectorySnapController);
+                anchorTrajectorySnapController, anchorTrajectoryView);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
-                _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
+                _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);

@@ -3,21 +3,38 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
-    public class AnchorTrajectoryView
+    public class BezierAnchorTrajectoryView : IAnchorTrajectoryView
     {
+        private readonly AnchorTrajectoryViewConfig _config;
         private readonly LineRenderer _firstLine;
         private readonly LineRenderer _secondLine;
         private readonly QuadraticBezierCurve _curve;
         private readonly Vector3[] _points;
 
-        private int LinePoints => _points.Length;
+        private int FullNumberOfLinePoints => _points.Length;
 
-        public AnchorTrajectoryView(LineRenderer firstLine, LineRenderer secondLine, int linePoints)
+        public BezierAnchorTrajectoryView(LineRenderer firstLine, LineRenderer secondLine, 
+            AnchorTrajectoryViewConfig config, int linePoints)
         {
+            _config = config;
+            
             _firstLine = firstLine;
+            InitLine(_firstLine);
+            
             _secondLine = secondLine;
+            InitLine(_secondLine);
+            
             _curve = new QuadraticBezierCurve();
             _points = new Vector3[linePoints];
+        }
+
+        private void InitLine(LineRenderer line)
+        {
+            line.widthCurve = _config.WidthCurve; 
+            line.widthMultiplier = _config.WidthMultiplier; 
+            line.material = _config.TrajectoryMaterial;
+            line.alignment = _config.Alignment;
+            line.textureMode = _config.TextureMode;
         }
 
         public void Hide()
@@ -29,7 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void DrawTrajectory(Vector3[] trajectoryPoints, RaycastHit obstacleHit, 
             bool trajectoryHitsObstacle, int lastIndexBeforeCollision)
         {
-            if (trajectoryHitsObstacle)
+            if (trajectoryHitsObstacle && lastIndexBeforeCollision > -1)
             {
                 DrawObstacleHitTrajectory(trajectoryPoints, obstacleHit, lastIndexBeforeCollision);
             }
@@ -48,14 +65,15 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private void DrawObstacleHitTrajectory(Vector3[] trajectoryPoints, RaycastHit obstacleHit, int lastIndexBeforeCollision)
         {
-            if (lastIndexBeforeCollision == trajectoryPoints.Length - 1)
+            Debug.Log(lastIndexBeforeCollision);
+            if (lastIndexBeforeCollision == trajectoryPoints.Length)
             {
                 DrawSingleLineTrajectory(trajectoryPoints);
                 return;
             }
             
             FillLine(_firstLine, trajectoryPoints, 0, lastIndexBeforeCollision);
-            FillLine(_secondLine, trajectoryPoints, lastIndexBeforeCollision + 1, trajectoryPoints.Length-1);
+            FillLine(_secondLine, trajectoryPoints, lastIndexBeforeCollision, trajectoryPoints.Length-1);
         }
         
         
@@ -75,12 +93,22 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _curve.P3 = endPosition;
             
             int numberOfPositions = (trajectoryLastIndex - trajectoryStartIndex) + 1;
-            Vector3[] points = new Vector3[numberOfPositions];
+            Vector3[] points = CreatePositionsArray(numberOfPositions);
             
             _curve.FillPointsFromCurve(points, out float dist);
             
             line.positionCount = numberOfPositions;
             line.SetPositions(points);
+        }
+
+        private Vector3[] CreatePositionsArray(int numberOfPositions)
+        {
+            if (numberOfPositions == FullNumberOfLinePoints)
+            {
+                return _points;
+            }
+
+            return new Vector3[numberOfPositions];
         }
         
     }
