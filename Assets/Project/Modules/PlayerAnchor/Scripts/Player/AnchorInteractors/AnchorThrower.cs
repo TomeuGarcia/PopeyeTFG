@@ -120,7 +120,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
 
             //_anchorTrajectoryMaker.DrawDebugLines(); // TODO remove this line once AnchorTrajectoryView works
-            _trajectoryView.DrawTrajectory(trajectoryPoints, obstacleHit, trajectoryHitsObstacle, lastIndexBeforeCollision);
+            _trajectoryView.DrawTrajectory(trajectoryPoints, trajectoryHitsObstacle, lastIndexBeforeCollision);
         }
         
         public void ThrowAnchor()
@@ -214,6 +214,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             {
                 _anchorTrajectorySnapController.RemoveCurrentAutoAimTarget();
             }
+            
+            _trajectoryView.Hide();
         }
         
         public AnchorThrowResult GetLastAnchorThrowResult()

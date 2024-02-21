@@ -1,5 +1,6 @@
 using Project.Scripts.Math.Curves;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
@@ -35,6 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             line.material = _config.TrajectoryMaterial;
             line.alignment = _config.Alignment;
             line.textureMode = _config.TextureMode;
+            line.shadowCastingMode = ShadowCastingMode.Off;
         }
 
         public void Hide()
@@ -43,12 +45,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _secondLine.positionCount = 0;
         }
 
-        public void DrawTrajectory(Vector3[] trajectoryPoints, RaycastHit obstacleHit, 
-            bool trajectoryHitsObstacle, int lastIndexBeforeCollision)
+        public void DrawTrajectory(Vector3[] trajectoryPoints, bool trajectoryHitsObstacle, int lastIndexBeforeCollision)
         {
             if (trajectoryHitsObstacle && lastIndexBeforeCollision > -1)
             {
-                DrawObstacleHitTrajectory(trajectoryPoints, obstacleHit, lastIndexBeforeCollision);
+                DrawObstacleHitTrajectory(trajectoryPoints, lastIndexBeforeCollision);
             }
             else
             {
@@ -63,9 +64,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _secondLine.positionCount = 0;
         }
 
-        private void DrawObstacleHitTrajectory(Vector3[] trajectoryPoints, RaycastHit obstacleHit, int lastIndexBeforeCollision)
+        private void DrawObstacleHitTrajectory(Vector3[] trajectoryPoints,int lastIndexBeforeCollision)
         {
-            Debug.Log(lastIndexBeforeCollision);
             if (lastIndexBeforeCollision == trajectoryPoints.Length)
             {
                 DrawSingleLineTrajectory(trajectoryPoints);
