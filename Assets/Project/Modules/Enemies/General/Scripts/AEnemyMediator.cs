@@ -21,6 +21,7 @@ namespace Popeye.Modules.Enemies
         public virtual void OnDeath(DamageHit damageHit)
         {
             _enemyVisuals.PlayDeathEffects(damageHit);
+            Recycle();
         }
 
         public abstract void OnPlayerClose();

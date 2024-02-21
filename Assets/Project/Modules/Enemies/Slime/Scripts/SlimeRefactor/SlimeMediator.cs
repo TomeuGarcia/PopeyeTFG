@@ -26,16 +26,16 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private DamageHitConfig _contactDamageHitConfig;
 
         [SerializeField] private BoxCollider _boxCollider;
-        public SlimeMindEnemy slimeMindEnemy;
+        [HideInInspector] public SlimeMindEnemy slimeMindEnemy;
         private SlimeFactory _slimeFactory;
         public Transform PlayerTransform { get; private set; }
         public SlimeSizeID SlimeSizeID { get; private set; }
         [SerializeField] private Transform _slimeTransform;
         private Transform _particlePoolParent;
         private Core.Pool.ObjectPool _objectPool;
+    
 
-
-        public override Vector3 Position => transform.position;
+        public override Vector3 Position => _slimeTransform.position;
 
         public void InitAfterSpawn()
         {
@@ -121,20 +121,19 @@ namespace Popeye.Modules.Enemies
         public void Divide()
         {
             _squashStretchAnimator.PlayDeath();
-            //_slimeDivider.SpawnSlimes();
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {
                 _slimeFactory.CreateFromParent(slimeMindEnemy,this,Position,Quaternion.identity);
             }
             slimeMindEnemy.RemoveSlimeFromList();
             _squashStretchAnimator.StopMove();
-            Destroy(gameObject);
         }
 
         public override void OnDeath(DamageHit damageHit)
         {
-            base.OnDeath(damageHit);
             Divide();
+            base.OnDeath(damageHit);
+            
         }
 
         public override void OnPlayerClose()
@@ -170,12 +169,12 @@ namespace Popeye.Modules.Enemies
 
         internal override void Init()
         {
-            throw new NotImplementedException();
+           
         }
 
         internal override void Release()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
