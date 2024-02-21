@@ -1,40 +1,137 @@
 using System;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Popeye.InverseKinematics.Bones;
+using Popeye.InverseKinematics.FABRIK;
+using Popeye.Modules.PlayerAnchor.Player;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Chain
 {
     public class AnchorChain : MonoBehaviour
     {
+        [SerializeField] private BoneChain _boneChain;
+        [SerializeField] private BoneChain _boneChainIK;
+        [SerializeField] private FABRIKControllerBehaviour _controllerIK;
         private Transform _playerBindTransform;
         private Transform _anchorBindTransform;
-        [SerializeField] private LineRenderer _chainLine;
         
         private IChainPhysics _chainPhysics;
+        private IVFXChainView _vfxChainView;
 
+        private IChainView _chainView;
         
-        public void Configure(IChainPhysics chainPhysics, Transform playerBindTransform, Transform anchorBindTransform)
+        private IChainViewLogic _currentChainViewLogic;
+        private SpiralThrowChainViewLogic _thrownChainViewLogic;
+        private SpiralThrowChainViewLogic _pullChainViewLogic;
+        private BoneChainChainViewLogic _restingOnFloorChainViewLogic;
+        private FoldingChainViewLogic _dashingTowardsChainViewLogic;
+        private SpiralThrowChainViewLogic _dashingAwayChainViewLogic;
+        private FoldingChainViewLogic _carriedChainViewLogic;
+
+
+        private Vector3 PlayerBindPosition => _playerBindTransform.position;
+        private Vector3 AnchorBindPosition => _anchorBindTransform.position;
+        
+        
+        public void Configure(IChainPhysics chainPhysics, Transform playerBindTransform, Transform anchorBindTransform,
+            ChainViewLogicGeneralConfig generalConfig)
         {
             _chainPhysics = chainPhysics;
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
+
+            generalConfig.ApplySharedMaterialToBonePrefabs();
+            
+            float boneLength = generalConfig.MaxChainLength / (generalConfig.ChainBoneCount-1);
+
+            _vfxChainView = new GhostVFXChainView(generalConfig.ObstacleCollisionProbingConfig, generalConfig.BoneSharedMaterial);
+            
+            _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
+                generalConfig.MaxChainLength, boneLength,
+                generalConfig.BonePrefab, generalConfig.BoneEndEffectorPrefab);
+            
+            _thrownChainViewLogic = 
+                new SpiralThrowChainViewLogic(generalConfig.ThrowViewLogicConfig, 
+                    generalConfig.ChainBoneCount);
+            
+            _pullChainViewLogic = 
+                new SpiralThrowChainViewLogic(generalConfig.PullViewLogicConfig, 
+                    generalConfig.ChainBoneCount);
+            
+            _restingOnFloorChainViewLogic = 
+                new BoneChainChainViewLogic(generalConfig.RestingOnFloorViewLogicConfig, 
+                    generalConfig.ChainBoneCount, _boneChainIK, _controllerIK);
+
+            _dashingTowardsChainViewLogic =
+                new FoldingChainViewLogic(generalConfig.DashingTowardsViewLogicConfig,
+                    generalConfig.ChainBoneCount);
+
+            _carriedChainViewLogic = 
+                new FoldingChainViewLogic(generalConfig.PickedUpTowardsViewLogicConfig,
+                    generalConfig.ChainBoneCount);
+
+            _dashingAwayChainViewLogic = 
+                new SpiralThrowChainViewLogic(generalConfig.DashingAwayViewLogicConfig, 
+                    generalConfig.ChainBoneCount);
+            
+            _currentChainViewLogic = _carriedChainViewLogic;
+            SetCarriedView();
+            
+            _boneChainIK.AwakeConfigure(generalConfig.ChainBoneCount, false, boneLength);
         }
 
 
         private void LateUpdate()
         {
-            _chainLine.SetPosition(0, _playerBindTransform.position);
-            _chainLine.SetPosition(1, _anchorBindTransform.position);
-        }
+            _currentChainViewLogic.UpdateChainPositions(Time.deltaTime, PlayerBindPosition, AnchorBindPosition);
 
-        public void SetThrownView()
+            Vector3[] newChainPositions = _currentChainViewLogic.GetChainPositions();
+            _chainView.Update(newChainPositions);
+            
+            newChainPositions = _chainView.GetUpdatedPositions();
+            _vfxChainView.Update(newChainPositions);
+        }
+        
+
+        public void SetThrownView(AnchorThrowResult throwResult)
         {
-            _chainLine.enabled = true;
+            _thrownChainViewLogic.EnterSetup(throwResult.Duration);
+            TransitionViewLogic(_thrownChainViewLogic);
+        }
+        public void SetPulledView(AnchorThrowResult pullResult)
+        {
+            _pullChainViewLogic.EnterSetup(pullResult.Duration);
+            TransitionViewLogic(_pullChainViewLogic);
+        }
+        public void SetRestingOnFloorView()
+        {
+            TransitionViewLogic(_restingOnFloorChainViewLogic);
         }
         public void SetCarriedView()
         {
-            _chainLine.enabled = true;
+            _carriedChainViewLogic.EnterSetup(0.15f, Ease.InOutSine);
+            TransitionViewLogic(_carriedChainViewLogic);
+        }
+        public void SetDashingTowardsView(float dashDuration, Ease dashEase)
+        {
+            _dashingTowardsChainViewLogic.EnterSetup(dashDuration, dashEase);
+            TransitionViewLogic(_dashingTowardsChainViewLogic);
+        }
+        public void SetDashingAwayView(float dashDuration, Ease dashEase)
+        {
+            _dashingAwayChainViewLogic.EnterSetup(dashDuration);
+            TransitionViewLogic(_dashingAwayChainViewLogic);
         }
 
+        private void TransitionViewLogic(IChainViewLogic newViewLogic)
+        {
+            Vector3[] previousStateChainPositions = _currentChainViewLogic.GetChainPositions();
+            _currentChainViewLogic.OnViewExit();
+            _currentChainViewLogic = newViewLogic;
+            _currentChainViewLogic.OnViewEnter(previousStateChainPositions, PlayerBindPosition, AnchorBindPosition);
+        }
+        
 
         public void EnableTension()
         {
@@ -44,6 +141,13 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public void DisableTension()
         {
             _chainPhysics.DisableTension();
+        }
+
+        public async UniTaskVoid DisableTensionForDuration(float duration)
+        {
+            DisableTension();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            EnableTension();
         }
 
         public void SetFailedThrow(bool failedThrow)

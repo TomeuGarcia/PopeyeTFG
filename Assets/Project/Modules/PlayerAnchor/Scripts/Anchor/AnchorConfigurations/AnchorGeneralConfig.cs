@@ -1,5 +1,6 @@
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
@@ -26,5 +27,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         public AnchorPullConfig PullConfig => _anchorPullConfig;
         public AnchorKickConfig KickConfig => _anchorKickConfig;
         public AnchorSpinConfig SpinConfig => _anchorSpinConfig;
+        
+        
+        [Header("GROUND / VOID checking")] 
+        [SerializeField] private CollisionProbingConfig _onVoidProbingConfig;
+        
+        public CollisionProbingConfig OnVoidProbingConfig => _onVoidProbingConfig;
     }
 }

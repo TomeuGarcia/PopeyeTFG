@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Scripts.Collisions;
 using Project.Modules.CombatSystem.KnockbackSystem;
+using Project.Modules.Installers.Scripts;
 using Project.PhysicsMovement;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
@@ -15,10 +13,18 @@ using UnityEngine;
 
 public class GameSetupInstaller : MonoBehaviour
 {
+    [Header("OBJECT TYPES")]
+    [SerializeField] private ObjectTypesInstaller _objectTypesInstaller;
+    
+    [Header("FACTORIES")]
     [SerializeField] private FactoriesInstaller _factoriesInstaller;
+    
+    [Header("PLAYER ANCHOR")]
     [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
 
+    [Header("OTHER")]
     [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
+    [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
     [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
     
     [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
@@ -36,7 +42,8 @@ public class GameSetupInstaller : MonoBehaviour
     private void Install()
     {
         CombatManagerService combatManagerService = 
-            new CombatManagerService(_hitTargetCollisionProbingConfig, new KnockbackManager(_physicsTweenerBehaviour));
+            new CombatManagerService(_hitTargetCollisionProbingConfig, 
+                new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig));
         ServiceLocator.Instance.RegisterService<ICombatManager>(combatManagerService);
 
         ITimeScaleManager timeScaleManager = new UnityTimeScaleManager();
@@ -44,6 +51,7 @@ public class GameSetupInstaller : MonoBehaviour
             new TimeFunctionalities(timeScaleManager, new HitStopManager(_hitStopManagerConfig, timeScaleManager));
         ServiceLocator.Instance.RegisterService<ITimeFunctionalities>(timeFunctionalities);
         
+        _objectTypesInstaller.Install();
         _factoriesInstaller.Install();
         _playerAnchorInstaller.Install();
     }
@@ -53,7 +61,8 @@ public class GameSetupInstaller : MonoBehaviour
         ServiceLocator.Instance.RemoveService<ICombatManager>();
         ServiceLocator.Instance.RemoveService<ITimeFunctionalities>();
         
-        _factoriesInstaller.Uninstall();
         _playerAnchorInstaller.Uninstall();
+        _factoriesInstaller.Uninstall();
+        _objectTypesInstaller.Uninstall();
     }
 }

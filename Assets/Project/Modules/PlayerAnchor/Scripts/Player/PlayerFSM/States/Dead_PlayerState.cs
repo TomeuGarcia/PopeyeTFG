@@ -21,6 +21,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             WaitForSpawnToFinish().Forget();
             _blackboard.PlayerMediator.SetMaxMovementSpeed(0);
             _blackboard.PlayerMediator.SetCanRotate(false);
+            _blackboard.PlayerMediator.PlayerView.PlayDeathAnimation();
+
         }
 
         public override void Exit()
@@ -32,7 +34,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_finishedDying)
             {
-                _blackboard.PlayerMediator.Respawn();
+                _blackboard.PlayerMediator.RespawnFromDeath();
                 NextState = PlayerStates.Spawning;
                 return true;
             }

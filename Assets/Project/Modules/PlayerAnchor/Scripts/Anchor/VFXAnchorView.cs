@@ -2,36 +2,45 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Camera.CameraShake;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.VFX.Anchor.Generic;
+using Popeye.Modules.VFX.Anchor.Throw;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.Generic.ParticleBehaviours;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class VFXAnchorView : MonoBehaviour, IAnchorView
     {
-        [Header("PARTICLE TYPES")]
-        [SerializeField] private ParticleTypes _carryTrailParticleType;
-        [SerializeField] private ParticleTypes _throwTrailParticleType;
-        [SerializeField] private ParticleTypes _throwHeadParticleType;
-        [SerializeField] private ParticleTypes _slamHeadParticleType;
-        
         [Header("REFERENCES")]
         [SerializeField] private Transform _vfxParent;
+        [SerializeField] private AnchorThrowHeadFollower _anchorThrowHeadFollower;
         [SerializeField] private Transform _specialMotionsTransform;
+
+        [Header("CONFIG")]
+        [SerializeField] private VFXAnchorViewConfig _vfxAnchorViewConfig;
         
-        [Header("PARAMETERS")]
-        [SerializeField] private Vector3 _slamTrailOffset = new Vector3(-0.8f, 0.0f, -0.1f);
-        private Vector3 _slamTrailFlipOffset;
-        
-        private IParticleFactory _particleFactory => ServiceLocator.Instance.GetService<IParticleFactory>();
+        private IParticleFactory _particleFactory;
+        private Transform _unparentedVFXHolder;
+
+        private IHitStopManager _hitStopManager;
+        private ICameraShaker _cameraShaker;
 
         private InterpolatorRecycleParticle _carryTrail;
-        
-        private void Awake()
+
+        public void Configure(IParticleFactory particleFactory, IHitStopManager hitStopManager, ICameraShaker cameraShaker)
         {
-            _slamTrailFlipOffset = new Vector3(-_slamTrailOffset.x, -_slamTrailOffset.y, _slamTrailOffset.z);
+            _particleFactory = particleFactory;
+            _unparentedVFXHolder = _particleFactory.ParticleParent;
+            _hitStopManager = hitStopManager;
+            _cameraShaker = cameraShaker;
+
+            PlayCarriedAnimation();
         }
         
         public void ResetView()
@@ -41,29 +50,30 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
 
-            _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
-            // Delete this when the able to acces specific times properly?
-            float riseTime = duration / 1.5f;
+            _particleFactory.Create(_vfxAnchorViewConfig.ThrowHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            
+            float riseTime = duration / 2.0f;
             float fallTime = duration - riseTime;
             
             await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
             PlayTwistLoopAnimation(0.01f, 2, 0.6f);
             
             await UniTask.Delay(TimeSpan.FromSeconds(riseTime / 2.0f));
-            //PlayTwistLoopAnimation(0.01f, 1, 0.3f);
-            Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
-            Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
-            _particleFactory.Create(_slamHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            _particleFactory.Create(_vfxAnchorViewConfig.SlamHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
 
             await UniTask.Delay(TimeSpan.FromSeconds(fallTime));
-            rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+            Transform groundHit = _particleFactory.Create(_vfxAnchorViewConfig.SlamGroundHitParticleType, _vfxParent.position, Quaternion.identity, _unparentedVFXHolder);
+            Transform groundDecal = _particleFactory.Create(_vfxAnchorViewConfig.SlamGroundDecalParticleType, _vfxParent.position, Quaternion.identity, _unparentedVFXHolder);
             
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
+            RaycastHit raycastHit;
+            Physics.Raycast(_vfxParent.position, Vector3.down, out raycastHit, 1.0f);
+            groundHit.up = raycastHit.normal;
+            groundDecal.up = raycastHit.normal;
+            groundDecal.RotateAround(groundDecal.up, UnityEngine.Random.Range(0.0f, 360.0f));
+            
+            _cameraShaker.PlayShake(_vfxAnchorViewConfig.ShakeConfigDamageDealt);
         }
         
         
@@ -84,36 +94,52 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public async UniTaskVoid PlayThrownAnimation(float duration)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
             
-            Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
-            Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
-            _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            Transform head = _particleFactory.Create(_vfxAnchorViewConfig.ThrowHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            
+            //Used for different way to move the effect pending of more feedback in order to make a decision
+            //_anchorThrowHeadFollower.StartFollowing();
+            //head.transform.parent = _anchorThrowHeadFollower.transform;
+            //head.transform.localPosition = Vector3.zero;
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_vfxAnchorViewConfig.ThrowTrailSpawnDelay));
+            Transform rightTrail = _particleFactory.Create(_vfxAnchorViewConfig.ThrowTrailParticleType, _vfxAnchorViewConfig.SlamTrailOffset, Quaternion.identity, _vfxParent);
+            Transform leftTrail = _particleFactory.Create(_vfxAnchorViewConfig.ThrowTrailParticleType, _vfxAnchorViewConfig.SlamTrailFlipOffset, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _vfxAnchorViewConfig.ThrowTrailSpawnDelay - _vfxAnchorViewConfig.ThrowTrailFallnDelay)));
+            Transform fallTrail = _particleFactory.Create(_vfxAnchorViewConfig.ThrowTrailSoftParticleType, _vfxAnchorViewConfig.ThrowTrailFallnoffset, Quaternion.identity, _vfxParent);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, _vfxAnchorViewConfig.ThrowTrailFallnDelay - _vfxAnchorViewConfig.FallImpactDelay)));
+            //Insert displacement effect
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, _vfxAnchorViewConfig.FallImpactDelay)));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
+            fallTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
-        }
+            Transform throwDecal = _particleFactory.Create(_vfxAnchorViewConfig.ThrowGroundDecalParticleType, _vfxParent.position, Quaternion.identity, _unparentedVFXHolder);
 
+            RaycastHit raycastHit;
+            Physics.Raycast(_vfxParent.position, Vector3.down, out raycastHit, 1.0f);
+            throwDecal.up = raycastHit.normal;
+            throwDecal.RotateAround(throwDecal.up, UnityEngine.Random.Range(0.0f, 360.0f));
+            
+            //await UniTask.Delay(TimeSpan.FromSeconds(0.25f));
+            //_anchorThrowHeadFollower.StopFollowing();
+        }
+        
         public async UniTaskVoid PlayPulledAnimation(float duration)
         {
-            //Time.timeScale = 0.2f;
             StopCarry();
             
-            Transform rightTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailOffset, Quaternion.identity, _vfxParent);
-            Transform leftTrail = _particleFactory.Create(_throwTrailParticleType, _slamTrailFlipOffset, Quaternion.identity, _vfxParent);
-            _particleFactory.Create(_throwHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            await UniTask.Delay(TimeSpan.FromSeconds(_vfxAnchorViewConfig.RetrieveTrailSpawnDelay));
+            Transform rightTrail = _particleFactory.Create(_vfxAnchorViewConfig.RetrieveTrailParticleType, _vfxAnchorViewConfig.SlamTrailOffset, Quaternion.identity, _vfxParent);
+            Transform leftTrail = _particleFactory.Create(_vfxAnchorViewConfig.RetrieveTrailParticleType, _vfxAnchorViewConfig.SlamTrailFlipOffset, Quaternion.identity, _vfxParent);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(duration - _vfxAnchorViewConfig.RetrieveTrailSpawnDelay, 0)));
             rightTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
             leftTrail.gameObject.GetComponent<InterpolatorRecycleParticle>().Play();
-            
-            //await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-            //Time.timeScale = 1.0f;
         }
 
         public void PlayKickedAnimation(float duration)
@@ -145,6 +171,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void PlayObstructedAnimation()
         {
             
+        }
+
+        public void OnDamageDealt(DamageHitResult damageHitResult)
+        {
+            _hitStopManager.QueueHitStop(_vfxAnchorViewConfig.HitStopDamageDealt);
         }
     }
 }

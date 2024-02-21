@@ -13,8 +13,8 @@ namespace Project.Scripts.Time.TimeScale
         
         private void Start()
         {
-#if UNITY_EDITOR
             _timeScaleManager = ServiceLocator.Instance.GetService<ITimeFunctionalities>().TimeScaleManager;
+#if UNITY_EDITOR
 #else
             if (_config.IgnoreOnBuild)
             {

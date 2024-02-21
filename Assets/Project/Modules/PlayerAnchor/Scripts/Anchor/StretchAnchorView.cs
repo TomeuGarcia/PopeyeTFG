@@ -1,7 +1,11 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Modules.Camera.CameraShake;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.VFX.ParticleFactories;
+using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -79,6 +83,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         }
 
+        public void Configure(IParticleFactory particleFactory)
+        {
+            
+        }
+
+        public void Configure(IParticleFactory particleFactory, IHitStopManager hitStopManager, ICameraShaker cameraShaker)
+        {
+            
+        }
+
         public void ResetView()
         {
             _dropShadow.Hide();
@@ -145,6 +159,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void StopCarry()
         {
             
+        }
+
+        public void OnDamageDealt(DamageHitResult damageHitResult)
+        {
+            throw new NotImplementedException();
         }
 
 

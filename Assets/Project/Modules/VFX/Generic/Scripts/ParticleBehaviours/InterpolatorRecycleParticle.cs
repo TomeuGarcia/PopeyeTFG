@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Pool;
@@ -6,49 +7,87 @@ using UnityEngine;
 
 namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 {
-    public abstract class InterpolatorRecycleParticle : RecyclableObject
+    public class InterpolatorRecycleParticle : RecyclableObject
     {
         [SerializeField] internal bool _interpolateOnInit;
-        [SerializeField] internal MaterialFloatSetupConfig[] _floatSetupDatas;
-        [SerializeField] internal MaterialFloatInterpolationConfig[] _floatInterpolationDatas;
+        [SerializeField] internal InterpolatorRecycleParticleData[] _interpolations;
         
-        internal List<Material> _materials = new();
-        private int _completedInterpolations = 0;
+        internal List<TrailRenderer> _trailRenderers = new();
+        
+        private int _completedInterpolations;
+        private int _totalInterpolations;
+
+        private void Awake()
+        {
+            foreach (var interpolation in _interpolations)
+            {
+                interpolation.Awake();
+                if (interpolation.TrailRenderers.Count > 0)
+                {
+                    _trailRenderers.AddRange(interpolation.TrailRenderers);
+                }
+            }
+
+            TrailEmission(false);
+        }
 
         internal override void Init()
         {
             _completedInterpolations = 0;
-            
-            foreach (var material in _materials)
+
+            foreach (var interpolation in _interpolations)
             {
-                Setup(material);
-                
-                if (_interpolateOnInit)
+                foreach (var material in interpolation.Materials)
                 {
-                    ApplyInterpolations(material).Forget();
+                    Setup(material, interpolation.FloatSetupDatas);
+                
+                    if (_interpolateOnInit)
+                    {
+                        ApplyInterpolations(material, interpolation.FloatInterpolationDatas).Forget();
+                    }
                 }
+            }
+
+            TrailInit().Forget();
+        }
+
+        private async UniTaskVoid TrailInit()
+        {
+            await UniTask.WaitForEndOfFrame();
+            TrailEmission(true);
+        }
+
+        private void TrailEmission(bool emission)
+        {
+            foreach (var trail in _trailRenderers)
+            {
+                trail.Clear();
+                trail.emitting = emission;
             }
         }
 
-        private void Setup(Material material)
+        private void Setup(Material material, MaterialFloatSetupConfig[] setupConfigs)
         {
-            MaterialInterpolator.Setup(material, _floatSetupDatas);
+            MaterialInterpolator.Setup(material, setupConfigs);
         }
 
         public void Play()
         {
-            foreach (var material in _materials)
+            foreach (var interpolation in _interpolations)
             {
-                ApplyInterpolations(material).Forget();
+                foreach (var material in interpolation.Materials)
+                {
+                    ApplyInterpolations(material, interpolation.FloatInterpolationDatas).Forget();
+                }
             }
         }
         
-        private async UniTaskVoid ApplyInterpolations(Material material)
+        private async UniTaskVoid ApplyInterpolations(Material material, MaterialFloatInterpolationConfig[] interpolationConfigs)
         {
-            await MaterialInterpolator.ApplyInterpolations(material, _floatInterpolationDatas);
+            await MaterialInterpolator.ApplyInterpolations(material, interpolationConfigs);
             _completedInterpolations++;
             
-            if (_completedInterpolations >= _materials.Count)
+            if (_completedInterpolations >= _interpolations.Length)
             {
                 Reset();
             }
@@ -56,7 +95,10 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 
         internal virtual void Reset()
         {
+            TrailEmission(false);
             Recycle();
         }
+        
+        internal override void Release() { }
     }
 }

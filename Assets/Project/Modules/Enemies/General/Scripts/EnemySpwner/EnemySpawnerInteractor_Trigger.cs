@@ -1,6 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.WorldElements.WorldInteractors;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -10,13 +11,30 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private Collider[] _triggers;
         [SerializeField] private AWorldInteractor[] _worldInteractors;
 
+        
+        [Header("ACCEPT TYPES")] 
+        [SerializeField] private ObjectTypeAsset _playerType;
+
+        private void Start()
+        {
+            if (_playerType == null)
+            {
+                _playerType = ServiceLocator.Instance.GetService<IObjectTypesGameService>().PlayerObjectType;
+            }
+        }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG))
+            if (AcceptsOtherCollider(other))
             {
                 StartEnemySpawnerWaves();
             }
+        }
+
+        private bool AcceptsOtherCollider(Collider other)
+        {
+            if (!other.TryGetComponent(out IObjectType otherObjectType)) return false;
+            return otherObjectType.IsOfType(_playerType);
         }
 
         protected override void OnAllEnemyWavesFinishedEvent()

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnDuration: 0.1
   _beforeRespawnDuration: 2
+  _fallingOnVoidDuration: 0.75
   _withoutAnchorMoveSpeed: 10
   _withAnchorMoveSpeed: 6.5
   _aimingMoveSpeed: 5
@@ -24,11 +25,13 @@ MonoBehaviour:
   _tiredMoveSpeed: 5
   _healingMoveSpeed: 0.25
   _anchorLateThrowTime: 0.1
+  anchorAimHeldWaitWaitTime: 0.2
   _anchorPickUpDistance: 2
   _anchorKickDistance: 4
-  _minDashDuration: 0.05
+  _minUtilityDashDuration: 0.2
+  _minDashDuration: 0.1
   _maxDashDuration: 0.35
   _dashInvulnerableDuration: 0.5
-  _minRollDuration: 0.05
+  _minRollDuration: 0.1
   _maxRollDuration: 0.3
   _rollInvulnerableDuration: 0.45

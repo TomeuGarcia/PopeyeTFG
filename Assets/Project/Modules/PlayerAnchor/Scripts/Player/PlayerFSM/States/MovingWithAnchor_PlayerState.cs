@@ -28,32 +28,52 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             _anchorHeldAimTimer.SetDuration(_blackboard.PlayerStatesConfig.AnchorAimHeldWaitTime);
             _anchorHeldAimTimer.Clear();
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
         }
 
         public override bool Update(float deltaTime)
         {
-            if (PlayerCanAimAnchor() || PlayerHoldingAim(deltaTime))
+            _blackboard.PlayerMediator.UpdateSafeGroundChecking(deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+            if (playerIsOnVoid)
+            {
+                _blackboard.PlayerMediator.OnPlayerFellOnVoid();
+                return false;
+            }
+            
+            if (PlayerCanAimAnchor())
             {
                 NextState = PlayerStates.AimingThrowAnchor;
                 return true;
             }
-
+            
+            
+            if (PlayerHoldingAim(deltaTime))
+            {
+                NextState = PlayerStates.AimingThrowAnchor;
+                return true;
+            }
+            
+            
             if (PlayerCanDash())
             {
                 NextState = PlayerStates.DashingDroppingAnchor;
                 return true;
             }
             
+            /* // This is very bugged
             if (LateAnchorThrow(deltaTime))
             {
                 NextState = PlayerStates.ThrowingAnchor;
                 return true;
             }
+            */
             
             /*
             if (PlayerTriesToSpinAnchor())
@@ -75,9 +95,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanAimAnchor()
         {
-            if (_blackboard.queuedAnchorThrow)
+            if (_blackboard.queuedAnchorAim)
             {
-                _blackboard.queuedAnchorThrow = false;
+                _blackboard.queuedAnchorAim = false;
                 return true;
             }
             

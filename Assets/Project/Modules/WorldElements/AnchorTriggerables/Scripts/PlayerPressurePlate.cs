@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Modules.WorldElements.WorldInteractors;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 namespace Popeye.Modules.WorldElements.AnchorTriggerables
@@ -20,6 +21,11 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private AWorldInteractor[] _worldInteractors;
 
         private int _triggeredCount;
+        
+        
+        [Header("ACCEPT TYPES")] 
+        [SerializeField] private ObjectTypeAsset[] _acceptTypes;
+        
 
         private void Awake()
         {
@@ -29,8 +35,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG) ||
-                other.gameObject.CompareTag(TagUtilities.ANCHOR_TAG))
+            if (AcceptsOtherCollider(other))
             {
                 if (_triggeredCount++ > 0) return;
 
@@ -40,8 +45,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag(TagUtilities.PLAYER_TAG) ||
-                other.gameObject.CompareTag(TagUtilities.ANCHOR_TAG))
+            if (AcceptsOtherCollider(other))
             {
                 if (--_triggeredCount > 0) return;
 
@@ -49,6 +53,11 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
             }
         }
 
+        private bool AcceptsOtherCollider(Collider other)
+        {
+            if (!other.TryGetComponent(out IObjectType otherObjectType)) return false;
+            return otherObjectType.IsOfAnyType(_acceptTypes);
+        }
 
 
         private void SetTriggeredState()

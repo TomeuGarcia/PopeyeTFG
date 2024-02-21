@@ -16,15 +16,33 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
         }
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
         }
 
         public override bool Update(float deltaTime)
         {
+            _blackboard.PlayerMediator.UpdateSafeGroundChecking(deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+            if (anchorIsOnVoid)
+            {
+                _blackboard.PlayerMediator.OnAnchorEndedInVoid();
+                return false;
+            }
+
+            if (playerIsOnVoid)
+            {
+                _blackboard.PlayerMediator.OnPlayerFellOnVoid();
+                return false;
+            }
+            
+            
+            
             //if (_blackboard.MovesetInputsController.PickUp_Pressed() && PlayerCanPickUpAnchor())
             if (PlayerCanPickUpAnchor())
             {
