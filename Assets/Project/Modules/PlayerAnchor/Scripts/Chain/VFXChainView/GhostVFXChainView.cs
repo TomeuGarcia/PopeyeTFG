@@ -1,5 +1,6 @@
 using System;
 using Popeye.Scripts.Collisions;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Chain
@@ -41,6 +42,14 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             
             UpdateShader();
+        }
+
+        ~GhostVFXChainView()
+        {
+            for (int i = 0; i < _obstaclePositionIDs.Length; ++i)
+            {
+                _chainSharedMaterial.SetVector(_obstaclePositionIDs[i], NOWHERE_POSITION);
+            }
         }
         
         

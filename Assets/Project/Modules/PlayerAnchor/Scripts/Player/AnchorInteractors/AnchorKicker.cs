@@ -42,7 +42,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorTrajectoryMaker.ComputeUpdatedTrajectory(startPosition, direction, 
                 floorNormal, _anchorKickConfig.HeightDisplacementCurve, distance,
                 out float trajectoryDistance, out bool trajectoryEndsOnTheFloor, 
-                out RaycastHit obstacleHit, out bool trajectoryHitsObstacle);
+                out RaycastHit obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision);
             
             
             float correctedDuration = (_anchorKickConfig.AnchorKickMoveDuration / distance) * trajectoryDistance;
@@ -63,7 +63,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private async UniTaskVoid DoKickAnchor(AnchorThrowResult anchorThrowResult)
         {
             _anchorTrajectoryMaker.ShowTrajectoryEndSpot();
-            _anchorTrajectoryMaker.DrawDebugLines();
             _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(anchorThrowResult.LastTrajectoryPathPoint, 
                 Vector3.up, !anchorThrowResult.EndsOnVoid);
             
