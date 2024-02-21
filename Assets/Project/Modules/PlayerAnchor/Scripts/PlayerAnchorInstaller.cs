@@ -15,6 +15,7 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
@@ -57,6 +58,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private AnchorPhysics _anchorPhysics;
         [SerializeField] private AnchorCollisions _anchorCollisions;
         [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
+        [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private Transform _anchorMoveTransform;
         [SerializeField] private InterfaceReference<IAnchorAudio, MonoBehaviour> _anchorAudioRef;
@@ -136,6 +138,8 @@ namespace Popeye.Modules.PlayerAnchor
             IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
                 _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
                 _anchorGeneralConfig.TrajectoryConfig.ViewConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
+            IAnchorViewExtras anchorViewExtras = new AnchorViewExtras(_anchorDropShadow);
+            
             
             
             anchorMotion.Configure(_anchorMoveTransform);
@@ -159,8 +163,8 @@ namespace Popeye.Modules.PlayerAnchor
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform, chainViewLogicGeneralConfig);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, 
-                cameraFunctionalities, anchorOnVoidChecker);
+                _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorViewExtras, anchorAudio, 
+                _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);
 
             IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial
                 ? new TutorialAnchorStatesCreator()
