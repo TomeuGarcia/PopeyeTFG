@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 895ac8491a9c4ae0beae68329b9f7d14, type: 3}
   m_Name: DropShadowConfig_Player
   m_EditorClassIdentifier: 
-  _obstacleProbingConfig: {fileID: 11400000, guid: 5bb6f204002b53c4285d1fe069175e3e,
+  _floorCOllisionProbingConfig: {fileID: 11400000, guid: dc14ba1280e3b1d4db568dc4cdd812cd,
     type: 2}
+  _probeOffset: {x: 0, y: 1.5, z: 0}
   _displacementFromFloor: 0.01
-  _minDistance: 2
-  _maxDistance: 10
-  _minDistanceSize: 0.2
-  _maxDistanceSize: 0.2
+  _closestDistance: 2
+  _furthestDistance: 10
+  _sizeClosestDistance: 1
+  _sizeFurthestDistance: 0.2
+  _showDuration: 0.1
+  _hideDuration: 0.2
