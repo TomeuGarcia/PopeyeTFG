@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 5267933966708404505}
   - component: {fileID: 5144887323695516696}
   m_Layer: 0
-  m_Name: AnchorChain_Bone
+  m_Name: AnchorChain_Bone_TwoRings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,7 +250,15 @@ MonoBehaviour:
   _boneRoot: {fileID: 5267933966708404505}
   _boneEnd: {fileID: 8090440512759670977}
   _meshHolder: {fileID: 3158998364568687557}
-  _meshes: []
+  _meshes:
+  - {fileID: 6877264364905576853}
+  - {fileID: 2110520357480632825}
+  - {fileID: 2651757753619839392}
+  - {fileID: 3469846746566668999}
+  - {fileID: 7445898766967137502}
+  - {fileID: 5122572020692949901}
+  - {fileID: 729909401207936373}
+  - {fileID: 2816243567175692015}
   _boneLength: 0.6
   _isEndEffector: 0
 --- !u!1 &2815947561783513974
