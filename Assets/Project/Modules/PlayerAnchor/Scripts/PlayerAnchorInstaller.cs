@@ -85,29 +85,7 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("HUD")] 
         [SerializeField] private PlayerHUD _playerHUD;
 
-        
-        [Header("DEBUG")]
-        [SerializeField] private LineRenderer debugLine;
-        [SerializeField] private LineRenderer debugLine2;
-        [SerializeField] private LineRenderer debugLine3;
-        [SerializeField] private bool drawDebugLines = true;
-        private AnchorTrajectoryMaker trajectoryMaker;
 
-        
-        
-        private void OnValidate()
-        {
-            if (trajectoryMaker != null)
-            {
-                trajectoryMaker.drawDebugLines = drawDebugLines;
-            }
-        }
-
-
-        private void Start()
-        {
-            OnValidate();
-        }
 
         public void Install()
         {
@@ -150,7 +128,7 @@ namespace Popeye.Modules.PlayerAnchor
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
-                _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
+                _anchorGeneralConfig.PullConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
@@ -219,9 +197,6 @@ namespace Popeye.Modules.PlayerAnchor
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);
             
-            
-            // Debug
-            trajectoryMaker = anchorTrajectoryMaker;
         }
 
 

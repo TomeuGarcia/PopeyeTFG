@@ -25,16 +25,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private AnchorPullConfig _anchorPullConfig;
 
         private QuadraticBezierCurve _pointsCurve;
-
-        private LineRenderer _debugLine;
-        private LineRenderer _debugLine2;
-        private LineRenderer _debugLine3;
-
-        public bool drawDebugLines = false;
+        
         
         public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
             ObstacleProbingConfig obstacleProbingConfig, AnchorPullConfig anchorPullConfig,
-            LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3,
             int numberOfPoints)
         {
             _trajectoryEndSpot = trajectoryEndSpot;
@@ -46,44 +40,18 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _straightLineTrajectoryPoints = new Vector3[2];
             _curvedTrajectoryPoints = new Vector3[numberOfPoints];
             
-            
-            _debugLine = debugLine;
-            _debugLine2 = debugLine2;
-            _debugLine3 = debugLine3;
 
             _pointsCurve = new QuadraticBezierCurve();
         }
-
-        public void DrawDebugLines()
-        {
-            DrawDebugLines(_straightLineTrajectoryPoints, _curvedTrajectoryPoints);
-        }
-        private void DrawDebugLines(Vector3[] trajectory1, Vector3[] trajectory2, Vector3[] trajectory3 = null)
-        {
-            _debugLine.positionCount = trajectory1.Length;
-            _debugLine.SetPositions(trajectory1);
-            
-            _debugLine2.positionCount = trajectory2.Length;
-            _debugLine2.SetPositions(trajectory2);
-
-            if (trajectory3 != null)
-            {
-                _debugLine3.positionCount = trajectory2.Length;
-                _debugLine3.SetPositions(trajectory2);
-            }
-        }
-
         
         
         public void ShowTrajectoryEndSpot()
         {
             _trajectoryEndSpot.Show();
-            _debugLine2.gameObject.SetActive(true);
         }
         public void HideTrajectoryEndSpot()
         {
             _trajectoryEndSpot.Hide();
-            _debugLine2.gameObject.SetActive(false);
         }
 
 

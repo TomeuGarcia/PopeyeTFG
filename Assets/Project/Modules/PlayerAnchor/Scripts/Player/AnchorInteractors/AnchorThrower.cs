@@ -119,7 +119,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 
             }
 
-            //_anchorTrajectoryMaker.DrawDebugLines(); // TODO remove this line once AnchorTrajectoryView works
             _trajectoryView.DrawTrajectory(trajectoryPoints, trajectoryHitsObstacle, lastIndexBeforeCollision);
         }
         
