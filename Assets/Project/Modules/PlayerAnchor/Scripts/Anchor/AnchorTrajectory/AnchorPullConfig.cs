@@ -21,7 +21,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         [Header("MOVEMENT")] 
         [SerializeField] private AnimationCurve _moveInterpolationCurve;
+        [SerializeField] private AnimationCurve _rotateInterpolationCurve;
         public AnimationCurve MoveInterpolationCurve => _moveInterpolationCurve;
+        public AnimationCurve RotateInterpolationCurve => _rotateInterpolationCurve;
         
         
         [Header("DURATIONS")]

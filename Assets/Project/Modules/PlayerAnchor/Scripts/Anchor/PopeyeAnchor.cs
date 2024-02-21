@@ -48,6 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public IOnVoidChecker OnVoidChecker { get; private set; }
 
         public Vector3 Position => _anchorMotion.Position;
+        public Vector3 Forward => _anchorMotion.Forward;
         public Quaternion Rotation => _anchorMotion.Rotation;
 
         [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
@@ -161,12 +162,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
             _anchorDamageDealer.DealPullDamage(anchorPullResult).Forget();
             
-            /*
+            
             _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 
-                AnchorPullResult.InterpolationEaseCurve);
-            */
-            _anchorMotion.MoveToPosition(anchorPullResult.LastTrajectoryPathPoint, anchorPullResult.Duration, 
                 anchorPullResult.MoveEaseCurve);
+            _anchorMotion.RotateStartToEnd(anchorPullResult.StartLookRotation, anchorPullResult.EndLookRotation,
+                anchorPullResult.Duration, anchorPullResult.RotateEaseCurve);
             
             _anchorChain.SetPulledView(anchorPullResult);
             
