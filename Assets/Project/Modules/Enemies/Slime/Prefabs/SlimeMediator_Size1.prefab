@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 5731476548914574290}
   - component: {fileID: 8177322979651808629}
   - component: {fileID: 8692202689089856036}
+  - component: {fileID: 8012597111499258498}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Enemy
@@ -195,6 +196,7 @@ MonoBehaviour:
   _stretchAmountY: 1.2
   _stretchAmountXZ: 1
   _squashAndStretchTime: 0.5
+  _animator: {fileID: 8012597111499258498}
 --- !u!114 &2150481757876597378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +277,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _autoAimTargetDataConfig: {fileID: 11400000, guid: 94e08f1580ee27f47aafd53bc7cfde02,
     type: 2}
+--- !u!95 &8012597111499258498
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2297b7e63ae8f4d428ac487566d55f18, type: 2}
+  m_CullingMode: 2
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6668136983467904787
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +347,6 @@ MonoBehaviour:
   _enemyVisuals: {fileID: 8177322979651808629}
   _slimeMovement: {fileID: 2150481757876597378}
   _squashStretchAnimator: {fileID: 7860900730581999901}
-  _slimeDivider: {fileID: 0}
   _enemyPatrolling: {fileID: 8856671318642120423}
   _damageTrigger: {fileID: 5731476548914574290}
   _contactDamageHitConfig: {fileID: 11400000, guid: 3a4eb30c3fea92e4cb11f299273d17aa,

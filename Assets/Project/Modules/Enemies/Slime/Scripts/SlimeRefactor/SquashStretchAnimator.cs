@@ -28,6 +28,8 @@ namespace Popeye.Modules.Enemies.Components
 
         protected AEnemyMediator _mediator;
 
+        [SerializeField] private Animator _animator;
+
         public void Configure(AEnemyMediator slimeMediator, Transform transform, ObjectPool objectPool)
         {
             _mediator = slimeMediator;
@@ -66,12 +68,16 @@ namespace Popeye.Modules.Enemies.Components
 
         public void PlayMove()
         {
+            //move animation
             _playAnimation = true;
+            _animator.SetBool("Moving", true);
             SquashAndStretch();
         }
 
         public void StopMove()
         {
+            //idle animation
+            _animator.SetBool("Moving",false);
             _playAnimation = false;
         }
     }
