@@ -65,7 +65,16 @@ namespace Popeye.Modules.PlayerController
             set { _maxSpeed = value; }
         }
 
-        public float CurrentSpeed => _rigidbody.velocity.magnitude;
+        public float CurrentSpeedXZ
+        {
+            get
+            {
+                Vector2 velocityXZ = new Vector2(_rigidbody.velocity.x, _rigidbody.velocity.z);
+                return velocityXZ.magnitude;
+            }
+        }
+
+        public float CurrentSpeedY => Mathf.Abs(_rigidbody.velocity.y);
 
         [Header("ACCELERATION")] 
         [SerializeField, Range(0.0f, 100.0f)] private float _maxAcceleration = 10.0f;

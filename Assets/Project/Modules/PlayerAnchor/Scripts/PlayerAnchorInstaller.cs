@@ -16,7 +16,6 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
-using Popeye.Modules.PlayerAnchor.Player.GameFeelEffects;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
@@ -166,7 +165,7 @@ namespace Popeye.Modules.PlayerAnchor
             ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
-            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig);
+            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player);
             
             
             _playerController.AwakeConfigure();
@@ -210,22 +209,27 @@ namespace Popeye.Modules.PlayerAnchor
 
 
 
-        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig)
+        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig, PopeyePlayer player)
         {
             IPlayerView playerSquashAndStretchView = new PlayerSquashAndStretchView(
                 playerGeneralViewConfig.SquashStretchViewConfig,
-                _player.MeshHolderTransform
+                player.MeshHolderTransform
             );
 
             IPlayerView playerMaterialView = new PlayerMaterialView(
                 playerGeneralViewConfig.MaterialViewConfig,
-                _player.MeshRenderer
+                player.MeshRenderer
             );
             
             IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
-                playerGeneralViewConfig.GameFeelEffectsConfig,
+                playerGeneralViewConfig.GameFeelEffectsViewConfig,
                 ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
                 ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker
+            );
+
+            IPlayerView animationsPlayerView = new PlayerAnimationsView(
+                _playerGeneralConfig.GeneralViewConfig.AnimatorViewConfig,
+                _player.Animator
             );
 
 
@@ -233,7 +237,8 @@ namespace Popeye.Modules.PlayerAnchor
             {
                 playerSquashAndStretchView,
                 playerMaterialView,
-                playerGameFeelEffectsView
+                playerGameFeelEffectsView,
+                animationsPlayerView
             };
             
             

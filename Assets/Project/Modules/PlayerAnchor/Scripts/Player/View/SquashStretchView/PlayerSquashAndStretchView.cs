@@ -114,6 +114,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PunchRotate(_config.AnchorObstructedRotationPunch);
         }
 
+        public void PlayEnterIdleAnimation()
+        {
+        }
+
+        public void PlayExitIdleAnimation()
+        {
+        }
+
+        public void PlayEnterMovingWithAnchorAnimation()
+        {
+        }
+
+        public void PlayEnterMovingWithoutAnchorAnimation()
+        {
+        }
+
+        public void PlayEnterAimingAnimation()
+        {
+        }
+
+        public void PlayPickUpAnchorAnimation()
+        {
+        }
 
 
         private void ClearTweens()

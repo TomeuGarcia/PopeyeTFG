@@ -2,10 +2,10 @@ using Popeye.Modules.Camera.CameraShake;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 
-namespace Popeye.Modules.PlayerAnchor.Player.GameFeelEffects
+namespace Popeye.Modules.PlayerAnchor.Player
 {
     [System.Serializable]
-    public class PlayerGameFeelEffectsConfig
+    public class PlayerGameFeelEffectsViewConfig
     {
         [SerializeField] private HitStopConfig _takeDamageHitStop;
         [SerializeField] private CameraShakeConfig _takeDamageCameraShake;

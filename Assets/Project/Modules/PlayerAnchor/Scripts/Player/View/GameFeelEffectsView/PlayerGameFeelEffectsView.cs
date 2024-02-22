@@ -2,20 +2,20 @@ using Cysharp.Threading.Tasks;
 using Popeye.Modules.Camera.CameraShake;
 using Project.Scripts.Time.TimeHitStop;
 
-namespace Popeye.Modules.PlayerAnchor.Player.GameFeelEffects
+namespace Popeye.Modules.PlayerAnchor.Player
 {
     public class PlayerGameFeelEffectsView : IPlayerView
     {
-        private readonly PlayerGameFeelEffectsConfig _config;
+        private readonly PlayerGameFeelEffectsViewConfig _viewConfig;
         private readonly IHitStopManager _hitStopManager;
         private readonly ICameraShaker _cameraShaker;
 
         
         
-        public PlayerGameFeelEffectsView(PlayerGameFeelEffectsConfig config,
+        public PlayerGameFeelEffectsView(PlayerGameFeelEffectsViewConfig viewConfig,
             IHitStopManager hitStopManager, ICameraShaker cameraShaker)
         {
-            _config = config;
+            _viewConfig = viewConfig;
             _hitStopManager = hitStopManager;
             _cameraShaker = cameraShaker;
         }
@@ -31,8 +31,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.GameFeelEffects
 
         public void PlayTakeDamageAnimation()
         {
-            _hitStopManager.QueueHitStop(_config.TakeDamageHitStop);
-            _cameraShaker.PlayShake(_config.TakeDamageCameraShake);
+            _hitStopManager.QueueHitStop(_viewConfig.TakeDamageHitStop);
+            _cameraShaker.PlayShake(_viewConfig.TakeDamageCameraShake);
         }
 
         public void PlayRespawnAnimation()
@@ -65,6 +65,31 @@ namespace Popeye.Modules.PlayerAnchor.Player.GameFeelEffects
         }
 
         public void PlayAnchorObstructedAnimation()
+        {
+        }
+
+        public void PlayEnterIdleAnimation()
+        {
+        }
+
+        public void PlayExitIdleAnimation()
+        {
+            
+        }
+
+        public void PlayEnterMovingWithAnchorAnimation()
+        {
+        }
+
+        public void PlayEnterMovingWithoutAnchorAnimation()
+        {
+        }
+
+        public void PlayEnterAimingAnimation()
+        {
+        }
+
+        public void PlayPickUpAnchorAnimation()
         {
         }
     }

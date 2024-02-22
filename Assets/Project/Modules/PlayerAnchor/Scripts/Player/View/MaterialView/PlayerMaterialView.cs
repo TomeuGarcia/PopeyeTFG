@@ -84,8 +84,33 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayAnchorObstructedAnimation()
         {
         }
-        
-        
+
+        public void PlayEnterIdleAnimation()
+        {
+        }
+
+        public void PlayExitIdleAnimation()
+        {
+            
+        }
+
+        public void PlayEnterMovingWithAnchorAnimation()
+        {
+        }
+
+        public void PlayEnterMovingWithoutAnchorAnimation()
+        {
+        }
+
+        public void PlayEnterAimingAnimation()
+        {
+        }
+
+        public void PlayPickUpAnchorAnimation()
+        {
+        }
+
+
         private async UniTask FlickBaseColor(FlickData flickData, Color flickColor)
         {
             await FlickBaseColor(flickData, flickColor, _config.NormalColor);

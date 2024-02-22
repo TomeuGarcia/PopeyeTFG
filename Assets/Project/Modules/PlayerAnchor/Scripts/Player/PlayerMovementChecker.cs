@@ -21,7 +21,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void Update()
         {
-            UpdateCheckMovingState(_playerController.CurrentSpeed);
+            UpdateCheckMovingState(_playerController.CurrentSpeedXZ);
         }
 
         private void UpdateCheckMovingState(float currentMoveSpeed)

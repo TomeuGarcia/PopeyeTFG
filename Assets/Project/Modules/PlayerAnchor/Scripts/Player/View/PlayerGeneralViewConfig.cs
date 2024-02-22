@@ -1,4 +1,3 @@
-using Popeye.Modules.PlayerAnchor.Player.GameFeelEffects;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -19,8 +18,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         [Header("GAME FEEL EFFECTS")]
-        [SerializeField] private PlayerGameFeelEffectsConfig _gameFeelEffectsConfig;
-        public PlayerGameFeelEffectsConfig GameFeelEffectsConfig => _gameFeelEffectsConfig;
+        [SerializeField] private PlayerGameFeelEffectsViewConfig _gameFeelEffectsViewConfig;
+        public PlayerGameFeelEffectsViewConfig GameFeelEffectsViewConfig => _gameFeelEffectsViewConfig;
+        
+        
+        [Header("ANIMATOR")]
+        [SerializeField] private PlayerAnimatorViewConfig _animatorViewConfig;
+        public PlayerAnimatorViewConfig AnimatorViewConfig => _animatorViewConfig;
 
     }
 }

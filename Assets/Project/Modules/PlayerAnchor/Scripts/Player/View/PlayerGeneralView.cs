@@ -101,5 +101,53 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 playerView.PlayAnchorObstructedAnimation();
             }
         }
+
+        public void PlayEnterIdleAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayEnterIdleAnimation();
+            }
+        }
+
+        public void PlayExitIdleAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayExitIdleAnimation();
+            }
+        }
+
+        public void PlayEnterMovingWithAnchorAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayEnterMovingWithAnchorAnimation();
+            }
+        }
+
+        public void PlayEnterMovingWithoutAnchorAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayEnterMovingWithoutAnchorAnimation();
+            }
+        }
+
+        public void PlayEnterAimingAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayEnterAimingAnimation();
+            }
+        }
+
+        public void PlayPickUpAnchorAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayPickUpAnchorAnimation();
+            }
+        }
     }
 }

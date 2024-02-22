@@ -4,7 +4,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
 {
     public interface IPlayerView
     {
-
         void StartTired();
         void EndTired();
         void PlayTakeDamageAnimation();
@@ -17,6 +16,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         UniTaskVoid PlayPullAnimation(float delay);
         
         void PlayAnchorObstructedAnimation();
-        
+
+
+        void PlayEnterIdleAnimation();
+        void PlayExitIdleAnimation();
+        void PlayEnterMovingWithAnchorAnimation();
+        void PlayEnterMovingWithoutAnchorAnimation();
+        void PlayEnterAimingAnimation();
+        void PlayPickUpAnchorAnimation();
+
     }
 }

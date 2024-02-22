@@ -24,9 +24,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         [SerializeField] private Transform _meshHolderTransform;
         [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private Animator _animator;
         
         public Transform MeshHolderTransform => _meshHolderTransform;
         public MeshRenderer MeshRenderer => _meshRenderer;
+        public Animator Animator => _animator;
         
         
         
@@ -98,6 +100,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
+            OnStopMoving();
             
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
@@ -454,11 +457,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnStartMoving()
         {
             _playerAudio.StartPlayingStepsSounds();
+            
+            PlayerView.PlayExitIdleAnimation();
         }
 
         public void OnStopMoving()
         {
             _playerAudio.StopPlayingStepsSounds();
+            
+            PlayerView.PlayEnterIdleAnimation();
         }
 
         public void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid)
