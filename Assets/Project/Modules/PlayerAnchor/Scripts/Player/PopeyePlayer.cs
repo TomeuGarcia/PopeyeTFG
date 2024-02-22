@@ -190,7 +190,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public Vector3 GetAnchorThrowStartPosition()
         {
-            return _anchorGrabToThrowHolder.position;
+            return _anchorGrabToThrowHolder.position + _anchorCarryHolder.TransformDirection(Vector3.back) * 1.4f;
         }
 
 

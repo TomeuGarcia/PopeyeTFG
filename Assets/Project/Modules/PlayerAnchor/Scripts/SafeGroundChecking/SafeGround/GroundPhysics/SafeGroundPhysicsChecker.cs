@@ -11,6 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         private readonly IPhysicsCaster _physicsCaster;
         private readonly Timer _checkGroundTimer;
         private readonly float _bestSafePositionDistanceStep;
+        private Vector3 _currentTrackedPosition;
 
         public Vector3 LastSafePosition { get; private set; }
         public Vector3 BestSafePosition => ComputeBestSafePosition();
@@ -29,6 +30,8 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         
         public void UpdateChecking(float deltaTime)
         {
+            _currentTrackedPosition = _positionTrackingTransform.position;
+            
             _checkGroundTimer.Update(deltaTime);
             if (_checkGroundTimer.HasFinished())
             {
@@ -37,18 +40,17 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
             }
         }
 
-
         private void CheckLastSafePosition()
         {
             if (_physicsCaster.CheckHit(out RaycastHit groundHit))
             {
-                LastSafePosition = _positionTrackingTransform.position;
+                LastSafePosition = _currentTrackedPosition;
             }
         }
 
         private Vector3 ComputeBestSafePosition()
         {
-            Vector3 currentPosition = _positionTrackingTransform.position;
+            Vector3 currentPosition = _currentTrackedPosition;
             currentPosition.y = LastSafePosition.y;
 
             Vector3 lastSafeToCurrent = currentPosition - LastSafePosition;

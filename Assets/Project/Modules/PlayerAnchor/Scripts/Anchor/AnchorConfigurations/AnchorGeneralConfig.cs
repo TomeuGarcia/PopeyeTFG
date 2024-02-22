@@ -27,6 +27,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         public AnchorPullConfig PullConfig => _anchorPullConfig;
         public AnchorKickConfig KickConfig => _anchorKickConfig;
         public AnchorSpinConfig SpinConfig => _anchorSpinConfig;
+
+        
+        [Header("TRAJECTORY")] 
+        [SerializeField] private AnchorTrajectoryConfig _trajectoryConfig;
+        public AnchorTrajectoryConfig TrajectoryConfig => _trajectoryConfig;
         
         
         [Header("GROUND / VOID checking")] 

@@ -15,6 +15,7 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
@@ -57,9 +58,12 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private AnchorPhysics _anchorPhysics;
         [SerializeField] private AnchorCollisions _anchorCollisions;
         [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
+        [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private Transform _anchorMoveTransform;
         [SerializeField] private InterfaceReference<IAnchorAudio, MonoBehaviour> _anchorAudioRef;
+        [SerializeField] private LineRenderer _anchorTrajectoryLine1;
+        [SerializeField] private LineRenderer _anchorTrajectoryLine2;
 
         
         [Header("Anchor Damage")] 
@@ -81,29 +85,7 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("HUD")] 
         [SerializeField] private PlayerHUD _playerHUD;
 
-        
-        [Header("DEBUG")]
-        [SerializeField] private LineRenderer debugLine;
-        [SerializeField] private LineRenderer debugLine2;
-        [SerializeField] private LineRenderer debugLine3;
-        [SerializeField] private bool drawDebugLines = true;
-        private AnchorTrajectoryMaker trajectoryMaker;
 
-        
-        
-        private void OnValidate()
-        {
-            if (trajectoryMaker != null)
-            {
-                trajectoryMaker.drawDebugLines = drawDebugLines;
-            }
-        }
-
-
-        private void Start()
-        {
-            OnValidate();
-        }
 
         public void Install()
         {
@@ -131,17 +113,22 @@ namespace Popeye.Modules.PlayerAnchor
             AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
             IAnchorAudio anchorAudio = _anchorAudioRef.Value;
             IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchorMoveTransform, _anchorGeneralConfig.OnVoidProbingConfig);
+            IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
+                _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
+                _anchorGeneralConfig.TrajectoryConfig.ViewConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
+            IAnchorViewExtras anchorViewExtras = new AnchorViewExtras(_anchorDropShadow);
+            
             
             
             anchorMotion.Configure(_anchorMoveTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
-                anchorTrajectorySnapController);
+                anchorTrajectorySnapController, anchorTrajectoryView);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
-                _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
+                _anchorGeneralConfig.PullConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
@@ -154,8 +141,8 @@ namespace Popeye.Modules.PlayerAnchor
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform, chainViewLogicGeneralConfig);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, 
-                cameraFunctionalities, anchorOnVoidChecker);
+                _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorViewExtras, anchorAudio, 
+                _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);
 
             IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial
                 ? new TutorialAnchorStatesCreator()
@@ -210,9 +197,6 @@ namespace Popeye.Modules.PlayerAnchor
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);
             
-            
-            // Debug
-            trajectoryMaker = anchorTrajectoryMaker;
         }
 
 

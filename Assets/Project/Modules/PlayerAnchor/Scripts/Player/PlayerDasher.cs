@@ -76,11 +76,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             Vector3 dashEndPosition = ComputeDashEndAnchorPosition(toAnchor, right, up);
 
-            /*
-            dashEndPosition = ComputeEndPositionCheckingForObstacles(_player.Position, dashEndPosition,
-                out float distanceChangeRatio01);
-                */
-
             return dashEndPosition;
         }
 
@@ -92,13 +87,23 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 return _anchor.CurrentTrajectorySnapTarget.GetDashEndPosition();
             }
             
-            Vector3 dashExtraDisplacement = _playerGeneralConfig.MovesetConfig.DashExtraDisplacement;
             
-            Vector3 extraDisplacement = toAnchorDirection * dashExtraDisplacement.z;
-            extraDisplacement += right * dashExtraDisplacement.x;
-            extraDisplacement += up * dashExtraDisplacement.y;
+            Vector3 dashExtraDisplacement = _playerGeneralConfig.MovesetConfig.DashExtraDisplacement;
+
+            Vector3 forwardDisplacement = toAnchorDirection * dashExtraDisplacement.z;
+            Vector3 rightDisplacement = right * dashExtraDisplacement.x;
+            Vector3 upDisplacement = up * dashExtraDisplacement.y;
+            
+            Vector3 extraDisplacement = forwardDisplacement + rightDisplacement + upDisplacement;
             
             Vector3 dashEndPosition = _anchor.Position + extraDisplacement;
+
+            if (!Physics.Raycast(dashEndPosition, Vector3.down, _obstacleProbingConfig.HeightToConsiderFloor,
+                    _obstacleProbingConfig.ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                dashEndPosition -= forwardDisplacement + rightDisplacement;
+                dashEndPosition -= (toAnchorDirection * 0.5f);
+            }
 
             return dashEndPosition;
         }

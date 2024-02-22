@@ -9,6 +9,7 @@ namespace Popeye.Modules.PlayerAnchor
         private Transform _rotateTransform;
 
         public Vector3 Position => _moveTransform.position;
+        public Vector3 Forward => _moveTransform.forward;
         public Quaternion Rotation => _rotateTransform.rotation;
 
         ~TransformMotion()
