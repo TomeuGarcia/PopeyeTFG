@@ -25,6 +25,7 @@ namespace Popeye.Modules.Enemies
         public void Die()
         {
             InvokeOnDeathComplete();
+            Recycle();
         }
         private void InstantiateTurret()
         {

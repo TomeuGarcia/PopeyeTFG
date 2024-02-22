@@ -19,7 +19,6 @@ namespace Popeye.Modules.Enemies
     {
         [SerializeField] private SlimeMovement _slimeMovement;
         [SerializeField] private SquashStretchAnimator _squashStretchAnimator;
-        [SerializeField] private SlimeDivider _slimeDivider;
         [SerializeField] private EnemyPatrolling _enemyPatrolling;
         [SerializeField] private DamageTrigger _damageTrigger;
         
@@ -43,9 +42,9 @@ namespace Popeye.Modules.Enemies
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
             _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);
-            _slimeDivider.Configure(this);
             _enemyPatrolling.Configure(this);
             _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
+            
             PlayMoveAnimation();
         }
 
@@ -169,12 +168,12 @@ namespace Popeye.Modules.Enemies
 
         internal override void Init()
         {
-           
         }
 
         internal override void Release()
         {
-            
+            _enemyHealth.HealToMax();
+            _slimeTransform.localPosition = Vector3.zero;
         }
     }
 }
