@@ -9,6 +9,7 @@ using Popeye.Scripts.Collisions;
 using Unity.Mathematics;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ParabolicProjectile : RecyclableObject
 {
@@ -20,7 +21,7 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] private float _height;
     [SerializeField] private float speed;
     private Transform _playerTransform;
-    [SerializeField] private MeshRenderer bulletBody;
+    [SerializeField] private MeshRenderer _bulletBody;
     private bool shoot = false;
     private bool aiming = false;
 
@@ -55,7 +56,7 @@ public class ParabolicProjectile : RecyclableObject
                     shoot = false;
                     aiming = false;
                     //float angle = _angle * Mathf.Deg2Rad;
-                    bulletBody.enabled = true;
+                    _bulletBody.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
             }
@@ -73,7 +74,7 @@ public class ParabolicProjectile : RecyclableObject
         _playerTransform = playerTransform;
         //_line.enabled = false;
         _line.material = _lineAimingMat;
-        bulletBody.enabled = false;
+        _bulletBody.enabled = false;
         gameObject.SetActive(true);
     }
 
@@ -173,12 +174,10 @@ public class ParabolicProjectile : RecyclableObject
 
     private void OnCollisionEnter(Collision other)
     {
-        
-            Debug.Log(other.transform.name);
             _contactDamageHit.DamageSourcePosition = transform.position;
             _contactDamageHit.UpdateKnockbackPushDirection(PositioningHelper.Instance.GetDirectionAlignedWithFloor(transform.position, other.transform.position));
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
-            bulletBody.enabled = false;
+            _bulletBody.enabled = false;
             RaycastHit hit;
             if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
             {
