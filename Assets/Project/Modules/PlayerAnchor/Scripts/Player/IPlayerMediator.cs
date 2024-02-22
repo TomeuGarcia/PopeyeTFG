@@ -73,7 +73,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void SetInvulnerable(bool isInvulnerable);
         void SetInvulnerableForDuration(float duration);
         bool CanHeal();
-        UniTask UseHeal();
+        void UseHeal();
         void HealToMax();
         
         void OnDamageTaken();

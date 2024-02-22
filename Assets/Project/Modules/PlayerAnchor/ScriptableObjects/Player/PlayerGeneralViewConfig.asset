@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35babde4d6cf45e097717fc700f5c040, type: 3}
+  m_Name: PlayerGeneralViewConfig
+  m_EditorClassIdentifier: 
+  _squashStretchViewConfig:
+    _takeDamageScalePunch:
+      _punch: {x: -0.2, y: 0.4, z: -0.2}
+      _duration: 0.3
+      _vibrato: 2
+      _ease: 4
+    _healScalePunch:
+      _punch: {x: 0.2, y: -0.4, z: 0.2}
+      _duration: 0.3
+      _vibrato: 1
+      _ease: 4
+    _deathRotation:
+      _value: {x: -90, y: 0, z: 45}
+      _duration: 0.6
+      _ease: 7
+    _deathMoveBy:
+      _value: {x: 0, y: -0.75, z: 0}
+      _duration: 0.15
+      _ease: 7
+    _dashScalePunch:
+      _punch: {x: -0.3, y: 0.6, z: -0.3}
+      _duration: 0
+      _vibrato: 5
+      _ease: 28
+    _dashRotationPunch:
+      _punch: {x: -10, y: 0, z: 0}
+      _duration: 0
+      _vibrato: 10
+      _ease: 7
+    _kickScalePunch:
+      _punch: {x: 0.2, y: -0.4, z: 0.2}
+      _duration: 0.3
+      _vibrato: 5
+      _ease: 4
+    _kickRotationPunch:
+      _punch: {x: 20, y: 0, z: 0}
+      _duration: 0.3
+      _vibrato: 5
+      _ease: 4
+    _throwScalePunch:
+      _punch: {x: 0, y: 0, z: 0}
+      _duration: 0.3
+      _vibrato: 1
+      _ease: 28
+    _throwRotationPunch:
+      _punch: {x: 10, y: 0, z: 0}
+      _duration: 0.3
+      _vibrato: 10
+      _ease: 7
+    _pullScalePunch:
+      _punch: {x: 0, y: 0, z: 0}
+      _duration: 0.3
+      _vibrato: 1
+      _ease: 28
+    _pullRotationPunch:
+      _punch: {x: 10, y: 0, z: 0}
+      _duration: 0.3
+      _vibrato: 10
+      _ease: 7
+    _anchorObstructedRotationPunch:
+      _punch: {x: 0, y: 45, z: 0}
+      _duration: 0.3
+      _vibrato: 10
+      _ease: 7
+  _materialViewConfig:
+    _normalColor: {r: 0.9333334, g: 0.78823537, b: 0.34117648, a: 1}
+    _damagedColor: {r: 0.9607844, g: 0.13333334, b: 0.14901961, a: 1}
+    _healColor: {r: 0.34117648, g: 0.9333334, b: 0.56078434, a: 1}
+    _baseColorProperty: _BaseColor
+    _isTiredProperty: _IsTired
+    _takeDamageFlick:
+      _flickDuration: 0.6
+      _numberOfFlicks: 3
+    _deathFlick:
+      _flickDuration: 1
+      _numberOfFlicks: 2
+    _healFlick:
+      _flickDuration: 0.3
+      _numberOfFlicks: 2

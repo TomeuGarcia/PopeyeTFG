@@ -238,7 +238,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorPuller.PullAnchor();
             LookTowardsAnchorForDuration(0.3f).Forget();
             
-            PlayerView.PlayPullAnimation(0.3f);
+            PlayerView.PlayPullAnimation(0.3f).Forget();
         }
 
         public void OnPullAnchorComplete()
@@ -504,10 +504,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return !_playerHealth.IsMaxHealth();
         }
 
-        public async UniTask UseHeal()
+        public void UseHeal()
         {
             _playerHealth.UseHeal();
-            await PlayerView.PlayHealAnimation();
+            PlayerView.PlayHealAnimation();
         }
 
         public void HealToMax()

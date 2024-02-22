@@ -114,7 +114,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _meshTransform.localPosition = Vector3.zero;
         }
 
-        public async UniTask PlayDeathAnimation()
+        public void PlayDeathAnimation()
         {
             float motionDuration = _deathDuration * 0.2f;
             _meshTransform.DORotate(_deathRotation, motionDuration)
@@ -123,18 +123,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 .SetEase(Ease.InOutQuad);
             
             int numberOfFlicks = 2;
-            await FlickBaseColor(numberOfFlicks, _deathDuration / numberOfFlicks, _damagedColor);
+            FlickBaseColor(numberOfFlicks, _deathDuration / numberOfFlicks, _damagedColor).Forget();
             SetMeshBaseColor(_damagedColor);
         }
 
-        public async UniTask PlayHealAnimation()
+        public void PlayHealAnimation()
         {
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_healPunchScale, _healPunchDuration, 1)
                 .SetEase(Ease.InOutSine);
 
             int numberOfFlicks = 2;
-            await FlickBaseColor(numberOfFlicks, _healDuration / numberOfFlicks, _healColor);
+            FlickBaseColor(numberOfFlicks, _healDuration / numberOfFlicks, _healColor).Forget();
         }
 
         public void PlayDashAnimation(float duration)
@@ -165,9 +165,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 .SetEase(Ease.InOutQuad);
         }
 
-        public async UniTaskVoid PlayPullAnimation(float duration)
+        public async UniTaskVoid PlayPullAnimation(float delay)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
             
             _meshTransform.DOComplete();
             _meshTransform.DOPunchScale(_pullPunchScale, _pullPunchDuration, 1)

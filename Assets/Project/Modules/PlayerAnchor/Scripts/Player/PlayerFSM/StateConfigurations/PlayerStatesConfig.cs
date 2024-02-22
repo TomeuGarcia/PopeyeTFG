@@ -91,6 +91,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float MinRollDuration => _minRollDuration;
         public float MaxRollDuration => _maxRollDuration;
         public float RollInvulnerableDuration => _rollInvulnerableDuration;
-
+        
+        
+        [Header("HEALING")]
+        [SerializeField, Range(0.01f, 10.0f)] private float _healingDuration = 0.3f; 
+        public float HealingDuration => _healingDuration;
     }
 }
