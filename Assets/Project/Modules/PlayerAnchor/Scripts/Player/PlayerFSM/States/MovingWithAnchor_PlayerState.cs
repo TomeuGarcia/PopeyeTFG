@@ -44,7 +44,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (playerIsOnVoid)
             {
                 _blackboard.PlayerMediator.OnPlayerFellOnVoid();
-                return false;
+                NextState = PlayerStates.FallingOnVoid;
+                return true;
             }
             
             if (PlayerCanAimAnchor())

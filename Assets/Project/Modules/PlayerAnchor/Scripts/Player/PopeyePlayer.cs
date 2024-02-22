@@ -384,9 +384,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnPlayerFellOnVoid()
         {
             _onVoidChecker.ClearState();
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.FallingOnVoid);
-
-            //_anchor.DisableChainTensionForDuration(_stateMachine.Blackboard.PlayerStatesConfig.FallingOnVoidDuration + 0.2f);
         }
 
         public bool TakeFellOnVoidDamage()
