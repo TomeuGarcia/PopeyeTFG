@@ -7,7 +7,6 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
 using Popeye.Scripts.Collisions;
 using Unity.Mathematics;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Serialization;
 
