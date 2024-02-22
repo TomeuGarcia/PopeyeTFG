@@ -16,12 +16,14 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.GameFeelEffects;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
+using Project.Scripts.Time.TimeFunctionalities;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -42,7 +44,6 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("PLAYER")]
         [SerializeField] private PopeyePlayer _player;
         [SerializeField] private Popeye.Modules.PlayerController.PlayerController _playerController;
-        [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
@@ -165,10 +166,11 @@ namespace Popeye.Modules.PlayerAnchor
             ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
+            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig);
             
             
             _playerController.AwakeConfigure();
-            playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
+            playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
@@ -184,7 +186,7 @@ namespace Popeye.Modules.PlayerAnchor
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
+                playerView, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
                 playerSafeGroundChecker, playerOnVoidChecker);
 
@@ -207,6 +209,39 @@ namespace Popeye.Modules.PlayerAnchor
         }
 
 
+
+        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig)
+        {
+            IPlayerView playerSquashAndStretchView = new PlayerSquashAndStretchView(
+                playerGeneralViewConfig.SquashStretchViewConfig,
+                _player.MeshHolderTransform
+            );
+
+            IPlayerView playerMaterialView = new PlayerMaterialView(
+                playerGeneralViewConfig.MaterialViewConfig,
+                _player.MeshRenderer
+            );
+            
+            IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
+                playerGeneralViewConfig.GameFeelEffectsConfig,
+                ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
+                ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker
+            );
+
+
+            IPlayerView[] playerSubViews =
+            {
+                playerSquashAndStretchView,
+                playerMaterialView,
+                playerGameFeelEffectsView
+            };
+            
+            
+            PlayerGeneralView playerGeneralView = new PlayerGeneralView(playerSubViews);
+
+            return playerGeneralView;
+        }
+        
 
         private IOnVoidChecker CreateOnVoidChecker(Transform castOriginTransform, CollisionProbingConfig voidProbingConfig,
             float checkFrequency = 0.15f)

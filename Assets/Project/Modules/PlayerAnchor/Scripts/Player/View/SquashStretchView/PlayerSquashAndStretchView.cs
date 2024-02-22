@@ -8,7 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class PlayerSquashAndStretchView : IPlayerView
     {
         private readonly PlayerSquashStretchViewConfig _config;
-        private readonly Transform _meshTransform;
+        private readonly Transform _meshHolderTransform;
 
         [System.Serializable]
         public class TweenPunchData
@@ -38,10 +38,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
 
-        public PlayerSquashAndStretchView(PlayerSquashStretchViewConfig config, Transform meshTransform)
+        public PlayerSquashAndStretchView(PlayerSquashStretchViewConfig config, Transform meshHolderTransform)
         {
             _config = config;
-            _meshTransform = meshTransform;
+            _meshHolderTransform = meshHolderTransform;
         }
         
         
@@ -62,8 +62,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayRespawnAnimation()
         {
-            _meshTransform.localRotation = Quaternion.identity;
-            _meshTransform.localPosition = Vector3.zero;
+            _meshHolderTransform.localRotation = Quaternion.identity;
+            _meshHolderTransform.localPosition = Vector3.zero;
         }
 
         public void PlayDeathAnimation()
@@ -118,7 +118,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void ClearTweens()
         {
-            _meshTransform.DOComplete();
+            _meshHolderTransform.DOComplete();
         }
         
         private void PunchRotate(TweenPunchData tweenPunchData)
@@ -132,24 +132,24 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private void PunchRotate(TweenPunchData tweenPunchData, float duration)
         {
-            _meshTransform.DOPunchRotation(tweenPunchData.Punch, duration, tweenPunchData.Vibrato)
+            _meshHolderTransform.DOPunchRotation(tweenPunchData.Punch, duration, tweenPunchData.Vibrato)
                 .SetEase(tweenPunchData.Ease);
         }
         private void PunchScale(TweenPunchData tweenPunchData, float duration)
         {
-            _meshTransform.DOPunchScale(tweenPunchData.Punch, duration, tweenPunchData.Vibrato)
+            _meshHolderTransform.DOPunchScale(tweenPunchData.Punch, duration, tweenPunchData.Vibrato)
                 .SetEase(tweenPunchData.Ease);
         }
 
         private void Rotate(TweenData tweenData)
         {
-            _meshTransform.DORotate(tweenData.Value, tweenData.Duration)
+            _meshHolderTransform.DORotate(tweenData.Value, tweenData.Duration)
                 .SetEase(tweenData.Ease);
         }
         
         private void LocalMoveBy(TweenData tweenData)
         {
-            _meshTransform.DOBlendableLocalMoveBy(tweenData.Value, tweenData.Duration)
+            _meshHolderTransform.DOBlendableLocalMoveBy(tweenData.Value, tweenData.Duration)
                 .SetEase(tweenData.Ease);
         }
     }

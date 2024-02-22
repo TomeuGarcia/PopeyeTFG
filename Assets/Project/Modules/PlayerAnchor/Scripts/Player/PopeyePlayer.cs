@@ -21,6 +21,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _targetForCamera;
         [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
         [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
+
+        [SerializeField] private Transform _meshHolderTransform;
+        [SerializeField] private MeshRenderer _meshRenderer;
+        
+        public Transform MeshHolderTransform => _meshHolderTransform;
+        public MeshRenderer MeshRenderer => _meshRenderer;
+        
+        
+        
         
         private IPlayerAudio _playerAudio;
         
