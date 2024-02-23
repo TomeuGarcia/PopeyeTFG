@@ -114,6 +114,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
+            PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
         }
 
         private void ResetAnchor()

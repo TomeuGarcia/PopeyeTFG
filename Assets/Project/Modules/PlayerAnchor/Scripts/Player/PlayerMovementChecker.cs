@@ -9,8 +9,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerController.PlayerController _playerController;
         private bool _isMoving;
         private const float MOVEMENT_SPEED_THRESHOLD = 0.1f;
-        
-        
+
+        public float MovementSpeedRatio { get; private set; }
+    
         
         public void Configure(IPlayerMediator player, PlayerController.PlayerController playerController)
         {
@@ -34,6 +35,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             {
                 DoStopMoving();
             }
+
+            MovementSpeedRatio = currentMoveSpeed / _playerController.MaxSpeed;
         }
 
         private void DoStartMoving()

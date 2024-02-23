@@ -118,6 +118,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
         }
 
+        public void UpdateMovingAnimation(float isMovingRatio01)
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.UpdateMovingAnimation(isMovingRatio01);
+            }
+        }
+
         public void PlayEnterMovingWithAnchorAnimation()
         {
             foreach (IPlayerView playerView in _subPlayerViews)

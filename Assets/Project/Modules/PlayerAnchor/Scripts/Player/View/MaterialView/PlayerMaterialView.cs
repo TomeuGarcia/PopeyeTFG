@@ -94,6 +94,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
         }
 
+        public void UpdateMovingAnimation(float isMovingRatio01)
+        {
+        }
+
         public void PlayEnterMovingWithAnchorAnimation()
         {
         }

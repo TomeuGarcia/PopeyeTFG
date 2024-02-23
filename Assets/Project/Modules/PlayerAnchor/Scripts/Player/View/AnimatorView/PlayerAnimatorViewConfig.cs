@@ -14,6 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private string _throwingAnchorParameter = "throwing";
         [SerializeField] private string _pullingAnchorParameter = "pulling";
         [SerializeField] private string _pickUpAnchorParameter = "pickUpAnchor";
+        [SerializeField] private string _idleToMovingParameter = "idleToMovingBlending";
         public string IdleParameter => _idleParameter;
         public string MovingWithAnchorParameter => _movingWithAnchorParameter;
         public string MovingWithoutAnchorParameter => _movingWithoutAnchorParameter;
@@ -21,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public string ThrowingAnchorParameter => _throwingAnchorParameter;
         public string PullingAnchorParameter => _pullingAnchorParameter;
         public string PickUpAnchorParameter => _pickUpAnchorParameter;
+        public string IdleToMovingParameter => _idleToMovingParameter;
         
         
         [Header("LAYERS")]

@@ -20,6 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void PlayEnterIdleAnimation();
         void PlayExitIdleAnimation();
+        void UpdateMovingAnimation(float isMovingRatio01);
         void PlayEnterMovingWithAnchorAnimation();
         void PlayEnterMovingWithoutAnchorAnimation();
         void PlayEnterAimingAnimation();

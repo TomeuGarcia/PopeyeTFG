@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -22,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _animator.SetBool(_config.IdleParameter, true);
             
-            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 0);
+            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 0f);
         }
 
         public void PlayExitIdleAnimation()
@@ -31,7 +32,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _animator.SetBool(_config.IdleParameter, false);
             
-            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 1);
+            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 1f);
+        }
+
+        public void UpdateMovingAnimation(float isMovingRatio01)
+        {
+            _animator.SetFloat(_config.IdleToMovingParameter, isMovingRatio01);
+            //_animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), isMovingRatio01);
         }
 
         public void PlayEnterMovingWithAnchorAnimation()
@@ -42,7 +49,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _animator.SetBool(_config.MovingWithoutAnchorParameter, false);
             _animator.SetBool(_config.AimingParameter, false);
             
-            _animator.ResetTrigger(_config.ThrowingAnchorParameter);
+            _animator.SetBool(_config.PickUpAnchorParameter, false);
         }
 
         public void PlayEnterMovingWithoutAnchorAnimation()
@@ -53,8 +60,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _animator.SetBool(_config.MovingWithoutAnchorParameter, true);
             _animator.SetBool(_config.AimingParameter, false);
             
-            _animator.ResetTrigger(_config.PullingAnchorParameter);
-            _animator.ResetTrigger(_config.PickUpAnchorParameter);
+            
+            _animator.SetBool(_config.ThrowingAnchorParameter, false);
         }
 
         public void PlayEnterAimingAnimation()
@@ -70,14 +77,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             Debug.Log("Pick Up Anchor");
             
-            _animator.SetTrigger(_config.PickUpAnchorParameter);
+            _animator.SetBool(_config.PickUpAnchorParameter, true);
         }
 
         public void PlayThrowAnimation()
         {
             Debug.Log("Throwing Anchor");
             
-            _animator.SetTrigger(_config.ThrowingAnchorParameter);
+            _animator.SetBool(_config.AimingParameter, true);
+            _animator.SetBool(_config.ThrowingAnchorParameter, true);
         }
 
         public async UniTaskVoid PlayPullAnimation(float delay)
@@ -87,7 +95,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _animator.SetTrigger(_config.PullingAnchorParameter);
         }
 
-        
+        public void PlayDashAnimation(float duration)
+        {
+            Debug.Log("Dashing Anchor");
+            _animator.SetBool(_config.MovingWithAnchorParameter, false);
+        }
         
         
         
@@ -117,9 +129,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
         }
 
-        public void PlayDashAnimation(float duration)
-        {
-        }
+        
 
         public void PlayKickAnimation()
         {
