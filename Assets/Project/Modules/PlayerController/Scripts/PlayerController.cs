@@ -31,10 +31,6 @@ namespace Popeye.Modules.PlayerController
         public Transform Transform => _rigidbody.transform;
         public Transform LookTransform => _lookTransform;
 
-        [SerializeField] private MeshRenderer _renderer;
-        private Material _material;
-
-
 
 
         [Header("LOOK")] 
@@ -136,9 +132,7 @@ namespace Popeye.Modules.PlayerController
         public void AwakeConfigure()
         {
             OnValidate();
-
-            _material = _renderer.material;
-
+            
             if (MovementInputHandler == null)
             {
                 MovementInputHandler = new WorldAxisMovementInput();

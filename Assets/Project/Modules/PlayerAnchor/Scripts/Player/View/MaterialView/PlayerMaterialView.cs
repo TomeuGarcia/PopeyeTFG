@@ -22,12 +22,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
 
 
-        public PlayerMaterialView(PlayerMaterialViewConfig config, MeshRenderer meshRenderer)
+        public PlayerMaterialView(PlayerMaterialViewConfig config, Renderer renderer)
         {
             _config = config;
             _config.OnValidate();
             
-            _material = meshRenderer.material;
+            _material = renderer.material;
             
             SetTired(false);
             SetBaseColor(_config.NormalColor);

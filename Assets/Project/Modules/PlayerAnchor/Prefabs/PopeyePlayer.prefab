@@ -782,6 +782,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc8a529fced45dfa144a4cc61ce5416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveTransform: {fileID: 6078796937421439867}
+  _fakeAnchor: {fileID: 366120629147909962}
   AnchorHit:
     Guid:
       Data1: -499224757
@@ -1251,7 +1253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1663238115100152791}
-  _renderer: {fileID: 1916423580640206978}
+  _renderer: {fileID: 0}
   useLookInput: 1
   _lookTransform: {fileID: 2041502078564415168}
   _lookOverTimeConfig:
@@ -2146,7 +2148,7 @@ Transform:
   - {fileID: 4279091411442141224}
   - {fileID: 6668082300037902310}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3863730451507063996
 MonoBehaviour:
@@ -2168,7 +2170,7 @@ MonoBehaviour:
     _underlyingValue: {fileID: 3218012436837454115}
   _destructiblePlatformBreaker: {fileID: 3415662257221133472}
   _meshHolderTransform: {fileID: 2041502078564415168}
-  _meshRenderer: {fileID: 1916423580640206978}
+  _renderer: {fileID: 2116012679240791379}
   _animator: {fileID: 6009713918096670091}
 --- !u!1001 &1567375447262187876
 PrefabInstance:
@@ -2566,6 +2568,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2041502078564415168}
     m_Modifications:
+    - target: {fileID: 5216006176414838017, guid: 5a4bd6742b6d79b48ab397927e27b8d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5851539185063531893, guid: 5a4bd6742b6d79b48ab397927e27b8d8,
         type: 3}
       propertyPath: m_Name
@@ -2626,14 +2633,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8485107046757671377, guid: 5a4bd6742b6d79b48ab397927e27b8d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a4bd6742b6d79b48ab397927e27b8d8, type: 3}
---- !u!23 &1916423580640206978 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7659811755775229465, guid: 5a4bd6742b6d79b48ab397927e27b8d8,
+--- !u!1 &366120629147909962 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8485107046757671377, guid: 5a4bd6742b6d79b48ab397927e27b8d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 8130579673188540059}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &2116012679240791379 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7892568725758716872, guid: 5a4bd6742b6d79b48ab397927e27b8d8,
     type: 3}
   m_PrefabInstance: {fileID: 8130579673188540059}
   m_PrefabAsset: {fileID: 0}

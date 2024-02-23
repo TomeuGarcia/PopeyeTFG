@@ -18,10 +18,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
             float distance = Vector3.Distance(_blackboard.TransformMotion.Position,
                 _blackboard.AnchorCarryHolder.position);
 
-            float duration = Mathf.Min(0.05f * distance, _blackboard.AnchorMotionConfig.MaxCarriedDuration); 
+            float duration = Mathf.Min(0.05f * distance, _blackboard.AnchorMotionConfig.MaxCarriedDuration);
+
+            Quaternion endRotation = _blackboard.AnchorMotionConfig.CarriedAnchorRotation;
             
             _blackboard.TransformMotion.ParentAndUpdate(_blackboard.AnchorCarryHolder,
-                Vector3.zero, _blackboard.AnchorMotionConfig.CarriedAnchorRotation,
+                Vector3.zero, Quaternion.identity,
                 duration, Ease.InOutSine);
                 
             
@@ -31,6 +33,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
             
             _blackboard.AnchorChain.DisableTension();
             _blackboard.AnchorPhysics.DisableCollision();
+
+            _blackboard.AnchorMediator.SetActiveDebug(false);
         }
 
         public void Exit()

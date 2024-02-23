@@ -10,6 +10,7 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
@@ -23,16 +24,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
 
         [SerializeField] private Transform _meshHolderTransform;
-        [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private Renderer _renderer;
         [SerializeField] private Animator _animator;
         
         public Transform MeshHolderTransform => _meshHolderTransform;
-        public MeshRenderer MeshRenderer => _meshRenderer;
+        public Renderer Renderer => _renderer;
         public Animator Animator => _animator;
-        
-        
-        
-        
+
+
+
         private IPlayerAudio _playerAudio;
         
         public Transform AnchorCarryHolder => _anchorCarryHolder;

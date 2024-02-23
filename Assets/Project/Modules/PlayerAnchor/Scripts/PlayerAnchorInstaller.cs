@@ -60,7 +60,6 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
         [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
-        [SerializeField] private Transform _anchorMoveTransform;
         [SerializeField] private InterfaceReference<IAnchorAudio, MonoBehaviour> _anchorAudioRef;
         [SerializeField] private LineRenderer _anchorTrajectoryLine1;
         [SerializeField] private LineRenderer _anchorTrajectoryLine2;
@@ -112,7 +111,7 @@ namespace Popeye.Modules.PlayerAnchor
             IChainPhysics chainPhysics = _chainPhysics.Value;
             AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
             IAnchorAudio anchorAudio = _anchorAudioRef.Value;
-            IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchorMoveTransform, _anchorGeneralConfig.OnVoidProbingConfig);
+            IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchor.PositionTransform, _anchorGeneralConfig.OnVoidProbingConfig);
             IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
                 _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
                 _anchorGeneralConfig.TrajectoryConfig.ViewConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
@@ -120,7 +119,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             
             
-            anchorMotion.Configure(_anchorMoveTransform);
+            anchorMotion.Configure(_anchor.PositionTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
                 anchorTrajectorySnapController, anchorTrajectoryView);
@@ -134,7 +133,7 @@ namespace Popeye.Modules.PlayerAnchor
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorTrajectorySnapController.Configure();
             _anchorCollisions.Configure(_obstacleProbingConfig);
-            anchorAudio.Configure(_anchorMoveTransform.gameObject);
+            anchorAudio.Configure(_anchor.PositionTransform.gameObject);
 
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
@@ -218,7 +217,7 @@ namespace Popeye.Modules.PlayerAnchor
 
             IPlayerView playerMaterialView = new PlayerMaterialView(
                 playerGeneralViewConfig.MaterialViewConfig,
-                player.MeshRenderer
+                player.Renderer
             );
             
             IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
