@@ -21,6 +21,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Debug.Log("Enter Idle");
             
             _animator.SetBool(_config.IdleParameter, true);
+            
+            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 0);
         }
 
         public void PlayExitIdleAnimation()
@@ -28,6 +30,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Debug.Log("Exit Idle");
             
             _animator.SetBool(_config.IdleParameter, false);
+            
+            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 1);
         }
 
         public void PlayEnterMovingWithAnchorAnimation()
