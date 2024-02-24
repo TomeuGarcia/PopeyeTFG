@@ -41,11 +41,13 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
 
-            generalConfig.ApplySharedMaterialToBonePrefabs();
+
+            Material chainMaterialCopy = new Material(generalConfig.BoneSharedMaterial);
+            generalConfig.ApplyMaterialToBonePrefabs(chainMaterialCopy);
             
             float boneLength = generalConfig.MaxChainLength / (generalConfig.ChainBoneCount-1);
 
-            _vfxChainView = new GhostVFXChainView(generalConfig.ObstacleCollisionProbingConfig, generalConfig.BoneSharedMaterial);
+            _vfxChainView = new GhostVFXChainView(generalConfig.ObstacleCollisionProbingConfig, chainMaterialCopy);
             
             _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
                 generalConfig.MaxChainLength, boneLength,

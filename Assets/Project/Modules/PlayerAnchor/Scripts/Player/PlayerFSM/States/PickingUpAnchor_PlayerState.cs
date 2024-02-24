@@ -15,6 +15,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
+            _blackboard.PlayerMediator.PlayerView.PlayPickUpAnchorAnimation();
+            
             StartPickingUpAnchor();
         }
 
