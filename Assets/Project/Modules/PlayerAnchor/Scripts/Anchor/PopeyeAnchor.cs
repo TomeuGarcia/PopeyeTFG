@@ -374,8 +374,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void SetActiveDebug(bool active)
         {
-            PositionTransform.gameObject.SetActive(active);
-            _fakeAnchor.SetActive(!active);
+            //PositionTransform.gameObject.SetActive(active);
+            //_fakeAnchor.SetActive(!active);
         }
     }
 }

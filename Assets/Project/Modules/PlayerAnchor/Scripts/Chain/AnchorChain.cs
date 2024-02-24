@@ -34,20 +34,17 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private Vector3 AnchorBindPosition => _anchorBindTransform.position;
         
         
-        public void Configure(IChainPhysics chainPhysics, Transform playerBindTransform, Transform anchorBindTransform,
+        public void Configure(IChainPhysics chainPhysics, IVFXChainView vfxChainView,
+            Transform playerBindTransform, Transform anchorBindTransform,
             ChainViewLogicGeneralConfig generalConfig)
         {
             _chainPhysics = chainPhysics;
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
-
-
-            Material chainMaterialCopy = new Material(generalConfig.BoneSharedMaterial);
-            generalConfig.ApplyMaterialToBonePrefabs(chainMaterialCopy);
             
             float boneLength = generalConfig.MaxChainLength / (generalConfig.ChainBoneCount-1);
 
-            _vfxChainView = new GhostVFXChainView(generalConfig.ObstacleCollisionProbingConfig, chainMaterialCopy);
+            _vfxChainView = vfxChainView;
             
             _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
                 generalConfig.MaxChainLength, boneLength,
@@ -100,6 +97,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _thrownChainViewLogic.EnterSetup(throwResult.Duration);
             TransitionViewLogic(_thrownChainViewLogic);
+            
+            _vfxChainView.StartAnimation(throwResult.FirstTrajectoryPathPoint + throwResult.Direction * 1.0f,
+                throwResult.Duration * 0.75f);
         }
         public void SetPulledView(AnchorThrowResult pullResult)
         {
