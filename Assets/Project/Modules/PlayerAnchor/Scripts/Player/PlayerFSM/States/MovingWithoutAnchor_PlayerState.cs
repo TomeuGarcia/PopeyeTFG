@@ -19,6 +19,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
+            
+            _blackboard.PlayerMediator.PlayerView.PlayEnterMovingWithoutAnchorAnimation();
         }
 
         public override void Exit()
@@ -38,7 +40,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (playerIsOnVoid)
             {
                 _blackboard.PlayerMediator.OnPlayerFellOnVoid();
-                return false;
+                NextState = PlayerStates.FallingOnVoid;
+                return true;
             }
             
             

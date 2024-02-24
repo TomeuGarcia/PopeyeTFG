@@ -48,5 +48,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         public DamageHitConfig VoidFallDamageConfig => _voidFallDamageConfig;
         public ObjectTypeAsset NotSafeGroundType => _notSafeGroundType;
         public Vector3 RespawnFromVoidPositionOffset => _respawnFromVoidPositionOffset;
+
+        
+        [Header("VIEW")] 
+        [SerializeField] private PlayerGeneralViewConfig _generalViewConfig;
+        
+        public PlayerGeneralViewConfig GeneralViewConfig => _generalViewConfig;
     }
 }
