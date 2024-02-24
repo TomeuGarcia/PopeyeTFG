@@ -14,92 +14,96 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _config = config;
             _animator = animator;
+
+            _config.OnValidate();
         }
         
         
         public void PlayEnterIdleAnimation()
         {
-            Debug.Log("Enter Idle");
-            
-            _animator.SetBool(_config.IdleParameter, true);
-            
-            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 0f);
+            SetAnimatorBool(_config.IdleParameterId, true);
         }
 
         public void PlayExitIdleAnimation()
         {
-            Debug.Log("Exit Idle");
-            
-            _animator.SetBool(_config.IdleParameter, false);
-            
-            _animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), 1f);
+            SetAnimatorBool(_config.IdleParameterId, false);
         }
 
         public void UpdateMovingAnimation(float isMovingRatio01)
         {
-            _animator.SetFloat(_config.IdleToMovingParameter, isMovingRatio01);
-            //_animator.SetLayerWeight(_animator.GetLayerIndex(_config.LegsLayer), isMovingRatio01);
+            ResetAnimatorFloat(_config.IdleToMovingParameterId, isMovingRatio01);
         }
 
         public void PlayEnterMovingWithAnchorAnimation()
         {
-            Debug.Log("Moving with Anchor");
+            SetAnimatorBool(_config.MovingWithAnchorParameterId, true);
+            SetAnimatorBool(_config.MovingWithoutAnchorParameterId, false);
+            SetAnimatorBool(_config.AimingParameterId, false);
             
-            _animator.SetBool(_config.MovingWithAnchorParameter, true);
-            _animator.SetBool(_config.MovingWithoutAnchorParameter, false);
-            _animator.SetBool(_config.AimingParameter, false);
-            
-            _animator.SetBool(_config.PickUpAnchorParameter, false);
+            SetAnimatorBool(_config.PickUpAnchorParameterId, false);
         }
 
         public void PlayEnterMovingWithoutAnchorAnimation()
         {
-            Debug.Log("Moving without Anchor");
+            SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
+            SetAnimatorBool(_config.MovingWithoutAnchorParameterId, true);
+            SetAnimatorBool(_config.AimingParameterId, false);
             
-            _animator.SetBool(_config.MovingWithAnchorParameter, false);
-            _animator.SetBool(_config.MovingWithoutAnchorParameter, true);
-            _animator.SetBool(_config.AimingParameter, false);
-            
-            
-            _animator.SetBool(_config.ThrowingAnchorParameter, false);
+            SetAnimatorBool(_config.ThrowingAnchorParameterId, false);
+            ResetAnimatorTrigger(_config.PullingAnchorParameterId);
         }
 
         public void PlayEnterAimingAnimation()
         {
-            Debug.Log("Aiming");
-            
-            _animator.SetBool(_config.MovingWithAnchorParameter, false);
-            _animator.SetBool(_config.MovingWithoutAnchorParameter, false);
-            _animator.SetBool(_config.AimingParameter, true);
+            SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
+            SetAnimatorBool(_config.MovingWithoutAnchorParameterId, false);
+            SetAnimatorBool(_config.AimingParameterId, true);
         }
 
         public void PlayPickUpAnchorAnimation()
         {
-            Debug.Log("Pick Up Anchor");
-            
-            _animator.SetBool(_config.PickUpAnchorParameter, true);
+            SetAnimatorBool(_config.PickUpAnchorParameterId, true);
         }
 
         public void PlayThrowAnimation()
         {
-            Debug.Log("Throwing Anchor");
-            
-            _animator.SetBool(_config.AimingParameter, true);
-            _animator.SetBool(_config.ThrowingAnchorParameter, true);
+            SetAnimatorBool(_config.AimingParameterId, true);
+            SetAnimatorBool(_config.ThrowingAnchorParameterId, true);
         }
 
         public async UniTaskVoid PlayPullAnimation(float delay)
         {
-            Debug.Log("Pulling Anchor");
-            
-            _animator.SetTrigger(_config.PullingAnchorParameter);
+            SetAnimatorTrigger(_config.PullingAnchorParameterId);
         }
 
         public void PlayDashAnimation(float duration)
         {
-            Debug.Log("Dashing Anchor");
-            _animator.SetBool(_config.MovingWithAnchorParameter, false);
+            SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
         }
+
+
+
+
+
+        private void SetAnimatorBool(int parameterId, bool value)
+        {
+            _animator.SetBool(parameterId, value);
+        }
+        
+        private void SetAnimatorTrigger(int parameterId)
+        {
+            _animator.SetTrigger(parameterId);
+        }
+        private void ResetAnimatorTrigger(int parameterId)
+        {
+            _animator.ResetTrigger(parameterId);
+        }
+        
+        private void ResetAnimatorFloat(int parameterId, float value)
+        {
+            _animator.SetFloat(parameterId, value);
+        }
+        
         
         
         

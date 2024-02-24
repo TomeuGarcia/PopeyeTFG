@@ -15,18 +15,28 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private string _pullingAnchorParameter = "pulling";
         [SerializeField] private string _pickUpAnchorParameter = "pickUpAnchor";
         [SerializeField] private string _idleToMovingParameter = "idleToMovingBlending";
-        public string IdleParameter => _idleParameter;
-        public string MovingWithAnchorParameter => _movingWithAnchorParameter;
-        public string MovingWithoutAnchorParameter => _movingWithoutAnchorParameter;
-        public string AimingParameter => _aimingParameter;
-        public string ThrowingAnchorParameter => _throwingAnchorParameter;
-        public string PullingAnchorParameter => _pullingAnchorParameter;
-        public string PickUpAnchorParameter => _pickUpAnchorParameter;
-        public string IdleToMovingParameter => _idleToMovingParameter;
-        
-        
-        [Header("LAYERS")]
-        [SerializeField] private string _legsLayer = "Legs Layer";
-        public string LegsLayer => _legsLayer;
+
+        public int IdleParameterId { get; private set; }
+        public int MovingWithAnchorParameterId { get; private set; }
+        public int MovingWithoutAnchorParameterId { get; private set; }
+        public int AimingParameterId { get; private set; }
+        public int ThrowingAnchorParameterId { get; private set; }
+        public int PullingAnchorParameterId { get; private set; }
+        public int PickUpAnchorParameterId { get; private set; }
+        public int IdleToMovingParameterId { get; private set; }
+
+
+        public void OnValidate()
+        {
+                    
+            IdleParameterId = Animator.StringToHash(_idleParameter);
+            MovingWithAnchorParameterId = Animator.StringToHash(_movingWithAnchorParameter);
+            MovingWithoutAnchorParameterId = Animator.StringToHash(_movingWithoutAnchorParameter);
+            AimingParameterId = Animator.StringToHash(_aimingParameter);
+            ThrowingAnchorParameterId = Animator.StringToHash(_throwingAnchorParameter);
+            PullingAnchorParameterId = Animator.StringToHash(_pullingAnchorParameter);
+            PickUpAnchorParameterId = Animator.StringToHash(_pickUpAnchorParameter);
+            IdleToMovingParameterId = Animator.StringToHash(_idleToMovingParameter);
+        }
     }
 }
