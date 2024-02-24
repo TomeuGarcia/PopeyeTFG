@@ -23,6 +23,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
+
+            _blackboard.PlayerMediator.PlayerView.PlayEnterAimingAnimation();
             
             StartChargingThrow();
         }
@@ -40,6 +42,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
+            _blackboard.PlayerMediator.UpdateSafeGroundChecking(deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+            if (playerIsOnVoid)
+            {
+                CancelChargingThrow();
+                _blackboard.PlayerMediator.OnPlayerFellOnVoid();
+                NextState = PlayerStates.FallingOnVoid;
+                return true;
+            }
+            
             if (_blackboard.MovesetInputsController.Aim_Released())
             {
                 CancelChargingThrow();

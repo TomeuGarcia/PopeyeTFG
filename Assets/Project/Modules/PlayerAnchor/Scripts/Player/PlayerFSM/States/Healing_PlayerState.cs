@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -43,7 +44,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid StartHealing()
         {
             _finishedHealing = false;
-            await _blackboard.PlayerMediator.UseHeal();
+            _blackboard.PlayerMediator.UseHeal();
+            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.HealingDuration));
             _finishedHealing = true;
         }
     }

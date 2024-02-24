@@ -10,6 +10,7 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
@@ -21,7 +22,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _targetForCamera;
         [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
         [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
+
+        [SerializeField] private Transform _meshHolderTransform;
+        [SerializeField] private Renderer _renderer;
+        [SerializeField] private Animator _animator;
         
+        public Transform MeshHolderTransform => _meshHolderTransform;
+        public Renderer Renderer => _renderer;
+        public Animator Animator => _animator;
+
+
+
         private IPlayerAudio _playerAudio;
         
         public Transform AnchorCarryHolder => _anchorCarryHolder;
@@ -89,6 +100,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
+            OnStopMoving();
             
             _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
@@ -102,6 +114,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
+            PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
         }
 
         private void ResetAnchor()
@@ -238,7 +251,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchorPuller.PullAnchor();
             LookTowardsAnchorForDuration(0.3f).Forget();
             
-            PlayerView.PlayPullAnimation(0.3f);
+            PlayerView.PlayPullAnimation(0.3f).Forget();
         }
 
         public void OnPullAnchorComplete()
@@ -384,9 +397,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnPlayerFellOnVoid()
         {
             _onVoidChecker.ClearState();
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.FallingOnVoid);
-
-            //_anchor.DisableChainTensionForDuration(_stateMachine.Blackboard.PlayerStatesConfig.FallingOnVoidDuration + 0.2f);
         }
 
         public bool TakeFellOnVoidDamage()
@@ -448,11 +458,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnStartMoving()
         {
             _playerAudio.StartPlayingStepsSounds();
+            
+            PlayerView.PlayExitIdleAnimation();
         }
 
         public void OnStopMoving()
         {
             _playerAudio.StopPlayingStepsSounds();
+            
+            PlayerView.PlayEnterIdleAnimation();
         }
 
         public void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid)
@@ -507,10 +521,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return !_playerHealth.IsMaxHealth();
         }
 
-        public async UniTask UseHeal()
+        public void UseHeal()
         {
             _playerHealth.UseHeal();
-            await PlayerView.PlayHealAnimation();
+            PlayerView.PlayHealAnimation();
         }
 
         public void HealToMax()
