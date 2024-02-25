@@ -46,8 +46,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private AnimationCurve _heightDisplacementCurve;
         
         public AnimationCurve HeightDisplacementCurve => _heightDisplacementCurve;
-        
-        
+
+
+
+        [SerializeField] private AnimationCurve _endRotatonWithCurve;
+        public AnimationCurve EndRotatonWithCurve => _endRotatonWithCurve;
         
         
 

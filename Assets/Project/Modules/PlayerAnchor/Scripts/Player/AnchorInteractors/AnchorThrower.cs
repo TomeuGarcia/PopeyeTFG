@@ -129,6 +129,33 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 AnchorThrowResult.EndLookRotation = _anchorTrajectorySnapController.GetTargetRotation();
                 _anchorTrajectorySnapController.UseCurrentTarget(AnchorThrowResult.Duration);
             }
+            else
+            {
+                Vector3 dir = Vector3.ProjectOnPlane(AnchorThrowResult.EndLookRotation * Vector3.down, Vector3.up).normalized;
+                Vector3 toCamera = (Vector3.left + Vector3.back).normalized;
+
+                float dot = Vector3.Dot(dir, toCamera);
+                Debug.Log(dot);
+
+                dot = Mathf.Abs(dot);
+                float offset = (1f - (dot*dot));
+                float offsetAngle = 90f * offset;
+                
+                Quaternion facingCameraRotation = AnchorThrowResult.EndLookRotation *
+                                                  Quaternion.AngleAxis(offsetAngle, Vector3.forward);
+                Quaternion endRotation = facingCameraRotation;
+                //AnchorThrowResult.EndLookRotation = endRotation;
+
+
+                Vector3 forward = (Vector3.down + toCamera * 0.3f).normalized;
+                Vector3 up = toCamera;
+                Quaternion lookToCamera = Quaternion.LookRotation(forward, up);
+
+
+                float t = _throwConfig.EndRotatonWithCurve.Evaluate(dot);
+                AnchorThrowResult.EndLookRotation =
+                Quaternion.LerpUnclamped(AnchorThrowResult.EndLookRotation, lookToCamera, 0.9f * t);
+            }
 
             _anchor.SetThrown(AnchorThrowResult);
             DoThrowAnchor(AnchorThrowResult).Forget();

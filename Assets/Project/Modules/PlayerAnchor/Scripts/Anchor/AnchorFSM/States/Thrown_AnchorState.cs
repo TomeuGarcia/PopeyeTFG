@@ -15,8 +15,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
             _blackboard.TransformMotion.Unparent();
             
             //_blackboard.AnchorChain.DisableTension();
-            
-            _blackboard.AnchorMediator.SetActiveDebug(true);
         }
 
         public void Exit()
