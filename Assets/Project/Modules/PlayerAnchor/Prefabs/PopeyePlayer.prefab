@@ -1463,6 +1463,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6081722259379824398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2450885935754783890}
+  m_Layer: 6
+  m_Name: AnchorThrowStartPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2450885935754783890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6081722259379824398}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.55, y: 0.15, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3940967709167532876}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6811965377698034572
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,6 +1555,7 @@ Transform:
   m_Children:
   - {fileID: 7700880094938301446}
   - {fileID: 2099948704858295707}
+  - {fileID: 2450885935754783890}
   m_Father: {fileID: 2041502078564415168}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2147,7 +2179,7 @@ Transform:
   - {fileID: 4279091411442141224}
   - {fileID: 6668082300037902310}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3863730451507063996
 MonoBehaviour:
@@ -2163,6 +2195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _anchorCarryHolder: {fileID: 2547270285845738440}
   _anchorGrabToThrowHolder: {fileID: 2547270285845738440}
+  _anchorThrowStart: {fileID: 2450885935754783890}
   _targetForEnemies: {fileID: 713660627178412460}
   _targetForCamera: {fileID: 8322469419176788749}
   _respawnCheckpointChecker:
