@@ -79,7 +79,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             SetAnimatorBool(_config.PullingAnchorParameterId, true);
             
-            SetAnimatorBool(_config.MovingWithAnchorParameterId, true); //
+            SetAnimatorBool(_config.MovingWithAnchorParameterId, false); //
             SetAnimatorBool(_config.MovingWithoutAnchorParameterId, true); //
             SetAnimatorBool(_config.AimingParameterId, false); //
         }

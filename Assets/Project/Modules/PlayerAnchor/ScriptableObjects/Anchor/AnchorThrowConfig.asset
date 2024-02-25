@@ -39,8 +39,8 @@ MonoBehaviour:
   _maxThrowForceChargeDuration: 0.1
   _minThrowMoveDuration: 0.2
   _maxThrowMoveDuration: 0.3
-  _minThrowDistance: 8
-  _maxThrowDistance: 8
+  _minThrowDistance: 9
+  _maxThrowDistance: 9
   _moveInterpolationCurve:
     serializedVersion: 2
     m_Curve:
@@ -133,8 +133,26 @@ MonoBehaviour:
     m_RotationOrder: 4
   _endRotationWeightCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.07747125
+      outSlope: 0.07747125
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.114992715
+    - serializedVersion: 3
+      time: 1
+      value: 0.40089095
+      inSlope: -1.2453995
+      outSlope: -1.2453995
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.062591076
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _correctionAmount: 0.8
+  _correctionAmount: 0.6
