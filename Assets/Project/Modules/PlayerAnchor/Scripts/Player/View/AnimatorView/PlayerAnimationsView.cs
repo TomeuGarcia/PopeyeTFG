@@ -50,7 +50,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetAnimatorBool(_config.AimingParameterId, false);
             
             SetAnimatorBool(_config.ThrowingAnchorParameterId, false);
-            ResetAnimatorTrigger(_config.PullingAnchorParameterId);
+            SetAnimatorBool(_config.PullingAnchorParameterId, false);
         }
 
         public void PlayEnterAimingAnimation()
@@ -58,6 +58,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
             SetAnimatorBool(_config.MovingWithoutAnchorParameterId, false);
             SetAnimatorBool(_config.AimingParameterId, true);
+            
+            SetAnimatorBool(_config.ThrowingAnchorParameterId, false); //
         }
 
         public void PlayPickUpAnchorAnimation()
@@ -67,20 +69,25 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayThrowAnimation()
         {
-            SetAnimatorBool(_config.AimingParameterId, true);
+            SetAnimatorBool(_config.AimingParameterId, false);
             SetAnimatorBool(_config.ThrowingAnchorParameterId, true);
+            
+            SetAnimatorBool(_config.MovingWithoutAnchorParameterId, true); //
         }
 
         public async UniTaskVoid PlayPullAnimation(float delay)
         {
-            SetAnimatorTrigger(_config.PullingAnchorParameterId);
+            SetAnimatorBool(_config.PullingAnchorParameterId, true);
+            
+            SetAnimatorBool(_config.MovingWithAnchorParameterId, false); //
+            SetAnimatorBool(_config.MovingWithoutAnchorParameterId, true); //
+            SetAnimatorBool(_config.AimingParameterId, false); //
         }
 
         public void PlayDashAnimation(float duration)
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
         }
-
 
 
 

@@ -33,8 +33,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
             
             _blackboard.AnchorChain.DisableTension();
             _blackboard.AnchorPhysics.DisableCollision();
-
-            _blackboard.AnchorMediator.SetActiveDebug(false);
         }
 
         public void Exit()

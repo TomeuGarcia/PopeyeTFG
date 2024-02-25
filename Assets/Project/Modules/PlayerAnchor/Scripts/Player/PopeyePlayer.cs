@@ -18,6 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         [SerializeField] private Transform _anchorCarryHolder;
         [SerializeField] private Transform _anchorGrabToThrowHolder;
+        [SerializeField] private Transform _anchorThrowStart;
         [SerializeField] private Transform _targetForEnemies;
         [SerializeField] private Transform _targetForCamera;
         [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
@@ -203,7 +204,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public Vector3 GetAnchorThrowStartPosition()
         {
-            return _anchorGrabToThrowHolder.position + _anchorCarryHolder.TransformDirection(Vector3.back) * 1.4f;
+            return _anchorThrowStart.position + _anchorThrowStart.TransformDirection(Vector3.back) * 1.4f;
         }
 
 

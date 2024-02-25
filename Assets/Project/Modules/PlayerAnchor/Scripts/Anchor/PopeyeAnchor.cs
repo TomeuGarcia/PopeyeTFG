@@ -371,11 +371,5 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorAudio.PlayDealDamageSound();
             _anchorView.OnDamageDealt(damageHitResult);
         }
-
-        public void SetActiveDebug(bool active)
-        {
-            //PositionTransform.gameObject.SetActive(active);
-            //_fakeAnchor.SetActive(!active);
-        }
     }
 }
