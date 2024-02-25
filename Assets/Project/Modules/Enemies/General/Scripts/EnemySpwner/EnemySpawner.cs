@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.EnemyFactories;
-using Popeye.Modules.Enemies.General;
 
-namespace Popeye.Modules.Enemies
+namespace Popeye.Modules.Enemies.General
 {
     public class EnemySpawner : MonoBehaviour
     {
@@ -77,7 +73,7 @@ namespace Popeye.Modules.Enemies
 
         private async UniTask SpawnEnemyWave(EnemyWave enemyWave)
         {
-            await UniTask.Delay((int)(enemyWave.DelayBeforeWaveSpawning * 1000));
+            await UniTask.Delay(TimeSpan.FromSeconds(enemyWave.DelayBeforeWaveSpawning));
 
 
             _activeEnemiesCount = enemyWave.NumberOfEnemies;
@@ -86,14 +82,13 @@ namespace Popeye.Modules.Enemies
             {
                 EnemyWave.SpawnSequenceBeat spawnSequenceBeat = enemyWave.SpawnSequence[i];
 
-                await UniTask.Delay((int)(spawnSequenceBeat.DelayBeforeSpawn * 1000));
+                await UniTask.Delay(TimeSpan.FromSeconds(spawnSequenceBeat.DelayBeforeSpawn));
                 SpawnEnemy(spawnSequenceBeat.EnemyID, spawnSequenceBeat.SpawnPosition);
             }
         }
 
         private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)
         {
-            //AEnemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
             AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity);
             enemy.AwakeInit(_enemyAttackTarget);
 
