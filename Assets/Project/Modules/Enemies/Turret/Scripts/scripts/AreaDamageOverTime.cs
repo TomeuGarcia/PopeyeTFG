@@ -65,7 +65,6 @@ public class AreaDamageOverTime : RecyclableObject
     {
         if (!other.TryGetComponent(out IObjectType otherObjectType)) return false;
         return otherObjectType.IsOfType(_playerType);
-        return true;
     }
     private void OnTriggerExit(Collider other)
     {
