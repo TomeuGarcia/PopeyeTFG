@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Enemies.EnemyFactories;
+using Popeye.Modules.Enemies.General;
 
 namespace Popeye.Modules.Enemies
 {
@@ -26,11 +28,11 @@ namespace Popeye.Modules.Enemies
             public class SpawnSequenceBeat
             {
                 [SerializeField, Range(0.0f, 10.0f)] private float _delayBeforeSpawn = 0.5f;
-                [SerializeField] private AEnemy _enemyPrefab;
+                [SerializeField] private EnemyID _enemyID;
                 [SerializeField] private Transform _spawnSpot;
 
                 public float DelayBeforeSpawn => _delayBeforeSpawn;
-                public AEnemy EnemyPrefab => _enemyPrefab;
+                public EnemyID EnemyID => _enemyID;
                 public Vector3 SpawnPosition => _spawnSpot.position;
             }
 
@@ -47,11 +49,11 @@ namespace Popeye.Modules.Enemies
         public EnemySpawnerEvent OnFirstWaveStarted;
         public EnemySpawnerEvent OnAllWavesFinished;
         
-        private EnemyFactory _enemyFactory;
+        private IEnemyFactory _enemyFactory;
 
         private void Start()
         {
-            _enemyFactory = ServiceLocator.Instance.GetService<EnemyFactory>();
+            _enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
         }
 
         public void StartWaves()
@@ -85,14 +87,14 @@ namespace Popeye.Modules.Enemies
                 EnemyWave.SpawnSequenceBeat spawnSequenceBeat = enemyWave.SpawnSequence[i];
 
                 await UniTask.Delay((int)(spawnSequenceBeat.DelayBeforeSpawn * 1000));
-                SpawnEnemy(spawnSequenceBeat.EnemyPrefab, spawnSequenceBeat.SpawnPosition);
+                SpawnEnemy(spawnSequenceBeat.EnemyID, spawnSequenceBeat.SpawnPosition);
             }
         }
 
-        private void SpawnEnemy(AEnemy enemyPrefab, Vector3 spawnPosition)
+        private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)
         {
             //AEnemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            AEnemy enemy = _enemyFactory.Create(enemyPrefab.Id.Id, spawnPosition, Quaternion.identity);
+            AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity);
             enemy.AwakeInit(_enemyAttackTarget);
 
             enemy.OnDeathComplete += DecrementActiveEnemiesCount;

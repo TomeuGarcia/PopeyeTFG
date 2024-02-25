@@ -445,7 +445,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             if (CheckFloorHit(upAndDownTrajectory[^1], 0.1f, FloorProbeDistance, out floorHit, 
                     ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
             {
-                upAndDownTrajectory[^1] = floorHit.point + (floorHit.normal * 0.2f);
+                upAndDownTrajectory[^1] = floorHit.point + (floorHit.normal * 0.005f);
             }
 
             return upAndDownTrajectory;

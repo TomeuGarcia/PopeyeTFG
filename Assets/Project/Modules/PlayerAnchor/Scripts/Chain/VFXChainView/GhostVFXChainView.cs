@@ -100,7 +100,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             UpdateShader();
         }
 
-        public void StartAnimation(Vector3 chainPosition, float duration)
+        public void StartOriginAnimation(Vector3 chainPosition, float duration)
         {            
             DisableUpdateObstacleHitsForDuration(chainPosition, duration).Forget();
         }

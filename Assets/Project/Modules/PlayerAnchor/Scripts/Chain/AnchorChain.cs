@@ -98,13 +98,14 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _thrownChainViewLogic.EnterSetup(throwResult.Duration);
             TransitionViewLogic(_thrownChainViewLogic);
             
-            _vfxChainView.StartAnimation(throwResult.FirstTrajectoryPathPoint + throwResult.Direction * 1.0f,
-                throwResult.Duration * 0.75f);
+            PlayChainThrowAnimation(throwResult);
         }
         public void SetPulledView(AnchorThrowResult pullResult)
         {
             _pullChainViewLogic.EnterSetup(pullResult.Duration);
             TransitionViewLogic(_pullChainViewLogic);
+            
+            PlayChainPullAnimation(pullResult);
         }
         public void SetRestingOnFloorView()
         {
@@ -156,7 +157,23 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _chainPhysics.SetFailedThrow(failedThrow);
         }
-        
-        
+
+
+        private void PlayChainThrowAnimation(AnchorThrowResult throwResult)
+        {
+            _vfxChainView.StartOriginAnimation(
+                throwResult.FirstTrajectoryPathPoint + 
+                Vector3.down * 0.5f + 
+                throwResult.Direction * 2.0f,
+                throwResult.Duration * 1.2f);
+        }
+        private void PlayChainPullAnimation(AnchorThrowResult pullResult)
+        {
+            _vfxChainView.StartOriginAnimation(
+                pullResult.FirstTrajectoryPathPoint + 
+                Vector3.down * 1.0f + 
+                pullResult.Direction * 0.0f,
+                pullResult.Duration * 0.75f);
+        }
     }
 }

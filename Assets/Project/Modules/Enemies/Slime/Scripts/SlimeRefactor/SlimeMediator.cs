@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 using System.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.Enemies.EnemyFactories;
+using Popeye.Modules.Enemies.Slime;
 using Popeye.Modules.VFX.ParticleFactories;
 using Task = System.Threading.Tasks.Task;
 
@@ -16,37 +18,49 @@ namespace Popeye.Modules.Enemies
     public class SlimeMediator : AEnemyMediator
     {
         [SerializeField] private SlimeMovement _slimeMovement;
-        [SerializeField] private SquashStretchAnimator _squashStretchAnimator;
-        [SerializeField] private SlimeDivider _slimeDivider;
+        [FormerlySerializedAs("_squashStretchAnimator")] [SerializeField] private SlimeAnimatorController slimeAnimatorController;
         [SerializeField] private EnemyPatrolling _enemyPatrolling;
         [SerializeField] private DamageTrigger _damageTrigger;
         
         [SerializeField] private DamageHitConfig _contactDamageHitConfig;
 
         [SerializeField] private BoxCollider _boxCollider;
-        public SlimeMindEnemy slimeMindEnemy;
-        public Transform playerTransform { get; private set; }
+        [HideInInspector] public SlimeMindEnemy slimeMindEnemy;
+        private SlimeFactory _slimeFactory;
+        public Transform PlayerTransform { get; private set; }
+        public SlimeSizeID SlimeSizeID { get; private set; }
         [SerializeField] private Transform _slimeTransform;
         private Transform _particlePoolParent;
         private Core.Pool.ObjectPool _objectPool;
+    
 
+        public override Vector3 Position => _slimeTransform.position;
 
-        public override Vector3 Position => transform.position;
-
-        public void Init()
+        public void InitAfterSpawn()
         {
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
-            _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);
-            _slimeDivider.Configure(this);
+            slimeAnimatorController.Configure(this,ServiceLocator.Instance.GetService<IParticleFactory>());
             _enemyPatrolling.Configure(this);
             _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
+            
+            PlayMoveAnimation();
         }
 
         public void SetSlimeMind(SlimeMindEnemy slimeMind)
         {
             slimeMindEnemy = slimeMind;
+        }
+
+        public void SetSlimeFactory(SlimeFactory slimeFactory)
+        {
+            _slimeFactory = slimeFactory;
+        }
+
+        public void SetSlimeSize(SlimeSizeID slimeSizeID)
+        {
+            SlimeSizeID = slimeSizeID;
         }
 
         public void SetObjectPool(Core.Pool.ObjectPool objectPool)
@@ -60,13 +74,13 @@ namespace Popeye.Modules.Enemies
         }
         public void PlayMoveAnimation()
         {
-            _squashStretchAnimator.PlayMove();
+            slimeAnimatorController.PlayMove();
         }
         public void SetPlayerTransform(Transform _playerTransform)
         {
-            playerTransform = _playerTransform;
-            _slimeMovement.SetTarget(playerTransform);
-            _enemyPatrolling.SetPlayerTransform(playerTransform);
+            PlayerTransform = _playerTransform;
+            _slimeMovement.SetTarget(PlayerTransform);
+            _enemyPatrolling.SetPlayerTransform(PlayerTransform);
         }
 
         public void SetWayPoints(Transform[] wayPoints)
@@ -87,7 +101,7 @@ namespace Popeye.Modules.Enemies
         private async void ApplyDivisionExplosionForces(Vector3 explosionForceDir,EnemyPatrolling.PatrolType type,Transform[] wayPoints)
         {
             _slimeMovement.DeactivateNavigation();
-            _squashStretchAnimator.PlayDeath();
+            slimeAnimatorController.PlayDeath();
             _enemyHealth.SetIsInvulnerable(true);
             _boxCollider.isTrigger = false;
             _slimeMovement.ApplyExplosionForce(explosionForceDir);
@@ -105,17 +119,20 @@ namespace Popeye.Modules.Enemies
 
         public void Divide()
         {
-            _squashStretchAnimator.PlayDeath();
-            _slimeDivider.SpawnSlimes();
+            slimeAnimatorController.PlayDeath();
+            if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
+            {
+                _slimeFactory.CreateFromParent(slimeMindEnemy,this,Position,Quaternion.identity);
+            }
             slimeMindEnemy.RemoveSlimeFromList();
-            _squashStretchAnimator.StopMove();
-            Destroy(gameObject);
+            slimeAnimatorController.StopMove();
         }
 
         public override void OnDeath(DamageHit damageHit)
         {
-            base.OnDeath(damageHit);
             Divide();
+            base.OnDeath(damageHit);
+            
         }
 
         public override void OnPlayerClose()
@@ -147,6 +164,16 @@ namespace Popeye.Modules.Enemies
         public Transform[] GetPatrolWaypoints()
         {
             return _enemyPatrolling.GetWaypoints();
+        }
+
+        internal override void Init()
+        {
+        }
+
+        internal override void Release()
+        {
+            _enemyHealth.HealToMax();
+            _slimeTransform.localPosition = Vector3.zero;
         }
     }
 }
