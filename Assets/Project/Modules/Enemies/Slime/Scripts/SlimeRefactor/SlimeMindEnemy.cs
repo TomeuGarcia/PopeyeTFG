@@ -25,7 +25,7 @@ namespace Popeye.Modules.Enemies
         
         
         [SerializeField] private Transform _transform;
-        [SerializeField] private ObjectPool _objectPool;
+        private ObjectPool _objectPool;
         [SerializeField] private PooledParticle _explosionParticles;
         public enum SlimeSize
         {

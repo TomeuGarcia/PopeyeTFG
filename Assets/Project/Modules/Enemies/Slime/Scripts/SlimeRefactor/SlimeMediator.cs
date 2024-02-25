@@ -18,7 +18,7 @@ namespace Popeye.Modules.Enemies
     public class SlimeMediator : AEnemyMediator
     {
         [SerializeField] private SlimeMovement _slimeMovement;
-        [SerializeField] private SquashStretchAnimator _squashStretchAnimator;
+        [FormerlySerializedAs("_squashStretchAnimator")] [SerializeField] private SlimeAnimatorController slimeAnimatorController;
         [SerializeField] private EnemyPatrolling _enemyPatrolling;
         [SerializeField] private DamageTrigger _damageTrigger;
         
@@ -41,7 +41,7 @@ namespace Popeye.Modules.Enemies
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
-            _squashStretchAnimator.Configure(this,_slimeTransform,_objectPool);
+            slimeAnimatorController.Configure(this,ServiceLocator.Instance.GetService<IParticleFactory>());
             _enemyPatrolling.Configure(this);
             _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
             
@@ -74,7 +74,7 @@ namespace Popeye.Modules.Enemies
         }
         public void PlayMoveAnimation()
         {
-            _squashStretchAnimator.PlayMove();
+            slimeAnimatorController.PlayMove();
         }
         public void SetPlayerTransform(Transform _playerTransform)
         {
@@ -101,7 +101,7 @@ namespace Popeye.Modules.Enemies
         private async void ApplyDivisionExplosionForces(Vector3 explosionForceDir,EnemyPatrolling.PatrolType type,Transform[] wayPoints)
         {
             _slimeMovement.DeactivateNavigation();
-            _squashStretchAnimator.PlayDeath();
+            slimeAnimatorController.PlayDeath();
             _enemyHealth.SetIsInvulnerable(true);
             _boxCollider.isTrigger = false;
             _slimeMovement.ApplyExplosionForce(explosionForceDir);
@@ -119,13 +119,13 @@ namespace Popeye.Modules.Enemies
 
         public void Divide()
         {
-            _squashStretchAnimator.PlayDeath();
+            slimeAnimatorController.PlayDeath();
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {
                 _slimeFactory.CreateFromParent(slimeMindEnemy,this,Position,Quaternion.identity);
             }
             slimeMindEnemy.RemoveSlimeFromList();
-            _squashStretchAnimator.StopMove();
+            slimeAnimatorController.StopMove();
         }
 
         public override void OnDeath(DamageHit damageHit)

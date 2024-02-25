@@ -99,19 +99,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b203e32c2901dd84a8cd41bba68a2c60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialVelocity: 15
-  _angle: 45
   _line: {fileID: 789859747101907206}
-  _step: 0.1
   _height: 7.5
   speed: 3.5
+  _rigidbody: {fileID: 7064552718558789589}
   _bulletBody: {fileID: 8315923643794440247}
   _contactDamageConfig: {fileID: 11400000, guid: c6614f1bb8f4db24d8bc9bee3b1beaf3,
     type: 2}
   _lineAimingMat: {fileID: 2100000, guid: 4be06b3bd04446e42a52bd36dfc8fe43, type: 2}
   _lineShootingMat: {fileID: 2100000, guid: 8d1a847468158234b9817083b482250e, type: 2}
-  _damageableArea: {fileID: 1970133506300216461, guid: 733bcf9a22cc1fe42b18017c46b80ae2,
-    type: 3}
   _defaultProbingConfig: {fileID: 11400000, guid: 537b87ca428213d44b2acced68efd8cf,
     type: 2}
 --- !u!120 &789859747101907206
@@ -265,4 +261,4 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2

@@ -14,6 +14,7 @@ namespace Popeye.Modules.Enemies.Components
         private AEnemyMediator _mediator;
         private Transform _playerTransform;
         private Core.Pool.ObjectPool _projectilePool;
+        private Core.Pool.ObjectPool _damageAreaPool;
 
        [SerializeField] private float timeBetweenShots;
        [SerializeField] private Transform _firePoint;
@@ -31,13 +32,14 @@ namespace Popeye.Modules.Enemies.Components
        [SerializeField] private float _playerDistanceThreshold;
        private float _squaredPlayerDistanceThreshold;
 
-        public void Configure(AEnemyMediator turetMediator,Core.Pool.ObjectPool projectilePool,Transform transform)
+        public void Configure(AEnemyMediator turetMediator,Core.Pool.ObjectPool projectilePool,Core.Pool.ObjectPool damageAreaPool,Transform transform)
         {
             _mediator = turetMediator;
             _projectilePool = projectilePool;
+            _damageAreaPool = damageAreaPool;
             _playerTransform = transform;
             _currentProjectile = _projectilePool.Spawn<ParabolicProjectile>(_firePoint.position, quaternion.identity);
-            _currentProjectile.PrepareShot(_firePoint,_playerTransform);
+            _currentProjectile.PrepareShot(_firePoint,_playerTransform,_damageAreaPool);
             _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
         }
 
@@ -58,9 +60,8 @@ namespace Popeye.Modules.Enemies.Components
                     {
                         _currentProjectile.Shoot();
                         timer = 0;
-                        _currentProjectile =
-                            _projectilePool.Spawn<ParabolicProjectile>(_firePoint.position, quaternion.identity);
-                        _currentProjectile.PrepareShot(_firePoint, _playerTransform);
+                        _currentProjectile = _projectilePool.Spawn<ParabolicProjectile>(_firePoint.position, quaternion.identity);
+                        _currentProjectile.PrepareShot(_firePoint, _playerTransform,_damageAreaPool);
                     }
                 }
 

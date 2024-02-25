@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
@@ -17,13 +18,23 @@ namespace Popeye.Modules.Enemies
         public Transform playerTransform { get; private set; }
         
         private Core.Pool.ObjectPool _projectilePool;
+        private Core.Pool.ObjectPool _areaDamagePool;
         private TurretMindEnemy _turretMind;
         [SerializeField] private ParabolicProjectile _parabolicProjectile;
+        [SerializeField] private AreaDamageOverTime _damageableArea;
         internal override void Init()
+        {
+            
+            
+        }
+
+        private void Start()
         {
             _projectilePool = new ObjectPool(_parabolicProjectile);
             _projectilePool.Init(15);
-            _turretShooting.Configure(this,_projectilePool,playerTransform);
+            _areaDamagePool = new ObjectPool(_damageableArea);
+            _areaDamagePool.Init(15);
+            _turretShooting.Configure(this,_projectilePool,_areaDamagePool,playerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
         }

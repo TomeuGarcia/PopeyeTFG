@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 public class AreaDamageOverTime : RecyclableObject
@@ -19,6 +20,7 @@ public class AreaDamageOverTime : RecyclableObject
 
     [SerializeField] private float _burnRate = 0.3f;
     [SerializeField] private float _lifeTime = 0.3f;
+    [SerializeField] private ObjectTypeAsset _playerType;
     private float burnTimer = 0;
 
     
@@ -27,7 +29,7 @@ public class AreaDamageOverTime : RecyclableObject
     {
         _contactDamageHit = new DamageHit(_contactDamageConfig);
         _combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
-        Invoke("Despawn",_lifeTime);
+        
     }
 
     private void Update()
@@ -45,11 +47,11 @@ public class AreaDamageOverTime : RecyclableObject
 
     private void Despawn()
     {
-        Destroy(gameObject);
+        Recycle();
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (AcceptsOtherCollider(other))
         {
             if (_player == null)
             {
@@ -59,9 +61,15 @@ public class AreaDamageOverTime : RecyclableObject
         }
     }
 
+    private bool AcceptsOtherCollider(Collider other)
+    {
+        if (!other.TryGetComponent(out IObjectType otherObjectType)) return false;
+        return otherObjectType.IsOfType(_playerType);
+        return true;
+    }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (AcceptsOtherCollider(other))
         {
             _standingOnArea = false;
             burnTimer = 0;
@@ -70,7 +78,7 @@ public class AreaDamageOverTime : RecyclableObject
 
     internal override void Init()
     {
-        
+        Invoke("Despawn",_lifeTime);
     }
 
     internal override void Release()

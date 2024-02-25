@@ -7,12 +7,13 @@ using UnityEngine;
 using DG.Tweening;
 using Popeye.Core.Pool;
 using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
 using UnityEngine.Pool;
 
 namespace Popeye.Modules.Enemies.Components
 {
-    public class SquashStretchAnimator : MonoBehaviour, IEnemyAnimator
+    public class SlimeAnimatorController : MonoBehaviour, IEnemyAnimator
     {
         private Core.Pool.ObjectPool _objectPool;
         
@@ -23,38 +24,27 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private float _squashAndStretchTime = 0.5f;
 
         private bool _playAnimation = false;
+        private const string MOVE_ANIMATOR_PARAMETER = "Moving";
         
-        private Transform _transform;
 
         protected AEnemyMediator _mediator;
 
         [SerializeField] private Animator _animator;
+        private IParticleFactory _particleFactory;
 
-        public void Configure(AEnemyMediator slimeMediator, Transform transform, ObjectPool objectPool)
+        public void Configure(AEnemyMediator slimeMediator, IParticleFactory particleFactory)
         {
             _mediator = slimeMediator;
-            _transform = transform;
-            _objectPool = objectPool;
-            
+            _particleFactory = particleFactory;
+
         }
 
         private void SpawnExplosionParticles()
         {
-            var obj = _objectPool.Spawn<PooledParticle>(transform.position,quaternion.identity);
-            //obj.Recycle();
+            _particleFactory.Create(ParticleTypes.SlimeDeathParticles, transform.position, Quaternion.identity);
         }
         
-        private async  UniTaskVoid SquashAndStretch()
-        {
-            // Squash
-           await _transform.DOScale(new Vector3(_squashAmountXZ, _squashAmountY, _squashAmountXZ), _squashAndStretchTime).AsyncWaitForCompletion();
-           //Stretch
-           await _transform.DOScale(new Vector3(_stretchAmountXZ, _stretchAmountY, _stretchAmountXZ), _squashAndStretchTime).AsyncWaitForCompletion();
-           
-           if(_playAnimation)
-           SquashAndStretch();
 
-        }
         
         public void PlayTakeDamage()
         {
@@ -70,14 +60,13 @@ namespace Popeye.Modules.Enemies.Components
         {
             //move animation
             _playAnimation = true;
-            _animator.SetBool("Moving", true);
-            SquashAndStretch();
+            _animator.SetBool(MOVE_ANIMATOR_PARAMETER, true);
         }
 
         public void StopMove()
         {
             //idle animation
-            _animator.SetBool("Moving",false);
+            _animator.SetBool(MOVE_ANIMATOR_PARAMETER,false);
             _playAnimation = false;
         }
     }

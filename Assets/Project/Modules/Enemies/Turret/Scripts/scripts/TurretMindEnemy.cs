@@ -27,7 +27,7 @@ namespace Popeye.Modules.Enemies
             InvokeOnDeathComplete();
             Recycle();
         }
-        private void InstantiateTurret()
+        private void InitTurret()
         {
             _turretMediator.SetTurretMind(this);
             _turretMediator.SetObjectPool(_projectilePool);
@@ -45,7 +45,7 @@ namespace Popeye.Modules.Enemies
 
         internal override void Init()
         {
-            InstantiateTurret();
+            InitTurret();
         }
 
         internal override void Release()

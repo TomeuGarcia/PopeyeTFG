@@ -12,17 +12,15 @@ using UnityEngine.Serialization;
 
 public class ParabolicProjectile : RecyclableObject
 {
-    [SerializeField] private float _initialVelocity;
-    [SerializeField] private float _angle;
     [SerializeField] private LineRenderer _line;
-    [SerializeField] private float _step;
     private Transform _firePoint;
     [SerializeField] private float _height;
     [SerializeField] private float speed;
     private Transform _playerTransform;
+    [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private MeshRenderer _bulletBody;
-    private bool shoot = false;
-    private bool aiming = false;
+    private bool _shoot = false;
+    private bool _aiming = false;
 
     private DamageHit _contactDamageHit;
     [SerializeField] private DamageHitConfig _contactDamageConfig;
@@ -31,7 +29,7 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] private Material _lineAimingMat;
     [SerializeField] private Material _lineShootingMat;
     
-    [SerializeField] private GameObject _damageableArea;
+    private ObjectPool _damageAreaPool;
     [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
     private void Update()
     {
@@ -40,21 +38,17 @@ public class ParabolicProjectile : RecyclableObject
             Vector3 direction = _playerTransform.position - _firePoint.position;
             Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
             Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
-            //_height = targetPos.y + targetPos.magnitude / 2f;
-            //_height = Mathf.Max(0.01f, _height);
             float angle;
             float v0;
             float time;
-            if (aiming)
+            if (_aiming)
             {
                 
                 CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
-                //DrawPath(groundDirection.normalized, v0, angle, time, _step);
-                if (shoot)
+                if (_shoot)
                 {
-                    shoot = false;
-                    aiming = false;
-                    //float angle = _angle * Mathf.Deg2Rad;
+                    _shoot = false;
+                    _aiming = false;
                     _bulletBody.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
@@ -65,13 +59,12 @@ public class ParabolicProjectile : RecyclableObject
 
     }
 
-    public void PrepareShot(Transform firePoint,Transform playerTransform)
+    public void PrepareShot(Transform firePoint,Transform playerTransform,ObjectPool damageAreaPool)
     {
-        
+        _damageAreaPool = damageAreaPool;
         _firePoint = firePoint;
-        aiming = false;
+        _aiming = false;
         _playerTransform = playerTransform;
-        //_line.enabled = false;
         _line.material = _lineAimingMat;
         _bulletBody.enabled = false;
         gameObject.SetActive(true);
@@ -85,13 +78,12 @@ public class ParabolicProjectile : RecyclableObject
 
     public void StartAiming()
     {
-        //_line.enabled = true;
-        aiming = true;
+        _aiming = true;
     }
     public void Shoot()
     {
         _line.material = _lineShootingMat;
-        shoot = true;
+        _shoot = true;
     }
     private void DrawPath(Vector3 direction, float v0, float angle,float time, float step)
     {
@@ -110,21 +102,6 @@ public class ParabolicProjectile : RecyclableObject
         float yFinal = (float)(v0 * time * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(time,2));
         _line.SetPosition(count,_firePoint.position +direction * xFinal + Vector3.up * yFinal);
     }
-
-    private void CalculatePath(Vector3 targetPos, float angle, out float v0, out float time)
-    {
-        float xt = targetPos.x;
-        float yt = targetPos.y;
-        float g = -Physics.gravity.y;
-
-        float v1 = Mathf.Pow(xt, 2) * g;
-        float v2 = 2 * xt * Mathf.Sin(angle) * Mathf.Cos(angle);
-        float v3 = 2 * yt * Mathf.Pow(Mathf.Cos(angle), 2);
-        v0 = Mathf.Sqrt(v1 / (v2 - v3));
-
-        time = xt / (v0 * Mathf.Cos(angle));
-
-    }
     private async UniTaskVoid Movement(Vector3 direction, float v0,float angle,float time)
     {
         float t = 0;
@@ -132,7 +109,7 @@ public class ParabolicProjectile : RecyclableObject
         {
             float x = v0 * t * Mathf.Cos(angle);
             float y = (float)(v0 * t * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(t,2));
-            transform.position = _firePoint.position + direction * x + Vector3.up * y;
+            _rigidbody.MovePosition(_firePoint.position + direction * x + Vector3.up * y); //= ;
             
             t += Time.deltaTime * speed;
             await UniTask.NextFrame();
@@ -181,7 +158,7 @@ public class ParabolicProjectile : RecyclableObject
             if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
             {
                 var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
-                Instantiate(_damageableArea, hit.point, startRot);
+                _damageAreaPool.Spawn<AreaDamageOverTime>(hit.point, startRot);
             }
             Recycle();
     }
