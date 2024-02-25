@@ -131,30 +131,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
             else
             {
-                Vector3 dir = Vector3.ProjectOnPlane(AnchorThrowResult.EndLookRotation * Vector3.down, Vector3.up).normalized;
-                Vector3 toCamera = (Vector3.left + Vector3.back).normalized;
-
-                float dot = Vector3.Dot(dir, toCamera);
-                Debug.Log(dot);
-
-                dot = Mathf.Abs(dot);
-                float offset = (1f - (dot*dot));
-                float offsetAngle = 90f * offset;
-                
-                Quaternion facingCameraRotation = AnchorThrowResult.EndLookRotation *
-                                                  Quaternion.AngleAxis(offsetAngle, Vector3.forward);
-                Quaternion endRotation = facingCameraRotation;
-                //AnchorThrowResult.EndLookRotation = endRotation;
-
-
-                Vector3 forward = (Vector3.down + toCamera * 0.3f).normalized;
-                Vector3 up = toCamera;
-                Quaternion lookToCamera = Quaternion.LookRotation(forward, up);
-
-
-                float t = _throwConfig.EndRotatonWithCurve.Evaluate(dot);
-                AnchorThrowResult.EndLookRotation =
-                Quaternion.LerpUnclamped(AnchorThrowResult.EndLookRotation, lookToCamera, 0.9f * t);
+                CorrectEndRotationForVisibility(AnchorThrowResult, _throwConfig);
             }
 
             _anchor.SetThrown(AnchorThrowResult);
@@ -173,6 +150,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             AnchorVerticalThrowResult.Reset(throwTrajectory, Vector3.up, 
                 _verticalThrowStartRotation, _verticalThrowEndRotation, duration, false);
+
+            CorrectEndRotationForVisibility(AnchorVerticalThrowResult, _verticalThrowConfig);
             
             _anchor.SetThrownVertically(AnchorVerticalThrowResult, floorHit).Forget();
             DoThrowAnchor(AnchorVerticalThrowResult).Forget();
@@ -249,5 +228,25 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return AnchorThrowResult;
         }
 
+
+        private void CorrectEndRotationForVisibility(AnchorThrowResult throwResult, AnchorThrowConfig throwConfig)
+        {
+            Vector3 dir = Vector3.ProjectOnPlane(throwResult.EndLookRotation * Vector3.down, Vector3.up).normalized;
+            Vector3 toCamera = (Vector3.left + Vector3.back).normalized;
+
+            float dot = Vector3.Dot(dir, toCamera);
+            int sign = dot > 0 ? -1 : 1;
+            dot = Mathf.Abs(dot);
+
+                
+            Vector3 forward = (Vector3.down + toCamera * 0.3f).normalized;
+            Vector3 up = toCamera * sign;
+            Quaternion lookToCamera = Quaternion.LookRotation(forward, up);
+
+            float t = throwConfig.EndRotationWeightCurve.Evaluate(dot);
+            
+            throwResult.EndLookRotation =
+                Quaternion.LerpUnclamped(throwResult.EndLookRotation, lookToCamera, throwConfig.CorrectionAmount * t);
+        }
     }
 }
