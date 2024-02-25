@@ -22,6 +22,7 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
+using Project.Scripts.Time.TimeFunctionalities;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -42,7 +43,6 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("PLAYER")]
         [SerializeField] private PopeyePlayer _player;
         [SerializeField] private Popeye.Modules.PlayerController.PlayerController _playerController;
-        [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
@@ -60,7 +60,6 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
         [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
-        [SerializeField] private Transform _anchorMoveTransform;
         [SerializeField] private InterfaceReference<IAnchorAudio, MonoBehaviour> _anchorAudioRef;
         [SerializeField] private LineRenderer _anchorTrajectoryLine1;
         [SerializeField] private LineRenderer _anchorTrajectoryLine2;
@@ -112,15 +111,19 @@ namespace Popeye.Modules.PlayerAnchor
             IChainPhysics chainPhysics = _chainPhysics.Value;
             AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
             IAnchorAudio anchorAudio = _anchorAudioRef.Value;
-            IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchorMoveTransform, _anchorGeneralConfig.OnVoidProbingConfig);
+            IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchor.PositionTransform, _anchorGeneralConfig.OnVoidProbingConfig);
             IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
                 _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
                 _anchorGeneralConfig.TrajectoryConfig.ViewConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             IAnchorViewExtras anchorViewExtras = new AnchorViewExtras(_anchorDropShadow);
             
+            Material chainMaterialCopy = new Material(chainViewLogicGeneralConfig.BoneSharedMaterial);
+            chainViewLogicGeneralConfig.ApplyMaterialToBonePrefabs(chainMaterialCopy);
+            IVFXChainView vfxChainView = new GhostVFXChainView(chainViewLogicGeneralConfig.ObstacleCollisionProbingConfig, chainMaterialCopy, 
+                _player.AnchorGrabToThrowHolder);
             
             
-            anchorMotion.Configure(_anchorMoveTransform);
+            anchorMotion.Configure(_anchor.PositionTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
                 anchorTrajectorySnapController, anchorTrajectoryView);
@@ -134,12 +137,13 @@ namespace Popeye.Modules.PlayerAnchor
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorTrajectorySnapController.Configure();
             _anchorCollisions.Configure(_obstacleProbingConfig);
-            anchorAudio.Configure(_anchorMoveTransform.gameObject);
+            anchorAudio.Configure(_anchor.PositionTransform.gameObject);
 
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
-            _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform, chainViewLogicGeneralConfig);
+            _anchorChain.Configure(chainPhysics, vfxChainView, _chainPlayerBindTransform, _chainAnchorBindTransform, 
+                chainViewLogicGeneralConfig);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorViewExtras, anchorAudio, 
                 _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);
@@ -165,10 +169,11 @@ namespace Popeye.Modules.PlayerAnchor
             ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
+            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player);
             
             
             _playerController.AwakeConfigure();
-            playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
+            playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
@@ -184,7 +189,7 @@ namespace Popeye.Modules.PlayerAnchor
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
+                playerView, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
                 playerSafeGroundChecker, playerOnVoidChecker);
 
@@ -207,6 +212,45 @@ namespace Popeye.Modules.PlayerAnchor
         }
 
 
+
+        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig, PopeyePlayer player)
+        {
+            IPlayerView playerSquashAndStretchView = new PlayerSquashAndStretchView(
+                playerGeneralViewConfig.SquashStretchViewConfig,
+                player.MeshHolderTransform
+            );
+
+            IPlayerView playerMaterialView = new PlayerMaterialView(
+                playerGeneralViewConfig.MaterialViewConfig,
+                player.Renderer
+            );
+            
+            IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
+                playerGeneralViewConfig.GameFeelEffectsViewConfig,
+                ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
+                ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker
+            );
+
+            IPlayerView animationsPlayerView = new PlayerAnimationsView(
+                _playerGeneralConfig.GeneralViewConfig.AnimatorViewConfig,
+                _player.Animator
+            );
+
+
+            IPlayerView[] playerSubViews =
+            {
+                playerSquashAndStretchView,
+                playerMaterialView,
+                playerGameFeelEffectsView,
+                animationsPlayerView
+            };
+            
+            
+            PlayerGeneralView playerGeneralView = new PlayerGeneralView(playerSubViews);
+
+            return playerGeneralView;
+        }
+        
 
         private IOnVoidChecker CreateOnVoidChecker(Transform castOriginTransform, CollisionProbingConfig voidProbingConfig,
             float checkFrequency = 0.15f)

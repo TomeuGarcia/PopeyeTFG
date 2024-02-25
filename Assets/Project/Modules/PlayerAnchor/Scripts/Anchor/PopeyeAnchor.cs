@@ -19,6 +19,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {
+        [SerializeField] private Transform _moveTransform;
+        [SerializeField] private GameObject _fakeAnchor;
+        
         [SerializeField]
         public FMODUnity.EventReference AnchorHit;
         private string AnchorHitSFX = null;
@@ -48,6 +51,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public IOnVoidChecker OnVoidChecker { get; private set; }
 
+        public Transform PositionTransform => _moveTransform;
         public Vector3 Position => _anchorMotion.Position;
         public Vector3 Forward => _anchorMotion.Forward;
         public Quaternion Rotation => _anchorMotion.Rotation;
@@ -366,6 +370,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _anchorAudio.PlayDealDamageSound();
             _anchorView.OnDamageDealt(damageHitResult);
+        }
+
+        public void SetActiveDebug(bool active)
+        {
+            //PositionTransform.gameObject.SetActive(active);
+            //_fakeAnchor.SetActive(!active);
         }
     }
 }

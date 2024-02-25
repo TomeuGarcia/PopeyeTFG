@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using RenderSettings = UnityEngine.RenderSettings;
@@ -15,12 +16,12 @@ namespace Popeye.Modules.VFX.Testing
         [SerializeField] private Vector3 _cookieScrollSpeed;
         
         [Header("GENERAL LIGHTING COLORS")]
-        [SerializeField] private List<Color> _sceneLightingColors = new();
+        [SerializeField, ColorUsage(hdr:true, showAlpha:true)] private List<Color> _environmentalLightColors = new();
         public int _currentColorIndex = 0;
 
         private void Awake()
         {
-            _sceneLightingColors.Insert(0, RenderSettings.ambientLight);
+            _environmentalLightColors.Insert(0, RenderSettings.ambientLight);
         }
 
         void Update()
@@ -52,10 +53,8 @@ namespace Popeye.Modules.VFX.Testing
 
         private void UpdateLight(int indexDisplacement)
         {
-            _currentColorIndex = (_currentColorIndex + indexDisplacement + _sceneLightingColors.Count) % _sceneLightingColors.Count;
-            RenderSettings.ambientLight = _sceneLightingColors[_currentColorIndex];
-            
-            Debug.Log("Current light color index: " + _currentColorIndex);
+            _currentColorIndex = (_currentColorIndex + indexDisplacement + _environmentalLightColors.Count) % _environmentalLightColors.Count;
+            RenderSettings.ambientLight = _environmentalLightColors[_currentColorIndex];
         }
     }
 }
