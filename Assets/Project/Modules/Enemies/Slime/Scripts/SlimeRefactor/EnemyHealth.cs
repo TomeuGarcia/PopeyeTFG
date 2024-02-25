@@ -83,5 +83,10 @@ namespace Popeye.Modules.Enemies.Components
         {
             return _knockbackEffectiveness;
         }
+
+        public void HealToMax()
+        {
+            _healthSystem.HealToMax();
+        }
     }
 }
