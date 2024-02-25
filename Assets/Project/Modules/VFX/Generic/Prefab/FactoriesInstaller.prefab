@@ -30,6 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2325448253669693098}
+  - {fileID: 7944352892869264965}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,9 +48,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _particleFactoryConfig: {fileID: 11400000, guid: 78f779898d99e714aa30b45514f46f71,
     type: 2}
-  _enemyFactoryConfiguration: {fileID: 11400000, guid: 0f9d598e6e987c643bd4a9399a2149d5,
-    type: 2}
+  _enemyFactoryInstaller: {fileID: 9209965314413134414}
   _particleParent: {fileID: 2325448253669693098}
+--- !u!1 &4994253554448234258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7944352892869264965}
+  - component: {fileID: 9209965314413134414}
+  m_Layer: 0
+  m_Name: EnemyFactoryInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7944352892869264965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4994253554448234258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 95176466506176847}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9209965314413134414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4994253554448234258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c342dcf704d45ce8fc9138bac8a9545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _installerConfiguration: {fileID: 11400000, guid: 47df96eca3497c542939c5ea34eb2d46,
+    type: 2}
 --- !u!1 &5970968138135878924
 GameObject:
   m_ObjectHideFlags: 0
