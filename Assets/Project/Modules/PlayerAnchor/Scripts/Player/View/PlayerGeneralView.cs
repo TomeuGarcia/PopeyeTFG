@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
@@ -62,11 +63,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
         }
 
-        public void PlayDashAnimation(float duration)
+        public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
             foreach (IPlayerView playerView in _subPlayerViews)
             {
-                playerView.PlayDashAnimation(duration);
+                playerView.PlayDashAnimation(duration, dashDirection);
             }
         }
 

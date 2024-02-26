@@ -11,6 +11,9 @@ namespace Popeye.Modules.VFX.Generic
         AnchorSlamGroundHit,
         AnchorSlamGroundDecal,
         AnchorHitGroundDecal,
-        AnchorThrowSoftTrail
+        AnchorThrowSoftTrail,
+        PlayerDashDisappear,
+        PlayerDashAppear,
+        PlayerDashTrail
     }
 }

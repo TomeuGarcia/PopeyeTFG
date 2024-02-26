@@ -305,7 +305,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
             DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
             
-            PlayerView.PlayDashAnimation(duration);
+            PlayerView.PlayDashAnimation(duration, Vector3.ProjectOnPlane((_anchor.Position - Position).normalized,  Vector3.up));
 
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
         }
@@ -324,7 +324,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetInvulnerableForDuration(invulnerableDuration);
             DropTargetForEnemies(invulnerableDuration).Forget();
             
-            PlayerView.PlayDashAnimation(duration);
+            PlayerView.PlayDashAnimation(duration, GetFloorAlignedLookDirection());
             
             _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
