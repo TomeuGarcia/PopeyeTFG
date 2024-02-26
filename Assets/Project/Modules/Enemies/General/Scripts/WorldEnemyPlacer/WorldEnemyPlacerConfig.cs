@@ -11,9 +11,9 @@ namespace Project.Modules.Enemies.General
     public class WorldEnemyPlacerConfig : ScriptableObject
     {
         [SerializeField] private WorldEnemyPlacer.EditorViewElement[] _viewElements;
+        [SerializeField] private WorldEnemyPlacer.EditorViewElement.ViewData _missingEnemyIdToViewData;
 
         private Dictionary<EnemyID, WorldEnemyPlacer.EditorViewElement.ViewData> _enemyIdToViewData;
-
 
         private void OnValidate()
         {
@@ -43,7 +43,7 @@ namespace Project.Modules.Enemies.General
         {
             if (!_enemyIdToViewData.TryGetValue(enemyID, out var viewData))
             {
-                throw new Exception($"No ViewData for {enemyID.name}");
+                return _missingEnemyIdToViewData;
             }
 
             return viewData;

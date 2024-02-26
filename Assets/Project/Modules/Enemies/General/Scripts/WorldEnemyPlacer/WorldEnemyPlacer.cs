@@ -1,4 +1,5 @@
 using System;
+using AYellowpaper;
 using NaughtyAttributes;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies;
@@ -45,8 +46,9 @@ namespace Project.Modules.Enemies.General
         
         [Header("CONFIGURATION")]
         [Required] [Expandable] [SerializeField] private WorldEnemyPlacerConfig _config;
-        
-        [Header("REFERENCES")]
+
+        [Header("REFERENCES")] 
+        [SerializeField] private InterfaceReference<IEnemyWaypointsInitializer, MonoBehaviour> _enemyWaypointsInitializer;
         [Required] [SerializeField] private GameObject _viewGameObject;
         [Required] [SerializeField] private MeshFilter _meshFilter;
         [Required] [SerializeField] private MeshRenderer _meshRenderer;
@@ -57,6 +59,12 @@ namespace Project.Modules.Enemies.General
         
         private void Awake()
         {
+#if UNITY_EDITOR
+            if (!EditorApplication.isPlaying)
+            {
+                return;
+            }
+#endif
             Destroy(_viewGameObject);
         }
 
@@ -76,7 +84,7 @@ namespace Project.Modules.Enemies.General
             IEnemyFactory enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
             AEnemy enemy = enemyFactory.Create(_enemyID, SpawnPosition, Quaternion.identity);
             
-            // TODO: give waypoints to the enemy
+            _enemyWaypointsInitializer.Value.SetEnemyWaypoints(enemy);
         }
 
         
