@@ -1115,27 +1115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a9abcf0c144a3f87d11813dd42dbbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SFX_Hit_Anchor:
-    Guid:
-      Data1: -499224757
-      Data2: 1312837135
-      Data3: -1113245014
-      Data4: -1995149949
-    Path: event:/SFX/PlayerAnchor/SFX_Hit_Anchor
-  _SFX_Throw_Anchor:
-    Guid:
-      Data1: 1928778239
-      Data2: 1314098825
-      Data3: 221596067
-      Data4: 1258358617
-    Path: event:/SFX/PlayerAnchor/SFX_Throw_Anchor
-  _SFX_Grab_Anchor:
-    Guid:
-      Data1: 1650359328
-      Data2: 1235497085
-      Data3: 1363947934
-      Data4: 1968968732
-    Path: event:/SFX/PlayerAnchor/SFX_Grab_Anchor
+  _dealDamage: {fileID: 11400000, guid: 5ad772a4d41cb994b90b4c192fd576d7, type: 2}
+  _throw: {fileID: 11400000, guid: 1a35e7ac316817342bc5e6e88a37e695, type: 2}
+  _grab: {fileID: 11400000, guid: 47d4501fb70d5ff439f927df1acf18c9, type: 2}
 --- !u!1 &5778715085500644937
 GameObject:
   m_ObjectHideFlags: 0
@@ -1763,7 +1745,6 @@ GameObject:
   - component: {fileID: 3872619649061859413}
   - component: {fileID: 3552976551123321659}
   - component: {fileID: 8819325856603640989}
-  - component: {fileID: 1312229144815368786}
   m_Layer: 6
   m_Name: PlayerAudio
   m_TagString: Untagged
@@ -1798,7 +1779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f38509829540428a81e3777b3dc603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _footstepsEventEmitter: {fileID: 1312229144815368786}
+  _footstepsSound: {fileID: 11400000, guid: d3f3c57f555e2294c815d0156e54b378, type: 2}
 --- !u!114 &8819325856603640989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,37 +1793,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attenuationObject: {fileID: 7630636896745076679}
---- !u!114 &1312229144815368786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7630636896745076679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -428363555
-      Data2: 1169048958
-      Data3: -1577649787
-      Data4: -936466446
-    Path: event:/SFX/PlayerAnchor/SFX_RR_Footsteps_Rock_Soft
-  Event: 
-  PlayEvent: 0
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  AllowNonRigidbodyDoppler: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7903642409692217006
 GameObject:
   m_ObjectHideFlags: 0
