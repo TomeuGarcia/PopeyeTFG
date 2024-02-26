@@ -1115,27 +1115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a9abcf0c144a3f87d11813dd42dbbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _SFX_Hit_Anchor:
-    Guid:
-      Data1: -499224757
-      Data2: 1312837135
-      Data3: -1113245014
-      Data4: -1995149949
-    Path: event:/SFX/PlayerAnchor/SFX_Hit_Anchor
-  _SFX_Throw_Anchor:
-    Guid:
-      Data1: 1928778239
-      Data2: 1314098825
-      Data3: 221596067
-      Data4: 1258358617
-    Path: event:/SFX/PlayerAnchor/SFX_Throw_Anchor
-  _SFX_Grab_Anchor:
-    Guid:
-      Data1: 1650359328
-      Data2: 1235497085
-      Data3: 1363947934
-      Data4: 1968968732
-    Path: event:/SFX/PlayerAnchor/SFX_Grab_Anchor
+  _dealDamage: {fileID: 11400000, guid: 5ad772a4d41cb994b90b4c192fd576d7, type: 2}
+  _throw: {fileID: 11400000, guid: 1a35e7ac316817342bc5e6e88a37e695, type: 2}
+  _grab: {fileID: 11400000, guid: 47d4501fb70d5ff439f927df1acf18c9, type: 2}
 --- !u!1 &5778715085500644937
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,28 +3,28 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
-    public class PlayerAudioFMOD : MonoBehaviour, IPlayerAudio
+    public class PlayerAudioFMOD : IPlayerAudio
     {
-        private GameObject _playerGameObject;
-        private IFMODAudioManager _fmodAudioManager;
-        
-        [SerializeField] private LastingFMODSound _footstepsSound;
-        
-        
-        public void Configure(GameObject playerGameObject, IFMODAudioManager fmodAudioManager)
+        private readonly GameObject _playerGameObject;
+        private readonly IFMODAudioManager _fmodAudioManager;
+        private readonly PlayerAudioFMODConfig _config;
+
+
+        public PlayerAudioFMOD(GameObject playerGameObject, IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config)
         {
             _playerGameObject = playerGameObject;
             _fmodAudioManager = fmodAudioManager;
+            _config = config;
         }
         
         public void StartPlayingStepsSounds()
         {
-            _fmodAudioManager.PlayLastingSound(_footstepsSound, _playerGameObject);
+            _fmodAudioManager.PlayLastingSound(_config.FootstepsSound, _playerGameObject);
         }
 
         public void StopPlayingStepsSounds()
         {
-            _fmodAudioManager.StopLastingSound(_footstepsSound);
+            _fmodAudioManager.StopLastingSound(_config.FootstepsSound);
         }
         
         
