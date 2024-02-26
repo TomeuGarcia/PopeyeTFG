@@ -1763,7 +1763,6 @@ GameObject:
   - component: {fileID: 3872619649061859413}
   - component: {fileID: 3552976551123321659}
   - component: {fileID: 8819325856603640989}
-  - component: {fileID: 1312229144815368786}
   m_Layer: 6
   m_Name: PlayerAudio
   m_TagString: Untagged
@@ -1798,7 +1797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f38509829540428a81e3777b3dc603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _footstepsEventEmitter: {fileID: 1312229144815368786}
+  _footstepsSound: {fileID: 11400000, guid: d3f3c57f555e2294c815d0156e54b378, type: 2}
 --- !u!114 &8819325856603640989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,37 +1811,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attenuationObject: {fileID: 7630636896745076679}
---- !u!114 &1312229144815368786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7630636896745076679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -428363555
-      Data2: 1169048958
-      Data3: -1577649787
-      Data4: -936466446
-    Path: event:/SFX/PlayerAnchor/SFX_RR_Footsteps_Rock_Soft
-  Event: 
-  PlayEvent: 0
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  AllowNonRigidbodyDoppler: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7903642409692217006
 GameObject:
   m_ObjectHideFlags: 0

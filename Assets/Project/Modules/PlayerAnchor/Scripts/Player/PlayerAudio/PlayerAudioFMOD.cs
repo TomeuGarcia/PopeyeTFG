@@ -1,26 +1,30 @@
+using Popeye.Modules.AudioSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
     public class PlayerAudioFMOD : MonoBehaviour, IPlayerAudio
     {
-        [SerializeField] private FMODUnity.StudioEventEmitter _footstepsEventEmitter;
         private GameObject _playerGameObject;
+        private IFMODAudioManager _fmodAudioManager;
+        
+        [SerializeField] private LastingFMODSound _footstepsSound;
         
         
-        public void Configure(GameObject playerGameObject)
+        public void Configure(GameObject playerGameObject, IFMODAudioManager fmodAudioManager)
         {
             _playerGameObject = playerGameObject;
+            _fmodAudioManager = fmodAudioManager;
         }
         
         public void StartPlayingStepsSounds()
         {
-            _footstepsEventEmitter.Play();
+            _fmodAudioManager.PlayLastingSound(_footstepsSound, _playerGameObject);
         }
 
         public void StopPlayingStepsSounds()
         {
-            _footstepsEventEmitter.Stop();
+            _fmodAudioManager.StopLastingSound(_footstepsSound);
         }
         
         

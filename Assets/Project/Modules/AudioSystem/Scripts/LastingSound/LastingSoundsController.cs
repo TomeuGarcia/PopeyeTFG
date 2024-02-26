@@ -25,7 +25,7 @@ namespace Popeye.Modules.AudioSystem
         {
             if (_activeLastingSoundEmitters.ContainsKey(lastingSound.Id))
             {
-                throw new Exception($"Lasting sound {lastingSound.name} is already playing");
+                return;
             }
 
             LastingFMODSoundEmitter soundEmitter =
@@ -42,10 +42,6 @@ namespace Popeye.Modules.AudioSystem
             {
                 soundEmitter.Stop();
                 ResetSoundEmitter(soundEmitter);
-            }
-            else
-            {
-                throw new Exception($"Trying to stop lasting sound {lastingSound.name}, but it is already not playing");
             }
         }
 
