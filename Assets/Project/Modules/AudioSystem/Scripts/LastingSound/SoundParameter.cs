@@ -1,18 +1,18 @@
+using FMOD.Studio;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
 namespace Popeye.Modules.AudioSystem
 {
-    [CreateAssetMenu(fileName = "LastingSoundParameter_NAME", 
-        menuName = ScriptableObjectsHelper.SOUNDSYSTEM_ASSETS_PATH + "LastingSoundParameter")]
-    public class SoundParameter
+    [CreateAssetMenu(fileName = "SoundParameter_NAME", 
+        menuName = ScriptableObjectsHelper.SOUNDSYSTEM_ASSETS_PATH + "SoundParameter")]
+    public class SoundParameter : ScriptableObject
     {
-        [SerializeField] private string _name = "PARAMETER_NAME";
+        [SerializeField] [FMODUnity.ParamRefAttribute] private string _name;
         [SerializeField] private float _value = 1.0f;
         
         public string Name => _name;
         public float Value => _value;
-
 
         public delegate void Event(SoundParameter parameter);
         public Event OnValueChanged;

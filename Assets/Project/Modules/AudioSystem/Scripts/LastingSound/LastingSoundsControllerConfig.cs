@@ -8,7 +8,7 @@ namespace Popeye.Modules.AudioSystem
         menuName = ScriptableObjectsHelper.SOUNDSYSTEM_ASSETS_PATH + "LastingSoundsControllerConfig")]
     public class LastingSoundsControllerConfig : ScriptableObject
     {
-        [SerializeField, Range(1, 30)] private int _startNumberOfLastingSounds;
+        [SerializeField, Range(1, 30)] private int _startNumberOfLastingSounds = 10;
         [SerializeField] private RecyclableObject _lastingSoundEmitterPrefab;
         
         

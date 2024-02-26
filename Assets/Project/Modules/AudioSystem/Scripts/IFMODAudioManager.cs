@@ -4,8 +4,8 @@ namespace Popeye.Modules.AudioSystem
 {
     public interface IFMODAudioManager
     {
-        void PlayOneShot(FMODUnity.EventReference eventReference);
-        void PlayOneShotAttached(FMODUnity.EventReference eventReference, GameObject attachedGameObject);
+        void PlayOneShot(IOneShotFMODSound oneShotSound);
+        void PlayOneShotAttached(IOneShotFMODSound oneShotSound, GameObject attachedGameObject);
         
         
         void PlayLastingSound(ILastingFMODSound lastingSound, GameObject attachedGameObject);
