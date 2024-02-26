@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Popeye.Modules.AudioSystem
 {
-    [CreateAssetMenu(fileName = "LastingFMODSoundAsset_NAME", 
-        menuName = ScriptableObjectsHelper.SOUNDSYSTEM_ASSETS_PATH + "LastingFMODSoundAsset")]
-    public class LastingFMODSoundAsset : ScriptableObject, ILastingFMODSound
+    [CreateAssetMenu(fileName = "LastingSound_NAME", 
+        menuName = ScriptableObjectsHelper.SOUNDSYSTEM_ASSETS_PATH + "LastingSound")]
+    public class LastingFMODSound : ScriptableObject
     {
         [SerializeField] private EventReference _eventReference;
         [SerializeField] private SoundParameter[] _parameters;
@@ -19,7 +19,17 @@ namespace Popeye.Modules.AudioSystem
 
         private void Awake()
         {
-            Id = new Guid();
+            Id = Guid.NewGuid();
         }
+
+#if UNITY_EDITOR
+        private void OnEnable()
+        {
+            Awake();
+        }
+#endif
+        
     }
+    
+    
 }

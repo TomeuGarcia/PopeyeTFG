@@ -4,13 +4,18 @@ namespace Popeye.Modules.AudioSystem
 {
     public interface IFMODAudioManager
     {
-        void PlayOneShot(IOneShotFMODSound oneShotSound);
-        void PlayOneShotAttached(IOneShotFMODSound oneShotSound, GameObject attachedGameObject);
+        public GlobalParametersController GlobalParametersController { get; }
         
         
-        void PlayLastingSound(ILastingFMODSound lastingSound, GameObject attachedGameObject);
-        void StopLastingSound(ILastingFMODSound lastingSound);
+        void PlayOneShot(OneShotFMODSound oneShotSound);
+        void PlayOneShotAttached(OneShotFMODSound oneShotSound, GameObject attachedGameObject);
+        
+        
+        void PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject);
+        void StopLastingSound(LastingFMODSound lastingSound);
 
         void StopAllSounds();
+        
+        
     }
 }

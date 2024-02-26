@@ -6,32 +6,36 @@ namespace Popeye.Modules.AudioSystem
     {
         private readonly OneShotSoundsController _oneShotSoundsController;
         private readonly LastingSoundsController _lastingSoundsController;
-        
-        public FMODAudioManager(Transform soundsParent, LastingSoundsControllerConfig lastingSoundsControllerConfig)
+        public GlobalParametersController GlobalParametersController { get; private set; }
+
+        public FMODAudioManager(OneShotSoundsController oneShotSoundsController, 
+            LastingSoundsController lastingSoundsController,
+            GlobalParametersController globalParametersController)
         {
-            _oneShotSoundsController = new OneShotSoundsController();
-            _lastingSoundsController = new LastingSoundsController(soundsParent, lastingSoundsControllerConfig);
+            _oneShotSoundsController = oneShotSoundsController;
+            _lastingSoundsController = lastingSoundsController;
+            GlobalParametersController = globalParametersController;
         }
 
 
-        public void PlayOneShot(IOneShotFMODSound oneShotSound)
+        public void PlayOneShot(OneShotFMODSound oneShotSound)
         {
             _oneShotSoundsController.Play(oneShotSound);
         }
 
-        public void PlayOneShotAttached(IOneShotFMODSound oneShotSound, GameObject attachedGameObject)
+        public void PlayOneShotAttached(OneShotFMODSound oneShotSound, GameObject attachedGameObject)
         {
             _oneShotSoundsController.Play(oneShotSound, attachedGameObject);
         }
 
         
         
-        public void PlayLastingSound(ILastingFMODSound lastingSound, GameObject attachedGameObject)
+        public void PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject)
         {
             _lastingSoundsController.Play(lastingSound, attachedGameObject.transform);
         }
 
-        public void StopLastingSound(ILastingFMODSound lastingSound)
+        public void StopLastingSound(LastingFMODSound lastingSound)
         {
             _lastingSoundsController.Stop(lastingSound);
         }

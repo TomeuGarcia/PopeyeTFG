@@ -8,7 +8,7 @@ namespace Popeye.Modules.AudioSystem
     {
         [SerializeField] private FMODUnity.StudioEventEmitter _eventEmitter;
 
-        private ILastingFMODSound _currentSound;
+        private LastingFMODSound _currentSound;
         
         
         internal override void Init()
@@ -22,7 +22,7 @@ namespace Popeye.Modules.AudioSystem
         }
 
         
-        public void Play(ILastingFMODSound lastingSound)
+        public void Play(LastingFMODSound lastingSound)
         {
             _currentSound = lastingSound;
 

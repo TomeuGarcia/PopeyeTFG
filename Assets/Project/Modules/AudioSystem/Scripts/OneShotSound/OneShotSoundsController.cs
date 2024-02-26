@@ -1,3 +1,5 @@
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 
 namespace Popeye.Modules.AudioSystem
@@ -9,13 +11,30 @@ namespace Popeye.Modules.AudioSystem
         
         }
 
-        public void Play(IOneShotFMODSound oneShotSound)
+        public void Play(OneShotFMODSound oneShotSound)
         {
-            FMODUnity.RuntimeManager.PlayOneShot(oneShotSound.EventReference);
+            EventInstance eventInstance = FMODUnity.RuntimeManager.CreateInstance(oneShotSound.EventReference);
+            DoPlay(oneShotSound, ref eventInstance);
         }
-        public void Play(IOneShotFMODSound oneShotSound, GameObject attachedGameObject)
+        public void Play(OneShotFMODSound oneShotSound, GameObject attachedGameObject)
         {
-            FMODUnity.RuntimeManager.PlayOneShotAttached(oneShotSound.EventReference, attachedGameObject);
+            EventInstance eventInstance = FMODUnity.RuntimeManager.CreateInstance(oneShotSound.EventReference);
+            eventInstance.set3DAttributes(attachedGameObject.transform.To3DAttributes());
+            DoPlay(oneShotSound, ref eventInstance);
         }
+
+        
+        private void DoPlay(OneShotFMODSound oneShotSound, ref EventInstance eventInstance)
+        {
+            foreach (SoundParameter parameter in oneShotSound.Parameters)
+            {
+                eventInstance.setParameterByName(parameter.Name, parameter.Value);
+            }
+            
+            eventInstance.start();
+            eventInstance.release();
+        }
+        
+        
     }
 }
