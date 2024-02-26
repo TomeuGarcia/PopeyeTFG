@@ -16,7 +16,7 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private EnemyID _id;
         public ID Id => _id;
         
-
+        public abstract void SetPatrollingWaypoints(Transform[] waypoints);
         public virtual void AwakeInit(Transform attackTarget)
         {
             _attackTarget = attackTarget;

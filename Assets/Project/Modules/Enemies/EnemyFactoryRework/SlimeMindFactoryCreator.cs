@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Slime;
 using UnityEngine;
@@ -27,11 +28,11 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             _slimeMindPool.Init(slimeFactoryConfiguration.NumberOfInitialSlimes);
         }
 
-        public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation)
+        public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation,EnemyPatrolling.PatrolType patrolType)
         {
             SlimeMindEnemy slimeMindEnemy = _slimeMindPool.Spawn<SlimeMindEnemy>(position, rotation);
             SlimeMediator slimeMediator =  _slimeFactory.CreateNew(_slimeTypeToSize[enemyID], slimeMindEnemy, position, rotation);
-            slimeMindEnemy.InitAfterSpawn(slimeMediator);
+            slimeMindEnemy.InitAfterSpawn(slimeMediator,patrolType);
             return slimeMindEnemy;
         }
     }

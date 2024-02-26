@@ -82,9 +82,10 @@ namespace Project.Modules.Enemies.General
         private void SpawnEnemy()
         {
             IEnemyFactory enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
-            AEnemy enemy = enemyFactory.Create(_enemyID, SpawnPosition, Quaternion.identity);
             
+            AEnemy enemy = enemyFactory.Create(_enemyID, SpawnPosition, Quaternion.identity,_enemyWaypointsInitializer.Value.GetPatrolType());
             _enemyWaypointsInitializer.Value.SetEnemyWaypoints(enemy);
+           
         }
 
         

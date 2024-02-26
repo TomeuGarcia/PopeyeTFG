@@ -27,6 +27,8 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private Transform _transform;
         private ObjectPool _objectPool;
         [SerializeField] private PooledParticle _explosionParticles;
+
+        private SlimeMediator _slimeMediator;
         public enum SlimeSize
         {
             SlimeSize1,
@@ -56,11 +58,10 @@ namespace Popeye.Modules.Enemies
         {
             return _attackTarget;
         }
-        public void InitAfterSpawn(SlimeMediator slimeMediator)
+        public void InitAfterSpawn(SlimeMediator slimeMediator,EnemyPatrolling.PatrolType patrolType)
         {
-            
-            
-            if(_patrolType == EnemyPatrolling.PatrolType.FixedWaypoints){slimeMediator.SetWayPoints(_wayPoints);}
+            _patrolType = patrolType;
+            _slimeMediator = slimeMediator;
             if(_patrolType == EnemyPatrolling.PatrolType.None){slimeMediator.StartChasing();}
         }
 
@@ -90,6 +91,11 @@ namespace Popeye.Modules.Enemies
         internal override void Release()
         {
             throw new NotImplementedException();
+        }
+
+        public override void SetPatrollingWaypoints(Transform[] waypoints)
+        {
+            _slimeMediator.SetWayPoints(waypoints);
         }
     }
 }

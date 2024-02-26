@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.EnemyFactories;
 
 namespace Popeye.Modules.Enemies.General
@@ -89,7 +90,7 @@ namespace Popeye.Modules.Enemies.General
 
         private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)
         {
-            AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity);
+            AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity,EnemyPatrolling.PatrolType.None);
             enemy.AwakeInit(_enemyAttackTarget);
 
             enemy.OnDeathComplete += DecrementActiveEnemiesCount;

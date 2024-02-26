@@ -48,7 +48,7 @@ MonoBehaviour:
   _enemyHealth: {fileID: 129179429737552354}
   _enemyVisuals: {fileID: 892496079672398938}
   _slimeMovement: {fileID: 2109834771631650075}
-  _squashStretchAnimator: {fileID: 8784783522602541844}
+  slimeAnimatorController: {fileID: 8784783522602541844}
   _enemyPatrolling: {fileID: 2356680394100086253}
   _damageTrigger: {fileID: 292460232546019636}
   _contactDamageHitConfig: {fileID: 11400000, guid: 3a4eb30c3fea92e4cb11f299273d17aa,
@@ -287,7 +287,7 @@ MonoBehaviour:
   _speed: 0
   _targetDistanceThreshold: 0.5
   _playerDistanceThreshold: 8
-  _wayPointDistanceThreshold: 1
+  _wayPointDistanceThreshold: 1.1
 --- !u!114 &292460232546019636
 MonoBehaviour:
   m_ObjectHideFlags: 0

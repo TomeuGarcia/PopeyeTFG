@@ -52,5 +52,10 @@ namespace Popeye.Modules.Enemies
         {
             
         }
+
+        public override void SetPatrollingWaypoints(Transform[] waypoints)
+        {
+            
+        }
     }
 }

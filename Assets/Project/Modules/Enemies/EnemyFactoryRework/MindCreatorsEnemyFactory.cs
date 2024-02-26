@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.General;
 using UnityEngine;
 
@@ -13,9 +14,9 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             _enemyTypeToFactoryCreator = enemyTypeToFactoryCreator;
         }
 
-        public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation)
+        public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation,EnemyPatrolling.PatrolType patrolType)
         {
-            return _enemyTypeToFactoryCreator[enemyID].Create(enemyID,position,rotation);
+            return _enemyTypeToFactoryCreator[enemyID].Create(enemyID,position,rotation,patrolType);
         }
     }
 }

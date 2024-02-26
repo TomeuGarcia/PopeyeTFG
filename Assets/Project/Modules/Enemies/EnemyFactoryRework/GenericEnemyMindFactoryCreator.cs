@@ -1,4 +1,5 @@
 using Popeye.Core.Pool;
+using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.General;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
            _enemyPool.Init(numberOfInitialObjects);
        }
 
-       public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation)
+       public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation,EnemyPatrolling.PatrolType patrolType)
         {
             return _enemyPool.Spawn<AEnemy>(position, rotation);
         }
