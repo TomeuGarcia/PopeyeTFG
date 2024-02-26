@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Popeye.Modules.AudioSystem
@@ -28,8 +29,23 @@ namespace Popeye.Modules.AudioSystem
             _oneShotSoundsController.Play(oneShotSound, attachedGameObject);
         }
 
-        
-        
+        public void PlayOneShots(OneShotFMODSound[] oneShotSounds)
+        {
+            foreach (OneShotFMODSound oneShotSound in oneShotSounds)
+            {
+                PlayOneShot(oneShotSound);
+            }
+        }
+
+        public void PlayOneShotsAttached(OneShotFMODSound[] oneShotSounds, GameObject attachedGameObject)
+        {
+            foreach (OneShotFMODSound oneShotSound in oneShotSounds)
+            {
+                PlayOneShotAttached(oneShotSound, attachedGameObject);
+            }
+        }
+
+
         public void PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject)
         {
             _lastingSoundsController.Play(lastingSound, attachedGameObject.transform);
@@ -39,9 +55,24 @@ namespace Popeye.Modules.AudioSystem
         {
             _lastingSoundsController.Stop(lastingSound);
         }
-        
 
-        
+        public void PlayLastingSounds(LastingFMODSound[] lastingSounds, GameObject attachedGameObject)
+        {
+            foreach (LastingFMODSound lastingSound in lastingSounds)
+            {
+                PlayLastingSound(lastingSound, attachedGameObject);
+            }
+        }
+
+        public void StopLastingSounds(LastingFMODSound[] lastingSounds)
+        {
+            foreach (LastingFMODSound lastingSound in lastingSounds)
+            {
+                StopLastingSound(lastingSound);
+            }
+        }
+
+
         public void StopAllSounds()
         {
             _lastingSoundsController.StopAll();
