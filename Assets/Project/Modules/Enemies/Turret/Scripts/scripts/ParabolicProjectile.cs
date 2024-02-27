@@ -13,7 +13,6 @@ using UnityEngine.Serialization;
 
 public class ParabolicProjectile : RecyclableObject
 {
-    [SerializeField] private LineRenderer _line;
     private Transform _firePoint;
     [SerializeField] private float _height;
     [SerializeField] private float speed;
@@ -26,9 +25,6 @@ public class ParabolicProjectile : RecyclableObject
     private DamageHit _contactDamageHit;
     [SerializeField] private DamageHitConfig _contactDamageConfig;
     private ICombatManager _combatManager;
-    
-    [SerializeField] private Material _lineAimingMat;
-    [SerializeField] private Material _lineShootingMat;
 
     private IHazardFactory _hazardFactory;
     [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
@@ -66,7 +62,6 @@ public class ParabolicProjectile : RecyclableObject
         _firePoint = firePoint;
         _aiming = false;
         _playerTransform = playerTransform;
-        _line.material = _lineAimingMat;
         _bulletBody.enabled = false;
         gameObject.SetActive(true);
     }
@@ -83,26 +78,9 @@ public class ParabolicProjectile : RecyclableObject
     }
     public void Shoot()
     {
-        _line.material = _lineShootingMat;
         _shoot = true;
     }
-    private void DrawPath(Vector3 direction, float v0, float angle,float time, float step)
-    {
-        step = Mathf.Max(0.01f, step);
-        _line.positionCount = (int)(time / step) + 2;
-        int count = 0;
-        
-        for (float i = 0; i < time; i += step)
-        {
-            float x = v0 * i * Mathf.Cos(angle);
-            float y = (float)(v0 * i * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(i,2));
-            _line.SetPosition(count,_firePoint.position + direction * x + Vector3.up * y);
-            count++;
-        }
-        float xFinal = v0 * time * Mathf.Cos(angle);
-        float yFinal = (float)(v0 * time * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(time,2));
-        _line.SetPosition(count,_firePoint.position +direction * xFinal + Vector3.up * yFinal);
-    }
+   
     private async UniTaskVoid Movement(Vector3 direction, float v0,float angle,float time)
     {
         float t = 0;
