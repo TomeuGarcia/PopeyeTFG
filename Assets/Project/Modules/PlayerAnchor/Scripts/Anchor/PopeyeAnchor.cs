@@ -286,6 +286,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.RestingOnFloor;
         }
+
+        public bool IsBeingCarried()
+        {
+            return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.Carried;
+        }
+
         public bool IsGrabbedBySnapper()
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.GrabbedBySnapper;

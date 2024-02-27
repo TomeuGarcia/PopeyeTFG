@@ -34,8 +34,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 = new PullingAnchor_PlayerState(blackboard);
             SpinningAnchor_PlayerState spinningAnchor 
                 = new SpinningAnchor_PlayerState(blackboard);
+            
             Tired_PlayerState tired
                 = new Tired_PlayerState(blackboard);
+            TiredPickingUpAnchor_PlayerState tiredPickingUpAnchor
+                = new TiredPickingUpAnchor_PlayerState(blackboard);
 
             Healing_PlayerState healing
                 = new Healing_PlayerState(blackboard);
@@ -61,7 +64,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 { PlayerStates.KickingAnchor , kickingAnchor },
                 { PlayerStates.PullingAnchor , pullingAnchor },
                 { PlayerStates.SpinningAnchor , spinningAnchor },
+                
                 { PlayerStates.Tired , tired },
+                { PlayerStates.TiredPickingUpAnchor , tiredPickingUpAnchor },
                 
                 { PlayerStates.Healing , healing },
                 { PlayerStates.FallingOnVoid , fallingOnVoid },
