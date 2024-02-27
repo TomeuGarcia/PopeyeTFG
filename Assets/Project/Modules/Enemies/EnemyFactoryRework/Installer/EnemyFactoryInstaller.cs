@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.General;
+using Popeye.Modules.Enemies.Hazards;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.EnemyFactories
@@ -10,8 +11,9 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         [SerializeField] private EnemyFactoryInstallerConfiguration _installerConfiguration;
         
 
-        public void Install()
+        public void Install(ServiceLocator serviceLocator)
         {
+            var hazardsFactory = serviceLocator.GetService<IHazardFactory>();
             Dictionary<EnemyID, EnemyFactoryInstallerConfiguration.EnemyMindPrefabSpawnData> enemyIdToPrefab 
                 = _installerConfiguration.GetEnemyToPrefabDictionary();
             
@@ -23,12 +25,12 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             foreach (var factoryData in enemyIdToPrefab)
             {
                 enemyIdToMindFactory[factoryData.Key] = 
-                    new GenericEnemyMindFactoryCreator(factoryData.Value.Prefab, transform, factoryData.Value.NumberOfInitialObjects);
+                    new GenericEnemyMindFactoryCreator(factoryData.Value.Prefab, transform, factoryData.Value.NumberOfInitialObjects,hazardsFactory);
             }
             
             // Setup Slime
             SlimeFactoryConfiguration slimeFactoryConfiguration = _installerConfiguration.SlimeFactoryConfiguration;
-            SlimeMindFactoryCreator slimeMindFactoryCreator = new SlimeMindFactoryCreator(slimeFactoryConfiguration, transform);
+            SlimeMindFactoryCreator slimeMindFactoryCreator = new SlimeMindFactoryCreator(slimeFactoryConfiguration, transform,hazardsFactory);
             EnemyID[] slimeEnemyIDs = slimeFactoryConfiguration.GetSlimeEnemyIDs();
             foreach (var slimeEnemyID in slimeEnemyIDs)
             {
@@ -37,12 +39,12 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
 
             MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new MindCreatorsEnemyFactory(enemyIdToMindFactory);
-            ServiceLocator.Instance.RegisterService<IEnemyFactory>(mindCreatorsEnemyFactory);
+            serviceLocator.RegisterService<IEnemyFactory>(mindCreatorsEnemyFactory);
         }
 
-        public void Uninstall()
+        public void Uninstall(ServiceLocator serviceLocator)
         {
-            ServiceLocator.Instance.RemoveService<IEnemyFactory>();
+            serviceLocator.RemoveService<IEnemyFactory>();
         }
     }
 }

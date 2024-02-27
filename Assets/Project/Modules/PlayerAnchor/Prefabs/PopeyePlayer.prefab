@@ -760,7 +760,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3178758628287992052}
   - {fileID: 3108242783718766051}
   - {fileID: 6078796937421439867}
   - {fileID: 2781965557336418674}
@@ -1071,71 +1070,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!1 &5481723878074619322
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3178758628287992052}
-  - component: {fileID: 545649270184472379}
-  m_Layer: 0
-  m_Name: AnchorAudio
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3178758628287992052
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5481723878074619322}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1252742472128866447}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &545649270184472379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5481723878074619322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68a9abcf0c144a3f87d11813dd42dbbd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _SFX_Hit_Anchor:
-    Guid:
-      Data1: -499224757
-      Data2: 1312837135
-      Data3: -1113245014
-      Data4: -1995149949
-    Path: event:/SFX/PlayerAnchor/SFX_Hit_Anchor
-  _SFX_Throw_Anchor:
-    Guid:
-      Data1: 1928778239
-      Data2: 1314098825
-      Data3: 221596067
-      Data4: 1258358617
-    Path: event:/SFX/PlayerAnchor/SFX_Throw_Anchor
-  _SFX_Grab_Anchor:
-    Guid:
-      Data1: 1650359328
-      Data2: 1235497085
-      Data3: 1363947934
-      Data4: 1968968732
-    Path: event:/SFX/PlayerAnchor/SFX_Grab_Anchor
 --- !u!1 &5778715085500644937
 GameObject:
   m_ObjectHideFlags: 0
@@ -1761,11 +1695,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3872619649061859413}
-  - component: {fileID: 3552976551123321659}
   - component: {fileID: 8819325856603640989}
-  - component: {fileID: 1312229144815368786}
   m_Layer: 6
-  m_Name: PlayerAudio
+  m_Name: AudioListener
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1786,19 +1718,6 @@ Transform:
   m_Father: {fileID: 5186106189778176743}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3552976551123321659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7630636896745076679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56f38509829540428a81e3777b3dc603, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _footstepsEventEmitter: {fileID: 1312229144815368786}
 --- !u!114 &8819325856603640989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,37 +1731,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attenuationObject: {fileID: 7630636896745076679}
---- !u!114 &1312229144815368786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7630636896745076679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -428363555
-      Data2: 1169048958
-      Data3: -1577649787
-      Data4: -936466446
-    Path: event:/SFX/PlayerAnchor/SFX_RR_Footsteps_Rock_Soft
-  Event: 
-  PlayEvent: 0
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  AllowNonRigidbodyDoppler: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7903642409692217006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2179,7 +2067,7 @@ Transform:
   - {fileID: 4279091411442141224}
   - {fileID: 6668082300037902310}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3863730451507063996
 MonoBehaviour:

@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 2325448253669693098}
   - {fileID: 7944352892869264965}
+  - {fileID: 6268884139131218515}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49,7 +50,41 @@ MonoBehaviour:
   _particleFactoryConfig: {fileID: 11400000, guid: 78f779898d99e714aa30b45514f46f71,
     type: 2}
   _enemyFactoryInstaller: {fileID: 9209965314413134414}
+  _hazardFactryConfig: {fileID: 11400000, guid: 312de0232ea915e43a9967cbae54a732,
+    type: 2}
+  _hazardsParent: {fileID: 6268884139131218515}
   _particleParent: {fileID: 2325448253669693098}
+--- !u!1 &1917867499920333949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6268884139131218515}
+  m_Layer: 0
+  m_Name: HazardsParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6268884139131218515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917867499920333949}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 95176466506176847}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4994253554448234258
 GameObject:
   m_ObjectHideFlags: 0

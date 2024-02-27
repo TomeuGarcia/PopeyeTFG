@@ -1,10 +1,9 @@
-using System;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
-namespace Popeye.Modules.Enemies
+namespace Popeye.Modules.Enemies.General
 {
     public class EnemySpawnerInteractor_Trigger : AEnemySpawnerInteractor
     {
