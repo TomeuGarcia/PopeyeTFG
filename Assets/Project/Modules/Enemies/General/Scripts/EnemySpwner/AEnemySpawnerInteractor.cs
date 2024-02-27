@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Popeye.Modules.Enemies
+namespace Popeye.Modules.Enemies.General
 {
     public abstract class AEnemySpawnerInteractor : MonoBehaviour
     {

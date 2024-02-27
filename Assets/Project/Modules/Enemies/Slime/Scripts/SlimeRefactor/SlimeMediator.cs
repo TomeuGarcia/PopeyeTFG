@@ -86,7 +86,10 @@ namespace Popeye.Modules.Enemies
         public void SetWayPoints(Transform[] wayPoints)
         {
             _enemyPatrolling.SetWayPoints(wayPoints);
+            StartPatrolling();
         }
+
+
        
         public void AddSlimesToSlimeMindList(SlimeMediator mediator)
         {
@@ -173,6 +176,7 @@ namespace Popeye.Modules.Enemies
         internal override void Release()
         {
             _enemyHealth.HealToMax();
+            _enemyPatrolling.ResetPatrolling();
             _slimeTransform.localPosition = Vector3.zero;
         }
     }

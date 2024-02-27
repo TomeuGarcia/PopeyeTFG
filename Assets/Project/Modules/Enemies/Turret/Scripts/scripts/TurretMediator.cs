@@ -15,28 +15,25 @@ namespace Popeye.Modules.Enemies
         [Header("COMPONENTS")] 
         [SerializeField] private TurretShooting _turretShooting;
 
-        public Transform playerTransform { get; private set; }
+        public Transform PlayerTransform { get; private set; }
         
-        private Core.Pool.ObjectPool _projectilePool;
-        private Core.Pool.ObjectPool _areaDamagePool;
         private TurretMindEnemy _turretMind;
         [SerializeField] private ParabolicProjectile _parabolicProjectile;
         [SerializeField] private AreaDamageOverTime _damageableArea;
+        
+        
         internal override void Init()
         {
-            
-            
+
+            _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
+            _enemyHealth.Configure(this);
+            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
         }
 
         private void Start()
         {
-            _projectilePool = new ObjectPool(_parabolicProjectile);
-            _projectilePool.Init(15);
-            _areaDamagePool = new ObjectPool(_damageableArea);
-            _areaDamagePool.Init(15);
-            _turretShooting.Configure(this,_projectilePool,_areaDamagePool,playerTransform);
-            _enemyHealth.Configure(this);
-            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+
+            
         }
 
         internal override void Release()
@@ -50,13 +47,9 @@ namespace Popeye.Modules.Enemies
         }
         public void SetPlayerTransform(Transform _playerTransform)
         {
-            playerTransform = _playerTransform;
+            PlayerTransform = _playerTransform;
         }
         
-        public void SetObjectPool(Core.Pool.ObjectPool objectPool)
-        {
-            _projectilePool = objectPool;
-        }
         public override void OnPlayerClose()
         {
             throw new System.NotImplementedException();

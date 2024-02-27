@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.General;
 using UnityEngine;
 
