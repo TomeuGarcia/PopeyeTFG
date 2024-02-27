@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Popeye.Scripts.MaterialHelpers
@@ -15,7 +16,7 @@ namespace Popeye.Scripts.MaterialHelpers
         public Material AssignToRenderersAndGetMaterial()
         {
             Material material = new Material(_materialToAssign);
-
+            
             foreach (Renderer renderer in _renderers)
             {
                 renderer.material = material;

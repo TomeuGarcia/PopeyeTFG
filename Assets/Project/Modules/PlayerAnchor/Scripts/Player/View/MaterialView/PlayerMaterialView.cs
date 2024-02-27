@@ -23,12 +23,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
 
 
-        public PlayerMaterialView(PlayerMaterialViewConfig config, Renderer renderer, Transform rendererTransform)
+        public PlayerMaterialView(PlayerMaterialViewConfig config, Material material, Transform rendererTransform)
         {
             _config = config;
             _config.OnValidate();
             
-            _material = renderer.material;
+            _material = material;
             _rendererTransform = rendererTransform;
 
             SetTired(false);

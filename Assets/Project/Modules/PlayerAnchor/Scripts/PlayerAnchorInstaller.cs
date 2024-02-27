@@ -173,7 +173,9 @@ namespace Popeye.Modules.PlayerAnchor
             ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
-            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player);
+
+            Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
+            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
             IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
             
             
@@ -217,7 +219,7 @@ namespace Popeye.Modules.PlayerAnchor
 
 
 
-        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig, PopeyePlayer player)
+        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig, PopeyePlayer player, Material playerMaterial)
         {
             IPlayerView playerSquashAndStretchView = new PlayerSquashAndStretchView(
                 playerGeneralViewConfig.SquashStretchViewConfig,
@@ -226,13 +228,12 @@ namespace Popeye.Modules.PlayerAnchor
 
             IPlayerView playerMaterialView = new PlayerMaterialView(
                 playerGeneralViewConfig.MaterialViewConfig,
-                player.Renderer,
+                playerMaterial,
                 player.Renderer.transform
             );
 
             IPlayerView playerParticleView = new PlayerParticlesView(
                 playerGeneralViewConfig.ParticlesViewConfig,
-                player.Renderer,
                 player.MeshHolderTransform,
                 ServiceLocator.Instance.GetService<IParticleFactory>()
             );
