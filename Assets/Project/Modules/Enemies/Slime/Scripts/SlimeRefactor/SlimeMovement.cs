@@ -64,6 +64,7 @@ namespace Popeye.Modules.Enemies.Components
 
         public void StartChasing()
         {
+            Debug.Log("Chasing");
             _followPlayer = true;
         }
 

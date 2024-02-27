@@ -52,7 +52,7 @@ public class GameSetupInstaller : MonoBehaviour
         ServiceLocator.Instance.RegisterService<ITimeFunctionalities>(timeFunctionalities);
         
         _objectTypesInstaller.Install();
-        _factoriesInstaller.Install();
+        _factoriesInstaller.Install(ServiceLocator.Instance);
         _playerAnchorInstaller.Install();
     }
     
@@ -62,7 +62,7 @@ public class GameSetupInstaller : MonoBehaviour
         ServiceLocator.Instance.RemoveService<ITimeFunctionalities>();
         
         _playerAnchorInstaller.Uninstall();
-        _factoriesInstaller.Uninstall();
+        _factoriesInstaller.Uninstall(ServiceLocator.Instance);
         _objectTypesInstaller.Uninstall();
     }
 }

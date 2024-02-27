@@ -58,9 +58,9 @@ namespace Popeye.Modules.Enemies
         {
             return _attackTarget;
         }
-        public void InitAfterSpawn(SlimeMediator slimeMediator,EnemyPatrolling.PatrolType patrolType)
+        public void InitAfterSpawn(SlimeMediator slimeMediator)
         {
-            _patrolType = patrolType;
+            _patrolType = EnemyPatrolling.PatrolType.None;
             _slimeMediator = slimeMediator;
             if(_patrolType == EnemyPatrolling.PatrolType.None){slimeMediator.StartChasing();}
         }
@@ -96,6 +96,7 @@ namespace Popeye.Modules.Enemies
         public override void SetPatrollingWaypoints(Transform[] waypoints)
         {
             _slimeMediator.SetWayPoints(waypoints);
+           
         }
     }
 }

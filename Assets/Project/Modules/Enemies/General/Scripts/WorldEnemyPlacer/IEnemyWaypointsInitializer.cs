@@ -6,7 +6,7 @@ namespace Project.Modules.Enemies.General
     public interface IEnemyWaypointsInitializer
     {
         void SetEnemyWaypoints(AEnemy enemy);
-        public EnemyPatrolling.PatrolType GetPatrolType();
+
 
     }
 }

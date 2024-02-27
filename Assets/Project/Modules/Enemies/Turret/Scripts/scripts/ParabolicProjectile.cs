@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.Enemies.Hazards;
 using Popeye.Scripts.Collisions;
 using Unity.Mathematics;
 using UnityEngine;
@@ -28,8 +29,8 @@ public class ParabolicProjectile : RecyclableObject
     
     [SerializeField] private Material _lineAimingMat;
     [SerializeField] private Material _lineShootingMat;
-    
-    private ObjectPool _damageAreaPool;
+
+    private IHazardFactory _hazardFactory;
     [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
     private void Update()
     {
@@ -59,9 +60,9 @@ public class ParabolicProjectile : RecyclableObject
 
     }
 
-    public void PrepareShot(Transform firePoint,Transform playerTransform,ObjectPool damageAreaPool)
+    public void PrepareShot(Transform firePoint,Transform playerTransform,IHazardFactory hazardFactory)
     {
-        _damageAreaPool = damageAreaPool;
+        _hazardFactory = hazardFactory;
         _firePoint = firePoint;
         _aiming = false;
         _playerTransform = playerTransform;
@@ -158,7 +159,7 @@ public class ParabolicProjectile : RecyclableObject
             if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
             {
                 var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
-                _damageAreaPool.Spawn<AreaDamageOverTime>(hit.point, startRot);
+                _hazardFactory.CreateDamageArea(hit.point, startRot);
             }
             Recycle();
     }

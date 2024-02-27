@@ -90,7 +90,7 @@ namespace Popeye.Modules.Enemies.General
 
         private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)
         {
-            AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity,EnemyPatrolling.PatrolType.None);
+            AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity);
             enemy.AwakeInit(_enemyAttackTarget);
 
             enemy.OnDeathComplete += DecrementActiveEnemiesCount;

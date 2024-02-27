@@ -83,7 +83,7 @@ namespace Project.Modules.Enemies.General
         {
             IEnemyFactory enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
             
-            AEnemy enemy = enemyFactory.Create(_enemyID, SpawnPosition, Quaternion.identity,_enemyWaypointsInitializer.Value.GetPatrolType());
+            AEnemy enemy = enemyFactory.Create(_enemyID, SpawnPosition, Quaternion.identity);
             _enemyWaypointsInitializer.Value.SetEnemyWaypoints(enemy);
            
         }

@@ -2,6 +2,7 @@ using System;
 using Popeye.Core.Pool;
 using Popeye.IDSystem;
 using Popeye.Modules.Enemies.General;
+using Popeye.Modules.Enemies.Hazards;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -10,7 +11,7 @@ namespace Popeye.Modules.Enemies
     {
         protected Transform _attackTarget;
         public Action<AEnemy> OnDeathComplete;
-        
+        protected IHazardFactory _hazardFactory;
         
         [Header("GENERIC")]
         [SerializeField] private EnemyID _id;
@@ -31,7 +32,11 @@ namespace Popeye.Modules.Enemies
         {
             OnDeathComplete?.Invoke(this);
         }
-        
+
+        public virtual void SetHazardFactory(IHazardFactory hazardFactory)
+        {
+            _hazardFactory = hazardFactory;
+        }
    
     }
 }

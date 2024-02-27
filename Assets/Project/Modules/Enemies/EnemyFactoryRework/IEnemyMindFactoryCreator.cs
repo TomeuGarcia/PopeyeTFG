@@ -6,6 +6,6 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 {
     public interface IEnemyMindFactoryCreator
     {
-        AEnemy Create(EnemyID enemyID,Vector3 position, Quaternion rotation,EnemyPatrolling.PatrolType patrolType);
+        AEnemy Create(EnemyID enemyID,Vector3 position, Quaternion rotation);
     }
 }

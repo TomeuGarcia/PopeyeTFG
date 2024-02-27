@@ -14,9 +14,9 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             _enemyTypeToFactoryCreator = enemyTypeToFactoryCreator;
         }
 
-        public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation,EnemyPatrolling.PatrolType patrolType)
+        public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation)
         {
-            return _enemyTypeToFactoryCreator[enemyID].Create(enemyID,position,rotation,patrolType);
+            return _enemyTypeToFactoryCreator[enemyID].Create(enemyID,position,rotation);
         }
     }
 }
