@@ -21,6 +21,7 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
@@ -225,7 +226,15 @@ namespace Popeye.Modules.PlayerAnchor
 
             IPlayerView playerMaterialView = new PlayerMaterialView(
                 playerGeneralViewConfig.MaterialViewConfig,
-                player.Renderer
+                player.Renderer,
+                player.Renderer.transform
+            );
+
+            IPlayerView playerParticleView = new PlayerParticlesView(
+                playerGeneralViewConfig.ParticlesViewConfig,
+                player.Renderer,
+                player.MeshHolderTransform,
+                ServiceLocator.Instance.GetService<IParticleFactory>()
             );
             
             IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
@@ -244,6 +253,7 @@ namespace Popeye.Modules.PlayerAnchor
             {
                 playerSquashAndStretchView,
                 playerMaterialView,
+                playerParticleView,
                 playerGameFeelEffectsView,
                 animationsPlayerView
             };

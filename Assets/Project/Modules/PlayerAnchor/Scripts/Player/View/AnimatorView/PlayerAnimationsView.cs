@@ -84,7 +84,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetAnimatorBool(_config.AimingParameterId, false); //
         }
 
-        public void PlayDashAnimation(float duration)
+        public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
         }

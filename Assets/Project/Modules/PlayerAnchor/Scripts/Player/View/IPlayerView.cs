@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
@@ -10,7 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void PlayRespawnAnimation();
         void PlayDeathAnimation();
         void PlayHealAnimation();
-        void PlayDashAnimation(float duration);
+        void PlayDashAnimation(float duration, Vector3 dashDirection);
         void PlayKickAnimation();
         void PlayThrowAnimation();
         UniTaskVoid PlayPullAnimation(float delay);

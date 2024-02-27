@@ -52,7 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             StopCarry();
 
-            _particleFactory.Create(_vfxAnchorViewConfig.ThrowHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
+            //_particleFactory.Create(_vfxAnchorViewConfig.ThrowHeadParticleType, Vector3.zero, Quaternion.identity, _vfxParent);
             
             float riseTime = duration / 2.0f;
             float fallTime = duration - riseTime;
