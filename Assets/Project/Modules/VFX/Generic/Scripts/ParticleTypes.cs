@@ -14,6 +14,7 @@ namespace Popeye.Modules.VFX.Generic
         AnchorThrowSoftTrail,
         PlayerDashDisappear,
         PlayerDashAppear,
-        PlayerDashTrail
+        PlayerDashTrail,
+        SlimeDeathParticles
     }
 }

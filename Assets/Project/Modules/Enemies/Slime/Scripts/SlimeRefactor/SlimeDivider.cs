@@ -32,9 +32,9 @@ namespace Popeye.Modules.Enemies.Components
 
                 SlimeMediator childSlimeMediator = slimeSpawned.GetComponent<SlimeMediator>();
                 childSlimeMediator.SetObjectPool(_mediator.GetObjectPool());
-                childSlimeMediator.Init();
+                childSlimeMediator.InitAfterSpawn();
                 childSlimeMediator.SetSlimeMind(_mediator.slimeMindEnemy);
-                childSlimeMediator.SetPlayerTransform(_mediator.playerTransform);
+                childSlimeMediator.SetPlayerTransform(_mediator.PlayerTransform);
                 childSlimeMediator.SpawningFromDivision(dir,_mediator.GetPatrolType(),_mediator.GetPatrolWaypoints());
                 
                 _mediator.AddSlimesToSlimeMindList(childSlimeMediator);

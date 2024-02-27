@@ -46,8 +46,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private AnimationCurve _heightDisplacementCurve;
         
         public AnimationCurve HeightDisplacementCurve => _heightDisplacementCurve;
-        
-        
+
+
+        [Header("END ROTATION CORRECTION")]
+
+        [SerializeField] private AnimationCurve _endRotationWeightCurve;
+        [SerializeField, Range(0f, 1f)] private float _correctionAmount = 0.8f;
+        public AnimationCurve EndRotationWeightCurve => _endRotationWeightCurve;
+        public float CorrectionAmount => _correctionAmount;
         
         
 

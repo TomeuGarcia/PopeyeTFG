@@ -7,11 +7,12 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
 {
     public class DestructiblePlatformView
     {
-        private Transform _meshTransform;
-        private Material _meshMaterial;
+        private readonly Transform _meshTransform;
+        private readonly Material _meshMaterial;
         private IParticleFactory _particleFactory;
         private readonly DestructiblePlatformConfig.AnimationConfigData _config;
 
+        private readonly Vector3 _originalLocalPosition;
         
         public DestructiblePlatformView(Transform meshTransform, Material meshMaterial, IParticleFactory particleFactory,
             DestructiblePlatformConfig.AnimationConfigData config)
@@ -21,6 +22,8 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             _particleFactory = particleFactory;
             _config = config;
 
+            _originalLocalPosition = _meshTransform.localPosition;
+            
             _meshMaterial.SetFloat(_config.AnimationPropertyID, 0.0f);
         }
 
@@ -51,6 +54,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
 
         public void PlayRegenerateAnimation()
         {
+            _meshTransform.localPosition = _originalLocalPosition; 
             PlayShaderAnimation(1, 0, _config.RegeneratingDuration, _config.RegeneratingColor, Ease.InOutCubic);
         }
 

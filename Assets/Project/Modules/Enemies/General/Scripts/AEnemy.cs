@@ -1,11 +1,12 @@
 using System;
+using Popeye.Core.Pool;
 using Popeye.IDSystem;
 using Popeye.Modules.Enemies.General;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
 {
-    public class AEnemy : MonoBehaviour
+    public abstract class AEnemy : RecyclableObject
     {
         protected Transform _attackTarget;
         public Action<AEnemy> OnDeathComplete;
@@ -30,5 +31,7 @@ namespace Popeye.Modules.Enemies
         {
             OnDeathComplete?.Invoke(this);
         }
+        
+   
     }
 }

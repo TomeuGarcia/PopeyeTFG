@@ -36,5 +36,8 @@ namespace Popeye.ProjectHelpers
         
         
         public const string COLLISIONS_PATH = ROOT + "Collisions/";
+        
+        
+        public const string SOUNDSYSTEM_ASSETS_PATH = ROOT + "SoundSystem/";
     }
 }
