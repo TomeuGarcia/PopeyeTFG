@@ -31,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void UpdateMovingAnimation(float isMovingRatio01)
         {
-            ResetAnimatorFloat(_config.IdleToMovingParameterId, isMovingRatio01);
+            SetAnimatorFloat(_config.IdleToMovingParameterId, isMovingRatio01);
         }
 
         public void PlayEnterMovingWithAnchorAnimation()
@@ -88,7 +88,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
         }
+        
+        public void StartTired()
+        {
+            SetAnimatorBool(_config.TiredParameterId, true);
+        }
 
+        public void EndTired()
+        {
+            SetAnimatorBool(_config.TiredParameterId, false);
+        }
 
 
 
@@ -96,17 +105,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _animator.SetBool(parameterId, value);
         }
-        
-        private void SetAnimatorTrigger(int parameterId)
-        {
-            _animator.SetTrigger(parameterId);
-        }
-        private void ResetAnimatorTrigger(int parameterId)
-        {
-            _animator.ResetTrigger(parameterId);
-        }
-        
-        private void ResetAnimatorFloat(int parameterId, float value)
+
+        private void SetAnimatorFloat(int parameterId, float value)
         {
             _animator.SetFloat(parameterId, value);
         }
@@ -116,13 +116,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
 
         
-        public void StartTired()
-        {
-        }
 
-        public void EndTired()
-        {
-        }
 
         public void PlayTakeDamageAnimation()
         {

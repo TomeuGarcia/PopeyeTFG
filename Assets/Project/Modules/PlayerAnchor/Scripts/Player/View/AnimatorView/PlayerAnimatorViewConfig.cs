@@ -14,6 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private string _throwingAnchorParameter = "throwing";
         [SerializeField] private string _pullingAnchorParameter = "pulling";
         [SerializeField] private string _pickUpAnchorParameter = "pickUpAnchor";
+        [SerializeField] private string _tiredParameter = "tired";
         [SerializeField] private string _idleToMovingParameter = "idleToMovingBlending";
 
         public int IdleParameterId { get; private set; }
@@ -23,6 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public int ThrowingAnchorParameterId { get; private set; }
         public int PullingAnchorParameterId { get; private set; }
         public int PickUpAnchorParameterId { get; private set; }
+        public int TiredParameterId { get; private set; }
         public int IdleToMovingParameterId { get; private set; }
 
 
@@ -36,6 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             ThrowingAnchorParameterId = Animator.StringToHash(_throwingAnchorParameter);
             PullingAnchorParameterId = Animator.StringToHash(_pullingAnchorParameter);
             PickUpAnchorParameterId = Animator.StringToHash(_pickUpAnchorParameter);
+            TiredParameterId = Animator.StringToHash(_tiredParameter);
             IdleToMovingParameterId = Animator.StringToHash(_idleToMovingParameter);
         }
     }
