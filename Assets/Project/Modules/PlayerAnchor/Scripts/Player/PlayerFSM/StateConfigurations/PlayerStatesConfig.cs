@@ -91,6 +91,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float MinRollDuration => _minRollDuration;
         public float MaxRollDuration => _maxRollDuration;
         public float RollInvulnerableDuration => _rollInvulnerableDuration;
+
+
+        [Header("TIRED")] 
+        [SerializeField] private bool _dropAnchorWhenTired = false;
+
+        public bool DropAnchorWhenTired => _dropAnchorWhenTired;
         
         
         [Header("HEALING")]

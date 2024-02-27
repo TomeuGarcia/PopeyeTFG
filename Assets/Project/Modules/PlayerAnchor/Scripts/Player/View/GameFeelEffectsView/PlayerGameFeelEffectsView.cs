@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.Camera.CameraShake;
 using Project.Scripts.Time.TimeHitStop;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
@@ -47,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
         }
 
-        public void PlayDashAnimation(float duration)
+        public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
         }
 

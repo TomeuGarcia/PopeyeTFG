@@ -15,6 +15,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [Header("MATERIAL")]
         [SerializeField] private PlayerMaterialViewConfig _materialViewConfig;
         public PlayerMaterialViewConfig MaterialViewConfig => _materialViewConfig;
+     
+        
+        [Header("PARTICLES")]
+        [SerializeField] private PlayerParticlesViewConfig _particlesViewConfig;
+        public PlayerParticlesViewConfig ParticlesViewConfig => _particlesViewConfig;
         
         
         [Header("GAME FEEL EFFECTS")]

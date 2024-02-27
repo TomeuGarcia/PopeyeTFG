@@ -21,7 +21,9 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
+using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
 using Project.Scripts.Time.TimeFunctionalities;
 using UnityEngine;
@@ -49,6 +51,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
         [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
+        [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -170,7 +173,9 @@ namespace Popeye.Modules.PlayerAnchor
             ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
-            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player);
+
+            Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
+            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
             IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
             
             
@@ -178,8 +183,8 @@ namespace Popeye.Modules.PlayerAnchor
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
-            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
-                _playerGeneralConfig.PotionHealAmount, _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
+            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
+                _playerGeneralConfig.PlayerHealthConfig.PotionHealAmount, _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
                 _obstacleProbingConfig, _dashFloorProbingConfig);
             playerMovementChecker.Configure(_player, _playerController);
@@ -214,7 +219,7 @@ namespace Popeye.Modules.PlayerAnchor
 
 
 
-        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig, PopeyePlayer player)
+        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig, PopeyePlayer player, Material playerMaterial)
         {
             IPlayerView playerSquashAndStretchView = new PlayerSquashAndStretchView(
                 playerGeneralViewConfig.SquashStretchViewConfig,
@@ -223,7 +228,14 @@ namespace Popeye.Modules.PlayerAnchor
 
             IPlayerView playerMaterialView = new PlayerMaterialView(
                 playerGeneralViewConfig.MaterialViewConfig,
-                player.Renderer
+                playerMaterial,
+                player.Renderer.transform
+            );
+
+            IPlayerView playerParticleView = new PlayerParticlesView(
+                playerGeneralViewConfig.ParticlesViewConfig,
+                player.MeshHolderTransform,
+                ServiceLocator.Instance.GetService<IParticleFactory>()
             );
             
             IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
@@ -242,6 +254,7 @@ namespace Popeye.Modules.PlayerAnchor
             {
                 playerSquashAndStretchView,
                 playerMaterialView,
+                playerParticleView,
                 playerGameFeelEffectsView,
                 animationsPlayerView
             };
