@@ -264,7 +264,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorAutoPullStaminaCost);
                 if (!HasStaminaLeft())
                 {
-                    _anchor.SnapToFloor(Position).Forget();
+                    //_anchor.SnapToFloor(Position).Forget();
                     EnterTiredState();
                 }
                 else
@@ -536,7 +536,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnDamageTaken()
         {
             PlayerView.PlayTakeDamageAnimation();
-            SetInvulnerableForDuration(_playerGeneralConfig.InvulnerableDurationAfterHit);
+            SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
         }
 
         public void OnKilledByDamageTaken()

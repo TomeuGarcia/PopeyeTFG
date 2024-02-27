@@ -178,8 +178,8 @@ namespace Popeye.Modules.PlayerAnchor
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
-            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
-                _playerGeneralConfig.PotionHealAmount, _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
+            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
+                _playerGeneralConfig.PlayerHealthConfig.PotionHealAmount, _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
                 _obstacleProbingConfig, _dashFloorProbingConfig);
             playerMovementChecker.Configure(_player, _playerController);
