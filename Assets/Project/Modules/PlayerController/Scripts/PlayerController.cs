@@ -175,7 +175,7 @@ namespace Popeye.Modules.PlayerController
             
             UpdateState();
             AdjustVelocity();
-            
+
             _rigidbody.velocity = _velocity;
 
             ClearState();

@@ -58,7 +58,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 rectangularArea.UpdateState();
                 
                 GridMovementAreaViewHelper.CreateRectangularAreaView(_viewConfig, transform, rectangularArea, 
-                    Vector3.up * 0.005f);
+                    Vector3.up * 0.0005f);
             }
         }
         

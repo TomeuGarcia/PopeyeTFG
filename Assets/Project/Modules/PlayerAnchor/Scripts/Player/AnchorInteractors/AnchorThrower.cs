@@ -140,10 +140,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _trajectoryView.Hide();
         }
 
-        public void ThrowAnchorVertically()
+        public void ThrowAnchorVertically(out float duration)
         {
             float distance = _verticalThrowConfig.MaxThrowDistance;
-            float duration = _verticalThrowConfig.MaxThrowMoveDuration;
+            duration = _verticalThrowConfig.MaxThrowMoveDuration;
             
             Vector3[] throwTrajectory = _anchorTrajectoryMaker.ComputeUpAndDownTrajectory(_anchor.Position, distance,
                 out RaycastHit floorHit);
