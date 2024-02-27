@@ -264,7 +264,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorAutoPullStaminaCost);
                 if (!HasStaminaLeft())
                 {
-                    //_anchor.SnapToFloor(Position).Forget();
                     EnterTiredState();
                 }
                 else

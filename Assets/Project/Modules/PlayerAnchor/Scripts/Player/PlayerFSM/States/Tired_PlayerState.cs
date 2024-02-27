@@ -20,6 +20,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.TiredMoveSpeed);
             _blackboard.PlayerMediator.SetCanRotate(true);
             _blackboard.PlayerView.StartTired();
+
+            if (ShouldDropAnchor())
+            {
+                _blackboard.AnchorMediator.SnapToFloor(_blackboard.PlayerMediator.Position).Forget();
+            }
         }
 
         public override void Exit()
@@ -53,6 +58,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             return _blackboard.AnchorMediator.IsRestingOnFloor() && 
                    _blackboard.PlayerMediator.GetDistanceFromAnchor() < _blackboard.PlayerStatesConfig.AnchorPickUpDistance;
+        }
+
+        private bool ShouldDropAnchor()
+        {
+            return _blackboard.PlayerStatesConfig.DropAnchorWhenTired &&
+                   _blackboard.cameFromState == PlayerStates.PullingAnchor;
         }
     }
 }

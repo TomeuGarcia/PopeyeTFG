@@ -22,6 +22,7 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
 using Popeye.Scripts.Collisions;
+using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
 using Project.Scripts.Time.TimeFunctionalities;
 using UnityEngine;
@@ -49,6 +50,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
         [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
+        [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
