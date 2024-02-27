@@ -10,6 +10,7 @@ using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Slime;
 using Popeye.Modules.VFX.ParticleFactories;
+using Popeye.Scripts.Collisions;
 using Task = System.Threading.Tasks.Task;
 
 
@@ -32,7 +33,8 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private Transform _slimeTransform;
         private Transform _particlePoolParent;
         private Core.Pool.ObjectPool _objectPool;
-    
+
+        [SerializeField] private CollisionProbingConfig _floorCollisionProbingConfig;
 
         public override Vector3 Position => _slimeTransform.position;
 
@@ -106,13 +108,13 @@ namespace Popeye.Modules.Enemies
             _slimeMovement.DeactivateNavigation();
             slimeAnimatorController.PlayDeath();
             _enemyHealth.SetIsInvulnerable(true);
-            _boxCollider.isTrigger = false;
+            //_boxCollider.isTrigger = false;
             _slimeMovement.ApplyExplosionForce(explosionForceDir);
 
             await Task.Delay(TimeSpan.FromSeconds(0.5f));
 
             _slimeMovement.StopExplosionForce();
-            _boxCollider.isTrigger = true;
+            //_boxCollider.isTrigger = true;
             _slimeMovement.ActivateNavigation();
             if(type == EnemyPatrolling.PatrolType.FixedWaypoints){SetWayPoints(wayPoints);}
             else if (type == EnemyPatrolling.PatrolType.None){StartChasing();}
@@ -125,17 +127,28 @@ namespace Popeye.Modules.Enemies
             slimeAnimatorController.PlayDeath();
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {
-                _slimeFactory.CreateFromParent(slimeMindEnemy,this,Position,Quaternion.identity);
+                _slimeFactory.CreateFromParent(slimeMindEnemy,this, ComputeChildSlimesSpawnPosition(), Quaternion.identity);
             }
             slimeMindEnemy.RemoveSlimeFromList();
             slimeAnimatorController.StopMove();
         }
 
+        private Vector3 ComputeChildSlimesSpawnPosition()
+        {
+            if (Physics.Raycast(Position, Vector3.down, out RaycastHit hit, 
+                    _floorCollisionProbingConfig.ProbeDistance, _floorCollisionProbingConfig.CollisionLayerMask,
+                    _floorCollisionProbingConfig.QueryTriggerInteraction))
+            {
+                return hit.point + (hit.normal * 1.0f);
+            }
+
+            return Position;
+        }
+        
         public override void OnDeath(DamageHit damageHit)
         {
             Divide();
             base.OnDeath(damageHit);
-            
         }
 
         public override void OnPlayerClose()
@@ -171,6 +184,7 @@ namespace Popeye.Modules.Enemies
 
         internal override void Init()
         {
+            _slimeMovement.StopExplosionForce();
         }
 
         internal override void Release()
@@ -178,6 +192,7 @@ namespace Popeye.Modules.Enemies
             _enemyHealth.HealToMax();
             _enemyPatrolling.ResetPatrolling();
             _slimeTransform.localPosition = Vector3.zero;
+            _slimeMovement.StopExplosionForce();
         }
     }
 }

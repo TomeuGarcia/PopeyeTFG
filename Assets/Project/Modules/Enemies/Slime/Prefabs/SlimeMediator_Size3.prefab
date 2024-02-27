@@ -56,6 +56,8 @@ MonoBehaviour:
   _boxCollider: {fileID: 3462995563991828812}
   slimeMindEnemy: {fileID: 0}
   _slimeTransform: {fileID: 7378742200920036401}
+  _floorCollisionProbingConfig: {fileID: 11400000, guid: fe781d398af7571499f4602c4acaeaf8,
+    type: 2}
 --- !u!1 &3861768562356960769
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +204,7 @@ Rigidbody:
   m_GameObject: {fileID: 3861768562356960769}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 2
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
