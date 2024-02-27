@@ -318,7 +318,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             SpendStamina(_playerGeneralConfig.MovesetConfig.RollStaminaCost);
             
-            _anchorThrower.ThrowAnchorVertically();
+            _anchorThrower.ThrowAnchorVertically(out float throwDuration);
 
             float invulnerableDuration = _playerGeneralConfig.StatesConfig.RollInvulnerableDuration;
             SetInvulnerableForDuration(invulnerableDuration);
@@ -329,6 +329,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             _playerController.enabled = true;
+
+            float extraWaitDuration = throwDuration - duration;
+            if (extraWaitDuration > 0)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(extraWaitDuration));
+            }
         }
 
         public void KickAnchor()
