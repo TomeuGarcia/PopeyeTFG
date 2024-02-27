@@ -39,7 +39,7 @@ namespace Popeye.Modules.Enemies
 
         internal override void Init()
         {
-            InitTurret();
+            
         }
 
         internal override void Release()
@@ -52,10 +52,11 @@ namespace Popeye.Modules.Enemies
             
         }
 
-        public override void SetHazardFactory(IHazardFactory hazardFactory)
+        public override void InitAfterSpawn(IHazardFactory hazardFactory)
         {
-            base.SetHazardFactory(hazardFactory);
+            base.InitAfterSpawn(hazardFactory);
             _turretMediator.SetHazardFactory(hazardFactory);
+            InitTurret();
         }
     }
 }

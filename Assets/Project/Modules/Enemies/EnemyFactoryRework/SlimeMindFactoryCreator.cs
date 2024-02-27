@@ -34,7 +34,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation)
         {
             SlimeMindEnemy slimeMindEnemy = _slimeMindPool.Spawn<SlimeMindEnemy>(position, rotation);
-            slimeMindEnemy.SetHazardFactory(_hazardFactory);
+            slimeMindEnemy.InitAfterSpawn(_hazardFactory);
             SlimeMediator slimeMediator =  _slimeFactory.CreateNew(_slimeTypeToSize[enemyID], slimeMindEnemy, position, rotation);
             slimeMindEnemy.InitAfterSpawn(slimeMediator);
             return slimeMindEnemy;

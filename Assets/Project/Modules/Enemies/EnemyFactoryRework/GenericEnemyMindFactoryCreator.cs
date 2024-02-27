@@ -22,7 +22,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
        public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation)
         {
             var enemy = _enemyPool.Spawn<AEnemy>(position, rotation);
-            enemy.SetHazardFactory(_hazardFactory);
+            enemy.InitAfterSpawn(_hazardFactory);
             return enemy;
         }
     }

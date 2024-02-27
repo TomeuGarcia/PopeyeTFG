@@ -33,7 +33,7 @@ namespace Popeye.Modules.Enemies
             OnDeathComplete?.Invoke(this);
         }
 
-        public virtual void SetHazardFactory(IHazardFactory hazardFactory)
+        public virtual void InitAfterSpawn(IHazardFactory hazardFactory)
         {
             _hazardFactory = hazardFactory;
         }
