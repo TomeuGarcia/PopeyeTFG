@@ -1,4 +1,5 @@
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Scripts.Collisions;
@@ -15,6 +16,9 @@ public class GameSetupInstaller : MonoBehaviour
 {
     [Header("OBJECT TYPES")]
     [SerializeField] private ObjectTypesInstaller _objectTypesInstaller;
+
+    [Header("AUDIO")] 
+    [SerializeField] private AudioInstaller _audioInstaller;
     
     [Header("FACTORIES")]
     [SerializeField] private FactoriesInstaller _factoriesInstaller;
@@ -41,28 +45,34 @@ public class GameSetupInstaller : MonoBehaviour
 
     private void Install()
     {
+        ServiceLocator serviceLocator = ServiceLocator.Instance;
+        
         CombatManagerService combatManagerService = 
             new CombatManagerService(_hitTargetCollisionProbingConfig, 
                 new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig));
-        ServiceLocator.Instance.RegisterService<ICombatManager>(combatManagerService);
+        serviceLocator.RegisterService<ICombatManager>(combatManagerService);
 
         ITimeScaleManager timeScaleManager = new UnityTimeScaleManager();
         TimeFunctionalities timeFunctionalities =
             new TimeFunctionalities(timeScaleManager, new HitStopManager(_hitStopManagerConfig, timeScaleManager));
-        ServiceLocator.Instance.RegisterService<ITimeFunctionalities>(timeFunctionalities);
+        serviceLocator.RegisterService<ITimeFunctionalities>(timeFunctionalities);
         
         _objectTypesInstaller.Install();
         _factoriesInstaller.Install(ServiceLocator.Instance);
+        _audioInstaller.Install(serviceLocator);
         _playerAnchorInstaller.Install();
     }
     
     private void Uninstall()
     {
-        ServiceLocator.Instance.RemoveService<ICombatManager>();
-        ServiceLocator.Instance.RemoveService<ITimeFunctionalities>();
+        ServiceLocator serviceLocator = ServiceLocator.Instance;
+        
+        serviceLocator.RemoveService<ICombatManager>();
+        serviceLocator.RemoveService<ITimeFunctionalities>();
         
         _playerAnchorInstaller.Uninstall();
         _factoriesInstaller.Uninstall(ServiceLocator.Instance);
+        _audioInstaller.Uninstall(serviceLocator);
         _objectTypesInstaller.Uninstall();
     }
 }

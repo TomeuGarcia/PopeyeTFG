@@ -1,6 +1,7 @@
 using AYellowpaper;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerController.Inputs;
@@ -47,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
         [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
-        [SerializeField] private InterfaceReference<IPlayerAudio, MonoBehaviour> _playerAudioRef;
+        [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -60,7 +61,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
         [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
-        [SerializeField] private InterfaceReference<IAnchorAudio, MonoBehaviour> _anchorAudioRef;
+        [SerializeField] private AnchorAudioFMODConfig _anchorAudioConfig;
         [SerializeField] private LineRenderer _anchorTrajectoryLine1;
         [SerializeField] private LineRenderer _anchorTrajectoryLine2;
 
@@ -97,7 +98,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             ICameraFunctionalities cameraFunctionalities = ServiceLocator.Instance.GetService<ICameraFunctionalities>();
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
-
+            IFMODAudioManager fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
+            
             
             // Anchor
             TransformMotion anchorMotion = new TransformMotion();
@@ -110,7 +112,6 @@ namespace Popeye.Modules.PlayerAnchor
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
             AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
-            IAnchorAudio anchorAudio = _anchorAudioRef.Value;
             IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchor.PositionTransform, _anchorGeneralConfig.OnVoidProbingConfig);
             IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
                 _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
@@ -121,6 +122,8 @@ namespace Popeye.Modules.PlayerAnchor
             chainViewLogicGeneralConfig.ApplyMaterialToBonePrefabs(chainMaterialCopy);
             IVFXChainView vfxChainView = new GhostVFXChainView(chainViewLogicGeneralConfig.ObstacleCollisionProbingConfig, chainMaterialCopy, 
                 _player.AnchorGrabToThrowHolder);
+
+            IAnchorAudio anchorAudio = new AnchorAudioFMOD(_anchor.PositionTransform.gameObject, fmodAudioManager, _anchorAudioConfig);
             
             
             anchorMotion.Configure(_anchor.PositionTransform);
@@ -137,7 +140,6 @@ namespace Popeye.Modules.PlayerAnchor
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorTrajectorySnapController.Configure();
             _anchorCollisions.Configure(_obstacleProbingConfig);
-            anchorAudio.Configure(_anchor.PositionTransform.gameObject);
 
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
@@ -165,11 +167,11 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
             PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
-            IPlayerAudio playerAudio = _playerAudioRef.Value;
             ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player);
+            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
             
             
             _playerController.AwakeConfigure();
@@ -181,7 +183,6 @@ namespace Popeye.Modules.PlayerAnchor
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
                 _obstacleProbingConfig, _dashFloorProbingConfig);
             playerMovementChecker.Configure(_player, _playerController);
-            playerAudio.Configure(_playerController.gameObject);
 
 
             _playerController.MovementInputHandler = movementInputHandler;
