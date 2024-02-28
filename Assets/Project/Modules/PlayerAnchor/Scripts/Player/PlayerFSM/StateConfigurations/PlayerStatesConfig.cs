@@ -39,6 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _tiredMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _healingMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _fallingOnVoidMoveSpeed = 0.0f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _dashingMoveSpeed = 12.0f;
 
         public float WithoutAnchorMoveSpeed => _withoutAnchorMoveSpeed;
         public float WithAnchorMoveSpeed => _withAnchorMoveSpeed;
@@ -50,6 +51,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float TiredMoveSpeed => _tiredMoveSpeed;
         public float HealingMoveSpeed => _healingMoveSpeed;
         public float FallingOnVoidMoveSpeed => _fallingOnVoidMoveSpeed;
+        public float DashingMoveSpeed => _dashingMoveSpeed;
         
         
         [Header("ANCHOR THROW")]
@@ -91,6 +93,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float MinRollDuration => _minRollDuration;
         public float MaxRollDuration => _maxRollDuration;
         public float RollInvulnerableDuration => _rollInvulnerableDuration;
+
+
+        [Header("TIRED")] 
+        [SerializeField] private bool _dropAnchorWhenTired = false;
+
+        public bool DropAnchorWhenTired => _dropAnchorWhenTired;
         
         
         [Header("HEALING")]

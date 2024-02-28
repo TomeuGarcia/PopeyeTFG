@@ -69,15 +69,22 @@ namespace Popeye.Modules.Enemies
             _combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
             
             if (_alreadyInitialized) return;
+        }
 
-            AwakeInit(_attackTarget);
-            SetRespawnPosition(Position);
+        public override void SetPatrollingWaypoints(Transform[] waypoints)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void AwakeInit(Transform attackTarget)
         {
             base.AwakeInit(attackTarget);
             AwakeInit_old(attackTarget, false);
+        }
+
+        public override void DieFromOrder()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void AwakeInit_old(Transform attackTarget, bool respawnsAfterDeath)
@@ -200,7 +207,7 @@ namespace Popeye.Modules.Enemies
             }
             else
             {
-                Destroy(gameObject);
+                Recycle();
             }
         }
 
@@ -324,6 +331,17 @@ namespace Popeye.Modules.Enemies
         public float GetKnockbackEffectivenessMultiplier()
         {
             return 1;
+        }
+
+        internal override void Init()
+        {
+            AwakeInit(_attackTarget);
+            SetRespawnPosition(Position);
+        }
+
+        internal override void Release()
+        {
+            
         }
     }
 }

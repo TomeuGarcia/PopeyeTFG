@@ -78,11 +78,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PunchScale(_config.HealScalePunch);
         }
 
-        public void PlayDashAnimation(float duration)
+        public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
             ClearTweens();
-            PunchScale(_config.DashScalePunch, duration);
-            PunchRotate(_config.DashRotationPunch, duration);
+            //PunchScale(_config.DashScalePunch, duration);
+            //PunchRotate(_config.DashRotationPunch, duration);
         }
 
         public void PlayKickAnimation()

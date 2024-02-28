@@ -22,6 +22,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         {
             _breakMode = DestructiblePlatform.BreakMode.BreakOverTime;
         }
+        
         public void SetBreakInstantlyMode()
         {
             _breakMode = DestructiblePlatform.BreakMode.InstantBreak;

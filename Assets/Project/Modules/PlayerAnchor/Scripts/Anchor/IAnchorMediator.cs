@@ -24,6 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         bool IsBeingThrown();
         bool IsBeingPulled();
         bool IsRestingOnFloor();
+        bool IsBeingCarried();
 
         bool IsGrabbedBySnapper();
 
@@ -47,7 +48,5 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
 
         void OnDamageDealt(DamageHitResult damageHitResult);
-
-        void SetActiveDebug(bool active);
     }
 }

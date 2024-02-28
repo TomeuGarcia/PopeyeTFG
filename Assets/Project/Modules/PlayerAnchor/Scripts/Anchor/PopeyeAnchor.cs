@@ -21,18 +21,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     {
         [SerializeField] private Transform _moveTransform;
         [SerializeField] private GameObject _fakeAnchor;
-        
-        [SerializeField]
-        public FMODUnity.EventReference AnchorHit;
-        private string AnchorHitSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorThrow;
-        private string AnchorThrowSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorGrab;
-        private string AnchorGrabSFX = null;
 
         private AnchorFSM _stateMachine;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
@@ -184,7 +172,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorViewExtras.OnPulled();
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
-
+            
         }
 
         public void OnDashedAt(float duration, Ease dashEase)
@@ -217,9 +205,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorView.PlayCarriedAnimation();
             _anchorViewExtras.OnCarried();
-            
+        }
+
+        public void SetCarriedFromPickedUp()
+        {
+            SetCarried();
             _anchorAudio.PlayPickedUpSound();
         }
+        
         public void SetGrabbedToThrow()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedToThrow);
@@ -286,6 +279,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.RestingOnFloor;
         }
+
+        public bool IsBeingCarried()
+        {
+            return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.Carried;
+        }
+
         public bool IsGrabbedBySnapper()
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.GrabbedBySnapper;
@@ -370,12 +369,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _anchorAudio.PlayDealDamageSound();
             _anchorView.OnDamageDealt(damageHitResult);
-        }
-
-        public void SetActiveDebug(bool active)
-        {
-            PositionTransform.gameObject.SetActive(active);
-            _fakeAnchor.SetActive(!active);
         }
     }
 }
