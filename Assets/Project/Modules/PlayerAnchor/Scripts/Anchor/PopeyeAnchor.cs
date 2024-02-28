@@ -21,18 +21,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     {
         [SerializeField] private Transform _moveTransform;
         [SerializeField] private GameObject _fakeAnchor;
-        
-        [SerializeField]
-        public FMODUnity.EventReference AnchorHit;
-        private string AnchorHitSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorThrow;
-        private string AnchorThrowSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorGrab;
-        private string AnchorGrabSFX = null;
 
         private AnchorFSM _stateMachine;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
@@ -184,7 +172,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorViewExtras.OnPulled();
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
-
+            
         }
 
         public void OnDashedAt(float duration, Ease dashEase)
@@ -217,9 +205,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorView.PlayCarriedAnimation();
             _anchorViewExtras.OnCarried();
-            
+        }
+
+        public void SetCarriedFromPickedUp()
+        {
+            SetCarried();
             _anchorAudio.PlayPickedUpSound();
         }
+        
         public void SetGrabbedToThrow()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedToThrow);

@@ -105,6 +105,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 dashEndPosition -= (toAnchorDirection * 0.5f);
             }
 
+            if (Physics.Raycast(_anchor.Position, toAnchorDirection, out RaycastHit wallHit,0.5f, 
+                    _obstacleProbingConfig.ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                dashEndPosition -= toAnchorDirection * 0.7f;
+                Debug.Log(wallHit.distance);
+            }
+
             return dashEndPosition;
         }
 

@@ -1,20 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.PlayerAnchor.Player;
 using UnityEngine;
 
 namespace Popeye.Core.Installers
 {
     public class GameReferencesInstaller : MonoBehaviour
     {
-        [SerializeField] private Transform _playerTransform;
-
-        void Awake()
+        public void Install(ServiceLocator serviceLocator, IPlayerMediator playerMediator)
         {
-            ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_playerTransform));
+            GameReferences gameReferences = new GameReferences(
+                playerMediator.GetDeathNotifier(),
+                playerMediator.GetTargetForEnemies(),
+                playerMediator.GetPlayerEnemySpawnersInteractions()
+            );
+            
+            serviceLocator.RegisterService<IGameReferences>(gameReferences);
         }
 
+        public void Uninstall(ServiceLocator serviceLocator)
+        {
+            serviceLocator.RemoveService<IGameReferences>();
+        }
+        
 
     }
 }

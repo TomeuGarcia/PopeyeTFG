@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5082174903333640810}
   - component: {fileID: 7790051331378039978}
   - component: {fileID: 1351218561991610330}
-  - component: {fileID: 6150467610471333831}
   - component: {fileID: 7348990576285241089}
+  - component: {fileID: 6150467610471333831}
   - component: {fileID: 7406570661138091252}
   - component: {fileID: 7860900730581999901}
   - component: {fileID: 2150481757876597378}
@@ -115,28 +115,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!195 &6150467610471333831
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3638549413259143673}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.75
-  m_Speed: 3.5
-  m_Acceleration: 15
-  avoidancePriority: 50
-  m_AngularSpeed: 300
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!54 &7348990576285241089
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -164,6 +142,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!195 &6150467610471333831
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3638549413259143673}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.75
+  m_Speed: 3.5
+  m_Acceleration: 15
+  avoidancePriority: 50
+  m_AngularSpeed: 300
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &7406570661138091252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,7 +376,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c8a1f7a3436042841a657af808a4aa0a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.66
+      value: -1.00002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c8a1f7a3436042841a657af808a4aa0a,
         type: 3}

@@ -15,6 +15,7 @@ namespace Popeye.Modules.VFX.Generic
         PlayerDashDisappear,
         PlayerDashAppear,
         PlayerDashTrail,
-        SlimeDeathParticles
+        SlimeDeathParticles,
+        EnemySpawnHint
     }
 }

@@ -32,5 +32,7 @@ namespace Popeye.Modules.Enemies
         }
         public abstract void OnPlayerClose();
         public abstract void OnPlayerFar();
+
+        public abstract void DieFromOrder();
     }
 }

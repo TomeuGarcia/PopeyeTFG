@@ -11,12 +11,14 @@ namespace Popeye.Modules.Enemies.General
         {
             _enemySpawner.OnFirstWaveStarted += OnOnFirstEnemyWaveStartedEvent;
             _enemySpawner.OnAllWavesFinished += OnAllEnemyWavesFinishedEvent;
+            _enemySpawner.OnPlayerDiedDuringWaves += OnPlayerDiedDuringWavesEvent;
         }
 
         private void OnDisable()
         {
             _enemySpawner.OnFirstWaveStarted -= OnOnFirstEnemyWaveStartedEvent;
             _enemySpawner.OnAllWavesFinished -= OnAllEnemyWavesFinishedEvent;
+            _enemySpawner.OnPlayerDiedDuringWaves -= OnPlayerDiedDuringWavesEvent;
         }
 
 
@@ -27,6 +29,7 @@ namespace Popeye.Modules.Enemies.General
 
         protected abstract void OnOnFirstEnemyWaveStartedEvent();
         protected abstract void OnAllEnemyWavesFinishedEvent();
+        protected abstract void OnPlayerDiedDuringWavesEvent();
 
 
     }
