@@ -17,26 +17,16 @@ namespace Popeye.Modules.Enemies
 
         [SerializeField] private EnemyPatrolling.PatrolType _patrolType = EnemyPatrolling.PatrolType.None;
         [SerializeField] private Transform[] _wayPoints;
-        
-        
         [SerializeField] private Transform _transform;
-        private ObjectPool _objectPool;
-        [SerializeField] private PooledParticle _explosionParticles;
+
 
         private SlimeMediator _slimeMediator;
 
         private void Awake()
         {
-            _objectPool = new ObjectPool(_explosionParticles, _transform);
-            _objectPool.Init(15);
-
             _slimeMediatorsUnderControl = new HashSet<SlimeMediator>(5);
         }
 
-        public ObjectPool GetParticlePool()
-        {
-            return _objectPool;
-        }
 
         public Transform GetPlayerTransform()
         {

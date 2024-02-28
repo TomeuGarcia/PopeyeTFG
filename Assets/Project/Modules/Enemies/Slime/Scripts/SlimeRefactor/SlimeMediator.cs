@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Popeye.Modules.Enemies.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
-using System.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
@@ -31,8 +28,7 @@ namespace Popeye.Modules.Enemies
         public Transform PlayerTransform { get; private set; }
         public SlimeSizeID SlimeSizeID { get; private set; }
         [SerializeField] private Transform _slimeTransform;
-        private Transform _particlePoolParent;
-        private Core.Pool.ObjectPool _objectPool;
+
 
         [SerializeField] private CollisionProbingConfig _floorCollisionProbingConfig;
 
@@ -64,16 +60,7 @@ namespace Popeye.Modules.Enemies
         {
             SlimeSizeID = slimeSizeID;
         }
-
-        public void SetObjectPool(Core.Pool.ObjectPool objectPool)
-        {
-            _objectPool = objectPool;
-        }
-
-        public Core.Pool.ObjectPool GetObjectPool()
-        {
-            return _objectPool;
-        }
+        
         public void PlayMoveAnimation()
         {
             slimeAnimatorController.PlayMove();
