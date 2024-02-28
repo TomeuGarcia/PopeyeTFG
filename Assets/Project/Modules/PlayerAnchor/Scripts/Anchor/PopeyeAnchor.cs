@@ -21,18 +21,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     {
         [SerializeField] private Transform _moveTransform;
         [SerializeField] private GameObject _fakeAnchor;
-        
-        [SerializeField]
-        public FMODUnity.EventReference AnchorHit;
-        private string AnchorHitSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorThrow;
-        private string AnchorThrowSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorGrab;
-        private string AnchorGrabSFX = null;
 
         private AnchorFSM _stateMachine;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
