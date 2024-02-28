@@ -4,9 +4,10 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
-using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
+using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.ParticleFactories;
 
 namespace Popeye.Modules.Enemies.General
 {
@@ -40,7 +41,7 @@ namespace Popeye.Modules.Enemies.General
 
 
 
-        [SerializeField] private Transform _enemyAttackTarget;
+        private Transform _enemyAttackTarget;
         [SerializeField] private EnemyWave[] _enemyWaves;
         private HashSet<AEnemy> _activeEnemies;
         private bool AllCurrentWaveEnemiesAreDead => _activeEnemies.Count == 0;
@@ -51,14 +52,22 @@ namespace Popeye.Modules.Enemies.General
         public EnemySpawnerEvent OnPlayerDiedDuringWaves;
         
         private IEnemyFactory _enemyFactory;
+        private IParticleFactory _particleFactory;
         private IPlayerDeathNotifier _playerDeathNotifier;
         private bool _playerDiedDuringWaves;
+
+        private const float SPAWN_HINT_DURATION = 1.5f;
+        private static readonly float HALF_SPAWN_HINT_DURATION = SPAWN_HINT_DURATION / 2;
 
         private void Start()
         {
             _enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
-            _playerDeathNotifier = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerDeathNotifier();
+            _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
 
+            IGameReferences gameReferences = ServiceLocator.Instance.GetService<IGameReferences>();
+            _playerDeathNotifier = gameReferences.GetPlayerDeathNotifier();
+            _enemyAttackTarget = gameReferences.GetPlayerTargetForEnemies();
+            
             _activeEnemies = new HashSet<AEnemy>(15);
         }
 
@@ -106,10 +115,22 @@ namespace Popeye.Modules.Enemies.General
                 EnemyWave.SpawnSequenceBeat spawnSequenceBeat = enemyWave.SpawnSequence[i];
 
                 await UniTask.Delay(TimeSpan.FromSeconds(spawnSequenceBeat.DelayBeforeSpawn));
+                
+                SpawnHinter(spawnSequenceBeat.SpawnPosition, SPAWN_HINT_DURATION);
+                await UniTask.Delay(TimeSpan.FromSeconds(HALF_SPAWN_HINT_DURATION));
+                
                 SpawnEnemy(spawnSequenceBeat.EnemyID, spawnSequenceBeat.SpawnPosition);
             }
         }
 
+        private void SpawnHinter(Vector3 spawnPosition, float duration)
+        {
+            EnemySpawnHinter spawnHinter =
+                _particleFactory.Create(ParticleTypes.EnemySpawnHint, spawnPosition, Quaternion.identity)
+                    .GetComponent<EnemySpawnHinter>();
+            spawnHinter.PlayAnimation(duration).Forget();
+        }
+        
         private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)
         {
             AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity);
