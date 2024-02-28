@@ -57,18 +57,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             Transform trail = _particleFactory.Create(_config.DashTrailParticleType, Vector3.zero, quaternion.identity, _transformHolder);
             Vector3 trailScale = trail.localScale;
-
-            float durationMinusDelay = Mathf.Max(duration - _config.TrailSpawnDelay, 0.01f);
-            
-            trail.DOLocalRotate(_config.DashTrailRotation, durationMinusDelay, RotateMode.LocalAxisAdd)
+            trail.DOLocalRotate(_config.DashTrailRotation, duration - _config.TrailSpawnDelay, RotateMode.LocalAxisAdd)
                 .SetEase(_config.DashTrailRotationEase);
-            trail.DOScale(Vector3.zero, durationMinusDelay)
-                .SetEase(_config.DashTrailScaleEase);
+            trail.DOScale(Vector3.zero, duration - _config.TrailSpawnDelay)
+                .SetEase(_config.DashTrailScaleEase).OnComplete(() =>
+                {
+                    trail.SetParent(null);
+                    trail.localScale = trailScale;
+                });
+            await UniTask.Delay(TimeSpan.FromSeconds(duration - _config.TrailSpawnDelay));
             
-            await UniTask.Delay(TimeSpan.FromSeconds(durationMinusDelay));
-            
-            trail.SetParent(null);
-            trail.localScale = trailScale;
             _particleFactory.Create(_config.DashAppearParticleType, Vector3.zero, quaternion.identity, _transformHolder);
         }
 
