@@ -15,7 +15,7 @@ public class ParabolicProjectile : RecyclableObject
 {
     private Transform _firePoint;
     [SerializeField] private float _height;
-    [SerializeField] private float speed;
+    [FormerlySerializedAs("speed")] [SerializeField] private float _speed;
     private Transform _playerTransform;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private MeshRenderer _bulletBody;
@@ -100,20 +100,17 @@ public class ParabolicProjectile : RecyclableObject
             float x = v0 * t * Mathf.Cos(angle);
             float y = (float)(v0 * t * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(t,2));
             _rigidbody.MovePosition(_firePoint.position + direction * x + Vector3.up * y);
-            if (IsCloseToTarget())
-            {
+
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
+                if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,0.5f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                 {
                     
                     var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
                     _hazardFactory.CreateDamageArea(hit.point, startRot);
                     Recycle();
                 }
-                
-            }
-            t += Time.deltaTime * speed;
-            await UniTask.NextFrame();
+                t += Time.deltaTime * _speed;
+                await UniTask.NextFrame();
         }
         
         
@@ -151,19 +148,17 @@ public class ParabolicProjectile : RecyclableObject
 
     private void OnCollisionEnter(Collision other)
     {
-           /* Debug.Log("collided with " + other.transform.name);
-            _contactDamageHit.DamageSourcePosition = transform.position;
+        _contactDamageHit.DamageSourcePosition = transform.position;
             _contactDamageHit.UpdateKnockbackPushDirection(PositioningHelper.Instance.GetDirectionAlignedWithFloor(transform.position, other.transform.position));
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
             _bulletBody.enabled = false;
             RaycastHit hit;
             if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
             {
-                Debug.Log("raycast hit " + hit.transform.name);
                 var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
                 _hazardFactory.CreateDamageArea(hit.point, startRot);
             }
-            Recycle();*/
+            Recycle();
     }
 
     internal override void Release()
