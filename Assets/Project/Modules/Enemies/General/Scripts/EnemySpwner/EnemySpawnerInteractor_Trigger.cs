@@ -44,6 +44,19 @@ namespace Popeye.Modules.Enemies.General
             }
         }
 
+        protected override void OnPlayerDiedDuringWavesEvent()
+        {
+            foreach (AWorldInteractor worldInteractor in _worldInteractors)
+            {
+                worldInteractor.AddDeactivationInput();
+            }
+            
+            foreach (Collider trigger in _triggers)
+            {
+                trigger.enabled = true;
+            }
+        }
+
         protected override void OnOnFirstEnemyWaveStartedEvent()
         {
             foreach (Collider trigger in _triggers)

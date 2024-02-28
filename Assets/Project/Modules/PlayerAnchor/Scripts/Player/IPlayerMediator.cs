@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
@@ -90,5 +91,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+
+        IPlayerDeathNotifier GetDeathNotifier();
     }
 }

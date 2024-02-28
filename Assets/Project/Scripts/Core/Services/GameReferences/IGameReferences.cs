@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using UnityEngine;
 
 namespace Popeye.Core.Services.GameReferences
 {
     public interface IGameReferences
     {
-        Transform GetPlayer();
-        void SetPlayer(Transform playerTransform);
-
+        Transform GetPlayerTargetForEnemies();
+        IPlayerDeathNotifier GetPlayerDeathNotifier();
 
     }
 }

@@ -58,7 +58,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
                 slimeMediator.SpawningFromDivision(spawnDirection, parentSlimeMediator.GetPatrolType(),
                     parentSlimeMediator.GetPatrolWaypoints());
 
-                ownerMind.AddSlimeToList();
+                ownerMind.AddSlimeToList(slimeMediator);
                 slimes[i] = slimeMediator;
             }
 

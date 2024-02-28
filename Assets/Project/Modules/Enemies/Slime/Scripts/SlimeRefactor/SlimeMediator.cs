@@ -93,9 +93,9 @@ namespace Popeye.Modules.Enemies
 
 
        
-        public void AddSlimesToSlimeMindList(SlimeMediator mediator)
+        public void AddSlimesToSlimeMindList(SlimeMediator childSlimeMediator)
         {
-            slimeMindEnemy.AddSlimeToList();
+            slimeMindEnemy.AddSlimeToList(childSlimeMediator);
         }
 
         public void SpawningFromDivision(Vector3 explosionForceDir,EnemyPatrolling.PatrolType type,Transform[] wayPoints)
@@ -129,7 +129,7 @@ namespace Popeye.Modules.Enemies
             {
                 _slimeFactory.CreateFromParent(slimeMindEnemy,this, ComputeChildSlimesSpawnPosition(), Quaternion.identity);
             }
-            slimeMindEnemy.RemoveSlimeFromList();
+            slimeMindEnemy.RemoveSlimeFromList(this);
             slimeAnimatorController.StopMove();
         }
 
@@ -160,6 +160,7 @@ namespace Popeye.Modules.Enemies
         {
             StartPatrolling();
         }
+
 
         public void StartChasing()
         {
@@ -193,6 +194,11 @@ namespace Popeye.Modules.Enemies
             _enemyPatrolling.ResetPatrolling();
             _slimeTransform.localPosition = Vector3.zero;
             _slimeMovement.StopExplosionForce();
+        }
+        
+        public override void DieFromOrder()
+        {
+            Recycle();
         }
     }
 }

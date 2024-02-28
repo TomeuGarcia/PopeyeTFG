@@ -24,17 +24,11 @@ namespace Popeye.Modules.Enemies
         
         internal override void Init()
         {
-
             _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
         }
 
-        private void Start()
-        {
-
-            
-        }
 
         internal override void Release()
         {
@@ -58,6 +52,11 @@ namespace Popeye.Modules.Enemies
         public override void OnPlayerFar()
         {
             throw new System.NotImplementedException();
+        }
+
+        public override void DieFromOrder()
+        {
+            //  
         }
 
         public override Vector3 Position { get; }

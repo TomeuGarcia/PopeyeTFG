@@ -6,6 +6,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Project.Modules.WorldElements.DestructiblePlatforms;
@@ -62,6 +63,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IOnVoidChecker _onVoidChecker;
         
         private bool _pullingAnchorFromTheVoid;
+
+        private PlayerDeathNotifier _playerDeathNotifier;
         
         public Vector3 Position => _playerController.Position;
         public Transform PositionTransform => _playerController.Transform;
@@ -97,6 +100,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _safeGroundChecker = safeGroundChecker;
             _onVoidChecker = onVoidChecker;
+
+            _playerDeathNotifier = new PlayerDeathNotifier();
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
@@ -459,6 +464,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.DisableForDuration(0.3f).Forget();
 
             PlayerView.PlayRespawnAnimation();
+            
+            _playerDeathNotifier.NotifyOnPlayerRespawnedFromDeath();
         }
 
         public void OnStartMoving()
@@ -484,6 +491,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             playerIsOnVoid = _onVoidChecker.IsOnVoid;
             anchorIsOnVoid = _anchor.OnVoidChecker.IsOnVoid;
         }
+
+
 
         private async UniTaskVoid DropTargetForEnemies(float duration)
         {
@@ -547,6 +556,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnKilledByDamageTaken()
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
+            _playerDeathNotifier.NotifyOnPlayerDied();
         }
 
         public void OnHealed()
@@ -570,6 +580,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void EnterTiredState()
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Tired);
+        }
+        
+        public IPlayerDeathNotifier GetDeathNotifier()
+        {
+            return _playerDeathNotifier;
         }
     }
 }

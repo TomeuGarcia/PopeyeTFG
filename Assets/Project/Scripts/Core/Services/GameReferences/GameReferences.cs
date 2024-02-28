@@ -1,26 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Modules.PlayerAnchor.Player;
+using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using UnityEngine;
 
 namespace Popeye.Core.Services.GameReferences
 {
    public class GameReferences : IGameReferences
    {
-      private Transform _playerTransform;
+      private readonly IPlayerDeathNotifier _playerDeathNotifier;
+      private readonly Transform _playerTargetForEnemies;
 
 
-      public GameReferences(Transform playerTransform)
+      public GameReferences(IPlayerDeathNotifier playerDeathNotifier, Transform playerTargetForEnemies)
       {
-         SetPlayer(playerTransform);
+         _playerDeathNotifier = playerDeathNotifier;
+         _playerTargetForEnemies = playerTargetForEnemies;
       }
-      public Transform GetPlayer()
+      
+      public Transform GetPlayerTargetForEnemies()
       {
-         return _playerTransform;
+         return _playerTargetForEnemies;
       }
 
-      public void SetPlayer(Transform playerTransform)
+      public IPlayerDeathNotifier GetPlayerDeathNotifier()
       {
-         _playerTransform = playerTransform;
+         return _playerDeathNotifier;
       }
    }
 }

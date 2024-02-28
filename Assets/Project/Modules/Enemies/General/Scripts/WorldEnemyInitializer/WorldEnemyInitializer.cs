@@ -15,7 +15,7 @@ namespace Popeye.Modules.Enemies.GeneralEnemyScripts
         {
             _spawnedEnemy = Instantiate(_enemyPrefab, transform);
             
-            _spawnedEnemy.SetAttackTarget(ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer());
+            _spawnedEnemy.SetAttackTarget(ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies());
         }
     }
 }
