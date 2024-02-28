@@ -37,6 +37,8 @@ namespace Popeye.Modules.Enemies
         {
             _hazardFactory = hazardFactory;
         }
-   
+
+        public abstract void DieFromOrder();
+
     }
 }

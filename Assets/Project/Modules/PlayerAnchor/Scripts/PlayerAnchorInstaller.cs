@@ -89,14 +89,14 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PlayerHUD _playerHUD;
 
 
+        public IPlayerMediator PlayerMediator => _player;
+        
 
         public void Install()
         {
             // Services
             ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(new CameraFunctionalities(
                 new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value));
-            
-            ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
             
             
             ICameraFunctionalities cameraFunctionalities = ServiceLocator.Instance.GetService<ICameraFunctionalities>();
@@ -214,7 +214,6 @@ namespace Popeye.Modules.PlayerAnchor
         public void Uninstall()
         {
             ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
-            ServiceLocator.Instance.RemoveService<IGameReferences>();
         }
 
 

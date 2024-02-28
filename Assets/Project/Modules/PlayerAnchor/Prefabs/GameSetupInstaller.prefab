@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2378466258881122024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7723378563233600437}
+  - component: {fileID: 4549802472953314210}
+  m_Layer: 0
+  m_Name: GameReferencesInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7723378563233600437
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2378466258881122024}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3575201745362238480}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4549802472953314210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2378466258881122024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51a0eff7344c884dad4b8f8d4b60b45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerTransform: {fileID: 0}
 --- !u!1 &2500100514045219782
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,6 +125,7 @@ Transform:
   - {fileID: 8300604786699173624}
   - {fileID: 2646407277253870018}
   - {fileID: 6644716886354876950}
+  - {fileID: 7723378563233600437}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -99,6 +145,7 @@ MonoBehaviour:
   _audioInstaller: {fileID: 2740378700219022275}
   _factoriesInstaller: {fileID: 1559925599531954913}
   _playerAnchorInstaller: {fileID: 7050149481166678006}
+  _gameReferencesInstaller: {fileID: 4549802472953314210}
   _hitTargetCollisionProbingConfig: {fileID: 11400000, guid: 8b65cc09cf609474cb68e23cb665020d,
     type: 2}
   _floorPlatformsProbingConfig: {fileID: 11400000, guid: df06efc9410d4eb46ac4cb7bdc6e09a1,
@@ -212,6 +259,7 @@ MonoBehaviour:
   _dashFloorProbingConfig: {fileID: 11400000, guid: df06efc9410d4eb46ac4cb7bdc6e09a1,
     type: 2}
   _playerAudioConfig: {fileID: 11400000, guid: 58a82a5f79aeb3b4d82f6e0787694180, type: 2}
+  _playerRenderersMaterialAssigner: {fileID: 0}
   _autoAimCreator: {fileID: 752198695613597362}
   _anchor: {fileID: 0}
   _anchorPhysics: {fileID: 0}

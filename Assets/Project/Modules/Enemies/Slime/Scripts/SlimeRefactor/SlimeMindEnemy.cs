@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.GameReferences;
@@ -7,52 +6,27 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.VFX.Generic;
 using UnityEngine;
-using FMODUnity;
-using Popeye.Modules.Enemies.EnemyFactories;
+
 
 namespace Popeye.Modules.Enemies
 {
     public class SlimeMindEnemy : AEnemy
     {
         [Header("SLIME MIND")]
-        [SerializeField] private SlimeSize _startingStartSize;
-        [SerializeField] private List<SlimeData> _sizeToPrefab;
-        private Dictionary<SlimeSize, GameObject> _sizeToPrefabDictionary = new Dictionary<SlimeSize, GameObject>();
-        private int _currentSlimesCount;
-        
+        private HashSet<SlimeMediator> _slimeMediatorsUnderControl;
+
         [SerializeField] private EnemyPatrolling.PatrolType _patrolType = EnemyPatrolling.PatrolType.None;
         [SerializeField] private Transform[] _wayPoints;
-        
-        
         [SerializeField] private Transform _transform;
-        private ObjectPool _objectPool;
-        [SerializeField] private PooledParticle _explosionParticles;
+
 
         private SlimeMediator _slimeMediator;
-        public enum SlimeSize
-        {
-            SlimeSize1,
-            SlimeSize2,
-            SlimeSize3
-        }
-
-        [Serializable]
-        public class SlimeData
-        {
-            public SlimeSize size;
-            public GameObject prefab;
-        }
 
         private void Awake()
         {
-            _objectPool = new ObjectPool(_explosionParticles, _transform);
-            _objectPool.Init(15);
+            _slimeMediatorsUnderControl = new HashSet<SlimeMediator>(5);
         }
 
-        public ObjectPool GetParticlePool()
-        {
-            return _objectPool;
-        }
 
         public Transform GetPlayerTransform()
         {
@@ -63,40 +37,52 @@ namespace Popeye.Modules.Enemies
             _patrolType = EnemyPatrolling.PatrolType.None;
             _slimeMediator = slimeMediator;
             if(_patrolType == EnemyPatrolling.PatrolType.None){slimeMediator.StartChasing();}
+
+            AddSlimeToList(slimeMediator);
         }
 
 
-        public void AddSlimeToList()
+        public void AddSlimeToList(SlimeMediator slimeMediator)
         {
-            _currentSlimesCount++;
+            _slimeMediatorsUnderControl.Add(slimeMediator);
         }
 
-        public void RemoveSlimeFromList()
+        public void RemoveSlimeFromList(SlimeMediator slimeMediator)
         {
-            _currentSlimesCount--;
+            _slimeMediatorsUnderControl.Remove(slimeMediator);
 
-            if (_currentSlimesCount <= 0)
+            if (_slimeMediatorsUnderControl.Count <= 0)
             {
                 InvokeOnDeathComplete();
+                Recycle();
             }
         }
 
         internal override void Init()
         {
-            _currentSlimesCount = 1;
-            _attackTarget = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
-            
+            _attackTarget = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies();
         }
 
         internal override void Release()
         {
-            throw new NotImplementedException();
+            
         }
 
         public override void SetPatrollingWaypoints(Transform[] waypoints)
         {
             _slimeMediator.SetWayPoints(waypoints);
-           
+        }
+
+        public override void DieFromOrder()
+        {
+            foreach (SlimeMediator slimeMediator in _slimeMediatorsUnderControl)
+            {
+                slimeMediator.DieFromOrder();
+            }
+            
+            _slimeMediatorsUnderControl.Clear();
+            
+            Recycle();
         }
     }
 }

@@ -27,14 +27,14 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         public SlimeMediator CreateNew(SlimeSizeID slimeSizeID, SlimeMindEnemy ownerMind,Vector3 position,Quaternion rotation)
         {
             SlimeMediator slimeMediator = _slimeSizeToPool[slimeSizeID].Spawn<SlimeMediator>(position, rotation);
-            InitializeSlimeMediator(slimeMediator, ownerMind.GetParticlePool(), ownerMind, slimeSizeID, ownerMind.GetPlayerTransform());
+            InitializeSlimeMediator(slimeMediator, ownerMind, slimeSizeID, ownerMind.GetPlayerTransform());
 
             return slimeMediator;
         }
 
-        private void InitializeSlimeMediator(SlimeMediator slimeMediator,ObjectPool particlesPool,SlimeMindEnemy ownerMind,SlimeSizeID slimeSizeID,Transform playerTransform)
+        private void InitializeSlimeMediator(SlimeMediator slimeMediator, SlimeMindEnemy ownerMind,
+            SlimeSizeID slimeSizeID, Transform playerTransform)
         {
-            slimeMediator.SetObjectPool(particlesPool);
             slimeMediator.InitAfterSpawn();
             slimeMediator.SetSlimeMind(ownerMind);
             slimeMediator.SetSlimeFactory(this);
@@ -54,11 +54,13 @@ namespace Popeye.Modules.Enemies.EnemyFactories
                 SlimeMediator slimeMediator = _slimeSizeToPool[slimechildSpawnData.slimeSizeId]
                     .Spawn<SlimeMediator>(position, rotation);
 
-                InitializeSlimeMediator(slimeMediator,parentSlimeMediator.GetObjectPool(),ownerMind,slimechildSpawnData.slimeSizeId,parentSlimeMediator.PlayerTransform);
+                InitializeSlimeMediator(slimeMediator, ownerMind, 
+                    slimechildSpawnData.slimeSizeId, parentSlimeMediator.PlayerTransform);
+                
                 slimeMediator.SpawningFromDivision(spawnDirection, parentSlimeMediator.GetPatrolType(),
                     parentSlimeMediator.GetPatrolWaypoints());
 
-                ownerMind.AddSlimeToList();
+                ownerMind.AddSlimeToList(slimeMediator);
                 slimes[i] = slimeMediator;
             }
 

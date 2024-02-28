@@ -14,11 +14,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
         
         public void Enter()
         {
-            Quaternion endRotation = _blackboard.AnchorMotionConfig.GrabbedToThrowAnchorRotation;
-            
             _blackboard.TransformMotion.ParentAndUpdate(_blackboard.AnchorGrabToThrowHolder,
                 Vector3.zero, Quaternion.identity, 
                 0.2f, Ease.InOutSine);
+            _blackboard.TransformMotion.ResetScale();
             
             _blackboard.AnchorPhysics.DisableCollision();
         }

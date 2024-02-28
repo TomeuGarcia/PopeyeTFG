@@ -31,7 +31,7 @@ namespace Popeye.Modules.Enemies
             }
             else
             {
-                _turretMediator.SetPlayerTransform(ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer());
+                _turretMediator.SetPlayerTransform(ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies());
             }
             
             _turretMediator.Init();
@@ -57,6 +57,12 @@ namespace Popeye.Modules.Enemies
             base.InitAfterSpawn(hazardFactory);
             _turretMediator.SetHazardFactory(hazardFactory);
             InitTurret();
+        }
+
+        public override void DieFromOrder()
+        {
+            _turretMediator.DieFromOrder();
+            Recycle();
         }
     }
 }

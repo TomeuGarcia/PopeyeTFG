@@ -71,5 +71,10 @@ namespace Popeye.Modules.Enemies
       {
          throw new NotImplementedException();
       }
+
+      public override void DieFromOrder()
+      {
+         throw new NotImplementedException();
+      }
    }
 }
