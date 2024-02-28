@@ -28,28 +28,34 @@ public class ParabolicProjectile : RecyclableObject
 
     private IHazardFactory _hazardFactory;
     [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
+
+    [SerializeField] float _distanceToTargetThreshold;
+    float _sqrDistanceToTargetThreshold;
+    private Vector3 _shotTarget;
     private void Update()
     {
         if (_playerTransform != null)
         {
+            
             Vector3 direction = _playerTransform.position - _firePoint.position;
             Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
             Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
             float angle;
             float v0;
             float time;
-            if (_aiming)
-            {
+
                 
-                CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
+                
                 if (_shoot)
                 {
+                    _shotTarget = _playerTransform.position+Vector3.down;
+                    CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
                     _shoot = false;
                     _aiming = false;
                     _bulletBody.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
-            }
+
             
             
         }
@@ -68,19 +74,24 @@ public class ParabolicProjectile : RecyclableObject
 
     private void Start()
     {
+        _sqrDistanceToTargetThreshold = _distanceToTargetThreshold * _distanceToTargetThreshold;
         _contactDamageHit = new DamageHit(_contactDamageConfig);
         _combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
     }
-
-    public void StartAiming()
-    {
-        _aiming = true;
-    }
+    
     public void Shoot()
     {
         _shoot = true;
     }
-   
+    private float DistanceToTargetSqrMagnitude(Vector3 targetPos)
+    {
+        return (targetPos - transform.position).sqrMagnitude;
+    }
+    
+    private bool IsCloseToTarget()
+    {
+        return DistanceToTargetSqrMagnitude(_shotTarget) < _sqrDistanceToTargetThreshold;
+    }
     private async UniTaskVoid Movement(Vector3 direction, float v0,float angle,float time)
     {
         float t = 0;
@@ -88,8 +99,19 @@ public class ParabolicProjectile : RecyclableObject
         {
             float x = v0 * t * Mathf.Cos(angle);
             float y = (float)(v0 * t * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(t,2));
-            _rigidbody.MovePosition(_firePoint.position + direction * x + Vector3.up * y); //= ;
-            
+            _rigidbody.MovePosition(_firePoint.position + direction * x + Vector3.up * y);
+            if (IsCloseToTarget())
+            {
+                Debug.Log("djpanchi");
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
+                {
+                    
+                    var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
+                    WaitAndRecycle(hit,startRot);
+                }
+                
+            }
             t += Time.deltaTime * speed;
             await UniTask.NextFrame();
         }
@@ -97,6 +119,12 @@ public class ParabolicProjectile : RecyclableObject
         
     }
 
+    private async UniTaskVoid WaitAndRecycle(RaycastHit hit,quaternion startRot)
+    {
+        //UniTask.Delay(1500);
+        _hazardFactory.CreateDamageArea(hit.point, startRot);
+        Recycle();
+    }
     public float QuadraticEquation(float a, float b, float c, float sign)
     {
         return (-b + sign * Mathf.Sqrt(b * b - 4 * a * c)) / (2 * a);
@@ -129,6 +157,7 @@ public class ParabolicProjectile : RecyclableObject
 
     private void OnCollisionEnter(Collision other)
     {
+           /* Debug.Log("collided with " + other.transform.name);
             _contactDamageHit.DamageSourcePosition = transform.position;
             _contactDamageHit.UpdateKnockbackPushDirection(PositioningHelper.Instance.GetDirectionAlignedWithFloor(transform.position, other.transform.position));
             _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
@@ -136,14 +165,17 @@ public class ParabolicProjectile : RecyclableObject
             RaycastHit hit;
             if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
             {
+                Debug.Log("raycast hit " + hit.transform.name);
                 var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
                 _hazardFactory.CreateDamageArea(hit.point, startRot);
             }
-            Recycle();
+            Recycle();*/
     }
 
     internal override void Release()
     {
-        //release projectile
+        _shoot = false;
+        _aiming = false;
+        _bulletBody.enabled = false;
     }
 }
