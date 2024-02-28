@@ -82,6 +82,11 @@ namespace Popeye.Modules.Enemies
             AwakeInit_old(attackTarget, false);
         }
 
+        public override void DieFromOrder()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void AwakeInit_old(Transform attackTarget, bool respawnsAfterDeath)
         {
             _attackTarget = attackTarget;

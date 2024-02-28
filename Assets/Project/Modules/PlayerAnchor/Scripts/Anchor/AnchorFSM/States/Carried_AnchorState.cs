@@ -20,11 +20,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 
             float duration = Mathf.Min(0.05f * distance, _blackboard.AnchorMotionConfig.MaxCarriedDuration);
 
-            Quaternion endRotation = _blackboard.AnchorMotionConfig.CarriedAnchorRotation;
-            
+
             _blackboard.TransformMotion.ParentAndUpdate(_blackboard.AnchorCarryHolder,
                 Vector3.zero, Quaternion.identity,
                 duration, Ease.InOutSine);
+            _blackboard.TransformMotion.ResetScale();
                 
             
             _blackboard.AnchorPhysics.DisableCollision();

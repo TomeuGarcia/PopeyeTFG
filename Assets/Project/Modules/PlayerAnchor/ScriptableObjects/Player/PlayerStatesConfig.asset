@@ -15,15 +15,18 @@ MonoBehaviour:
   _spawnDuration: 0.1
   _beforeRespawnDuration: 2
   _fallingOnVoidDuration: 0.75
-  _withoutAnchorMoveSpeed: 10
+  _invulnerableTimeAfterVoidFallRespawn: 1.5
+  _withoutAnchorMoveSpeed: 12
   _withAnchorMoveSpeed: 6.5
   _aimingMoveSpeed: 5
   _throwingAnchorMoveSpeed: 10
   _pullingAnchorMoveSpeed: 5
   _kickingAnchorMoveSpeed: 10
   _spinningAnchorMoveSpeed: 0.5
-  _tiredMoveSpeed: 5
+  _tiredMoveSpeed: 6.5
   _healingMoveSpeed: 0.25
+  _fallingOnVoidMoveSpeed: 0
+  _dashingMoveSpeed: 15
   _anchorLateThrowTime: 0.1
   anchorAimHeldWaitWaitTime: 0.2
   _anchorPickUpDistance: 2
@@ -35,3 +38,5 @@ MonoBehaviour:
   _minRollDuration: 0.1
   _maxRollDuration: 0.3
   _rollInvulnerableDuration: 0.45
+  _dropAnchorWhenTired: 0
+  _healingDuration: 0.3

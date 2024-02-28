@@ -1,3 +1,4 @@
+using Popeye.Core.Installers;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
@@ -26,6 +27,9 @@ public class GameSetupInstaller : MonoBehaviour
     [Header("PLAYER ANCHOR")]
     [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
 
+    [Header("GAME REFERENCES")] 
+    [SerializeField] private GameReferencesInstaller _gameReferencesInstaller;
+    
     [Header("OTHER")]
     [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
     [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
@@ -61,6 +65,8 @@ public class GameSetupInstaller : MonoBehaviour
         _factoriesInstaller.Install(serviceLocator);
         _audioInstaller.Install(serviceLocator);
         _playerAnchorInstaller.Install();
+        
+        _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
     }
     
     private void Uninstall()
@@ -70,9 +76,12 @@ public class GameSetupInstaller : MonoBehaviour
         serviceLocator.RemoveService<ICombatManager>();
         serviceLocator.RemoveService<ITimeFunctionalities>();
         
+        _gameReferencesInstaller.Uninstall(serviceLocator);
+        
         _playerAnchorInstaller.Uninstall();
         _factoriesInstaller.Uninstall(serviceLocator);
         _audioInstaller.Uninstall(serviceLocator);
         _objectTypesInstaller.Uninstall();
+        
     }
 }
