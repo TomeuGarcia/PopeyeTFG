@@ -7,11 +7,11 @@ using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
+using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
@@ -69,6 +69,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Vector3 Position => _playerController.Position;
         public Transform PositionTransform => _playerController.Transform;
         public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
+        private IPlayerEnemySpawnersInteractions _playerEnemySpawnersInteractions;
 
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
@@ -102,6 +103,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _onVoidChecker = onVoidChecker;
 
             _playerDeathNotifier = new PlayerDeathNotifier();
+            _playerEnemySpawnersInteractions = new PlayerEnemySpawnerInteractions(this, _anchor);
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
@@ -289,8 +291,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 _anchor.SnapToFloor(Position).Forget();
             }
         }
-        
-        
+
+        public async UniTaskVoid QueuePullAnchor()
+        {
+            await UniTask.WaitUntil(() => _anchor.IsRestingOnFloor());
+            OnAnchorEndedInVoid();
+        }
+
 
         public async UniTask DashTowardsAnchor()
         {
@@ -585,6 +592,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public IPlayerDeathNotifier GetDeathNotifier()
         {
             return _playerDeathNotifier;
+        }
+
+        public IPlayerEnemySpawnersInteractions GetPlayerEnemySpawnersInteractions()
+        {
+            return _playerEnemySpawnersInteractions;
         }
     }
 }

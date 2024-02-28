@@ -6,6 +6,7 @@ using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
+using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
 
@@ -54,6 +55,7 @@ namespace Popeye.Modules.Enemies.General
         private IEnemyFactory _enemyFactory;
         private IParticleFactory _particleFactory;
         private IPlayerDeathNotifier _playerDeathNotifier;
+        private IPlayerEnemySpawnersInteractions _playerEnemySpawnersInteractions;
         private bool _playerDiedDuringWaves;
 
         private const float SPAWN_HINT_DURATION = 1.5f;
@@ -67,6 +69,7 @@ namespace Popeye.Modules.Enemies.General
             IGameReferences gameReferences = ServiceLocator.Instance.GetService<IGameReferences>();
             _playerDeathNotifier = gameReferences.GetPlayerDeathNotifier();
             _enemyAttackTarget = gameReferences.GetPlayerTargetForEnemies();
+            _playerEnemySpawnersInteractions = gameReferences.GetPlayerEnemySpawnersInteractions();
             
             _activeEnemies = new HashSet<AEnemy>(15);
         }
@@ -75,6 +78,8 @@ namespace Popeye.Modules.Enemies.General
         {
             _playerDeathNotifier.AddDelegate(this);
             _playerDiedDuringWaves = false;
+            
+            _playerEnemySpawnersInteractions.OnSpawnerTrapActivated();
             
             DoStartWaves().Forget();
         }

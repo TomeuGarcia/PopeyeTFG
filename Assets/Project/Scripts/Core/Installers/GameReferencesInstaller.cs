@@ -11,7 +11,8 @@ namespace Popeye.Core.Installers
         {
             GameReferences gameReferences = new GameReferences(
                 playerMediator.GetDeathNotifier(),
-                playerMediator.GetTargetForEnemies()
+                playerMediator.GetTargetForEnemies(),
+                playerMediator.GetPlayerEnemySpawnersInteractions()
             );
             
             serviceLocator.RegisterService<IGameReferences>(gameReferences);
