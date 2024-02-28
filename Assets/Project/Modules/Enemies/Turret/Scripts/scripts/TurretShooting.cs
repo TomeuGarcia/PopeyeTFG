@@ -27,11 +27,11 @@ namespace Popeye.Modules.Enemies.Components
        [SerializeField] private float _stretchAmountXZ = 2.8f;
        [SerializeField] private float _squashAndStretchTime = 0.5f;
 
-       private bool animationOn = false;
+       private bool _animationOn = false;
        [SerializeField] private float _playerDistanceThreshold;
        private float _squaredPlayerDistanceThreshold;
 
-        public void Configure(AEnemyMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
+       public void Configure(AEnemyMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
             _mediator = turetMediator;
             _playerTransform = playerTransform;
@@ -40,24 +40,24 @@ namespace Popeye.Modules.Enemies.Components
             _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
         }
 
+
+
         private void Update()
         {
             if (IsPlayerAtCloseDistance())
             {
                 if (timer >= timeBetweenShots - 1)
                 {
-                    _currentProjectile.StartAiming();
 
-                    if (!animationOn)
+                    if (!_animationOn)
                     {
-                        SquashAndStretch();
+                        SquashAndStretch().Forget();
                     }
 
                     if (timer >= timeBetweenShots)
                     {
-                        _currentProjectile.Shoot();
+                        _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform).Shoot();
                         timer = 0;
-                        _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform);
                     }
                 }
 
@@ -65,6 +65,12 @@ namespace Popeye.Modules.Enemies.Components
             }
             else
             {
+                if (_animationOn)
+                {
+                    _animationOn = false;
+                    transform.DOComplete();
+                    transform.localScale = Vector3.one;
+                }
                 timer = 0;
             }
         }
@@ -80,15 +86,23 @@ namespace Popeye.Modules.Enemies.Components
         }
         private async UniTaskVoid SquashAndStretch()
         {
-            animationOn = true;
-            // Squash
+            _animationOn = true;
             await transform.DOScale(new Vector3(_squashAmountXZ, _squashAmountY, _squashAmountXZ), 0.9f)
                 .AsyncWaitForCompletion();
-            //Stretch
-            await transform.DOScale(new Vector3(_stretchAmountXZ, _stretchAmountY, _stretchAmountXZ), 0.2f)
+            if (!_animationOn)
+            {
+                return;
+            }
+            await transform.DOScale(new Vector3(_stretchAmountXZ, _stretchAmountY, _stretchAmountXZ), 0.1f)
                 .AsyncWaitForCompletion();
-            animationOn = false;
+            
+            _animationOn = false;
 
+        }
+
+        private void OnDestroy()
+        {
+            transform.DOComplete();
         }
     }
 }

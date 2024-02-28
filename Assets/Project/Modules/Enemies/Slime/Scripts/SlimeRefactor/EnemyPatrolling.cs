@@ -80,7 +80,6 @@ namespace Popeye.Modules.Enemies.Components
         }
         public void SetPatrolling(bool patrolling)
         {
-            Debug.Log("patrolling");
             _patrolling = patrolling;
             if (_patrolling)
             {
