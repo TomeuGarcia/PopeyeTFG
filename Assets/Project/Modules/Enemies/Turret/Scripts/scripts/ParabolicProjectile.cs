@@ -102,13 +102,13 @@ public class ParabolicProjectile : RecyclableObject
             _rigidbody.MovePosition(_firePoint.position + direction * x + Vector3.up * y);
             if (IsCloseToTarget())
             {
-                Debug.Log("djpanchi");
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                 {
                     
                     var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
-                    WaitAndRecycle(hit,startRot);
+                    _hazardFactory.CreateDamageArea(hit.point, startRot);
+                    Recycle();
                 }
                 
             }
@@ -118,13 +118,7 @@ public class ParabolicProjectile : RecyclableObject
         
         
     }
-
-    private async UniTaskVoid WaitAndRecycle(RaycastHit hit,quaternion startRot)
-    {
-        //UniTask.Delay(1500);
-        _hazardFactory.CreateDamageArea(hit.point, startRot);
-        Recycle();
-    }
+    
     public float QuadraticEquation(float a, float b, float c, float sign)
     {
         return (-b + sign * Mathf.Sqrt(b * b - 4 * a * c)) / (2 * a);
