@@ -211,7 +211,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void PickUpAnchor()
         {
-            _anchor.SetCarried();
+            _anchor.SetCarriedFromPickedUp();
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorPickUpStaminaCost);
         }
         
