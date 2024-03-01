@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553955f48be427689f675b1387a5206, type: 3}
+  m_Name: SpecificCaseEnemyHinterFactoryConfig
+  m_EditorClassIdentifier: 
+  _numberOfInitialInstances: 5
+  _enemySpawnHinterPrefab: {fileID: 4603134168111114084, guid: 77741b9090e82a74b8ceca945272ff25,
+    type: 3}
+  _defaultSpawnHinterConfig: {fileID: 11400000, guid: 5f4fcdee17d7a0e4b9297780d93fb4a5,
+    type: 2}
+  _idsToConfigs:
+  - _enemyID: {fileID: 11400000, guid: 13c133157e715eb4a8b42d6f84a8340a, type: 2}
+    _spawnHinterConfig: {fileID: 11400000, guid: 80675bb93e6f2024c849f9ab00838f2a,
+      type: 2}

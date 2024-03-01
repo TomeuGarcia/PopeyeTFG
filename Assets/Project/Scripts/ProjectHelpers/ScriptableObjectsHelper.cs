@@ -11,6 +11,7 @@ namespace Popeye.ProjectHelpers
         public const string PLAYER_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Player/";
 
         public const string ENEMIES_ASSET_PATH = ROOT + "Enemies/";
+        public const string ENEMYHINTS_ASSET_PATH =ENEMIES_ASSET_PATH + "Hints/";
         public const string HAZARDS_ASSET_PATH = ENEMIES_ASSET_PATH + "Hazards/";
         
         public const string PLAYERCONTROLLER_ASSETS_PATH = ROOT + "PlayerController/";
