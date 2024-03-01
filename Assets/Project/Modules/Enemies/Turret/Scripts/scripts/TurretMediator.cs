@@ -32,7 +32,7 @@ namespace Popeye.Modules.Enemies
 
         internal override void Release()
         {
-            
+            _enemyHealth.HealToMax();
         }
 
         public void SetTurretMind(TurretMindEnemy turretMind)
