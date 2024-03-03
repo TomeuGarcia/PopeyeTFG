@@ -74,7 +74,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             await UniTask.Delay(TimeSpan.FromSeconds(_config.TrailRecycleDelay));
             trail.SetParent(_transformHolder);
-            //trail.Force();
         }
 
         public void PlayKickAnimation()
