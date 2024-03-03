@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using Popeye.Scripts.EditorUtilities;
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         }
 
 #if UNITY_EDITOR
-        public void DrawGizmos()
+        public void DrawGizmos(DistanceFromCameraTransparencyConfig transparencyConfig)
         {
             if (!_showArea) return;
             
@@ -44,25 +45,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 _rectangularArea.Corner_LeftForward
             };
 
-            Color drawColor = _drawColor;
-            
-
-            float distanceToEditorCamera = 
-                Vector3.Distance(SceneView.currentDrawingSceneView.camera.transform.position, _rectangularArea.Center);
-
-            if (distanceToEditorCamera > INVISIBLE_DISTANCE)
-            {
-                return;
-            }
-            
-            if (distanceToEditorCamera > START_FADING_DISTANCE)
-            {
-                float transparency = 1f - ((distanceToEditorCamera - START_FADING_DISTANCE) /
-                                            (INVISIBLE_DISTANCE - START_FADING_DISTANCE));
-
-                drawColor.a = transparency;
-            }
-
+            Color drawColor = transparencyConfig.ApplyTransparencyToColor(_drawColor, _rectangularArea.Center);
 
             Handles.color = drawColor;
             for (int i = 0; i < corners.Length; ++i)

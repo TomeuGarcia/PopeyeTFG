@@ -42,5 +42,8 @@ namespace Popeye.ProjectHelpers
         
         
         public const string SOUNDSYSTEM_ASSETS_PATH = ROOT + "SoundSystem/";
+        
+        
+        public const string EDITORUTILITIES_ASSETS_PATH = ROOT + "EditorUtilities/";
     }
 }

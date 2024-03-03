@@ -1,5 +1,6 @@
 using System;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.EditorUtilities;
 using UnityEngine;
 
 namespace Popeye.Modules.WorldElements.WorldBuilders
@@ -30,7 +31,10 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         
         [Header("VIEW")]
         [SerializeField] private EditorViewConfig _editorView;
+        [SerializeField] private DistanceFromCameraTransparencyConfig _transparencyConfig;
+
         public EditorViewConfig EditorView => _editorView;
+        public DistanceFromCameraTransparencyConfig TransparencyConfig => _transparencyConfig;
         
         
         

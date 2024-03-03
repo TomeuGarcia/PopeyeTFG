@@ -2,6 +2,11 @@ using System;
 using NaughtyAttributes;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+
 namespace Popeye.Modules.WorldElements.WorldBuilders
 {
     public class WallBuilder : MonoBehaviour
@@ -56,6 +61,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [HideInInspector] public Vector2 moveBy = Vector2.zero;
         [HideInInspector] public Vector2Int selectedPointsRange = Vector2Int.zero;
 
+        private Vector3 Position => transform.position;
+
 
         private void OnValidate()
         {
@@ -83,22 +90,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 CreateFakeMesh();
             }
         }
-
-        private void OnDrawGizmos()
-        {
-            for (int i = 1; i < _points.Length; ++i)
-            {                
-                Vector3 previousPoint = transform.TransformPoint(_points[i-1]);
-                Vector3 currentPoint = transform.TransformPoint(_points[i]);
-                Gizmos.color = _config.EditorView.FillLineColor;
-                Gizmos.DrawLine(previousPoint,currentPoint);
-                
-                Gizmos.color = _config.EditorView.FillBlockColor;
-                Vector3[] corners = GetCornersOfPointIndices(i - 1, i);
-                Gizmos.DrawLineStrip(corners, true);
-            }
-        }
-
+        
         public void AddPoint()
         {
             Array.Resize(ref _points, _points.Length + 1);
@@ -272,6 +264,76 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
             return corners;
         }
+
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Draw();
+        }
+        
+        private void Draw()
+        {
+            Vector3[] drawSpacePoints = new Vector3[_points.Length];
+            
+            
+            for (int i = 0; i < _points.Length; ++i)
+            {
+                drawSpacePoints[i] = transform.TransformPoint(_points[i]);
+                Handles.color = _config.TransparencyConfig.ApplyTransparencyToColor(_config.EditorView.CornerBlockColor, Position);
+                DrawBlock(CornerBlock, drawSpacePoints[i], Quaternion.identity);
+            }
+
+
+            for (int i = 1; i < _points.Length; ++i)
+            {
+                Vector3 previousPoint = drawSpacePoints[i - 1];
+                Vector3 currentPoint = drawSpacePoints[i];
+
+                Handles.color = _config.TransparencyConfig.ApplyTransparencyToColor(_config.EditorView.FillLineColor, Position);
+                Handles.DrawLine(previousPoint, currentPoint, _config.EditorView.LineThickness);
+
+                if (FillBlock.Length < 0.01f)
+                {
+                    continue;
+                }
+
+                Vector3 previousToCurrent = currentPoint - previousPoint;
+                float previousToCurrentDistance = previousToCurrent.magnitude;
+                Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
+                
+                Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
+                
+                Handles.color = _config.TransparencyConfig.ApplyTransparencyToColor(_config.EditorView.FillBlockColor, Position);
+
+                float lineLength = previousToCurrentDistance - CornerBlock.Length;
+                float distanceCounter = CornerBlock.Length / 2 + FillBlock.Length / 2;
+
+                for (; distanceCounter < lineLength; distanceCounter += FillBlock.Length)
+                {
+                    Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
+                    DrawBlock(FillBlock, fillPosition, offsetRotation);
+                }
+            }
+        }
+        
+        private void DrawBlock(Block block, Vector3 center, Quaternion rotation)
+        {
+            Vector3[] framePoints = block.ToFrame(center, rotation);
+            for (int i = 0; i < framePoints.Length; ++i)
+            {
+                Handles.DrawLine(framePoints[i], framePoints[(i + 1) % framePoints.Length], _config.EditorView.LineThickness);
+            }
+
+            Vector3 lookA = Vector3.Lerp(framePoints[0], framePoints[1], 0.5f);
+            Vector3 lookB = Vector3.Lerp(framePoints[2], framePoints[3], 0.5f);
+            Vector3 lookCenter = Vector3.Lerp(framePoints[0], framePoints[3], 0.5f);
+            
+            Handles.DrawLine(lookA, lookCenter);
+            Handles.DrawLine(lookB, lookCenter);
+        }
+#endif
         
     }
+    
 }
