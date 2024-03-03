@@ -17,20 +17,21 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Color HealColor => _healColor;
         
         
+        [Header("DAMAGED")]
         [SerializeField] private List<MaterialFlash> _flashSequence = new();
         public List<MaterialFlash> FlashSequence => _flashSequence;
 
+        [Header("TIRED")]
         [SerializeField] private string _isTiredProperty;
         [SerializeField] private float _tiredTransitionTime;
         public string IsTiredProperty => _isTiredProperty;
         public float TiredTransitionTime => _tiredTransitionTime;
         
-
-        [SerializeField] private PlayerMaterialView.FlickData _takeDamageFlick;
-        [SerializeField] private PlayerMaterialView.FlickData _deathFlick;
-        [SerializeField] private PlayerMaterialView.FlickData _healFlick;
-        public PlayerMaterialView.FlickData TakeDamageFlick => _takeDamageFlick;
-        public PlayerMaterialView.FlickData DeathFlick => _deathFlick;
-        public PlayerMaterialView.FlickData HealFlick => _healFlick;
+        [Header("DASH")]
+        [SerializeField] private string _dashingProperty;
+        [SerializeField] private float _dashMaterialTransitionTime;
+        public string DashingProperty => _dashingProperty;
+        public float DashMaterialTransitionTime => _dashMaterialTransitionTime;
+        
     }
 }
