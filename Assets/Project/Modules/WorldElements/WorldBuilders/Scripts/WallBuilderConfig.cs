@@ -1,4 +1,5 @@
 using System;
+using AYellowpaper;
 using Popeye.ProjectHelpers;
 using Popeye.Scripts.EditorUtilities;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 {
     
     [CreateAssetMenu(fileName = "WallBuilderConfig_NAME", 
-        menuName = ScriptableObjectsHelper.WORLDELEMENTS_ASSETS_PATH + "WallBuilderConfig")]
+        menuName = ScriptableObjectsHelper.WALLBUILDER_ASSETS_PATH + "WallBuilderConfig")]
     public class WallBuilderConfig : ScriptableObject
     {
         [System.Serializable]
@@ -26,7 +27,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             [SerializeField, Range(0.01f, 10.0f)] private float _lineThickness = 2.5f;
             public float LineThickness => _lineThickness;
         }
-        
+
+
+        [Header("DATA TRACKING")]
+        [SerializeField] private InterfaceReference<IWallBuilderDataTracker, ScriptableObject> _wallBuilderDataTracker;
+        public IWallBuilderDataTracker WallBuilderDataTracker => _wallBuilderDataTracker.Value;
         
         
         [Header("VIEW")]

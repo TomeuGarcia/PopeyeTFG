@@ -1,6 +1,7 @@
 using System;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -153,7 +154,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void CreateCornerWall(Vector3 position)
         {
-            Instantiate(_config.CornerBlockPrefab, position, Quaternion.identity, _cornerWallsParent);
+            InstantiateWall(_config.CornerBlockPrefab, position, Quaternion.identity);
         }
 
         private void CreateFillWalls(Vector3 previousPoint, Vector3 previousToCurrentDirection, float previousToCurrentDistance,
@@ -164,8 +165,14 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             for (; distanceCounter < fillLength; distanceCounter += FillBlock.Length)
             {
                 Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
-                Instantiate(_config.FillBlockPrefab, fillPosition, rotation, _fillWallsParent);
+                InstantiateWall(_config.FillBlockPrefab, fillPosition, rotation);
             }
+        }
+
+        private void InstantiateWall(GameObject wallPrefab, Vector3 position, Quaternion rotation)
+        {
+            Instantiate(wallPrefab, position, rotation, _fillWallsParent);
+            _config.WallBuilderDataTracker.OnWallInstantiated();
         }
         
 
