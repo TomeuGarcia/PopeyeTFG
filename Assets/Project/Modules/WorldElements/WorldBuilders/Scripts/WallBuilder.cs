@@ -12,6 +12,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             [SerializeField] private Vector2 _size = Vector2.one;
             private Vector2 _halfSize;
             public Vector2 Size => _size;
+            public Vector3 WorldSpaceSize =>  new Vector3(_size.x, 0, _size.y);
             public float Length => Size.y;
 
             public Vector3[] ToFrame(Vector3 center, Quaternion rotation)
@@ -85,10 +86,16 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = _config.EditorView.FillLineColor;
             for (int i = 1; i < _points.Length; ++i)
-            {
-                Gizmos.DrawLine(transform.TransformPoint(_points[i-1]), transform.TransformPoint(_points[i]));
+            {                
+                Vector3 previousPoint = transform.TransformPoint(_points[i-1]);
+                Vector3 currentPoint = transform.TransformPoint(_points[i]);
+                Gizmos.color = _config.EditorView.FillLineColor;
+                Gizmos.DrawLine(previousPoint,currentPoint);
+                
+                Gizmos.color = _config.EditorView.FillBlockColor;
+                Vector3[] corners = GetCornersOfPointIndices(i - 1, i);
+                Gizmos.DrawLineStrip(corners, true);
             }
         }
 
@@ -236,6 +243,34 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             {
                 _points[i] -= new Vector3(moveAmount.x, 0, moveAmount.y);
             }
+        }
+
+
+
+        private Vector3[] GetCornersOfPointIndices(int previousIndex, int currentIndex)
+        {
+            Vector3 previousPoint = transform.TransformPoint(_points[previousIndex]);
+            Vector3 currentPoint = transform.TransformPoint(_points[currentIndex]);
+
+            Vector3 previousToCurrentDirection = (currentPoint - previousPoint).normalized;
+            Vector3 sideDirection = Vector3.Cross(previousToCurrentDirection, Vector3.up).normalized;
+
+            Vector3 cornerBlockSize = CornerBlock.WorldSpaceSize;
+
+            Vector3 forwardProjectedSize = Vector3.Project(cornerBlockSize, sideDirection) / 2;
+            Vector3 sideProjectedSize = Vector3.Project(cornerBlockSize, previousToCurrentDirection) / 2;
+            
+            Vector3 previousCornerA = previousPoint - forwardProjectedSize - sideProjectedSize;
+            Vector3 previousCornerB = previousPoint + forwardProjectedSize + sideProjectedSize;
+            Vector3 currentCornerA = currentPoint - forwardProjectedSize - sideProjectedSize;
+            Vector3 currentCornerB = currentPoint + forwardProjectedSize + sideProjectedSize;
+
+            Vector3[] corners =
+            {
+                previousCornerA, previousCornerB, currentCornerB, currentCornerA
+            };
+
+            return corners;
         }
         
     }
