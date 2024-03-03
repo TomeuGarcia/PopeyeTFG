@@ -65,10 +65,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 {
                     trail.SetParent(null);
                 });
-            await UniTask.Delay(TimeSpan.FromSeconds(duration - _config.TrailSpawnDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f,duration - _config.TrailSpawnDelay)));
             
             ghost.gameObject.GetComponent<InterpolatorRecycleParticle>().ForceStop();
             _particleFactory.Create(_config.DashAppearParticleType, Vector3.zero, quaternion.identity, _transformHolder);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.TrailRecycleDelay));
+            trail.SetParent(_transformHolder);
+            //trail.Force();
         }
 
         public void PlayKickAnimation()
