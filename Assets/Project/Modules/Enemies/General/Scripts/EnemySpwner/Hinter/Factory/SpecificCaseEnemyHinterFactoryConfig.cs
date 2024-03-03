@@ -31,8 +31,18 @@ namespace Popeye.Modules.Enemies.General
         public int NumberOfInitialInstances => _numberOfInitialInstances;
         public RecyclableObject EnemySpawnHinterPrefab => _enemySpawnHinterPrefab;
         public EnemySpawnHinterConfig DefaultSpawnHinterConfig => _defaultSpawnHinterConfig;
-        
-        
+
+
+        public void Init()
+        {
+            _defaultSpawnHinterConfig.InitMaterials(NumberOfInitialInstances);
+
+            foreach (var enemyIDToHinterConfig in _idsToConfigs)
+            {
+                enemyIDToHinterConfig.SpawnHinterConfig.InitMaterials(NumberOfInitialInstances);
+            }
+            
+        }
 
         public Dictionary<EnemyID, EnemySpawnHinterConfig> GetIdsToConfigsDictionary()
         {

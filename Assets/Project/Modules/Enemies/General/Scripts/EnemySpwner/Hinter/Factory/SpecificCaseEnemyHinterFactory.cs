@@ -15,6 +15,7 @@ namespace Popeye.Modules.Enemies.General
 
         public SpecificCaseEnemyHinterFactory(SpecificCaseEnemyHinterFactoryConfig config, Transform parent)
         {
+            config.Init();
             _defaultSpawnHinterConfig = config.DefaultSpawnHinterConfig;
             _idsToConfigsDictionary = config.GetIdsToConfigsDictionary();
 
