@@ -9,7 +9,7 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
     {
         [SerializeField] private List<ParticleSystem> _particleSystems = new();
         private int _completedParticles;
-        
+
         internal override void Init()
         {
             _completedParticles = 0;
@@ -23,7 +23,7 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         public void OnParticleSystemStopped()
         {
             _completedParticles++;
-            
+
             if (_completedParticles >= _particleSystems.Count)
             {
                 Recycle();

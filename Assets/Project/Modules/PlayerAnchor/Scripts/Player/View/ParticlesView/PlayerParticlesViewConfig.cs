@@ -13,8 +13,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private ParticleTypes _dashTrailParticleType;
         [SerializeField] private ParticleTypes _dashDisappearParticleType;
         [SerializeField] private ParticleTypes _dashAppearParticleType;
+        [SerializeField] private ParticleTypes _dashGhostParticleType;
 
         [SerializeField] private float _trailSpawnDelay = 0.05f;
+        [SerializeField] private float _trailRecycleDelay = 0.05f;
         [SerializeField] private Vector3 _dashTrailRotation;
 
         [SerializeField] private Ease _dashTrailRotationEase;
@@ -23,7 +25,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public ParticleTypes DashTrailParticleType => _dashTrailParticleType;
         public ParticleTypes DashDisappearParticleType => _dashDisappearParticleType;
         public ParticleTypes DashAppearParticleType => _dashAppearParticleType;
+        public ParticleTypes DashGhostParticleType => _dashGhostParticleType;
         public float TrailSpawnDelay => _trailSpawnDelay;
+        public float TrailRecycleDelay => _trailRecycleDelay;
         public Vector3 DashTrailRotation => _dashTrailRotation;
         public Ease DashTrailRotationEase => _dashTrailRotationEase;
         public Ease DashTrailScaleEase => _dashTrailScaleEase;
