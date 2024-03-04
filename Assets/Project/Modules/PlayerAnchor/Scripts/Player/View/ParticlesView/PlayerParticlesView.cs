@@ -52,22 +52,28 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private async UniTaskVoid DoPlayDash(float duration, Vector3 dashDirection)
         {
+            Transform ghost = _particleFactory.Create(_config.DashGhostParticleType, Vector3.zero, quaternion.identity, _transformHolder);
             _particleFactory.Create(_config.DashDisappearParticleType, Vector3.zero, quaternion.identity, _transformHolder);
             await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, _config.TrailSpawnDelay)));
+
+            float undelayedDuration = Mathf.Max(0.0f,duration - _config.TrailSpawnDelay);
             
             Transform trail = _particleFactory.Create(_config.DashTrailParticleType, Vector3.zero, quaternion.identity, _transformHolder);
-            Vector3 trailScale = trail.localScale;
-            trail.DOLocalRotate(_config.DashTrailRotation, duration - _config.TrailSpawnDelay, RotateMode.LocalAxisAdd)
+            trail.localScale = Vector3.one;
+            trail.DOLocalRotate(_config.DashTrailRotation, undelayedDuration, RotateMode.LocalAxisAdd)
                 .SetEase(_config.DashTrailRotationEase);
-            trail.DOScale(Vector3.zero, duration - _config.TrailSpawnDelay)
+            trail.DOScale(Vector3.zero, undelayedDuration)
                 .SetEase(_config.DashTrailScaleEase).OnComplete(() =>
                 {
                     trail.SetParent(null);
-                    trail.localScale = trailScale;
                 });
-            await UniTask.Delay(TimeSpan.FromSeconds(duration - _config.TrailSpawnDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(undelayedDuration));
             
+            ghost.gameObject.GetComponent<InterpolatorRecycleParticle>().ForceStop();
             _particleFactory.Create(_config.DashAppearParticleType, Vector3.zero, quaternion.identity, _transformHolder);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.TrailRecycleDelay));
+            trail.SetParent(_transformHolder);
         }
 
         public void PlayKickAnimation()

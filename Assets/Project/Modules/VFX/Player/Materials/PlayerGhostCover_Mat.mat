@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7136929829157928479
+--- !u!114 &-4096367103341064842
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PlayerCharacter_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 620d805886ad05744b302c2f436f5b87,
+  m_Name: PlayerGhostCover_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: b0d9046caaa4db8478920aa37f6422a7,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -37,20 +37,24 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseTex:
-        m_Texture: {fileID: 2800000, guid: b24353a05527d2f4ca5a53fc82f7f4da, type: 3}
+    - _SampleTexture2D_86d57146158e424b9d82ba68e37fc6ef_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 9366cd92f63e29c46b414a7a10012ced, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MetallicTex:
-        m_Texture: {fileID: 2800000, guid: a5655e68ce2f91f409bd8cfd8fec2c9b, type: 3}
+    - _SampleTexture2D_87e4edc69920499897afb9bbfac13b24_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 9366cd92f63e29c46b414a7a10012ced, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _NormalTex:
-        m_Texture: {fileID: 2800000, guid: b816c2a0e9b2974448429fc53fc9b8ae, type: 3}
+    - _SampleTexture2D_8aea0b75d2694a19900f4fcff8542a64_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 9366cd92f63e29c46b414a7a10012ced, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _OcclusionTex:
-        m_Texture: {fileID: 2800000, guid: bea3aeb96d8bd9443abc1ca8510f9dad, type: 3}
+    - _SampleTexture2D_ad5c19002d794cbb936c4936e93c7355_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 9366cd92f63e29c46b414a7a10012ced, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_f76f84958f404054b267592cf6cd9c79_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 9366cd92f63e29c46b414a7a10012ced, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -67,25 +71,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AOStrength: 1
-    - _Alpha: 1
-    - _AlphaClip: 0.05
-    - _DashPow: 1
-    - _Dashing: 0
-    - _IsDamaged: 0
-    - _IsTired: 0
+    - _AA: -0.56
+    - _DisScale: 10
+    - _DisStrength: 0.2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 0.5
-    - _TiredBlinkSpeed: 4
-    - _TiredIntensityMultiplier: 2
-    - _TiredNoiseScale: 10
-    - _TiredPow: 1
-    - _isDashing: 0
+    - _ScrollSpeed: 1
+    - _SecondaryColorPresence: 0.1
+    - _Stretch: 1
     m_Colors:
-    - _DamagedColor: {r: 1, g: 0, b: 0, a: 0}
-    - _DashColor: {r: 0, g: 4, b: 1.876022, a: 0}
-    - _DashingScale: {r: 1, g: 0.5, b: 1.5, a: 0}
-    - _TiredColor: {r: 0, g: 0.32833624, b: 1, a: 0}
-    - _TiredNoiseClamp: {r: 0, g: 1, b: 0, a: 0}
+    - _DefaultScale: {r: 1, g: 1, b: 1, a: 0}
+    - _DisSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _HighlightColor: {r: 0, g: 0.7490195, b: 0.4288504, a: 0}
+    - _MainColor: {r: 0, g: 1, b: 0.5716543, a: 0}
+    - _SecondaryColor: {r: 0.3396226, g: 0.1944193, b: 0.1810253, a: 0}
+    - _StretchedScale: {r: 1, g: 1, b: 2, a: 0}
   m_BuildTextureStacks: []
