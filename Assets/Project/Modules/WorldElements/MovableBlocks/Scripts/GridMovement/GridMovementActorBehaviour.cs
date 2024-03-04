@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
+using Popeye.Scripts.EditorUtilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -26,6 +27,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         
         [Required("Assign - ScriptableObject")] 
         [Expandable] [SerializeField] private GridMovementActorConfig _gridMovementActorConfig;
+        [SerializeField] private DistanceFromCameraTransparencyConfig _transparencyConfig;
         [SerializeField] private RectangularAreaWrapper _rectangularAreaWrapper;
 
         private GridMovementArea _associatedMovementArea;
@@ -58,7 +60,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            _rectangularAreaWrapper?.DrawGizmos();
+            _rectangularAreaWrapper?.DrawGizmos(_transparencyConfig);
         }
 #endif
         

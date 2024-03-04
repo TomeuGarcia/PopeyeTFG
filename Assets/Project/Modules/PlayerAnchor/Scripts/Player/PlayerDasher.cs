@@ -109,7 +109,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
                     _obstacleProbingConfig.ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
             {
                 dashEndPosition -= toAnchorDirection * 0.7f;
-                Debug.Log(wallHit.distance);
             }
 
             return dashEndPosition;

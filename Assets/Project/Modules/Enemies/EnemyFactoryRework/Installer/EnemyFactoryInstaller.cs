@@ -9,6 +9,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     public class EnemyFactoryInstaller: MonoBehaviour
     {
         [SerializeField] private EnemyFactoryInstallerConfiguration _installerConfiguration;
+        [SerializeField] private SpecificCaseEnemyHinterFactoryConfig _enemyHinterFactoryConfig;
         
 
         public void Install(ServiceLocator serviceLocator)
@@ -40,10 +41,16 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
             MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new MindCreatorsEnemyFactory(enemyIdToMindFactory);
             serviceLocator.RegisterService<IEnemyFactory>(mindCreatorsEnemyFactory);
+
+
+            SpecificCaseEnemyHinterFactory enemyHinterFactory =
+                new SpecificCaseEnemyHinterFactory(_enemyHinterFactoryConfig, transform);
+            serviceLocator.RegisterService<IEnemyHinterFactory>(enemyHinterFactory);
         }
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
+            serviceLocator.RemoveService<IEnemyHinterFactory>();
             serviceLocator.RemoveService<IEnemyFactory>();
         }
     }
