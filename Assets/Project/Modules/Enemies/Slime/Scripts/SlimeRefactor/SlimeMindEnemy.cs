@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.GameReferences;
@@ -7,79 +6,83 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.VFX.Generic;
 using UnityEngine;
-using FMODUnity;
+
 
 namespace Popeye.Modules.Enemies
 {
     public class SlimeMindEnemy : AEnemy
     {
         [Header("SLIME MIND")]
-        [SerializeField] private SlimeSize _startingStartSize;
-        [SerializeField] private List<SlimeData> _sizeToPrefab;
-        private Dictionary<SlimeSize, GameObject> _sizeToPrefabDictionary = new Dictionary<SlimeSize, GameObject>();
-        private int _currentSlimesCount;
-        
+        private HashSet<SlimeMediator> _slimeMediatorsUnderControl;
+
         [SerializeField] private EnemyPatrolling.PatrolType _patrolType = EnemyPatrolling.PatrolType.None;
         [SerializeField] private Transform[] _wayPoints;
-        
-        
         [SerializeField] private Transform _transform;
-        [SerializeField] private ObjectPool _objectPool;
-        [SerializeField] private PooledParticle _explosionParticles;
-        public enum SlimeSize
+
+
+        private SlimeMediator _slimeMediator;
+
+        private void Awake()
         {
-            SlimeSize1,
-            SlimeSize2,
-            SlimeSize3
+            _slimeMediatorsUnderControl = new HashSet<SlimeMediator>(5);
         }
 
-        [Serializable]
-        public class SlimeData
+
+        public Transform GetPlayerTransform()
         {
-            public SlimeSize size;
-            public GameObject prefab;
+            return _attackTarget;
+        }
+        public void InitAfterSpawn(SlimeMediator slimeMediator)
+        {
+            _patrolType = EnemyPatrolling.PatrolType.None;
+            _slimeMediator = slimeMediator;
+            if(_patrolType == EnemyPatrolling.PatrolType.None){slimeMediator.StartChasing();}
+
+            AddSlimeToList(slimeMediator);
         }
 
-        private void Start()
+
+        public void AddSlimeToList(SlimeMediator slimeMediator)
         {
-            foreach (var slimeData in _sizeToPrefab)
-            {
-                _sizeToPrefabDictionary.Add(slimeData.size, slimeData.prefab);
-            }
-            InstantiateFirstSlime();
-            _currentSlimesCount++;
+            _slimeMediatorsUnderControl.Add(slimeMediator);
         }
 
-        
-        public void AddSlimeToList()
+        public void RemoveSlimeFromList(SlimeMediator slimeMediator)
         {
-            _currentSlimesCount++;
-        }
+            _slimeMediatorsUnderControl.Remove(slimeMediator);
 
-        public void RemoveSlimeFromList()
-        {
-            _currentSlimesCount--;
-
-            if (_currentSlimesCount <= 0)
+            if (_slimeMediatorsUnderControl.Count <= 0)
             {
                 InvokeOnDeathComplete();
+                Recycle();
             }
         }
-        
-        private void InstantiateFirstSlime()
+
+        internal override void Init()
         {
-            GameObject go = Instantiate(_sizeToPrefabDictionary[_startingStartSize], transform);
-            SlimeMediator mediator = go.GetComponent<SlimeMediator>();
-            _objectPool = new ObjectPool(_explosionParticles, _transform);
-            _objectPool.Init(15);
-            mediator.SetObjectPool(_objectPool);
-            mediator.Init();
-            _attackTarget = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
-            mediator.SetPlayerTransform(_attackTarget);
-            mediator.SetSlimeMind(this);
-            mediator.PlayMoveAnimation();
-            if(_patrolType == EnemyPatrolling.PatrolType.FixedWaypoints){mediator.SetWayPoints(_wayPoints);}
-            if(_patrolType == EnemyPatrolling.PatrolType.None){mediator.StartChasing();}
+            _attackTarget = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies();
+        }
+
+        internal override void Release()
+        {
+            
+        }
+
+        public override void SetPatrollingWaypoints(Transform[] waypoints)
+        {
+            _slimeMediator.SetWayPoints(waypoints);
+        }
+
+        public override void DieFromOrder()
+        {
+            foreach (SlimeMediator slimeMediator in _slimeMediatorsUnderControl)
+            {
+                slimeMediator.DieFromOrder();
+            }
+            
+            _slimeMediatorsUnderControl.Clear();
+            
+            Recycle();
         }
     }
 }

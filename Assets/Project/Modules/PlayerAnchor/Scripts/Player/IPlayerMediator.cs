@@ -1,4 +1,6 @@
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
+using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
@@ -36,6 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void ThrowAnchor();
         void PullAnchor();
         void OnPullAnchorComplete();
+        UniTaskVoid QueuePullAnchor();
         
         UniTask DashTowardsAnchor();
         UniTask DashForward();
@@ -73,7 +76,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void SetInvulnerable(bool isInvulnerable);
         void SetInvulnerableForDuration(float duration);
         bool CanHeal();
-        UniTask UseHeal();
+        void UseHeal();
         void HealToMax();
         
         void OnDamageTaken();
@@ -90,5 +93,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+
+        IPlayerDeathNotifier GetDeathNotifier();
+        IPlayerEnemySpawnersInteractions GetPlayerEnemySpawnersInteractions();
     }
 }

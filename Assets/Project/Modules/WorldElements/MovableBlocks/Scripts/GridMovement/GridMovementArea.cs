@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AYellowpaper;
 using NaughtyAttributes;
+using Popeye.Scripts.EditorUtilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,7 +11,8 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
     {
         [Required("Assign - ScriptableObject")] 
         [SerializeField] private GridMovementAreaViewConfig _viewConfig;
-        
+        [SerializeField] private DistanceFromCameraTransparencyConfig _transparencyConfig;
+
         [Space(20)]
         [SerializeField] private InterfaceReference<IGridMovementActor, MonoBehaviour>[] _gridMovementActorReferences;
         
@@ -40,7 +42,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             
             for (int i = 0; i < _areaWrappers.Count; ++i)
             {
-                _areaWrappers[i].DrawGizmos();
+                _areaWrappers[i].DrawGizmos(_transparencyConfig);
             }
         }
 #endif
@@ -58,7 +60,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
                 rectangularArea.UpdateState();
                 
                 GridMovementAreaViewHelper.CreateRectangularAreaView(_viewConfig, transform, rectangularArea, 
-                    Vector3.up * 0.005f);
+                    Vector3.up * 0.0005f);
             }
         }
         

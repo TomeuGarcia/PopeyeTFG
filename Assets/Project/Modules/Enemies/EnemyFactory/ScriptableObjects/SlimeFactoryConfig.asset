@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dc97fc0d556406ca5fd3bcdff9d1d5b, type: 3}
+  m_Name: SlimeFactoryConfig
+  m_EditorClassIdentifier: 
+  _slimeMindPrefab: {fileID: 2711686069890572797, guid: 1aa550e15c32f6e47a3788220fbda8d2,
+    type: 3}
+  _numberOfInitialSlimes: 30
+  _slimeMindAndSizeDatas:
+  - _slimeMindId: {fileID: 11400000, guid: 59110f4af00a95b488d16e5c0142c851, type: 2}
+    _mediatorPrefab: {fileID: 4924014901260253396, guid: 8bf3ddffb34ea014880351d6a52cd0f4,
+      type: 3}
+    _numberOfInitialObjects: 15
+    _slimeSizeId: {fileID: 11400000, guid: af8f650ec8a60e14eb22d08afe88fe3e, type: 2}
+    _nextChildrenSpawnData:
+      slimeSizeId: {fileID: 0}
+      childsToSpawn: 0
+  - _slimeMindId: {fileID: 11400000, guid: 0e92f20a8951f73498ff0551079234e1, type: 2}
+    _mediatorPrefab: {fileID: 4924014901260253396, guid: 8a9ad2c9b6b1c2a4d97046cbef19b0ff,
+      type: 3}
+    _numberOfInitialObjects: 15
+    _slimeSizeId: {fileID: 11400000, guid: 8880c0015add6e447aea971db3fd0ba0, type: 2}
+    _nextChildrenSpawnData:
+      slimeSizeId: {fileID: 11400000, guid: af8f650ec8a60e14eb22d08afe88fe3e, type: 2}
+      childsToSpawn: 2
+  - _slimeMindId: {fileID: 11400000, guid: 13c133157e715eb4a8b42d6f84a8340a, type: 2}
+    _mediatorPrefab: {fileID: 4735250719613439942, guid: 962946fa0eec59146aa01d79c0208ab7,
+      type: 3}
+    _numberOfInitialObjects: 15
+    _slimeSizeId: {fileID: 11400000, guid: c4391c562dfe42241af8c1e3b56b593b, type: 2}
+    _nextChildrenSpawnData:
+      slimeSizeId: {fileID: 11400000, guid: 8880c0015add6e447aea971db3fd0ba0, type: 2}
+      childsToSpawn: 2

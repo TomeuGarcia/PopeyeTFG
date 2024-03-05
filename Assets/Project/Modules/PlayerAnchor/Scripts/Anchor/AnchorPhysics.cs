@@ -18,7 +18,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _anchorMediator = anchorMediator;
             
-            _rigidbody.transform.localPosition = Vector3.zero;
             _rigidbody.interpolation = RigidbodyInterpolation.None;
             _rigidbody.isKinematic = true;
         }

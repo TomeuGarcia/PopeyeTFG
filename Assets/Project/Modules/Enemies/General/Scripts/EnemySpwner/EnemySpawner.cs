@@ -1,14 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Enemies.EnemyFactories;
+using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
+using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
+using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.ParticleFactories;
 
-namespace Popeye.Modules.Enemies
+namespace Popeye.Modules.Enemies.General
 {
-    public class EnemySpawner : MonoBehaviour
+    public class EnemySpawner : MonoBehaviour, IPlayerDeathDelegate
     {
 
         [System.Serializable]
@@ -26,11 +30,11 @@ namespace Popeye.Modules.Enemies
             public class SpawnSequenceBeat
             {
                 [SerializeField, Range(0.0f, 10.0f)] private float _delayBeforeSpawn = 0.5f;
-                [SerializeField] private AEnemy _enemyPrefab;
+                [SerializeField] private EnemyID _enemyID;
                 [SerializeField] private Transform _spawnSpot;
 
                 public float DelayBeforeSpawn => _delayBeforeSpawn;
-                public AEnemy EnemyPrefab => _enemyPrefab;
+                public EnemyID EnemyID => _enemyID;
                 public Vector3 SpawnPosition => _spawnSpot.position;
             }
 
@@ -38,64 +42,103 @@ namespace Popeye.Modules.Enemies
 
 
 
-        [SerializeField] private Transform _enemyAttackTarget;
+        private Transform _enemyAttackTarget;
         [SerializeField] private EnemyWave[] _enemyWaves;
-        private int _activeEnemiesCount;
-        private bool AllCurrentWaveEnemiesAreDead => _activeEnemiesCount == 0;
+        private HashSet<AEnemy> _activeEnemies;
+        private bool AllCurrentWaveEnemiesAreDead => _activeEnemies.Count == 0;
         public delegate void EnemySpawnerEvent();
 
         public EnemySpawnerEvent OnFirstWaveStarted;
         public EnemySpawnerEvent OnAllWavesFinished;
+        public EnemySpawnerEvent OnPlayerDiedDuringWaves;
         
-        private EnemyFactory _enemyFactory;
+        private IEnemyFactory _enemyFactory;
+        private IEnemyHinterFactory _enemyHinterFactory;
+        private IPlayerDeathNotifier _playerDeathNotifier;
+        private IPlayerEnemySpawnersInteractions _playerEnemySpawnersInteractions;
+        private bool _playerDiedDuringWaves;
+
 
         private void Start()
         {
-            _enemyFactory = ServiceLocator.Instance.GetService<EnemyFactory>();
+            _enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
+            _enemyHinterFactory = ServiceLocator.Instance.GetService<IEnemyHinterFactory>();
+
+            IGameReferences gameReferences = ServiceLocator.Instance.GetService<IGameReferences>();
+            _playerDeathNotifier = gameReferences.GetPlayerDeathNotifier();
+            _enemyAttackTarget = gameReferences.GetPlayerTargetForEnemies();
+            _playerEnemySpawnersInteractions = gameReferences.GetPlayerEnemySpawnersInteractions();
+            
+            _activeEnemies = new HashSet<AEnemy>(15);
         }
 
         public void StartWaves()
         {
+            _playerDeathNotifier.AddDelegate(this);
+            _playerDiedDuringWaves = false;
+            
+            _playerEnemySpawnersInteractions.OnSpawnerTrapActivated();
+            
             DoStartWaves().Forget();
         }
-
 
         private async UniTaskVoid DoStartWaves()
         {
             OnFirstWaveStarted?.Invoke();
 
-            for (int waveI = 0; waveI < _enemyWaves.Length; ++waveI)
+            for (int waveI = 0; waveI < _enemyWaves.Length && !_playerDiedDuringWaves; ++waveI)
             {
                 await SpawnEnemyWave(_enemyWaves[waveI]);
-                await UniTask.WaitUntil(() => AllCurrentWaveEnemiesAreDead);
+                await UniTask.WaitUntil(() => AllCurrentWaveEnemiesAreDead || _playerDiedDuringWaves);
             }
 
-            OnAllWavesFinished?.Invoke();
+            FinishWaves();
+        }
+
+        private void FinishWaves()
+        {
+            _playerDeathNotifier.RemoveDelegate(this);
+
+            if (_playerDiedDuringWaves)
+            {
+                ResetSpawnerOnPlayerDied();
+            }
+            else
+            {
+                OnAllWavesFinished?.Invoke();
+            }
         }
 
         private async UniTask SpawnEnemyWave(EnemyWave enemyWave)
         {
-            await UniTask.Delay((int)(enemyWave.DelayBeforeWaveSpawning * 1000));
-
-
-            _activeEnemiesCount = enemyWave.NumberOfEnemies;
-
+            await UniTask.Delay(TimeSpan.FromSeconds(enemyWave.DelayBeforeWaveSpawning));
+            
             for (int i = 0; i < enemyWave.SpawnSequence.Length; ++i)
             {
                 EnemyWave.SpawnSequenceBeat spawnSequenceBeat = enemyWave.SpawnSequence[i];
 
-                await UniTask.Delay((int)(spawnSequenceBeat.DelayBeforeSpawn * 1000));
-                SpawnEnemy(spawnSequenceBeat.EnemyPrefab, spawnSequenceBeat.SpawnPosition);
+                await UniTask.Delay(TimeSpan.FromSeconds(spawnSequenceBeat.DelayBeforeSpawn));
+
+                SpawnHinter(spawnSequenceBeat.EnemyID, spawnSequenceBeat.SpawnPosition, out float extraWaitDuration);
+                await UniTask.Delay(TimeSpan.FromSeconds(extraWaitDuration));
+                
+                SpawnEnemy(spawnSequenceBeat.EnemyID, spawnSequenceBeat.SpawnPosition);
             }
         }
 
-        private void SpawnEnemy(AEnemy enemyPrefab, Vector3 spawnPosition)
+        private void SpawnHinter(EnemyID enemyID, Vector3 spawnPosition, out float waitDuration)
         {
-            //AEnemy enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            AEnemy enemy = _enemyFactory.Create(enemyPrefab.Id.Id, spawnPosition, Quaternion.identity);
+            _enemyHinterFactory.Create(spawnPosition, Quaternion.identity, enemyID, out waitDuration);
+        }
+        
+        private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)
+        {
+            AEnemy enemy = _enemyFactory.Create(enemyID, spawnPosition, Quaternion.identity);
             enemy.AwakeInit(_enemyAttackTarget);
 
             enemy.OnDeathComplete += DecrementActiveEnemiesCount;
+
+            _activeEnemies.Add(enemy);
         }
         
         
@@ -103,9 +146,31 @@ namespace Popeye.Modules.Enemies
         private void DecrementActiveEnemiesCount(AEnemy destroyedEnemy)
         {
             destroyedEnemy.OnDeathComplete -= DecrementActiveEnemiesCount;
-
-            --_activeEnemiesCount;
+            _activeEnemies.Remove(destroyedEnemy);
         }
 
+        
+        public void OnPlayerDied()
+        {
+        }
+
+        public void OnPlayerRespawnedFromDeath()
+        {
+            _playerDiedDuringWaves = true;
+        }
+
+        private void ResetSpawnerOnPlayerDied()
+        {
+            foreach (AEnemy enemy in _activeEnemies)
+            {
+                enemy.OnDeathComplete -= DecrementActiveEnemiesCount;
+                enemy.DieFromOrder();
+            }
+            
+            _activeEnemies.Clear();
+            
+            OnPlayerDiedDuringWaves?.Invoke();
+        }
+        
     }
 }

@@ -11,6 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorMediator
     {
+        Transform PositionTransform { get; }
         Vector3 Position { get; }
         IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; }
         DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
@@ -23,6 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         bool IsBeingThrown();
         bool IsBeingPulled();
         bool IsRestingOnFloor();
+        bool IsBeingCarried();
 
         bool IsGrabbedBySnapper();
 
@@ -46,6 +48,5 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
 
         void OnDamageDealt(DamageHitResult damageHitResult);
-
     }
 }

@@ -17,7 +17,7 @@ namespace Popeye.Modules.Enemies.VFX
         [System.Serializable]
         public class OriginalMeshData
         {
-            public MeshRenderer _mesh;
+            public Renderer _mesh;
             [HideInInspector] public Material _originalMaterial;
         }
 
@@ -61,7 +61,7 @@ namespace Popeye.Modules.Enemies.VFX
             //get the    position   of the contact point
             //get the     normal    of the contact poiint
             
-            Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer();
+            Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies();
             Vector3 spawnPos = transform.position + (player.position - transform.position).normalized * 1.25f; //x.xf serves as enemy width
             
             _particleFactory.Create(_visualConfig.SplatterParticleType, spawnPos, quaternion.identity).LookAt(player);

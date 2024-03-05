@@ -19,17 +19,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {
-        [SerializeField]
-        public FMODUnity.EventReference AnchorHit;
-        private string AnchorHitSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorThrow;
-        private string AnchorThrowSFX = null;
-
-        [SerializeField]
-        public FMODUnity.EventReference AnchorGrab;
-        private string AnchorGrabSFX = null;
+        [SerializeField] private Transform _moveTransform;
+        [SerializeField] private GameObject _fakeAnchor;
 
         private AnchorFSM _stateMachine;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
@@ -48,6 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public IOnVoidChecker OnVoidChecker { get; private set; }
 
+        public Transform PositionTransform => _moveTransform;
         public Vector3 Position => _anchorMotion.Position;
         public Vector3 Forward => _anchorMotion.Forward;
         public Quaternion Rotation => _anchorMotion.Rotation;
@@ -180,7 +172,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorViewExtras.OnPulled();
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
-
+            
         }
 
         public void OnDashedAt(float duration, Ease dashEase)
@@ -213,9 +205,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorView.PlayCarriedAnimation();
             _anchorViewExtras.OnCarried();
-            
+        }
+
+        public void SetCarriedFromPickedUp()
+        {
+            SetCarried();
             _anchorAudio.PlayPickedUpSound();
         }
+        
         public void SetGrabbedToThrow()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedToThrow);
@@ -282,6 +279,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.RestingOnFloor;
         }
+
+        public bool IsBeingCarried()
+        {
+            return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.Carried;
+        }
+
         public bool IsGrabbedBySnapper()
         {
             return _stateMachine.CurrentStateType == AnchorStates.AnchorStates.GrabbedBySnapper;

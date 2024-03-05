@@ -34,18 +34,17 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private Vector3 AnchorBindPosition => _anchorBindTransform.position;
         
         
-        public void Configure(IChainPhysics chainPhysics, Transform playerBindTransform, Transform anchorBindTransform,
+        public void Configure(IChainPhysics chainPhysics, IVFXChainView vfxChainView,
+            Transform playerBindTransform, Transform anchorBindTransform,
             ChainViewLogicGeneralConfig generalConfig)
         {
             _chainPhysics = chainPhysics;
             _playerBindTransform = playerBindTransform;
             _anchorBindTransform = anchorBindTransform;
-
-            generalConfig.ApplySharedMaterialToBonePrefabs();
             
             float boneLength = generalConfig.MaxChainLength / (generalConfig.ChainBoneCount-1);
 
-            _vfxChainView = new GhostVFXChainView(generalConfig.ObstacleCollisionProbingConfig, generalConfig.BoneSharedMaterial);
+            _vfxChainView = vfxChainView;
             
             _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
                 generalConfig.MaxChainLength, boneLength,
@@ -98,11 +97,15 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _thrownChainViewLogic.EnterSetup(throwResult.Duration);
             TransitionViewLogic(_thrownChainViewLogic);
+            
+            PlayChainThrowAnimation(throwResult);
         }
         public void SetPulledView(AnchorThrowResult pullResult)
         {
             _pullChainViewLogic.EnterSetup(pullResult.Duration);
             TransitionViewLogic(_pullChainViewLogic);
+            
+            PlayChainPullAnimation(pullResult);
         }
         public void SetRestingOnFloorView()
         {
@@ -154,7 +157,23 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _chainPhysics.SetFailedThrow(failedThrow);
         }
-        
-        
+
+
+        private void PlayChainThrowAnimation(AnchorThrowResult throwResult)
+        {
+            _vfxChainView.StartOriginAnimation(
+                throwResult.FirstTrajectoryPathPoint + 
+                Vector3.down * 0.5f + 
+                throwResult.Direction * 2.0f,
+                throwResult.Duration * 1.2f);
+        }
+        private void PlayChainPullAnimation(AnchorThrowResult pullResult)
+        {
+            _vfxChainView.StartOriginAnimation(
+                pullResult.FirstTrajectoryPathPoint + 
+                Vector3.down * 1.0f + 
+                pullResult.Direction * 0.0f,
+                pullResult.Duration * 0.75f);
+        }
     }
 }
