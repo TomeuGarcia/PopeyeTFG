@@ -9,6 +9,19 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorThrowConfig")]
     public class AnchorThrowConfig : ScriptableObject
     {
+        [System.Serializable]
+        public class ExtraDistanceData
+        {
+            [SerializeField, Range(0.0f, 20.0f)] private float _distance = 4.0f;
+            [SerializeField, Range(0.0f, 10.0f)] private float _adaptDuration = 0.5f;
+            [SerializeField] private AnimationCurve _adaptEase = AnimationCurve.Linear(0,0,1,1);
+
+            public float Distance => _distance;
+            public float AdaptDuration => _adaptDuration;
+            public AnimationCurve AdaptEase => _adaptEase;
+        }
+        
+        
         [Header("FORCE")]
         [SerializeField] private AnimationCurve _throwForceCurve;
         
@@ -31,6 +44,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public float MinThrowDistance => _minThrowDistance;
         public float MaxThrowDistance => _maxThrowDistance;
+
+        
+        [Header("EXTRA DISTANCE")] 
+        [SerializeField] private ExtraDistanceData _movingForwardExtraDistanceData;
+        public ExtraDistanceData MovingForwardExtraDistanceData => _movingForwardExtraDistanceData;
 
 
         [Header("MOVEMENT")] 

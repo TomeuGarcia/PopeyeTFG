@@ -205,6 +205,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return Mathf.Lerp(_throwConfig.MinThrowDistance, _throwConfig.MaxThrowDistance, 
                 _currentThrowCurveForce01);
+            
+            // TODO add extra distance moving forward. Add IThrowDistanceModifier?
         }
         private float ComputeThrowDuration()
         {
