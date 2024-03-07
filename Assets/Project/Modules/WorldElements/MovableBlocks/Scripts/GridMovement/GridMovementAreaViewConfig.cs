@@ -11,7 +11,6 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         [SerializeField] private GameObject _quadMeshPrefab;
         [SerializeField] private Material _areaMaterial;
         
-
         public GameObject QuadMeshPrefab => _quadMeshPrefab;
         public Material AreaMaterial => _areaMaterial;
     }

@@ -11,6 +11,7 @@ namespace Popeye.ProjectHelpers
         public const string PLAYER_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Player/";
 
         public const string ENEMIES_ASSET_PATH = ROOT + "Enemies/";
+        public const string ENEMYHINTS_ASSET_PATH =ENEMIES_ASSET_PATH + "Hints/";
         public const string HAZARDS_ASSET_PATH = ENEMIES_ASSET_PATH + "Hazards/";
         
         public const string PLAYERCONTROLLER_ASSETS_PATH = ROOT + "PlayerController/";
@@ -21,6 +22,7 @@ namespace Popeye.ProjectHelpers
         public const string GAMESTATE_ASSETS_PATH = ROOT + "GameState/";
         
         public const string WORLDELEMENTS_ASSETS_PATH = ROOT + "WorldElements/";
+        public const string WALLBUILDER_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "WallBuilder/";
         public const string GRIDMOVEMENT_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "GridMovement/";
         
         
@@ -41,5 +43,8 @@ namespace Popeye.ProjectHelpers
         
         
         public const string SOUNDSYSTEM_ASSETS_PATH = ROOT + "SoundSystem/";
+        
+        
+        public const string EDITORUTILITIES_ASSETS_PATH = ROOT + "EditorUtilities/";
     }
 }

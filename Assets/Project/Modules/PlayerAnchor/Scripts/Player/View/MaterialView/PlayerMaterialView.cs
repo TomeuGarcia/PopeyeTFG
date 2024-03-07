@@ -90,8 +90,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private async UniTaskVoid DoPlayDash(float duration, Vector3 dashDirection)
         {
+            _material.DOFloat(1.0f, _config.DashingProperty, _config.DashMaterialTransitionTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.DashMaterialTransitionTime));
             _rendererTransform.gameObject.SetActive(false);
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _config.DashMaterialTransitionTime)));
+            _material.DOFloat(0.0f, _config.DashingProperty, _config.DashMaterialTransitionTime);
             _rendererTransform.gameObject.SetActive(true);
         }
 
