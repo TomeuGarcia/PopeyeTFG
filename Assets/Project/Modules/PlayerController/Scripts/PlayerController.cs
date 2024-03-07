@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerController
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IPlayerMovementStateReader
     {
  
       
@@ -23,6 +23,7 @@ namespace Popeye.Modules.PlayerController
         private Vector3 _movementInput;
         private Vector3 _lookInput;
         private Vector3 _movementDirection;
+        public Vector3 MovementDirection => _movementDirection;
 
         [Header("COMPONENTS")]
         [SerializeField] private Rigidbody _rigidbody;
@@ -69,6 +70,8 @@ namespace Popeye.Modules.PlayerController
                 return velocityXZ.magnitude;
             }
         }
+
+        public float CurrentSpeedXZRatio01 => CurrentSpeedXZ / MaxSpeed;
 
         public float CurrentSpeedY => Mathf.Abs(_rigidbody.velocity.y);
 

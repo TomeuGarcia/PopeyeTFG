@@ -127,10 +127,12 @@ namespace Popeye.Modules.PlayerAnchor
                 _player.AnchorGrabToThrowHolder);
 
             IAnchorAudio anchorAudio = new AnchorAudioFMOD(_anchor.PositionTransform.gameObject, fmodAudioManager, _anchorAudioConfig);
+            IThrowDistanceComputer throwDistanceComputer =
+                new MovingForwardRangeThrowDistanceComputer(_anchorGeneralConfig.ThrowConfig, _playerController);
             
             
             anchorMotion.Configure(_anchor.PositionTransform);
-            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, throwDistanceComputer,
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
                 anchorTrajectorySnapController, anchorTrajectoryView);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);

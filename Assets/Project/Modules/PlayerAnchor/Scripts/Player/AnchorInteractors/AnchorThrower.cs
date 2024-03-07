@@ -14,6 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrowConfig _throwConfig;
         private AnchorThrowConfig _verticalThrowConfig;
+        private IThrowDistanceComputer _throwDistanceComputer;
         
         private AnchorTrajectorySnapController _anchorTrajectorySnapController;
 
@@ -40,6 +41,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker,
+            IThrowDistanceComputer throwDistanceComputer,
             AnchorThrowConfig throwConfig, AnchorThrowConfig verticalThrowConfig,
             AnchorTrajectorySnapController anchorTrajectorySnapController,
             IAnchorTrajectoryView trajectoryView)
@@ -47,6 +49,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
+
+            _throwDistanceComputer = throwDistanceComputer;
+            
             _verticalThrowConfig = verticalThrowConfig;
             _throwConfig = throwConfig;
             _anchorTrajectorySnapController = anchorTrajectorySnapController;
@@ -203,10 +208,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private float ComputeThrowDistance()
         {
-            return Mathf.Lerp(_throwConfig.MinThrowDistance, _throwConfig.MaxThrowDistance, 
-                _currentThrowCurveForce01);
-            
-            // TODO add extra distance moving forward. Add IThrowDistanceModifier?
+            return _throwDistanceComputer.ComputeThrowDistance(_currentThrowCurveForce01);
         }
         private float ComputeThrowDuration()
         {

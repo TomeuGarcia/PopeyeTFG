@@ -13,12 +13,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public class ExtraDistanceData
         {
             [SerializeField, Range(0.0f, 20.0f)] private float _distance = 4.0f;
-            [SerializeField, Range(0.0f, 10.0f)] private float _adaptDuration = 0.5f;
-            [SerializeField] private AnimationCurve _adaptEase = AnimationCurve.Linear(0,0,1,1);
+            [SerializeField] private AnimationCurve _adaptEaseCurve = AnimationCurve.Linear(0,0,1,1);
 
             public float Distance => _distance;
-            public float AdaptDuration => _adaptDuration;
-            public AnimationCurve AdaptEase => _adaptEase;
+            public AnimationCurve AdaptEaseCurve => _adaptEaseCurve;
         }
         
         
