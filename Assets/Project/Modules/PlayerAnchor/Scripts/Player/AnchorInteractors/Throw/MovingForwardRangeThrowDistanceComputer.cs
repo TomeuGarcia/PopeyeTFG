@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private float AdaptOutDuration => _throwConfig.MovingForwardExtraDistanceData.AdaptOutDuration;
         private AnimationCurve AdaptEaseInCurve => _throwConfig.MovingForwardExtraDistanceData.AdaptEaseInCurve;
         private AnimationCurve AdaptEaseOutCurve => _throwConfig.MovingForwardExtraDistanceData.AdaptEaseOutCurve;
+        private float DotToConsider => _throwConfig.MovingForwardExtraDistanceData.DotToConsider;
 
 
         private float _currentTimer;
@@ -58,7 +59,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 _playerMovementStateReader.LookDirection
                 );
 
-            return movementLookDot > 0;
+            return movementLookDot > DotToConsider;
         }
         
         private float ComputeExtraDistanceTimerRatio(bool movingInLookDirection)
