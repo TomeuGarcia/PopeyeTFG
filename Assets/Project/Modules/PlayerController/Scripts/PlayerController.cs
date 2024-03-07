@@ -24,6 +24,7 @@ namespace Popeye.Modules.PlayerController
         private Vector3 _lookInput;
         private Vector3 _movementDirection;
         public Vector3 MovementDirection => _movementDirection;
+        public Vector3 MovementDirectionNormalized => _movementDirection.normalized;
 
         [Header("COMPONENTS")]
         [SerializeField] private Rigidbody _rigidbody;

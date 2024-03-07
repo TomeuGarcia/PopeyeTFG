@@ -193,6 +193,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void ResetThrowForce()
         {
             _currentThrowForce01 = 0.0f;
+            _throwDistanceComputer.ClearState();
         }
 
         public void IncrementThrowForce(float deltaTime)
