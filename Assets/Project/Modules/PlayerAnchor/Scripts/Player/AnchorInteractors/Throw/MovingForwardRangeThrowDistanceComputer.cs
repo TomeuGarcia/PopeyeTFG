@@ -1,6 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerController;
-using Popeye.Timers;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
