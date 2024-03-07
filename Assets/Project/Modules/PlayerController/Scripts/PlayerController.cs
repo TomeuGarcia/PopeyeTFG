@@ -110,6 +110,7 @@ namespace Popeye.Modules.PlayerController
         private Vector3 _contactNormal;
         public Vector3 ContactNormal => _contactNormal;
         public Vector3 GroundNormal { get; private set; }
+        public Vector3 GroundPoint { get; private set; }
         private int _groundContactCount;
 
         private bool OnGround => _groundContactCount > 0;
@@ -172,7 +173,7 @@ namespace Popeye.Modules.PlayerController
             if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
             {
                 _movementDirection = _ledgeDetectionController.
-                    UpdateMovementDirectionFromMovementInput(Position, _movementInput);
+                    UpdateMovementDirectionFromMovementInput(GroundPoint, _movementInput);
                 
                 _desiredVelocity = _movementDirection * _maxSpeed;
             }
@@ -279,13 +280,14 @@ namespace Popeye.Modules.PlayerController
                 return false;
             }
 
-            if (!Physics.Raycast(_rigidbody.position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
+            if (!Physics.Raycast(Position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
                     _groundProbeMask))
             {
                 GroundNormal = Vector3.up;
                 return false;
             }
             GroundNormal = hit.normal;
+            GroundPoint = hit.point;
 
 
             float speed = _velocity.magnitude;

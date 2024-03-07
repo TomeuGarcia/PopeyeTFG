@@ -1,6 +1,7 @@
 using System;
 using NaughtyAttributes;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerController
@@ -21,9 +22,9 @@ namespace Popeye.Modules.PlayerController
         
         [Space(15)]
         [SerializeField, Range(0.0f, 90.0f)] private float _maxLedgeGroundAngle = 40.0f;
-
+        
         [Space(15)]
-        [Tag] [SerializeField] private string _ignoreLedgeTag;
+        [SerializeField] private ObjectTypeAsset _ignoreLedgeObjectType;
         
         
         public float LedgeProbeForwardDisplacement => _ledgeProbeForwardDisplacement;
@@ -33,8 +34,7 @@ namespace Popeye.Modules.PlayerController
         public float LedgeFriction => _ledgeFriction;
 
         public float MinLedgeDotProduct { get; private set; }
-
-        public string IgnoreLedgeTag => _ignoreLedgeTag;
+        public ObjectTypeAsset IgnoreLedgeObjectType => _ignoreLedgeObjectType;
         
 
         private void OnValidate()

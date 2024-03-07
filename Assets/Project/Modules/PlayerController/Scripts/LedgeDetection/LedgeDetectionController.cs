@@ -1,4 +1,5 @@
 using Popeye.Scripts.Collisions;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerController
@@ -13,7 +14,7 @@ namespace Popeye.Modules.PlayerController
         private float LedgeStartStopDistance => _ledgeDetectionConfig.LedgeStartStopDistance;
         private float LedgeFriction => _ledgeDetectionConfig.LedgeFriction;
         private float MinLedgeDotProduct => _ledgeDetectionConfig.MinLedgeDotProduct;
-        private string IgnoreLedgeTag => _ledgeDetectionConfig.IgnoreLedgeTag;
+        private ObjectTypeAsset IgnoreLedgeObjectType => _ledgeDetectionConfig.IgnoreLedgeObjectType;
 
         
 
@@ -54,7 +55,7 @@ namespace Popeye.Modules.PlayerController
 
         public Vector3 UpdateMovementDirectionFromMovementInput(Vector3 position, Vector3 movementInput)
         {
-            _position = position;
+            _position = position + Vector3.up * 0.001f;
             _movementDirection = _movementInput = movementInput;
             
             UpdateMoveDirectionOnLedge();
@@ -100,14 +101,14 @@ namespace Popeye.Modules.PlayerController
 
         private bool CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge)
         {
-            Vector3 movementInput = _movementInput;
+            Vector3 movementInput = _movementInput.normalized;
             
             bool forwardLedge = CheckIsOnLedge(movementInput, out ledgeNormal, out distanceFromLedge);
             if (forwardLedge)
             {
                 return true;
             }
-            
+
             Vector3 leftMovementInput = _leftPerpendicular * movementInput;
             bool leftLedge = CheckIsOnLedge(leftMovementInput, out ledgeNormal, out distanceFromLedge);
             if (leftLedge)
@@ -132,10 +133,10 @@ namespace Popeye.Modules.PlayerController
             
             Vector3 origin = _position + (probeDirection * LedgeProbeForwardDisplacement);
             
-            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit floorHit, 
                     GroundProbeDistance, GroundProbeMask, GroundQueryTriggerInteraction))
             {
-                if (hit.normal.y >= MinLedgeDotProduct)
+                if (floorHit.normal.y >= MinLedgeDotProduct)
                 {
                     return false;
                 }
@@ -163,8 +164,15 @@ namespace Popeye.Modules.PlayerController
 
         private bool IgnoreLedgeHit(RaycastHit ledgeHit)
         {
-            return _checkingIgnoreLedges && 
-                   ledgeHit.collider.CompareTag(IgnoreLedgeTag);
+            if (_checkingIgnoreLedges)
+            {
+                if (ledgeHit.collider.TryGetComponent(out ObjectTypeBehaviour objectTypeBehaviour))
+                {
+                    return objectTypeBehaviour.IsOfType(IgnoreLedgeObjectType);
+                }
+            }
+
+            return false;
         }
         
     }
