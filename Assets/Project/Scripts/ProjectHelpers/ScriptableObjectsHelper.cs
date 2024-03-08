@@ -32,6 +32,7 @@ namespace Popeye.ProjectHelpers
         public const string VFX_ASSETS_PATH = ROOT + "VFX/";
         
         public const string SCENELOADING_ASSETS_PATH = ROOT + "SceneLoading/";
+        public const string VALUESTATS_ASSETS_PATH = ROOT + "ValueStats/";
         
         
         public const string ID_ASSETS_PATH = ROOT + "ID/";

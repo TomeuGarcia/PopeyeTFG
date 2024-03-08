@@ -6,6 +6,8 @@ namespace Popeye.Modules.ValueStatSystem
 {
     public abstract class AValueStat
     {
+        public abstract int MaxValue { get; }  
+        
         public delegate void ValueStatEvent();
         public ValueStatEvent OnValueUpdate;
         

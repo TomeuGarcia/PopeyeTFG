@@ -1,5 +1,7 @@
 using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Popeye.Modules.ValueStatSystem
@@ -10,23 +12,29 @@ namespace Popeye.Modules.ValueStatSystem
         [SerializeField] private RectTransform _mainTransform;
         [SerializeField] private Image _fillImage;
         [SerializeField] private Image _lazyBarFillImage;
-        [SerializeField, Range(0.0f, 10.0f)] private float _fullFillDuration = 1.0f;
-        [SerializeField, Range(0.0f, 10.0f)] private float _lazyFullFillDuration = 2.0f;
-        [SerializeField, Range(0.0f, 10.0f)] private float _colorPunchMinDuration = 0.4f;
+        
+        [Header("CONFIGURATION")]
+        [Expandable] [SerializeField] private ValueStatBarViewConfig _viewConfig;
+        
+        
+        private float FullFillDuration => _viewConfig.FullFillDuration;
+        private float LazyFullFillDuration =>_viewConfig.LazyFullFillDuration;
+        private float ColorPunchMinDuration => _viewConfig.ColorPunchMinDuration;
     
-        [SerializeField] private Color _originalColor = Color.blue;
-        [SerializeField] private Color _lazyColor = Color.black;
-        [SerializeField] private Color _incrementColor = Color.green;
-        [SerializeField] private Color _decrementColor = Color.red;
+        private Color OriginalColor => _viewConfig.OriginalColor;
+        private Color LazyColor => _viewConfig.LazyColor;
+        private Color IncrementColor => _viewConfig.IncrementColor;
+        private Color DecrementColor => _viewConfig.DecrementColor;
 
-        [SerializeField] private Ease _fillEase = Ease.InOutQuad;
-        [SerializeField] private Ease _lazyFillEase = Ease.InOutQuad;
+        private Ease FillEase => _viewConfig.FillEase;
+        private Ease LazyFillEase => _viewConfig.LazyFillEase;
+
         
         private bool _isSubscribed;
         
         protected abstract AValueStat ValueStat { get; }
 
-        protected float LazyExtraDuration => _lazyFullFillDuration - _fullFillDuration;
+        protected float LazyExtraDuration => LazyFullFillDuration - FullFillDuration;
 
         
     
@@ -34,12 +42,12 @@ namespace Popeye.Modules.ValueStatSystem
         {
             if (_fillImage != null)
             {
-                _fillImage.color = _originalColor;
+                _fillImage.color = OriginalColor;
             }
     
             if (_lazyBarFillImage != null)
             {
-                _lazyBarFillImage.color = _lazyColor;
+                _lazyBarFillImage.color = LazyColor;
             }
         }
     
@@ -104,8 +112,8 @@ namespace Popeye.Modules.ValueStatSystem
             bool isSubtracting = changeAmount < 0;
             changeAmount = Mathf.Abs(changeAmount);
 
-            float fillDuration = changeAmount * _fullFillDuration;
-            float lazyFillDuration = changeAmount * _lazyFullFillDuration;
+            float fillDuration = changeAmount * FullFillDuration;
+            float lazyFillDuration = changeAmount * LazyFullFillDuration;
 
             DoUpdateFillImage(newFillValue, fillDuration, lazyFillDuration, isSubtracting);
         }
@@ -113,10 +121,10 @@ namespace Popeye.Modules.ValueStatSystem
         protected void DoUpdateFillImage(float newFillValue, float fillDuration, float lazyFillDuration,
             bool isSubtracting)
         {
-            FillBar(_fillImage, newFillValue, fillDuration, _fillEase);
-            FillBar(_lazyBarFillImage, newFillValue, lazyFillDuration, _lazyFillEase);
+            FillBar(_fillImage, newFillValue, fillDuration, FillEase);
+            FillBar(_lazyBarFillImage, newFillValue, lazyFillDuration, LazyFillEase);
 
-            PunchFillImageColor(isSubtracting ? _decrementColor : _incrementColor, fillDuration);
+            PunchFillImageColor(isSubtracting ? DecrementColor : IncrementColor, fillDuration);
         }
         
         
@@ -137,12 +145,12 @@ namespace Popeye.Modules.ValueStatSystem
         
         private void PunchFillImageColor(Color punchColor, float duration)
         {
-            duration = Mathf.Max(duration, _colorPunchMinDuration);
+            duration = Mathf.Max(duration, ColorPunchMinDuration);
             duration /= 2;
             _fillImage.DOColor(punchColor, duration)
                 .OnComplete(() =>
                 {
-                    _fillImage.DOColor(_originalColor, duration);
+                    _fillImage.DOColor(OriginalColor, duration);
                 });
         }
     

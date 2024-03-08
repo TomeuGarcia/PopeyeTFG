@@ -7,7 +7,9 @@ using Timer = Popeye.Timers.Timer;
 namespace Popeye.Modules.ValueStatSystem
 {
     public class TimeStaminaSystem : ATimeValueStat
-    {
+    {        
+        public override int MaxValue => _staminaSystem.MaxValue;
+        
         private StaminaSystem _staminaSystem;
 
         private ITimeStaminaConfig _config;

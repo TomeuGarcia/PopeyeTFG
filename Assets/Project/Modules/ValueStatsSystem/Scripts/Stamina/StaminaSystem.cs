@@ -6,6 +6,8 @@ namespace Popeye.Modules.ValueStatSystem
 {
     public class StaminaSystem : AValueStat
     {
+        public override int MaxValue => MaxStamina;
+        
         private int _currentStamina;
         public int MaxStamina => _config.MaxStamina;
         public int CurrentStamina => _currentStamina;

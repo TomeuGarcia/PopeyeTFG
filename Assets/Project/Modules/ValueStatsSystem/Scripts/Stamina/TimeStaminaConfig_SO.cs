@@ -1,11 +1,12 @@
 using System;
+using Popeye.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Popeye.Modules.ValueStatSystem
 {
-    [CreateAssetMenu(fileName = "TimeStaminaConfig", 
-        menuName = "Popeye/ValueStats/TimeStaminaConfig")]
+    [CreateAssetMenu(fileName = "TimeStaminaConfig_SO", 
+        menuName = ScriptableObjectsHelper.VALUESTATS_ASSETS_PATH + "TimeStaminaConfig")]
     public class TimeStaminaConfig_SO : ScriptableObject, ITimeStaminaConfig
     {
         [Header("VALUES")] 

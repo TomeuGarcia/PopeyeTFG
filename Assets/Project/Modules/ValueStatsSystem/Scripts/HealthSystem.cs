@@ -9,6 +9,8 @@ namespace Popeye.Modules.ValueStatSystem
 {
     public class HealthSystem : AValueStat
     {
+        public override int MaxValue => MaxHealth;
+
         private int _maxHealth;
         private int _currentHealth;
         public int MaxHealth => _maxHealth;    
@@ -109,7 +111,8 @@ namespace Popeye.Modules.ValueStatSystem
             
             SetInvulnerable(false); 
         }
-    
+
+
         public override float GetValuePer1Ratio()
         {
             return (float)_currentHealth / _maxHealth;
