@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &320191541800502219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1274417102656126780}
+  m_Layer: 0
+  m_Name: AnchorChainBind
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1274417102656126780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320191541800502219}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4961382533563393153}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &461867568188169313
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +229,7 @@ MonoBehaviour:
     type: 3}
   _numberOfBones: 10
   _startVisible: 1
-  _firstBoneParent: {fileID: 6564083882448793959}
+  _firstBoneParent: {fileID: 1274417102656126780}
   autoUpdateBoneGeneration: 0
 --- !u!1 &3323606456129337017
 GameObject:
@@ -255,27 +286,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveTransform: {fileID: 4961382533563393153}
   _fakeAnchor: {fileID: 0}
-  AnchorHit:
-    Guid:
-      Data1: -499224757
-      Data2: 1312837135
-      Data3: -1113245014
-      Data4: -1995149949
-    Path: event:/SFX/PlayerAnchor/SFX_Hit_Anchor
-  AnchorThrow:
-    Guid:
-      Data1: 1928778239
-      Data2: 1314098825
-      Data3: 221596067
-      Data4: 1258358617
-    Path: event:/SFX/PlayerAnchor/SFX_Throw_Anchor
-  AnchorGrab:
-    Guid:
-      Data1: 1650359328
-      Data2: 1235497085
-      Data3: 1363947934
-      Data4: 1968968732
-    Path: event:/SFX/PlayerAnchor/SFX_Grab_Anchor
   _destructiblePlatformBreaker: {fileID: 2475414617101000845}
   _pull_CameraZoomInOut: {fileID: 11400000, guid: 17be9d73010c2554c88e46ce1f5d67d0,
     type: 2}
@@ -681,6 +691,7 @@ Transform:
   - {fileID: 7841744605102467066}
   - {fileID: 1016890141761066905}
   - {fileID: 8527802213293091523}
+  - {fileID: 1274417102656126780}
   m_Father: {fileID: 136449527110061941}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1268,12 +1279,6 @@ Transform:
 --- !u!54 &2964756008601247103 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 1891322326405914882, guid: 4e84f29c78a65b6499f7729f1ea4a091,
-    type: 3}
-  m_PrefabInstance: {fileID: 3682746316876774525}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6564083882448793959 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7495100011918347546, guid: 4e84f29c78a65b6499f7729f1ea4a091,
     type: 3}
   m_PrefabInstance: {fileID: 3682746316876774525}
   m_PrefabAsset: {fileID: 0}

@@ -645,8 +645,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6124321632422559697}
-  m_LocalRotation: {x: 0.4256223, y: 0.3396549, z: -0.17629857, w: 0.8199994}
-  m_LocalPosition: {x: -73.25306, y: 148.20102, z: -73.25305}
+  m_LocalRotation: {x: 0.4256223, y: 0.3396549, z: -0.17629856, w: 0.81999946}
+  m_LocalPosition: {x: -73.25306, y: 148.20102, z: -73.25306}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1159,8 +1159,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8732743717244918940}
-  m_LocalRotation: {x: 0.4256223, y: 0.3396549, z: -0.17629857, w: 0.8199994}
-  m_LocalPosition: {x: -73.25306, y: 148.20102, z: -73.25305}
+  m_LocalRotation: {x: 0.4256223, y: 0.3396549, z: -0.17629856, w: 0.81999946}
+  m_LocalPosition: {x: -73.25306, y: 148.20102, z: -73.25306}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1483,6 +1483,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2259574bc7194459a9a2dd6959b5904e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &2242342481575286185 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 83814815434496198, guid: 4c926eca4bc34f2419ddf931b08c4baf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2177388964853534063}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3146074289355317715 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3863730451507063996, guid: 4c926eca4bc34f2419ddf931b08c4baf,
@@ -1576,12 +1582,6 @@ MonoBehaviour:
 --- !u!4 &5811398296010217030 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5661473675443739433, guid: 4c926eca4bc34f2419ddf931b08c4baf,
-    type: 3}
-  m_PrefabInstance: {fileID: 2177388964853534063}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6172617056675568626 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5448837921779570333, guid: 4c926eca4bc34f2419ddf931b08c4baf,
     type: 3}
   m_PrefabInstance: {fileID: 2177388964853534063}
   m_PrefabAsset: {fileID: 0}
@@ -1775,7 +1775,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _chainAnchorBindTransform
       value: 
-      objectReference: {fileID: 6172617056675568626}
+      objectReference: {fileID: 2242342481575286185}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: _chainPlayerBindTransform

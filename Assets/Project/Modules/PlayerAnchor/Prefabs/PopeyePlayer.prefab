@@ -345,7 +345,7 @@ MonoBehaviour:
     type: 3}
   _numberOfBones: 19
   _startVisible: 1
-  _firstBoneParent: {fileID: 5448837921779570333}
+  _firstBoneParent: {fileID: 83814815434496198}
   autoUpdateBoneGeneration: 0
 --- !u!1 &4451369053554759903
 GameObject:
@@ -454,8 +454,6 @@ MonoBehaviour:
     m_Bits: 0
   _maxStairsAngle: 50
   _checkLedges: 1
-  _ledgeGroundCollisionProbingConfig: {fileID: 11400000, guid: 9f6e989e7af6e86488dfc1af7f4f2738,
-    type: 2}
   _ledgeDetectionConfig: {fileID: 11400000, guid: cc5eb6bc64e48c143ad84db3dbf5b7b3,
     type: 2}
 --- !u!114 &3426250871532629262
@@ -1000,7 +998,7 @@ Transform:
   - {fileID: 4279091411442141224}
   - {fileID: 6668082300037902310}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3863730451507063996
 MonoBehaviour:
@@ -1118,15 +1116,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22996d8743ffb5548b3ba1f438041ace, type: 3}
---- !u!4 &1252742472128866447 stripped
+--- !u!4 &83814815434496198 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 136449527110061941, guid: 22996d8743ffb5548b3ba1f438041ace,
+  m_CorrespondingSourceObject: {fileID: 1274417102656126780, guid: 22996d8743ffb5548b3ba1f438041ace,
     type: 3}
   m_PrefabInstance: {fileID: 1190752105491818490}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &5448837921779570333 stripped
+--- !u!4 &1252742472128866447 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 6564083882448793959, guid: 22996d8743ffb5548b3ba1f438041ace,
+  m_CorrespondingSourceObject: {fileID: 136449527110061941, guid: 22996d8743ffb5548b3ba1f438041ace,
     type: 3}
   m_PrefabInstance: {fileID: 1190752105491818490}
   m_PrefabAsset: {fileID: 0}
