@@ -185,10 +185,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 
                 obstacleHit = floorHit;
             }
-            else
-            {
-                Debug.Log("no hit");
-            }
 
             trajectoryDistance = ComputeTrajectoryDistance(_curvedTrajectoryPoints);
             trajectoryHitsObstacle = trajectoryEndsOnTheFloor;

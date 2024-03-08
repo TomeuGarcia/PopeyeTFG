@@ -19,13 +19,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         [Header("OTHER CONFIGURATIONS")] 
         [Expandable] [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
         [Expandable] [SerializeField] private PlayerStatesConfig _playerStatesConfig;
-        [SerializeField] private PlayerHealthConfig _playerHealthConfig;
         [Expandable] [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
 
         public PlayerMovesetConfig MovesetConfig => _playerMovesetConfig;
         public PlayerStatesConfig StatesConfig => _playerStatesConfig;
-        public PlayerHealthConfig PlayerHealthConfig => _playerHealthConfig;
         public TimeStaminaConfig_SO StaminaConfig => _playerStaminaConfig;
+        
+        [Header("HEALTH")]
+        [SerializeField] private PlayerHealthConfig _playerHealthConfig;
+        [SerializeField] private PotionsPlayerHealingConfig _potionsHealingConfig;
+        public PlayerHealthConfig PlayerHealthConfig => _playerHealthConfig;
+        public PotionsPlayerHealingConfig PotionsHealingConfig => _potionsHealingConfig;
 
         
         [Header("GROUND / VOID checking")] 

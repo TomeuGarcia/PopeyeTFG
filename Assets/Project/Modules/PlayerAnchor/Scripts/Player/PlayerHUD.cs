@@ -1,3 +1,4 @@
+using AYellowpaper;
 using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
@@ -7,6 +8,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         [SerializeField] private ValueStatBar _healthBar;
         [SerializeField] private TimeValueStatBar _staminaBar;
+        
+        
+        [SerializeField] private InterfaceReference<IPlayerHealingUI, MonoBehaviour> _playerHealingUI;
+        public IPlayerHealingUI PlayerHealingUI => _playerHealingUI.Value;
         
         public void Configure(AValueStat healthSystem, ATimeValueStat staminaStat)
         {

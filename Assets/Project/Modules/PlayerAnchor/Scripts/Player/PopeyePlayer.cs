@@ -46,6 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private AnchorGeneralConfig _anchorGeneralConfig;
 
         public IPlayerView PlayerView { get; private set; }
+        public IPlayerHealing PlayerHealing { get; private set; }
         private PlayerHealth _playerHealth;
         private TimeStaminaSystem _staminaSystem;
         
@@ -74,7 +75,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
-            PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
+            IPlayerHealing playerHealing, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
             PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
@@ -86,6 +87,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerGeneralConfig = playerGeneralConfig;
             _anchorGeneralConfig = anchorGeneralConfig; 
             PlayerView = playerView;
+            PlayerHealing = playerHealing;
             _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
             _playerMovementChecker = playerMovementChecker;
@@ -466,6 +468,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerMotion.SetPosition(_respawnCheckpointChecker.Value.BestSafePosition);  
             _playerMotion.SetRotation(Quaternion.identity);
             _playerHealth.HealToMax();
+            PlayerHealing.ResetHeals();
             ResetAnchor();
             
             _playerController.DisableForDuration(0.3f).Forget();
@@ -536,24 +539,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return _staminaSystem.HasMaxStamina();
         }
-
-        public bool CanHeal()
-        {
-            // For now there are no number of heal limits
-            return !_playerHealth.IsMaxHealth();
-        }
-
-        public void UseHeal()
-        {
-            _playerHealth.UseHeal();
-            PlayerView.PlayHealAnimation();
-        }
-
-        public void HealToMax()
-        {
-            _playerHealth.HealToMax();
-        }
-
+        
         public void OnDamageTaken()
         {
             PlayerView.PlayTakeDamageAnimation();
