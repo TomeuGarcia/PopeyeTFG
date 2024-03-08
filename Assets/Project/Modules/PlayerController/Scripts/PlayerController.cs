@@ -101,7 +101,6 @@ namespace Popeye.Modules.PlayerController
 
         [Header("LEDGE")] 
         [SerializeField] private bool _checkLedges = false;
-        [SerializeField] private CollisionProbingConfig _ledgeGroundCollisionProbingConfig;
         [SerializeField] private LedgeDetectionConfig _ledgeDetectionConfig;
         private LedgeDetectionController _ledgeDetectionController;
 
@@ -148,8 +147,7 @@ namespace Popeye.Modules.PlayerController
                 InputCorrector = new DefaultInputCorrector();
             }
 
-            _ledgeDetectionController =
-                new LedgeDetectionController(_ledgeDetectionConfig, _ledgeGroundCollisionProbingConfig);
+            _ledgeDetectionController = new LedgeDetectionController(_ledgeDetectionConfig);
 
             CanRotate = true;
 

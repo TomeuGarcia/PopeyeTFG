@@ -18,10 +18,13 @@ namespace Popeye.Modules.PlayerController
 
         
 
-        private readonly CollisionProbingConfig _groundProbingConfig;
-        private LayerMask GroundProbeMask => _groundProbingConfig.CollisionLayerMask;
-        private float GroundProbeDistance => _groundProbingConfig.ProbeDistance;
-        private QueryTriggerInteraction GroundQueryTriggerInteraction => _groundProbingConfig.QueryTriggerInteraction;
+        private LayerMask GroundProbeMask => _ledgeDetectionConfig.GroundProbingConfig.CollisionLayerMask;
+        private float GroundProbeDistance => _ledgeDetectionConfig.GroundProbingConfig.ProbeDistance;
+        private QueryTriggerInteraction GroundQueryTriggerInteraction => _ledgeDetectionConfig.GroundProbingConfig.QueryTriggerInteraction;
+        
+        private LayerMask LedgeProbeMask => _ledgeDetectionConfig.LedgeProbingConfig.CollisionLayerMask;
+        private float LedgeProbeDistance => _ledgeDetectionConfig.LedgeProbingConfig.ProbeDistance;
+        private QueryTriggerInteraction LedgeQueryTriggerInteraction => _ledgeDetectionConfig.LedgeProbingConfig.QueryTriggerInteraction;
         
         
         
@@ -35,11 +38,9 @@ namespace Popeye.Modules.PlayerController
         private bool _checkingIgnoreLedges;
 
 
-        public LedgeDetectionController(LedgeDetectionConfig ledgeDetectionLedgeDetectionConfig,
-            CollisionProbingConfig groundProbingConfig)
+        public LedgeDetectionController(LedgeDetectionConfig ledgeDetectionLedgeDetectionConfig)
         {
             _ledgeDetectionConfig = ledgeDetectionLedgeDetectionConfig;
-            _groundProbingConfig = groundProbingConfig;
 
             _leftPerpendicular = Quaternion.AngleAxis(-90f, Vector3.up);
             _rightPerpendicular = Quaternion.AngleAxis(90f, Vector3.up);
@@ -142,10 +143,10 @@ namespace Popeye.Modules.PlayerController
                 }
             }
 
-            origin += (GroundProbeDistance * Vector3.down);
+            origin += (LedgeProbeDistance * Vector3.down);
             probeDirection = -probeDirection;
             if (Physics.Raycast(origin, probeDirection, out RaycastHit ledgeHit, 
-                    LedgeProbeBackwardDisplacement, GroundProbeMask, GroundQueryTriggerInteraction))
+                    LedgeProbeBackwardDisplacement, LedgeProbeMask, LedgeQueryTriggerInteraction))
             {
                 if (IgnoreLedgeHit(ledgeHit))
                 {
