@@ -17,7 +17,7 @@ namespace Popeye.Modules.Enemies.VFX
         [System.Serializable]
         public class OriginalMeshData
         {
-            public MeshRenderer _mesh;
+            public Renderer _mesh;
             [HideInInspector] public Material _originalMaterial;
         }
 

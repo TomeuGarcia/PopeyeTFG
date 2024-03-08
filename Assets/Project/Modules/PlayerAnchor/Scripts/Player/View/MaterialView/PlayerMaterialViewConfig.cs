@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,25 +16,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Color DamagedColor => _damagedColor;
         public Color HealColor => _healColor;
         
-
-        [SerializeField] private string _baseColorProperty;
-        [SerializeField] private string _isTiredProperty;
-        public int BaseColorPropertyID { get; private set; }
-        public int IsTiredPropertyID { get; private set; }
         
+        [Header("DAMAGED")]
+        [SerializeField] private List<MaterialFlash> _flashSequence = new();
+        public List<MaterialFlash> FlashSequence => _flashSequence;
 
-        [SerializeField] private PlayerMaterialView.FlickData _takeDamageFlick;
-        [SerializeField] private PlayerMaterialView.FlickData _deathFlick;
-        [SerializeField] private PlayerMaterialView.FlickData _healFlick;
-        public PlayerMaterialView.FlickData TakeDamageFlick => _takeDamageFlick;
-        public PlayerMaterialView.FlickData DeathFlick => _deathFlick;
-        public PlayerMaterialView.FlickData HealFlick => _healFlick;
-
-
-        public void OnValidate()
-        {
-            BaseColorPropertyID = Shader.PropertyToID(_baseColorProperty);
-            IsTiredPropertyID = Shader.PropertyToID(_isTiredProperty);
-        }
+        [Header("TIRED")]
+        [SerializeField] private string _isTiredProperty;
+        [SerializeField] private float _tiredTransitionTime;
+        public string IsTiredProperty => _isTiredProperty;
+        public float TiredTransitionTime => _tiredTransitionTime;
+        
+        [Header("DASH")]
+        [SerializeField] private string _dashingProperty;
+        [SerializeField] private float _dashMaterialTransitionTime;
+        public string DashingProperty => _dashingProperty;
+        public float DashMaterialTransitionTime => _dashMaterialTransitionTime;
+        
     }
 }

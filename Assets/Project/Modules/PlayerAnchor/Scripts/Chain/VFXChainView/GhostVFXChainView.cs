@@ -34,7 +34,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             {
                 _fullCollisionT -= deltaTime * SPEED;
 
-                if (_fullCollisionT < 0.00001f)
+                if (_fullCollisionT > 0.00001f)
                 {
                     _fullCollisionT = 0f;
                     _hiddenPosition = NOWHERE_POSITION;

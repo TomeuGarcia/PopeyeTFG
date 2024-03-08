@@ -31,7 +31,7 @@ Transform:
   m_Children:
   - {fileID: 1568081252590656938}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &438095420768655321
 MonoBehaviour:
@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 1568081252590656938}
   - component: {fileID: 4321818296593445499}
   - component: {fileID: 4823475747647379611}
+  - component: {fileID: 6087427381656217909}
   m_Layer: 0
   m_Name: PlayerApparitionParticles
   m_TagString: Untagged
@@ -90,7 +91,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 1.5
   simulationSpeed: 2
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4943,3 +4944,16 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &6087427381656217909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4511008397592153781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f5722729724abe8b78b8479b8d4396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _recyclableParticleParent: {fileID: 438095420768655321}

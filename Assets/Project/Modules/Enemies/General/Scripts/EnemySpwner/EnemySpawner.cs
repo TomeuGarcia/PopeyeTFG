@@ -53,18 +53,16 @@ namespace Popeye.Modules.Enemies.General
         public EnemySpawnerEvent OnPlayerDiedDuringWaves;
         
         private IEnemyFactory _enemyFactory;
-        private IParticleFactory _particleFactory;
+        private IEnemyHinterFactory _enemyHinterFactory;
         private IPlayerDeathNotifier _playerDeathNotifier;
         private IPlayerEnemySpawnersInteractions _playerEnemySpawnersInteractions;
         private bool _playerDiedDuringWaves;
 
-        private const float SPAWN_HINT_DURATION = 1.5f;
-        private static readonly float HALF_SPAWN_HINT_DURATION = SPAWN_HINT_DURATION / 2;
 
         private void Start()
         {
             _enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
-            _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
+            _enemyHinterFactory = ServiceLocator.Instance.GetService<IEnemyHinterFactory>();
 
             IGameReferences gameReferences = ServiceLocator.Instance.GetService<IGameReferences>();
             _playerDeathNotifier = gameReferences.GetPlayerDeathNotifier();
@@ -120,20 +118,17 @@ namespace Popeye.Modules.Enemies.General
                 EnemyWave.SpawnSequenceBeat spawnSequenceBeat = enemyWave.SpawnSequence[i];
 
                 await UniTask.Delay(TimeSpan.FromSeconds(spawnSequenceBeat.DelayBeforeSpawn));
-                
-                SpawnHinter(spawnSequenceBeat.SpawnPosition, SPAWN_HINT_DURATION);
-                await UniTask.Delay(TimeSpan.FromSeconds(HALF_SPAWN_HINT_DURATION));
+
+                SpawnHinter(spawnSequenceBeat.EnemyID, spawnSequenceBeat.SpawnPosition, out float extraWaitDuration);
+                await UniTask.Delay(TimeSpan.FromSeconds(extraWaitDuration));
                 
                 SpawnEnemy(spawnSequenceBeat.EnemyID, spawnSequenceBeat.SpawnPosition);
             }
         }
 
-        private void SpawnHinter(Vector3 spawnPosition, float duration)
+        private void SpawnHinter(EnemyID enemyID, Vector3 spawnPosition, out float waitDuration)
         {
-            EnemySpawnHinter spawnHinter =
-                _particleFactory.Create(ParticleTypes.EnemySpawnHint, spawnPosition, Quaternion.identity)
-                    .GetComponent<EnemySpawnHinter>();
-            spawnHinter.PlayAnimation(duration).Forget();
+            _enemyHinterFactory.Create(spawnPosition, Quaternion.identity, enemyID, out waitDuration);
         }
         
         private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)

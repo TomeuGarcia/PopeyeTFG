@@ -52,24 +52,28 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private async UniTaskVoid DoPlayDash(float duration, Vector3 dashDirection)
         {
+            Transform ghost = _particleFactory.Create(_config.DashGhostParticleType, Vector3.zero, quaternion.identity, _transformHolder);
             _particleFactory.Create(_config.DashDisappearParticleType, Vector3.zero, quaternion.identity, _transformHolder);
             await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, _config.TrailSpawnDelay)));
+
+            float undelayedDuration = Mathf.Max(0.0f,duration - _config.TrailSpawnDelay);
             
             Transform trail = _particleFactory.Create(_config.DashTrailParticleType, Vector3.zero, quaternion.identity, _transformHolder);
-            Vector3 trailScale = trail.localScale;
-
-            float durationMinusDelay = Mathf.Max(duration - _config.TrailSpawnDelay, 0.01f);
-            
-            trail.DOLocalRotate(_config.DashTrailRotation, durationMinusDelay, RotateMode.LocalAxisAdd)
+            trail.localScale = Vector3.one;
+            trail.DOLocalRotate(_config.DashTrailRotation, undelayedDuration, RotateMode.LocalAxisAdd)
                 .SetEase(_config.DashTrailRotationEase);
-            trail.DOScale(Vector3.zero, durationMinusDelay)
-                .SetEase(_config.DashTrailScaleEase);
+            trail.DOScale(Vector3.zero, undelayedDuration)
+                .SetEase(_config.DashTrailScaleEase).OnComplete(() =>
+                {
+                    trail.SetParent(null);
+                });
+            await UniTask.Delay(TimeSpan.FromSeconds(undelayedDuration));
             
-            await UniTask.Delay(TimeSpan.FromSeconds(durationMinusDelay));
-            
-            trail.SetParent(null);
-            trail.localScale = trailScale;
+            ghost.gameObject.GetComponent<InterpolatorRecycleParticle>().ForceStop();
             _particleFactory.Create(_config.DashAppearParticleType, Vector3.zero, quaternion.identity, _transformHolder);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.TrailRecycleDelay));
+            trail.SetParent(_transformHolder);
         }
 
         public void PlayKickAnimation()

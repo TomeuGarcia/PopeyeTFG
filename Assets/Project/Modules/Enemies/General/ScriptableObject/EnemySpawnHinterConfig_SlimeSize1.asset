@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65a5b7c33b91419b961fae28b8897c62, type: 3}
+  m_Name: EnemySpawnHinterConfig_SlimeSize1
+  m_EditorClassIdentifier: 
+  _material: {fileID: 2100000, guid: f95b9254681ba2340b913e1f1b5ca7f2, type: 2}
+  _animationProperty: _AnimationT
+  _growEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.36460716
+      value: 0.5200304
+      inSlope: 1.8424594
+      outSlope: 1.8424594
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.24885093
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _growEndSize: {x: 3, y: 3, z: 3}
+  _growDuration: 1.5
+  _disappearEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.059277
+      outSlope: 1.059277
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06321127
+    - serializedVersion: 3
+      time: 0.94756705
+      value: 0.6560025
+      inSlope: 0.017030263
+      outSlope: 0.017030263
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.075238444
+      outWeight: 0.9159043
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _disappearWait: 0.3
+  _disappearDuration: 1
