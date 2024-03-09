@@ -17,6 +17,7 @@ namespace Popeye.Modules.ValueStatSystem
         }
         
         public abstract float GetValuePer1Ratio();
+        public abstract int GetValue();
 
     }
 }

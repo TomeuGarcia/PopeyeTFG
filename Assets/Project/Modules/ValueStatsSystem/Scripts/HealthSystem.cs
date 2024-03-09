@@ -117,6 +117,11 @@ namespace Popeye.Modules.ValueStatSystem
         {
             return (float)_currentHealth / _maxHealth;
         }
+
+        public override int GetValue()
+        {
+            return _currentHealth;
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
@@ -85,7 +86,7 @@ namespace Popeye.Modules.ValueStatSystem
     
         protected void UpdateFillImage()
         {
-            _imageFillBar.UpdateFill(ValueStat.GetValuePer1Ratio());
+            _imageFillBar.UpdateFill(ValueStat.GetValuePer1Ratio()).Forget();
         }
         
         protected void KillAllUpdates()

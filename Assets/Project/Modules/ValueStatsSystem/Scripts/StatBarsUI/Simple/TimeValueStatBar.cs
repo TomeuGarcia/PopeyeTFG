@@ -36,6 +36,7 @@ namespace Popeye.Modules.ValueStatSystem
         private void UpdateToMax(float durationToMax)
         {
             _imageFillBar.UpdateFillToMax(durationToMax);
+            
         }
 
     }

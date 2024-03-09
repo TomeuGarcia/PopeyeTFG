@@ -70,6 +70,10 @@ namespace Popeye.Modules.ValueStatSystem
         {
             return (float)_currentStamina / MaxStamina;
         }
+        public override int GetValue()
+        {
+            return _currentStamina;
+        }
     }
 }
 

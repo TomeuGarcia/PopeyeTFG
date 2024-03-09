@@ -9,8 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dce7290d3184b66bc44cc92a302bb3a, type: 3}
-  m_Name: PotionsPlayerHealingConfig
+  m_Script: {fileID: 11500000, guid: be95913148c440bf84be18b0b13a45a3, type: 3}
+  m_Name: SegmentedValueStatBarConfig_PlayerHealth
   m_EditorClassIdentifier: 
-  _potionHealAmount: 25
-  _numberOfHeals: 3
+  _statValueAmountPerUnit: 25
+  _spacingBetweenCells: {x: 8, y: 0}
+  _paddingCells:
+    m_Left: 8
+    m_Right: 8
+    m_Top: 8
+    m_Bottom: 8

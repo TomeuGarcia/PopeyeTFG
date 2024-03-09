@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
@@ -31,7 +33,7 @@ namespace Popeye.Modules.ValueStatSystem
             _fillImage.fillAmount = _lazyBarFillImage.fillAmount = value01;
         }
     
-        public void UpdateFill(float value01)
+        public async UniTask UpdateFill(float value01)
         {
             float changeAmount = value01 - _fillImage.fillAmount;
 
@@ -42,6 +44,8 @@ namespace Popeye.Modules.ValueStatSystem
             float lazyFillDuration = changeAmount * _viewConfig.LazyFullFillDuration;
 
             DoUpdateFill(value01, fillDuration, lazyFillDuration, isSubtracting);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(fillDuration));
         }
         
         public void UpdateFillToMax(float fillDuration)

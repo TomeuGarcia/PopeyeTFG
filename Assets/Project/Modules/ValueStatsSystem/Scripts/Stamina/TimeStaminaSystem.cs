@@ -158,7 +158,10 @@ namespace Popeye.Modules.ValueStatSystem
         {
             return _staminaSystem.GetValuePer1Ratio();
         }
-
+        public override int GetValue()
+        {
+            return _staminaSystem.GetValue();
+        }
 
         
         private void StartRecoverAfterUse()
