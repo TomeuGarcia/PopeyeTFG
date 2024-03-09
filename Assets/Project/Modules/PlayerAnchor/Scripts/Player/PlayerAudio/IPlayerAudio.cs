@@ -6,5 +6,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         void StartPlayingStepsSounds();
         void StopPlayingStepsSounds();
+        void PlayDashTowardsAnchorSound();
+        void PlayDashDroppingAnchorSound();
+        void PlayTakeDamageSound();
     }
 }

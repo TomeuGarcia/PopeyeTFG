@@ -314,6 +314,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
             
             PlayerView.PlayDashAnimation(duration, Vector3.ProjectOnPlane((_anchor.Position - Position).normalized,  Vector3.up));
+            _playerAudio.PlayDashTowardsAnchorSound();
 
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
         }
@@ -333,6 +334,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             DropTargetForEnemies(invulnerableDuration).Forget();
             
             PlayerView.PlayDashAnimation(duration, GetFloorAlignedLookDirection());
+            _playerAudio.PlayDashDroppingAnchorSound();
             
             _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
@@ -543,11 +545,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnDamageTaken()
         {
             PlayerView.PlayTakeDamageAnimation();
+            _playerAudio.PlayTakeDamageSound();
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
         }
 
         public void OnKilledByDamageTaken()
         {
+            _playerAudio.PlayTakeDamageSound();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
             _playerDeathNotifier.NotifyOnPlayerDied();
         }

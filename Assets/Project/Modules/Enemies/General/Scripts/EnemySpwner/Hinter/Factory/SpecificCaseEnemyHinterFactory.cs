@@ -25,7 +25,7 @@ namespace Popeye.Modules.Enemies.General
 
         
         
-        public void Create(Vector3 position, Quaternion rotation, EnemyID enemyID, out float duration)
+        public EnemySpawnHinter Create(Vector3 position, Quaternion rotation, EnemyID enemyID, out float duration)
         {
             EnemySpawnHinter enemySpawnHinter = _enemySpawnHintersPool.Spawn<EnemySpawnHinter>(position, rotation);
 
@@ -34,6 +34,8 @@ namespace Popeye.Modules.Enemies.General
             enemySpawnHinter.PlayAnimation().Forget();
             
             duration = enemySpawnHinterConfig.UserWaitDuration;
+
+            return enemySpawnHinter;
         }
 
         private EnemySpawnHinterConfig GetEnemySpawnHinterConfig(EnemyID enemyID)

@@ -4,11 +4,13 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Modules.Enemies.General.Scripts.EnemySpwner.Audio;
 
 namespace Popeye.Modules.Enemies.General
 {
@@ -41,9 +43,13 @@ namespace Popeye.Modules.Enemies.General
         }
 
 
-
-        private Transform _enemyAttackTarget;
+        [Header("CONFIGURATIONS")] 
+        [SerializeField] private EnemySpawnerAudioConfig _audioConfig;
+        
+        [Header("ENEMY WAVES")]
         [SerializeField] private EnemyWave[] _enemyWaves;
+        
+        private Transform _enemyAttackTarget;
         private HashSet<AEnemy> _activeEnemies;
         private bool AllCurrentWaveEnemiesAreDead => _activeEnemies.Count == 0;
         public delegate void EnemySpawnerEvent();
@@ -58,7 +64,8 @@ namespace Popeye.Modules.Enemies.General
         private IPlayerEnemySpawnersInteractions _playerEnemySpawnersInteractions;
         private bool _playerDiedDuringWaves;
 
-
+        private IFMODAudioManager _audioManager;
+        
         private void Start()
         {
             _enemyFactory = ServiceLocator.Instance.GetService<IEnemyFactory>();
@@ -68,6 +75,8 @@ namespace Popeye.Modules.Enemies.General
             _playerDeathNotifier = gameReferences.GetPlayerDeathNotifier();
             _enemyAttackTarget = gameReferences.GetPlayerTargetForEnemies();
             _playerEnemySpawnersInteractions = gameReferences.GetPlayerEnemySpawnersInteractions();
+
+            _audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
             
             _activeEnemies = new HashSet<AEnemy>(15);
         }
@@ -78,6 +87,7 @@ namespace Popeye.Modules.Enemies.General
             _playerDiedDuringWaves = false;
             
             _playerEnemySpawnersInteractions.OnSpawnerTrapActivated();
+            _audioManager.PlayOneShotAttached(_audioConfig.EnemyWavesStart, gameObject);
             
             DoStartWaves().Forget();
         }
@@ -106,6 +116,7 @@ namespace Popeye.Modules.Enemies.General
             else
             {
                 OnAllWavesFinished?.Invoke();
+                _audioManager.PlayOneShotAttached(_audioConfig.EnemyWavesCompleted, gameObject);
             }
         }
 
@@ -128,7 +139,8 @@ namespace Popeye.Modules.Enemies.General
 
         private void SpawnHinter(EnemyID enemyID, Vector3 spawnPosition, out float waitDuration)
         {
-            _enemyHinterFactory.Create(spawnPosition, Quaternion.identity, enemyID, out waitDuration);
+            EnemySpawnHinter hinter = _enemyHinterFactory.Create(spawnPosition, Quaternion.identity, enemyID, out waitDuration);
+            _audioManager.PlayOneShotAttached(hinter.Sound, gameObject);
         }
         
         private void SpawnEnemy(EnemyID enemyID, Vector3 spawnPosition)
