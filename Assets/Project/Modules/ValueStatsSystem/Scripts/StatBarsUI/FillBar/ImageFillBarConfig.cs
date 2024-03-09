@@ -9,16 +9,21 @@ namespace Popeye.Modules.ValueStatSystem
         menuName = ScriptableObjectsHelper.VALUESTATS_ASSETS_PATH + "ImageFillBarConfig")]
     public class ImageFillBarConfig : ScriptableObject
     {
+        [Header("DURATIONS")]
         [SerializeField, Range(0.0f, 10.0f)] private float _fullFillDuration = 1.0f;
         [SerializeField, Range(0.0f, 10.0f)] private float _lazyFullFillDuration = 2.0f;
         [SerializeField, Range(0.0f, 10.0f)] private float _colorPunchMinDuration = 0.4f;
     
+        [Space(10)]
+        [Header("COLORS")]
         [SerializeField] private Color _originalColor = Color.blue;
         [SerializeField] private Color _lazyColor = Color.black;
         [SerializeField] private Color _incrementColor = Color.green;
         [SerializeField] private Color _decrementColor = Color.red;
         [SerializeField] private Color _backgroundColor = Color.black;
 
+        [Space(10)]
+        [Header("EASE")]
         [SerializeField] private Ease _fillEase = Ease.InOutQuad;
         [SerializeField] private Ease _lazyFillEase = Ease.InOutQuad;
         

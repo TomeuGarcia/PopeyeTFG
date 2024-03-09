@@ -59,6 +59,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             _isSubscribed = false;
             
             //OnValidate();
+            _config.Init();
             InstantiateSegments();
     
             SubscribeToEvents();
@@ -164,18 +165,10 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         private void SetupBarsHolder()
         {
             Rect barsHolderRect = _barsHolder.rect;
-
-            float emptyWidthSpace = (_config.SpacingBetweenCells.x * (NumberOfSegments - 1)) + 
-                                    _config.PaddingCells.horizontal;
-
-            float emptyHeightSpace = _config.PaddingCells.vertical;
             
-            float cellWidth = (barsHolderRect.width - emptyWidthSpace) / NumberOfSegments;
-            float cellHeight = barsHolderRect.height - emptyHeightSpace;
-
-            _barsGridLayoutGroup.cellSize = new Vector2(cellWidth, cellHeight);
-            _barsGridLayoutGroup.spacing = _config.SpacingBetweenCells;
-            _barsGridLayoutGroup.padding = _config.PaddingCells;
+            _barsGridLayoutGroup.cellSize = _config.ComputeCellSize(NumberOfSegments, barsHolderRect);
+            _barsGridLayoutGroup.spacing = _config.ComputeSpacingBetweenCells(NumberOfSegments, barsHolderRect);
+            _barsGridLayoutGroup.padding = _config.ComputePaddingCells(barsHolderRect);
         }
         
     }

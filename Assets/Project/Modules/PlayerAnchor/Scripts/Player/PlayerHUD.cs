@@ -7,12 +7,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
 {
     public class PlayerHUD : MonoBehaviour
     {
-        [SerializeField] private ValueStatBar _healthBar;
+        [SerializeField] private SegmentedValueStatBar _healthBar;
         [SerializeField] private TimeValueStatBar _staminaBar;
         
         
-        [SerializeField] private SegmentedValueStatBar _newHealthBar;
-        [SerializeField] private SegmentedValueStatBar _newHealthBar2;
         
         
         [SerializeField] private InterfaceReference<IPlayerHealingUI, MonoBehaviour> _playerHealingUI;
@@ -24,9 +22,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _healthBar.Init(healthSystem);
             _staminaBar.Init(staminaStat);
-            
-            _newHealthBar.Init(healthSystem);
-            _newHealthBar2.Init(healthSystem);
         }
 
     }

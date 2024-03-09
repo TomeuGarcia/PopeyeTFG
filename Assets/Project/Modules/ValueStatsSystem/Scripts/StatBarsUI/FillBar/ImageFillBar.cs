@@ -93,8 +93,8 @@ namespace Popeye.Modules.ValueStatSystem
         
         public void ResetAllUpdates()
         {
-            _fillImage.DOComplete();
-            _lazyBarFillImage.DOComplete();
+            _fillImage.DOKill();
+            _lazyBarFillImage.DOKill();
         }
         
         
