@@ -9,7 +9,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private ValueStatBar _healthBar;
         [SerializeField] private TimeValueStatBar _staminaBar;
         
-        [SerializeField] private DiscreteValueStatBar _healthBar2;
         
         [SerializeField] private InterfaceReference<IPlayerHealingUI, MonoBehaviour> _playerHealingUI;
         public IPlayerHealingUI PlayerHealingUI => _playerHealingUI.Value;
@@ -18,8 +17,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _healthBar.Init(healthSystem);
             _staminaBar.Init(staminaStat);
-            
-            _healthBar2.Init(healthSystem);
         }
         
         
