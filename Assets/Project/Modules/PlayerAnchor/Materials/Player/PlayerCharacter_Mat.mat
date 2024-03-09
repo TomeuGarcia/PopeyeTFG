@@ -67,11 +67,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AOStrength: 0.94
+    - _AOStrength: 1
     - _Alpha: 1
     - _AlphaClip: 0.05
+    - _DashPow: 1
+    - _Dashing: 0
+    - _IsDamaged: 0
+    - _IsTired: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 0.5
-    m_Colors: []
+    - _TiredBlinkSpeed: 4
+    - _TiredIntensityMultiplier: 2
+    - _TiredNoiseScale: 10
+    - _TiredPow: 1
+    - _isDashing: 0
+    m_Colors:
+    - _DamagedColor: {r: 1, g: 0, b: 0, a: 0}
+    - _DashColor: {r: 0, g: 4, b: 1.876022, a: 0}
+    - _DashingScale: {r: 1, g: 0.5, b: 1.5, a: 0}
+    - _TiredColor: {r: 0, g: 0.32833624, b: 1, a: 0}
+    - _TiredNoiseClamp: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

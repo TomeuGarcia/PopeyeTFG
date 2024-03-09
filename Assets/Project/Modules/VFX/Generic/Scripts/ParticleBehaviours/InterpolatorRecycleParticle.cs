@@ -81,6 +81,11 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
                 }
             }
         }
+
+        public void ForceStop()
+        {
+            Reset();
+        }
         
         private async UniTaskVoid ApplyInterpolations(Material material, MaterialFloatInterpolationConfig[] interpolationConfigs)
         {

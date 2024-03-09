@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6534911457466879058}
-  - component: {fileID: 5082174903333640810}
-  - component: {fileID: 7790051331378039978}
   - component: {fileID: 1351218561991610330}
   - component: {fileID: 7348990576285241089}
   - component: {fileID: 6150467610471333831}
@@ -44,56 +42,6 @@ Transform:
   m_Father: {fileID: 312538142261316673}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5082174903333640810
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3638549413259143673}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &7790051331378039978
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3638549413259143673}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 72fa3a50c3742b248b34fdac95e688ea, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &1351218561991610330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -261,7 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
   _originalMeshDatas:
-  - _mesh: {fileID: 7790051331378039978}
+  - _mesh: {fileID: 2854735661932866081}
     _originalMaterial: {fileID: 0}
 --- !u!114 &8692202689089856036
 MonoBehaviour:
@@ -445,6 +393,12 @@ PrefabInstance:
 --- !u!4 &2541915207466760637 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c8a1f7a3436042841a657af808a4aa0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2651506463834725974}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &2854735661932866081 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -8984111842697628553, guid: c8a1f7a3436042841a657af808a4aa0a,
     type: 3}
   m_PrefabInstance: {fileID: 2651506463834725974}
   m_PrefabAsset: {fileID: 0}

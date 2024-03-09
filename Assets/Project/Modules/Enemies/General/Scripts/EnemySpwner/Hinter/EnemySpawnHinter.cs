@@ -15,28 +15,26 @@ namespace Popeye.Modules.Enemies.General
 
         [Header("CONFIGURATION")] 
         [SerializeField] private EnemySpawnHinterConfig _config;
-        [SerializeField, Range(0.01f, 5.0f)] private float _animationDuration = 0.5f; 
 
         
-        private void Awake()
+        private void Start()
         {
-            _material = _renderer.material;
+            SetConfiguration(_config);
         }
 
-        private void Update()
+        public void SetConfiguration(EnemySpawnHinterConfig newConfig)
         {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                PlayAnimation(_animationDuration).Forget();
-            }
+            _config = newConfig;
+            _material = _config.Material;
+            _renderer.material = _material;
         }
 
-
-        public async UniTaskVoid PlayAnimation(float duration)
+        public async UniTaskVoid PlayAnimation()
         {
-            PlayGrowAnimation(duration);
+            AnimationSetup();
+            PlayGrowAnimation();
             
-            float waitDuration = duration * _config.DisappearWait;
+            float waitDuration = _config.GrowDuration * _config.DisappearWait;
             await UniTask.Delay(TimeSpan.FromSeconds(waitDuration));
 
             float disappearDuration = _config.DisappearDuration;
@@ -47,9 +45,9 @@ namespace Popeye.Modules.Enemies.General
             Recycle();
         }
 
-        private void PlayGrowAnimation(float duration)
+        private void PlayGrowAnimation()
         {
-            _animationTransform.DOScale(Vector3.one * 4, duration)
+            _animationTransform.DOScale(_config.GrowEndSize, _config.GrowDuration)
                 .SetEase(_config.GrowEase);
         }
 
@@ -67,12 +65,17 @@ namespace Popeye.Modules.Enemies.General
                 duration
             ).SetEase(_config.DisappearEase);
         }
-        
 
-        internal override void Init()
+
+        private void AnimationSetup()
         {
             _animationTransform.localScale = Vector3.zero;
             _material.SetFloat(_config.AnimationPropertyId, 0);
+        }
+
+        internal override void Init()
+        {
+            
         }
 
         internal override void Release()

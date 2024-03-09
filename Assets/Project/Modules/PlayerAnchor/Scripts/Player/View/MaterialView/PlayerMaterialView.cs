@@ -1,5 +1,8 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -26,7 +29,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public PlayerMaterialView(PlayerMaterialViewConfig config, Material material, Transform rendererTransform)
         {
             _config = config;
-            _config.OnValidate();
             
             _material = material;
             _rendererTransform = rendererTransform;
@@ -51,6 +53,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             //TODO
             //Not here, but: muffle sound, vignete...
+            
+            DoDamaged().Forget();
+        }
+
+        private async UniTaskVoid DoDamaged()
+        {
+            _material.DOFloat(1f, "_IsDamaged", 0.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+            _material.DOFloat(0f, "_IsDamaged", 0.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+            _material.DOFloat(1f, "_IsDamaged", 0.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+            _material.DOFloat(0f, "_IsDamaged", 0.0f);
         }
 
         public void PlayRespawnAnimation()
@@ -75,8 +90,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private async UniTaskVoid DoPlayDash(float duration, Vector3 dashDirection)
         {
+            _material.DOFloat(1.0f, _config.DashingProperty, _config.DashMaterialTransitionTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.DashMaterialTransitionTime));
             _rendererTransform.gameObject.SetActive(false);
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _config.DashMaterialTransitionTime)));
+            _material.DOFloat(0.0f, _config.DashingProperty, _config.DashMaterialTransitionTime);
             _rendererTransform.gameObject.SetActive(true);
         }
 
@@ -127,7 +145,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void SetTired(bool isTired)
         {
-            _material.SetFloat(_config.IsTiredPropertyID, isTired ? 1f : 0f);
+            _material.DOFloat(isTired ? 1f : 0f, _config.IsTiredProperty, _config.TiredTransitionTime);
         }
     }
 }

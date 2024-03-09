@@ -12,13 +12,6 @@ namespace Popeye.Modules.Enemies.VFX
     
     public class GeneralEnemyVFXConfig : ScriptableObject
     {
-        [System.Serializable]
-        public class MaterialFlash
-        {
-            public Material _flashMaterial;
-            public float _waitTime;
-        }
-
         [Header("ONHIT")]
         [SerializeField] private ParticleTypes _waveParticles;
         [SerializeField] private ParticleTypes _splatterParticles;

@@ -80,17 +80,11 @@ MonoBehaviour:
     _normalColor: {r: 1, g: 1, b: 1, a: 1}
     _damagedColor: {r: 0.9607844, g: 0.13333334, b: 0.14901961, a: 1}
     _healColor: {r: 0.34117648, g: 0.9333334, b: 0.56078434, a: 1}
-    _baseColorProperty: _BaseColor
+    _flashSequence: []
     _isTiredProperty: _IsTired
-    _takeDamageFlick:
-      _flickDuration: 0.4
-      _numberOfFlicks: 3
-    _deathFlick:
-      _flickDuration: 1
-      _numberOfFlicks: 2
-    _healFlick:
-      _flickDuration: 0.3
-      _numberOfFlicks: 2
+    _tiredTransitionTime: 0.25
+    _dashingProperty: _isDashing
+    _dashMaterialTransitionTime: 0.075
   _particlesViewConfig: {fileID: 11400000, guid: 8591a54b932661448914ca8b47c32f3f,
     type: 2}
   _gameFeelEffectsViewConfig:
