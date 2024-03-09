@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4cdab71240b404d9cb20766093e993a, type: 3}
-  m_Name: PlayerStaminaConfig
+  m_Script: {fileID: 11500000, guid: fe9a9f8eae8448348948e1f35d38b155, type: 3}
+  m_Name: TimeStepsStaminaSystemConfig_Player
   m_EditorClassIdentifier: 
   _maxStamina: 80
   _spawnStamina: 80
-  _fullRecoverDuration: 2
-  _recoverAfterUseDelayDuration: 1
-  _recoverAfterExhaustDelayDuration: 1.5
+  _staminaAmountRecoveringStep: 20
+  _delayStartRecovering: 1
+  _delayStartRecoveringAfterExhausted: 1.5
+  _delayRecoveringStep: 0.5

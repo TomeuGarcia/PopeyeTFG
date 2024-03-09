@@ -6,13 +6,13 @@ using Timer = Popeye.Timers.Timer;
 
 namespace Popeye.Modules.ValueStatSystem
 {
-    public class TimeStaminaSystem : ATimeValueStat
+    public class TimeStaminaSystem : ATimeValueStat, IStaminaSystem
     {        
         public override int MaxValue => _staminaSystem.MaxValue;
         
         private StaminaSystem _staminaSystem;
 
-        private ITimeStaminaConfig _config;
+        private readonly ITimeStaminaConfig _config;
 
         public bool ExhaustedAllStamina { get; private set; }
         private bool _isWaitingToRestoreStamina;
@@ -82,14 +82,6 @@ namespace Popeye.Modules.ValueStatSystem
             _staminaSystem.Spend(spendAmount);
             DoSpendEnd();
         }
-    
-        public void SpendAll()
-        {
-            DoSpendStart();
-            _staminaSystem.SpendAll();
-            DoSpendEnd();
-        }
-
 
         public void SetProgressiveSpendPerSecond(int progressiveSpendPerSecond)
         {
@@ -101,17 +93,17 @@ namespace Popeye.Modules.ValueStatSystem
             
             DoSpendStart();
             
-            float accomulatedSpendAmount = 0.0f;
+            float accumulatedSpendAmount = 0.0f;
             while (_spendingProgressively && _staminaSystem.HasStaminaLeft())
             {
-                while (accomulatedSpendAmount < 1)
+                while (accumulatedSpendAmount < 1)
                 {
-                    accomulatedSpendAmount += Time.deltaTime * _progressiveSpendPerSecond;
+                    accumulatedSpendAmount += Time.deltaTime * _progressiveSpendPerSecond;
                     await UniTask.Yield();
                 }
                 
-                int spendAmount = (int)accomulatedSpendAmount;
-                accomulatedSpendAmount -= spendAmount;
+                int spendAmount = (int)accumulatedSpendAmount;
+                accumulatedSpendAmount -= spendAmount;
                 
                 _staminaSystem.Spend(spendAmount);
                 InvokeOnValueUpdate();

@@ -8,8 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class PlayerHUD : MonoBehaviour
     {
         [SerializeField] private SegmentedValueStatBar _healthBar;
-        [SerializeField] private TimeValueStatBar _staminaBar;
-        [SerializeField] private TimeSegmentedValueStatBar _staminaBar2;
+        [SerializeField] private TimeStepSegmentedValueStatBar _staminaBar;
         
         
         
@@ -19,11 +18,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         
-        public void Configure(AValueStat healthSystem, ATimeValueStat staminaStat)
+        public void Configure(AValueStat healthSystem, ATimeStepValueStat staminaStat)
         {
             _healthBar.Init(healthSystem);
             _staminaBar.Init(staminaStat);
-            _staminaBar2.Init(staminaStat);
         }
 
     }

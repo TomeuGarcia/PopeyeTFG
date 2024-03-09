@@ -27,14 +27,14 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         {
             _timeValueStat.OnValueUpdate += UpdateSegments;
             _timeValueStat.OnValueStartUpdate += UpdateSegmentsToMax;
-            _timeValueStat.OnValueStopUpdate += CompleteAllUpdates;
+            _timeValueStat.OnValueStopUpdate += KillAllUpdates;
         }
 
         protected override void DoUnsubscribeToEvents()
         {
             _timeValueStat.OnValueUpdate -= UpdateSegments;
             _timeValueStat.OnValueStartUpdate -= UpdateSegmentsToMax;
-            _timeValueStat.OnValueStopUpdate -= CompleteAllUpdates;
+            _timeValueStat.OnValueStopUpdate -= KillAllUpdates;
         }
 
         private void UpdateSegmentsToMax(float durationToMax)
@@ -54,9 +54,9 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             }
         }
 
-        protected override void CompleteAllUpdates()
+        protected override void KillAllUpdates()
         {
-            base.CompleteAllUpdates();
+            base.KillAllUpdates();
             _updateToMaxInterrupted = true;
         }
     }

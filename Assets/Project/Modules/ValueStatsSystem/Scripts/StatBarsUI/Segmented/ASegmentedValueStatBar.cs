@@ -148,11 +148,11 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         } 
         
         
-        protected virtual void CompleteAllUpdates()
+        protected virtual void KillAllUpdates()
         {
             for (int i = 0; i < _imageFillBars.Length; ++i)
             {
-                _imageFillBars[i].CompleteAllUpdates();
+                _imageFillBars[i].KillAllUpdates();
             }
         }
 

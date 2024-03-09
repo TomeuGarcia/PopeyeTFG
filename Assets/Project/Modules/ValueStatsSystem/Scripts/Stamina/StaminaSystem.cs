@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.ValueStatSystem
 {
-    public class StaminaSystem : AValueStat
+    public class StaminaSystem : AValueStat, IStaminaSystem
     {
         public override int MaxValue => MaxStamina;
         

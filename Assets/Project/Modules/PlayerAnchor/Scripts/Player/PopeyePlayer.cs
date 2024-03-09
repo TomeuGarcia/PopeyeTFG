@@ -48,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public IPlayerView PlayerView { get; private set; }
         public IPlayerHealing PlayerHealing { get; private set; }
         private PlayerHealth _playerHealth;
-        private TimeStaminaSystem _staminaSystem;
+        private IStaminaSystem _staminaSystem;
         
         private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
@@ -75,7 +75,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
-            IPlayerHealing playerHealing, PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
+            IPlayerHealing playerHealing, PlayerHealth playerHealth, IStaminaSystem staminaSystem, 
             PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
@@ -111,14 +111,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
             OnStopMoving();
-            
-            _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
 
-        private void OnDestroy()
-        {
-            _staminaSystem.OnValueExhausted -= OnStaminaExhausted;
-        }
 
         private void Update()
         {
@@ -374,10 +368,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorSpinner.StartSpinningAnchor(startsCarryingAnchor, spinToTheRight);
             
+            /*
             _staminaSystem.SetProgressiveSpendPerSecond(_playerGeneralConfig.MovesetConfig.AnchorSpinPerSecondStaminaCost);
             _staminaSystem.SpendProgressively().Forget();
 
             _staminaSystem.OnValueExhausted += StopSpinningAnchor;
+            */
         }
 
         public void SpinAnchor(float deltaTime)
@@ -389,16 +385,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorSpinner.StopSpinningAnchor();
             
+            /*
             _staminaSystem.StopSpendingProgressively();
             _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
+            */
         }
 
         public void InterruptSpinningAnchor()
         {
             _anchorSpinner.InterruptSpinningAnchor();
             
+            /*
             _staminaSystem.StopSpendingProgressively();
             _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
+            */
         }
 
         public bool SpinningAnchorFinished()
@@ -563,6 +563,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             if (spendAmount == 0) return;
             
             _staminaSystem.Spend(spendAmount);
+            if (!_staminaSystem.HasStaminaLeft())
+            {
+                OnStaminaExhausted();
+            }
         }
 
         private void OnStaminaExhausted()

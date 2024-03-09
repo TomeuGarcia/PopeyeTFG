@@ -19,11 +19,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         [Header("OTHER CONFIGURATIONS")] 
         [Expandable] [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
         [Expandable] [SerializeField] private PlayerStatesConfig _playerStatesConfig;
-        [Expandable] [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
+        [Expandable] [SerializeField] private TimeStepsStaminaSystemConfig _playerStaminaConfig;
 
         public PlayerMovesetConfig MovesetConfig => _playerMovesetConfig;
         public PlayerStatesConfig StatesConfig => _playerStatesConfig;
-        public TimeStaminaConfig_SO StaminaConfig => _playerStaminaConfig;
+        public TimeStepsStaminaSystemConfig StaminaConfig => _playerStaminaConfig;
         
         [Header("HEALTH")]
         [SerializeField] private PlayerHealthConfig _playerHealthConfig;
