@@ -9,6 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         [SerializeField] private SegmentedValueStatBar _healthBar;
         [SerializeField] private TimeValueStatBar _staminaBar;
+        [SerializeField] private TimeSegmentedValueStatBar _staminaBar2;
         
         
         
@@ -22,6 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _healthBar.Init(healthSystem);
             _staminaBar.Init(staminaStat);
+            _staminaBar2.Init(staminaStat);
         }
 
     }

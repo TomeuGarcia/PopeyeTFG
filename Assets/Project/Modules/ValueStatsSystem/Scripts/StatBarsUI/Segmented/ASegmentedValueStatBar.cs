@@ -10,8 +10,8 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         [Header("COMPONENTS")] 
         [Required] [SerializeField] private RectTransform _barsHolder;
         [Required] [SerializeField] private GridLayoutGroup _barsGridLayoutGroup;
-        private ImageFillBar[] _imageFillBars;
-        private int _currentBarIndex;
+        protected ImageFillBar[] _imageFillBars;
+        protected int _currentBarIndex;
 
         [Header("CONFIGURATION")]
         [Required] [SerializeField] private ImageFillBar _imageFillBarPrefab;
@@ -23,8 +23,8 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         
         protected abstract AValueStat ValueStat { get; }
         
-        private int NumberOfSegments => _imageFillBars.Length;
-
+        protected int NumberOfSegments => _imageFillBars.Length;
+        
 
         /*
         [Button("Validate")]
@@ -148,11 +148,11 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         } 
         
         
-        protected void KillAllUpdates()
+        protected virtual void CompleteAllUpdates()
         {
             for (int i = 0; i < _imageFillBars.Length; ++i)
             {
-                _imageFillBars[i].ResetAllUpdates();
+                _imageFillBars[i].CompleteAllUpdates();
             }
         }
 

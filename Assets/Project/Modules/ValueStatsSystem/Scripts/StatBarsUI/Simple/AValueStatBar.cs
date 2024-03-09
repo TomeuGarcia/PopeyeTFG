@@ -91,7 +91,7 @@ namespace Popeye.Modules.ValueStatSystem
         
         protected void KillAllUpdates()
         {
-            _imageFillBar.ResetAllUpdates();
+            _imageFillBar.KillAllUpdates();
         }
     }
 }

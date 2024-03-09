@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+
 namespace Popeye.Modules.ValueStatSystem
 {
     public class TimeValueStatBar : AValueStatBar
@@ -35,7 +37,7 @@ namespace Popeye.Modules.ValueStatSystem
 
         private void UpdateToMax(float durationToMax)
         {
-            _imageFillBar.UpdateFillToMax(durationToMax);
+            _imageFillBar.UpdateFillToMax(durationToMax).Forget();
             
         }
 

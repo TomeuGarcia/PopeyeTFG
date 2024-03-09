@@ -48,11 +48,13 @@ namespace Popeye.Modules.ValueStatSystem
             await UniTask.Delay(TimeSpan.FromSeconds(fillDuration));
         }
         
-        public void UpdateFillToMax(float fillDuration)
+        public async UniTask UpdateFillToMax(float fillDuration)
         {
             float lazyFillDuration = fillDuration + _viewConfig.LazyExtraDuration;
             
             DoUpdateFill(1.0f, fillDuration, lazyFillDuration, false);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(fillDuration));
         }
         
         
@@ -91,10 +93,15 @@ namespace Popeye.Modules.ValueStatSystem
                 });
         }
         
-        public void ResetAllUpdates()
+        public void KillAllUpdates()
         {
             _fillImage.DOKill();
             _lazyBarFillImage.DOKill();
+        }
+        public void CompleteAllUpdates()
+        {
+            _fillImage.DOComplete();
+            _lazyBarFillImage.DOComplete();
         }
         
         
