@@ -17,6 +17,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         [SerializeField] private InterfaceReference<IPowerBooster, ScriptableObject>[] _powerBoosters;
 
         private delegate void PowerBoosterCallback(IPowerBooster powerBooster);
+
+        public int ExperienceToUnlock => _experienceToUnlock;
+        public int AccumulatedExperience => _accumulatedExperience;
+        
             
         private void IteratePowerBoosters(PowerBoosterCallback powerBoosterCallback)
         {
