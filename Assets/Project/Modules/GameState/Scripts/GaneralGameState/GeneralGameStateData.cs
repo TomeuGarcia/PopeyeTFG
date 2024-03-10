@@ -1,5 +1,6 @@
 using Popeye.ProjectHelpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.GameState.GaneralGameState
 {
@@ -10,9 +11,9 @@ namespace Popeye.Modules.GameState.GaneralGameState
     {
         [Header("FlAGS")] 
         [SerializeField] private bool _isTutorial;
-        [SerializeField] private int _startingPowerBoosts = 0;
+        [SerializeField] private int _startingPowerBoostExperience = 0;
 
         public bool IsTutorial => _isTutorial;
-        public int StartingPowerBoosts => _startingPowerBoosts;
+        public int StartingPowerBoostExperience => _startingPowerBoostExperience;
     }
 }

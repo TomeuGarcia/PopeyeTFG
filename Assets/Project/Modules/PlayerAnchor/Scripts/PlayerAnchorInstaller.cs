@@ -217,7 +217,7 @@ namespace Popeye.Modules.PlayerAnchor
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerStamina.ExtraStamina);
             
-            _playerPowerBoostController.Init(_player, _generalGameStateData.StartingPowerBoosts);
+            _playerPowerBoostController.Init(_player, _generalGameStateData.StartingPowerBoostExperience, _playerHUD.PlayerPowerBoosterUI);
         }
 
 

@@ -20,6 +20,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
 
         private bool AllLevelsAreMaxed => _indexOfActiveLevel == _powerBoostLevels.Length - 1;
         private int NextLevelIndex => _indexOfActiveLevel + 1;
+
+        private IPlayerPowerBoosterUI _playerPowerBoosterUI;
         
         
         // Drawers
@@ -30,7 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
 
 
         
-        public void Init(IPlayerMediator playerMediator, int numberOfActiveLevels)
+        public void Init(IPlayerMediator playerMediator, int startingExperience, IPlayerPowerBoosterUI playerPowerBoosterUI)
         {
             foreach (PlayerPowerBoostLevel powerBoostLevel in _powerBoostLevels)
             {
@@ -39,8 +41,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
             
             _indexOfActiveLevel = -1;
             _accumulatedExperience = 0;
+
+            _playerPowerBoosterUI = playerPowerBoosterUI;
             
-            AddLevels(numberOfActiveLevels);
+            AddExperience(startingExperience);
         }
 
         
@@ -53,6 +57,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
                 AddLevels(1);
                 experienceToAdd = reminderExperience;
             }
+            
+            _playerPowerBoosterUI.OnLevelAdded(NextLevelIndex + 1);
         }
 
         private void AddLevels(int numberOfLevelsToAdd)
@@ -95,6 +101,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
             RemoveLevels(_levelLoseAmount);
 
             _accumulatedExperience = 0;
+            _playerPowerBoosterUI.OnLevelAdded(NextLevelIndex + 1);
         }
 
         private void RemoveLevels(int levelLoseAmount)
