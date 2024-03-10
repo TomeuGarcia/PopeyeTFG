@@ -9,6 +9,7 @@ namespace Popeye.ProjectHelpers
         public const string ANCHOR_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Anchor/";
         public const string ANCHORCHAIN_ASSETS_PATH = ANCHOR_ASSETS_PATH + "Chain/";
         public const string PLAYER_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Player/";
+        public const string PLAYERPOWERBOOSTERS_ASSETS_PATH = PLAYER_ASSETS_PATH + "PowerBoosters/";
 
         public const string ENEMIES_ASSET_PATH = ROOT + "Enemies/";
         public const string ENEMYHINTS_ASSET_PATH =ENEMIES_ASSET_PATH + "Hints/";

@@ -17,6 +17,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
@@ -53,6 +54,9 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
         [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
+
+        [Header("Player - Powers")] 
+        [SerializeField] private PlayerPowerBoostController _playerPowerBoostController;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -213,6 +217,7 @@ namespace Popeye.Modules.PlayerAnchor
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerStamina.ExtraStamina);
             
+            _playerPowerBoostController.Init(_player, _generalGameStateData.StartingPowerBoosts);
         }
 
 

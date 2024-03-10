@@ -1,11 +1,10 @@
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
 using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.Stamina
 {
-    public class PlayerStaminaSystem : IStaminaSystem, IPowerBooster
+    public class PlayerStaminaSystem : IStaminaSystem, IPlayerStaminaPower
     {
         private readonly PlayerStaminaSystemConfig _config;
         private readonly TimeStepsStaminaSystem _baseStamina;
@@ -14,8 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.Stamina
         public TimeStepsStaminaSystem BaseStamina => _baseStamina;
         public TimeStepsStaminaSystem ExtraStamina => _extraStamina;
 
-        private bool ExtraStaminaIsActive => _activeBoostsCounter > 0;
-        private int _activeBoostsCounter;
+        private bool ExtraStaminaIsActive => _extraStamina.HasStaminaLeft();
         
         
         public PlayerStaminaSystem(PlayerStaminaSystemConfig config)
@@ -25,20 +23,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.Stamina
             _extraStamina = new TimeStepsStaminaSystem(_config.ExtraStaminaConfig);
 
             _baseStamina.OnValueStepRestored += OnBaseStaminaRestored;
-            
-            _activeBoostsCounter = 0;
-            TestAddBoosters().Forget();
         }
 
-        private async UniTaskVoid TestAddBoosters()
-        {
-            await UniTask.Delay(200);
-            AddBoost();
-            await UniTask.Delay(200);
-            AddBoost();
-            await UniTask.Delay(200);
-            AddBoost();
-        }
         
         ~PlayerStaminaSystem() 
         {
@@ -84,21 +70,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.Stamina
 
         
         
-        public void AddBoost()
+        public void AddExtraStamina(int staminaAddAmount)
         {
-            // TODO
-            _extraStamina.ResetMaxValue(_extraStamina.MaxValue + 20, true);
-            ++_activeBoostsCounter;
+            _extraStamina.ResetMaxValue(_extraStamina.MaxValue + staminaAddAmount, true);
         }
 
-        public void RemoveBoosts(int numberOfBoostsToRemove)
+        public void RemoveExtraBoosts(int staminaRemoveAmount)
         {
-            for (int i = 0; i < numberOfBoostsToRemove; ++i)
-            {
-                _extraStamina.ResetMaxValue(_extraStamina.MaxValue - 20, true);
-            }
-            
-            _activeBoostsCounter -= numberOfBoostsToRemove;
+            _extraStamina.ResetMaxValue(_extraStamina.MaxValue - staminaRemoveAmount, true);
         }
 
 

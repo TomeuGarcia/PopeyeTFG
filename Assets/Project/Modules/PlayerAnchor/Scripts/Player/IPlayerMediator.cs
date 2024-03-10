@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         Transform PositionTransform { get; }
         IPlayerView PlayerView { get; }
         IPlayerHealing PlayerHealing { get; }
+        IPlayerStaminaPower PlayerStaminaPower { get; }
         DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);

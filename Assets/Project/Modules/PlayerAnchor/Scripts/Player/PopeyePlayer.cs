@@ -8,6 +8,7 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Project.Modules.WorldElements.DestructiblePlatforms;
@@ -47,8 +48,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public IPlayerView PlayerView { get; private set; }
         public IPlayerHealing PlayerHealing { get; private set; }
+        public IPlayerStaminaPower PlayerStaminaPower => _staminaSystem;
         private PlayerHealth _playerHealth;
-        private IStaminaSystem _staminaSystem;
+        private PlayerStaminaSystem _staminaSystem;
         
         private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
@@ -75,7 +77,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
-            IPlayerHealing playerHealing, PlayerHealth playerHealth, IStaminaSystem staminaSystem, 
+            IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
             PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,

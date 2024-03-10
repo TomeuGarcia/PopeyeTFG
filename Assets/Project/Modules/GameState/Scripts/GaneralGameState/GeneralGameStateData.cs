@@ -10,7 +10,9 @@ namespace Popeye.Modules.GameState.GaneralGameState
     {
         [Header("FlAGS")] 
         [SerializeField] private bool _isTutorial;
+        [SerializeField] private int _startingPowerBoosts = 0;
 
         public bool IsTutorial => _isTutorial;
+        public int StartingPowerBoosts => _startingPowerBoosts;
     }
 }
