@@ -25,11 +25,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         // Drawers
         [Space(30)]
         [ProgressBar("Experience", "DrawerExperienceToUnlock", EColor.Green)] // Dynamic max value constructor
-        [SerializeField] private int _drawerAccumulatedExperience = 0;
-        private int DrawerAccumulatedExperience => AllLevelsAreMaxed ? 0 : _powerBoostLevels[NextLevelIndex].AccumulatedExperience;
+        [SerializeField] private int _accumulatedExperience;
         private int DrawerExperienceToUnlock => AllLevelsAreMaxed ? 0 : _powerBoostLevels[NextLevelIndex].ExperienceToUnlock;
 
-        
 
         
         public void Init(IPlayerMediator playerMediator, int numberOfActiveLevels)
@@ -40,25 +38,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
             }
             
             _indexOfActiveLevel = -1;
-
+            _accumulatedExperience = 0;
             
-            _drawerAccumulatedExperience = 0;
             AddLevels(numberOfActiveLevels);
         }
 
         
-        public void AddExperience(int experience)
+        public void AddExperience(int experienceToAdd)
         {
-            // For now do nothing with experience, and always add 1
-            
             while (!AllLevelsAreMaxed &&
-                _powerBoostLevels[NextLevelIndex].AddExperienceToUnlock(experience, out int reminderExperience))
+                   experienceToAdd > 0 &&
+                   AddExperienceToUnlock(experienceToAdd, out int reminderExperience))
             {
                 AddLevels(1);
-                experience = reminderExperience;
+                experienceToAdd = reminderExperience;
             }
-
-            _drawerAccumulatedExperience = DrawerAccumulatedExperience;
         }
 
         private void AddLevels(int numberOfLevelsToAdd)
@@ -76,13 +70,31 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         }
         
         
+        private bool AddExperienceToUnlock(int experienceToAdd, out int reminderExperience)
+        {
+            _accumulatedExperience += experienceToAdd;
+
+            int experienceToUnlock = DrawerExperienceToUnlock;
+            
+            reminderExperience = Mathf.Max(0, _accumulatedExperience - experienceToUnlock);
+            
+            bool levelUp = _accumulatedExperience >= experienceToUnlock;
+            
+            if(levelUp)
+            {
+                _accumulatedExperience = 0;
+            }
+            
+            return levelUp;
+        }
+        
         
         
         public void RemoveExperience()
         {
             RemoveLevels(_levelLoseAmount);
 
-            _drawerAccumulatedExperience = DrawerAccumulatedExperience;
+            _accumulatedExperience = 0;
         }
 
         private void RemoveLevels(int levelLoseAmount)

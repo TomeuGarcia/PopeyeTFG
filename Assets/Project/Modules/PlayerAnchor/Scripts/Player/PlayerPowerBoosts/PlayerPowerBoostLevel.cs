@@ -11,7 +11,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
     {
         [Header("EXPERIENCE")] 
         [SerializeField, Min(1)] private int _experienceToUnlock = 10;
-        [ShowNonSerializedField] private int _accumulatedExperience;
         
         [Header("POWER BOOSTERS")]
         [SerializeField] private InterfaceReference<IPowerBooster, ScriptableObject>[] _powerBoosters;
@@ -19,7 +18,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         private delegate void PowerBoosterCallback(IPowerBooster powerBooster);
 
         public int ExperienceToUnlock => _experienceToUnlock;
-        public int AccumulatedExperience => _accumulatedExperience;
         
             
         private void IteratePowerBoosters(PowerBoosterCallback powerBoosterCallback)
@@ -34,19 +32,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         public void Init(IPlayerMediator playerMediator)
         {
             IteratePowerBoosters((powerBooster) => powerBooster.Init(playerMediator));
-            _accumulatedExperience = 0;
         }
 
-        public bool AddExperienceToUnlock(int experience, out int reminderExperience)
-        {
-            _accumulatedExperience += experience;
-            reminderExperience = _accumulatedExperience - _experienceToUnlock;
-
-            _accumulatedExperience = Mathf.Min(_accumulatedExperience, _experienceToUnlock);
-            
-            return _accumulatedExperience == _experienceToUnlock;
-        }
-        
         public void Apply()
         {
             IteratePowerBoosters((powerBooster) => powerBooster.Apply());
@@ -54,8 +41,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         public void Remove()
         {
             IteratePowerBoosters((powerBooster) => powerBooster.Remove());
-
-            _accumulatedExperience = 0;
         }
     }
 }
