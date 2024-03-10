@@ -155,7 +155,12 @@ namespace Popeye.Modules.ValueStatSystem
             return _staminaSystem.GetValue();
         }
 
-        
+        protected override void DoResetMaxValue(int maxValue, bool setValueToMax)
+        {
+            _staminaSystem.ResetMaxValue(maxValue, setValueToMax);
+        }
+
+
         private void StartRecoverAfterUse()
         {
             WaitToRestore(_config.RecoverAfterUseDelayDuration);

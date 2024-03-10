@@ -9,6 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         [SerializeField] private SegmentedValueStatBar _healthBar;
         [SerializeField] private TimeStepSegmentedValueStatBar _staminaBar;
+        [SerializeField] private TimeStepSegmentedValueStatBar _extraStaminaBar;
         
         
         
@@ -18,10 +19,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         
-        public void Configure(AValueStat healthSystem, ATimeStepValueStat staminaStat)
+        public void Configure(AValueStat healthSystem, 
+            ATimeStepValueStat baseStaminaStat, ATimeStepValueStat extraStaminaStat)
         {
             _healthBar.Init(healthSystem);
-            _staminaBar.Init(staminaStat);
+            _staminaBar.Init(baseStaminaStat);
+            _extraStaminaBar.Init(extraStaminaStat);
         }
 
     }

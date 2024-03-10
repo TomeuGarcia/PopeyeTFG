@@ -13,8 +13,9 @@ namespace Popeye.Modules.ValueStatSystem
         [SerializeField, Range(0, 500)] private int _maxStamina = 100;
         [SerializeField, Range(0, 500)] private int _spawnStamina = 100;
 
-        public int MaxStamina => _maxStamina;
+        public int SpawnMaxStamina => _maxStamina;
         public int SpawnStamina => _spawnStamina;
+        public int CurrentMaxStamina { get; set; }
 
 
         [Header("DURATIONS")]
@@ -30,6 +31,7 @@ namespace Popeye.Modules.ValueStatSystem
         private void OnValidate()
         {
             _spawnStamina = Mathf.Min(_spawnStamina, _maxStamina);
+            CurrentMaxStamina = _spawnStamina;
         }
 
         private void Awake()

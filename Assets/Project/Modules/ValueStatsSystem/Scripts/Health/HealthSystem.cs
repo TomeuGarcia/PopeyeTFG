@@ -122,6 +122,19 @@ namespace Popeye.Modules.ValueStatSystem
         {
             return _currentHealth;
         }
+
+        protected override void DoResetMaxValue(int maxValue, bool setValueToMax)
+        {
+            _maxHealth = maxValue;
+            if (setValueToMax)
+            {
+                _currentHealth = _maxHealth;
+            }
+            else
+            {
+                _currentHealth = Mathf.Min(_currentHealth, _maxHealth);
+            }
+        }
     }
 }
 

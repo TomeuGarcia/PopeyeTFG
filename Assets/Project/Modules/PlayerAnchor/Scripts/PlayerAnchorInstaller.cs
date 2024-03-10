@@ -17,6 +17,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
@@ -168,7 +169,7 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
-            TimeStepsStaminaSystem playerStamina = new TimeStepsStaminaSystem(_playerGeneralConfig.StaminaConfig);
+            PlayerStaminaSystem playerStamina = new PlayerStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
             PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
@@ -210,7 +211,7 @@ namespace Popeye.Modules.PlayerAnchor
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
-            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);
+            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerStamina.ExtraStamina);
             
         }
 

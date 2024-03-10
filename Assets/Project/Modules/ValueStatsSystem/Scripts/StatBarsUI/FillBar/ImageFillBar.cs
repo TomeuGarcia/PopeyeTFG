@@ -26,8 +26,17 @@ namespace Popeye.Modules.ValueStatSystem
             _lazyBarFillImage.color = _viewConfig.LazyColor;
             _backgroundImage.color = _viewConfig.BackgroundColor;
         }
-        
-        
+
+        private void OnDisable()
+        {
+            CompleteAllUpdates();
+        }
+        private void OnDestroy()
+        {
+            KillAllUpdates();
+        }
+
+
         public void InstantUpdateFill(float value01)
         {
             _fillImage.fillAmount = _lazyBarFillImage.fillAmount = value01;

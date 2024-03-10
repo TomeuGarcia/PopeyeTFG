@@ -9,7 +9,7 @@ namespace Popeye.Modules.ValueStatSystem
         public override int MaxValue => MaxStamina;
         
         private int _currentStamina;
-        public int MaxStamina => _config.MaxStamina;
+        public int MaxStamina => _config.CurrentMaxStamina;
         public int CurrentStamina => _currentStamina;
 
         private readonly IStaminaConfig _config;
@@ -73,6 +73,20 @@ namespace Popeye.Modules.ValueStatSystem
         public override int GetValue()
         {
             return _currentStamina;
+        }
+
+        protected override void DoResetMaxValue(int maxValue, bool setValueToMax)
+        {
+            _config.CurrentMaxStamina = maxValue;
+
+            if (setValueToMax)
+            {
+                _currentStamina = MaxStamina;
+            }
+            else
+            {
+                _currentStamina = Mathf.Min(_currentStamina, MaxStamina);
+            }
         }
     }
 }

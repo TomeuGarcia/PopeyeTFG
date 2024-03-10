@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Popeye.Modules.ValueStatSystem.Segmented
@@ -10,14 +11,16 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         [Header("COMPONENTS")] 
         [Required] [SerializeField] private RectTransform _barsHolder;
         [Required] [SerializeField] private GridLayoutGroup _barsGridLayoutGroup;
-        protected ImageFillBar[] _imageFillBars;
-        protected int _currentBarIndex;
 
         [Header("CONFIGURATION")]
         [Required] [SerializeField] private ImageFillBar _imageFillBarPrefab;
         [Expandable] [Required] [SerializeField] private SegmentedValueStatBarConfig _config;
         [Expandable] [Required] [SerializeField] private ImageFillBarConfig _viewConfig;
-
+        
+        
+        
+        protected ImageFillBar[] _imageFillBars;
+        protected int _currentBarIndex;
 
         private bool _isSubscribed;
         
@@ -60,13 +63,13 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             
             //OnValidate();
             _config.Init();
-            InstantiateSegments();
+            InstantiateDefaultSegments();
     
             SubscribeToEvents();
             InstantUpdateSegments();
         }
 
-        private void InstantiateSegments()
+        private void InstantiateDefaultSegments()
         {
             int numberOfSegments = _config.NumberOfSegments(ValueStat.MaxValue, out int reminder);
 
@@ -169,6 +172,18 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             _barsGridLayoutGroup.cellSize = _config.ComputeCellSize(NumberOfSegments, barsHolderRect);
             _barsGridLayoutGroup.spacing = _config.ComputeSpacingBetweenCells(NumberOfSegments, barsHolderRect);
             _barsGridLayoutGroup.padding = _config.ComputePaddingCells(barsHolderRect);
+        }
+
+
+        protected void OnMaxValueUpdated()
+        {
+            foreach (ImageFillBar imageFillBar in _imageFillBars)
+            {
+                Destroy(imageFillBar.gameObject);
+            }
+
+            InstantiateDefaultSegments();
+            InstantUpdateSegments();
         }
         
     }

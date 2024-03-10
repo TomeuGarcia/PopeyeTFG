@@ -24,12 +24,17 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         {
             _timeStepValueStat.OnValueUpdate += UpdateSegments;
             _timeStepValueStat.OnValueStepRestored += UpdateSegments;
+
+            _timeStepValueStat.OnMaxValueUpdate += OnMaxValueUpdated;
+            
         }
 
         protected override void DoUnsubscribeToEvents()
         {
             _timeStepValueStat.OnValueUpdate -= UpdateSegments;
             _timeStepValueStat.OnValueStepRestored -= UpdateSegments;
+            
+            _timeStepValueStat.OnMaxValueUpdate -= OnMaxValueUpdated;
         }
         
         

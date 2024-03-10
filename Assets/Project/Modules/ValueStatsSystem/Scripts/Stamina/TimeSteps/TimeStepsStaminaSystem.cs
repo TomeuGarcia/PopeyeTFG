@@ -14,7 +14,7 @@ namespace Popeye.Modules.ValueStatSystem
         private CancellationTokenSource _waitToStartRestoringCTS;
         private bool _isRestoringStamina;
         
-
+        
         public TimeStepsStaminaSystem(TimeStepsStaminaSystemConfig config)
         {
             _config = config;
@@ -31,8 +31,12 @@ namespace Popeye.Modules.ValueStatSystem
         {
             return _staminaSystem.GetValue();
         }
-        
-        
+
+        protected override void DoResetMaxValue(int maxValue, bool setValueToMax)
+        {
+            _staminaSystem.ResetMaxValue(maxValue, setValueToMax);
+        }
+
 
         public bool HasMaxStamina()
         {
@@ -49,18 +53,30 @@ namespace Popeye.Modules.ValueStatSystem
             _staminaSystem.Spend(spendAmount);
             InvokeOnValueUpdate();
 
+            StartRestoring();
+        }
+
+        public void CancelRestoring()
+        {
             if (_isRestoringStamina)
             {
                 _waitToStartRestoringCTS.Cancel();
             }
-
-            _waitToStartRestoringCTS = new CancellationTokenSource();
-            StartRestoring(_waitToStartRestoringCTS).Forget();
         }
-
-
-        private async UniTaskVoid StartRestoring(CancellationTokenSource cancellationTokenSource)
+        
+        public void StartRestoring()
         {
+            CancelRestoring();
+            _waitToStartRestoringCTS = new CancellationTokenSource();
+            DoStartRestoring(_waitToStartRestoringCTS).Forget();
+        }
+        
+
+        private async UniTaskVoid DoStartRestoring(CancellationTokenSource cancellationTokenSource)
+        {
+            if (cancellationTokenSource.IsCancellationRequested) return;
+            
+            
             _isRestoringStamina = true;
             
             float startRestoringDelay = HasStaminaLeft()
