@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Popeye.Modules.ValueStatSystem.Segmented
 {
@@ -15,7 +16,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         }
         
         
-        public Vector2 ComputeCellSize(int numberOfSegments, Rect holderRect)
+        public Vector2 ComputeCellSize(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
             float emptyWidthSpace = (_spacingBetweenCells.x * (numberOfSegments - 1)) + 
                                     _paddingCells.horizontal;
@@ -28,12 +29,12 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             return new Vector2(cellWidth, cellHeight);
         }
 
-        public Vector2 ComputeSpacingBetweenCells(int numberOfSegments, Rect holderRect)
+        public Vector2 ComputeSpacingBetweenCells(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
             return _spacingBetweenCells;
         }
         
-        public RectOffset ComputePaddingCells(Rect holderRect)
+        public RectOffset ComputePaddingCells(Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
             return _paddingCells;
         }

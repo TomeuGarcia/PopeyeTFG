@@ -2,6 +2,7 @@ using System;
 using NaughtyAttributes;
 using Popeye.ProjectHelpers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Popeye.Modules.ValueStatSystem.Segmented
 {
@@ -16,14 +17,11 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         
         [Space(10)]
         [Header("CELLS CONFIGURATION")]
-        [SerializeField] private bool _fixedCellSize = false;
-        
-        [ShowIf("_fixedCellSize")]
-        [SerializeField] private Vector2 _cellSize = new Vector2(30, 30);
-        
-        [HideIf("_fixedCellSize")]
+        [SerializeField] private bool _adaptSize = true;
+
+        [ShowIf("_adaptSize")]
         [SerializeField] private Vector2 _spacingBetweenCells = new Vector2(20, 0);
-        
+        [ShowIf("_adaptSize")]
         [SerializeField] private RectOffset _paddingCells = new RectOffset();
 
 
@@ -33,9 +31,9 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
 
         public void Init()
         {
-            _cellComputer = _fixedCellSize
-                ? new FixedSizeCellComputer(_spacingBetweenCells, _paddingCells, _cellSize)
-                : new HolderRectAdaptCellComputer(_spacingBetweenCells, _paddingCells);
+            _cellComputer = _adaptSize
+                ? new HolderRectAdaptCellComputer(_spacingBetweenCells, _paddingCells)
+                : new FixedSizeCellComputer();
         }
         
         
@@ -66,19 +64,19 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         }
 
 
-        public Vector2 ComputeCellSize(int numberOfSegments, Rect holderRect)
+        public Vector2 ComputeCellSize(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
-            return _cellComputer.ComputeCellSize(numberOfSegments, holderRect);
+            return _cellComputer.ComputeCellSize(numberOfSegments, holderRect, gridLayoutGroup);
         }
 
-        public Vector2 ComputeSpacingBetweenCells(int numberOfSegments, Rect holderRect)
+        public Vector2 ComputeSpacingBetweenCells(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
-            return _cellComputer.ComputeSpacingBetweenCells(numberOfSegments, holderRect);
+            return _cellComputer.ComputeSpacingBetweenCells(numberOfSegments, holderRect, gridLayoutGroup);
         }
         
-        public RectOffset ComputePaddingCells(Rect holderRect)
+        public RectOffset ComputePaddingCells(Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
-            return _cellComputer.ComputePaddingCells(holderRect);
+            return _cellComputer.ComputePaddingCells(holderRect, gridLayoutGroup);
         }
         
     }

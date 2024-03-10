@@ -169,9 +169,9 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         {
             Rect barsHolderRect = _barsHolder.rect;
             
-            _barsGridLayoutGroup.cellSize = _config.ComputeCellSize(NumberOfSegments, barsHolderRect);
-            _barsGridLayoutGroup.spacing = _config.ComputeSpacingBetweenCells(NumberOfSegments, barsHolderRect);
-            _barsGridLayoutGroup.padding = _config.ComputePaddingCells(barsHolderRect);
+            _barsGridLayoutGroup.cellSize = _config.ComputeCellSize(NumberOfSegments, barsHolderRect, _barsGridLayoutGroup);
+            _barsGridLayoutGroup.spacing = _config.ComputeSpacingBetweenCells(NumberOfSegments, barsHolderRect, _barsGridLayoutGroup);
+            _barsGridLayoutGroup.padding = _config.ComputePaddingCells(barsHolderRect, _barsGridLayoutGroup);
         }
 
 

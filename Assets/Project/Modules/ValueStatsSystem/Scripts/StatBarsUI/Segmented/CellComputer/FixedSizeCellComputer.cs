@@ -1,49 +1,28 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Popeye.Modules.ValueStatSystem.Segmented
 {
     public class FixedSizeCellComputer : ICellComputer
     {
-        private Vector2 _spacingBetweenCells;
-        private readonly RectOffset _paddingCells;
-        private readonly Vector2 _cellSize;
-
-
-        public FixedSizeCellComputer(Vector2 spacingBetweenCells, RectOffset paddingCells, Vector2 cellSize)
+        public FixedSizeCellComputer()
         {
-            _spacingBetweenCells = spacingBetweenCells;
-            _paddingCells = paddingCells;
-            _cellSize = cellSize;
         }
         
         
-        public Vector2 ComputeCellSize(int numberOfSegments, Rect holderRect)
+        public Vector2 ComputeCellSize(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
-            return _cellSize;
+            return gridLayoutGroup.cellSize;
         }
 
-        public Vector2 ComputeSpacingBetweenCells(int numberOfSegments, Rect holderRect)
+        public Vector2 ComputeSpacingBetweenCells(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
-            float occupiedWidthSpace = (_cellSize.x * numberOfSegments) + _paddingCells.horizontal;
-            float emptyWidthSpace = holderRect.width - occupiedWidthSpace;
-            
-            float widthSpacing = emptyWidthSpace / (numberOfSegments - 1);
-            
-            float occupiedHeightSpace = _cellSize.y  + _paddingCells.vertical;
-            float emptyHeightSpace = holderRect.height - occupiedHeightSpace;
-            
-            float heightSpacing = emptyHeightSpace / (numberOfSegments - 1);
-            
-
-            _spacingBetweenCells.x = widthSpacing;
-            _spacingBetweenCells.y = heightSpacing;
-            
-            return _spacingBetweenCells;
+            return gridLayoutGroup.spacing;
         }
         
-        public RectOffset ComputePaddingCells(Rect holderRect)
+        public RectOffset ComputePaddingCells(Rect holderRect, GridLayoutGroup gridLayoutGroup)
         {
-            return _paddingCells;
+            return gridLayoutGroup.padding;
         }
     }
 }
