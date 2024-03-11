@@ -15,6 +15,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
             {
                 _powerBoostController.Value.AddExperience(powerBoostDrop.Experience);
             }
+            
+            Debug.Log(other.name);
         }
         
         
