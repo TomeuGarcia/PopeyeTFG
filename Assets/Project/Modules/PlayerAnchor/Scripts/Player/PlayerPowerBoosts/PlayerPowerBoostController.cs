@@ -128,12 +128,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
             _indexOfActiveLevel = indexOfLastActiveLevel;
         }
 
-        
 
+#if UNITY_EDITOR
+        
+        [SerializeField, Range(0, 100)] private int _debugExperienceToAdd = 5;
         [Button()]
         private void DebugAddExperience()
         {
-            AddExperience(5);
+            AddExperience(_debugExperienceToAdd);
         }
         
         [Button()]
@@ -141,6 +143,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         {
             RemoveExperience();
         }
+#endif
+        
     }
     
     
