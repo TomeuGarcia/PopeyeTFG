@@ -6,17 +6,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
 {
     public class PowerBoostDropCollector : MonoBehaviour
     {
-        [SerializeField] private InterfaceReference<IPlayerPowerBoostController, ScriptableObject> _powerBoostController;
+        private IPlayerPowerBoostController _powerBoostController;
 
+        public void Init(IPlayerPowerBoostController powerBoostController)
+        {
+            _powerBoostController = powerBoostController;
+        }
+        
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out IPowerBoostDrop powerBoostDrop))
+            if (other.TryGetComponent(out IPowerBoostDrop powerBoostDrop) &&  powerBoostDrop.CanBeUsed())
             {
-                _powerBoostController.Value.AddExperience(powerBoostDrop.Experience);
+                _powerBoostController.AddExperience(powerBoostDrop.GetExperienceAndSetUsed());
             }
             
-            Debug.Log(other.name);
         }
         
         

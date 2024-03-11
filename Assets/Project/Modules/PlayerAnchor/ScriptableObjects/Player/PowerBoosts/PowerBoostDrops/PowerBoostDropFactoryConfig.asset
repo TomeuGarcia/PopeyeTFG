@@ -12,8 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa1e633556b4d3596a77187aeb8b7fe, type: 3}
   m_Name: PowerBoostDropFactoryConfig
   m_EditorClassIdentifier: 
+  _defaultDropPrefab: {fileID: 4071621770937719304, guid: da98bf70fcd0428449136000057a6d64,
+    type: 3}
+  _defaultInitialInstances: 10
   _dropConfigToPoolsData:
   - _dropPrefab: {fileID: 4071621770937719304, guid: da98bf70fcd0428449136000057a6d64,
       type: 3}
     _experienceAmount: 1
     _initialInstances: 10
+  - _dropPrefab: {fileID: 4071621770937719304, guid: 8d32b45fbb757124a89f1840cf9ebdb6,
+      type: 3}
+    _experienceAmount: 3
+    _initialInstances: 5
+  - _dropPrefab: {fileID: 4071621770937719304, guid: 7c24006f7840a7c468548e0606b26af6,
+      type: 3}
+    _experienceAmount: 5
+    _initialInstances: 5

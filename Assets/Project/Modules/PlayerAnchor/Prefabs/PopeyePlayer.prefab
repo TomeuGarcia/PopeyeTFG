@@ -833,8 +833,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef754264f2f4db59a627b93c8ac7c8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _powerBoostController:
-    _underlyingValue: {fileID: 11400000, guid: 7d4a3228d8f80484c890b7e0ccaa40d4, type: 2}
 --- !u!135 &8408295895933382354
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -974,6 +972,7 @@ MonoBehaviour:
   _meshHolderTransform: {fileID: 2041502078564415168}
   _renderer: {fileID: 2116012679240791379}
   _animator: {fileID: 6009713918096670091}
+  _powerBoostDropCollector: {fileID: 4592988738627885128}
 --- !u!1001 &1190752105491818490
 PrefabInstance:
   m_ObjectHideFlags: 0

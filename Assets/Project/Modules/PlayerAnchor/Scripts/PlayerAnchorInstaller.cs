@@ -59,6 +59,8 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("Player - Powers")] 
         [SerializeField] private PlayerPowerBoostController _playerPowerBoostController;
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
+        [SerializeField] private PlayerPowerBoostController _powerBoostController;
+
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -208,7 +210,7 @@ namespace Popeye.Modules.PlayerAnchor
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker);
+                playerSafeGroundChecker, playerOnVoidChecker, _powerBoostController);
 
 
             IPlayerStatesCreator playerStatesCreator = _generalGameStateData.IsTutorial

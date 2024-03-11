@@ -7,6 +7,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
     public class AutoCollectPowerBoostDrop : RecyclableObject, IPowerBoostDrop
     {
         public int Experience { get; private set; }
+        private bool _wasUsed;
+
+        private Transform _defaultParent;
 
         [SerializeField] private ParticleSystem _particleSystem;
 
@@ -15,6 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
         private void Awake()
         {
             _shapeModule = _particleSystem.shape;
+            _defaultParent = transform.parent;
         }
 
         public void Init(int experience, Transform autoCollectTransform)
@@ -39,12 +43,23 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
 
         internal override void Init()
         {
-            
+            _wasUsed = false;
         }
 
         internal override void Release()
         {
-            
+            transform.parent = _defaultParent;
+        }
+
+        public bool CanBeUsed()
+        {
+            return !_wasUsed;
+        }
+
+        public int GetExperienceAndSetUsed()
+        {
+            _wasUsed = true;
+            return Experience;
         }
     }
 }

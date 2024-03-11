@@ -12,10 +12,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [Expandable] [SerializeField] private OneShotFMODSound _dealDamage;
         [Expandable] [SerializeField] private OneShotFMODSound _throw;
         [Expandable] [SerializeField] private OneShotFMODSound _grab;
+        [Expandable] [SerializeField] private OneShotFMODSound _pull;
         
         public OneShotFMODSound DealDamage => _dealDamage;
         public OneShotFMODSound Throw => _throw;
         public OneShotFMODSound Grab => _grab;
+        public OneShotFMODSound Pull => _pull;
 
     }
 }

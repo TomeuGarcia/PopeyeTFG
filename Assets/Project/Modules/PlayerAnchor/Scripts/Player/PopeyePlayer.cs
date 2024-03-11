@@ -8,6 +8,8 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
 using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
@@ -29,6 +31,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _meshHolderTransform;
         [SerializeField] private Renderer _renderer;
         [SerializeField] private Animator _animator;
+
+        [SerializeField] private PowerBoostDropCollector _powerBoostDropCollector;
         
         public Transform MeshHolderTransform => _meshHolderTransform;
         public Renderer Renderer => _renderer;
@@ -68,6 +72,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private bool _pullingAnchorFromTheVoid;
 
         private PlayerDeathNotifier _playerDeathNotifier;
+
+        private IPlayerPowerBoostController _powerBoostController;
         
         public Vector3 Position => _playerController.Position;
         public Transform PositionTransform => _playerController.Transform;
@@ -82,7 +88,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
-            ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker)
+            ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
+            IPlayerPowerBoostController powerBoostController)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
@@ -108,6 +115,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _playerDeathNotifier = new PlayerDeathNotifier();
             _playerEnemySpawnersInteractions = new PlayerEnemySpawnerInteractions(this, _anchor);
+
+            _powerBoostController = powerBoostController;
+            _powerBoostDropCollector.Init(_powerBoostController);
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
@@ -548,6 +558,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             PlayerView.PlayTakeDamageAnimation();
             _playerAudio.PlayTakeDamageSound();
+            _powerBoostController.RemoveExperience();
+            
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
         }
 
