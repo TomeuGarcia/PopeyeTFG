@@ -18,6 +18,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
@@ -57,6 +58,7 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Powers")] 
         [SerializeField] private PlayerPowerBoostController _playerPowerBoostController;
+        [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -218,11 +220,18 @@ namespace Popeye.Modules.PlayerAnchor
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerStamina.ExtraStamina);
             
             _playerPowerBoostController.Init(_player, _generalGameStateData.StartingPowerBoostExperience, _playerHUD.PlayerPowerBoosterUI);
+
+            
+            PowerBoostDropFactory powerBoostDropFactory =
+                new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);
+            
+            ServiceLocator.Instance.RegisterService<IPowerBoostDropFactory>(powerBoostDropFactory);
         }
 
 
         public void Uninstall()
         {
+            ServiceLocator.Instance.RemoveService<IPowerBoostDropFactory>();
             ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
         }
 

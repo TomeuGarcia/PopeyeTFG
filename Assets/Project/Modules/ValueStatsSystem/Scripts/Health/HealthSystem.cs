@@ -24,6 +24,7 @@ namespace Popeye.Modules.ValueStatSystem
         }
         private Queue<float> _queuedInvulnerableDurations;
 
+        public ValueStatEvent OnDeath;
 
         public HealthSystem(int maxHealth)
         {
@@ -45,6 +46,12 @@ namespace Popeye.Modules.ValueStatSystem
             _currentHealth = Mathf.Max(0, _currentHealth);
 
             InvokeOnValueUpdate();
+            
+            if (IsDead())
+            {
+                InvokeOnDeath();
+            }
+            
     
             return receivedDamage;
         }
@@ -53,6 +60,7 @@ namespace Popeye.Modules.ValueStatSystem
         {
             _currentHealth = 0;
 
+            InvokeOnDeath();
             InvokeOnValueUpdate();
         }
     
@@ -134,6 +142,12 @@ namespace Popeye.Modules.ValueStatSystem
             {
                 _currentHealth = Mathf.Min(_currentHealth, _maxHealth);
             }
+        }
+
+
+        private void InvokeOnDeath()
+        {
+            OnDeath?.Invoke();
         }
     }
 }

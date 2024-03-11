@@ -7,6 +7,7 @@ using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Slime;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
 using Project.Modules.Enemies.Slime.Scripts.SlimeRefactor;
@@ -36,6 +37,7 @@ namespace Popeye.Modules.Enemies
 
         [SerializeField] private SlimeSoundsConfig _slimeSounds;
         private IFMODAudioManager _audioManager;
+        [SerializeField] private PowerBoostDropper _powerBoostDropper;
 
         public override Vector3 Position => _slimeTransform.position;
 
@@ -121,6 +123,8 @@ namespace Popeye.Modules.Enemies
         public void Divide()
         {
             slimeAnimatorController.PlayDeath();
+            _powerBoostDropper.SpawnDrop(Position);
+            
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {
                 _slimeFactory.CreateFromParent(slimeMindEnemy,this, ComputeChildSlimesSpawnPosition(), Quaternion.identity);

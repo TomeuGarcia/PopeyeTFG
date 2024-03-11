@@ -1,15 +1,13 @@
 using NaughtyAttributes;
-using Popeye.Modules.ValueStatSystem;
 using Popeye.ProjectHelpers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
 {
     
     [CreateAssetMenu(fileName = "PlayerPowerBoostController", 
         menuName = ScriptableObjectsHelper.PLAYERPOWERBOOSTERS_ASSETS_PATH + "PlayerPowerBoostController")]
-    public class PlayerPowerBoostController : ScriptableObject
+    public class PlayerPowerBoostController : ScriptableObject, IPlayerPowerBoostController
     {
         [Header("LEVELS")]
         [SerializeField] private PlayerPowerBoostLevel[] _powerBoostLevels;
