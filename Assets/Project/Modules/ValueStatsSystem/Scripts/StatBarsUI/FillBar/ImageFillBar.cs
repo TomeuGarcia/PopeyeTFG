@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
+using Project.Scripts.TweenExtensions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ namespace Popeye.Modules.ValueStatSystem
     public class ImageFillBar : MonoBehaviour
     {
         [Header("COMPONENTS")]
+        [Required] [SerializeField] private RectTransform _holder;
         [Required] [SerializeField] private Image _backgroundImage;
         [Required] [SerializeField] private Image _lazyBarFillImage;
         [Required] [SerializeField] private Image _fillImage;
@@ -74,6 +76,12 @@ namespace Popeye.Modules.ValueStatSystem
             FillBar(_lazyBarFillImage, newFillValue, lazyFillDuration, _viewConfig.LazyFillEase);
 
             PunchFillImageColor(isSubtracting ? _viewConfig.DecrementColor : _viewConfig.IncrementColor, fillDuration);
+
+            if (_viewConfig.PunchScale)
+            {
+                _holder.PunchScale(isSubtracting ? _viewConfig.DecrementPunchScaleConfig : _viewConfig.IncrementPunchScaleConfig, true);
+            }
+            
         }
         
         

@@ -1,6 +1,8 @@
 using System;
 using DG.Tweening;
+using NaughtyAttributes;
 using Popeye.ProjectHelpers;
+using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
 namespace Popeye.Modules.ValueStatSystem
@@ -26,7 +28,9 @@ namespace Popeye.Modules.ValueStatSystem
         [Header("EASE")]
         [SerializeField] private Ease _fillEase = Ease.InOutQuad;
         [SerializeField] private Ease _lazyFillEase = Ease.InOutQuad;
-        
+
+
+       
         
         public float FullFillDuration => _fullFillDuration;
         public float LazyFullFillDuration => _lazyFullFillDuration;
@@ -42,6 +46,17 @@ namespace Popeye.Modules.ValueStatSystem
 
         public Ease FillEase => _fillEase;
         public Ease LazyFillEase => _lazyFillEase;
+        
+        
+        
+        [Space(10)] 
+        [SerializeField] private bool _punchScale = false;
+        [ShowIf("_punchScale")] [Expandable] [SerializeField] private TweenPunchConfig _incrementPunchScaleConfig;
+        [ShowIf("_punchScale")] [Expandable] [SerializeField] private TweenPunchConfig _decrementPunchScaleConfig;
+
+        public bool PunchScale => _punchScale;
+        public TweenPunchConfig IncrementPunchScaleConfig => _incrementPunchScaleConfig;
+        public TweenPunchConfig DecrementPunchScaleConfig => _decrementPunchScaleConfig;
 
 
         private void OnValidate()

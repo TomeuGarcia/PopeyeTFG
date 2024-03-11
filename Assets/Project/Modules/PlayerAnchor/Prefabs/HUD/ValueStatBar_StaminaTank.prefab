@@ -302,11 +302,11 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 80, y: 80}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2331751724532068398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _imageFillBar: {fileID: 4298882774884946180}
-  _viewConfig: {fileID: 11400000, guid: 8ba754bd3015e5a4e98f7e30091be37e, type: 2}
+  _viewConfig: {fileID: 11400000, guid: e28e2c9ff44c33e40a6802b80057d66e, type: 2}
 --- !u!114 &4298882774884946180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bf6ffaf104f462293c4d5c56b21ba70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _holder: {fileID: 2153727840609909450}
   _backgroundImage: {fileID: 1760599788440534013}
   _lazyBarFillImage: {fileID: 5232348774667773434}
   _fillImage: {fileID: 997141789539934940}

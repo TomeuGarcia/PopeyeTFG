@@ -35,12 +35,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             --_currentNumberOfHeals;
             
             _playerHealth.Heal(_config.PotionHealAmount);
-            _playerHealingUI.OnHealUsed(_currentNumberOfHeals);
 
             if (!HasHealsLeft())
             {
                 _playerHealingUI.OnHealsExhausted();
             }
+            _playerHealingUI.OnHealUsed(_currentNumberOfHeals);
         }
 
         public void ResetHeals()

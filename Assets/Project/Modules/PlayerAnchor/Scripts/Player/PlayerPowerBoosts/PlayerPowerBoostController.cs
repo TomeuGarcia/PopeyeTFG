@@ -26,9 +26,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         
         // Drawers
         [Space(30)]
-        [ProgressBar("Experience", "DrawerExperienceToUnlock", EColor.Green)] // Dynamic max value constructor
+        [ProgressBar("Experience", "NextExperienceToUnlock", EColor.Green)] // Dynamic max value constructor
         [SerializeField] private int _accumulatedExperience;
-        private int DrawerExperienceToUnlock => AllLevelsAreMaxed ? 0 : _powerBoostLevels[NextLevelIndex].ExperienceToUnlock;
+        private int NextExperienceToUnlock => AllLevelsAreMaxed ? 1 : _powerBoostLevels[NextLevelIndex].ExperienceToUnlock;
 
 
         
@@ -41,8 +41,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
             
             _indexOfActiveLevel = -1;
             _accumulatedExperience = 0;
-
+            
             _playerPowerBoosterUI = playerPowerBoosterUI;
+            _playerPowerBoosterUI.Init();
             
             AddExperience(startingExperience);
         }
@@ -50,15 +51,24 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         
         public void AddExperience(int experienceToAdd)
         {
+            bool leveledUp = false;
+            
             while (!AllLevelsAreMaxed &&
                    experienceToAdd > 0 &&
                    AddExperienceToUnlock(experienceToAdd, out int reminderExperience))
             {
                 AddLevels(1);
+                _accumulatedExperience = 0;
                 experienceToAdd = reminderExperience;
+                leveledUp = true;
+            }
+
+            if (leveledUp && !AllLevelsAreMaxed)
+            {
+                _playerPowerBoosterUI.OnExperienceAdded(_accumulatedExperience, NextExperienceToUnlock);
             }
             
-            _playerPowerBoosterUI.OnLevelAdded(NextLevelIndex + 1);
+            _playerPowerBoosterUI.OnLevelAdded(NextLevelIndex);
         }
 
         private void AddLevels(int numberOfLevelsToAdd)
@@ -80,16 +90,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         {
             _accumulatedExperience += experienceToAdd;
 
-            int experienceToUnlock = DrawerExperienceToUnlock;
+            int experienceToUnlock = NextExperienceToUnlock;
             
             reminderExperience = Mathf.Max(0, _accumulatedExperience - experienceToUnlock);
             
             bool levelUp = _accumulatedExperience >= experienceToUnlock;
             
-            if(levelUp)
-            {
-                _accumulatedExperience = 0;
-            }
+            
+            _playerPowerBoosterUI.OnExperienceAdded(_accumulatedExperience, experienceToUnlock);
+
             
             return levelUp;
         }
@@ -101,7 +110,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
             RemoveLevels(_levelLoseAmount);
 
             _accumulatedExperience = 0;
-            _playerPowerBoosterUI.OnLevelAdded(NextLevelIndex + 1);
+            _playerPowerBoosterUI.OnLevelLost(NextLevelIndex);
+            _playerPowerBoosterUI.OnExperienceLost(0, NextExperienceToUnlock);
         }
 
         private void RemoveLevels(int levelLoseAmount)

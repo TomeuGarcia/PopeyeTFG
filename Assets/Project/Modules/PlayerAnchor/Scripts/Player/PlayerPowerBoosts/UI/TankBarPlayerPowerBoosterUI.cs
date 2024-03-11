@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Popeye.Modules.ValueStatSystem;
 using TMPro;
 using UnityEngine;
@@ -10,48 +13,89 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         [SerializeField] private TextMeshProUGUI _nextLevelNumberText;
         [SerializeField] private ValueStatBar _tankBar;
 
-        private int _currentNextLevelNumber;
+        private int _activeCurrentLevelNumber;
 
-        
-        public void Init(AValueStat experienceValueStat)
+        private const int LEVEL_NUMBER_START_SHOWING = 1;
+        private const float FULL_FILL_DURATION = 0.5f;
+
+
+        private SimpleValueStat _experienceValueStat;
+
+        private struct ExperienceGroup
         {
-            _tankBar.Init(experienceValueStat);
+            private int _currentValue;
+            private int _maxValue;
+            private float _valueRatio;
 
-            _currentNextLevelNumber = 0;
+            public ExperienceGroup(int currentValue, int maxValue)
+            {
+                _currentValue = currentValue;
+                _maxValue = maxValue;
+                _valueRatio = (float)_currentValue / _maxValue;
+            }
+            
+            public int CurrentValue => _currentValue;
+            public int MaxValue => _maxValue;
+            public float ValueRatio => _valueRatio;
+            
+        }
+
+        private ExperienceGroup _lastExperienceGroup;
+        private Queue<ExperienceGroup> _addedExperienceQueue;
+        private bool _processingAddedExperience;
+
+            
+
+        public void Init()
+        {
+            _experienceValueStat = new SimpleValueStat(1, 0);
+            _tankBar.Init(_experienceValueStat);
+
+            _addedExperienceQueue = new Queue<ExperienceGroup>(10);
+            _lastExperienceGroup = new ExperienceGroup(0, 1);
+            _processingAddedExperience = false;
+            
+            _activeCurrentLevelNumber = 0;
             HideText();
         }
 
-        public void OnLevelAdded(int nextLevelNumber)
+        public void OnExperienceAdded(int currentExperience, int maxExperience)
         {
-            UpdateText(nextLevelNumber);
+            QueueAddedExperience(currentExperience, maxExperience);
         }
 
-        public void OnLevelLost(int nextLevelNumber)
+        public void OnExperienceLost(int currentExperience, int maxExperience)
         {
-            UpdateText(nextLevelNumber);
+            _addedExperienceQueue.Clear();
+            QueueAddedExperience(currentExperience, maxExperience);
+        }
+
+
+        public void OnLevelAdded(int currentLevelNumber)
+        {
+            if (_activeCurrentLevelNumber < LEVEL_NUMBER_START_SHOWING &&
+                currentLevelNumber >= LEVEL_NUMBER_START_SHOWING)
+            {
+                ShowText();
+            }
+            UpdateText(currentLevelNumber);
+        }
+
+        public void OnLevelLost(int currentLevelNumber)
+        {
+            if (_activeCurrentLevelNumber >= LEVEL_NUMBER_START_SHOWING &&
+                currentLevelNumber < LEVEL_NUMBER_START_SHOWING)
+            {
+                HideText();
+            }            
+            UpdateText(currentLevelNumber);
         }
 
 
         private void UpdateText(int nextLevelNumber)
         {
-            if (_currentNextLevelNumber < 2)
-            {                
-                _nextLevelNumberText.text = nextLevelNumber.ToString();
-                ShowText();
-            }
-            else 
-            {
-                if (nextLevelNumber < 2)
-                {
-                    HideText();
-                }
-                else
-                {
-                    _nextLevelNumberText.text = nextLevelNumber.ToString();
-                }
-            }
-            
-            _currentNextLevelNumber = nextLevelNumber;
+            _nextLevelNumberText.text = nextLevelNumber.ToString();
+            _activeCurrentLevelNumber = nextLevelNumber;
         }
         private void ShowText()
         {
@@ -61,7 +105,42 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         {
             _nextLevelNumberHolder.gameObject.SetActive(false);
         }
-        
+
+
+        private void QueueAddedExperience(int currentExperience, int maxExperience)
+        {
+            _addedExperienceQueue.Enqueue( new ExperienceGroup(currentExperience, maxExperience));
+            
+            if (_processingAddedExperience) return;
+            
+            ProcessQueuedExperience().Forget();
+        }
+
+
+        private async UniTaskVoid ProcessQueuedExperience()
+        {
+            _processingAddedExperience = true;
+            
+            while (_addedExperienceQueue.Count > 0)
+            {
+                ExperienceGroup experienceGroup = _addedExperienceQueue.Dequeue(); 
+                UpdateExperienceTank(experienceGroup);
+
+                float addedRatio = Mathf.Abs(experienceGroup.ValueRatio - _lastExperienceGroup.ValueRatio);
+                await UniTask.Delay(TimeSpan.FromSeconds(FULL_FILL_DURATION * addedRatio));
+            }
+
+            _processingAddedExperience = false;
+        }
+
+
+        private void UpdateExperienceTank(ExperienceGroup experienceGroup)
+        {
+            _experienceValueStat.ResetMaxValue(experienceGroup.MaxValue, false);
+            _experienceValueStat.SetCurrentValue(experienceGroup.CurrentValue);
+
+            _lastExperienceGroup = experienceGroup;
+        }
         
     }
 }
