@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         [SerializeField] private SpecificCaseEnemyHinterFactoryConfig _enemyHinterFactoryConfig;
         
 
-        public void Install(ServiceLocator serviceLocator)
+        public void Install(ServiceLocator serviceLocator, IFMODAudioManager audioManager)
         {
             var hazardsFactory = serviceLocator.GetService<IHazardFactory>();
             Dictionary<EnemyID, EnemyFactoryInstallerConfiguration.EnemyMindPrefabSpawnData> enemyIdToPrefab 
@@ -31,7 +32,8 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             
             // Setup Slime
             SlimeFactoryConfiguration slimeFactoryConfiguration = _installerConfiguration.SlimeFactoryConfiguration;
-            SlimeMindFactoryCreator slimeMindFactoryCreator = new SlimeMindFactoryCreator(slimeFactoryConfiguration, transform,hazardsFactory);
+            SlimeMindFactoryCreator slimeMindFactoryCreator = 
+                new SlimeMindFactoryCreator(slimeFactoryConfiguration, transform, hazardsFactory, audioManager);
             EnemyID[] slimeEnemyIDs = slimeFactoryConfiguration.GetSlimeEnemyIDs();
             foreach (var slimeEnemyID in slimeEnemyIDs)
             {

@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerController
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IPlayerMovementStateReader
     {
  
       
@@ -23,6 +23,8 @@ namespace Popeye.Modules.PlayerController
         private Vector3 _movementInput;
         private Vector3 _lookInput;
         private Vector3 _movementDirection;
+        public Vector3 MovementDirection => _movementDirection;
+        public Vector3 MovementDirectionNormalized => _movementDirection.normalized;
 
         [Header("COMPONENTS")]
         [SerializeField] private Rigidbody _rigidbody;
@@ -70,6 +72,8 @@ namespace Popeye.Modules.PlayerController
             }
         }
 
+        public float CurrentSpeedXZRatio01 => CurrentSpeedXZ / MaxSpeed;
+
         public float CurrentSpeedY => Mathf.Abs(_rigidbody.velocity.y);
 
         [Header("ACCELERATION")] 
@@ -97,7 +101,6 @@ namespace Popeye.Modules.PlayerController
 
         [Header("LEDGE")] 
         [SerializeField] private bool _checkLedges = false;
-        [SerializeField] private CollisionProbingConfig _ledgeGroundCollisionProbingConfig;
         [SerializeField] private LedgeDetectionConfig _ledgeDetectionConfig;
         private LedgeDetectionController _ledgeDetectionController;
 
@@ -106,6 +109,7 @@ namespace Popeye.Modules.PlayerController
         private Vector3 _contactNormal;
         public Vector3 ContactNormal => _contactNormal;
         public Vector3 GroundNormal { get; private set; }
+        public Vector3 GroundPoint { get; private set; }
         private int _groundContactCount;
 
         private bool OnGround => _groundContactCount > 0;
@@ -143,8 +147,7 @@ namespace Popeye.Modules.PlayerController
                 InputCorrector = new DefaultInputCorrector();
             }
 
-            _ledgeDetectionController =
-                new LedgeDetectionController(_ledgeDetectionConfig, _ledgeGroundCollisionProbingConfig);
+            _ledgeDetectionController = new LedgeDetectionController(_ledgeDetectionConfig);
 
             CanRotate = true;
 
@@ -168,7 +171,7 @@ namespace Popeye.Modules.PlayerController
             if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
             {
                 _movementDirection = _ledgeDetectionController.
-                    UpdateMovementDirectionFromMovementInput(Position, _movementInput);
+                    UpdateMovementDirectionFromMovementInput(GroundPoint, _movementInput);
                 
                 _desiredVelocity = _movementDirection * _maxSpeed;
             }
@@ -275,13 +278,14 @@ namespace Popeye.Modules.PlayerController
                 return false;
             }
 
-            if (!Physics.Raycast(_rigidbody.position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
+            if (!Physics.Raycast(Position, Vector3.down, out RaycastHit hit, _groundProbeDistance,
                     _groundProbeMask))
             {
                 GroundNormal = Vector3.up;
                 return false;
             }
             GroundNormal = hit.normal;
+            GroundPoint = hit.point;
 
 
             float speed = _velocity.magnitude;

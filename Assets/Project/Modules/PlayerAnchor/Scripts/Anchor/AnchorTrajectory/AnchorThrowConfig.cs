@@ -9,6 +9,31 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorThrowConfig")]
     public class AnchorThrowConfig : ScriptableObject
     {
+        [System.Serializable]
+        public class ExtraDistanceData
+        {
+            [SerializeField, Range(0.0f, 20.0f)] private float _distance = 4.0f;
+            [SerializeField, Range(0.01f, 10.0f)] private float _adaptInDuration = 0.5f;
+            [SerializeField] private AnimationCurve _adaptEaseInCurve = AnimationCurve.Linear(0,0,1,1);
+            [SerializeField, Range(0.01f, 10.0f)] private float _adaptOutDuration = 0.5f;
+            [SerializeField] private AnimationCurve _adaptEaseOutCurve = AnimationCurve.Linear(0,0,1,1);
+            [SerializeField, Range(0.0f, 360.0f)] private float _angleToConsider = 180.0f;
+
+            public float Distance => _distance;
+            public float AdaptInDuration => _adaptInDuration;
+            public AnimationCurve AdaptEaseInCurve => _adaptEaseInCurve;
+            public float AdaptOutDuration => _adaptOutDuration;
+            public AnimationCurve AdaptEaseOutCurve => _adaptEaseOutCurve;
+
+            public float DotToConsider { get; private set; }
+
+            public void OnValidate()
+            {
+                DotToConsider = Mathf.Cos((_angleToConsider / 2) * Mathf.Deg2Rad);
+            }
+        }
+        
+        
         [Header("FORCE")]
         [SerializeField] private AnimationCurve _throwForceCurve;
         
@@ -31,6 +56,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public float MinThrowDistance => _minThrowDistance;
         public float MaxThrowDistance => _maxThrowDistance;
+
+        
+        [Header("EXTRA DISTANCE")] 
+        [SerializeField] private ExtraDistanceData _movingForwardExtraDistanceData;
+        public ExtraDistanceData MovingForwardExtraDistanceData => _movingForwardExtraDistanceData;
 
 
         [Header("MOVEMENT")] 
@@ -61,6 +91,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _maxThrowDistance = Mathf.Max(_maxThrowDistance, _minThrowDistance);
             _maxThrowMoveDuration = Mathf.Max(_maxThrowMoveDuration, _minThrowMoveDuration);
+            
+            _movingForwardExtraDistanceData.OnValidate();
         }
 
         private void Awake()

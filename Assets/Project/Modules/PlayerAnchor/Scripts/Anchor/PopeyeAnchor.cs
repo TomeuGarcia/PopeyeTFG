@@ -129,7 +129,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
             _anchorViewExtras.OnThrown();
             
-            _anchorAudio.PlayThrowSound();
+            _anchorAudio.PlayThrowSound();            
         }
         
         public async UniTaskVoid SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
@@ -173,6 +173,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
             
+            _anchorAudio.PlayPullSound();
         }
 
         public void OnDashedAt(float duration, Ease dashEase)
