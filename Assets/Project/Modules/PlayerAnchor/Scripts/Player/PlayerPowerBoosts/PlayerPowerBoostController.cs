@@ -10,7 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
     public class PlayerPowerBoostController : ScriptableObject, IPlayerPowerBoostController
     {
         [Header("LEVELS")]
-        [SerializeField] private PlayerPowerBoostLevel[] _powerBoostLevels;
+        [Expandable] [SerializeField] private PlayerPowerBoostLevel[] _powerBoostLevels;
         [SerializeField, Range(1, 10)] private int _levelLoseAmount = 3;
         
         [Space(30)]
