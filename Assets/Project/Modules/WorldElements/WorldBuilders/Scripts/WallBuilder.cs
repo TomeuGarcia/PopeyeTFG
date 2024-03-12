@@ -179,7 +179,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         private void CreateColliderPreviousToCurrent(int index, Vector3 previousToCurrentDirection, float previousToCurrentDistance,  
             Quaternion rotation, float fillLength)
         {
-            Vector3 colliderPosition = _points[index - 1] + (previousToCurrentDirection * (fillLength / 2));
+            Vector3 colliderPosition =  _points[index - 1] + (previousToCurrentDirection * (fillLength / 2));
             Vector3 colliderSize = rotation * 
                                    (new Vector3(_config.ColliderWidth, _config.ColliderHeight, previousToCurrentDistance)); 
                 
@@ -199,7 +199,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             colliderSize.x = Mathf.Abs(colliderSize.x);
             colliderSize.y = Mathf.Abs(colliderSize.y);
             colliderSize.z = Mathf.Abs(colliderSize.z);
-            
+
             BoxCollider boxCollider = _collidersParent.AddComponent<BoxCollider>();
             boxCollider.center = colliderPosition + (Vector3.up * _config.HalfColliderHeight);
             boxCollider.size = colliderSize;
@@ -244,6 +244,26 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
         }
 
+
+        public void ResetAndFixRotation()
+        {
+            Quaternion inverseRotation = Quaternion.Inverse(transform.rotation);
+
+            Vector3[] pointsCopy = new Vector3[_points.Length];
+            for (int i = 0; i < _points.Length; ++i)
+            {
+                pointsCopy[i] = transform.TransformPoint(_points[i]);
+            }
+            
+            transform.rotation = Quaternion.identity;
+            /*
+            for (int i = 0; i < _points.Length; ++i)
+            {
+                _points[i] = transform.TransformPoint(pointsCopy[i]);
+            }
+            */
+        } 
+        
 
 
         private Vector3[] GetCornersOfPointIndices(int previousIndex, int currentIndex)

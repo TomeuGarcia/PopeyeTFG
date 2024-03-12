@@ -47,6 +47,14 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
             
             GUILayout.Space(15);
+            if (GUILayout.Button("Reset & Fix Rotation"))
+            {
+                Undo.RecordObject(_wallBuilder, "Reset & Fix Rotation");
+                _wallBuilder.ResetAndFixRotation();
+                EditorUtility.SetDirty(_wallBuilder);
+            }
+            
+            GUILayout.Space(15);
             _wallBuilder.moveBy = EditorGUILayout.Vector2Field("Move By Amount", _wallBuilder.moveBy);
             Vector2Int pointsRange = EditorGUILayout.Vector2IntField("Selected Points Range", _wallBuilder.selectedPointsRange);
             pointsRange.x = Mathf.Max(pointsRange.x, 0);
