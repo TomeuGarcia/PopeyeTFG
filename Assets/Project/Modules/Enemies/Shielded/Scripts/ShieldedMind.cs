@@ -29,6 +29,7 @@ namespace Popeye.Modules.Enemies
             }
             
             _shieldedMediator.Init();
+            _shieldedMediator.StartChasing();
         }
 
         internal override void Release()
@@ -40,7 +41,7 @@ namespace Popeye.Modules.Enemies
         {
  
         }
-
+        
         public override void DieFromOrder()
         {
             _shieldedMediator.DieFromOrder();

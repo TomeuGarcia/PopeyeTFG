@@ -76,5 +76,6 @@ namespace Popeye.Modules.Enemies
             _turretMind.Die();
             _enemyVisuals.PlayDeathEffects(damageHit);
         }
+        
     }
 }
