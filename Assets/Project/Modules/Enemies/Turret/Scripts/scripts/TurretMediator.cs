@@ -20,6 +20,7 @@ namespace Popeye.Modules.Enemies
         private TurretMindEnemy _turretMind;
         [SerializeField] private ParabolicProjectile _parabolicProjectile;
         [SerializeField] private AreaDamageOverTime _damageableArea;
+        [SerializeField] private TurretAnimatorController _turretAnimatorController;
         
         
         internal override void Init()
@@ -27,12 +28,12 @@ namespace Popeye.Modules.Enemies
             _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _turretAnimatorController.Configure(this);
         }
 
 
         internal override void Release()
         {
-            _enemyHealth.HealToMax();
         }
 
         public void SetTurretMind(TurretMindEnemy turretMind)
@@ -59,12 +60,22 @@ namespace Popeye.Modules.Enemies
             //  
         }
 
+        public void StartShootingAnimation()
+        {
+            _turretAnimatorController.PlayShootingAnimation();
+        }
+        
+        public void StopShootingAnimation()
+        {
+            _turretAnimatorController.StopShootingAnimation();
+        }
         public override Vector3 Position { get; }
-
+        
         public override void OnDeath(DamageHit damageHit)
         {
             _turretMind.Die();
             _enemyVisuals.PlayDeathEffects(damageHit);
         }
+        
     }
 }

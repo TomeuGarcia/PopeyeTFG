@@ -12,7 +12,7 @@ namespace Popeye.Modules.Enemies.Components
 {
     public class TurretShooting : MonoBehaviour
     {
-        private AEnemyMediator _mediator;
+        private TurretMediator _mediator;
         private Transform _playerTransform;
         private IHazardFactory _hazardsFactory;
         [SerializeField] private float timeBetweenShots;
@@ -31,7 +31,7 @@ namespace Popeye.Modules.Enemies.Components
        [SerializeField] private float _playerDistanceThreshold;
        private float _squaredPlayerDistanceThreshold;
 
-       public void Configure(AEnemyMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
+       public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
             _mediator = turetMediator;
             _playerTransform = playerTransform;
@@ -51,6 +51,7 @@ namespace Popeye.Modules.Enemies.Components
 
                     if (!_animationOn)
                     {
+                        _mediator.StartShootingAnimation();
                         SquashAndStretch().Forget();
                     }
 
@@ -96,6 +97,7 @@ namespace Popeye.Modules.Enemies.Components
             await transform.DOScale(new Vector3(_stretchAmountXZ, _stretchAmountY, _stretchAmountXZ), 0.1f)
                 .AsyncWaitForCompletion();
             
+            _mediator.StopShootingAnimation();
             _animationOn = false;
 
         }

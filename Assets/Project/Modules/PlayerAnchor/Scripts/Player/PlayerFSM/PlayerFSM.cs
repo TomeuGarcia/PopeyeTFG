@@ -8,7 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class PlayerFSM
     {
         private APlayerState _currentState;
-        private PlayerStates _currentStateType;
+        public PlayerStates CurrentStateType { get; private set; }
         private Dictionary<PlayerStates, APlayerState> _states;
 
         public PlayerStatesBlackboard Blackboard { get; private set; }
@@ -18,9 +18,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             Blackboard = blackboard;
             
             _states = playerStatesCreator.CreateStatesDictionary(blackboard);
-            _currentStateType = playerStatesCreator.StartState;
+            CurrentStateType = playerStatesCreator.StartState;
             
-            _currentState = _states[_currentStateType];
+            _currentState = _states[CurrentStateType];
             _currentState.Enter();
         }
 
@@ -34,13 +34,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private void TransitionToNextState(PlayerStates nextState)
         {
-            Blackboard.cameFromState = _currentStateType;
+            Blackboard.cameFromState = CurrentStateType;
+            CurrentStateType = nextState;
             
             _currentState.Exit();
             _currentState = _states[nextState];
             _currentState.Enter();
-
-            _currentStateType = nextState;
         }
 
         public void OverwriteState(PlayerStates newState)
