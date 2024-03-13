@@ -1,11 +1,10 @@
+using System;
 using Popeye.Scripts.ObjectTypes;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.WorldElements.Tutorial
 {
-    [RequireComponent(typeof (Rigidbody))]
+    [RequireComponent(typeof(Rigidbody))]
     public class TriggerOnceGroup : MonoBehaviour
     {
 
@@ -16,6 +15,23 @@ namespace Popeye.Modules.WorldElements.Tutorial
 
         private bool _hasActivated = false;
         private IWorldTriggerable _worldTriggerable;
+
+
+        private void Awake()
+        {
+            foreach (Collider trigger in _activationTriggers)
+            {
+                trigger.isTrigger = true;
+            }
+            foreach (Collider trigger in _deactivationTriggers)
+            {
+                trigger.isTrigger = true;
+            }
+
+            Rigidbody rigidbody = GetComponent<Rigidbody>();
+            rigidbody.useGravity = false;
+            rigidbody.isKinematic = true;
+        }
 
 
         private void OnTriggerEnter(Collider other)
@@ -39,28 +55,19 @@ namespace Popeye.Modules.WorldElements.Tutorial
             {
                 if(OtherIsTouchingTriggers(other, _deactivationTriggers))
                 {
-                    Debug.Log("DeactivateTrigger");
                     DisableTriggers(_deactivationTriggers);
                     _worldTriggerable.Deactivate();
-                }
-                else
-                {
-                    Debug.Log("NotDeactivateTrigger");
                 }
             }
             else
             {
                 if(OtherIsTouchingTriggers(other, _activationTriggers))
                 {
-                    Debug.Log("ActivateTrigger");
                     DisableTriggers(_activationTriggers);
                     _hasActivated = true;
                     _worldTriggerable.Activate();
                 }
-                else
-                {
-                    Debug.Log("NotActivateTrigger");
-                }
+
             }
         }
 
