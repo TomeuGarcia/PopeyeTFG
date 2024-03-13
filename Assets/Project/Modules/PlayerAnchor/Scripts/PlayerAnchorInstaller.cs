@@ -1,4 +1,5 @@
 using AYellowpaper;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
@@ -17,6 +18,10 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
@@ -52,6 +57,12 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
         [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
+
+        [Header("Player - Powers")] 
+        [SerializeField] private PlayerPowerBoostController _playerPowerBoostController;
+        [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
+        [SerializeField] private PlayerPowerBoostController _powerBoostController;
+
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -127,10 +138,12 @@ namespace Popeye.Modules.PlayerAnchor
                 _player.AnchorGrabToThrowHolder);
 
             IAnchorAudio anchorAudio = new AnchorAudioFMOD(_anchor.PositionTransform.gameObject, fmodAudioManager, _anchorAudioConfig);
+            IThrowDistanceComputer throwDistanceComputer =
+                new MovingForwardRangeThrowDistanceComputer(_anchorGeneralConfig.ThrowConfig, _playerController);
             
             
             anchorMotion.Configure(_anchor.PositionTransform);
-            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, throwDistanceComputer,
                 _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
                 anchorTrajectorySnapController, anchorTrajectoryView);
             anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
@@ -166,7 +179,7 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
-            TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerGeneralConfig.StaminaConfig);
+            PlayerStaminaSystem playerStamina = new PlayerStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
             PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
@@ -177,14 +190,22 @@ namespace Popeye.Modules.PlayerAnchor
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
             IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
-            
+
+            IPlayerHealing playerHealing = 
+                new PotionsPlayerHealing(playerHealth, _playerGeneralConfig.PotionsHealingConfig, _playerHUD.PlayerHealingUI);
+
+            IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
+            PlayerGlobalEventsListener playerGlobalEventsListener = 
+                new PlayerGlobalEventsListener(eventSystemService, _player, _anchor);
+            PlayerEventsDispatcher playerEventsDispatcher =
+                new PlayerEventsDispatcher(eventSystemService);
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
-                _playerGeneralConfig.PlayerHealthConfig.PotionHealAmount, _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
+                _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
                 _obstacleProbingConfig, _dashFloorProbingConfig);
             playerMovementChecker.Configure(_player, _playerController);
@@ -195,9 +216,10 @@ namespace Popeye.Modules.PlayerAnchor
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                playerView, playerAudio, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
+                playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker);
+                playerSafeGroundChecker, playerOnVoidChecker, _powerBoostController,
+                playerGlobalEventsListener, playerEventsDispatcher);
 
 
             IPlayerStatesCreator playerStatesCreator = _generalGameStateData.IsTutorial
@@ -206,13 +228,21 @@ namespace Popeye.Modules.PlayerAnchor
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
-            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);
+            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerStamina.ExtraStamina);
             
+            _playerPowerBoostController.Init(_player, _generalGameStateData.StartingPowerBoostExperience, _playerHUD.PlayerPowerBoosterUI);
+
+            
+            PowerBoostDropFactory powerBoostDropFactory =
+                new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);
+            
+            ServiceLocator.Instance.RegisterService<IPowerBoostDropFactory>(powerBoostDropFactory);
         }
 
 
         public void Uninstall()
         {
+            ServiceLocator.Instance.RemoveService<IPowerBoostDropFactory>();
             ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
         }
 
