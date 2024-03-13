@@ -3,11 +3,9 @@ using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
-using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
-using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
-using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
+using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -71,14 +69,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private bool _pullingAnchorFromTheVoid;
 
-        private PlayerDeathNotifier _playerDeathNotifier;
-
         private IPlayerPowerBoostController _powerBoostController;
+        
+        private IPlayerGlobalEventsListener _globalEventsListener;
+        private IPlayerEventsDispatcher _eventsDispatcher;
         
         public Vector3 Position => _playerController.Position;
         public Transform PositionTransform => _playerController.Transform;
         public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
-        private IPlayerEnemySpawnersInteractions _playerEnemySpawnersInteractions;
+        
 
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
@@ -89,7 +88,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
             ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
-            IPlayerPowerBoostController powerBoostController)
+            IPlayerPowerBoostController powerBoostController,
+            IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
@@ -113,8 +113,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _safeGroundChecker = safeGroundChecker;
             _onVoidChecker = onVoidChecker;
 
-            _playerDeathNotifier = new PlayerDeathNotifier();
-            _playerEnemySpawnersInteractions = new PlayerEnemySpawnerInteractions(this, _anchor);
+            _globalEventsListener = globalEventsListener;
+            _globalEventsListener.StartListening();
+            _eventsDispatcher = eventsDispatcher;
 
             _powerBoostController = powerBoostController;
             _powerBoostDropCollector.Init(_powerBoostController);
@@ -124,7 +125,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetInstantRotation(false);
             OnStopMoving();
         }
-
+        
+        private void OnDestroy()
+        {
+            _globalEventsListener.StopListening();
+        }
 
         private void Update()
         {
@@ -489,7 +494,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             PlayerView.PlayRespawnAnimation();
             
-            _playerDeathNotifier.NotifyOnPlayerRespawnedFromDeath();
+            _eventsDispatcher.DispatchOnRespawnFromDeathEvent();
         }
 
         public void OnStartMoving()
@@ -567,7 +572,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _playerAudio.PlayTakeDamageSound();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
-            _playerDeathNotifier.NotifyOnPlayerDied();
+            _eventsDispatcher.DispatchOnDiedEvent();
         }
 
         public void OnHealed()
@@ -596,15 +601,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Tired);
         }
-        
-        public IPlayerDeathNotifier GetDeathNotifier()
-        {
-            return _playerDeathNotifier;
-        }
 
-        public IPlayerEnemySpawnersInteractions GetPlayerEnemySpawnersInteractions()
-        {
-            return _playerEnemySpawnersInteractions;
-        }
     }
 }

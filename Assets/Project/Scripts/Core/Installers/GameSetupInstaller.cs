@@ -13,7 +13,7 @@ namespace Popeye.Core.Installers
 		protected override void DoInstallDependencies()
 		{			
 			ServiceLocator.Instance.RegisterService<ICommandQueueService>(new CommandQueueServiceImpl());
-			ServiceLocator.Instance.RegisterService<IEventSystemService>(new EventSystemServiceImpl());
+			ServiceLocator.Instance.RegisterService<IEventSystemService>(new EventSystemService());
 	
 			var serializer = new UnityJsonSerializerService();
 			var dataStore = new PlayerPrefsDataStorageService(serializer);
