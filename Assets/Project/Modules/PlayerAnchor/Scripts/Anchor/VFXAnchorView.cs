@@ -71,7 +71,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             Physics.Raycast(_vfxParent.position, Vector3.down, out raycastHit, 1.0f);
             groundHit.up = raycastHit.normal;
             groundDecal.up = raycastHit.normal;
-            groundDecal.RotateAround(groundDecal.up, UnityEngine.Random.Range(0.0f, 360.0f));
+            float randomRotation = UnityEngine.Random.Range(0.0f, 360.0f);
+            groundHit.RotateAround(groundHit.up, randomRotation);
+            groundDecal.RotateAround(groundDecal.up, randomRotation);
             
             _cameraShaker.PlayShake(_vfxAnchorViewConfig.ShakeConfigDamageDealt);
         }
