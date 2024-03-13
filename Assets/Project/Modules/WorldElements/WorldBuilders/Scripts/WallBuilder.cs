@@ -2,6 +2,7 @@ using System;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -39,6 +40,35 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
         }
 
+        [System.Serializable]
+        public class SubPoints
+        {
+            [SerializeField] private int _stemmingFromIndex = 0;
+            
+            public Vector3[] points = { 
+                Vector3.left * 2, 
+                Vector3.right * 2, 
+                Vector3.right * 2 + Vector3.forward * 3 
+            };
+
+            public int StemmingFromIndex => _stemmingFromIndex;
+
+            public void ApplyCorrection(int maxIndex)
+            {
+                _stemmingFromIndex = Mathf.Clamp(_stemmingFromIndex, 0, maxIndex);
+
+                for (int i = 1; i < points.Length; ++i)
+                {
+                    if (points[i - 1] == points[i])
+                    {
+                        points[i] += Vector3.right;
+                    }
+                }
+            }
+
+        }
+        
+
         [Header("PARENTS")] 
         [SerializeField] private Transform _cornerWallsParent;
         [SerializeField] private Transform _fillWallsParent;
@@ -54,9 +84,14 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Vector3.right * 2 + Vector3.forward * 3 
         };
 
+        [Header("SUB-POINTS")]
+        [SerializeField] private SubPoints[] _subPointsList;
+        public SubPoints[] SubPointsList => _subPointsList;
+        
+        
         public Vector3[] Points => _points;
-        public Block CornerBlock => _config.CornerBlock;
-        public Block FillBlock => _config.FillBlock;
+        private Block CornerBlock => _config.CornerBlock;
+        private Block FillBlock => _config.FillBlock;
         public WallBuilderConfig.EditorViewConfig EditorView => _config.EditorView;
 
         [HideInInspector] public Vector2 moveBy = Vector2.zero;
@@ -71,6 +106,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             {
                 CornerBlock.UpdateHalfSize();
                 FillBlock.UpdateHalfSize();
+            }
+
+            foreach (SubPoints subPoints in _subPointsList)
+            {
+                subPoints.ApplyCorrection(_points.Length - 1);
             }
         }
 
@@ -89,6 +129,15 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             {
                 FillWalls();
                 CreateFakeMesh();
+            }
+
+            if (_subPointsList.Length > 0)
+            {
+                foreach (SubPoints subPoints in _subPointsList)
+                {
+                    if (subPoints.points.Length == 0) continue;
+                    FillSubPointsWall(subPoints);
+                }
             }
         }
         
@@ -116,7 +165,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         {
             for (int i = 0; i < _points.Length; ++i)
             {
-                Vector3 point = transform.TransformPoint(_points[i]);
+                Vector3 point = PointToWorldSpace(_points[i]);
                 CreateCornerWall(point);
             }
             
@@ -125,31 +174,69 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 return;
             }
             
+            CreateColliderForFirst();
             for (int i = 1; i < _points.Length; ++i)
             {
-                Vector3 previousPoint = transform.TransformPoint(_points[i - 1]);
-                Vector3 currentPoint = transform.TransformPoint(_points[i]);
+                Vector3 previousPointLocal = _points[i - 1];
+                Vector3 previousPoint = PointToWorldSpace(previousPointLocal);
+                Vector3 currentPoint = PointToWorldSpace(_points[i]);
                 
-
-                Vector3 previousToCurrent = currentPoint - previousPoint;
-                float previousToCurrentDistance = previousToCurrent.magnitude;
-                Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
-                
-                Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
-                
-                float fillLength = previousToCurrentDistance - CornerBlock.Length;
-
-                
-                CreateFillWalls(previousPoint, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
-                    fillLength);
-                
-                CreateColliderPreviousToCurrent(i, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
-                    fillLength);
-                    
+                CreatFillWallsBetweenPoints(previousPointLocal, previousPoint, currentPoint);
             }
 
-            CreateColliderForLast();
         }
+
+        private void FillSubPointsWall(SubPoints subPoints)
+        {
+            Vector3[] points = subPoints.points;
+            
+            for (int i = 0; i < points.Length; ++i)
+            {
+                Vector3 point = PointToWorldSpace(points[i]);
+                CreateCornerWall(point);
+            }
+            
+            if (FillBlock.Length < 0.01f)
+            {
+                return;
+            }
+            
+            
+            Vector3 previousPointLocal = _points[subPoints.StemmingFromIndex];
+            Vector3 previousPoint = PointToWorldSpace(previousPointLocal);
+            Vector3 currentPoint = PointToWorldSpace(points[0]);
+                
+            CreatFillWallsBetweenPoints(previousPointLocal, previousPoint, currentPoint);
+            
+            for (int i = 1; i < points.Length; ++i)
+            {
+                previousPointLocal = points[i - 1];
+                previousPoint = PointToWorldSpace(previousPointLocal);
+                currentPoint = PointToWorldSpace(points[i]);
+                
+                CreatFillWallsBetweenPoints(previousPointLocal, previousPoint, currentPoint);
+            }
+        }
+
+
+        private void CreatFillWallsBetweenPoints(Vector3 previousPointLocal, Vector3 previousPoint, Vector3 currentPoint)
+        {
+            Vector3 previousToCurrent = currentPoint - previousPoint;
+            float previousToCurrentDistance = previousToCurrent.magnitude;
+            Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
+                
+            Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
+                
+            float fillLength = previousToCurrentDistance - CornerBlock.Length;
+
+                
+            CreateFillWalls(previousPoint, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
+                fillLength);
+                
+            CreateColliderPreviousToCurrent(previousPointLocal, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
+                fillLength);
+        }
+
 
 
         private void CreateCornerWall(Vector3 position)
@@ -176,19 +263,27 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
         
 
-        private void CreateColliderPreviousToCurrent(int index, Vector3 previousToCurrentDirection, float previousToCurrentDistance,  
+        private void CreateColliderPreviousToCurrent(Vector3 previousPointLocal, Vector3 previousToCurrentDirection, float previousToCurrentDistance,  
             Quaternion rotation, float fillLength)
         {
-            Vector3 colliderPosition = _points[index - 1] + (previousToCurrentDirection * (fillLength / 2));
+            Quaternion offsetRotation = transform.rotation;
+            Quaternion revertRotation =  Quaternion.Inverse(offsetRotation);
+            
+            Vector3 startPoint = offsetRotation * previousPointLocal;
+            
+            Vector3 colliderPosition =  startPoint + (previousToCurrentDirection * ((fillLength / 2) + CornerBlock.Length));
             Vector3 colliderSize = rotation * 
-                                   (new Vector3(_config.ColliderWidth, _config.ColliderHeight, previousToCurrentDistance)); 
-                
+                                   (new Vector3(_config.ColliderWidth, _config.ColliderHeight, previousToCurrentDistance));
+
+            colliderPosition = revertRotation * colliderPosition;
+            colliderSize = revertRotation * colliderSize;
+            
             DoCreateCollider(colliderPosition, colliderSize);
         }
         
-        private void CreateColliderForLast()
+        private void CreateColliderForFirst()
         {
-            Vector3 colliderPosition = _points[^1];
+            Vector3 colliderPosition = _points[0];
             Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length);
 
             DoCreateCollider(colliderPosition, colliderSize);
@@ -199,7 +294,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             colliderSize.x = Mathf.Abs(colliderSize.x);
             colliderSize.y = Mathf.Abs(colliderSize.y);
             colliderSize.z = Mathf.Abs(colliderSize.z);
-            
+
             BoxCollider boxCollider = _collidersParent.AddComponent<BoxCollider>();
             boxCollider.center = colliderPosition + (Vector3.up * _config.HalfColliderHeight);
             boxCollider.size = colliderSize;
@@ -233,14 +328,24 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             
             Vector2 offset = (minimums + maximums) / 2;
 
-            MovePointsRangeByAmount(offset, 0, _points.Length);
+            MovePointsRangeByAmount(_points, offset, 0, _points.Length);
+
+            foreach (SubPoints subPoints in _subPointsList)
+            {
+                MovePointsRangeByAmount(subPoints.points, offset, 0, subPoints.points.Length);
+            }
         }
 
-        public void MovePointsRangeByAmount(Vector2 moveAmount, int startInclusive, int endExclusive)
+        public void MoveBasePointsRangeByAmount(Vector2 moveAmount, int startInclusive, int endExclusive)
+        {
+            MovePointsRangeByAmount(_points, moveAmount, startInclusive, endExclusive);
+        }
+        
+        public void MovePointsRangeByAmount(Vector3[] points, Vector2 moveAmount, int startInclusive, int endExclusive)
         {
             for (int i = startInclusive; i < endExclusive; ++i)
             {
-                _points[i] -= new Vector3(moveAmount.x, 0, moveAmount.y);
+                points[i] -= new Vector3(moveAmount.x, 0, moveAmount.y);
             }
         }
 
@@ -248,8 +353,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private Vector3[] GetCornersOfPointIndices(int previousIndex, int currentIndex)
         {
-            Vector3 previousPoint = transform.TransformPoint(_points[previousIndex]);
-            Vector3 currentPoint = transform.TransformPoint(_points[currentIndex]);
+            Vector3 previousPoint = PointToWorldSpace(_points[previousIndex]);
+            Vector3 currentPoint = PointToWorldSpace(_points[currentIndex]);
 
             Vector3 previousToCurrentDirection = (currentPoint - previousPoint).normalized;
             Vector3 sideDirection = Vector3.Cross(previousToCurrentDirection, Vector3.up).normalized;
@@ -271,56 +376,87 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
             return corners;
         }
+        
+        private Vector3 PointToWorldSpace(Vector3 point)
+        {
+            return transform.TransformPoint(point);
+        }
 
 
 #if UNITY_EDITOR
+        private float _colorMultiplier;
+        
         private void OnDrawGizmos()
         {
-            Draw();
+            _colorMultiplier = 1.0f;
+            Draw(_points);
+
+            _colorMultiplier = EditorView.StemmingBlocksColorMultiplier;
+            foreach (SubPoints subPoints in _subPointsList)
+            {
+                if (subPoints.points.Length == 0) continue;
+                
+                DrawFillBlocks(
+                    PointToWorldSpace(_points[subPoints.StemmingFromIndex]), 
+                    PointToWorldSpace(subPoints.points[0])
+                    );
+
+                Draw(subPoints.points);
+            }
         }
         
-        private void Draw()
+        private void Draw(Vector3[] points)
         {
-            Vector3[] drawSpacePoints = new Vector3[_points.Length];
+            Vector3[] drawSpacePoints = new Vector3[points.Length];
             
             
-            for (int i = 0; i < _points.Length; ++i)
+            for (int i = 0; i < points.Length; ++i)
             {
-                drawSpacePoints[i] = transform.TransformPoint(_points[i]);
-                Handles.color = _config.TransparencyConfig.ApplyTransparencyToColor(_config.EditorView.CornerBlockColor, Position);
+                drawSpacePoints[i] = PointToWorldSpace(points[i]);
+                Handles.color = _config.TransparencyConfig
+                    .ApplyTransparencyToColor(_config.EditorView.CornerBlockColor * _colorMultiplier, Position);
+                
                 DrawBlock(CornerBlock, drawSpacePoints[i], Quaternion.identity);
             }
 
 
-            for (int i = 1; i < _points.Length; ++i)
+            if (FillBlock.Length < 0.01f)
+            {
+                return;
+            }
+            
+            for (int i = 1; i < points.Length; ++i)
             {
                 Vector3 previousPoint = drawSpacePoints[i - 1];
                 Vector3 currentPoint = drawSpacePoints[i];
 
-                Handles.color = _config.TransparencyConfig.ApplyTransparencyToColor(_config.EditorView.FillLineColor, Position);
-                Handles.DrawLine(previousPoint, currentPoint, _config.EditorView.LineThickness);
+                DrawFillBlocks(previousPoint, currentPoint);
+            }
+        }
 
-                if (FillBlock.Length < 0.01f)
-                {
-                    continue;
-                }
+        private void DrawFillBlocks(Vector3 previousPoint, Vector3 currentPoint)
+        {
+            Handles.color = _config.TransparencyConfig
+                .ApplyTransparencyToColor(_config.EditorView.FillLineColor * _colorMultiplier, Position);
+            Handles.DrawLine(previousPoint, currentPoint, _config.EditorView.LineThickness);
+            
 
-                Vector3 previousToCurrent = currentPoint - previousPoint;
-                float previousToCurrentDistance = previousToCurrent.magnitude;
-                Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
+            Vector3 previousToCurrent = currentPoint - previousPoint;
+            float previousToCurrentDistance = previousToCurrent.magnitude;
+            Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
                 
-                Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
+            Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
                 
-                Handles.color = _config.TransparencyConfig.ApplyTransparencyToColor(_config.EditorView.FillBlockColor, Position);
+            Handles.color = _config.TransparencyConfig
+                .ApplyTransparencyToColor(_config.EditorView.FillBlockColor * _colorMultiplier, Position);
 
-                float lineLength = previousToCurrentDistance - CornerBlock.Length;
-                float distanceCounter = CornerBlock.Length / 2 + FillBlock.Length / 2;
+            float lineLength = previousToCurrentDistance - CornerBlock.Length;
+            float distanceCounter = CornerBlock.Length / 2 + FillBlock.Length / 2;
 
-                for (; distanceCounter < lineLength; distanceCounter += FillBlock.Length)
-                {
-                    Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
-                    DrawBlock(FillBlock, fillPosition, offsetRotation);
-                }
+            for (; distanceCounter < lineLength; distanceCounter += FillBlock.Length)
+            {
+                Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
+                DrawBlock(FillBlock, fillPosition, offsetRotation);
             }
         }
         
@@ -339,6 +475,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Handles.DrawLine(lookA, lookCenter);
             Handles.DrawLine(lookB, lookCenter);
         }
+        
 #endif
         
     }
