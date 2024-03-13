@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Scripts.Collisions;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Components
