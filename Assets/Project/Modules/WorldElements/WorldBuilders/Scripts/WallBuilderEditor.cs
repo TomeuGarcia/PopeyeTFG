@@ -28,7 +28,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             _wallBuilder = target as WallBuilder;
             _points = _wallBuilder.Points;
 
-            GUILayout.Space(10);
+            GUILayout.Space(20);
+            GUILayout.Label("BUTTONS");
             if (GUILayout.Button("Add Point"))
             {
                 Undo.RecordObject(_wallBuilder, "Add Point");
@@ -54,7 +55,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             if (GUILayout.Button("Move Points By Amount"))
             {
                 Undo.RecordObject(_wallBuilder, "Move Selected Points Range By Amount");
-                _wallBuilder.MovePointsRangeByAmount(_wallBuilder.moveBy, pointsRange.x, pointsRange.y);
+                _wallBuilder.MoveBasePointsRangeByAmount(_wallBuilder.moveBy, pointsRange.x, pointsRange.y);
                 EditorUtility.SetDirty(_wallBuilder);
             }
         }
@@ -81,23 +82,35 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             for (int i = 0; i < _points.Length; ++i)
             {
                 Handles.color = _editorView.CornerButtonColor;
-                DrawPointButton(i);
+                DrawPointButton(i, _points, ref _selectedIndex);
             }
-            
+
+
+            WallBuilder.SubPoints[] subPointsList = _wallBuilder.SubPointsList;
+            foreach (WallBuilder.SubPoints subPoints in subPointsList)
+            {
+                for (int i = 0; i < subPoints.points.Length; ++i)
+                {
+                    Handles.color = _editorView.CornerButtonColor;
+                    DrawPointButton(i, subPoints.points, ref _selectedIndexSubPoints);
+                }
+            }
+
         }
-        
+
+        private int _selectedIndexSubPoints = -1;
 
 
-        private void DrawPointButton(int index)
+        private void DrawPointButton(int index, Vector3[] points, ref int selectedIndex)
         {
-            Vector3 point = _handleTransform.TransformPoint(_points[index]);
+            Vector3 point = _handleTransform.TransformPoint(points[index]);
             
             if (Handles.Button(point, _handleRotation, _editorView.ButtonSize, ButtonPickSize, Handles.DotHandleCap))
             {
-                _selectedIndex = index;
+                selectedIndex = index;
             }
 
-            if (_selectedIndex != index) return;
+            if (selectedIndex != index) return;
             
             
             EditorGUI.BeginChangeCheck();
@@ -106,7 +119,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             {
                 Undo.RecordObject(_wallBuilder, "Move point");
                 EditorUtility.SetDirty(_wallBuilder);
-                _points[index] = _handleTransform.InverseTransformPoint(point);
+                points[index] = _handleTransform.InverseTransformPoint(point);
             }
         }
 

@@ -29,6 +29,9 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             
             [SerializeField, Range(0.01f, 10.0f)] private float _buttonSize = 0.2f;
             public float ButtonSize => _buttonSize;
+            
+            [SerializeField, Range(0.0f, 2.0f)] private float _stemmingBlocksColorMultiplier = 0.6f;
+            public float StemmingBlocksColorMultiplier => _stemmingBlocksColorMultiplier;
         }
 
 
