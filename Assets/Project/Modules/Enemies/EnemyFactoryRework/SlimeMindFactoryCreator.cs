@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
@@ -15,7 +16,8 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         private readonly Dictionary<EnemyID, SlimeSizeID> _slimeTypeToSize;
         private readonly SlimeFactory _slimeFactory;
 
-        public SlimeMindFactoryCreator(SlimeFactoryConfiguration slimeFactoryConfiguration, Transform parent,IHazardFactory hazardFactory)
+        public SlimeMindFactoryCreator(SlimeFactoryConfiguration slimeFactoryConfiguration, Transform parent, 
+            IHazardFactory hazardFactory, IFMODAudioManager audioManager)
         {
             _hazardFactory = hazardFactory;
             Dictionary<SlimeSizeID, ObjectPool> slimeSizeToPool; 
@@ -25,7 +27,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
                 out slimeSizeToPool, out slimeSizeToNextSize, out _slimeTypeToSize);
             
             
-            _slimeFactory = new SlimeFactory(slimeSizeToPool, slimeSizeToNextSize);
+            _slimeFactory = new SlimeFactory(slimeSizeToPool, slimeSizeToNextSize, audioManager);
             
             _slimeMindPool = new ObjectPool(slimeFactoryConfiguration.SlimeMindPrefab, parent);
             _slimeMindPool.Init(slimeFactoryConfiguration.NumberOfInitialSlimes);

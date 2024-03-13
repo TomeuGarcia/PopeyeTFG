@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
-using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
@@ -11,6 +10,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         Vector3 Position { get; }
         Transform PositionTransform { get; }
         IPlayerView PlayerView { get; }
+        IPlayerHealing PlayerHealing { get; }
+        IPlayerStaminaPower PlayerStaminaPower { get; }
         DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
@@ -75,10 +76,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void SetInvulnerable(bool isInvulnerable);
         void SetInvulnerableForDuration(float duration);
-        bool CanHeal();
-        void UseHeal();
-        void HealToMax();
-        
+
         void OnDamageTaken();
         void OnKilledByDamageTaken();
         void OnHealed();
@@ -94,7 +92,5 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
 
-        IPlayerDeathNotifier GetDeathNotifier();
-        IPlayerEnemySpawnersInteractions GetPlayerEnemySpawnersInteractions();
     }
 }

@@ -88,7 +88,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             }
             */
             
-            if (PlayerCanHeal())
+            if (PlayerCanHeal(out bool hasHealsLeft))
             {
                 NextState = PlayerStates.Healing;
                 return true;
@@ -144,9 +144,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return _blackboard.AnchorMediator.IsObstructedByObstacles();
         }
         
-        private bool PlayerCanHeal()
+        private bool PlayerCanHeal(out bool hasHealsLeft)
         {
-            return _blackboard.MovesetInputsController.Heal_Pressed() && _blackboard.PlayerMediator.CanHeal();
+            hasHealsLeft = false;
+            
+            return _blackboard.MovesetInputsController.Heal_Pressed() && 
+                   _blackboard.PlayerMediator.PlayerHealing.CanHeal(out hasHealsLeft);
         }
     }
 }

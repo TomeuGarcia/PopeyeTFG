@@ -9,7 +9,7 @@ namespace Popeye.Modules.Enemies.Components
 {
     public class EnemyHealth : MonoBehaviour, IDamageHitTarget, IKnockbackHitTarget
     {
-        private HealthSystem _healthSystem;
+        public HealthSystem HealthSystem { get; private set; }
         [SerializeField, Range(0, 100)] private int _maxHealth = 50;
         
         [SerializeField] private Rigidbody _knockbackRigidbody;
@@ -21,11 +21,13 @@ namespace Popeye.Modules.Enemies.Components
         public void Configure(AEnemyMediator slimeMediator)
         {
             _mediator = slimeMediator;
+            HealToMax();
+            SetIsInvulnerable(false);
         }
 
         private void Awake()
         {
-            _healthSystem = new HealthSystem(_maxHealth);
+            HealthSystem = new HealthSystem(_maxHealth);
         }
 
         public DamageHitTargetType GetDamageHitTargetType()
@@ -35,7 +37,7 @@ namespace Popeye.Modules.Enemies.Components
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            int receivedDamage = _healthSystem.TakeDamage(damageHit.Damage);
+            int receivedDamage = HealthSystem.TakeDamage(damageHit.Damage);
             
             if (IsDead())
             {
@@ -51,22 +53,22 @@ namespace Popeye.Modules.Enemies.Components
 
         public bool CanBeDamaged(DamageHit damageHit)
         {
-            return !_healthSystem.IsDead() && !_healthSystem.IsInvulnerable;
+            return !HealthSystem.IsDead() && !HealthSystem.IsInvulnerable;
         }
 
         public bool IsDead()
         {
-            return _healthSystem.IsDead();
+            return HealthSystem.IsDead();
         }
 
         public void SetIsInvulnerable(bool isInvulnerable)
         {
-            _healthSystem.IsInvulnerable = isInvulnerable;
+            HealthSystem.IsInvulnerable = isInvulnerable;
         }
 
         public float GetValuePer1Ratio()
         {
-            return _healthSystem.GetValuePer1Ratio();
+            return HealthSystem.GetValuePer1Ratio();
         }
 
         public Rigidbody GetRigidbodyToKnockback()
@@ -86,7 +88,7 @@ namespace Popeye.Modules.Enemies.Components
 
         public void HealToMax()
         {
-            _healthSystem.HealToMax();
+            HealthSystem.HealToMax();
         }
     }
 }
