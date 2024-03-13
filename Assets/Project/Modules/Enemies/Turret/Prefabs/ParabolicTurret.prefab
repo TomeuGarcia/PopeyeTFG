@@ -49,6 +49,8 @@ GameObject:
   - component: {fileID: 4656662251084337943}
   - component: {fileID: 1156818105874790195}
   - component: {fileID: 386968618821554870}
+  - component: {fileID: 7113560271976556030}
+  - component: {fileID: 4723153015175015033}
   m_Layer: 11
   m_Name: ParabolicTurret
   m_TagString: Untagged
@@ -184,6 +186,7 @@ MonoBehaviour:
     type: 3}
   _damageableArea: {fileID: 7843934647530321542, guid: 733bcf9a22cc1fe42b18017c46b80ae2,
     type: 3}
+  _turretAnimatorController: {fileID: 7113560271976556030}
 --- !u!114 &6891017323650486759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,3 +262,37 @@ MonoBehaviour:
   _parabolicProjectile: {fileID: 7378326224867316411, guid: 4e338e253182bdf49a70eaa39a367679,
     type: 3}
   _turretMediator: {fileID: 5585137727194799300}
+--- !u!114 &7113560271976556030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8057627024655104793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 062ca90339b485f45a27dd5ef84a88fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 4723153015175015033}
+--- !u!95 &4723153015175015033
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8057627024655104793}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5c5855aeebca93e4780323532c31c23b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
