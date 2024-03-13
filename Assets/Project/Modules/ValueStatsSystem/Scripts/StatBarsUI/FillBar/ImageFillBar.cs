@@ -114,11 +114,13 @@ namespace Popeye.Modules.ValueStatSystem
         {
             _fillImage.DOKill();
             _lazyBarFillImage.DOKill();
+            _holder.DOKill();
         }
         public void CompleteAllUpdates()
         {
             _fillImage.DOComplete();
             _lazyBarFillImage.DOComplete();
+            _holder.DOComplete();
         }
         
         
