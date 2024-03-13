@@ -451,8 +451,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8732743717244918940}
-  m_LocalRotation: {x: 0.4256223, y: 0.3396549, z: -0.17629856, w: 0.81999946}
-  m_LocalPosition: {x: -73.25306, y: 148.20102, z: -73.25306}
+  m_LocalRotation: {x: 0.4256223, y: 0.3396549, z: -0.17629857, w: 0.8199994}
+  m_LocalPosition: {x: -52.75306, y: 148.20102, z: -228.25305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -642,7 +642,7 @@ Transform:
   - {fileID: 4693105823415062388}
   - {fileID: 1151401866870032477}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &225901474954619720
 PrefabInstance:
@@ -1551,12 +1551,6 @@ PrefabInstance:
       objectReference: {fileID: 5362549251048967700}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
-      propertyPath: _powerBoostController
-      value: 
-      objectReference: {fileID: 11400000, guid: 7d4a3228d8f80484c890b7e0ccaa40d4,
-        type: 2}
-    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
-        type: 3}
       propertyPath: _anchorTrajectoryLine1
       value: 
       objectReference: {fileID: 5170877326926555913}
@@ -1587,21 +1581,9 @@ PrefabInstance:
       objectReference: {fileID: 8397785993026938708}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
-      propertyPath: _playerPowerBoostController
-      value: 
-      objectReference: {fileID: 11400000, guid: 7d4a3228d8f80484c890b7e0ccaa40d4,
-        type: 2}
-    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
-        type: 3}
       propertyPath: _anchorView._underlyingValue
       value: 
       objectReference: {fileID: 5630546514496348566}
-    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
-        type: 3}
-      propertyPath: _powerBoostDropFactoryConfig
-      value: 
-      objectReference: {fileID: 11400000, guid: c1acdb7662fefee4099c6bed11ebc1e3,
-        type: 2}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: _cameraShaker._underlyingValue
