@@ -1,4 +1,5 @@
 using AYellowpaper;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
@@ -17,6 +18,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -191,6 +193,12 @@ namespace Popeye.Modules.PlayerAnchor
 
             IPlayerHealing playerHealing = 
                 new PotionsPlayerHealing(playerHealth, _playerGeneralConfig.PotionsHealingConfig, _playerHUD.PlayerHealingUI);
+
+            IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
+            PlayerGlobalEventsListener playerGlobalEventsListener = 
+                new PlayerGlobalEventsListener(eventSystemService, _player, _anchor);
+            PlayerEventsDispatcher playerEventsDispatcher =
+                new PlayerEventsDispatcher(eventSystemService);
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
@@ -210,7 +218,8 @@ namespace Popeye.Modules.PlayerAnchor
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker, _powerBoostController);
+                playerSafeGroundChecker, playerOnVoidChecker, _powerBoostController,
+                playerGlobalEventsListener, playerEventsDispatcher);
 
 
             IPlayerStatesCreator playerStatesCreator = _generalGameStateData.IsTutorial

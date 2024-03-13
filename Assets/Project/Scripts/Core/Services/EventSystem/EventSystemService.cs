@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Popeye.Core.Services.EventSystem
 {
-    public class EventSystemServiceImpl : IEventSystemService
+    public class EventSystemService : IEventSystemService
     {
         private readonly Dictionary<Type, Delegate> _events;
 
-        public EventSystemServiceImpl()
+        public EventSystemService()
         {
             _events = new Dictionary<Type, Delegate>();
         }
