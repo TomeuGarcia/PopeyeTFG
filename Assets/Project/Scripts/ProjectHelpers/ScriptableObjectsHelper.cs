@@ -53,5 +53,6 @@ namespace Popeye.ProjectHelpers
         public const string EDITORUTILITIES_ASSETS_PATH = ROOT + "EditorUtilities/";
         
         public const string TWEENEXTENSIONS_ASSETS_PATH = ROOT + "TweenExtensions/";
+        public const string TEXTUTILITIES_ASSETS_PATH = ROOT + "TextUtilities/";
     }
 }
