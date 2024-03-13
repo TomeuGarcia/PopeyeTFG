@@ -376,6 +376,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
             return corners;
         }
+        
+        private Vector3 PointToWorldSpace(Vector3 point)
+        {
+            return transform.TransformPoint(point);
+        }
 
 
 #if UNITY_EDITOR
@@ -470,11 +475,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Handles.DrawLine(lookA, lookCenter);
             Handles.DrawLine(lookB, lookCenter);
         }
-
-        private Vector3 PointToWorldSpace(Vector3 point)
-        {
-            return transform.TransformPoint(point);
-        }
+        
 #endif
         
     }
