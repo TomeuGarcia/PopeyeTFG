@@ -12,7 +12,12 @@ namespace Popeye.Modules.AudioSystem
         [SerializeField] private float _value = 1.0f;
         
         public string Name => _name;
-        public float Value => _value;
+        public float Value
+        {
+            get => _value;
+            set => _value = value;
+        }
+    
 
         public delegate void Event(SoundParameter parameter);
         public Event OnValueChanged;

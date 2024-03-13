@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies;
@@ -24,7 +25,7 @@ public class FactoriesInstaller : MonoBehaviour
     {
         serviceLocator.RegisterService<IParticleFactory>(new ParticleFactory(_particleFactoryConfig, _particleParent));
         serviceLocator.RegisterService<IHazardFactory>(new HazardsFactory(_hazardFactryConfig,_hazardsParent));
-        _enemyFactoryInstaller.Install(serviceLocator);
+        _enemyFactoryInstaller.Install(serviceLocator, ServiceLocator.Instance.GetService<IFMODAudioManager>());
     }
 
     public void Uninstall(ServiceLocator serviceLocator)
