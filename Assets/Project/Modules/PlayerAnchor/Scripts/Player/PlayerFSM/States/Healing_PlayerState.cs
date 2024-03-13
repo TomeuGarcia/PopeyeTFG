@@ -44,7 +44,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid StartHealing()
         {
             _finishedHealing = false;
-            _blackboard.PlayerMediator.UseHeal();
+            _blackboard.PlayerMediator.PlayerHealing.UseHeal();
             await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.HealingDuration));
             _finishedHealing = true;
         }

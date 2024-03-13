@@ -22,6 +22,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             PlayOneShotAttached(_config.Throw);
         }
 
+        public void PlayPullSound()
+        {
+            PlayOneShotAttached(_config.Pull);
+        }
+
         public void PlayPickedUpSound()
         {
             PlayOneShotAttached(_config.Grab);           

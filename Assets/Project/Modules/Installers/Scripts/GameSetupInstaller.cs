@@ -62,8 +62,8 @@ public class GameSetupInstaller : MonoBehaviour
         serviceLocator.RegisterService<ITimeFunctionalities>(timeFunctionalities);
         
         _objectTypesInstaller.Install();
-        _factoriesInstaller.Install(serviceLocator);
         _audioInstaller.Install(serviceLocator);
+        _factoriesInstaller.Install(serviceLocator);
         _playerAnchorInstaller.Install();
         
         _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);

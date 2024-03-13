@@ -7,29 +7,50 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     public class BezierAnchorTrajectoryView : IAnchorTrajectoryView
     {
         private readonly AnchorTrajectoryViewConfig _config;
-        private readonly LineRenderer _firstLine;
-        private readonly LineRenderer _secondLine;
         private readonly QuadraticBezierCurve _curve;
-        private readonly Vector3[] _points;
+        private readonly LineViewData _firstLineViewData;
+        private readonly LineViewData _secondLineViewData;
+        
+        private class LineViewData
+        {
+            private readonly LineRenderer _lineRenderer;
+            private readonly Vector3[] _points;
 
-        private int FullNumberOfLinePoints => _points.Length;
+            public LineViewData(LineRenderer lineRenderer, int numberOfPoints)
+            {
+                _lineRenderer = lineRenderer;
+                _lineRenderer.positionCount = numberOfPoints;
+                _points = new Vector3[numberOfPoints];
+            }
+
+            public void UpdateWithCurve(QuadraticBezierCurve curve)
+            { 
+                curve.FillPointsFromCurve(_points, out float dist);
+                _lineRenderer.positionCount = _points.Length;
+                _lineRenderer.SetPositions(_points);
+            }
+
+            public void Hide()
+            {
+                _lineRenderer.positionCount = 0;
+            }
+        }
 
         public BezierAnchorTrajectoryView(LineRenderer firstLine, LineRenderer secondLine, 
             AnchorTrajectoryViewConfig config, int linePoints)
         {
             _config = config;
             
-            _firstLine = firstLine;
-            InitLine(_firstLine);
+            InitLineRenderer(firstLine);
+            _firstLineViewData = new LineViewData(firstLine, linePoints);
             
-            _secondLine = secondLine;
-            InitLine(_secondLine);
+            InitLineRenderer(secondLine);
+            _secondLineViewData = new LineViewData(secondLine, linePoints);
             
             _curve = new QuadraticBezierCurve();
-            _points = new Vector3[linePoints];
         }
 
-        private void InitLine(LineRenderer line)
+        private void InitLineRenderer(LineRenderer line)
         {
             line.widthCurve = _config.WidthCurve; 
             line.widthMultiplier = _config.WidthMultiplier; 
@@ -41,8 +62,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void Hide()
         {
-            _firstLine.positionCount = 0;
-            _secondLine.positionCount = 0;
+            _firstLineViewData.Hide();
+            _secondLineViewData.Hide();
         }
 
         public void DrawTrajectory(Vector3[] trajectoryPoints, bool trajectoryHitsObstacle, int lastIndexBeforeCollision)
@@ -59,9 +80,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private void DrawSingleLineTrajectory(Vector3[] trajectoryPoints)
         {
-            FillLine(_firstLine, trajectoryPoints, 0, trajectoryPoints.Length - 1);
+            FillLine(_firstLineViewData, trajectoryPoints, 0, trajectoryPoints.Length - 1);
             
-            _secondLine.positionCount = 0;
+            _secondLineViewData.Hide();
         }
 
         private void DrawObstacleHitTrajectory(Vector3[] trajectoryPoints,int lastIndexBeforeCollision)
@@ -72,12 +93,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 return;
             }
             
-            FillLine(_firstLine, trajectoryPoints, 0, lastIndexBeforeCollision);
-            FillLine(_secondLine, trajectoryPoints, lastIndexBeforeCollision, trajectoryPoints.Length-1);
+            FillLine(_firstLineViewData, trajectoryPoints, 0, lastIndexBeforeCollision);
+            FillLine(_secondLineViewData, trajectoryPoints, lastIndexBeforeCollision, trajectoryPoints.Length-1);
         }
         
         
-        private void FillLine(LineRenderer line, Vector3[] trajectoryPoints, 
+        private void FillLine(LineViewData lineViewData, Vector3[] trajectoryPoints, 
             int trajectoryStartIndex, int trajectoryLastIndex)
         {
             Vector3 startPosition = trajectoryPoints[trajectoryStartIndex];
@@ -86,30 +107,15 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             Vector3 lastPointControl = endPosition + startToEndDirection;
             lastPointControl.y = startPosition.y;
             Vector3 firstPointControl = Vector3.Lerp(startPosition, lastPointControl, 0.5f);
+            
 
             _curve.P0 = startPosition;
             _curve.P1 = firstPointControl;
             _curve.P2 = lastPointControl;
             _curve.P3 = endPosition;
             
-            int numberOfPositions = (trajectoryLastIndex - trajectoryStartIndex) + 1;
-            Vector3[] points = CreatePositionsArray(numberOfPositions);
-            
-            _curve.FillPointsFromCurve(points, out float dist);
-            
-            line.positionCount = numberOfPositions;
-            line.SetPositions(points);
+            lineViewData.UpdateWithCurve(_curve);
         }
 
-        private Vector3[] CreatePositionsArray(int numberOfPositions)
-        {
-            if (numberOfPositions == FullNumberOfLinePoints)
-            {
-                return _points;
-            }
-
-            return new Vector3[numberOfPositions];
-        }
-        
     }
 }

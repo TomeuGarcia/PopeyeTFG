@@ -2,6 +2,8 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Pool;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.General
@@ -16,6 +18,8 @@ namespace Popeye.Modules.Enemies.General
         [Header("CONFIGURATION")] 
         [SerializeField] private EnemySpawnHinterConfig _config;
 
+        public OneShotFMODSound Sound => _config.Sound;
+        
         
         private void Start()
         {
@@ -33,7 +37,7 @@ namespace Popeye.Modules.Enemies.General
         {
             AnimationSetup();
             PlayGrowAnimation();
-            
+
             float waitDuration = _config.GrowDuration * _config.DisappearWait;
             await UniTask.Delay(TimeSpan.FromSeconds(waitDuration));
 
