@@ -15,12 +15,10 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         private Transform _handleTransform;
         private Quaternion _handleRotation;
         
-        private int selectedIndex = -1;
+        private int _selectedIndex = -1;
 
         private WallBuilderConfig.EditorViewConfig _editorView;
-        private readonly float _buttonSize = 0.2f;
-        private readonly float _buttonPickSize = 0.25f;
-        private float LineThickness => _editorView.LineThickness;
+        private float ButtonPickSize => _editorView.ButtonSize + 0.05f;
 
 
         public override void OnInspectorGUI()
@@ -46,13 +44,6 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 EditorUtility.SetDirty(_wallBuilder);
             }
             
-            GUILayout.Space(15);
-            if (GUILayout.Button("Reset & Fix Rotation"))
-            {
-                Undo.RecordObject(_wallBuilder, "Reset & Fix Rotation");
-                _wallBuilder.ResetAndFixRotation();
-                EditorUtility.SetDirty(_wallBuilder);
-            }
             
             GUILayout.Space(15);
             _wallBuilder.moveBy = EditorGUILayout.Vector2Field("Move By Amount", _wallBuilder.moveBy);
@@ -94,19 +85,19 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
             
         }
+        
 
-        
-        
+
         private void DrawPointButton(int index)
         {
             Vector3 point = _handleTransform.TransformPoint(_points[index]);
             
-            if (Handles.Button(point, _handleRotation, _buttonSize, _buttonPickSize, Handles.DotHandleCap))
+            if (Handles.Button(point, _handleRotation, _editorView.ButtonSize, ButtonPickSize, Handles.DotHandleCap))
             {
-                selectedIndex = index;
+                _selectedIndex = index;
             }
 
-            if (selectedIndex != index) return;
+            if (_selectedIndex != index) return;
             
             
             EditorGUI.BeginChangeCheck();

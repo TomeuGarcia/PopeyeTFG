@@ -179,10 +179,18 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         private void CreateColliderPreviousToCurrent(int index, Vector3 previousToCurrentDirection, float previousToCurrentDistance,  
             Quaternion rotation, float fillLength)
         {
-            Vector3 colliderPosition =  _points[index - 1] + (previousToCurrentDirection * (fillLength / 2));
+            Quaternion offsetRotation = transform.rotation;
+            Quaternion revertRotation =  Quaternion.Inverse(offsetRotation);
+            
+            Vector3 startPoint = offsetRotation * _points[index - 1];
+            
+            Vector3 colliderPosition =  startPoint + (previousToCurrentDirection * (fillLength / 2));
             Vector3 colliderSize = rotation * 
-                                   (new Vector3(_config.ColliderWidth, _config.ColliderHeight, previousToCurrentDistance)); 
-                
+                                   (new Vector3(_config.ColliderWidth, _config.ColliderHeight, previousToCurrentDistance));
+
+            colliderPosition = revertRotation * colliderPosition;
+            colliderSize = revertRotation * colliderSize;
+            
             DoCreateCollider(colliderPosition, colliderSize);
         }
         
@@ -244,26 +252,6 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
         }
 
-
-        public void ResetAndFixRotation()
-        {
-            Quaternion inverseRotation = Quaternion.Inverse(transform.rotation);
-
-            Vector3[] pointsCopy = new Vector3[_points.Length];
-            for (int i = 0; i < _points.Length; ++i)
-            {
-                pointsCopy[i] = transform.TransformPoint(_points[i]);
-            }
-            
-            transform.rotation = Quaternion.identity;
-            /*
-            for (int i = 0; i < _points.Length; ++i)
-            {
-                _points[i] = transform.TransformPoint(pointsCopy[i]);
-            }
-            */
-        } 
-        
 
 
         private Vector3[] GetCornersOfPointIndices(int previousIndex, int currentIndex)

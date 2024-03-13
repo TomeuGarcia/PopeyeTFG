@@ -26,6 +26,9 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
             [SerializeField, Range(0.01f, 10.0f)] private float _lineThickness = 2.5f;
             public float LineThickness => _lineThickness;
+            
+            [SerializeField, Range(0.01f, 10.0f)] private float _buttonSize = 0.2f;
+            public float ButtonSize => _buttonSize;
         }
 
 
