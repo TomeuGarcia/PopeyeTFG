@@ -21,6 +21,8 @@ namespace Popeye.Modules.Enemies.Components
         public void Configure(AEnemyMediator slimeMediator)
         {
             _mediator = slimeMediator;
+            HealToMax();
+            SetIsInvulnerable(false);
         }
 
         private void Awake()
