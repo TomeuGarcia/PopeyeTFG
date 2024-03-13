@@ -326,7 +326,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerDasher.DashTowardsAnchor(duration);
             
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
-
+            
             SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
             DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
             
