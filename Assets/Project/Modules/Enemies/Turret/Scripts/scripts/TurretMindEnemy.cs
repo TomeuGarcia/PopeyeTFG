@@ -11,8 +11,6 @@ namespace Popeye.Modules.Enemies
 {
     public class TurretMindEnemy : AEnemy
     {
-        [SerializeField] private Transform _transform;
-        [SerializeField] private ParabolicProjectile _parabolicProjectile;
         [SerializeField] private TurretMediator _turretMediator;
         
 
