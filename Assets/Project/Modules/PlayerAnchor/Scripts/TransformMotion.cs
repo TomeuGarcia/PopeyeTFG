@@ -123,5 +123,11 @@ namespace Popeye.Modules.PlayerAnchor
             _rotateTransform.DOLocalRotateQuaternion(localRotation, duration)
                 .SetEase(ease);
         }
+
+        public void ResetScale()
+        {
+            _moveTransform.localScale = Vector3.one;
+            _rotateTransform.localScale = Vector3.one;
+        }
     }
 }

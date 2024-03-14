@@ -71,10 +71,20 @@ namespace Popeye.Modules.Enemies
             if (_alreadyInitialized) return;
         }
 
+        public override void SetPatrollingWaypoints(Transform[] waypoints)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void AwakeInit(Transform attackTarget)
         {
             base.AwakeInit(attackTarget);
             AwakeInit_old(attackTarget, false);
+        }
+
+        public override void DieFromOrder()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void AwakeInit_old(Transform attackTarget, bool respawnsAfterDeath)

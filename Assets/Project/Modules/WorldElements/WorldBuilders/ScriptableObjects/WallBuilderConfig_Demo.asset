@@ -12,19 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d61e841b53ed4978b8ebb0c7a2ddff58, type: 3}
   m_Name: WallBuilderConfig_Demo
   m_EditorClassIdentifier: 
+  _wallBuilderDataTracker:
+    _underlyingValue: {fileID: 11400000, guid: 635874df3e7520f47a17718a88cb8cc1, type: 2}
   _editorView:
-    _cornerButtonColor: {r: 0, g: 0.74228394, b: 0.7830189, a: 1}
+    _cornerButtonColor: {r: 0, g: 0.8018868, b: 0.32649472, a: 1}
     _cornerBlockColor: {r: 0, g: 0.24072957, b: 1, a: 1}
     _fillBlockColor: {r: 1, g: 0.32273105, b: 0.015686274, a: 1}
     _fillLineColor: {r: 1, g: 0, b: 0.36695004, a: 1}
     _lineThickness: 2.5
+    _buttonSize: 0.2
+    _stemmingBlocksColorMultiplier: 0.25
+  _transparencyConfig: {fileID: 11400000, guid: 0142e529bd3dd4b43a63ff23335d5f9a,
+    type: 2}
   _cornerBlock:
     _size: {x: 1, y: 1}
   _fillBlock:
     _size: {x: 1, y: 2}
-  _cornerBlockPrefab: {fileID: 3221932706478820892, guid: 6084c07e1f0e7b14ebbba247f9eaf8d2,
+  _cornerBlockPrefab: {fileID: 2342861894599056367, guid: dd807c51d4542df45843befe2e8f1a35,
     type: 3}
-  _fillBlockPrefab: {fileID: 4407190998663603906, guid: 5bdf8c64a78dbea469465c474b6f5765,
+  _fillBlockPrefab: {fileID: 4384057310616593575, guid: e45540d0c745ed14db7d8fb83d5f761a,
     type: 3}
   _colliderWidth: 1
   _colliderHeight: 2

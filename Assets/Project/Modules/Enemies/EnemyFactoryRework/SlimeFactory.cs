@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.Slime;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     {
         private Dictionary<SlimeSizeID, ObjectPool> _slimeSizeToPool;
         private Dictionary<SlimeSizeID, SlimeChildSpawnData> _slimeSizeToNextSize;
-        
+        private readonly IFMODAudioManager _audioManager;
+
         [System.Serializable]
         public struct SlimeChildSpawnData
         {
@@ -18,26 +20,29 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         }
 
         public SlimeFactory(Dictionary<SlimeSizeID, ObjectPool> slimeSizeToPool, 
-            Dictionary<SlimeSizeID, SlimeChildSpawnData> slimeSizeToNextSize)
+            Dictionary<SlimeSizeID, SlimeChildSpawnData> slimeSizeToNextSize,
+            IFMODAudioManager audioManager)
         {
             _slimeSizeToPool = slimeSizeToPool;
             _slimeSizeToNextSize = slimeSizeToNextSize;
+            _audioManager = audioManager;
         }
 
         public SlimeMediator CreateNew(SlimeSizeID slimeSizeID, SlimeMindEnemy ownerMind,Vector3 position,Quaternion rotation)
         {
             SlimeMediator slimeMediator = _slimeSizeToPool[slimeSizeID].Spawn<SlimeMediator>(position, rotation);
-            InitializeSlimeMediator(slimeMediator, ownerMind.GetParticlePool(), ownerMind, slimeSizeID, ownerMind.GetPlayerTransform());
+            InitializeSlimeMediator(slimeMediator, ownerMind, slimeSizeID, ownerMind.GetPlayerTransform());
 
             return slimeMediator;
         }
 
-        private void InitializeSlimeMediator(SlimeMediator slimeMediator,ObjectPool particlesPool,SlimeMindEnemy ownerMind,SlimeSizeID slimeSizeID,Transform playerTransform)
+        private void InitializeSlimeMediator(SlimeMediator slimeMediator, SlimeMindEnemy ownerMind,
+            SlimeSizeID slimeSizeID, Transform playerTransform)
         {
-            slimeMediator.SetObjectPool(particlesPool);
             slimeMediator.InitAfterSpawn();
             slimeMediator.SetSlimeMind(ownerMind);
             slimeMediator.SetSlimeFactory(this);
+            slimeMediator.SetAudioManager(_audioManager);
             slimeMediator.SetSlimeSize(slimeSizeID);
             slimeMediator.SetPlayerTransform(playerTransform);
         }
@@ -54,11 +59,13 @@ namespace Popeye.Modules.Enemies.EnemyFactories
                 SlimeMediator slimeMediator = _slimeSizeToPool[slimechildSpawnData.slimeSizeId]
                     .Spawn<SlimeMediator>(position, rotation);
 
-                InitializeSlimeMediator(slimeMediator,parentSlimeMediator.GetObjectPool(),ownerMind,slimechildSpawnData.slimeSizeId,parentSlimeMediator.PlayerTransform);
+                InitializeSlimeMediator(slimeMediator, ownerMind, 
+                    slimechildSpawnData.slimeSizeId, parentSlimeMediator.PlayerTransform);
+                
                 slimeMediator.SpawningFromDivision(spawnDirection, parentSlimeMediator.GetPatrolType(),
                     parentSlimeMediator.GetPatrolWaypoints());
 
-                ownerMind.AddSlimeToList();
+                ownerMind.AddSlimeToList(slimeMediator);
                 slimes[i] = slimeMediator;
             }
 

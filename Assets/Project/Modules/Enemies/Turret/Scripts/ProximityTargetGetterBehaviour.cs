@@ -66,5 +66,15 @@ namespace Popeye.Modules.Enemies
       {
          throw new NotImplementedException();
       }
+
+      public override void SetPatrollingWaypoints(Transform[] waypoints)
+      {
+         throw new NotImplementedException();
+      }
+
+      public override void DieFromOrder()
+      {
+         throw new NotImplementedException();
+      }
    }
 }

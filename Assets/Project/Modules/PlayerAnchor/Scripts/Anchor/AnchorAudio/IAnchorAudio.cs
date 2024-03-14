@@ -4,8 +4,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorAudio
     {
-        void Configure(GameObject anchorGameObject);
         void PlayThrowSound();
+        void PlayPullSound();
         void PlayPickedUpSound();
         void PlayDealDamageSound();
     }

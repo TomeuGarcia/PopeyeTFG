@@ -48,7 +48,6 @@ namespace Popeye.Modules.Enemies.Components
                         _mediator.OnPlayerClose();
                         return;
                     }
-                    
                     if (IsCloseToWayPoint())
                     {
                         UpdateWaypointDestination();
@@ -70,11 +69,14 @@ namespace Popeye.Modules.Enemies.Components
         public void SetWayPoints(Transform[] wayPoints)
         {
             _wayPoints = wayPoints;
-
             _patrolType = PatrolType.FixedWaypoints;
-            UpdateWaypointDestination();
             _squaredWayPointDistanceThreshold = _wayPointDistanceThreshold * _wayPointDistanceThreshold;
-            SetPatrolling(true);
+        }
+
+        public void ResetPatrolling()
+        {
+            _patrolType = PatrolType.None;
+            _patrolling = false;
         }
         public void SetPatrolling(bool patrolling)
         {

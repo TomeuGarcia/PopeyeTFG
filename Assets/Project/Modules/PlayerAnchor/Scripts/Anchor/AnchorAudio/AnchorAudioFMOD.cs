@@ -1,45 +1,46 @@
+using Popeye.Modules.AudioSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
-    public class AnchorAudioFMOD : MonoBehaviour, IAnchorAudio
+    public class AnchorAudioFMOD : IAnchorAudio
     {
-        [SerializeField] private FMODUnity.EventReference _SFX_Hit_Anchor;
-        private GameObject _anchorGameObject;
+        private readonly GameObject _anchorGameObject;
+        private readonly IFMODAudioManager _fmodAudioManager;
+        private readonly AnchorAudioFMODConfig _config;
 
-        [SerializeField] private FMODUnity.EventReference _SFX_Throw_Anchor;
-
-        [SerializeField] private FMODUnity.EventReference _SFX_Grab_Anchor;
-
-
-        public void Configure(GameObject anchorGameObject)
+        public AnchorAudioFMOD(GameObject anchorGameObject, IFMODAudioManager fmodAudioManager, AnchorAudioFMODConfig config)
         {
             _anchorGameObject = anchorGameObject;
+            _fmodAudioManager = fmodAudioManager;
+            _config = config;
         }
         
         
         public void PlayThrowSound()
         {
-            PlayOneShot(_SFX_Throw_Anchor);
-           
+            PlayOneShotAttached(_config.Throw);
+        }
+
+        public void PlayPullSound()
+        {
+            PlayOneShotAttached(_config.Pull);
         }
 
         public void PlayPickedUpSound()
         {
-            PlayOneShot(_SFX_Grab_Anchor);
-           
+            PlayOneShotAttached(_config.Grab);           
         }
 
         public void PlayDealDamageSound()
         {
-            PlayOneShot(_SFX_Hit_Anchor);
-          
+            PlayOneShotAttached(_config.DealDamage);
         }
 
 
-        private void PlayOneShot(FMODUnity.EventReference soundEventReference)
+        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
         {
-            FMODUnity.RuntimeManager.PlayOneShotAttached(soundEventReference, _anchorGameObject);
+            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _anchorGameObject);
         }
         
     }

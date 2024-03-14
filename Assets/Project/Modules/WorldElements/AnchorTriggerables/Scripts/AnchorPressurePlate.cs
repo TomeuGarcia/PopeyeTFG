@@ -9,7 +9,10 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 {
     public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget
     {
-       
+        [Header("MOVE")] 
+        [SerializeField] private Vector3 _triggerMoveBy = Vector3.zero;
+        
+        
         [Header("REFERENCES")]
         [SerializeField] private Material _triggeredMaterial;
         [SerializeField] private Material _notTriggeredMaterial;
@@ -77,12 +80,12 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         protected void PlayTriggerAnimation()
         {
             _buttonMesh.material = _triggeredMaterial;
-            _buttonTransform.DOLocalMove(Vector3.down * 0.05f, 0.2f);
+            _buttonTransform.DOBlendableLocalMoveBy(_triggerMoveBy, 0.2f);
         }
         protected void PlayUntriggerAnimation()
         {
             _buttonMesh.material = _notTriggeredMaterial;
-            _buttonTransform.DOLocalMove(Vector3.zero, 0.2f);
+            _buttonTransform.DOLocalMove(-_triggerMoveBy, 0.2f);
         }
     
     

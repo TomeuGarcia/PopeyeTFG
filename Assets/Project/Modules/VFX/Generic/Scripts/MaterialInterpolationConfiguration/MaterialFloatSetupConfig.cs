@@ -1,5 +1,6 @@
 using Popeye.ProjectHelpers;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration
 {

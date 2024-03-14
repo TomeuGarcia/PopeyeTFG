@@ -1,5 +1,8 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -8,6 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         private readonly PlayerMaterialViewConfig _config;
         private readonly Material _material;
+        private readonly Transform _rendererTransform;
 
 
         [System.Serializable]
@@ -22,15 +26,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
 
 
-        public PlayerMaterialView(PlayerMaterialViewConfig config, Renderer renderer)
+        public PlayerMaterialView(PlayerMaterialViewConfig config, Material material, Transform rendererTransform)
         {
             _config = config;
-            _config.OnValidate();
             
-            _material = renderer.material;
-            
+            _material = material;
+            _rendererTransform = rendererTransform;
+
             SetTired(false);
-            SetBaseColor(_config.NormalColor);
+            //Might be needed: SetDashing(false);
         }
         
         
@@ -47,26 +51,51 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayTakeDamageAnimation()
         {
-            FlickBaseColor(_config.TakeDamageFlick, _config.DamagedColor).Forget();
+            //TODO
+            //Not here, but: muffle sound, vignete...
+            
+            DoDamaged().Forget();
+        }
+
+        private async UniTaskVoid DoDamaged()
+        {
+            _material.DOFloat(1f, "_IsDamaged", 0.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+            _material.DOFloat(0f, "_IsDamaged", 0.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+            _material.DOFloat(1f, "_IsDamaged", 0.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+            _material.DOFloat(0f, "_IsDamaged", 0.0f);
         }
 
         public void PlayRespawnAnimation()
         {
-            
+            //TODO
         }
 
         public void PlayDeathAnimation()
         {
-            FlickBaseColor(_config.DeathFlick, _config.DamagedColor, _config.DamagedColor).Forget();
+            //TODO
         }
 
         public void PlayHealAnimation()
         {
-            FlickBaseColor(_config.HealFlick, _config.HealColor).Forget();
+            //TODO
         }
 
-        public void PlayDashAnimation(float duration)
+        public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
+            DoPlayDash(duration, dashDirection).Forget();
+        }
+
+        private async UniTaskVoid DoPlayDash(float duration, Vector3 dashDirection)
+        {
+            _material.DOFloat(1.0f, _config.DashingProperty, _config.DashMaterialTransitionTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.DashMaterialTransitionTime));
+            _rendererTransform.gameObject.SetActive(false);
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _config.DashMaterialTransitionTime)));
+            _material.DOFloat(0.0f, _config.DashingProperty, _config.DashMaterialTransitionTime);
+            _rendererTransform.gameObject.SetActive(true);
         }
 
         public void PlayKickAnimation()
@@ -114,31 +143,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
         }
 
-
-        private async UniTask FlickBaseColor(FlickData flickData, Color flickColor)
-        {
-            await FlickBaseColor(flickData, flickColor, _config.NormalColor);
-        }
-        private async UniTask FlickBaseColor(FlickData flickData, Color flickColor, Color endColor)
-        {
-            float halfDuration = flickData.FlickDuration / 2;
-            for (int i = 0; i < flickData.NumberOfFlicks; ++i)
-            {
-                SetBaseColor(flickColor);
-                await UniTask.Delay(TimeSpan.FromSeconds(halfDuration));
-                SetBaseColor(_config.NormalColor);
-                await UniTask.Delay(TimeSpan.FromSeconds(halfDuration));
-            }
-            
-            SetBaseColor(endColor);
-        }
-        private void SetBaseColor(Color color)
-        {
-            _material.SetColor(_config.BaseColorPropertyID, color);
-        }
         private void SetTired(bool isTired)
         {
-            _material.SetFloat(_config.IsTiredPropertyID, isTired ? 1f : 0f);
+            _material.DOFloat(isTired ? 1f : 0f, _config.IsTiredProperty, _config.TiredTransitionTime);
         }
     }
 }

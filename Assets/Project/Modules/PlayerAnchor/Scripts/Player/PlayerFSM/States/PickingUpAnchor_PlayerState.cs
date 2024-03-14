@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -16,7 +17,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.PlayerView.PlayPickUpAnchorAnimation();
-            
             StartPickingUpAnchor();
         }
 

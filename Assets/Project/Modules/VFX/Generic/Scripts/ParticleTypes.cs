@@ -12,7 +12,11 @@ namespace Popeye.Modules.VFX.Generic
         AnchorSlamGroundDecal,
         AnchorHitGroundDecal,
         AnchorThrowSoftTrail,
-        SlimeDeathParticles
-        
+        PlayerDashDisappear,
+        PlayerDashAppear,
+        PlayerDashTrail,
+        SlimeDeathParticles,
+        EnemySpawnHint,
+        PlayerDashGhost
     }
 }

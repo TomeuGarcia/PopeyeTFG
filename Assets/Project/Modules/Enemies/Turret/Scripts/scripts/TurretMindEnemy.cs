@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Enemies.Hazards;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -10,17 +11,9 @@ namespace Popeye.Modules.Enemies
 {
     public class TurretMindEnemy : AEnemy
     {
-        [SerializeField] private Transform _transform;
-
-        private Core.Pool.ObjectPool _projectilePool;
-        [SerializeField] private ParabolicProjectile _parabolicProjectile;
         [SerializeField] private TurretMediator _turretMediator;
         
-        private void Start()
-        {
-            _projectilePool = new ObjectPool(_parabolicProjectile, _transform);
-            _projectilePool.Init(5);
-        }
+
 
         public void Die()
         {
@@ -30,14 +23,13 @@ namespace Popeye.Modules.Enemies
         private void InitTurret()
         {
             _turretMediator.SetTurretMind(this);
-            _turretMediator.SetObjectPool(_projectilePool);
             if (_attackTarget != null)
             {
                 _turretMediator.SetPlayerTransform(_attackTarget);
             }
             else
             {
-                _turretMediator.SetPlayerTransform(ServiceLocator.Instance.GetService<IGameReferences>().GetPlayer());
+                _turretMediator.SetPlayerTransform(ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies());
             }
             
             _turretMediator.Init();
@@ -45,12 +37,30 @@ namespace Popeye.Modules.Enemies
 
         internal override void Init()
         {
-            InitTurret();
+            
         }
 
         internal override void Release()
         {
             
+        }
+
+        public override void SetPatrollingWaypoints(Transform[] waypoints)
+        {
+            
+        }
+
+        public override void InitAfterSpawn(IHazardFactory hazardFactory)
+        {
+            base.InitAfterSpawn(hazardFactory);
+            _turretMediator.SetHazardFactory(hazardFactory);
+            InitTurret();
+        }
+
+        public override void DieFromOrder()
+        {
+            _turretMediator.DieFromOrder();
+            Recycle();
         }
     }
 }

@@ -1,15 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Popeye.Modules.Enemies.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
-using System.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Slime;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;
+using Popeye.Scripts.Collisions;
+using Project.Modules.Enemies.Slime.Scripts.SlimeRefactor;
 using Task = System.Threading.Tasks.Task;
 
 
@@ -30,9 +31,13 @@ namespace Popeye.Modules.Enemies
         public Transform PlayerTransform { get; private set; }
         public SlimeSizeID SlimeSizeID { get; private set; }
         [SerializeField] private Transform _slimeTransform;
-        private Transform _particlePoolParent;
-        private Core.Pool.ObjectPool _objectPool;
-    
+
+
+        [SerializeField] private CollisionProbingConfig _floorCollisionProbingConfig;
+
+        [SerializeField] private SlimeSoundsConfig _slimeSounds;
+        private IFMODAudioManager _audioManager;
+        [SerializeField] private PowerBoostDropper _powerBoostDropper;
 
         public override Vector3 Position => _slimeTransform.position;
 
@@ -57,21 +62,16 @@ namespace Popeye.Modules.Enemies
         {
             _slimeFactory = slimeFactory;
         }
+        public void SetAudioManager(IFMODAudioManager audioManager)
+        {
+            _audioManager = audioManager;
+        }
 
         public void SetSlimeSize(SlimeSizeID slimeSizeID)
         {
             SlimeSizeID = slimeSizeID;
         }
-
-        public void SetObjectPool(Core.Pool.ObjectPool objectPool)
-        {
-            _objectPool = objectPool;
-        }
-
-        public Core.Pool.ObjectPool GetObjectPool()
-        {
-            return _objectPool;
-        }
+        
         public void PlayMoveAnimation()
         {
             slimeAnimatorController.PlayMove();
@@ -86,11 +86,14 @@ namespace Popeye.Modules.Enemies
         public void SetWayPoints(Transform[] wayPoints)
         {
             _enemyPatrolling.SetWayPoints(wayPoints);
+            StartPatrolling();
         }
+
+
        
-        public void AddSlimesToSlimeMindList(SlimeMediator mediator)
+        public void AddSlimesToSlimeMindList(SlimeMediator childSlimeMediator)
         {
-            slimeMindEnemy.AddSlimeToList();
+            slimeMindEnemy.AddSlimeToList(childSlimeMediator);
         }
 
         public void SpawningFromDivision(Vector3 explosionForceDir,EnemyPatrolling.PatrolType type,Transform[] wayPoints)
@@ -103,13 +106,13 @@ namespace Popeye.Modules.Enemies
             _slimeMovement.DeactivateNavigation();
             slimeAnimatorController.PlayDeath();
             _enemyHealth.SetIsInvulnerable(true);
-            _boxCollider.isTrigger = false;
+            //_boxCollider.isTrigger = false;
             _slimeMovement.ApplyExplosionForce(explosionForceDir);
 
             await Task.Delay(TimeSpan.FromSeconds(0.5f));
 
             _slimeMovement.StopExplosionForce();
-            _boxCollider.isTrigger = true;
+            //_boxCollider.isTrigger = true;
             _slimeMovement.ActivateNavigation();
             if(type == EnemyPatrolling.PatrolType.FixedWaypoints){SetWayPoints(wayPoints);}
             else if (type == EnemyPatrolling.PatrolType.None){StartChasing();}
@@ -120,19 +123,38 @@ namespace Popeye.Modules.Enemies
         public void Divide()
         {
             slimeAnimatorController.PlayDeath();
+            _powerBoostDropper.SpawnDrop(Position);
+            
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {
-                _slimeFactory.CreateFromParent(slimeMindEnemy,this,Position,Quaternion.identity);
+                _slimeFactory.CreateFromParent(slimeMindEnemy,this, ComputeChildSlimesSpawnPosition(), Quaternion.identity);
+                _slimeSounds.PlayDivideSound(_audioManager, _slimeTransform.gameObject, SlimeSizeID);
             }
-            slimeMindEnemy.RemoveSlimeFromList();
+            else
+            {
+                _slimeSounds.PlayDeathSound(_audioManager, _slimeTransform.gameObject, SlimeSizeID);
+            }
+            
+            slimeMindEnemy.RemoveSlimeFromList(this);
             slimeAnimatorController.StopMove();
         }
 
+        private Vector3 ComputeChildSlimesSpawnPosition()
+        {
+            if (Physics.Raycast(Position, Vector3.down, out RaycastHit hit, 
+                    _floorCollisionProbingConfig.ProbeDistance, _floorCollisionProbingConfig.CollisionLayerMask,
+                    _floorCollisionProbingConfig.QueryTriggerInteraction))
+            {
+                return hit.point + (hit.normal * 1.0f);
+            }
+
+            return Position;
+        }
+        
         public override void OnDeath(DamageHit damageHit)
         {
             Divide();
             base.OnDeath(damageHit);
-            
         }
 
         public override void OnPlayerClose()
@@ -144,6 +166,7 @@ namespace Popeye.Modules.Enemies
         {
             StartPatrolling();
         }
+
 
         public void StartChasing()
         {
@@ -168,12 +191,20 @@ namespace Popeye.Modules.Enemies
 
         internal override void Init()
         {
+            _slimeMovement.StopExplosionForce();
         }
 
         internal override void Release()
         {
             _enemyHealth.HealToMax();
+            _enemyPatrolling.ResetPatrolling();
             _slimeTransform.localPosition = Vector3.zero;
+            _slimeMovement.StopExplosionForce();
+        }
+        
+        public override void DieFromOrder()
+        {
+            Recycle();
         }
     }
 }

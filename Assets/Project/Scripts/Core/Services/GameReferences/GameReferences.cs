@@ -1,26 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Popeye.Core.Services.GameReferences
 {
    public class GameReferences : IGameReferences
    {
-      private Transform _playerTransform;
+      private readonly Transform _playerTargetForEnemies;
 
 
-      public GameReferences(Transform playerTransform)
+      public GameReferences(Transform playerTargetForEnemies)
       {
-         SetPlayer(playerTransform);
+         _playerTargetForEnemies = playerTargetForEnemies;
       }
-      public Transform GetPlayer()
+      
+      public Transform GetPlayerTargetForEnemies()
       {
-         return _playerTransform;
+         return _playerTargetForEnemies;
       }
+      
 
-      public void SetPlayer(Transform playerTransform)
-      {
-         _playerTransform = playerTransform;
-      }
+
    }
 }

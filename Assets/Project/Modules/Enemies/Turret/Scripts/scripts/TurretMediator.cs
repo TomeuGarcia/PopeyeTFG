@@ -15,33 +15,25 @@ namespace Popeye.Modules.Enemies
         [Header("COMPONENTS")] 
         [SerializeField] private TurretShooting _turretShooting;
 
-        public Transform playerTransform { get; private set; }
+        public Transform PlayerTransform { get; private set; }
         
-        private Core.Pool.ObjectPool _projectilePool;
-        private Core.Pool.ObjectPool _areaDamagePool;
         private TurretMindEnemy _turretMind;
         [SerializeField] private ParabolicProjectile _parabolicProjectile;
         [SerializeField] private AreaDamageOverTime _damageableArea;
+        [SerializeField] private TurretAnimatorController _turretAnimatorController;
+        
+        
         internal override void Init()
         {
-            
-            
-        }
-
-        private void Start()
-        {
-            _projectilePool = new ObjectPool(_parabolicProjectile);
-            _projectilePool.Init(15);
-            _areaDamagePool = new ObjectPool(_damageableArea);
-            _areaDamagePool.Init(15);
-            _turretShooting.Configure(this,_projectilePool,_areaDamagePool,playerTransform);
+            _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _turretAnimatorController.Configure(this);
         }
+
 
         internal override void Release()
         {
-            
         }
 
         public void SetTurretMind(TurretMindEnemy turretMind)
@@ -50,13 +42,9 @@ namespace Popeye.Modules.Enemies
         }
         public void SetPlayerTransform(Transform _playerTransform)
         {
-            playerTransform = _playerTransform;
+            PlayerTransform = _playerTransform;
         }
         
-        public void SetObjectPool(Core.Pool.ObjectPool objectPool)
-        {
-            _projectilePool = objectPool;
-        }
         public override void OnPlayerClose()
         {
             throw new System.NotImplementedException();
@@ -67,12 +55,27 @@ namespace Popeye.Modules.Enemies
             throw new System.NotImplementedException();
         }
 
-        public override Vector3 Position { get; }
+        public override void DieFromOrder()
+        {
+            //  
+        }
 
+        public void StartShootingAnimation()
+        {
+            _turretAnimatorController.PlayShootingAnimation();
+        }
+        
+        public void StopShootingAnimation()
+        {
+            _turretAnimatorController.StopShootingAnimation();
+        }
+        public override Vector3 Position { get; }
+        
         public override void OnDeath(DamageHit damageHit)
         {
             _turretMind.Die();
             _enemyVisuals.PlayDeathEffects(damageHit);
         }
+        
     }
 }
