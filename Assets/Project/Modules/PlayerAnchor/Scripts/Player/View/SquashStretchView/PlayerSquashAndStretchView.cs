@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -57,7 +58,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayTakeDamageAnimation()
         {
             ClearTweens();
-            PunchScale(_config.TakeDamageScalePunch);
+            _meshHolderTransform.PunchScale(_config.TakeDamageScalePunch);
         }
 
         public void PlayRespawnAnimation()
@@ -68,15 +69,25 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayDeathAnimation()
         {
-            Rotate(_config.DeathRotation);
-            LocalMoveBy(_config.DeathMoveBy);
+            _meshHolderTransform.Rotate(_config.DeathRotation);
+            _meshHolderTransform.BlendableLocalMoveBy(_config.DeathMoveBy);
         }
 
         public void PlayHealAnimation()
         {
             ClearTweens();
-            PunchScale(_config.HealScalePunch);
+            _meshHolderTransform.PunchScale(_config.HealScalePunch);
         }
+        public void PlayStartHealingAnimation(float durationToComplete)
+        {
+            _meshHolderTransform.PunchScale(_config.StartHealingScalePunch);
+        }
+        public void PlayHealingInterruptedAnimation()
+        {
+            KillTweens();
+            _meshHolderTransform.DOScale(Vector3.one, 0.1f);
+        }
+
 
         public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
@@ -88,8 +99,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayKickAnimation()
         {
             ClearTweens();
-            PunchScale(_config.KickScalePunch);
-            PunchRotate(_config.KickRotationPunch);
+            _meshHolderTransform.PunchScale(_config.KickScalePunch);
+            _meshHolderTransform.PunchRotation(_config.KickRotationPunch);
         }
 
         public void PlayThrowAnimation()
@@ -142,10 +153,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
         }
 
-
         private void ClearTweens()
         {
             _meshHolderTransform.DOComplete();
+        }
+        private void KillTweens()
+        {
+            _meshHolderTransform.DOKill();
         }
         
         private void PunchRotate(TweenPunchData tweenPunchData)

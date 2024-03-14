@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Project.Scripts.TweenExtensions
 {
-    [CreateAssetMenu(fileName = "TweenPunchConfig_NAME", 
+    [CreateAssetMenu(fileName = "TweenPunch_TYPE__NAME", 
         menuName = ScriptableObjectsHelper.TWEENEXTENSIONS_ASSETS_PATH + "TweenPunchConfig")]
     public class TweenPunchConfig : ScriptableObject
     {

@@ -469,7 +469,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = true;
         }
 
-        
+
+
+
         public Transform GetTargetForEnemies()
         {
             return _targetForEnemies;
@@ -579,7 +581,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             PlayerView.PlayHealAnimation();
         }
+
+        public void OnHealStart(float durationToComplete)
+        {
+            PlayerView.PlayStartHealingAnimation(durationToComplete);
+        }
         
+        public void OnHealInterrupted()
+        {
+            PlayerView.PlayHealingInterruptedAnimation();
+        }
+
 
         private void SpendStamina(int spendAmount)
         {
