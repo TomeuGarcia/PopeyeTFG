@@ -3,11 +3,14 @@ using Popeye.Modules.Enemies.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Slime;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
+using Project.Modules.Enemies.Slime.Scripts.SlimeRefactor;
 using Task = System.Threading.Tasks.Task;
 
 
@@ -32,6 +35,12 @@ namespace Popeye.Modules.Enemies
 
         [SerializeField] private CollisionProbingConfig _floorCollisionProbingConfig;
 
+        [SerializeField] private SlimeSoundsConfig _slimeSounds;
+        private IFMODAudioManager _audioManager;
+        
+        [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
+        private IPowerBoostDropFactory _powerBoostDropFactory;
+
         public override Vector3 Position => _slimeTransform.position;
 
         public void InitAfterSpawn()
@@ -54,6 +63,14 @@ namespace Popeye.Modules.Enemies
         public void SetSlimeFactory(SlimeFactory slimeFactory)
         {
             _slimeFactory = slimeFactory;
+        }
+        public void SetAudioManager(IFMODAudioManager audioManager)
+        {
+            _audioManager = audioManager;
+        }
+        public void SetBoostDropFactory(IPowerBoostDropFactory powerBoostDropFactory)
+        {
+            _powerBoostDropFactory = powerBoostDropFactory;
         }
 
         public void SetSlimeSize(SlimeSizeID slimeSizeID)
@@ -112,10 +129,18 @@ namespace Popeye.Modules.Enemies
         public void Divide()
         {
             slimeAnimatorController.PlayDeath();
+            _powerBoostDropFactory.Create(Position, Quaternion.identity, _powerBoostDrop);
+            
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {
                 _slimeFactory.CreateFromParent(slimeMindEnemy,this, ComputeChildSlimesSpawnPosition(), Quaternion.identity);
+                _slimeSounds.PlayDivideSound(_audioManager, _slimeTransform.gameObject, SlimeSizeID);
             }
+            else
+            {
+                _slimeSounds.PlayDeathSound(_audioManager, _slimeTransform.gameObject, SlimeSizeID);
+            }
+            
             slimeMindEnemy.RemoveSlimeFromList(this);
             slimeAnimatorController.StopMove();
         }

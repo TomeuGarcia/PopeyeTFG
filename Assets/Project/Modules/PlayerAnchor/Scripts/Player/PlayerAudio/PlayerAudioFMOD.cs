@@ -26,8 +26,26 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _fmodAudioManager.StopLastingSound(_config.FootstepsSound);
         }
-        
-        
+
+        public void PlayDashTowardsAnchorSound()
+        {
+            PlayOneShotAttached(_config.DashTowardsAnchorSound);
+        }
+
+        public void PlayDashDroppingAnchorSound()
+        {
+            PlayOneShotAttached(_config.DashDroppingAnchor);
+        }
+
+        public void PlayTakeDamageSound()
+        {
+            PlayOneShotAttached(_config.TakeDamage);
+        }
+
+        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
+        {
+            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _playerGameObject);
+        }
     }
 }
 

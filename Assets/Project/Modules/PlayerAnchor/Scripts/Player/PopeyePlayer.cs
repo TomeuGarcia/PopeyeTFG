@@ -3,11 +3,12 @@ using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
-using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
-using Popeye.Modules.PlayerAnchor.Player.DeathDelegate;
-using Popeye.Modules.PlayerAnchor.Player.EnemyInteractions;
+using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Project.Modules.WorldElements.DestructiblePlatforms;
@@ -28,6 +29,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _meshHolderTransform;
         [SerializeField] private Renderer _renderer;
         [SerializeField] private Animator _animator;
+
+        [SerializeField] private PowerBoostDropCollector _powerBoostDropCollector;
         
         public Transform MeshHolderTransform => _meshHolderTransform;
         public Renderer Renderer => _renderer;
@@ -46,8 +49,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private AnchorGeneralConfig _anchorGeneralConfig;
 
         public IPlayerView PlayerView { get; private set; }
+        public IPlayerHealing PlayerHealing { get; private set; }
+        public IPlayerStaminaPower PlayerStaminaPower => _staminaSystem;
         private PlayerHealth _playerHealth;
-        private TimeStaminaSystem _staminaSystem;
+        private PlayerStaminaSystem _staminaSystem;
         
         private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
@@ -64,28 +69,34 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private bool _pullingAnchorFromTheVoid;
 
-        private PlayerDeathNotifier _playerDeathNotifier;
+        private IPlayerPowerBoostController _powerBoostController;
+        
+        private IPlayerGlobalEventsListener _globalEventsListener;
+        private IPlayerEventsDispatcher _eventsDispatcher;
         
         public Vector3 Position => _playerController.Position;
         public Transform PositionTransform => _playerController.Transform;
         public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
-        private IPlayerEnemySpawnersInteractions _playerEnemySpawnersInteractions;
+        
 
         public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
-            PlayerHealth playerHealth, TimeStaminaSystem staminaSystem, 
+            IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
             PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
-            ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker)
+            ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
+            IPlayerPowerBoostController powerBoostController,
+            IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _stateMachine = stateMachine;
             _playerController = playerController;
             _playerGeneralConfig = playerGeneralConfig;
             _anchorGeneralConfig = anchorGeneralConfig; 
             PlayerView = playerView;
+            PlayerHealing = playerHealing;
             _playerHealth = playerHealth;
             _staminaSystem = staminaSystem;
             _playerMovementChecker = playerMovementChecker;
@@ -102,20 +113,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _safeGroundChecker = safeGroundChecker;
             _onVoidChecker = onVoidChecker;
 
-            _playerDeathNotifier = new PlayerDeathNotifier();
-            _playerEnemySpawnersInteractions = new PlayerEnemySpawnerInteractions(this, _anchor);
+            _globalEventsListener = globalEventsListener;
+            _globalEventsListener.StartListening();
+            _eventsDispatcher = eventsDispatcher;
+
+            _powerBoostController = powerBoostController;
+            _powerBoostDropCollector.Init(_powerBoostController);
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
             OnStopMoving();
-            
-            _staminaSystem.OnValueExhausted += OnStaminaExhausted;
         }
-
+        
         private void OnDestroy()
         {
-            _staminaSystem.OnValueExhausted -= OnStaminaExhausted;
+            _globalEventsListener.StopListening();
         }
 
         private void Update()
@@ -313,11 +326,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerDasher.DashTowardsAnchor(duration);
             
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorDashStaminaCost);
-
+            
             SetInvulnerableForDuration(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration);
             DropTargetForEnemies(_playerGeneralConfig.StatesConfig.DashInvulnerableDuration).Forget();
             
             PlayerView.PlayDashAnimation(duration, Vector3.ProjectOnPlane((_anchor.Position - Position).normalized,  Vector3.up));
+            _playerAudio.PlayDashTowardsAnchorSound();
 
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
         }
@@ -337,6 +351,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             DropTargetForEnemies(invulnerableDuration).Forget();
             
             PlayerView.PlayDashAnimation(duration, GetFloorAlignedLookDirection());
+            _playerAudio.PlayDashDroppingAnchorSound();
             
             _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
@@ -372,10 +387,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorSpinner.StartSpinningAnchor(startsCarryingAnchor, spinToTheRight);
             
+            /*
             _staminaSystem.SetProgressiveSpendPerSecond(_playerGeneralConfig.MovesetConfig.AnchorSpinPerSecondStaminaCost);
             _staminaSystem.SpendProgressively().Forget();
 
             _staminaSystem.OnValueExhausted += StopSpinningAnchor;
+            */
         }
 
         public void SpinAnchor(float deltaTime)
@@ -387,16 +404,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchorSpinner.StopSpinningAnchor();
             
+            /*
             _staminaSystem.StopSpendingProgressively();
             _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
+            */
         }
 
         public void InterruptSpinningAnchor()
         {
             _anchorSpinner.InterruptSpinningAnchor();
             
+            /*
             _staminaSystem.StopSpendingProgressively();
             _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
+            */
         }
 
         public bool SpinningAnchorFinished()
@@ -448,7 +469,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = true;
         }
 
-        
+
+
+
         public Transform GetTargetForEnemies()
         {
             return _targetForEnemies;
@@ -466,13 +489,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerMotion.SetPosition(_respawnCheckpointChecker.Value.BestSafePosition);  
             _playerMotion.SetRotation(Quaternion.identity);
             _playerHealth.HealToMax();
+            PlayerHealing.ResetHeals();
             ResetAnchor();
             
             _playerController.DisableForDuration(0.3f).Forget();
 
             PlayerView.PlayRespawnAnimation();
             
-            _playerDeathNotifier.NotifyOnPlayerRespawnedFromDeath();
+            _eventsDispatcher.DispatchOnRespawnFromDeathEvent();
         }
 
         public void OnStartMoving()
@@ -536,47 +560,48 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return _staminaSystem.HasMaxStamina();
         }
-
-        public bool CanHeal()
-        {
-            // For now there are no number of heal limits
-            return !_playerHealth.IsMaxHealth();
-        }
-
-        public void UseHeal()
-        {
-            _playerHealth.UseHeal();
-            PlayerView.PlayHealAnimation();
-        }
-
-        public void HealToMax()
-        {
-            _playerHealth.HealToMax();
-        }
-
+        
         public void OnDamageTaken()
         {
             PlayerView.PlayTakeDamageAnimation();
+            _playerAudio.PlayTakeDamageSound();
+            _powerBoostController.RemoveExperience();
+            
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
         }
 
         public void OnKilledByDamageTaken()
         {
+            _playerAudio.PlayTakeDamageSound();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
-            _playerDeathNotifier.NotifyOnPlayerDied();
+            _eventsDispatcher.DispatchOnDiedEvent();
         }
 
         public void OnHealed()
         {
             PlayerView.PlayHealAnimation();
         }
+
+        public void OnHealStart(float durationToComplete)
+        {
+            PlayerView.PlayStartHealingAnimation(durationToComplete);
+        }
         
+        public void OnHealInterrupted()
+        {
+            PlayerView.PlayHealingInterruptedAnimation();
+        }
+
 
         private void SpendStamina(int spendAmount)
         {
             if (spendAmount == 0) return;
             
             _staminaSystem.Spend(spendAmount);
+            if (!_staminaSystem.HasStaminaLeft())
+            {
+                OnStaminaExhausted();
+            }
         }
 
         private void OnStaminaExhausted()
@@ -588,15 +613,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Tired);
         }
-        
-        public IPlayerDeathNotifier GetDeathNotifier()
-        {
-            return _playerDeathNotifier;
-        }
 
-        public IPlayerEnemySpawnersInteractions GetPlayerEnemySpawnersInteractions()
-        {
-            return _playerEnemySpawnersInteractions;
-        }
     }
 }

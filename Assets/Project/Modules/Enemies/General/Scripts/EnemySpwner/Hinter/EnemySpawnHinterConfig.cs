@@ -1,4 +1,6 @@
 using System;
+using NaughtyAttributes;
+using Popeye.Modules.AudioSystem;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -27,6 +29,9 @@ namespace Popeye.Modules.Enemies.General
         [Header("USER")] 
         [SerializeField, Range(0.01f, 5.0f)] private float _userWaitDuration = 0.75f;
 
+        [Header("SOUND")] 
+        [Expandable] [SerializeField] private OneShotFMODSound _sound; 
+
         public Vector3 GrowEndSize => _growEndSize;
         public AnimationCurve GrowEase => _growEase;
         public float GrowDuration => _growDuration;
@@ -36,6 +41,7 @@ namespace Popeye.Modules.Enemies.General
         public Material Material => GetNextMaterialInstance();
         public int AnimationPropertyId { get; private set; }
         public float UserWaitDuration => _userWaitDuration;
+        public OneShotFMODSound Sound => _sound;
 
         
         public void InitMaterials(int numberOfMaterialInstances)

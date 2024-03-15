@@ -14,6 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrowConfig _throwConfig;
         private AnchorThrowConfig _verticalThrowConfig;
+        private IThrowDistanceComputer _throwDistanceComputer;
         
         private AnchorTrajectorySnapController _anchorTrajectorySnapController;
 
@@ -40,6 +41,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker,
+            IThrowDistanceComputer throwDistanceComputer,
             AnchorThrowConfig throwConfig, AnchorThrowConfig verticalThrowConfig,
             AnchorTrajectorySnapController anchorTrajectorySnapController,
             IAnchorTrajectoryView trajectoryView)
@@ -47,6 +49,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
+
+            _throwDistanceComputer = throwDistanceComputer;
+            
             _verticalThrowConfig = verticalThrowConfig;
             _throwConfig = throwConfig;
             _anchorTrajectorySnapController = anchorTrajectorySnapController;
@@ -75,7 +80,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             Vector3 startPosition = _player.GetAnchorThrowStartPosition();
             Vector3 floorNormal = _player.GetFloorNormal();
-            Vector3 direction = _player.GetLookDirectionConsideringSteep();
+            Vector3 direction = _player.GetLookDirection();
             float distance = ThrowDistance;
 
 
@@ -134,7 +139,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 CorrectEndRotationForVisibility(AnchorThrowResult, _throwConfig);
             }
 
-            _anchor.SetThrown(AnchorThrowResult);
+            _anchor.SetThrown(AnchorThrowResult).Forget();
             DoThrowAnchor(AnchorThrowResult).Forget();
             
             _trajectoryView.Hide();
@@ -188,6 +193,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void ResetThrowForce()
         {
             _currentThrowForce01 = 0.0f;
+            _throwDistanceComputer.ClearState();
         }
 
         public void IncrementThrowForce(float deltaTime)
@@ -203,8 +209,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private float ComputeThrowDistance()
         {
-            return Mathf.Lerp(_throwConfig.MinThrowDistance, _throwConfig.MaxThrowDistance, 
-                _currentThrowCurveForce01);
+            return _throwDistanceComputer.ComputeThrowDistance(_currentThrowCurveForce01);
         }
         private float ComputeThrowDuration()
         {

@@ -113,7 +113,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorChain.DisableTensionForDuration(duration).Forget();
         }
         
-        public void SetThrown(AnchorThrowResult anchorThrowResult)
+        public async UniTaskVoid SetThrown(AnchorThrowResult anchorThrowResult)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
@@ -130,6 +130,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorViewExtras.OnThrown();
             
             _anchorAudio.PlayThrowSound();
+
+            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
+            if (!anchorThrowResult.EndsOnVoid)
+            {
+                _anchorAudio.PlayLandOnFloorSound();
+            }
         }
         
         public async UniTaskVoid SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
@@ -173,6 +179,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             _cameraFunctionalities.CameraZoomer.ZoomOutInToDefault(_pull_CameraZoomInOut);
             
+            _anchorAudio.PlayPullSound();
         }
 
         public void OnDashedAt(float duration, Ease dashEase)

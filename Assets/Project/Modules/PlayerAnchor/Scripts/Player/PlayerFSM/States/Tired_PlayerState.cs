@@ -44,7 +44,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 
                 return true;
             }
-            
+         
+            if (_blackboard.AnchorMediator.IsGrabbedBySnapper() &&
+                _blackboard.cameFromState == PlayerStates.DashingTowardsAnchor)
+            {
+                NextState = PlayerStates.TiredPickingUpAnchor;
+                return true;
+            }
             if (PlayerCanPickUpAnchor())
             {
                 NextState = PlayerStates.TiredPickingUpAnchor;
