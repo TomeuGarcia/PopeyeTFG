@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Project.Scripts.TweenExtensions
 {
-    [CreateAssetMenu(fileName = "TweenColorConfig_NAME", 
+    [CreateAssetMenu(fileName = "TweenColor__NAME", 
         menuName = ScriptableObjectsHelper.TWEENEXTENSIONS_ASSETS_PATH + "TweenColorConfig")]
     public class TweenColorConfig : ScriptableObject
     {

@@ -13,44 +13,19 @@ MonoBehaviour:
   m_Name: PlayerGeneralViewConfig
   m_EditorClassIdentifier: 
   _squashStretchViewConfig:
-    _takeDamageScalePunch:
-      _punch: {x: -0.2, y: 0.4, z: -0.2}
-      _duration: 0.3
-      _vibrato: 2
-      _ease: 4
-    _healScalePunch:
-      _punch: {x: 0.2, y: -0.4, z: 0.2}
-      _duration: 0.3
-      _vibrato: 1
-      _ease: 4
-    _deathRotation:
-      _value: {x: -90, y: 0, z: 45}
-      _duration: 0.6
-      _ease: 7
-    _deathMoveBy:
-      _value: {x: 0, y: -0.75, z: 0}
-      _duration: 0.15
-      _ease: 7
-    _dashScalePunch:
-      _punch: {x: -0.3, y: 0.6, z: -0.3}
-      _duration: 0
-      _vibrato: 5
-      _ease: 28
-    _dashRotationPunch:
-      _punch: {x: -10, y: 0, z: 0}
-      _duration: 0
-      _vibrato: 10
-      _ease: 7
-    _kickScalePunch:
-      _punch: {x: 0.2, y: -0.4, z: 0.2}
-      _duration: 0.3
-      _vibrato: 5
-      _ease: 4
-    _kickRotationPunch:
-      _punch: {x: 20, y: 0, z: 0}
-      _duration: 0.3
-      _vibrato: 5
-      _ease: 4
+    _takeDamageScalePunch: {fileID: 11400000, guid: 11f42e9a5883c444797dfff832853b89,
+      type: 2}
+    _healScalePunch: {fileID: 11400000, guid: 028f3d49b63cbe848be75c77b5b5dc79, type: 2}
+    _startHealingScalePunch: {fileID: 11400000, guid: 5117a2319c80c344a90b0c8035259a41,
+      type: 2}
+    _deathRotation: {fileID: 11400000, guid: 7718c3e3d63b82c46bdb1f89327716e0, type: 2}
+    _deathMoveBy: {fileID: 11400000, guid: 951aa3c38f4f34d44a6f262f60aea61c, type: 2}
+    _dashScalePunch: {fileID: 11400000, guid: 1104923a1e8f53d4c9d6bedb3b74a6f6, type: 2}
+    _dashRotationPunch: {fileID: 11400000, guid: 689e13a7da63f2f43b773738f8d720d9,
+      type: 2}
+    _kickScalePunch: {fileID: 11400000, guid: 16d57a345f1b916488d7e81642e2ab17, type: 2}
+    _kickRotationPunch: {fileID: 11400000, guid: ef25a84229478fd4b8243c24d76236f2,
+      type: 2}
     _throwScalePunch:
       _punch: {x: 0, y: 0, z: 0}
       _duration: 0.3

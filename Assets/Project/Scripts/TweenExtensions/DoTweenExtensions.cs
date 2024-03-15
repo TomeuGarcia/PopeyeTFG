@@ -1,32 +1,55 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Project.Scripts.TweenExtensions
 {
     public static class DoTweenExtensions
     {
         // SCALE
-        public static Tweener PunchScale(this Transform target, TweenPunchConfig punchConfig, bool completeBeforeApplying = false)
+        public static Tweener Scale(this Transform target, TweenConfig config, bool completeBeforeApplying = false)
         {
             if (completeBeforeApplying)
             {
                 target.DOComplete();
             }
             
-            return target.DOPunchScale(punchConfig.Value, punchConfig.Duration, punchConfig.Vibrato, punchConfig.Elasticity)
-                .SetEase(punchConfig.Ease);
+            return target.DOScale(config.Value, config.Duration)
+                .SetEase(config.Ease);
         }
-
         
-        // COLOR
-        public static Tweener PunchColor(this Graphic target, TweenColorConfig punchConfig)
+        // ROTATE
+        public static Tweener Rotate(this Transform target, TweenConfig config, bool completeBeforeApplying = false)
         {
-            Color originalColor = target.color;
-            return target.DOColor(punchConfig.Value, punchConfig.Duration).SetEase(punchConfig.Ease)
-                .OnComplete(() => target.DOColor(originalColor, punchConfig.Duration).SetEase(punchConfig.Ease));
+            if (completeBeforeApplying)
+            {
+                target.DOComplete();
+            }
+            
+            return target.DORotate(config.Value, config.Duration)
+                .SetEase(config.Ease);
         }
         
+        // MOVE
+        public static Tweener Move(this Transform target, TweenConfig config, bool completeBeforeApplying = false)
+        {
+            if (completeBeforeApplying)
+            {
+                target.DOComplete();
+            }
+            
+            return target.DOMove(config.Value, config.Duration)
+                .SetEase(config.Ease);
+        }
+        public static Tweener BlendableLocalMoveBy(this Transform target, TweenConfig config, bool completeBeforeApplying = false)
+        {
+            if (completeBeforeApplying)
+            {
+                target.DOComplete();
+            }
+            
+            return target.DOBlendableLocalMoveBy(config.Value, config.Duration)
+                .SetEase(config.Ease);
+        }
         
         
     }

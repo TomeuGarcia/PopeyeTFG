@@ -1,3 +1,5 @@
+using NaughtyAttributes;
+using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -7,34 +9,36 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class PlayerSquashStretchViewConfig
     {
         [Header("TAKE DAMAGE")]
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _takeDamageScalePunch;
-        public PlayerSquashAndStretchView.TweenPunchData TakeDamageScalePunch => _takeDamageScalePunch;
+        [Expandable] [SerializeField] private TweenPunchConfig _takeDamageScalePunch;
+        public TweenPunchConfig TakeDamageScalePunch => _takeDamageScalePunch;
       
         
         [Header("HEAL")]
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _healScalePunch;
-        public PlayerSquashAndStretchView.TweenPunchData HealScalePunch => _healScalePunch;
-
+        [Expandable] [SerializeField] private TweenPunchConfig _healScalePunch;
+        [Expandable] [SerializeField] private TweenPunchConfig _startHealingScalePunch;
+        public TweenPunchConfig HealScalePunch => _healScalePunch;
+        public TweenPunchConfig StartHealingScalePunch => _startHealingScalePunch;
+        
 
         [Header("DEATH")] 
-        [SerializeField] private PlayerSquashAndStretchView.TweenData _deathRotation;
-        [SerializeField] private PlayerSquashAndStretchView.TweenData _deathMoveBy;
-        public PlayerSquashAndStretchView.TweenData DeathRotation => _deathRotation;
-        public PlayerSquashAndStretchView.TweenData DeathMoveBy => _deathMoveBy;
+        [Expandable] [SerializeField] private TweenConfig _deathRotation;
+        [Expandable] [SerializeField] private TweenConfig _deathMoveBy;
+        public TweenConfig DeathRotation => _deathRotation;
+        public TweenConfig DeathMoveBy => _deathMoveBy;
 
 
         [Header("DASH")]
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _dashScalePunch;
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _dashRotationPunch;
-        public PlayerSquashAndStretchView.TweenPunchData DashScalePunch => _dashScalePunch;
-        public PlayerSquashAndStretchView.TweenPunchData DashRotationPunch => _dashRotationPunch;
+        [SerializeField] private TweenPunchConfig _dashScalePunch;
+        [SerializeField] private TweenPunchConfig _dashRotationPunch;
+        public TweenPunchConfig DashScalePunch => _dashScalePunch;
+        public TweenPunchConfig DashRotationPunch => _dashRotationPunch;
         
         
         [Header("KICK")]
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _kickScalePunch;
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _kickRotationPunch;
-        public PlayerSquashAndStretchView.TweenPunchData KickScalePunch => _kickScalePunch;
-        public PlayerSquashAndStretchView.TweenPunchData KickRotationPunch => _kickRotationPunch;
+        [SerializeField] private TweenPunchConfig _kickScalePunch;
+        [SerializeField] private TweenPunchConfig _kickRotationPunch;
+        public TweenPunchConfig KickScalePunch => _kickScalePunch;
+        public TweenPunchConfig KickRotationPunch => _kickRotationPunch;
         
         
         [Header("THROW")]

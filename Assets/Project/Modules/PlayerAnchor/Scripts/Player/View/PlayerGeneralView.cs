@@ -63,6 +63,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
         }
 
+        public void PlayStartHealingAnimation(float durationToComplete)
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayStartHealingAnimation(durationToComplete);
+            }
+        }
+
+        public void PlayHealingInterruptedAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayHealingInterruptedAnimation();
+            }
+        }
+
         public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
             foreach (IPlayerView playerView in _subPlayerViews)
