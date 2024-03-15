@@ -1,6 +1,7 @@
 using System;
 using NaughtyAttributes;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.ValueStatSystem;
@@ -32,9 +33,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         
         [Header("HEALTH")]
         [SerializeField] private PlayerHealthConfig _playerHealthConfig;
-        [SerializeField] private PlayerHealingConfig _healingConfig;
+        [SerializeField] private PotionsPlayerHealingConfig _potionsHealingConfig;
         public PlayerHealthConfig PlayerHealthConfig => _playerHealthConfig;
-        public PlayerHealingConfig HealingConfig => _healingConfig;
+        public PotionsPlayerHealingConfig PotionsHealingConfig => _potionsHealingConfig;
+        
+        
+        [Header("FOCUS")]
+        [Expandable] [SerializeField] private PlayerFocusConfig _focusConfig;
+        public PlayerFocusConfig FocusConfig => _focusConfig;
 
         
         [Header("GROUND / VOID checking")] 

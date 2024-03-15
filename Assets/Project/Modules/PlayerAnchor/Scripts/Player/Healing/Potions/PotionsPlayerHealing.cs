@@ -3,7 +3,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class PotionsPlayerHealing : IPlayerHealing
     {
         private readonly PlayerHealth _playerHealth;
-        private readonly PlayerHealingConfig _config;
+        private readonly PotionsPlayerHealingConfig _config;
         private readonly IPlayerHealingUI _playerHealingUI;
 
         private int _currentNumberOfHeals;
@@ -11,7 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private int MaxNumberOfHeals => _config.NumberOfHeals;
         
 
-        public PotionsPlayerHealing(PlayerHealth playerHealth, PlayerHealingConfig config,
+        public PotionsPlayerHealing(PlayerHealth playerHealth, PotionsPlayerHealingConfig config,
             IPlayerHealingUI playerHealingUI)
         {
             _playerHealth = playerHealth;
