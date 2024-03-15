@@ -4,6 +4,7 @@ using NaughtyAttributes;
 using Popeye.ProjectHelpers;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.ValueStatSystem
 {
@@ -51,12 +52,12 @@ namespace Popeye.Modules.ValueStatSystem
         
         [Space(10)] 
         [SerializeField] private bool _punchScale = false;
-        [ShowIf("_punchScale")] [Expandable] [SerializeField] private TweenPunchConfig _incrementPunchScaleConfig;
-        [ShowIf("_punchScale")] [Expandable] [SerializeField] private TweenPunchConfig _decrementPunchScaleConfig;
+        [FormerlySerializedAs("_incrementPunchScaleConfig")] [ShowIf("_punchScale")] [Expandable] [SerializeField] private TweenPunchConfigAsset incrementPunchScaleConfigAsset;
+        [FormerlySerializedAs("_decrementPunchScaleConfig")] [ShowIf("_punchScale")] [Expandable] [SerializeField] private TweenPunchConfigAsset decrementPunchScaleConfigAsset;
 
         public bool PunchScale => _punchScale;
-        public TweenPunchConfig IncrementPunchScaleConfig => _incrementPunchScaleConfig;
-        public TweenPunchConfig DecrementPunchScaleConfig => _decrementPunchScaleConfig;
+        public TweenPunchConfigAsset IncrementPunchScaleConfigAsset => incrementPunchScaleConfigAsset;
+        public TweenPunchConfigAsset DecrementPunchScaleConfigAsset => decrementPunchScaleConfigAsset;
 
 
         private void OnValidate()

@@ -93,6 +93,11 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 100.0f)] private float _groundSnapBreakSpeed = 100.0f;
         [SerializeField, Range(0.0f, 10.0f)] private float _groundProbeDistance = 1.5f;
         private const float SPEED_COMPARISON_THRESHOLD = 0.2f;
+        
+        [SerializeField, Range(0.0f, 90.0f)] private float _maxGroundSlopeAngle = 25.0f;
+        [SerializeField, Range(0.0f, 90.0f)] private float _minGroundSlopeAngle = 10.0f;
+        private float _minGroundSlopeDotProduct;
+        private float _maxGroundSlopeDotProduct;
 
         [Header("STAIRS")] [SerializeField] private LayerMask _stairsProbeMask = -1;
         [SerializeField, Range(0.0f, 90.0f)] private float _maxStairsAngle = 50.0f;
@@ -119,12 +124,15 @@ namespace Popeye.Modules.PlayerController
         private bool OnSteep => _steepContactCount > 0;
 
         private int _stepsSinceLastGrounded;
+        private bool _isOnSlope;
 
 
         private void OnValidate()
         {
             _minGroundDotProduct = Mathf.Cos(_maxGroundAngle * Mathf.Deg2Rad);
             _minStairsDotProduct = Mathf.Cos(_maxStairsAngle * Mathf.Deg2Rad);
+            _minGroundSlopeDotProduct = Mathf.Cos(_maxGroundSlopeAngle * Mathf.Deg2Rad);
+            _maxGroundSlopeDotProduct = Mathf.Cos(_minGroundSlopeAngle * Mathf.Deg2Rad);
 
             // Eliminate inconsistent _groundSnapBreakSpeed float precision
             if (Mathf.Abs(_maxSpeed - _groundSnapBreakSpeed) > SPEED_COMPARISON_THRESHOLD)
@@ -184,6 +192,15 @@ namespace Popeye.Modules.PlayerController
             ClearState();
         }
 
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(Position, Position + _rigidbody.velocity);
+            
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(Position, Position + _velocity);
+        }
+
         private void LateUpdate()
         {
             if (CanRotate)
@@ -206,7 +223,8 @@ namespace Popeye.Modules.PlayerController
         {
             for (int i = 0; i < collision.contactCount; ++i)
             {
-                Vector3 normal = collision.GetContact(i).normal;
+                ContactPoint contactPoint = collision.GetContact(i);
+                Vector3 normal = contactPoint.normal;
                 float minDot = GetGroundCollisionMinDot(collision.gameObject.layer);
                 if (normal.y >= minDot)
                 {
@@ -215,6 +233,13 @@ namespace Popeye.Modules.PlayerController
                 }
                 else if (normal.y > -0.01f)
                 {
+                    if (normal.y < _minGroundSlopeDotProduct &&
+                        normal.y > _maxGroundSlopeDotProduct)
+                    {
+                        _isOnSlope = true;
+                        continue;
+                    }
+                    
                     _steepContactCount += 1;
                     _steepNormal += normal;
                 }
@@ -245,6 +270,7 @@ namespace Popeye.Modules.PlayerController
         {
             _groundContactCount = _steepContactCount = 0;
             _contactNormal = _steepNormal = Vector3.zero;
+            _isOnSlope = false;
         }
 
 
@@ -259,17 +285,26 @@ namespace Popeye.Modules.PlayerController
             float acceleration = OnGround ? _maxAcceleration : _maxAirAcceleration;
 
             float maxSpeedChange = acceleration * Time.deltaTime;
+            
 
             float newX = Mathf.MoveTowards(currentX, _desiredVelocity.x, maxSpeedChange);
             float newZ = Mathf.MoveTowards(currentZ, _desiredVelocity.z, maxSpeedChange);
 
-            _velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
+            _velocity += xAxis * (newX - currentX) + 
+                         zAxis * (newZ - currentZ);
+            
+            if (_isOnSlope)
+            {
+                _velocity += _maxSpeed * Vector3.up;
+            }
+            
 
             if (!OnGround)
             {
                 _velocity += Vector3.down * (_airFallAcceleration * Time.deltaTime);
             }
         }
+        
 
         private bool CheckSnapToGround()
         {

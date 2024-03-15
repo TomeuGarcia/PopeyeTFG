@@ -1,6 +1,8 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
@@ -19,6 +21,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         [SerializeField] private MeshRenderer _buttonMesh;
         [SerializeField] private Transform _buttonTransform;
         [SerializeField] protected BoxCollider _collider;
+        [SerializeField] private OneShotFMODSound _activatedSound;
     
         [Header("WORLD INTERACTORS")]
         [SerializeField] private AWorldInteractor[] _worldInteractors;
@@ -81,6 +84,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         {
             _buttonMesh.material = _triggeredMaterial;
             _buttonTransform.DOBlendableLocalMoveBy(_triggerMoveBy, 0.2f);
+            ServiceLocator.Instance.GetService<IFMODAudioManager>().PlayOneShotAttached(_activatedSound, gameObject);
         }
         protected void PlayUntriggerAnimation()
         {

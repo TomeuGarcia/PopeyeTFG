@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.Slime;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.EnemyFactories
@@ -43,6 +45,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             slimeMediator.SetSlimeMind(ownerMind);
             slimeMediator.SetSlimeFactory(this);
             slimeMediator.SetAudioManager(_audioManager);
+            slimeMediator.SetBoostDropFactory(ServiceLocator.Instance.GetService<IPowerBoostDropFactory>());
             slimeMediator.SetSlimeSize(slimeSizeID);
             slimeMediator.SetPlayerTransform(playerTransform);
         }

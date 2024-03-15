@@ -1,16 +1,14 @@
 using DG.Tweening;
-using Popeye.ProjectHelpers;
 using UnityEngine;
 
 namespace Project.Scripts.TweenExtensions
 {
-    [CreateAssetMenu(fileName = "TweenColorConfig_NAME", 
-        menuName = ScriptableObjectsHelper.TWEENEXTENSIONS_ASSETS_PATH + "TweenColorConfig")]
-    public class TweenColorConfig : ScriptableObject
+    [System.Serializable]
+    public class TweenColorConfig
     {
         [SerializeField] private Color _value = Color.white;
         [SerializeField, Range(0.01f, 5.0f)] private float _duration = 0.3f;
-        [SerializeField] private Ease _ease = Ease.Linear;
+        [SerializeField] private Ease _ease = Ease.InOutSine;
         
         public Color Value => _value;
         public float Duration => _duration;
