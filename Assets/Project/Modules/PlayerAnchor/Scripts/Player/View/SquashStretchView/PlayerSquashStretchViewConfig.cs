@@ -9,20 +9,20 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class PlayerSquashStretchViewConfig
     {
         [Header("TAKE DAMAGE")]
-        [Expandable] [SerializeField] private TweenPunchConfig _takeDamageScalePunch;
+        [SerializeField] private TweenPunchConfig _takeDamageScalePunch;
         public TweenPunchConfig TakeDamageScalePunch => _takeDamageScalePunch;
       
         
         [Header("HEAL")]
-        [Expandable] [SerializeField] private TweenPunchConfig _healScalePunch;
-        [Expandable] [SerializeField] private TweenPunchConfig _startHealingScalePunch;
+        [SerializeField] private TweenPunchConfig _healScalePunch;
+        [SerializeField] private TweenPunchConfig _startHealingScalePunch;
         public TweenPunchConfig HealScalePunch => _healScalePunch;
         public TweenPunchConfig StartHealingScalePunch => _startHealingScalePunch;
         
 
-        [Header("DEATH")] 
-        [Expandable] [SerializeField] private TweenConfig _deathRotation;
-        [Expandable] [SerializeField] private TweenConfig _deathMoveBy;
+        [Header("DEATH")]
+        [SerializeField] private TweenConfig _deathRotation;
+        [SerializeField] private TweenConfig _deathMoveBy;
         public TweenConfig DeathRotation => _deathRotation;
         public TweenConfig DeathMoveBy => _deathMoveBy;
 
@@ -42,22 +42,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         [Header("THROW")]
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _throwScalePunch;
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _throwRotationPunch;
-        public PlayerSquashAndStretchView.TweenPunchData ThrowScalePunch => _throwScalePunch;
-        public PlayerSquashAndStretchView.TweenPunchData ThrowRotationPunch => _throwRotationPunch;
+        [SerializeField] private TweenPunchConfig _throwScalePunch;
+        [SerializeField] private TweenPunchConfig _throwRotationPunch;
+        public TweenPunchConfig ThrowScalePunch => _throwScalePunch;
+        public TweenPunchConfig ThrowRotationPunch => _throwRotationPunch;
         
         
         [Header("PULL")]
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _pullScalePunch;
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _pullRotationPunch;
-        public PlayerSquashAndStretchView.TweenPunchData PullScalePunch => _pullScalePunch;
-        public PlayerSquashAndStretchView.TweenPunchData PullRotationPunch => _pullRotationPunch;
+        [SerializeField] private TweenPunchConfig _pullScalePunch;
+        [SerializeField] private TweenPunchConfig _pullRotationPunch;
+        public TweenPunchConfig PullScalePunch => _pullScalePunch;
+        public TweenPunchConfig PullRotationPunch => _pullRotationPunch;
         
         
         [Header("ANCHOR OBSTRUCTED")]
-        [SerializeField] private PlayerSquashAndStretchView.TweenPunchData _anchorObstructedRotationPunch;
-        public PlayerSquashAndStretchView.TweenPunchData AnchorObstructedRotationPunch => _anchorObstructedRotationPunch;
+        [SerializeField] private TweenPunchConfig _anchorObstructedRotationPunch;
+        public TweenPunchConfig AnchorObstructedRotationPunch => _anchorObstructedRotationPunch;
         
         
     }

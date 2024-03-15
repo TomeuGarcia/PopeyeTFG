@@ -7,48 +7,48 @@ namespace Project.Scripts.TweenExtensions
     public static class DoTweenExtensions_Punch
     {
         // SCALE
-        public static Tweener PunchScale(this Transform target, TweenPunchConfig punchConfig, bool completeBeforeApplying = false)
+        public static Tweener PunchScale(this Transform target, TweenPunchConfig config, bool completeBeforeApplying = false)
         {
             if (completeBeforeApplying)
             {
                 target.DOComplete();
             }
             
-            return target.DOPunchScale(punchConfig.Value, punchConfig.Duration, punchConfig.Vibrato, punchConfig.Elasticity)
-                .SetEase(punchConfig.Ease);
+            return target.DOPunchScale(config.Value, config.Duration, config.Vibrato, config.Elasticity)
+                .SetEase(config.Ease);
         }
         
         // ROTATION
-        public static Tweener PunchRotation(this Transform target, TweenPunchConfig punchConfig, bool completeBeforeApplying = false)
+        public static Tweener PunchRotation(this Transform target, TweenPunchConfig config, bool completeBeforeApplying = false)
         {
             if (completeBeforeApplying)
             {
                 target.DOComplete();
             }
             
-            return target.DOPunchRotation(punchConfig.Value, punchConfig.Duration, punchConfig.Vibrato, punchConfig.Elasticity)
-                .SetEase(punchConfig.Ease);
+            return target.DOPunchRotation(config.Value, config.Duration, config.Vibrato, config.Elasticity)
+                .SetEase(config.Ease);
         }
         
         // POSITION
-        public static Tweener PunchPosition(this Transform target, TweenPunchConfig punchConfig, bool completeBeforeApplying = false)
+        public static Tweener PunchPosition(this Transform target, TweenPunchConfig config, bool completeBeforeApplying = false)
         {
             if (completeBeforeApplying)
             {
                 target.DOComplete();
             }
             
-            return target.DOPunchPosition(punchConfig.Value, punchConfig.Duration, punchConfig.Vibrato, punchConfig.Elasticity)
-                .SetEase(punchConfig.Ease);
+            return target.DOPunchPosition(config.Value, config.Duration, config.Vibrato, config.Elasticity)
+                .SetEase(config.Ease);
         }
 
         
         // COLOR
-        public static Tweener PunchColor(this Graphic target, TweenColorConfig punchConfig)
+        public static Tweener PunchColor(this Graphic target, TweenColorConfig config)
         {
             Color originalColor = target.color;
-            return target.DOColor(punchConfig.Value, punchConfig.Duration).SetEase(punchConfig.Ease)
-                .OnComplete(() => target.DOColor(originalColor, punchConfig.Duration).SetEase(punchConfig.Ease));
+            return target.DOColor(config.Value, config.Duration).SetEase(config.Ease)
+                .OnComplete(() => target.DOColor(originalColor, config.Duration).SetEase(config.Ease));
         }
         
         

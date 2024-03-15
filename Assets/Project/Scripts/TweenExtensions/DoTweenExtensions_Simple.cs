@@ -49,6 +49,18 @@ namespace Project.Scripts.TweenExtensions
             
             return target.DOBlendableLocalMoveBy(config.Value, config.Duration)
                 .SetEase(config.Ease);
+            
+        }
+        public static Tweener FuckMe(this Transform target, TweenConfig config, bool completeBeforeApplying = false)
+        {
+            if (completeBeforeApplying)
+            {
+                target.DOComplete();
+            }
+            
+            return target.DOBlendableLocalMoveBy(config.Value, config.Duration)
+                .SetEase(config.Ease);
+            
         }
         
         
