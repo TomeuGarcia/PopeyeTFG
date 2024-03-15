@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2965795394795682049}
   - component: {fileID: 8571586424734363197}
   - component: {fileID: 5056197512327966205}
+  - component: {fileID: 4292326399883785260}
   m_Layer: 11
   m_Name: Body
   m_TagString: Untagged
@@ -83,6 +84,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4292326399883785260
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998943214090890972}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1360089, y: 1, z: 1.6168162}
+  m_Center: {x: 0.0035287493, y: 0, z: 0.27267012}
 --- !u!1 &5660178913069760518
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 30
+  _maxHealth: 70
   _knockbackRigidbody: {fileID: 1095751144913005411}
   _knockbackEffectiveness: 0
 --- !u!195 &1687219243861207131
@@ -467,4 +489,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damageTargetsOncePerActivation: 0
   _isKnockbackPushOrigin: 0
-  _collider: {fileID: 5414311982984017282}
+  _collider: {fileID: 4292326399883785260}
