@@ -8,6 +8,7 @@ using Popeye.ProjectHelpers;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
@@ -31,9 +32,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         
         [Header("HEALTH")]
         [SerializeField] private PlayerHealthConfig _playerHealthConfig;
-        [SerializeField] private PotionsPlayerHealingConfig _potionsHealingConfig;
+        [SerializeField] private PlayerHealingConfig _healingConfig;
         public PlayerHealthConfig PlayerHealthConfig => _playerHealthConfig;
-        public PotionsPlayerHealingConfig PotionsHealingConfig => _potionsHealingConfig;
+        public PlayerHealingConfig HealingConfig => _healingConfig;
 
         
         [Header("GROUND / VOID checking")] 

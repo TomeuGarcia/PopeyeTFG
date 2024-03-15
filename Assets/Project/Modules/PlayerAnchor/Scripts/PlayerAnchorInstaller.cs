@@ -192,7 +192,7 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
 
             IPlayerHealing playerHealing = 
-                new PotionsPlayerHealing(playerHealth, _playerGeneralConfig.PotionsHealingConfig, _playerHUD.PlayerHealingUI);
+                new PotionsPlayerHealing(playerHealth, _playerGeneralConfig.HealingConfig, _playerHUD.PlayerHealingUI);
 
             IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
             PlayerGlobalEventsListener playerGlobalEventsListener = 

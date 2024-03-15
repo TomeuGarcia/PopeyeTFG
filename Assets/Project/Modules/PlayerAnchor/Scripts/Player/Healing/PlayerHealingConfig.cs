@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
-    [CreateAssetMenu(fileName = "PotionsPlayerHealingConfig", 
-        menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PotionsPlayerHealingConfig")]
-    public class PotionsPlayerHealingConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "PlayerHealingConfig_NAME", 
+        menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerHealingConfig")]
+    public class PlayerHealingConfig : ScriptableObject
     {
         [SerializeField, Range(1, 300)] private int _potionHealAmount = 30;
         [SerializeField, Range(1, 10)] private int _numberOfHeals = 3;
