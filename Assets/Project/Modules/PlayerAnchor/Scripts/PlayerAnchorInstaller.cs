@@ -202,7 +202,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
-                movesetInputsController, _anchor);
+                movesetInputsController, _anchor, playerMovementChecker);
             playerMotion.Configure(_playerController.Transform, _playerController.Transform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
