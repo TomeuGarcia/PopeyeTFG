@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
@@ -27,10 +28,10 @@ namespace Popeye.Modules.ValueStatSystem
         {
             if (_imageFillBar && _viewConfig)
             {
-                _imageFillBar.Init(_viewConfig);
+                //_imageFillBar.Init(_viewConfig);
             }
         }
-    
+
         private void OnEnable()
         {
             if (HasSubscriptionReferences())
@@ -53,6 +54,7 @@ namespace Popeye.Modules.ValueStatSystem
             _isSubscribed = false;
             
             OnValidate();
+            _imageFillBar.Init(_viewConfig);
     
             SubscribeToEvents();
             InstantUpdateFillImage();
