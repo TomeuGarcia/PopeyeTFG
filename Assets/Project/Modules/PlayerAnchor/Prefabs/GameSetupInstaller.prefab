@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51a0eff7344c884dad4b8f8d4b60b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerTransform: {fileID: 0}
 --- !u!1 &2500100514045219782
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +259,13 @@ MonoBehaviour:
     type: 2}
   _playerAudioConfig: {fileID: 11400000, guid: 58a82a5f79aeb3b4d82f6e0787694180, type: 2}
   _playerRenderersMaterialAssigner: {fileID: 0}
+  _playerPowerBoostController: {fileID: 11400000, guid: 7d4a3228d8f80484c890b7e0ccaa40d4,
+    type: 2}
+  _powerBoostDropFactoryConfig: {fileID: 11400000, guid: c1acdb7662fefee4099c6bed11ebc1e3,
+    type: 2}
+  _powerBoostController: {fileID: 11400000, guid: 7d4a3228d8f80484c890b7e0ccaa40d4,
+    type: 2}
+  _powerBoostDropper: {fileID: 0}
   _autoAimCreator: {fileID: 752198695613597362}
   _anchor: {fileID: 0}
   _anchorPhysics: {fileID: 0}

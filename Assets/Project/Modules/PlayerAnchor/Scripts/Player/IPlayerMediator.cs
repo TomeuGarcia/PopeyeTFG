@@ -80,7 +80,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void OnDamageTaken();
         void OnKilledByDamageTaken();
         void OnHealed();
-
+        void OnHealStart(float durationToComplete);
+        void OnHealInterrupted();
 
         Transform GetTargetForEnemies();
         void RespawnFromDeath();
