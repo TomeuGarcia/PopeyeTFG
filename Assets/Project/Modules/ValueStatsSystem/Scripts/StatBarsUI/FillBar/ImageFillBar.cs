@@ -12,21 +12,25 @@ namespace Popeye.Modules.ValueStatSystem
     {
         [Header("COMPONENTS")]
         [Required] [SerializeField] private RectTransform _holder;
-        [Required] [SerializeField] private Image _backgroundImage;
-        [Required] [SerializeField] private Image _lazyBarFillImage;
-        [Required] [SerializeField] private Image _fillImage;
+        [Required] [SerializeField] private SmartImage _backgroundImage;
+        [Required] [SerializeField] private SmartImage _lazyBarFillImage;
+        [Required] [SerializeField] private SmartImage _fillImage;
         
         private ImageFillBarConfig _viewConfig;
         
-        private const float ALMOST_ZERO_DURATION = 0.01f;
 
 
         public void Init(ImageFillBarConfig viewConfig)
         {
             _viewConfig = viewConfig;
-            _fillImage.color = _viewConfig.OriginalColor;
-            _lazyBarFillImage.color = _viewConfig.LazyColor;
-            _backgroundImage.color = _viewConfig.BackgroundColor;
+            
+            _fillImage.Init();
+            _lazyBarFillImage.Init();
+            _backgroundImage.Init();
+            
+            _fillImage.SetColor(_viewConfig.OriginalColor);
+            _lazyBarFillImage.SetColor(_viewConfig.LazyColor);
+            _backgroundImage.SetColor(_viewConfig.BackgroundColor);
         }
 
         private void OnDisable()
@@ -41,12 +45,13 @@ namespace Popeye.Modules.ValueStatSystem
 
         public void InstantUpdateFill(float value01)
         {
-            _fillImage.fillAmount = _lazyBarFillImage.fillAmount = value01;
+            _fillImage.SetFillValue(value01);
+            _lazyBarFillImage.SetFillValue(value01);
         }
     
         public async UniTask UpdateFill(float value01)
         {
-            float changeAmount = value01 - _fillImage.fillAmount;
+            float changeAmount = value01 - _fillImage.FillValue;
 
             bool isSubtracting = changeAmount < 0;
             changeAmount = Mathf.Abs(changeAmount);
@@ -72,42 +77,27 @@ namespace Popeye.Modules.ValueStatSystem
         private void DoUpdateFill(float newFillValue, float fillDuration, float lazyFillDuration,
             bool isSubtracting)
         {
-            FillBar(_fillImage, newFillValue, fillDuration, _viewConfig.FillEase);
-            FillBar(_lazyBarFillImage, newFillValue, lazyFillDuration, _viewConfig.LazyFillEase);
+            _fillImage.ToFillValue(newFillValue, fillDuration, _viewConfig.FillEase);
+            _lazyBarFillImage.ToFillValue(newFillValue, lazyFillDuration, _viewConfig.LazyFillEase);
 
             PunchFillImageColor(isSubtracting ? _viewConfig.DecrementColor : _viewConfig.IncrementColor, fillDuration);
 
             if (_viewConfig.PunchScale)
             {
-                _holder.PunchScale(isSubtracting ? _viewConfig.DecrementPunchScaleConfig : _viewConfig.IncrementPunchScaleConfig, true);
+                _holder.PunchScale(isSubtracting 
+                    ? _viewConfig.DecrementPunchScaleConfigAsset 
+                    : _viewConfig.IncrementPunchScaleConfigAsset, 
+                    true);
             }
             
         }
         
-        
-    
-        private void FillBar(Image fillImage, float newFillValue, float duration, Ease ease)
-        {
-            if (duration < ALMOST_ZERO_DURATION)
-            {
-                fillImage.fillAmount = newFillValue;
-                return;
-            }
-            
-            fillImage.DOComplete();
-            fillImage.DOFillAmount(newFillValue, duration)
-                .SetEase(ease);
-        }
-        
+
         private void PunchFillImageColor(Color punchColor, float duration)
         {
             duration = Mathf.Max(duration, _viewConfig.ColorPunchMinDuration);
-            duration /= 2;
-            _fillImage.DOColor(punchColor, duration)
-                .OnComplete(() =>
-                {
-                    _fillImage.DOColor(_viewConfig.OriginalColor, duration);
-                });
+            
+            _fillImage.PunchColor(punchColor, _viewConfig.OriginalColor, duration);
         }
         
         public void KillAllUpdates()
@@ -116,6 +106,7 @@ namespace Popeye.Modules.ValueStatSystem
             _lazyBarFillImage.DOKill();
             _holder.DOKill();
         }
+        
         public void CompleteAllUpdates()
         {
             _fillImage.DOComplete();

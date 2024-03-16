@@ -6,6 +6,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -30,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Renderer _renderer;
         [SerializeField] private Animator _animator;
 
-        [SerializeField] private PowerBoostDropCollector _powerBoostDropCollector;
+        [SerializeField] private FocusDropCollector _focusDropCollector;
         
         public Transform MeshHolderTransform => _meshHolderTransform;
         public Renderer Renderer => _renderer;
@@ -69,7 +70,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private bool _pullingAnchorFromTheVoid;
 
-        private IPlayerPowerBoostController _powerBoostController;
+        private IPlayerFocusController _focusController;
         
         private IPlayerGlobalEventsListener _globalEventsListener;
         private IPlayerEventsDispatcher _eventsDispatcher;
@@ -88,7 +89,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
             ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
-            IPlayerPowerBoostController powerBoostController,
+            IPlayerFocusController focusController,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _stateMachine = stateMachine;
@@ -117,8 +118,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _globalEventsListener.StartListening();
             _eventsDispatcher = eventsDispatcher;
 
-            _powerBoostController = powerBoostController;
-            _powerBoostDropCollector.Init(_powerBoostController);
+            _focusController = focusController;
+            _focusDropCollector.Init(_focusController);
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
@@ -469,7 +470,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.CanRotate = true;
         }
 
-        
+
+
+
         public Transform GetTargetForEnemies()
         {
             return _targetForEnemies;
@@ -563,8 +566,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             PlayerView.PlayTakeDamageAnimation();
             _playerAudio.PlayTakeDamageSound();
-            _powerBoostController.RemoveExperience();
-            
+
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
         }
 
@@ -579,7 +581,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             PlayerView.PlayHealAnimation();
         }
+
+        public void OnHealStart(float durationToComplete)
+        {
+            PlayerView.PlayStartHealingAnimation(durationToComplete);
+        }
         
+        public void OnHealInterrupted()
+        {
+            PlayerView.PlayHealingInterruptedAnimation();
+        }
+
 
         private void SpendStamina(int spendAmount)
         {
