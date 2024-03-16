@@ -16,9 +16,9 @@ namespace Popeye.Modules.Enemies.Components
         private Transform _playerTransform;
         private IHazardFactory _hazardsFactory;
         [SerializeField] private float timeBetweenShots;
-       [SerializeField] private Transform _firePoint;
-       private float timer = 0;
-       private ParabolicProjectile _currentProjectile;
+        [SerializeField] private Transform _firePoint;
+        private float timer = 0;
+        private ParabolicProjectile _currentProjectile;
        
         
        [SerializeField] private float _squashAmountY = 2.6f;
@@ -29,6 +29,7 @@ namespace Popeye.Modules.Enemies.Components
 
        private bool _animationOn = false;
        [SerializeField] private float _playerDistanceThreshold;
+       [SerializeField] private float _playerDistanceThresholdToAppear;
        private float _squaredPlayerDistanceThreshold;
 
        public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
@@ -46,32 +47,21 @@ namespace Popeye.Modules.Enemies.Components
         {
             if (IsPlayerAtCloseDistance())
             {
-                if (timer >= timeBetweenShots - 1)
-                {
-
-                    if (!_animationOn)
-                    {
-                        _mediator.StartShootingAnimation();
-                        SquashAndStretch().Forget();
-                    }
+                _mediator.AppearAnimation();
+                _mediator.LookAtPlayer(Time.deltaTime);
 
                     if (timer >= timeBetweenShots)
                     {
-                        _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform).Shoot();
+                        
+                        _mediator.StartShootingAnimation();
+                        _mediator.StoptIdleAnimation();
                         timer = 0;
                     }
-                }
-
                 timer += Time.deltaTime;
             }
             else
             {
-                if (_animationOn)
-                {
-                    _animationOn = false;
-                    transform.DOComplete();
-                    transform.localScale = Vector3.one;
-                }
+                _mediator.HideAnimation();
                 timer = 0;
             }
         }
@@ -85,23 +75,11 @@ namespace Popeye.Modules.Enemies.Components
         {
             return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
         }
-        private async UniTaskVoid SquashAndStretch()
+
+        public void Shoot()
         {
-            _animationOn = true;
-            await transform.DOScale(new Vector3(_squashAmountXZ, _squashAmountY, _squashAmountXZ), 0.9f)
-                .AsyncWaitForCompletion();
-            if (!_animationOn)
-            {
-                return;
-            }
-            await transform.DOScale(new Vector3(_stretchAmountXZ, _stretchAmountY, _stretchAmountXZ), 0.1f)
-                .AsyncWaitForCompletion();
-            
-            _mediator.StopShootingAnimation();
-            _animationOn = false;
-
+            _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform).Shoot();
         }
-
         private void OnDestroy()
         {
             transform.DOComplete();
