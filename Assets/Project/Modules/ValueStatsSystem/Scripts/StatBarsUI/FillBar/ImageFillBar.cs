@@ -79,7 +79,10 @@ namespace Popeye.Modules.ValueStatSystem
 
             if (_viewConfig.PunchScale)
             {
-                _holder.PunchScale(isSubtracting ? _viewConfig.DecrementPunchScaleConfig : _viewConfig.IncrementPunchScaleConfig, true);
+                _holder.PunchScale(isSubtracting 
+                    ? _viewConfig.DecrementPunchScaleConfigAsset 
+                    : _viewConfig.IncrementPunchScaleConfigAsset, 
+                    true);
             }
             
         }

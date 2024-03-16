@@ -12,17 +12,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [Header("TEXT COLORS")]
         [SerializeField] private Color _healsReadyTextColor = Color.white;
         [SerializeField] private Color _healsExhaustedTextColor = Color.gray;
-        [SerializeField] private TweenColorConfig _textColorPunch;
-        public TweenColorConfig TextColorPunch => _textColorPunch;
+        [SerializeField] private TweenColorConfigAsset _textColorPunch;
+        public TweenColorConfigAsset TextColorPunch => _textColorPunch;
         
         
         [Header("TEXTS PUNCHING")]
-        [SerializeField] private TweenPunchConfig _textPunch;
-        public TweenPunchConfig TextPunch => _textPunch;
+        [SerializeField] private TweenPunchConfigAsset _textPunch;
+        public TweenPunchConfigAsset TextPunch => _textPunch;
         
         [Header("IMAGE PUNCHING")]
-        [SerializeField] private TweenPunchConfig _imagePunch;
-        public TweenPunchConfig ImagePunch => _imagePunch;
+        [SerializeField] private TweenPunchConfigAsset _imagePunch;
+        public TweenPunchConfigAsset ImagePunch => _imagePunch;
         
         
         public Color HealsReadyTextColor => _healsReadyTextColor;

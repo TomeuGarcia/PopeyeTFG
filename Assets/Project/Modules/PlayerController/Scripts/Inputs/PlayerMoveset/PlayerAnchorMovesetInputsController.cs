@@ -114,6 +114,14 @@ namespace Popeye.Modules.PlayerController.Inputs
         {
             return _heal.WasPressedThisFrame();
         }
+        public bool Heal_HeldPressed()
+        {
+            return _heal.IsPressed();
+        }
+        public bool Heal_Released()
+        {
+            return _heal.WasReleasedThisFrame();
+        }
         
         
         public bool SpinAttack_Pressed(out bool spinRight)

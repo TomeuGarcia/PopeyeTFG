@@ -14,67 +14,84 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _squashStretchViewConfig:
     _takeDamageScalePunch:
-      _punch: {x: -0.2, y: 0.4, z: -0.2}
+      _value: {x: -0.2, y: 0.4, z: -0.2}
       _duration: 0.3
-      _vibrato: 2
+      _vibrato: 7
+      _elasticity: 1
       _ease: 4
     _healScalePunch:
-      _punch: {x: 0.2, y: -0.4, z: 0.2}
+      _value: {x: 0.2, y: 0.2, z: 0.2}
       _duration: 0.3
-      _vibrato: 1
+      _vibrato: 7
+      _elasticity: 1
       _ease: 4
+    _startHealingScalePunch:
+      _value: {x: -0.2, y: 0.4, z: -0.2}
+      _duration: 1.8
+      _vibrato: 0
+      _elasticity: 0.25
+      _ease: 17
     _deathRotation:
-      _value: {x: -90, y: 0, z: 45}
-      _duration: 0.6
-      _ease: 7
-    _deathMoveBy:
-      _value: {x: 0, y: -0.75, z: 0}
-      _duration: 0.15
-      _ease: 7
-    _dashScalePunch:
-      _punch: {x: -0.3, y: 0.6, z: -0.3}
-      _duration: 0
-      _vibrato: 5
-      _ease: 28
-    _dashRotationPunch:
-      _punch: {x: -10, y: 0, z: 0}
-      _duration: 0
-      _vibrato: 10
-      _ease: 7
-    _kickScalePunch:
-      _punch: {x: 0.2, y: -0.4, z: 0.2}
+      _value: {x: 90, y: 180, z: 0}
       _duration: 0.3
-      _vibrato: 5
+      _ease: 4
+    _deathMoveBy:
+      _value: {x: 0.5, y: -0.5, z: 0}
+      _duration: 0.3
+      _ease: 4
+    _dashScalePunch:
+      _value: {x: 0.5, y: 0.5, z: 0}
+      _duration: 0.22218269
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _dashRotationPunch:
+      _value: {x: 0.5, y: 0.5, z: 0}
+      _duration: 0.22218269
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _kickScalePunch:
+      _value: {x: 0.5, y: 0.5, z: 0}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
       _ease: 4
     _kickRotationPunch:
-      _punch: {x: 20, y: 0, z: 0}
+      _value: {x: 0.5, y: 0.5, z: 0}
       _duration: 0.3
-      _vibrato: 5
+      _vibrato: 7
+      _elasticity: 1
       _ease: 4
     _throwScalePunch:
-      _punch: {x: 0, y: 0, z: 0}
+      _value: {x: 0, y: 0.5, z: 0.2}
       _duration: 0.3
       _vibrato: 1
+      _elasticity: 1
       _ease: 28
     _throwRotationPunch:
-      _punch: {x: 10, y: 0, z: 0}
-      _duration: 0.3
-      _vibrato: 10
+      _value: {x: 30, y: 0, z: 0}
+      _duration: 0.4
+      _vibrato: 0
+      _elasticity: 1
       _ease: 7
     _pullScalePunch:
-      _punch: {x: 0, y: 0, z: 0}
+      _value: {x: 0, y: 0.3, z: -0.2}
       _duration: 0.3
-      _vibrato: 1
+      _vibrato: 7
+      _elasticity: 1
       _ease: 28
     _pullRotationPunch:
-      _punch: {x: 10, y: 0, z: 0}
-      _duration: 0.3
-      _vibrato: 10
-      _ease: 7
+      _value: {x: 10, y: 50, z: 0}
+      _duration: 0.2
+      _vibrato: 8
+      _elasticity: 1
+      _ease: 2
     _anchorObstructedRotationPunch:
-      _punch: {x: 0, y: 45, z: 0}
+      _value: {x: 0, y: 45, z: 0}
       _duration: 0.3
       _vibrato: 10
+      _elasticity: 1
       _ease: 7
   _materialViewConfig:
     _normalColor: {r: 1, g: 1, b: 1, a: 1}

@@ -62,7 +62,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PlayerPowerBoostController _playerPowerBoostController;
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         [SerializeField] private PlayerPowerBoostController _powerBoostController;
-
+        
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -236,7 +236,9 @@ namespace Popeye.Modules.PlayerAnchor
             PowerBoostDropFactory powerBoostDropFactory =
                 new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);
             
+            
             ServiceLocator.Instance.RegisterService<IPowerBoostDropFactory>(powerBoostDropFactory);
+            
         }
 
 
