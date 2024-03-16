@@ -50,8 +50,7 @@ namespace Popeye.Modules.ValueStatSystem
             
             _imageMaterial.DOComplete();
             _imageMaterial.DOFloat(value01, _config.FillProperty, duration)
-            .SetEase(ease);
-            
+                .SetEase(ease);
         }
         
         public void SetColor(Color color)

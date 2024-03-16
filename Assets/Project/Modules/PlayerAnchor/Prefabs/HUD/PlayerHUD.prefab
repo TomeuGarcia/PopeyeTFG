@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 2861429571389074304}
   - component: {fileID: 4878800075606453330}
   - component: {fileID: 1894573134306969625}
+  - component: {fileID: 4258988891808823492}
   m_Layer: 0
   m_Name: PlayerHUD
   m_TagString: Untagged
@@ -99,6 +100,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tankBar: {fileID: 5425186273387803027}
+  _uiEffects: {fileID: 4258988891808823492}
+--- !u!114 &4258988891808823492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995858578924771212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebef5d89590c4276abc22e626e93f5b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _focusImage: {fileID: 3078208029587244099}
+  _canBeUsedPropertyName: _CanBeUsed
 --- !u!1 &4666350239566028355
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,6 +752,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d6e812fe34ee26408b7931dd479524d, type: 3}
+--- !u!114 &3078208029587244099 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4729294291597526526, guid: 6d6e812fe34ee26408b7931dd479524d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7716401178765525437}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5425186273387803027 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2331751724532068398, guid: 6d6e812fe34ee26408b7931dd479524d,

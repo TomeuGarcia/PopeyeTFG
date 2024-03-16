@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
@@ -10,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         public int MaxFocusAmount => _config.MaxFocusAmount;
         public int CurrentFocusAmount { get; private set; }
 
+        private bool _couldSpendStamina = false;
 
         public PlayerFocusController(PlayerFocusConfig config, IPlayerFocusUI focusUI)
         {
@@ -35,11 +38,27 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
             SetCurrentFocusAmount(CurrentFocusAmount - focusAmount);
             _focusUI.OnFocusSpent();
         }
-        
+
         private void SetCurrentFocusAmount(int focusAmount)
         {
             CurrentFocusAmount = Mathf.Clamp(focusAmount, 0, MaxFocusAmount);
+            UpdateCanSpendStamina();
         }
 
+        private void UpdateCanSpendStamina()
+        {
+            bool canSpendStamina = HasEnoughFocus(_config.LowestSpendAmount);
+            if (!_couldSpendStamina && canSpendStamina)
+            {
+                _focusUI.OnStartHavingEnoughFocusToSpend();
+            }
+            else if (_couldSpendStamina && !canSpendStamina)
+            {
+                _focusUI.OnStopHavingEnoughFocusToSpend();
+            }
+
+            _couldSpendStamina = canSpendStamina;
+        }
+        
     }
 }

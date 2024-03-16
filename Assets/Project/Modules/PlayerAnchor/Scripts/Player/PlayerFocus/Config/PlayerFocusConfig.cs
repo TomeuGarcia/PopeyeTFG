@@ -14,5 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         public FocusPlayerHealingConfig HealingConfig => _healingConfig;
         public int MaxFocusAmount => _maxFocusAmount;
         public int StartFocusAmount => _startFocusAmount;
+
+        public int LowestSpendAmount => _healingConfig.RequiredFocusToHeal;
     }
 }

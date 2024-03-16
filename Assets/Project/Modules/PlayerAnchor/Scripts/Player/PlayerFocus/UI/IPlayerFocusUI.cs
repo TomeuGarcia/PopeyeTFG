@@ -5,5 +5,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         void OnFocusGained();
         void OnFocusSpent();
         void OnMaxFocusAmountChanged();
+        void OnStartHavingEnoughFocusToSpend();
+        void OnStopHavingEnoughFocusToSpend();
     }
 }
