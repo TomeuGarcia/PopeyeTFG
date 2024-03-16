@@ -19,6 +19,7 @@ namespace Popeye.Modules.Enemies.Components
         public void LookAtPlayer(float delta)
         {
             Vector3 targetDirection = _playerTransform.position - transform.position;
+            targetDirection = Vector3.ProjectOnPlane(targetDirection, Vector3.up).normalized;
             float singleStep = _speed * delta;
             Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
             
