@@ -76,7 +76,7 @@ namespace Popeye.Modules.Enemies.Components
                     _defaultProbingConfig.QueryTriggerInteraction))
             {
                 
-                dashEndPosition = hit.point-direction*1f;
+                dashEndPosition = hit.point-direction;
             }
             else
             {

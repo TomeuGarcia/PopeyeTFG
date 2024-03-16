@@ -16,10 +16,10 @@ namespace Popeye.Modules.Enemies.Components
         private Transform _playerTransform;
         private IHazardFactory _hazardsFactory;
         [SerializeField] private float timeBetweenShots;
-       [SerializeField] private Transform _firePoint;
-       private float timer = 0;
-       private ParabolicProjectile _currentProjectile;
-       
+        [SerializeField] private Transform _firePoint;
+        private float _timer = 0;
+        private ParabolicProjectile _currentProjectile;
+        private bool _outOfGround = true;
         
        [SerializeField] private float _squashAmountY = 2.6f;
        [SerializeField] private float _squashAmountXZ = 2.6f;
@@ -27,8 +27,10 @@ namespace Popeye.Modules.Enemies.Components
        [SerializeField] private float _stretchAmountXZ = 2.8f;
        [SerializeField] private float _squashAndStretchTime = 0.5f;
 
+       
        private bool _animationOn = false;
        [SerializeField] private float _playerDistanceThreshold;
+       [SerializeField] private float _playerDistanceThresholdToAppear;
        private float _squaredPlayerDistanceThreshold;
 
        public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
@@ -46,36 +48,29 @@ namespace Popeye.Modules.Enemies.Components
         {
             if (IsPlayerAtCloseDistance())
             {
-                if (timer >= timeBetweenShots - 1)
+                _mediator.AppearAnimation();
+                if (_outOfGround)
                 {
+                    _mediator.LookAtPlayer(Time.deltaTime);
 
-                    if (!_animationOn)
+                    if (_timer >= timeBetweenShots)
                     {
+
                         _mediator.StartShootingAnimation();
-                        SquashAndStretch().Forget();
+                        _mediator.StoptIdleAnimation();
+                        _timer = 0;
                     }
 
-                    if (timer >= timeBetweenShots)
-                    {
-                        _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform).Shoot();
-                        timer = 0;
-                    }
+                    _timer += Time.deltaTime;
                 }
-
-                timer += Time.deltaTime;
             }
             else
             {
-                if (_animationOn)
-                {
-                    _animationOn = false;
-                    transform.DOComplete();
-                    transform.localScale = Vector3.one;
-                }
-                timer = 0;
+                _mediator.HideAnimation();
+                _timer = 0;
             }
         }
-
+        
         private float GetPlayerSqrMagnitude()
         {
             return (_playerTransform.position - transform.position).sqrMagnitude;
@@ -85,23 +80,23 @@ namespace Popeye.Modules.Enemies.Components
         {
             return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
         }
-        private async UniTaskVoid SquashAndStretch()
+
+        public void SetOutOfGround()
         {
-            _animationOn = true;
-            await transform.DOScale(new Vector3(_squashAmountXZ, _squashAmountY, _squashAmountXZ), 0.9f)
-                .AsyncWaitForCompletion();
-            if (!_animationOn)
-            {
-                return;
-            }
-            await transform.DOScale(new Vector3(_stretchAmountXZ, _stretchAmountY, _stretchAmountXZ), 0.1f)
-                .AsyncWaitForCompletion();
             
-            _mediator.StopShootingAnimation();
-            _animationOn = false;
-
+            _timer = 0;
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform);
+            _outOfGround = true;
         }
-
+        public void InsideGround()
+        {
+            _outOfGround = false;
+        }
+        public void Shoot()
+        {
+            _currentProjectile.Shoot();
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform);
+        }
         private void OnDestroy()
         {
             transform.DOComplete();

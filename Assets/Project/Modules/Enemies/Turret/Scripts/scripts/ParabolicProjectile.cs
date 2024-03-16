@@ -19,8 +19,9 @@ public class ParabolicProjectile : RecyclableObject
     private Transform _playerTransform;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private MeshRenderer _bulletBody;
+    [SerializeField] private float _predictMagnitude;
+    private Vector3 _lastFrameTargetPosition = Vector3.zero;
     private bool _shoot = false;
-    private bool _aiming = false;
 
     private DamageHit _contactDamageHit;
     [SerializeField] private DamageHitConfig _contactDamageConfig;
@@ -36,38 +37,35 @@ public class ParabolicProjectile : RecyclableObject
     {
         if (_playerTransform != null)
         {
-            
-            Vector3 direction = _playerTransform.position - _firePoint.position;
-            Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
-            Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
-            float angle;
-            float v0;
-            float time;
 
-                
-                
                 if (_shoot)
                 {
-                    _shotTarget = _playerTransform.position+Vector3.down;
+                    Vector3 playerMoveDir = (_playerTransform.position - _lastFrameTargetPosition).normalized;
+                    Vector3 direction = (_playerTransform.position + playerMoveDir * _predictMagnitude) - _firePoint.position;
+                    Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
+                    Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
+                    float angle;
+                    float v0;
+                    float time;
+                    
+                    _shotTarget = _playerTransform.position  + Vector3.down;
                     CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
                     _shoot = false;
-                    _aiming = false;
                     _bulletBody.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
 
             
-            
+                _lastFrameTargetPosition = _playerTransform.position;
         }
 
     }
 
-    public void PrepareShot(Transform firePoint,Transform playerTransform,IHazardFactory hazardFactory)
+    public void PrepareShot(Transform playerTransform,IHazardFactory hazardFactory,Transform firePoint)
     {
         _hazardFactory = hazardFactory;
-        _firePoint = firePoint;
-        _aiming = false;
         _playerTransform = playerTransform;
+        _firePoint = firePoint;
         _bulletBody.enabled = false;
         gameObject.SetActive(true);
     }
@@ -164,7 +162,6 @@ public class ParabolicProjectile : RecyclableObject
     internal override void Release()
     {
         _shoot = false;
-        _aiming = false;
         _bulletBody.enabled = false;
     }
 }
