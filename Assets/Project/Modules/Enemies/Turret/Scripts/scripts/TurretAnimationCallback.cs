@@ -23,6 +23,15 @@ namespace Popeye.Modules.Enemies.Components
             _mediator.StopShootingAnimation();
             _mediator.StartIdleAnimation();
         }
+
+        public void OutOfGround()
+        {
+            _mediator.SetOutOfGround();
+        }
         
+        public void InsideGround()
+        {
+            _mediator.SetInsideGround();
+        }
     }
 }

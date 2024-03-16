@@ -17,9 +17,9 @@ namespace Popeye.Modules.Enemies.Components
         private IHazardFactory _hazardsFactory;
         [SerializeField] private float timeBetweenShots;
         [SerializeField] private Transform _firePoint;
-        private float timer = 0;
+        private float _timer = 0;
         private ParabolicProjectile _currentProjectile;
-       
+        private bool _outOfGround = true;
         
        [SerializeField] private float _squashAmountY = 2.6f;
        [SerializeField] private float _squashAmountXZ = 2.6f;
@@ -27,6 +27,7 @@ namespace Popeye.Modules.Enemies.Components
        [SerializeField] private float _stretchAmountXZ = 2.8f;
        [SerializeField] private float _squashAndStretchTime = 0.5f;
 
+       
        private bool _animationOn = false;
        [SerializeField] private float _playerDistanceThreshold;
        [SerializeField] private float _playerDistanceThresholdToAppear;
@@ -48,24 +49,28 @@ namespace Popeye.Modules.Enemies.Components
             if (IsPlayerAtCloseDistance())
             {
                 _mediator.AppearAnimation();
-                _mediator.LookAtPlayer(Time.deltaTime);
+                if (_outOfGround)
+                {
+                    _mediator.LookAtPlayer(Time.deltaTime);
 
-                    if (timer >= timeBetweenShots)
+                    if (_timer >= timeBetweenShots)
                     {
-                        
+
                         _mediator.StartShootingAnimation();
                         _mediator.StoptIdleAnimation();
-                        timer = 0;
+                        _timer = 0;
                     }
-                timer += Time.deltaTime;
+
+                    _timer += Time.deltaTime;
+                }
             }
             else
             {
                 _mediator.HideAnimation();
-                timer = 0;
+                _timer = 0;
             }
         }
-
+        
         private float GetPlayerSqrMagnitude()
         {
             return (_playerTransform.position - transform.position).sqrMagnitude;
@@ -76,9 +81,21 @@ namespace Popeye.Modules.Enemies.Components
             return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
         }
 
+        public void SetOutOfGround()
+        {
+            
+            _timer = 0;
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform);
+            _outOfGround = true;
+        }
+        public void InsideGround()
+        {
+            _outOfGround = false;
+        }
         public void Shoot()
         {
-            _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform).Shoot();
+            _currentProjectile.Shoot();
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform);
         }
         private void OnDestroy()
         {

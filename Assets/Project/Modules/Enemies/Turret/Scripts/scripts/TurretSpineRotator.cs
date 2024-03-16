@@ -18,7 +18,6 @@ namespace Popeye.Modules.Enemies.Components
 
         public void LookAtPlayer(float delta)
         {
-            Debug.Log("looking at playe wtf " + _playerTransform.position);
             Vector3 targetDirection = _playerTransform.position - transform.position;
             float singleStep = _speed * delta;
             Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
