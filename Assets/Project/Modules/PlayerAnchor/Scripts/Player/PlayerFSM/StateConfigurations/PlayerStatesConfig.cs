@@ -40,6 +40,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _healingMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _fallingOnVoidMoveSpeed = 0.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _dashingMoveSpeed = 12.0f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _enteringSpecialAttackMoveSpeed = 0.5f;
 
         public float WithoutAnchorMoveSpeed => _withoutAnchorMoveSpeed;
         public float WithAnchorMoveSpeed => _withAnchorMoveSpeed;
@@ -52,6 +53,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float HealingMoveSpeed => _healingMoveSpeed;
         public float FallingOnVoidMoveSpeed => _fallingOnVoidMoveSpeed;
         public float DashingMoveSpeed => _dashingMoveSpeed;
+        public float EnteringSpecialAttackMoveSpeed => _enteringSpecialAttackMoveSpeed;
         
         
         [Header("ANCHOR THROW")]
@@ -104,5 +106,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [Header("HEALING")]
         [SerializeField, Range(0.01f, 10.0f)] private float _healingDuration = 0.3f; 
         public float HealingDuration => _healingDuration;
+        
+        
+        [Header("SPECIAL ATTACK")]
+        [SerializeField, Range(0.0f, 10.0f)] private float _enteringSpecialAttackDuration = 0.3f; 
+        public float EnteringSpecialAttackDuration => _enteringSpecialAttackDuration;
     }
 }

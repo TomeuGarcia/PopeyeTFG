@@ -95,6 +95,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 NextState = PlayerStates.Healing;
                 return true;
             }
+            if (PlayerCanDoSpecialAttack())
+            {
+                NextState = PlayerStates.EnteringSpecialAttack;
+                return true;
+            }
             
             return false;
         }
@@ -152,6 +157,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             return _blackboard.MovesetInputsController.Heal_Pressed() && 
                    _blackboard.PlayerMediator.PlayerHealing.CanHeal(out hasHealsLeft);
+        }
+        
+        private bool PlayerCanDoSpecialAttack()
+        {
+            return _blackboard.MovesetInputsController.SpecialAttack_Pressed() && 
+                   _blackboard.PlayerMediator.CanDoSpecialAttack();
         }
     }
 }
