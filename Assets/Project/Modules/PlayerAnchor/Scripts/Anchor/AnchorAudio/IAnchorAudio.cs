@@ -8,5 +8,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         void PlayPullSound();
         void PlayPickedUpSound();
         void PlayDealDamageSound();
+        void PlayLandOnFloorSound();
     }
 }

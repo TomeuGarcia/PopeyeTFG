@@ -37,7 +37,9 @@ namespace Popeye.Modules.Enemies
 
         [SerializeField] private SlimeSoundsConfig _slimeSounds;
         private IFMODAudioManager _audioManager;
-        [SerializeField] private PowerBoostDropper _powerBoostDropper;
+        
+        [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
+        private IPowerBoostDropFactory _powerBoostDropFactory;
 
         public override Vector3 Position => _slimeTransform.position;
 
@@ -65,6 +67,10 @@ namespace Popeye.Modules.Enemies
         public void SetAudioManager(IFMODAudioManager audioManager)
         {
             _audioManager = audioManager;
+        }
+        public void SetBoostDropFactory(IPowerBoostDropFactory powerBoostDropFactory)
+        {
+            _powerBoostDropFactory = powerBoostDropFactory;
         }
 
         public void SetSlimeSize(SlimeSizeID slimeSizeID)
@@ -123,7 +129,7 @@ namespace Popeye.Modules.Enemies
         public void Divide()
         {
             slimeAnimatorController.PlayDeath();
-            _powerBoostDropper.SpawnDrop(Position);
+            _powerBoostDropFactory.Create(Position, Quaternion.identity, _powerBoostDrop);
             
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {

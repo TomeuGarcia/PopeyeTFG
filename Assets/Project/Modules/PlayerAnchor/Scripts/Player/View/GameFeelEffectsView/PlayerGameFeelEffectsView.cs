@@ -47,7 +47,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayHealAnimation()
         {
         }
-
+        public void PlayStartHealingAnimation(float durationToComplete)
+        {
+        }
+        public void PlayHealingInterruptedAnimation()
+        {
+        }
+        
         public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
         }
