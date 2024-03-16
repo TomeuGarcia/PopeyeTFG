@@ -19,6 +19,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -59,9 +60,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
 
         [Header("Player - Powers")] 
-        [SerializeField] private PlayerPowerBoostController _playerPowerBoostController;
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
-        [SerializeField] private PlayerPowerBoostController _powerBoostController;
         
 
         [Header("Player - AutoAim")] 
@@ -191,8 +190,10 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
             IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
 
+            PlayerFocusController playerFocusController =
+                new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
             IPlayerHealing playerHealing = 
-                new PotionsPlayerHealing(playerHealth, _playerGeneralConfig.PotionsHealingConfig, _playerHUD.PlayerHealingUI);
+                new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
             IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
             PlayerGlobalEventsListener playerGlobalEventsListener = 
@@ -218,7 +219,7 @@ namespace Popeye.Modules.PlayerAnchor
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
                 _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker, _powerBoostController,
+                playerSafeGroundChecker, playerOnVoidChecker, playerFocusController,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
 
@@ -228,10 +229,8 @@ namespace Popeye.Modules.PlayerAnchor
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
-            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerStamina.ExtraStamina);
+            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerFocusController);
             
-            _playerPowerBoostController.Init(_player, _generalGameStateData.StartingPowerBoostExperience, _playerHUD.PlayerPowerBoosterUI);
-
             
             PowerBoostDropFactory powerBoostDropFactory =
                 new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);

@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Threading.Tasks;
 using Popeye.Scripts.GizmosUtilities;
-using Popeye.Timers;
 using UnityEditor;
 using UnityEngine;
 

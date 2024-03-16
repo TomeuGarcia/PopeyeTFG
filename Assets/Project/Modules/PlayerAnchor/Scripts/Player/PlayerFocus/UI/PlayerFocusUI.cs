@@ -12,7 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         
         
 
-        void Init(IPlayerFocusState playerFocusState)
+        public void Init(IPlayerFocusState playerFocusState)
         {
             _playerFocusState = playerFocusState;
             
