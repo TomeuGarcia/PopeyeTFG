@@ -15,7 +15,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
+            UpdateMovementSpeed();
+            
             
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
@@ -28,6 +30,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public override void Exit()
         {
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
         }
 
         public override bool Update(float deltaTime)
@@ -163,6 +166,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             return _blackboard.MovesetInputsController.SpecialAttack_Pressed() && 
                    _blackboard.PlayerMediator.CanDoSpecialAttack();
+        }
+
+        private void UpdateMovementSpeed()
+        {
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
         }
     }
 }

@@ -192,9 +192,11 @@ namespace Popeye.Modules.PlayerAnchor
 
             PlayerFocusController playerFocusController =
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
+            ISpecialAttackToggleable[] specialAttackToggleables = 
+                { _anchorGeneralConfig.DamageConfig, _playerGeneralConfig.StatesConfig };
             PlayerFocusSpecialAttackController playerSpecialAttackController
                 = new PlayerFocusSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig,
-                    _anchorGeneralConfig.DamageConfig);
+                    specialAttackToggleables);
             
             IPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);

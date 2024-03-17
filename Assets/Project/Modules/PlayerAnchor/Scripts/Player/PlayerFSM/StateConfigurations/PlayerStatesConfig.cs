@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -8,7 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 {
     [CreateAssetMenu(fileName = "PlayerStatesConfig", 
         menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerStatesConfig")]
-    public class PlayerStatesConfig : ScriptableObject
+    public class PlayerStatesConfig : ScriptableObject, ISpecialAttackToggleable
     {
         [Header("SPAWNING")]
         [SerializeField, Range(0.01f, 10.0f)] private float _spawnDuration = 0.5f;
@@ -42,8 +43,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _dashingMoveSpeed = 12.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _enteringSpecialAttackMoveSpeed = 0.5f;
 
-        public float WithoutAnchorMoveSpeed => _withoutAnchorMoveSpeed;
-        public float WithAnchorMoveSpeed => _withAnchorMoveSpeed;
+        public float WithoutAnchorMoveSpeed => _withoutAnchorMoveSpeed + _extraSpeed;
+        public float WithAnchorMoveSpeed => _withAnchorMoveSpeed + _extraSpeed;
         public float AimingMoveSpeed => _aimingMoveSpeed;
         public float ThrowingAnchorMoveSpeed => _throwingAnchorMoveSpeed;
         public float PullingAnchorMoveSpeed => _pullingAnchorMoveSpeed;
@@ -110,6 +111,23 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         
         [Header("SPECIAL ATTACK")]
         [SerializeField, Range(0.0f, 10.0f)] private float _enteringSpecialAttackDuration = 0.3f; 
+        [SerializeField, Range(0.0f, 20.0f)] private float _specialAttackExtraSpeed = 5.0f; 
         public float EnteringSpecialAttackDuration => _enteringSpecialAttackDuration;
+        private float _extraSpeed = 0;
+
+        public delegate void PlayerStatesEvent();
+        public PlayerStatesEvent OnSpeedValueChanged;
+
+        public void SetDefaultMode()
+        {
+            _extraSpeed = 0;
+            OnSpeedValueChanged?.Invoke();
+        }
+
+        public void SetSpecialAttackMode()
+        {
+            _extraSpeed = _specialAttackExtraSpeed;
+            OnSpeedValueChanged?.Invoke();
+        }
     }
 }

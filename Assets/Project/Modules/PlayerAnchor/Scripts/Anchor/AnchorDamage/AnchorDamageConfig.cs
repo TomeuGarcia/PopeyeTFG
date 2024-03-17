@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "AnchorDamageConfig", 
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorDamageConfig")]
-    public class AnchorDamageConfig : ScriptableObject
+    public class AnchorDamageConfig : ScriptableObject, ISpecialAttackToggleable
     {
         [Header("THROW")]
         [Expandable] [SerializeField] private DamageHitConfig _throwDamageHit;
@@ -104,17 +105,17 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 _verticalLandDamageHit_Enraged
             );
 
-            SetDefault();
+            SetDefaultMode();
         }
-
-        public void SetEnraged()
-        {
-            _currentHitsGroup = _enragedHitsGroup;
-        }
-        public void SetDefault()
+        
+        public void SetDefaultMode()
         {
             _currentHitsGroup = _defaultHitsGroup;
         }
 
+        public void SetSpecialAttackMode()
+        {
+            _currentHitsGroup = _enragedHitsGroup;
+        }
     }
 }

@@ -8,16 +8,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
     {
         private readonly IPlayerFocusSpender _focusSpender;
         private readonly PlayerFocusAttackConfig _focusAttackConfig;
-        private readonly AnchorDamageConfig _anchorDamageConfig;
+        private readonly ISpecialAttackToggleable[] _specialAttackToggleables;
 
         private bool _isBeingPerformed;
         
         public PlayerFocusSpecialAttackController(IPlayerFocusSpender focusSpender, PlayerFocusAttackConfig focusAttackConfig,
-            AnchorDamageConfig anchorDamageConfig)
+            ISpecialAttackToggleable[] specialAttackToggleables)
         {
             _focusSpender = focusSpender;
             _focusAttackConfig = focusAttackConfig;
-            _anchorDamageConfig = anchorDamageConfig;
+            _specialAttackToggleables = specialAttackToggleables;
+            
+            foreach (ISpecialAttackToggleable specialAttackToggleable in _specialAttackToggleables)
+            {
+                specialAttackToggleable.SetDefaultMode();
+            }
         }
         
         public bool CanDoSpecialAttack()
@@ -39,10 +44,18 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         
         private async UniTaskVoid DoSpecialAttack()
         {
-            _anchorDamageConfig.SetEnraged();
+            foreach (ISpecialAttackToggleable specialAttackToggleable in _specialAttackToggleables)
+            {
+                specialAttackToggleable.SetSpecialAttackMode();
+            }
             _isBeingPerformed = true;
+            
             await UniTask.Delay(TimeSpan.FromSeconds(_focusAttackConfig.AttackDuration));
-            _anchorDamageConfig.SetDefault();
+            
+            foreach (ISpecialAttackToggleable specialAttackToggleable in _specialAttackToggleables)
+            {
+                specialAttackToggleable.SetDefaultMode();
+            }
             _isBeingPerformed = false;
         }
     }
