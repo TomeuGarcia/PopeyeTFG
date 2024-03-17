@@ -4,7 +4,6 @@ using DG.Tweening;
 using NaughtyAttributes;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Popeye.Modules.ValueStatSystem
 {
