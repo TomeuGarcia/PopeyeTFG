@@ -54,22 +54,24 @@ namespace Popeye.Modules.PlayerController
             _checkingIgnoreLedges = checkingIgnoreLedges;
         }
 
-        public Vector3 UpdateMovementDirectionFromMovementInput(Vector3 position, Vector3 movementInput)
+        public Vector3 UpdateMovementDirectionFromMovementInput(Vector3 position, Vector3 movementInput,
+            out bool isOnLedge)
         {
             _position = position + Vector3.up * 0.001f;
             _movementDirection = _movementInput = movementInput;
             
-            UpdateMoveDirectionOnLedge();
+            UpdateMoveDirectionOnLedge(out isOnLedge);
             
             return _movementDirection;
         }
         
         
-        private void UpdateMoveDirectionOnLedge()
+        private void UpdateMoveDirectionOnLedge(out bool isOnLedge)
         {
             bool isHeadingTowardsLedge = CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge);
             if (!isHeadingTowardsLedge)
             {
+                isOnLedge = false;
                 return;                
             }
 
@@ -77,29 +79,46 @@ namespace Popeye.Modules.PlayerController
 
             if (movementLedgeNormalDot < 0)
             {
+                isOnLedge = false;
                 return;
             }
             
-            float tFromLedge = Mathf.Clamp01((distanceFromLedge-LedgeDistance) / LedgeStartStopDistance);
+            isOnLedge = true;
+            
+            float tFromLedge = (distanceFromLedge-LedgeDistance) / (LedgeStartStopDistance-LedgeDistance);
+
+            bool isFarFromLedge = tFromLedge > 1;
+            
+            if (isFarFromLedge)
+            {
+                isOnLedge = false;
+                return;
+            }
+
             
             Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, ledgeNormal);
+            
             bool sideLedge = CheckIsOnLedge(projectedMoveDirection.normalized, 
                 out Vector3 sideLedgeNormal, out float sideDistanceFromLedge);
             if (sideLedge)
             {
-                projectedMoveDirection -= sideLedgeNormal *
-                                    (1-Mathf.Clamp01((sideDistanceFromLedge-LedgeDistance)  / LedgeStartStopDistance));
+                float tFromSideLedge = (sideDistanceFromLedge-LedgeDistance) / (LedgeStartStopDistance-LedgeDistance);
+                projectedMoveDirection -= sideLedgeNormal * (1-tFromSideLedge);
             }
 
             
-            bool alignedWithLedge = movementLedgeNormalDot > 0.95f;
-            Vector3 correctedMoveDirection = alignedWithLedge ? _movementInput * tFromLedge : projectedMoveDirection;
-            correctedMoveDirection = Vector3.LerpUnclamped(correctedMoveDirection, _movementInput * tFromLedge, 
-                Mathf.Pow(tFromLedge, LedgeFriction));
-
+            Vector3 correctedMoveDirection = projectedMoveDirection;
+            
             _movementDirection = correctedMoveDirection;
         }
 
+        public void DrawGizmos()
+        {
+            Vector3 position = _position + Vector3.up * 2;
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(position, position + _movementDirection);
+        }
+        
         private bool CheckIsHeadingTowardsLedge(out Vector3 ledgeNormal, out float distanceFromLedge)
         {
             Vector3 movementInput = _movementInput.normalized;
@@ -156,13 +175,16 @@ namespace Popeye.Modules.PlayerController
                 ledgeNormal = ledgeHit.normal;
 
                 Vector3 projectedLedgePosition = Vector3.ProjectOnPlane(ledgeHit.point, Vector3.up);
-                Vector3 projectedPlayerPosition = Vector3.ProjectOnPlane(_position, Vector3.up);
-                distanceFromLedge = Vector3.Distance(projectedLedgePosition, projectedPlayerPosition);
-            }
+                Vector3 projectedPlayerPosition =  Vector3.ProjectOnPlane(_position, Vector3.up);
 
+                Vector3 playerToLedge = projectedLedgePosition - projectedPlayerPosition;
+                Vector3 projectedPlayerToLedge = Vector3.ProjectOnPlane(playerToLedge, ledgeNormal);
+
+                distanceFromLedge = Vector3.Distance(playerToLedge, projectedPlayerToLedge);
+            }
             return true;
         }
-
+        
         private bool IgnoreLedgeHit(RaycastHit ledgeHit)
         {
             if (_checkingIgnoreLedges)

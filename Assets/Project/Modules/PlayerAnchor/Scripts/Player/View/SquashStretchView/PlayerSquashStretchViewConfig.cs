@@ -58,7 +58,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [Header("ANCHOR OBSTRUCTED")]
         [SerializeField] private TweenPunchConfig _anchorObstructedRotationPunch;
         public TweenPunchConfig AnchorObstructedRotationPunch => _anchorObstructedRotationPunch;
+                
         
+        [Header("SPECIAL ATTACK")]
+        [SerializeField] private TweenPunchConfig _specialAttackScalePunch;
+        [SerializeField] private TweenPunchConfig _specialAttackFinishScalePunch;
+        [SerializeField] private TweenPunchConfig _startSpecialAttackScalePunch;
+        public TweenPunchConfig SpecialAttackScalePunch => _specialAttackScalePunch;
+        public TweenPunchConfig SpecialAttackFinishScalePunch => _specialAttackFinishScalePunch;
+        public TweenPunchConfig StartSpecialAttackScalePunch => _startSpecialAttackScalePunch;
         
     }
 }

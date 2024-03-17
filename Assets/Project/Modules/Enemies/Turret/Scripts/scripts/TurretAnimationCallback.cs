@@ -33,5 +33,15 @@ namespace Popeye.Modules.Enemies.Components
         {
             _mediator.SetInsideGround();
         }
+
+        public void SetVulnerable()
+        {
+            _mediator.SetVulnerable();
+        }
+
+        public void SetInvulnerable()
+        {
+            _mediator.SetInvulnerable();
+        }
     }
 }

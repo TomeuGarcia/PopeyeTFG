@@ -42,6 +42,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
             Healing_PlayerState healing
                 = new Healing_PlayerState(blackboard);
+            
+            EnteringSpecialAttack_PlayerState enteringSpecialAttack
+                = new EnteringSpecialAttack_PlayerState(blackboard);
 
             FallingOnVoid_PlayerState fallingOnVoid
                 = new FallingOnVoid_PlayerState(blackboard);
@@ -69,6 +72,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 { PlayerStates.TiredPickingUpAnchor , tiredPickingUpAnchor },
                 
                 { PlayerStates.Healing , healing },
+                { PlayerStates.EnteringSpecialAttack , enteringSpecialAttack },
                 { PlayerStates.FallingOnVoid , fallingOnVoid },
             };
 

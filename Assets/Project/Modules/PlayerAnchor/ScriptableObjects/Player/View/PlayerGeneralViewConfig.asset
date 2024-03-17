@@ -41,13 +41,13 @@ MonoBehaviour:
       _ease: 4
     _dashScalePunch:
       _value: {x: 0.5, y: 0.5, z: 0}
-      _duration: 0.22218269
+      _duration: 0.3
       _vibrato: 7
       _elasticity: 1
       _ease: 4
     _dashRotationPunch:
       _value: {x: 0.5, y: 0.5, z: 0}
-      _duration: 0.22218269
+      _duration: 0.3
       _vibrato: 7
       _elasticity: 1
       _ease: 4
@@ -93,6 +93,24 @@ MonoBehaviour:
       _vibrato: 10
       _elasticity: 1
       _ease: 7
+    _specialAttackScalePunch:
+      _value: {x: 0.6, y: 0.2, z: 0.2}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _specialAttackFinishScalePunch:
+      _value: {x: -0.8, y: -0.2, z: -0.2}
+      _duration: 0.5
+      _vibrato: 8
+      _elasticity: 1
+      _ease: 4
+    _startSpecialAttackScalePunch:
+      _value: {x: 0, y: 0, z: 0}
+      _duration: 1
+      _vibrato: 0
+      _elasticity: 0.25
+      _ease: 17
   _materialViewConfig:
     _normalColor: {r: 1, g: 1, b: 1, a: 1}
     _damagedColor: {r: 0.9607844, g: 0.13333334, b: 0.14901961, a: 1}
@@ -108,6 +126,10 @@ MonoBehaviour:
     _takeDamageHitStop: {fileID: 11400000, guid: 3ffd15616ee45c641a3a110dea97020e,
       type: 2}
     _takeDamageCameraShake: {fileID: 11400000, guid: a576c12731b5da64a902718d8fda3c0c,
+      type: 2}
+    _healingZoomInOut: {fileID: 11400000, guid: d03fd682296d2a643b1e2eaba569540d,
+      type: 2}
+    _healingInterrupted: {fileID: 11400000, guid: 524ce40b9247c644e82e5bb38d5a4222,
       type: 2}
   _animatorViewConfig:
     _idleParameter: b_idle

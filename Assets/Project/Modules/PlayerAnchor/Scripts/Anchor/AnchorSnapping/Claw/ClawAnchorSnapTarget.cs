@@ -26,6 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private Transform _user;
         
+        
 
         
         public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;

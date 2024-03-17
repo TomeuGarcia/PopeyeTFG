@@ -143,6 +143,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
         }
 
+        public void PlaySpecialAttackInterruptedAnimation()
+        {
+        }
+
+        public void PlaySpecialAttackAnimation()
+        {
+        }
+
+        public void PlaySpecialAttackFinishAnimation()
+        {
+        }
+
+        public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
+        {
+        }
+
         public void PlayStartHealingAnimation(float durationToComplete)
         {
         }

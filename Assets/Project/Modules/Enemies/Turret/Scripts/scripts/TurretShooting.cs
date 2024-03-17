@@ -30,8 +30,11 @@ namespace Popeye.Modules.Enemies.Components
        
        private bool _animationOn = false;
        [SerializeField] private float _playerDistanceThreshold;
+       [SerializeField] private float _playerDistanceThresholdToHide;
        [SerializeField] private float _playerDistanceThresholdToAppear;
        private float _squaredPlayerDistanceThreshold;
+       private float _squaredPlayerDistanceThresholdToHide;
+       private float _squaredPlayerDistanceThresholdToAppear;
 
        public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
@@ -40,13 +43,15 @@ namespace Popeye.Modules.Enemies.Components
             _hazardsFactory = hazardFactory;
             _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform);
             _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
+            _squaredPlayerDistanceThresholdToAppear = _playerDistanceThresholdToAppear * _playerDistanceThresholdToAppear;
+            _squaredPlayerDistanceThresholdToHide = _playerDistanceThresholdToHide * _playerDistanceThresholdToHide;
         }
 
 
 
         private void Update()
         {
-            if (IsPlayerAtCloseDistance())
+            if (IsPlayerFarEnoughToAppear())
             {
                 _mediator.AppearAnimation();
                 if (_outOfGround)
@@ -64,7 +69,7 @@ namespace Popeye.Modules.Enemies.Components
                     _timer += Time.deltaTime;
                 }
             }
-            else
+            if(!IsPlayerAtCloseDistance())
             {
                 _mediator.HideAnimation();
                 _timer = 0;
@@ -77,6 +82,16 @@ namespace Popeye.Modules.Enemies.Components
         }
         
         private bool IsPlayerAtCloseDistance()
+        {
+            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold && GetPlayerSqrMagnitude() > _squaredPlayerDistanceThresholdToHide;
+        }
+        
+        private bool IsPlayerFarEnoughToAppear()
+        {
+            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold && GetPlayerSqrMagnitude() > _squaredPlayerDistanceThresholdToAppear;
+        }
+
+        private bool IsPlayerTooClose()
         {
             return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
         }
@@ -91,6 +106,7 @@ namespace Popeye.Modules.Enemies.Components
         public void InsideGround()
         {
             _outOfGround = false;
+            _currentProjectile.Recycle();
         }
         public void Shoot()
         {

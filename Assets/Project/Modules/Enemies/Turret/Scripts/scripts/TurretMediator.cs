@@ -5,6 +5,7 @@ using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;
 using UnityEngine;
 
@@ -23,7 +24,8 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private TurretAnimatorController _turretAnimatorController;
         [SerializeField] private TurretAnimationCallback _turretAnimatorCallback;
         [SerializeField] private TurretSpineRotator _turretSpineRotator;
-        
+        [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
+        private IPowerBoostDropFactory _powerBoostDropFactory;
         
         internal override void Init()
         {
@@ -48,7 +50,10 @@ namespace Popeye.Modules.Enemies
         {
             PlayerTransform = _playerTransform;
         }
-        
+        public void SetBoostDropFactory(IPowerBoostDropFactory powerBoostDropFactory)
+        {
+            _powerBoostDropFactory = powerBoostDropFactory;
+        }
         public override void OnPlayerClose()
         {
             throw new System.NotImplementedException();
@@ -94,6 +99,7 @@ namespace Popeye.Modules.Enemies
         
         public override void OnDeath(DamageHit damageHit)
         {
+            _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
             _turretMind.Die();
             _enemyVisuals.PlayDeathEffects(damageHit);
         }
@@ -115,6 +121,15 @@ namespace Popeye.Modules.Enemies
         {
             _turretShooting.InsideGround();
         }
+
+        public void SetVulnerable()
+        {
+            _enemyHealth.SetIsInvulnerable(false);
+        }
         
+        public void SetInvulnerable()
+        {
+            _enemyHealth.SetIsInvulnerable(true);
+        }
     }
 }
