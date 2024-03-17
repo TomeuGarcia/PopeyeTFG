@@ -62,7 +62,6 @@ namespace Popeye.Modules.CombatSystem
         
         public void Activate()
         {
-            Debug.Log("A");
             _hitTargetsHistory.Clear();
             
             if (_trackActivations)
@@ -74,7 +73,6 @@ namespace Popeye.Modules.CombatSystem
         } 
         public void Deactivate()
         {
-            Debug.Log("D");
             if (_trackActivations)
             {
                 _activationsCount = Mathf.Max(_activationsCount - 1, 0);
