@@ -12,17 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a35268fa3d9b414e8a281201703cf6a3, type: 3}
   m_Name: AnchorDamageConfig
   m_EditorClassIdentifier: 
-  _anchorThrowDamageHit: {fileID: 11400000, guid: e62d216700a58594882a02bed4d4bfd3,
+  _throwDamageHit: {fileID: 11400000, guid: e62d216700a58594882a02bed4d4bfd3, type: 2}
+  _throwDamageHit_Enraged: {fileID: 11400000, guid: 723f3ec41b6382242bbaa4da05b3fbe7,
     type: 2}
   _throwDamageExtraDuration: 0.2
-  _anchorPullDamageHit: {fileID: 11400000, guid: 88bca265c85677848877af6a1716064e,
+  _pullDamageHit: {fileID: 11400000, guid: 88bca265c85677848877af6a1716064e, type: 2}
+  _pullDamageHit_Enraged: {fileID: 11400000, guid: 296715e25720d1d47b8da6730ddfe635,
     type: 2}
   _pullDamageExtraDuration: 0
-  _anchorKickDamageHit: {fileID: 11400000, guid: 387ef6980c5f2fc45a67bc348c6a5c8c,
+  _pullKnockbackDistanceFromPlayer: 7
+  _kickDamageHit: {fileID: 11400000, guid: 387ef6980c5f2fc45a67bc348c6a5c8c, type: 2}
+  _kickDamageHit_Enraged: {fileID: 11400000, guid: 8f129764c48d18e47ab45ed95c3898b9,
     type: 2}
   _kickDamageExtraDuration: 0.2
-  _anchorVerticalLandDamageHit: {fileID: 11400000, guid: b9a8f8a9e869849438d7be73048107ab,
+  _verticalLandDamageHit: {fileID: 11400000, guid: b9a8f8a9e869849438d7be73048107ab,
+    type: 2}
+  _verticalLandDamageHit_Enraged: {fileID: 11400000, guid: 777546c496e74b64385afd391e328340,
     type: 2}
   _verticalLandDamageExtraDuration: 0.2
-  _anchorSpinDamageHit: {fileID: 11400000, guid: 79a5b6cbbec12a5428ef3874a7018816,
+  _spinDamageHit: {fileID: 11400000, guid: 79a5b6cbbec12a5428ef3874a7018816, type: 2}
+  _spinDamageHit_Enraged: {fileID: 11400000, guid: cb3c7da300d3e2b49a061f3efb182b34,
     type: 2}

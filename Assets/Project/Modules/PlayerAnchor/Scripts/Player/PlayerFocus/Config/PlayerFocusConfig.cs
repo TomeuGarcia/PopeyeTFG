@@ -9,12 +9,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
     {
         [SerializeField, Range(1, 100)] private int _maxFocusAmount = 100;
         [SerializeField, Range(0, 100)] private int _startFocusAmount = 0;
-        [SerializeField] private FocusPlayerHealingConfig _healingConfig;
+        [SerializeField] private PlayerFocusHealingConfig _healingConfig;
+        [SerializeField] private PlayerFocusAttackConfig _attackConfig;
         
-        public FocusPlayerHealingConfig HealingConfig => _healingConfig;
+        public PlayerFocusHealingConfig HealingConfig => _healingConfig;
+        public PlayerFocusAttackConfig AttackConfig => _attackConfig;
         public int MaxFocusAmount => _maxFocusAmount;
         public int StartFocusAmount => _startFocusAmount;
-
-        public int LowestSpendAmount => _healingConfig.RequiredFocusToHeal;
+        public int LowestSpendAmount => Mathf.Min(_healingConfig.RequiredFocusToPerform, _attackConfig.RequiredFocusToPerform);
     }
 }

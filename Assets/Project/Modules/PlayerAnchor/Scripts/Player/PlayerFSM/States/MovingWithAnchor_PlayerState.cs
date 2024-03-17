@@ -21,7 +21,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithAnchorMoveSpeed);
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
+            UpdateMovementSpeed();
             
             _lateAnchorThrowTimer.SetDuration(_blackboard.PlayerStatesConfig.AnchorLateThrowTime);
             _lateAnchorThrowTimer.Clear();
@@ -40,6 +41,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public override void Exit()
         {
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
+            
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
         }
 
         public override bool Update(float deltaTime)
@@ -91,6 +94,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (PlayerCanHeal(out bool hasHealsLeft))
             {
                 NextState = PlayerStates.Healing;
+                return true;
+            }
+            if (PlayerCanDoSpecialAttack())
+            {
+                NextState = PlayerStates.EnteringSpecialAttack;
                 return true;
             }
             
@@ -149,6 +157,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             return _blackboard.MovesetInputsController.Heal_Pressed() && 
                    _blackboard.PlayerMediator.PlayerHealing.CanHeal(out hasHealsLeft);
+        }
+        private bool PlayerCanDoSpecialAttack()
+        {
+            return _blackboard.MovesetInputsController.SpecialAttack_Pressed() && 
+                   _blackboard.PlayerMediator.CanDoSpecialAttack();
+        }
+
+        private void UpdateMovementSpeed()
+        {
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithAnchorMoveSpeed);
         }
     }
 }

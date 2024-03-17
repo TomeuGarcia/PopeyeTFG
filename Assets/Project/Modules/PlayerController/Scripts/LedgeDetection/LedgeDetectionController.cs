@@ -80,6 +80,7 @@ namespace Popeye.Modules.PlayerController
                 return;
             }
             
+            
             float tFromLedge = Mathf.Clamp01((distanceFromLedge-LedgeDistance) / LedgeStartStopDistance);
             
             Vector3 projectedMoveDirection = Vector3.ProjectOnPlane(_movementInput, ledgeNormal);
@@ -96,6 +97,8 @@ namespace Popeye.Modules.PlayerController
             Vector3 correctedMoveDirection = alignedWithLedge ? _movementInput * tFromLedge : projectedMoveDirection;
             correctedMoveDirection = Vector3.LerpUnclamped(correctedMoveDirection, _movementInput * tFromLedge, 
                 Mathf.Pow(tFromLedge, LedgeFriction));
+            
+            
 
             _movementDirection = correctedMoveDirection;
         }
@@ -159,7 +162,6 @@ namespace Popeye.Modules.PlayerController
                 Vector3 projectedPlayerPosition = Vector3.ProjectOnPlane(_position, Vector3.up);
                 distanceFromLedge = Vector3.Distance(projectedLedgePosition, projectedPlayerPosition);
             }
-
             return true;
         }
 

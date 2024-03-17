@@ -7,8 +7,6 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
-using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
-using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
@@ -71,6 +69,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private bool _pullingAnchorFromTheVoid;
 
         private IPlayerFocusController _focusController;
+        private IPlayerSpecialAttackController _specialAttackController;
         
         private IPlayerGlobalEventsListener _globalEventsListener;
         private IPlayerEventsDispatcher _eventsDispatcher;
@@ -89,7 +88,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
             ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
-            IPlayerFocusController focusController,
+            IPlayerFocusController focusController, IPlayerSpecialAttackController specialAttackController,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _stateMachine = stateMachine;
@@ -120,6 +119,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _focusController = focusController;
             _focusDropCollector.Init(_focusController);
+            
+            _specialAttackController = specialAttackController;
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
@@ -523,8 +524,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             playerIsOnVoid = _onVoidChecker.IsOnVoid;
             anchorIsOnVoid = _anchor.OnVoidChecker.IsOnVoid;
         }
-
-
+        
+        
 
         private async UniTaskVoid DropTargetForEnemies(float duration)
         {
@@ -592,6 +593,37 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayHealingInterruptedAnimation();
         }
 
+        
+        
+        public bool CanDoSpecialAttack()
+        {
+            return _specialAttackController.CanDoSpecialAttack();
+        }
+
+        public void OnSpecialAttackPreparationStart(float durationToComplete)
+        {
+            PlayerView.PlayStartEnteringSpecialAttackAnimation(durationToComplete);
+        }
+
+        public void OnSpecialAttackPreparationInterrupted()
+        {
+            PlayerView.PlaySpecialAttackInterruptedAnimation();
+        }
+
+        public void OnSpecialAttackPerformed()
+        {
+            PlayerView.PlaySpecialAttackAnimation();
+            _specialAttackController.StartSpecialAttack();
+            WaitForSpecialAttackFinished().Forget();
+        }
+        private async UniTaskVoid WaitForSpecialAttackFinished()
+        {
+            await UniTask.WaitUntil(() => !_specialAttackController.SpecialAttackIsBeingPerformed());
+            PlayerView.PlaySpecialAttackFinishAnimation();
+        }
+        
+        
+        
 
         private void SpendStamina(int spendAmount)
         {
