@@ -115,6 +115,15 @@ namespace Popeye.Modules.Enemies
         {
             _turretShooting.InsideGround();
         }
+
+        public void SetVulnerable()
+        {
+            _enemyHealth.SetIsInvulnerable(false);
+        }
         
+        public void SetInvulnerable()
+        {
+            _enemyHealth.SetIsInvulnerable(true);
+        }
     }
 }

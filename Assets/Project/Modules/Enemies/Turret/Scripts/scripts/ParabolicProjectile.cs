@@ -100,7 +100,7 @@ public class ParabolicProjectile : RecyclableObject
             _rigidbody.MovePosition(_firePoint.position + direction * x + Vector3.up * y);
 
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,0.5f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
+                if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,1f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                 {
                     
                     var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));

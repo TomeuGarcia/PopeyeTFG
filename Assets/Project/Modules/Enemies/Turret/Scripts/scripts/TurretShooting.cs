@@ -30,8 +30,9 @@ namespace Popeye.Modules.Enemies.Components
        
        private bool _animationOn = false;
        [SerializeField] private float _playerDistanceThreshold;
-       [SerializeField] private float _playerDistanceThresholdToAppear;
+       [SerializeField] private float _playerDistanceThresholdToHide;
        private float _squaredPlayerDistanceThreshold;
+       private float _squaredPlayerDistanceThresholdToHide;
 
        public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
@@ -40,6 +41,7 @@ namespace Popeye.Modules.Enemies.Components
             _hazardsFactory = hazardFactory;
             _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform);
             _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
+            _squaredPlayerDistanceThresholdToHide = _playerDistanceThresholdToHide * _playerDistanceThresholdToHide;
         }
 
 
@@ -77,6 +79,11 @@ namespace Popeye.Modules.Enemies.Components
         }
         
         private bool IsPlayerAtCloseDistance()
+        {
+            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold && GetPlayerSqrMagnitude() > _squaredPlayerDistanceThresholdToHide;
+        }
+
+        private bool IsPlayerTooClose()
         {
             return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
         }
