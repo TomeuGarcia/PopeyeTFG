@@ -277,7 +277,8 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
                 playerGeneralViewConfig.GameFeelEffectsViewConfig,
                 ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
-                ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker
+                ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker,
+                ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraZoomer
             );
 
             IPlayerView animationsPlayerView = new PlayerAnimationsView(

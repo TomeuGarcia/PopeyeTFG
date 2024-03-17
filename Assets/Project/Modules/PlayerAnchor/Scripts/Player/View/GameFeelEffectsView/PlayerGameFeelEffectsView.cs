@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.Camera.CameraShake;
+using Popeye.Modules.Camera.CameraZoom;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 
@@ -10,15 +11,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly PlayerGameFeelEffectsViewConfig _viewConfig;
         private readonly IHitStopManager _hitStopManager;
         private readonly ICameraShaker _cameraShaker;
-
-        
+        private readonly ICameraZoomer _cameraZoomer;
         
         public PlayerGameFeelEffectsView(PlayerGameFeelEffectsViewConfig viewConfig,
-            IHitStopManager hitStopManager, ICameraShaker cameraShaker)
+            IHitStopManager hitStopManager, ICameraShaker cameraShaker, ICameraZoomer cameraZoomer)
         {
             _viewConfig = viewConfig;
             _hitStopManager = hitStopManager;
             _cameraShaker = cameraShaker;
+            _cameraZoomer = cameraZoomer;
         }
         
         
@@ -49,9 +50,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         public void PlayStartHealingAnimation(float durationToComplete)
         {
+            _viewConfig.HealingZoomInOut.ZoomInConfig.SetDuration(durationToComplete);
+            _cameraZoomer.ZoomInOutToDefault(_viewConfig.HealingZoomInOut);
+            
         }
         public void PlayHealingInterruptedAnimation()
         {
+            _cameraZoomer.KillCurrentZoom();
+            _cameraZoomer.ZoomToDefault(_viewConfig.HealingInterrupted);
         }
 
         public void PlaySpecialAttackAnimation()
