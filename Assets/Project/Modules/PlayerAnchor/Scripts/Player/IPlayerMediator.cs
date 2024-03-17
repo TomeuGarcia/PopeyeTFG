@@ -93,5 +93,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
 
+
+        bool CanDoSpecialAttack();
+        void OnSpecialAttackPreparationStart(float durationToComplete);
+        void OnSpecialAttackPreparationInterrupted();
+        void OnSpecialAttackPerformed();
+
     }
 }

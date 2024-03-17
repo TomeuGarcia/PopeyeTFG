@@ -34,7 +34,7 @@ namespace Popeye.Modules.CombatSystem
         
         
         
-        public void Configure(ICombatManager combatManager, DamageHit damageHit)
+        public void Configure(ICombatManager combatManager, DamageHit damageHit = null)
         {
             _damageDealer = new DamageDealer();
             _damageDealer.Configure(combatManager, damageHit);

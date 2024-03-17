@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5426397085022066006}
   - component: {fileID: 7963120177115329457}
   - component: {fileID: 1760599788440534013}
+  - component: {fileID: 8631448396920212974}
   m_Layer: 5
   m_Name: Background_Image
   m_TagString: Untagged
@@ -76,6 +77,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8631448396920212974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237918479729121028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoInit: 0
+  _image: {fileID: 1760599788440534013}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &861389248218253271
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +106,7 @@ GameObject:
   - component: {fileID: 954064048516883010}
   - component: {fileID: 8173967109874396852}
   - component: {fileID: 997141789539934940}
+  - component: {fileID: 4729294291597526526}
   m_Layer: 5
   m_Name: Fill_Image
   m_TagString: Untagged
@@ -134,8 +154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.15686275, g: 0.6392157, b: 0.8000001, a: 1}
+  m_Material: {fileID: 2100000, guid: 1d74ed8b656d61849915b29aea9b57a0, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -147,11 +167,29 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 0.735
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4729294291597526526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861389248218253271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoInit: 0
+  _image: {fileID: 997141789539934940}
+  _imageMode: 1
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &4031095868714267861
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +240,7 @@ GameObject:
   - component: {fileID: 6801650553533219463}
   - component: {fileID: 4034922432032531855}
   - component: {fileID: 5232348774667773434}
+  - component: {fileID: 5391059915031920382}
   m_Layer: 5
   m_Name: LazyBarFill_Image
   m_TagString: Untagged
@@ -249,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1d74ed8b656d61849915b29aea9b57a0, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -267,6 +306,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5391059915031920382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5470394894278890374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoInit: 0
+  _image: {fileID: 5232348774667773434}
+  _imageMode: 1
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &7500989892740568721
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,7 +336,7 @@ GameObject:
   - component: {fileID: 2331751724532068398}
   - component: {fileID: 4298882774884946180}
   m_Layer: 5
-  m_Name: ValueStatBar_StaminaTank
+  m_Name: ValueStatBar_PowerTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -334,9 +391,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _holder: {fileID: 2153727840609909450}
-  _backgroundImage: {fileID: 1760599788440534013}
-  _lazyBarFillImage: {fileID: 5232348774667773434}
-  _fillImage: {fileID: 997141789539934940}
+  _backgroundImage: {fileID: 8631448396920212974}
+  _lazyBarFillImage: {fileID: 5391059915031920382}
+  _fillImage: {fileID: 4729294291597526526}
 --- !u!1 &9032147900573471221
 GameObject:
   m_ObjectHideFlags: 0

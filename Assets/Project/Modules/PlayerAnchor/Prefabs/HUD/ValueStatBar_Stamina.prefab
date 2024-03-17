@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 560198331988574767}
   - component: {fileID: 8904881588088196825}
   - component: {fileID: 517125006436221617}
+  - component: {fileID: 2423680257746779329}
   m_Layer: 5
   m_Name: Fill_Image
   m_TagString: Untagged
@@ -76,6 +77,23 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2423680257746779329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76554243003131834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _image: {fileID: 517125006436221617}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &700024695560517481
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +105,7 @@ GameObject:
   - component: {fileID: 4734921749996991803}
   - component: {fileID: 7239838512782480348}
   - component: {fileID: 1339070426294508432}
+  - component: {fileID: 82993185731834947}
   m_Layer: 5
   m_Name: Background_Image
   m_TagString: Untagged
@@ -152,6 +171,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &82993185731834947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700024695560517481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _image: {fileID: 1339070426294508432}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &1784453214518186727
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +238,7 @@ GameObject:
   - component: {fileID: 6097852442040083178}
   - component: {fileID: 4397010540374656482}
   - component: {fileID: 4784709728123356567}
+  - component: {fileID: 3958390629448120176}
   m_Layer: 5
   m_Name: LazyBarFill_Image
   m_TagString: Untagged
@@ -267,6 +304,23 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3958390629448120176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4688531388397876203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _image: {fileID: 4784709728123356567}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &7125648747982960380
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,9 +388,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _holder: {fileID: 1664125519564626599}
-  _backgroundImage: {fileID: 1339070426294508432}
-  _lazyBarFillImage: {fileID: 4784709728123356567}
-  _fillImage: {fileID: 517125006436221617}
+  _backgroundImage: {fileID: 82993185731834947}
+  _lazyBarFillImage: {fileID: 3958390629448120176}
+  _fillImage: {fileID: 2423680257746779329}
 --- !u!1 &7302008526254032943
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,17 +15,22 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
+            UpdateMovementSpeed();
+            
             
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
             
             _blackboard.PlayerMediator.PlayerView.PlayEnterMovingWithoutAnchorAnimation();
+            
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = _blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed;
         }
 
         public override void Exit()
         {
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
         }
 
         public override bool Update(float deltaTime)
@@ -93,6 +98,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 NextState = PlayerStates.Healing;
                 return true;
             }
+            if (PlayerCanDoSpecialAttack())
+            {
+                NextState = PlayerStates.EnteringSpecialAttack;
+                return true;
+            }
             
             return false;
         }
@@ -150,6 +160,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             return _blackboard.MovesetInputsController.Heal_Pressed() && 
                    _blackboard.PlayerMediator.PlayerHealing.CanHeal(out hasHealsLeft);
+        }
+        
+        private bool PlayerCanDoSpecialAttack()
+        {
+            return _blackboard.MovesetInputsController.SpecialAttack_Pressed() && 
+                   _blackboard.PlayerMediator.CanDoSpecialAttack();
+        }
+
+        private void UpdateMovementSpeed()
+        {
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
         }
     }
 }

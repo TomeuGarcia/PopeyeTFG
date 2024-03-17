@@ -62,6 +62,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _meshHolderTransform.DOScale(Vector3.one, 0.1f);
         }
 
+        public void PlaySpecialAttackAnimation()
+        {
+            ClearTweens();
+            PunchScale(_config.SpecialAttackScalePunch);
+        }
+
+        public void PlaySpecialAttackFinishAnimation()
+        {
+            ClearTweens();
+            PunchScale(_config.SpecialAttackFinishScalePunch);
+        }
+
+        public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
+        {
+            PunchScale(_config.StartSpecialAttackScalePunch);
+        }
+
+        public void PlaySpecialAttackInterruptedAnimation()
+        {
+            KillTweens();
+            _meshHolderTransform.DOScale(Vector3.one, 0.1f);
+        }
+
 
         public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
