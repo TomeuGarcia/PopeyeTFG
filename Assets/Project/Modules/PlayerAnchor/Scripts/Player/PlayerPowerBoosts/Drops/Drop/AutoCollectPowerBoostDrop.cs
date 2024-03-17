@@ -1,5 +1,7 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Popeye.Core.Pool;
+using Popeye.Modules.Camera.CameraZoom;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
@@ -24,6 +26,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
         public void Init(int experience, Transform autoCollectTransform)
         {
             Experience = experience;
+            DelayedInit(autoCollectTransform).Forget();
+        }
+
+        public async UniTaskVoid DelayedInit(Transform autoCollectTransform)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(0f));
 
             Transform particleTransform = transform;
             
