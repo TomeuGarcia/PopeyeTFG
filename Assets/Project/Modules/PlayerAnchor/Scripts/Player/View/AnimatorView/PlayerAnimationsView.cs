@@ -36,6 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayEnterMovingWithAnchorAnimation()
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, true);
+            SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 1);
             SetAnimatorBool(_config.MovingWithoutAnchorParameterId, false);
             SetAnimatorBool(_config.AimingParameterId, false);
             
@@ -45,6 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayEnterMovingWithoutAnchorAnimation()
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
+            SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 0);
             SetAnimatorBool(_config.MovingWithoutAnchorParameterId, true);
             SetAnimatorBool(_config.AimingParameterId, false);
             
@@ -55,6 +57,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayEnterAimingAnimation()
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
+            SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 0);
             SetAnimatorBool(_config.MovingWithoutAnchorParameterId, false);
             SetAnimatorBool(_config.AimingParameterId, true);
             
@@ -79,6 +82,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetAnimatorBool(_config.PullingAnchorParameterId, true);
             
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false); //
+            SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 0);
             SetAnimatorBool(_config.MovingWithoutAnchorParameterId, true); //
             SetAnimatorBool(_config.AimingParameterId, false); //
         }
@@ -88,6 +92,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
+            SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 0);
         }
         
         public void StartTired()
