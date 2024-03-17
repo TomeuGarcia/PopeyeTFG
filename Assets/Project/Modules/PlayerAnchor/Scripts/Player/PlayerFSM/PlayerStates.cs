@@ -23,6 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         TiredPickingUpAnchor,
         
         Healing,
+        EnteringSpecialAttack,
         FallingOnVoid
     }
 }

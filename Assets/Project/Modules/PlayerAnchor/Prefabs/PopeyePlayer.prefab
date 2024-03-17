@@ -398,11 +398,14 @@ MonoBehaviour:
   _maxGroundAngle: 40
   _groundSnapBreakSpeed: 8.2
   _groundProbeDistance: 1.5
+  _maxGroundSlopeAngle: 25
+  _minGroundSlopeAngle: 10
   _stairsProbeMask:
     serializedVersion: 2
     m_Bits: 0
   _maxStairsAngle: 50
   _checkLedges: 1
+  _maxOnLedgeAcceleration: 1000
   _ledgeDetectionConfig: {fileID: 11400000, guid: cc5eb6bc64e48c143ad84db3dbf5b7b3,
     type: 2}
 --- !u!114 &3426250871532629262
@@ -796,11 +799,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3298974903971979245}
-  - component: {fileID: 4592988738627885128}
+  - component: {fileID: 2310154199985845200}
   - component: {fileID: 8408295895933382354}
   - component: {fileID: 7198901115405341971}
   m_Layer: 17
-  m_Name: PowerBoostDropCollector
+  m_Name: FocusDropCollector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -821,7 +824,7 @@ Transform:
   m_Father: {fileID: 5186106189778176743}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4592988738627885128
+--- !u!114 &2310154199985845200
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -830,7 +833,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8488945991963225910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ef754264f2f4db59a627b93c8ac7c8e, type: 3}
+  m_Script: {fileID: 11500000, guid: 674819970e04490fab087c57b4d6fb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!135 &8408295895933382354
@@ -972,7 +975,7 @@ MonoBehaviour:
   _meshHolderTransform: {fileID: 2041502078564415168}
   _renderer: {fileID: 2116012679240791379}
   _animator: {fileID: 6009713918096670091}
-  _powerBoostDropCollector: {fileID: 4592988738627885128}
+  _focusDropCollector: {fileID: 2310154199985845200}
 --- !u!1001 &1190752105491818490
 PrefabInstance:
   m_ObjectHideFlags: 0

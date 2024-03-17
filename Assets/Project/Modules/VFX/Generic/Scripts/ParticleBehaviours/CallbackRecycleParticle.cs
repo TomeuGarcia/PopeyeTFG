@@ -30,6 +30,17 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
             }
         }
 
+        public void ForceStop()
+        {
+            foreach (var particleSystem in _particleSystems)
+            {
+                if (particleSystem.isPlaying)
+                {
+                    particleSystem.Stop();
+                }
+            }
+        }
+
         internal override void Release() { }
     }
 }

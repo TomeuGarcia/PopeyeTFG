@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly UnityEngine.InputSystem.InputAction _kick;
         
         private readonly UnityEngine.InputSystem.InputAction _heal;
+        private readonly UnityEngine.InputSystem.InputAction _specialAttack;
         
         private readonly UnityEngine.InputSystem.InputAction _spinAttack_Left;
         private readonly UnityEngine.InputSystem.InputAction _spinAttack_Right;
@@ -41,6 +42,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             _kick = _playerInputControls.Land.Kick;
 
             _heal = _playerInputControls.Land.Heal;
+            
+            _specialAttack = _playerInputControls.Land.SpecialAttack;
             
             _spinAttack_Left = _playerInputControls.Land.SpinAttack_Left;
             _spinAttack_Right = _playerInputControls.Land.SpinAttack_Right;
@@ -113,6 +116,27 @@ namespace Popeye.Modules.PlayerController.Inputs
         public bool Heal_Pressed()
         {
             return _heal.WasPressedThisFrame();
+        }
+        public bool Heal_HeldPressed()
+        {
+            return _heal.IsPressed();
+        }
+        public bool Heal_Released()
+        {
+            return _heal.WasReleasedThisFrame();
+        }
+        
+        public bool SpecialAttack_Pressed()
+        {
+            return _specialAttack.WasPressedThisFrame();
+        }
+        public bool SpecialAttack_HeldPressed()
+        {
+            return _specialAttack.IsPressed();
+        }
+        public bool SpecialAttack_Released()
+        {
+            return _specialAttack.WasReleasedThisFrame();
         }
         
         

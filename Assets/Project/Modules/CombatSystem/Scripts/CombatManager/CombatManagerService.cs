@@ -34,7 +34,6 @@ namespace Popeye.Modules.CombatSystem
                 return false;
             }
 
-            
             damageHitResult = hitTarget.TakeHitDamage(damageHit);
             SetDamageHitResultContactValues(damageHit, damageHitResult);
 

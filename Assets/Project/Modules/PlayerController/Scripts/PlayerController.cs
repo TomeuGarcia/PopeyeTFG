@@ -93,6 +93,11 @@ namespace Popeye.Modules.PlayerController
         [SerializeField, Range(0.0f, 100.0f)] private float _groundSnapBreakSpeed = 100.0f;
         [SerializeField, Range(0.0f, 10.0f)] private float _groundProbeDistance = 1.5f;
         private const float SPEED_COMPARISON_THRESHOLD = 0.2f;
+        
+        [SerializeField, Range(0.0f, 90.0f)] private float _maxGroundSlopeAngle = 25.0f;
+        [SerializeField, Range(0.0f, 90.0f)] private float _minGroundSlopeAngle = 10.0f;
+        private float _minGroundSlopeDotProduct;
+        private float _maxGroundSlopeDotProduct;
 
         [Header("STAIRS")] [SerializeField] private LayerMask _stairsProbeMask = -1;
         [SerializeField, Range(0.0f, 90.0f)] private float _maxStairsAngle = 50.0f;
@@ -101,8 +106,10 @@ namespace Popeye.Modules.PlayerController
 
         [Header("LEDGE")] 
         [SerializeField] private bool _checkLedges = false;
+        [SerializeField, Range(0.0f, 1000.0f)] private float _maxOnLedgeAcceleration = 150f;
         [SerializeField] private LedgeDetectionConfig _ledgeDetectionConfig;
         private LedgeDetectionController _ledgeDetectionController;
+        private bool _isOnLedge = false;
 
 
 
@@ -119,12 +126,15 @@ namespace Popeye.Modules.PlayerController
         private bool OnSteep => _steepContactCount > 0;
 
         private int _stepsSinceLastGrounded;
+        private bool _isOnSlope;
 
 
         private void OnValidate()
         {
             _minGroundDotProduct = Mathf.Cos(_maxGroundAngle * Mathf.Deg2Rad);
             _minStairsDotProduct = Mathf.Cos(_maxStairsAngle * Mathf.Deg2Rad);
+            _minGroundSlopeDotProduct = Mathf.Cos(_maxGroundSlopeAngle * Mathf.Deg2Rad);
+            _maxGroundSlopeDotProduct = Mathf.Cos(_minGroundSlopeAngle * Mathf.Deg2Rad);
 
             // Eliminate inconsistent _groundSnapBreakSpeed float precision
             if (Mathf.Abs(_maxSpeed - _groundSnapBreakSpeed) > SPEED_COMPARISON_THRESHOLD)
@@ -171,9 +181,13 @@ namespace Popeye.Modules.PlayerController
             if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
             {
                 _movementDirection = _ledgeDetectionController.
-                    UpdateMovementDirectionFromMovementInput(GroundPoint, _movementInput);
+                    UpdateMovementDirectionFromMovementInput(GroundPoint, _movementInput, out _isOnLedge);
                 
                 _desiredVelocity = _movementDirection * _maxSpeed;
+            }
+            else
+            {
+                _isOnLedge = false;
             }
             
             UpdateState();
@@ -182,6 +196,11 @@ namespace Popeye.Modules.PlayerController
             _rigidbody.velocity = _velocity;
 
             ClearState();
+        }
+
+        private void OnDrawGizmos()
+        {
+            _ledgeDetectionController?.DrawGizmos();
         }
 
         private void LateUpdate()
@@ -206,7 +225,8 @@ namespace Popeye.Modules.PlayerController
         {
             for (int i = 0; i < collision.contactCount; ++i)
             {
-                Vector3 normal = collision.GetContact(i).normal;
+                ContactPoint contactPoint = collision.GetContact(i);
+                Vector3 normal = contactPoint.normal;
                 float minDot = GetGroundCollisionMinDot(collision.gameObject.layer);
                 if (normal.y >= minDot)
                 {
@@ -215,6 +235,13 @@ namespace Popeye.Modules.PlayerController
                 }
                 else if (normal.y > -0.01f)
                 {
+                    if (normal.y < _minGroundSlopeDotProduct &&
+                        normal.y > _maxGroundSlopeDotProduct)
+                    {
+                        _isOnSlope = true;
+                        continue;
+                    }
+                    
                     _steepContactCount += 1;
                     _steepNormal += normal;
                 }
@@ -245,6 +272,7 @@ namespace Popeye.Modules.PlayerController
         {
             _groundContactCount = _steepContactCount = 0;
             _contactNormal = _steepNormal = Vector3.zero;
+            _isOnSlope = false;
         }
 
 
@@ -256,20 +284,30 @@ namespace Popeye.Modules.PlayerController
             float currentX = Vector3.Dot(_velocity, xAxis);
             float currentZ = Vector3.Dot(_velocity, zAxis);
 
-            float acceleration = OnGround ? _maxAcceleration : _maxAirAcceleration;
+            float acceleration = _isOnLedge 
+                ? _maxOnLedgeAcceleration 
+                : (OnGround ? _maxAcceleration : _maxAirAcceleration);
 
             float maxSpeedChange = acceleration * Time.deltaTime;
 
             float newX = Mathf.MoveTowards(currentX, _desiredVelocity.x, maxSpeedChange);
             float newZ = Mathf.MoveTowards(currentZ, _desiredVelocity.z, maxSpeedChange);
 
-            _velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
+            _velocity += xAxis * (newX - currentX) + 
+                         zAxis * (newZ - currentZ);
+
+            if (_isOnSlope)
+            {
+                _velocity += _maxSpeed * Vector3.up;
+            }
+            
 
             if (!OnGround)
             {
                 _velocity += Vector3.down * (_airFallAcceleration * Time.deltaTime);
             }
         }
+        
 
         private bool CheckSnapToGround()
         {

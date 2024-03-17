@@ -14,6 +14,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly Transform _transformHolder;
         private readonly IParticleFactory _particleFactory;
 
+        private CallbackRecycleParticle _healingParticlesToInterrupt;
+        private CallbackRecycleParticle _enragedParticlesToInterrupt;
+
         public PlayerParticlesView(PlayerParticlesViewConfig config, Transform transformHolder, IParticleFactory particleFactory)
         {
             _config = config;
@@ -42,6 +45,38 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
 
         public void PlayHealAnimation()
+        {
+            _particleFactory.Create(_config.HealCompletedParticleType, Vector3.zero, quaternion.identity, _transformHolder)
+                .gameObject.GetComponent<CallbackRecycleParticle>();
+        }
+        public void PlayStartHealingAnimation(float durationToComplete)
+        {
+            _healingParticlesToInterrupt = _particleFactory.Create(_config.HealProcessParticleType, Vector3.zero, quaternion.identity, _transformHolder)
+                .gameObject.GetComponent<CallbackRecycleParticle>();
+        }
+        public void PlayHealingInterruptedAnimation()
+        {
+            _healingParticlesToInterrupt.ForceStop();
+        }
+
+        public void PlaySpecialAttackAnimation()
+        {
+            _particleFactory.Create(_config.EnragedStartParticleTypes, Vector3.zero, quaternion.identity, _transformHolder);
+        }
+
+        public void PlaySpecialAttackFinishAnimation()
+        {
+            _particleFactory.Create(_config.EnragedStartParticleTypes, Vector3.zero, quaternion.identity, _transformHolder);
+            _enragedParticlesToInterrupt.ForceStop();
+        }
+
+        public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
+        {
+            _enragedParticlesToInterrupt = _particleFactory.Create(_config.EnragedParticleTypes, Vector3.zero, quaternion.identity, _transformHolder)
+                .gameObject.GetComponent<CallbackRecycleParticle>();
+        }
+
+        public void PlaySpecialAttackInterruptedAnimation()
         {
         }
 

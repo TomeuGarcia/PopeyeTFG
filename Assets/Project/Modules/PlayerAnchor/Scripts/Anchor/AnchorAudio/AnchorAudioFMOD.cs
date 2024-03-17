@@ -37,6 +37,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             PlayOneShotAttached(_config.DealDamage);
         }
 
+        public void PlayLandOnFloorSound()
+        {
+            PlayOneShotAttached(_config.LandOnFloor);
+        }
+
 
         private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
         {

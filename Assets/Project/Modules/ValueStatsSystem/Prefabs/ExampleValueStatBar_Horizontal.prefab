@@ -68,9 +68,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _holder: {fileID: 7498518784000243760}
-  _backgroundImage: {fileID: 7898587211789089031}
-  _lazyBarFillImage: {fileID: 4426627665323386624}
-  _fillImage: {fileID: 8657339298241585190}
+  _backgroundImage: {fileID: 4225847227383767581}
+  _lazyBarFillImage: {fileID: 2894455929387270180}
+  _fillImage: {fileID: 170534085274240516}
 --- !u!1 &4474673923654095228
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 3141210376334360701}
   - component: {fileID: 4759583008926492533}
   - component: {fileID: 4426627665323386624}
+  - component: {fileID: 2894455929387270180}
   m_Layer: 5
   m_Name: LazyBarFill_Image
   m_TagString: Untagged
@@ -147,6 +148,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2894455929387270180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4474673923654095228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _image: {fileID: 4426627665323386624}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &8556490254142461438
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,6 +176,7 @@ GameObject:
   - component: {fileID: 4521029581921392556}
   - component: {fileID: 1977410681992245579}
   - component: {fileID: 7898587211789089031}
+  - component: {fileID: 4225847227383767581}
   m_Layer: 5
   m_Name: Background_Image
   m_TagString: Untagged
@@ -223,6 +242,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4225847227383767581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8556490254142461438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _image: {fileID: 7898587211789089031}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &9081446941033907501
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +270,7 @@ GameObject:
   - component: {fileID: 8704902994095792312}
   - component: {fileID: 332211747136711758}
   - component: {fileID: 8657339298241585190}
+  - component: {fileID: 170534085274240516}
   m_Layer: 5
   m_Name: Fill_Image
   m_TagString: Untagged
@@ -299,3 +336,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &170534085274240516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9081446941033907501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _image: {fileID: 8657339298241585190}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color

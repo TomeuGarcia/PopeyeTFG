@@ -1,11 +1,9 @@
 using System;
+using System.Collections;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine;
-#if UNITY_EDITOR
-using Popeye.Scripts.GizmosUtilities;
-using UnityEditor;
-#endif
 
 namespace Popeye.Modules.WorldElements.WorldInteractors
 {
@@ -20,13 +18,22 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         [SerializeField] private Transform _deactivatedStateSpot;
         [SerializeField, Range(0.0f, 10.0f)] private float _deactivateDuration = 0.5f;
 
-        [Header("REFERNCES")]
+        [Header("REFERENCES")]
         [SerializeField] private Transform _barrierTransform;
         [SerializeField] private Collider _collider;
         [SerializeField] private bool _startActivated = false;
         [SerializeField] private bool _colliderIsAlwaysEnabled = false;
 
         private bool _isActivated = false;
+
+        public bool StartActivated => _startActivated;
+        public Transform BarrierTransform => _barrierTransform;
+        public Transform ActivatedStateSpot => _activatedStateSpot;
+        public Transform DeactivatedStateSpot => _deactivatedStateSpot;
+        public float ActivateDuration => _activateDuration;
+        public float DeactivateDuration => _deactivateDuration;
+        
+        
 
         protected override void AwakeInit()
         {
@@ -84,17 +91,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             SetCollisionEnabled(isEnabled);
         }
 
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {      
-            Vector3 cameraPosition = SceneView.currentDrawingSceneView.camera.transform.position;
-            if (Vector3.Distance(cameraPosition, transform.position) < 30)
-            {
-                GizmosExtensions.HandlesDrawArrow(_deactivatedStateSpot.position, _activatedStateSpot.position, Color.red);
-            }
-        }
-#endif
-        
+
     }
 }
 

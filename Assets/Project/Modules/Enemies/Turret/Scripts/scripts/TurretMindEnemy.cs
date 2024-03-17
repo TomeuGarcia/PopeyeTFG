@@ -4,6 +4,7 @@ using Popeye.Core.Pool;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -31,7 +32,7 @@ namespace Popeye.Modules.Enemies
             {
                 _turretMediator.SetPlayerTransform(ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies());
             }
-            
+            _turretMediator.SetBoostDropFactory(ServiceLocator.Instance.GetService<IPowerBoostDropFactory>());
             _turretMediator.Init();
         }
 
