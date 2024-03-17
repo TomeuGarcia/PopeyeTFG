@@ -15,6 +15,9 @@ namespace Popeye.Modules.CombatSystem
         [SerializeField] private bool _isKnockbackPushOrigin = false;
         [SerializeField] private Collider _collider;
 
+        [SerializeField] private bool _trackActivations = false;
+        private int _activationsCount = 0;
+        
         public Vector3 Position => transform.position;
         
         
@@ -23,6 +26,15 @@ namespace Popeye.Modules.CombatSystem
 
         
         private void OnTriggerEnter(Collider other)
+        {
+            if (_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
+            {
+                return;
+            }
+
+            TryDealDamage(other);
+        }
+        private void OnTriggerStay(Collider other)
         {
             if (_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
             {
@@ -50,11 +62,25 @@ namespace Popeye.Modules.CombatSystem
         
         public void Activate()
         {
+            Debug.Log("A");
             _hitTargetsHistory.Clear();
+            
+            if (_trackActivations)
+            {
+                if (++_activationsCount > 1) return;
+            }
+            
             _collider.enabled = true;
         } 
         public void Deactivate()
         {
+            Debug.Log("D");
+            if (_trackActivations)
+            {
+                _activationsCount = Mathf.Max(_activationsCount - 1, 0);
+                if (_activationsCount > 0) return;
+            }
+            
             _collider.enabled = false;
         }
 
