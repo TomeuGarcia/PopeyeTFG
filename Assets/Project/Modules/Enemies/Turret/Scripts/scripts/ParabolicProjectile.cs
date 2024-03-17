@@ -19,8 +19,10 @@ public class ParabolicProjectile : RecyclableObject
     private Transform _playerTransform;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private MeshRenderer _bulletBody;
+    [SerializeField] private float _predictMagnitude;
+    [SerializeField] private TrailRenderer _trail;
+    private Vector3 _lastFrameTargetPosition = Vector3.zero;
     private bool _shoot = false;
-    private bool _aiming = false;
 
     private DamageHit _contactDamageHit;
     [SerializeField] private DamageHitConfig _contactDamageConfig;
@@ -30,51 +32,49 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
 
     [SerializeField] float _distanceToTargetThreshold;
-    float _sqrDistanceToTargetThreshold;
-    private Vector3 _shotTarget;
     private void Update()
     {
         if (_playerTransform != null)
         {
-            
-            Vector3 direction = _playerTransform.position - _firePoint.position;
-            Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
-            Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
-            float angle;
-            float v0;
-            float time;
 
-                
-                
                 if (_shoot)
                 {
-                    _shotTarget = _playerTransform.position+Vector3.down;
+                    Vector3 playerMoveDir = (_playerTransform.position - _lastFrameTargetPosition).normalized;
+                    Vector3 direction = (_playerTransform.position + playerMoveDir * _predictMagnitude) - _firePoint.position;
+                    Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
+                    Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
+                    float angle;
+                    float v0;
+                    float time;
+                    
                     CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
                     _shoot = false;
-                    _aiming = false;
+                    _trail.Clear();
                     _bulletBody.enabled = true;
+                    _trail.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
 
             
-            
+                _lastFrameTargetPosition = _playerTransform.position;
         }
 
     }
 
-    public void PrepareShot(Transform firePoint,Transform playerTransform,IHazardFactory hazardFactory)
+    public void PrepareShot(Transform playerTransform,IHazardFactory hazardFactory,Transform firePoint)
     {
+        _shoot = false;
         _hazardFactory = hazardFactory;
-        _firePoint = firePoint;
-        _aiming = false;
         _playerTransform = playerTransform;
+        _firePoint = firePoint;
         _bulletBody.enabled = false;
+        _trail.Clear();
+        _trail.enabled = false;
         gameObject.SetActive(true);
     }
 
     private void Start()
     {
-        _sqrDistanceToTargetThreshold = _distanceToTargetThreshold * _distanceToTargetThreshold;
         _contactDamageHit = new DamageHit(_contactDamageConfig);
         _combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
     }
@@ -83,31 +83,27 @@ public class ParabolicProjectile : RecyclableObject
     {
         _shoot = true;
     }
-    private float DistanceToTargetSqrMagnitude(Vector3 targetPos)
-    {
-        return (targetPos - transform.position).sqrMagnitude;
-    }
+
     
-    private bool IsCloseToTarget()
-    {
-        return DistanceToTargetSqrMagnitude(_shotTarget) < _sqrDistanceToTargetThreshold;
-    }
+
     private async UniTaskVoid Movement(Vector3 direction, float v0,float angle,float time)
     {
         float t = 0;
+        Vector3 origin = _firePoint.position;
         while (t < time*2)
         {
             float x = v0 * t * Mathf.Cos(angle);
             float y = (float)(v0 * t * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(t,2));
-            _rigidbody.MovePosition(_firePoint.position + direction * x + Vector3.up * y);
+            _rigidbody.MovePosition(origin + direction * x + Vector3.up * y);
 
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,0.5f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
+                if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,1f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                 {
                     
                     var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
                     _hazardFactory.CreateDamageArea(hit.point, startRot);
                     Recycle();
+                    t = time * 2;
                 }
                 t += Time.deltaTime * _speed;
                 await UniTask.NextFrame();
@@ -146,25 +142,9 @@ public class ParabolicProjectile : RecyclableObject
         Invoke(nameof(Recycle),5);
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        _contactDamageHit.DamageSourcePosition = transform.position;
-            _contactDamageHit.UpdateKnockbackPushDirection(PositioningHelper.Instance.GetDirectionAlignedWithFloor(transform.position, other.transform.position));
-            _combatManager.TryDealDamage(other.gameObject, _contactDamageHit, out DamageHitResult damageHitResult);
-            _bulletBody.enabled = false;
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,_defaultProbingConfig.ProbeDistance,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
-            {
-                var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
-                _hazardFactory.CreateDamageArea(hit.point, startRot);
-            }
-            Recycle();
-    }
-
     internal override void Release()
     {
         _shoot = false;
-        _aiming = false;
         _bulletBody.enabled = false;
     }
 }
