@@ -10,6 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private PlayerStates _healEndNextState;
 
         private Timer _healActionTimer;
+        private bool _wasInterrupted;
         
         public Healing_PlayerState(PlayerStatesBlackboard blackboard)
         {
@@ -21,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _healEndNextState = _blackboard.cameFromState;
+            _wasInterrupted = false;
 
             float durationToComplete = _blackboard.PlayerStatesConfig.HealingDuration;
             _healActionTimer = new Timer(durationToComplete);
@@ -31,7 +33,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
-            
+            if (_wasInterrupted)
+            {
+                _blackboard.PlayerMediator.OnHealInterrupted();
+            }
         }
 
         public override bool Update(float deltaTime)
@@ -48,7 +53,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             }
             else if (_blackboard.MovesetInputsController.Heal_Released())
             {
-                _blackboard.PlayerMediator.OnHealInterrupted();
+                _wasInterrupted = true;
                 NextState = _healEndNextState;
                 return true;
             }

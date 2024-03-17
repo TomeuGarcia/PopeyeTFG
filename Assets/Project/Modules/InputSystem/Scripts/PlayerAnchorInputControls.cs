@@ -120,6 +120,15 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""SpecialAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""4925b897-cadd-41d6-8352-231177a78d8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""SpinAttack_Left"",
                     ""type"": ""Button"",
                     ""id"": ""17d85603-1a90-47d9-917e-cc356eb35805"",
@@ -567,6 +576,28 @@ namespace InputSystem
                     ""action"": ""SpinAttack_Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1b3f6e2-de5f-4252-b981-f7e4bc154fc8"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpecialAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3677d6a6-9cce-4e75-bccf-7f7c97bf9f31"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpecialAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -612,6 +643,7 @@ namespace InputSystem
             m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
             m_Land_Kick = m_Land.FindAction("Kick", throwIfNotFound: true);
             m_Land_Heal = m_Land.FindAction("Heal", throwIfNotFound: true);
+            m_Land_SpecialAttack = m_Land.FindAction("SpecialAttack", throwIfNotFound: true);
             m_Land_SpinAttack_Left = m_Land.FindAction("SpinAttack_Left", throwIfNotFound: true);
             m_Land_SpinAttack_Right = m_Land.FindAction("SpinAttack_Right", throwIfNotFound: true);
         }
@@ -685,6 +717,7 @@ namespace InputSystem
         private readonly InputAction m_Land_Dash;
         private readonly InputAction m_Land_Kick;
         private readonly InputAction m_Land_Heal;
+        private readonly InputAction m_Land_SpecialAttack;
         private readonly InputAction m_Land_SpinAttack_Left;
         private readonly InputAction m_Land_SpinAttack_Right;
         public struct LandActions
@@ -701,6 +734,7 @@ namespace InputSystem
             public InputAction @Dash => m_Wrapper.m_Land_Dash;
             public InputAction @Kick => m_Wrapper.m_Land_Kick;
             public InputAction @Heal => m_Wrapper.m_Land_Heal;
+            public InputAction @SpecialAttack => m_Wrapper.m_Land_SpecialAttack;
             public InputAction @SpinAttack_Left => m_Wrapper.m_Land_SpinAttack_Left;
             public InputAction @SpinAttack_Right => m_Wrapper.m_Land_SpinAttack_Right;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
@@ -742,6 +776,9 @@ namespace InputSystem
                 @Heal.started += instance.OnHeal;
                 @Heal.performed += instance.OnHeal;
                 @Heal.canceled += instance.OnHeal;
+                @SpecialAttack.started += instance.OnSpecialAttack;
+                @SpecialAttack.performed += instance.OnSpecialAttack;
+                @SpecialAttack.canceled += instance.OnSpecialAttack;
                 @SpinAttack_Left.started += instance.OnSpinAttack_Left;
                 @SpinAttack_Left.performed += instance.OnSpinAttack_Left;
                 @SpinAttack_Left.canceled += instance.OnSpinAttack_Left;
@@ -782,6 +819,9 @@ namespace InputSystem
                 @Heal.started -= instance.OnHeal;
                 @Heal.performed -= instance.OnHeal;
                 @Heal.canceled -= instance.OnHeal;
+                @SpecialAttack.started -= instance.OnSpecialAttack;
+                @SpecialAttack.performed -= instance.OnSpecialAttack;
+                @SpecialAttack.canceled -= instance.OnSpecialAttack;
                 @SpinAttack_Left.started -= instance.OnSpinAttack_Left;
                 @SpinAttack_Left.performed -= instance.OnSpinAttack_Left;
                 @SpinAttack_Left.canceled -= instance.OnSpinAttack_Left;
@@ -826,6 +866,7 @@ namespace InputSystem
             void OnDash(InputAction.CallbackContext context);
             void OnKick(InputAction.CallbackContext context);
             void OnHeal(InputAction.CallbackContext context);
+            void OnSpecialAttack(InputAction.CallbackContext context);
             void OnSpinAttack_Left(InputAction.CallbackContext context);
             void OnSpinAttack_Right(InputAction.CallbackContext context);
         }

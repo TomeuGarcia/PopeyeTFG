@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7064669de4c4fe4b54618bca2fd6329, type: 3}
+  m_Name: PlayerFocusConfig
+  m_EditorClassIdentifier: 
+  _maxFocusAmount: 100
+  _startFocusAmount: 0
+  _healingConfig:
+    _requiredFocusToPerform: 50
+    _healAmount: 4
+  _attackConfig:
+    _requiredFocusToPerform: 5
+    _attackDuration: 5
