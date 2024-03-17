@@ -96,6 +96,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "SpecialAttack",
+                    "type": "Button",
+                    "id": "4925b897-cadd-41d6-8352-231177a78d8d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SpinAttack_Left",
                     "type": "Button",
                     "id": "17d85603-1a90-47d9-917e-cc356eb35805",
@@ -541,6 +550,28 @@
                     "processors": "",
                     "groups": "Desktop",
                     "action": "SpinAttack_Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1b3f6e2-de5f-4252-b981-f7e4bc154fc8",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpecialAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3677d6a6-9cce-4e75-bccf-7f7c97bf9f31",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpecialAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

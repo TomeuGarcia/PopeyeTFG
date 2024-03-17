@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35babde4d6cf45e097717fc700f5c040, type: 3}
+  m_Name: PlayerGeneralViewConfig
+  m_EditorClassIdentifier: 
+  _squashStretchViewConfig:
+    _takeDamageScalePunch:
+      _value: {x: -0.2, y: 0.4, z: -0.2}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _healScalePunch:
+      _value: {x: 0.2, y: 0.2, z: 0.2}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _startHealingScalePunch:
+      _value: {x: -0.2, y: 0.4, z: -0.2}
+      _duration: 1.8
+      _vibrato: 0
+      _elasticity: 0.25
+      _ease: 17
+    _deathRotation:
+      _value: {x: 90, y: 180, z: 0}
+      _duration: 0.3
+      _ease: 4
+    _deathMoveBy:
+      _value: {x: 0.5, y: -0.5, z: 0}
+      _duration: 0.3
+      _ease: 4
+    _dashScalePunch:
+      _value: {x: 0.5, y: 0.5, z: 0}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _dashRotationPunch:
+      _value: {x: 0.5, y: 0.5, z: 0}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _kickScalePunch:
+      _value: {x: 0.5, y: 0.5, z: 0}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _kickRotationPunch:
+      _value: {x: 0.5, y: 0.5, z: 0}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _throwScalePunch:
+      _value: {x: 0, y: 0.5, z: 0.2}
+      _duration: 0.3
+      _vibrato: 1
+      _elasticity: 1
+      _ease: 28
+    _throwRotationPunch:
+      _value: {x: 30, y: 0, z: 0}
+      _duration: 0.4
+      _vibrato: 0
+      _elasticity: 1
+      _ease: 7
+    _pullScalePunch:
+      _value: {x: 0, y: 0.3, z: -0.2}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 28
+    _pullRotationPunch:
+      _value: {x: 10, y: 50, z: 0}
+      _duration: 0.2
+      _vibrato: 8
+      _elasticity: 1
+      _ease: 2
+    _anchorObstructedRotationPunch:
+      _value: {x: 0, y: 45, z: 0}
+      _duration: 0.3
+      _vibrato: 10
+      _elasticity: 1
+      _ease: 7
+    _specialAttackScalePunch:
+      _value: {x: 0.6, y: 0.2, z: 0.2}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _specialAttackFinishScalePunch:
+      _value: {x: -0.8, y: -0.2, z: -0.2}
+      _duration: 0.5
+      _vibrato: 8
+      _elasticity: 1
+      _ease: 4
+    _startSpecialAttackScalePunch:
+      _value: {x: 0, y: 0, z: 0}
+      _duration: 1
+      _vibrato: 0
+      _elasticity: 0.25
+      _ease: 17
+  _materialViewConfig:
+    _normalColor: {r: 1, g: 1, b: 1, a: 1}
+    _damagedColor: {r: 0.9607844, g: 0.13333334, b: 0.14901961, a: 1}
+    _healColor: {r: 0.34117648, g: 0.9333334, b: 0.56078434, a: 1}
+    _flashSequence: []
+    _isTiredProperty: _IsTired
+    _tiredTransitionTime: 0.25
+    _dashingProperty: _isDashing
+    _dashMaterialTransitionTime: 0.075
+  _particlesViewConfig: {fileID: 11400000, guid: 8591a54b932661448914ca8b47c32f3f,
+    type: 2}
+  _gameFeelEffectsViewConfig:
+    _takeDamageHitStop: {fileID: 11400000, guid: 3ffd15616ee45c641a3a110dea97020e,
+      type: 2}
+    _takeDamageCameraShake: {fileID: 11400000, guid: a576c12731b5da64a902718d8fda3c0c,
+      type: 2}
+  _animatorViewConfig:
+    _idleParameter: b_idle
+    _movingWithAnchorParameter: b_movingWithAnchor
+    _movingWithoutAnchorParameter: b_movingWithoutAnchor
+    _aimingParameter: b_aiming
+    _throwingAnchorParameter: b_throwing
+    _pullingAnchorParameter: t_pulling
+    _pickUpAnchorParameter: b_pickUpAnchor
+    _tiredParameter: b_tired
+    _idleToMovingParameter: idleToMovingBlend

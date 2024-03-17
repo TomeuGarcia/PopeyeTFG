@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Popeye.Timers;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -7,8 +8,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     {
         private readonly PlayerStatesBlackboard _blackboard;
         private PlayerStates _healEndNextState;
-        private bool _finishedHealing;
-        
+
+        private Timer _healActionTimer;
+        private bool _wasInterrupted;
         
         public Healing_PlayerState(PlayerStatesBlackboard blackboard)
         {
@@ -20,20 +22,38 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _healEndNextState = _blackboard.cameFromState;
+            _wasInterrupted = false;
+
+            float durationToComplete = _blackboard.PlayerStatesConfig.HealingDuration;
+            _healActionTimer = new Timer(durationToComplete);
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.HealingMoveSpeed);
-            StartHealing().Forget();
+            _blackboard.PlayerMediator.OnHealStart(durationToComplete);
         }
 
         public override void Exit()
         {
-            
+            if (_wasInterrupted)
+            {
+                _blackboard.PlayerMediator.OnHealInterrupted();
+            }
         }
 
         public override bool Update(float deltaTime)
         {
-            if (_finishedHealing)
+            if (_blackboard.MovesetInputsController.Heal_HeldPressed())
             {
+                _healActionTimer.Update(deltaTime);
+                if (_healActionTimer.HasFinished())
+                {
+                    _blackboard.PlayerMediator.PlayerHealing.UseHeal();
+                    NextState = _healEndNextState;
+                    return true;
+                }
+            }
+            else if (_blackboard.MovesetInputsController.Heal_Released())
+            {
+                _wasInterrupted = true;
                 NextState = _healEndNextState;
                 return true;
             }
@@ -41,12 +61,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return false;
         }
 
-        private async UniTaskVoid StartHealing()
-        {
-            _finishedHealing = false;
-            _blackboard.PlayerMediator.PlayerHealing.UseHeal();
-            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.HealingDuration));
-            _finishedHealing = true;
-        }
+        
+
     }
 }

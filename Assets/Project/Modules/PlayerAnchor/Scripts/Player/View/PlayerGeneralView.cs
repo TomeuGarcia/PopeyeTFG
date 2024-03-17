@@ -63,6 +63,54 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
         }
 
+        public void PlayStartHealingAnimation(float durationToComplete)
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayStartHealingAnimation(durationToComplete);
+            }
+        }
+
+        public void PlayHealingInterruptedAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayHealingInterruptedAnimation();
+            }
+        }
+
+        public void PlaySpecialAttackAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlaySpecialAttackAnimation();
+            }
+        }
+
+        public void PlaySpecialAttackFinishAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlaySpecialAttackFinishAnimation();
+            }
+        }
+
+        public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayStartEnteringSpecialAttackAnimation(durationToComplete);
+            }
+        }
+
+        public void PlaySpecialAttackInterruptedAnimation()
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlaySpecialAttackInterruptedAnimation();
+            }
+        }
+
         public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
             foreach (IPlayerView playerView in _subPlayerViews)

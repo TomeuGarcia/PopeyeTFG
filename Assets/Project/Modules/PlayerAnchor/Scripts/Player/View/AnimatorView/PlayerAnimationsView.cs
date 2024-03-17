@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -84,6 +83,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetAnimatorBool(_config.AimingParameterId, false); //
         }
 
+
+
         public void PlayDashAnimation(float duration, Vector3 dashDirection)
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
@@ -133,8 +134,30 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayHealAnimation()
         {
         }
+        public void PlayHealingInterruptedAnimation()
+        {
+        }
 
-        
+        public void PlaySpecialAttackInterruptedAnimation()
+        {
+        }
+
+        public void PlaySpecialAttackAnimation()
+        {
+        }
+
+        public void PlaySpecialAttackFinishAnimation()
+        {
+        }
+
+        public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
+        {
+        }
+
+        public void PlayStartHealingAnimation(float durationToComplete)
+        {
+        }
+
 
         public void PlayKickAnimation()
         {

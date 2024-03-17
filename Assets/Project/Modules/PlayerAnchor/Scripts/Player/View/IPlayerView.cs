@@ -11,6 +11,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void PlayRespawnAnimation();
         void PlayDeathAnimation();
         void PlayHealAnimation();
+        void PlayStartHealingAnimation(float durationToComplete);
+        void PlayHealingInterruptedAnimation();
+        
+        void PlaySpecialAttackAnimation();
+        void PlaySpecialAttackFinishAnimation();
+        void PlayStartEnteringSpecialAttackAnimation(float durationToComplete);
+        void PlaySpecialAttackInterruptedAnimation();
+        
         void PlayDashAnimation(float duration, Vector3 dashDirection);
         void PlayKickAnimation();
         void PlayThrowAnimation();

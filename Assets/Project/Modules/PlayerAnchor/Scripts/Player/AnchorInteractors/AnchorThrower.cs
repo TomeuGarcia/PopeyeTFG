@@ -139,7 +139,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 CorrectEndRotationForVisibility(AnchorThrowResult, _throwConfig);
             }
 
-            _anchor.SetThrown(AnchorThrowResult);
+            _anchor.SetThrown(AnchorThrowResult).Forget();
             DoThrowAnchor(AnchorThrowResult).Forget();
             
             _trajectoryView.Hide();
