@@ -48,5 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
 
         void OnDamageDealt(DamageHitResult damageHitResult);
+
+        void ResetCurrentTrajectorySnapTarget();
     }
 }

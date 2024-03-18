@@ -184,6 +184,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void OnDashedAt(float duration, Ease dashEase)
         {
+            CurrentTrajectorySnapTarget?.OnUsedForDash();
             _anchorChain.SetDashingTowardsView(duration, dashEase);
         }
         public void OnDashedAwayFrom(float duration, Ease dashEase)
@@ -376,6 +377,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _anchorAudio.PlayDealDamageSound();
             _anchorView.OnDamageDealt(damageHitResult);
+        }
+
+        public void ResetCurrentTrajectorySnapTarget()
+        {
+            CurrentTrajectorySnapTarget = null;
         }
     }
 }

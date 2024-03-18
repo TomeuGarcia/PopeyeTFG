@@ -57,6 +57,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void PlayCloseAnimation()
         {
+            _clawsTransform.DOComplete();
             foreach (var claw in _claws)
             {
                 claw.LocalRotate(_viewConfig.RotateCloseClaws, true);
@@ -84,7 +85,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             }
             
             _isPlayingHint = false;
-            _clawsTransform.DOComplete();
+        }
+
+
+        public async UniTaskVoid PlayUsedForDashAnimation()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.UsedForDashDelay));
+            
+            _clawsTransform.PunchRotation(_viewConfig.RotatePunchUsedClawParent, true);
+            _clawsTransform.PunchPosition(_viewConfig.MovePunchUsedClawParent);
+            _clawsTransform.PunchScale(_viewConfig.ScalePunchUsedClawParent);
+            foreach (var claw in _claws)
+            {
+                claw.PunchRotation(_viewConfig.RotatePunchUsedClaws, true);
+            }
         }
     }
 }

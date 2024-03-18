@@ -108,10 +108,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             {
                 _dashEndSpot.position = floorHit.point + (Vector3.up * HeightDistanceFromFloor);
             }
-            else
-            {
-                Debug.Log("kekewait");
-            }
+
         }
         
         public Vector3 GetDashEndPosition()
@@ -167,8 +164,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             OnStopBeingUsedEvent?.Invoke();
         }
 
-
-
-
+        public void OnUsedForDash()
+        {
+            _view.PlayUsedForDashAnimation().Forget();
+        }
     }
 }
