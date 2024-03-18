@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.38431373, g: 0.43137255, b: 0.6431373, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18154658, g: 0.2271898, b: 0.3074084, a: 1}
+  m_IndirectSpecularColor: {r: 0.17798744, g: 0.22284889, b: 0.30496395, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5421,6 +5421,61 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701985021427338022, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.8396226
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701985021427338022, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.49467722
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701985021427338022, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.34456214
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701985021427338022, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 2.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701985021427338022, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701985021427338022, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5768379791485677307, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.509434
+      objectReference: {fileID: 0}
+    - target: {fileID: 5768379791485677307, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.026432898
+      objectReference: {fileID: 0}
+    - target: {fileID: 5768379791485677307, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.32403973
+      objectReference: {fileID: 0}
+    - target: {fileID: 5768379791485677307, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6878037402935297284, guid: 00f18fadd30967544908d64c123b873c,
+        type: 3}
+      propertyPath: m_Name
+      value: Back Lighting
       objectReference: {fileID: 0}
     - target: {fileID: 7475104475800612250, guid: 00f18fadd30967544908d64c123b873c,
         type: 3}
@@ -14199,6 +14254,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1955783140790353081, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
