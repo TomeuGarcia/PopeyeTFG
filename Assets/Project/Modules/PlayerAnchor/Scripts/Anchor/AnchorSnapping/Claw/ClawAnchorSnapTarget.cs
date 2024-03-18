@@ -54,7 +54,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private void Awake()
         {
-            _view = new ClawAnchorSnapTargetView(_clawsTransform, _claws);
+            _view = new ClawAnchorSnapTargetView(_clawsTransform, _claws, _config.ViewConfig);
         }
 
 
@@ -143,12 +143,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void OnAddedAsAimTarget()
         {
-            _view.PlayOpenAnimation(0.2f);
+            _view.PlayOpenAnimation();
         }
 
         public void OnRemovedFromAimTarget()
         {
-            _view.PlayCloseAnimation(0.2f);
+            _view.PlayCloseAnimation();
         }
 
         public void OnUsedAsAimTarget(float delay)
