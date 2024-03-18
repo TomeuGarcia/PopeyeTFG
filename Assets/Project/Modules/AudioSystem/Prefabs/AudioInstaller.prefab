@@ -125,7 +125,7 @@ Transform:
   - {fileID: 8421621900725079027}
   - {fileID: 1853564623033999772}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1298202652517695298
 MonoBehaviour:
@@ -146,6 +146,14 @@ MonoBehaviour:
     type: 2}
   _gameAudiosManager:
     _underlyingValue: {fileID: 828421003842713945}
+  _masterSoundVolumeController: {fileID: 11400000, guid: 81049b1c07b36454fa4a8e372baf486d,
+    type: 2}
+  _musicSoundVolumeController: {fileID: 11400000, guid: 0c6ca2a836aff6645b230d98e0bcc68d,
+    type: 2}
+  _ambienceSoundVolumeController: {fileID: 11400000, guid: 3768e0ead2256ee4da01fcb8c7352740,
+    type: 2}
+  _sfxSoundVolumeController: {fileID: 11400000, guid: 584adbcb24689b84585cc82cd52e8472,
+    type: 2}
 --- !u!114 &5823451090475051384
 MonoBehaviour:
   m_ObjectHideFlags: 0
