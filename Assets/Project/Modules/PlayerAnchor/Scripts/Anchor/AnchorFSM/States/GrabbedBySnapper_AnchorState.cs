@@ -25,6 +25,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
         {
             _blackboard.TransformMotion.Unparent();
             _blackboard.AnchorMediator.CurrentTrajectorySnapTarget.OnFinishBeingUsed();
+            _blackboard.AnchorMediator.ResetCurrentTrajectorySnapTarget();
         }
         
         

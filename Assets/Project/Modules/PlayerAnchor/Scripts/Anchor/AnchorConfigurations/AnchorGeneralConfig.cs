@@ -40,5 +40,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         
         public CollisionProbingConfig OnVoidProbingConfig => _onVoidProbingConfig;
 
+
+        [Header("VIEW")] 
+        [SerializeField] private GeneralAnchorViewConfig _generalViewConfig;
+        public GeneralAnchorViewConfig GeneralViewConfig => _generalViewConfig;
     }
 }
