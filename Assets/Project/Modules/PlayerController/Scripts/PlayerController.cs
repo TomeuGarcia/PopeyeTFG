@@ -405,12 +405,7 @@ namespace Popeye.Modules.PlayerController
 
             _lookTransform.localRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
         }
-
-
-        public void GetPushed(Vector3 pushForce)
-        {
-            _rigidbody.AddForce(pushForce, ForceMode.Impulse);
-        }
+        
 
 
         public void ResetRigidbody()
@@ -418,20 +413,29 @@ namespace Popeye.Modules.PlayerController
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
         }
-        
-        public async UniTaskVoid DisableForDuration(float duration)
+
+        public void EnablePhysics()
+        {
+            _rigidbody.useGravity = true;
+            _rigidbody.isKinematic = false;
+            enabled = true;
+        }
+        public void DisablePhysics()
         {
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             _rigidbody.useGravity = false;
             _rigidbody.isKinematic = true;
             enabled = false;
+        }
+        
+        public async UniTaskVoid DisableForDuration(float duration)
+        {
+            DisablePhysics();
             
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             
-            _rigidbody.useGravity = true;
-            _rigidbody.isKinematic = false;
-            enabled = true;
+            EnablePhysics();
         }
 
 
