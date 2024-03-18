@@ -15,9 +15,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         protected override void DoEnter()
         {
-            if (_blackboard.cameFromState == PlayerStates.TiredPickingUpAnchor) return;
+            UpdateMovementSpeed();
             
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.TiredMoveSpeed);
+            if (_blackboard.cameFromState == PlayerStates.TiredPickingUpAnchor) return;
+
             _blackboard.PlayerMediator.SetCanRotate(true);
             _blackboard.PlayerView.StartTired();
 
@@ -70,6 +71,20 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             return _blackboard.PlayerStatesConfig.DropAnchorWhenTired &&
                    _blackboard.cameFromState == PlayerStates.PullingAnchor;
+        }
+
+        private void UpdateMovementSpeed()
+        {
+            bool cameMovingWithAnchor = 
+                _blackboard.cameFromState == PlayerStates.MovingWithAnchor ||
+                _blackboard.cameFromState == PlayerStates.TiredPickingUpAnchor;
+
+            float maxMovementSpeed = cameMovingWithAnchor
+                ? _blackboard.PlayerStatesConfig.TiredWithAnchorMoveSpeed
+                : _blackboard.PlayerStatesConfig.TiredWithoutAnchorMoveSpeed;
+
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
         }
     }
 }
