@@ -17,6 +17,10 @@ namespace Popeye.Modules.VFX.Generic
         PlayerDashTrail,
         SlimeDeathParticles,
         EnemySpawnHint,
-        PlayerDashGhost
+        PlayerDashGhost,
+        HealProcess,
+        HealCompleted,
+        EnterEnraged,
+        EnragedProcess
     }
 }

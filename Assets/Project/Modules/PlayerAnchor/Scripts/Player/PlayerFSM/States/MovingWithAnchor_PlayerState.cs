@@ -34,8 +34,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
 
             _blackboard.PlayerMediator.PlayerView.PlayEnterMovingWithAnchorAnimation();
-
-            _blackboard.PlayerMovementChecker.MaxMovementSpeed = _blackboard.PlayerStatesConfig.WithAnchorMoveSpeed;
         }
 
         public override void Exit()
@@ -166,7 +164,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private void UpdateMovementSpeed()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithAnchorMoveSpeed);
+            float maxMovementSpeed = _blackboard.PlayerStatesConfig.WithAnchorMoveSpeed;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
         }
     }
 }

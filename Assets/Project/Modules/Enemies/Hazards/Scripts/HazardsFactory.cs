@@ -19,7 +19,7 @@ namespace Popeye.Modules.Enemies.Hazards
         public ParabolicProjectile CreateParabolicProjectile(Transform origin, Transform targetPosition)
         {
             var projectile = _projectilePool.Spawn<ParabolicProjectile>(origin.position, Quaternion.identity);
-            projectile.PrepareShot(origin,targetPosition,this);
+            projectile.PrepareShot(targetPosition,this,origin);
             return projectile;
         }
 

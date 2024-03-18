@@ -34,7 +34,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _recoverFromFallTimer.Update(deltaTime);
             if (_recoverFromFallTimer.HasFinished())
             {
+                _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
                 _blackboard.PlayerMediator.SetInvulnerable(false);
+
                 bool diedAfterFall = _blackboard.PlayerMediator.TakeFellOnVoidDamage();
 
                 if (diedAfterFall)

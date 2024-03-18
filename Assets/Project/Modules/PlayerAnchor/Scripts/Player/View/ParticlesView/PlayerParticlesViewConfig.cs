@@ -9,6 +9,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerParticlesViewConfig")]
     public class PlayerParticlesViewConfig : ScriptableObject
     {
+        [Header("HEAL")]
+        [SerializeField] private ParticleTypes _healProcessParticleType;
+        [SerializeField] private ParticleTypes _healCompletedParticleType;
+        [SerializeField] private ParticleTypes _enragedStartParticleTypes;
+        [SerializeField] private ParticleTypes _enragedParticleTypes;
+        
         [Header("DASH")]
         [SerializeField] private ParticleTypes _dashTrailParticleType;
         [SerializeField] private ParticleTypes _dashDisappearParticleType;
@@ -22,6 +28,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Ease _dashTrailRotationEase;
         [SerializeField] private Ease _dashTrailScaleEase;
         
+        public ParticleTypes HealProcessParticleType => _healProcessParticleType;
+        public ParticleTypes HealCompletedParticleType => _healCompletedParticleType;
+        public ParticleTypes EnragedStartParticleTypes => _enragedStartParticleTypes;
+        public ParticleTypes EnragedParticleTypes => _enragedParticleTypes;
         public ParticleTypes DashTrailParticleType => _dashTrailParticleType;
         public ParticleTypes DashDisappearParticleType => _dashDisappearParticleType;
         public ParticleTypes DashAppearParticleType => _dashAppearParticleType;

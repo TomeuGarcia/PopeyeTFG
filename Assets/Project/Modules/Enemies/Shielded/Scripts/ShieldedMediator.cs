@@ -27,6 +27,7 @@ namespace Popeye.Modules.Enemies
             _shieldedDashing.Configure(this);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _enemyHealth.SetIsInvulnerable(true);
         }
 
         public void SetShieldedMind(ShieldedMind shieldedMind)
@@ -55,6 +56,7 @@ namespace Popeye.Modules.Enemies
         }
         public void StartDashing()
         {
+            
             _chasing = false;
             _shieldedMovement.StopChasing();
         }
