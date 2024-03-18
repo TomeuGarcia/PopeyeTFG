@@ -151,8 +151,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void PlayCarriedAnimation()
         {
+            _specialMotionsTransform.DOLocalRotateQuaternion(Quaternion.identity, 0.2f);
             //_carryTrail = _particleFactory.Create(_carryTrailParticleType, Vector3.zero, Quaternion.identity, _vfxParent)
-                //.gameObject.GetComponent<InterpolatorRecycleParticle>();
+            //.gameObject.GetComponent<InterpolatorRecycleParticle>();
         }
 
         public void StopCarry()

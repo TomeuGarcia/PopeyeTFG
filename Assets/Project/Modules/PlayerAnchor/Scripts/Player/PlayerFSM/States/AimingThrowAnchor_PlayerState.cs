@@ -16,6 +16,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             _blackboard.queuedAnchorAim = false;
             
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
+            UpdateMovementSpeed();
+            
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
             _blackboard.PlayerMediator.SetInstantRotation(true);
             _blackboard.PlayerMediator.SetCanUseRotateInput(true);
@@ -31,6 +34,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
+            
             _blackboard.PlayerMediator.SetInstantRotation(false);
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
             _blackboard.PlayerMediator.SetCanFallOffLedges(false, true);
@@ -94,5 +99,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.CancelChargingThrow();
         }
         
+        
+        private void UpdateMovementSpeed()
+        {
+            float maxMovementSpeed = _blackboard.PlayerStatesConfig.AimingMoveSpeed;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
+        }
     }
 }

@@ -178,6 +178,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.SetCheckLedges(!canFallOffLedges, checkingIgnoreLedges);
         }
 
+        public void SetEnabledFallingPhysics(bool fallingPhysicsEnabled)
+        {
+            if (fallingPhysicsEnabled)
+            {
+                _playerController.EnablePhysics();
+            }
+            else
+            {
+                _playerController.DisablePhysics();
+            }
+        }
+
 
         public float GetDistanceFromAnchor()
         {
@@ -481,9 +493,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void RespawnToLastSafeGround()
         {
+            SetEnabledFallingPhysics(true);
             _playerController.ResetRigidbody();
             Vector3 respawnPosition = _safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset;
             _playerMotion.SetPosition(respawnPosition);
+            _safeGroundChecker.UpdateChecking();
         }
         public void RespawnFromDeath()
         {

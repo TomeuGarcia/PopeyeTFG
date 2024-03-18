@@ -7,5 +7,6 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         Vector3 LastSafePosition { get; }
         Vector3 BestSafePosition { get; }
         void UpdateChecking(float deltaTime);
+        void UpdateChecking();
     }
 }

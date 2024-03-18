@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5555289864896258569
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LiquidFill_Image_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 884cdeab2b8df2246bb9c9384902ccd9,
+  m_Name: Fullscreen_Gradient_Material
+  m_Shader: {fileID: -6465566751694194690, guid: 01e5a414dae64594492276299b3b9969,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -51,11 +38,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CanBeUsed: 0
-    - _FillValue: 0.5
+    - _Hidden: 2.5
+    - _Hiddenness: 3
+    - _Strength: 0.1
     m_Colors:
-    - _CanBeUsedColor: {r: 0, g: 1, b: 0.50782627, a: 0}
-    - _CanNotBeUsedColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}
-    - _Color: {r: 0.06666666, g: 0.9176471, b: 0.4784314, a: 1}
-    - _NormalColor: {r: 0.15908685, g: 0.6132076, b: 0.38881844, a: 0}
+    - _BottomLeftColor: {r: 0.08627448, g: 0, b: 1, a: 1}
+    - _TopRightColor: {r: 0.6613469, g: 0, b: 1, a: 1}
   m_BuildTextureStacks: []
