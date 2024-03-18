@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 12
+  _maxHealth: 40
   _knockbackRigidbody: {fileID: 7348990576285241089}
   _knockbackEffectiveness: 1
 --- !u!114 &7860900730581999901
@@ -195,6 +195,7 @@ MonoBehaviour:
   _damageTargetsOncePerActivation: 0
   _isKnockbackPushOrigin: 0
   _collider: {fileID: 1351218561991610330}
+  _trackActivations: 0
 --- !u!114 &8177322979651808629
 MonoBehaviour:
   m_ObjectHideFlags: 0
