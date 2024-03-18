@@ -12,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     public interface IAnchorMediator
     {
         Transform PositionTransform { get; }
+        Transform MeshHolder { get; }
         Vector3 Position { get; }
         IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; }
         DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
