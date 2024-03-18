@@ -497,7 +497,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerController.ResetRigidbody();
             Vector3 respawnPosition = _safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset;
             _playerMotion.SetPosition(respawnPosition);
-            _safeGroundChecker.UpdateChecking(10000);
+            _safeGroundChecker.UpdateChecking();
         }
         public void RespawnFromDeath()
         {
