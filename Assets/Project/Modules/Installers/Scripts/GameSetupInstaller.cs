@@ -93,6 +93,8 @@ public class GameSetupInstaller : MonoBehaviour
         
         ServiceLocator serviceLocator = ServiceLocator.Instance;
         
+        serviceLocator.RemoveService<IGameStateEventsDispatcher>();
+        
         serviceLocator.RemoveService<ICombatManager>();
         serviceLocator.RemoveService<ITimeFunctionalities>();
         

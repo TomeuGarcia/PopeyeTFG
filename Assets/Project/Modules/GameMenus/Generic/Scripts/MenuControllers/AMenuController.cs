@@ -15,14 +15,15 @@ namespace Popeye.Modules.GameMenus.Generic
 
         private InputAction _goBackInput;
 
-        private bool IsBeingShown => _groupHolder.activeInHierarchy;
-        
+        public bool IsBeingShown { get; private set; }
+
 
         public void Init(SmartButton.SmartButtonEvent closeMenuCallback, InputAction goBackInput)
         {
             _backButtonAndConfig.SmartButton.Init(_backButtonAndConfig.Config, closeMenuCallback);
             _goBackInput = goBackInput;
-            
+
+            IsBeingShown = false;
             DoInit(goBackInput);
         }
 
@@ -31,11 +32,13 @@ namespace Popeye.Modules.GameMenus.Generic
         public void Show()
         {
             _groupHolder.SetActive(true);
+            IsBeingShown = true;
         }
         
         public void Hide()
         {
             _groupHolder.SetActive(false);
+            IsBeingShown = false;
         }
 
         private void Update()
@@ -43,6 +46,14 @@ namespace Popeye.Modules.GameMenus.Generic
             if (_goBackInput.WasPressedThisFrame() && IsBeingShown)
             {
                 _backButtonAndConfig.SmartButton.SimulateOnButtonClicked();
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (IsBeingShown)
+            {
+                Hide();
             }
         }
     }
