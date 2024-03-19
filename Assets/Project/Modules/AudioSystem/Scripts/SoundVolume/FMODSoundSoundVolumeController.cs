@@ -9,6 +9,7 @@ namespace Popeye.Modules.AudioSystem
     public class FMODSoundSoundVolumeController : ScriptableObject, ISoundVolumeController
     {
         [SerializeField] [FMODUnity.BankRef] private string _bankReference;
+        [SerializeField] private string _bankReference2 = "bus:/";
         private FMOD.Studio.Bus _bus;
         
 
@@ -32,7 +33,10 @@ namespace Popeye.Modules.AudioSystem
         public void Init(float volumeValue01)
         {
             return;
-            _bus = FMODUnity.RuntimeManager.GetBus(_bankReference);
+            Debug.Log(FMODUnity.RuntimeManager.BankStubPrefix);
+            
+            FMODUnity.RuntimeManager.LoadBank(_bankReference2);
+            _bus = FMODUnity.RuntimeManager.GetBus(_bankReference2);
             SetVolume(volumeValue01);
         }
         
