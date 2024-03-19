@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418986908292266948}
   - component: {fileID: 4149582752248903952}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WorldEnemyPlacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +32,7 @@ Transform:
   - {fileID: 7256202050056883254}
   - {fileID: 7191464264025833879}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4149582752248903952
 MonoBehaviour:
@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 7256202050056883254}
   - component: {fileID: 5005100359778651790}
   - component: {fileID: 2099137147570021464}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Preview_SlimeSize2
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
@@ -93,7 +93,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4835209610756631808}
-  m_Mesh: {fileID: 3529768685151129472, guid: c8a1f7a3436042841a657af808a4aa0a, type: 3}
+  m_Mesh: {fileID: -1068885543552597904, guid: 8c77273781550d64789bdfed6ab84172, type: 3}
 --- !u!23 &2099137147570021464
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -146,7 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7191464264025833879}
   - component: {fileID: 2100543695818645583}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EnemyWaypointsInitializer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,5 +180,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b0d8781d974114b3989b8a3e6f1915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolType: 0
-  wayPoints: []
+  _patrolType: 0
+  _wayPoints: []

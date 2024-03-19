@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5768379791485677307}
   - component: {fileID: 5119893592432405727}
   m_Layer: 0
-  m_Name: Directional Light (1)
+  m_Name: Back Lighting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,8 +44,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.13421145, g: 0.18157473, b: 0.18867922, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.32403973, g: 0.026432898, b: 0.509434, a: 1}
+  m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -151,7 +151,7 @@ Transform:
   - {fileID: 111933173830820894}
   - {fileID: 6310735558748973367}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9027568205825936884
 MonoBehaviour:
@@ -270,8 +270,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.501246, g: 0.5503049, b: 0.754717, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.34456214, g: 0.49467722, b: 0.8396226, a: 1}
+  m_Intensity: 2.43
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
