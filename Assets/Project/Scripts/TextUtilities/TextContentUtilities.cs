@@ -7,7 +7,7 @@ namespace Popeye.Scripts.TextUtilities
 {
     public static class TextContentUtilities
     {
-        public static void SetContent(this TextMeshPro textMesh, TextContent textContent)
+        public static void SetContent(this TMP_Text textMesh, TextContent textContent)
         {
             textMesh.text = textContent.Content;
         }

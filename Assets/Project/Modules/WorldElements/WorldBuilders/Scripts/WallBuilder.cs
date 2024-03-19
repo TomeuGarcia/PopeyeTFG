@@ -125,6 +125,12 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void Start()
         {
+            if (_config.MetaConfig.DestroyOnPlay)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             if (_points.Length > 0)
             {
                 FillWalls();

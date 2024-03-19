@@ -600,6 +600,76 @@ namespace InputSystem
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""df36b836-b8bb-4955-b684-e65604e0347a"",
+            ""actions"": [
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""077d1ec3-1b19-4ed1-94c7-5cd5417ede8f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""4412f884-7b18-4796-a26c-d75d8b9d968a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""84a66e03-8263-4c07-a5eb-48c292767950"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c82eaa3-705a-4893-8370-2c0961239ffd"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04aaf496-765a-4daf-95bf-930fa9ec8d10"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4161a199-6b29-4c31-a85c-0ff89eafb06f"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -646,6 +716,10 @@ namespace InputSystem
             m_Land_SpecialAttack = m_Land.FindAction("SpecialAttack", throwIfNotFound: true);
             m_Land_SpinAttack_Left = m_Land.FindAction("SpinAttack_Left", throwIfNotFound: true);
             m_Land_SpinAttack_Right = m_Land.FindAction("SpinAttack_Right", throwIfNotFound: true);
+            // UI
+            m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+            m_UI_Back = m_UI.FindAction("Back", throwIfNotFound: true);
+            m_UI_OpenMenu = m_UI.FindAction("OpenMenu", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -845,6 +919,60 @@ namespace InputSystem
             }
         }
         public LandActions @Land => new LandActions(this);
+
+        // UI
+        private readonly InputActionMap m_UI;
+        private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+        private readonly InputAction m_UI_Back;
+        private readonly InputAction m_UI_OpenMenu;
+        public struct UIActions
+        {
+            private @PlayerAnchorInputControls m_Wrapper;
+            public UIActions(@PlayerAnchorInputControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Back => m_Wrapper.m_UI_Back;
+            public InputAction @OpenMenu => m_Wrapper.m_UI_OpenMenu;
+            public InputActionMap Get() { return m_Wrapper.m_UI; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+            public void AddCallbacks(IUIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+                @Back.started += instance.OnBack;
+                @Back.performed += instance.OnBack;
+                @Back.canceled += instance.OnBack;
+                @OpenMenu.started += instance.OnOpenMenu;
+                @OpenMenu.performed += instance.OnOpenMenu;
+                @OpenMenu.canceled += instance.OnOpenMenu;
+            }
+
+            private void UnregisterCallbacks(IUIActions instance)
+            {
+                @Back.started -= instance.OnBack;
+                @Back.performed -= instance.OnBack;
+                @Back.canceled -= instance.OnBack;
+                @OpenMenu.started -= instance.OnOpenMenu;
+                @OpenMenu.performed -= instance.OnOpenMenu;
+                @OpenMenu.canceled -= instance.OnOpenMenu;
+            }
+
+            public void RemoveCallbacks(IUIActions instance)
+            {
+                if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIActions @UI => new UIActions(this);
         private int m_DesktopSchemeIndex = -1;
         public InputControlScheme DesktopScheme
         {
@@ -869,6 +997,11 @@ namespace InputSystem
             void OnSpecialAttack(InputAction.CallbackContext context);
             void OnSpinAttack_Left(InputAction.CallbackContext context);
             void OnSpinAttack_Right(InputAction.CallbackContext context);
+        }
+        public interface IUIActions
+        {
+            void OnBack(InputAction.CallbackContext context);
+            void OnOpenMenu(InputAction.CallbackContext context);
         }
     }
 }

@@ -1,3 +1,6 @@
+using Popeye.Core.Services.EventSystem;
+using Popeye.Modules.GameState;
+
 namespace Popeye.Modules.PlayerController.Inputs
 {
     public class PlayerAnchorMovesetInputsController
@@ -21,12 +24,19 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly UnityEngine.InputSystem.InputAction _spinAttack_Left;
         private readonly UnityEngine.InputSystem.InputAction _spinAttack_Right;
 
+
+        private readonly IEventSystemService _eventSystemService;
         
-        
-        public PlayerAnchorMovesetInputsController()
+        public PlayerAnchorMovesetInputsController(IEventSystemService eventSystemService)
         {
+            _eventSystemService = eventSystemService;
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
+            
+            
             _playerInputControls = new InputSystem.PlayerAnchorInputControls();
-            _playerInputControls.Enable();
+            EnabledInputs();
+            
 
             _aim = _playerInputControls.Land.Aim;
             _cancelAim = _playerInputControls.Land.CancelAim;
@@ -51,9 +61,32 @@ namespace Popeye.Modules.PlayerController.Inputs
 
         ~PlayerAnchorMovesetInputsController()
         {
-            _playerInputControls.Disable();
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
+            
+            DisabledInputs();
         }
 
+        private void OnGamePausedEvent(IGameStateEventsDispatcher.OnGamePaused eventData)
+        {
+            DisabledInputs();
+        }
+        private void OnGameResumedEvent(IGameStateEventsDispatcher.OnGameResumed onGamePaused)
+        {
+            EnabledInputs();
+        }
+        
+        private void EnabledInputs()
+        {
+            _playerInputControls.Enable();
+        }
+        
+        private void DisabledInputs()
+        {
+            _playerInputControls.Disable();
+        }
+        
+        
 
         public bool Aim_Pressed()
         {
