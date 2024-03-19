@@ -4,10 +4,10 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
 {
     public class KnockbackHit
     {
-        public float _pushDistance;
-        
-        public KnockbackHitType KnockbackType { get; private set; }
-        public float Duration { get; private set; }
+        private readonly KnockbackHitConfig _config;
+        private float PushDistance => _config.PushDistance;
+        public float Duration => _config.Duration;
+        public KnockbackHitType KnockbackType => _config.KnockbackType;
         
         
         
@@ -17,15 +17,13 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
 
         public KnockbackHit(KnockbackHitConfig config)
         {
-            _pushDistance = config.PushDistance;
-            KnockbackType = config.KnockbackType;
-            Duration = config.Duration;
+            _config = config;
         }
         
         
         public void UpdatePushDirection(Vector3 pushDirection)
         {
-            PushDisplacement = pushDirection * _pushDistance;
+            PushDisplacement = pushDirection * PushDistance;
         }
         
         public void UpdateEndPosition(Vector3 endPosition)

@@ -32,6 +32,7 @@ using Popeye.Scripts.Collisions;
 using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
 using Project.Scripts.Time.TimeFunctionalities;
+using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -71,7 +72,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
         [SerializeField] private AnchorCollisions _anchorCollisions;
-        [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
+        [SerializeField] private VFXAnchorView _vfxAnchorView;
         [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
         [SerializeField] private AnchorAudioFMODConfig _anchorAudioConfig;
@@ -112,7 +113,10 @@ namespace Popeye.Modules.PlayerAnchor
             ICameraFunctionalities cameraFunctionalities = ServiceLocator.Instance.GetService<ICameraFunctionalities>();
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
             IFMODAudioManager fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
-            
+            IParticleFactory particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
+            ITimeFunctionalities timeFunctionalities = ServiceLocator.Instance.GetService<ITimeFunctionalities>();
+            IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
+
             
             // Anchor
             TransformMotion anchorMotion = new TransformMotion();
@@ -139,7 +143,9 @@ namespace Popeye.Modules.PlayerAnchor
             IAnchorAudio anchorAudio = new AnchorAudioFMOD(_anchor.PositionTransform.gameObject, fmodAudioManager, _anchorAudioConfig);
             IThrowDistanceComputer throwDistanceComputer =
                 new MovingForwardRangeThrowDistanceComputer(_anchorGeneralConfig.ThrowConfig, _playerController);
-            
+
+            IAnchorView anchorView = CreateAnchorView(_anchorGeneralConfig.GeneralViewConfig, _anchor.MeshHolder,
+                particleFactory, timeFunctionalities.HitStopManager, cameraFunctionalities.CameraShaker);
             
             anchorMotion.Configure(_anchor.PositionTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, throwDistanceComputer,
@@ -162,7 +168,7 @@ namespace Popeye.Modules.PlayerAnchor
             _anchorChain.Configure(chainPhysics, vfxChainView, _chainPlayerBindTransform, _chainAnchorBindTransform, 
                 chainViewLogicGeneralConfig);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorViewExtras, anchorAudio, 
+                _anchorPhysics, _anchorCollisions, anchorView, anchorViewExtras, anchorAudio, 
                 _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);
 
             IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial
@@ -174,7 +180,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             // Player
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
-            PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController();
+            PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController(eventSystemService);
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
@@ -201,7 +207,6 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
-            IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
             PlayerGlobalEventsListener playerGlobalEventsListener = 
                 new PlayerGlobalEventsListener(eventSystemService, _player, _anchor);
             PlayerEventsDispatcher playerEventsDispatcher =
@@ -300,6 +305,32 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerGeneralView playerGeneralView = new PlayerGeneralView(playerSubViews);
 
             return playerGeneralView;
+        }
+        
+        private IAnchorView CreateAnchorView(GeneralAnchorViewConfig anchorGeneralViewConfig, Transform anchorMeshHolder,
+            IParticleFactory particleFactory, IHitStopManager hitStopManager, ICameraShaker cameraShaker)
+        {
+            IAnchorView anchorStretchView = new StretchAnchorView(
+                anchorGeneralViewConfig.StretchViewConfig, anchorMeshHolder
+            );
+            
+            _vfxAnchorView.Configure(
+                anchorGeneralViewConfig.VfxViewConfig,
+                particleFactory,
+                hitStopManager,
+                cameraShaker
+            );
+
+            IAnchorView[] anchorSubViews =
+            {
+                anchorStretchView,
+                _vfxAnchorView
+            };
+            
+            
+            GeneralAnchorView anchorGeneralView = new GeneralAnchorView(anchorSubViews);
+
+            return anchorGeneralView;
         }
         
 

@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 320191541800502219}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.8}
+  m_LocalPosition: {x: 0, y: 0, z: -1.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -270,7 +270,7 @@ Transform:
   - {fileID: 8371242735614521713}
   - {fileID: 542140075044529399}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4131713180568420220
 MonoBehaviour:
@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveTransform: {fileID: 4961382533563393153}
-  _fakeAnchor: {fileID: 0}
+  _meshHolder: {fileID: 2844395377855781948}
   _destructiblePlatformBreaker: {fileID: 2475414617101000845}
   _pull_CameraZoomInOut: {fileID: 11400000, guid: 17be9d73010c2554c88e46ce1f5d67d0,
     type: 2}
@@ -306,8 +306,6 @@ MonoBehaviour:
   _vfxParent: {fileID: 3183404267920450486}
   _anchorThrowHeadFollower: {fileID: 0}
   _specialMotionsTransform: {fileID: 7841744605102467066}
-  _vfxAnchorViewConfig: {fileID: 11400000, guid: 7b8d911b58da25540bfc1fbbbbed5747,
-    type: 2}
 --- !u!114 &7243833051957240061
 MonoBehaviour:
   m_ObjectHideFlags: 0

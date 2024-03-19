@@ -8,5 +8,6 @@ namespace Project.Scripts.Time.TimeScale
         float CurrentTimeScale { get; }
         
         void SetTimeScale(float timeScale);
+        void SetPersistingTimeScale(float persistingTimeScale);
     }
 }

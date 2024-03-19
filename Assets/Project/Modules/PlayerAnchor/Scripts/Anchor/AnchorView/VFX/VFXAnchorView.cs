@@ -22,8 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private AnchorThrowHeadFollower _anchorThrowHeadFollower;
         [SerializeField] private Transform _specialMotionsTransform;
 
-        [Header("CONFIG")]
-        [SerializeField] private VFXAnchorViewConfig _vfxAnchorViewConfig;
+        private VFXAnchorViewConfig _vfxAnchorViewConfig;
         
         private IParticleFactory _particleFactory;
         private Transform _unparentedVFXHolder;
@@ -33,8 +32,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private InterpolatorRecycleParticle _carryTrail;
 
-        public void Configure(IParticleFactory particleFactory, IHitStopManager hitStopManager, ICameraShaker cameraShaker)
+        public void Configure(VFXAnchorViewConfig vfxAnchorViewConfig,
+            IParticleFactory particleFactory, IHitStopManager hitStopManager, ICameraShaker cameraShaker)
         {
+            _vfxAnchorViewConfig = vfxAnchorViewConfig;
+            
             _particleFactory = particleFactory;
             _unparentedVFXHolder = _particleFactory.ParticleParent;
             _hitStopManager = hitStopManager;
