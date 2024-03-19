@@ -31,7 +31,7 @@ Transform:
   m_Children:
   - {fileID: 1957812209337412346}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5165228487136625329
 MonoBehaviour:
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _menusCanvasHolder: {fileID: 4906880397377841736}
+  _background: {fileID: 9130328921510202854}
   _pauseMenu:
     _underlyingValue: {fileID: 2769736249456340074}
 --- !u!1 &4906880397377841736
@@ -171,7 +172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &908973856515917720
 RectTransform:
   m_ObjectHideFlags: 0

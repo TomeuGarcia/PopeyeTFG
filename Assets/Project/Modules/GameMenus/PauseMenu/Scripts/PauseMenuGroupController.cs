@@ -14,7 +14,9 @@ namespace Popeye.Modules.GameMenus.PauseMenu
     {
         [Header("CANVAS")]
         [SerializeField] private GameObject _menusCanvasHolder;
+        [SerializeField] private GameObject _background;
 
+        
         
         [Header("PAUSE MENU")]
         [SerializeField] private InterfaceReference<AMenuController, MonoBehaviour> _pauseMenu;
@@ -34,6 +36,8 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         {
             _gameStateEventsDispatcher = ServiceLocator.Instance.GetService<IGameStateEventsDispatcher>();
 
+            _background.SetActive(true);
+            
             _inputUIActions = new InputSystem.PlayerAnchorInputControls();
             _inputUIActions.Enable();
             _goBackInput = _inputUIActions.UI.Back;
