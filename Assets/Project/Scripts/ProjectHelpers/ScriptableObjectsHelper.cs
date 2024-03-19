@@ -40,6 +40,10 @@ namespace Popeye.ProjectHelpers
         public const string SCENELOADING_ASSETS_PATH = ROOT + "SceneLoading/";
         public const string VALUESTATS_ASSETS_PATH = ROOT + "ValueStats/";
         
+        public const string UI_ASSETS_PATH = ROOT + "UI/";
+        public const string UISLIDER_ASSETS_PATH = UI_ASSETS_PATH + "Slider/";
+        public const string UIBUTTON_ASSETS_PATH = UI_ASSETS_PATH + "Button/";
+        
         
         public const string ID_ASSETS_PATH = ROOT + "ID/";
         public const string OBJECTTYPE_ASSETS_PATH = ROOT + "ObjectType/";

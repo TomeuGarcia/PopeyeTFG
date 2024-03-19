@@ -14,8 +14,9 @@ namespace Popeye.Modules.AudioSystem
 
         public float CurrentVolume
         {
-            get 
-            { 
+            get
+            {
+                return 1.0f;
                 _bus.getVolume(out float volumeValue01);
                 return volumeValue01;
             }
@@ -23,12 +24,14 @@ namespace Popeye.Modules.AudioSystem
 
         public void SetVolume(float volumeValue01)
         {
+            return;
             _bus.setVolume(volumeValue01);
         }
         
         
         public void Init(float volumeValue01)
         {
+            return;
             _bus = FMODUnity.RuntimeManager.GetBus(_bankReference);
             SetVolume(volumeValue01);
         }
