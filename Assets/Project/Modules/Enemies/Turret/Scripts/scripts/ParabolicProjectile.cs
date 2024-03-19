@@ -6,6 +6,8 @@ using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
 using Unity.Mathematics;
 using UnityEngine;
@@ -32,6 +34,10 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
 
     [SerializeField] float _distanceToTargetThreshold;
+    [SerializeField] ParticleTypes _projectileExplosion;
+    [SerializeField] ParticleTypes _projectileArea;
+    
+    private IParticleFactory _particleFactory;
 
 
     private void Update()
@@ -61,6 +67,11 @@ public class ParabolicProjectile : RecyclableObject
 
     }
 
+    public void SetParticleFactory(IParticleFactory particleFactory)
+    {
+        _particleFactory = particleFactory;
+    }
+    
     public void PrepareShot(Transform playerTransform,IHazardFactory hazardFactory,Transform firePoint)
     {
         _shoot = false;
@@ -107,9 +118,11 @@ public class ParabolicProjectile : RecyclableObject
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,1f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                 {
-                    
+
                     var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
                     _hazardFactory.CreateDamageArea(hit.point, startRot);
+                    _particleFactory.Create(_projectileExplosion, hit.point, startRot);
+                    _particleFactory.Create(_projectileArea, hit.point, startRot);
                     Recycle();
                     t = time * 2;
                 }

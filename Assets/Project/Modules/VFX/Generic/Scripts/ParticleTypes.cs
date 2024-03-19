@@ -22,8 +22,6 @@ namespace Popeye.Modules.VFX.Generic
         HealCompleted,
         EnterEnraged,
         EnragedProcess,
-        TurretProjectileTrail,
-        TurretProjectile,
         TurretProjectileCollision,
         TurretAOE
     }
