@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 50
+  _maxHealth: 80
   _knockbackRigidbody: {fileID: 4821231514884419924}
   _knockbackEffectiveness: 1
 --- !u!114 &8784783522602541844
@@ -290,7 +290,8 @@ MonoBehaviour:
   _navMeshAgent: {fileID: 5597591312320529887}
   _speed: 0
   _targetDistanceThreshold: 0.5
-  _playerDistanceThreshold: 15
+  _playerDistanceThreshold: 30
+  _playerDistanceThresholdToStartFollowing: 15
   _wayPointDistanceThreshold: 1.1
 --- !u!114 &292460232546019636
 MonoBehaviour:
@@ -307,6 +308,7 @@ MonoBehaviour:
   _damageTargetsOncePerActivation: 0
   _isKnockbackPushOrigin: 1
   _collider: {fileID: 3462995563991828812}
+  _trackActivations: 0
 --- !u!114 &892496079672398938
 MonoBehaviour:
   m_ObjectHideFlags: 0

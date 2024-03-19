@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 50
+  _maxHealth: 80
   _knockbackRigidbody: {fileID: 1156818105874790195}
   _knockbackEffectiveness: 0
 --- !u!54 &1156818105874790195
@@ -470,6 +470,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -31.421171
       objectReference: {fileID: 0}
+    - target: {fileID: -6449620441752727428, guid: 6ca6ede76d05e3744be6ea121b396f2a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cbc194d1f4722c84ab6c03c3e91260e2, type: 2}
     - target: {fileID: -6440449514139974201, guid: 6ca6ede76d05e3744be6ea121b396f2a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
