@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System.Collections;
@@ -15,6 +16,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
     {
         [Header("REFERENCES")] 
         [SerializeField] private MeshRenderer _buttonMesh;
+        [SerializeField] private Collider _collider;
 
         private Material _timerMaterial;
         [SerializeField] private Transform _buttonTransform;
@@ -137,8 +139,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private async UniTaskVoid StartPressedTimer()
         {
             _isPressed = true;
-            await UniTask.Delay(MathUtilities.SecondsToMilliseconds(_pressedDuration),
-                cancellationToken: _pressedCancellationSource.Token);
+            await UniTask.Delay(TimeSpan.FromSeconds(_pressedDuration), cancellationToken: _pressedCancellationSource.Token);
 
             if (_isPressed && !_triggeredAllOnceAlready)
             {
@@ -146,6 +147,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
                 DeactivateWorldInteractors();
                 PlayUntriggerAnimation();
             }
+            RefreshCollider().Forget();
         }
 
 
@@ -176,5 +178,14 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
             _timerMaterial.SetFloat("_CanUnfill", 0.0f);
         }
+
+        private async UniTaskVoid RefreshCollider()
+        {
+            _collider.enabled = false;
+            await UniTask.Yield();
+            _triggeredCount = 0;
+            _collider.enabled = true;
+        }
+        
     }
 }
