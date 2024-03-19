@@ -49,9 +49,7 @@ public class ParabolicProjectile : RecyclableObject
                     
                     CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
                     _shoot = false;
-                    _trail.Clear();
                     _bulletBody.enabled = true;
-                    _trail.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
 
@@ -95,7 +93,11 @@ public class ParabolicProjectile : RecyclableObject
             float x = v0 * t * Mathf.Cos(angle);
             float y = (float)(v0 * t * Math.Sin(angle) - (1f/2f) * -Physics.gravity.y * Mathf.Pow(t,2));
             _rigidbody.MovePosition(origin + direction * x + Vector3.up * y);
-
+            if (!_trail.enabled)
+            {
+                _trail.Clear();
+                _trail.enabled = true;
+            }
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit,1f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                 {

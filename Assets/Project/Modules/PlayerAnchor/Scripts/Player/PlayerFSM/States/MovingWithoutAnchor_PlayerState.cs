@@ -168,8 +168,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private void UpdateMovementSpeed()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed);
-            _blackboard.PlayerMovementChecker.MaxMovementSpeed = _blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed;
+            float maxMovementSpeed = _blackboard.PlayerStatesConfig.WithoutAnchorMoveSpeed;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void SetInstantRotation(bool instantRotation);
         void SetCanRotate(bool canRotate);
         void SetCanFallOffLedges(bool canFallOffLedges, bool checkingIgnoreLedges = true);
+        void SetEnabledFallingPhysics(bool fallingPhysicsEnabled);
         float GetDistanceFromAnchor();
         float GetDistanceFromAnchorRatio01();
         Vector3 GetFloorAlignedDirectionToAnchor();
