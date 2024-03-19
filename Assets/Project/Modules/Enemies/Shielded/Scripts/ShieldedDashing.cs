@@ -45,11 +45,12 @@ namespace Popeye.Modules.Enemies.Components
                 else
                 {
                     Vector3 rayCastDirection = (_playerTransform.position - transform.position).normalized;
+                    float rayCastDistance = (_playerTransform.position - transform.position).magnitude;
                     RaycastHit hit;
-                    if (Physics.Raycast(transform.position, rayCastDirection, out hit,_canSeePlayerProbingConfig.ProbeDistance, _canSeePlayerProbingConfig.CollisionLayerMask,
-                            _canSeePlayerProbingConfig.QueryTriggerInteraction))
+                    if (!Physics.Raycast(transform.position, rayCastDirection, out hit,rayCastDistance, _defaultProbingConfig.CollisionLayerMask,
+                            _defaultProbingConfig.QueryTriggerInteraction))
                     {
-    
+                        
                             Dash();
                             _coolDownTimer = 0;
                     }
