@@ -1,8 +1,10 @@
 using System;
 using AYellowpaper;
+using NaughtyAttributes;
 using Popeye.Modules.GameMenus.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace Popeye.Modules.GameMenus.PauseMenu
 {
@@ -13,6 +15,10 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         [SerializeField] private InterfaceReference<AMenuController, MonoBehaviour> _optionsMenu;
         private AMenuController OptionsMenu => _optionsMenu.Value;
 
+        [Header("QUIT")]
+        [SerializeField] private SmartButtonAndConfig _quitButtonAndConfig;
+        [Scene] [SerializeField] private int _mainMenuScene; 
+        
         
 
         protected override void DoInit(InputAction goBackInput)
@@ -21,6 +27,10 @@ namespace Popeye.Modules.GameMenus.PauseMenu
             
             _optionsButtonAndConfig.SmartButton.Init(
                 _optionsButtonAndConfig.Config, OpenOptionsMenu);
+
+            
+            _quitButtonAndConfig.SmartButton.Init(
+                _quitButtonAndConfig.Config, QuitToMainMenu);
 
             CloseOptionsMenu();
         }
@@ -37,7 +47,12 @@ namespace Popeye.Modules.GameMenus.PauseMenu
             OptionsMenu.Hide();
             Show();
         }
-    
+
+
+        private void QuitToMainMenu()
+        {
+            SceneManager.LoadScene(_mainMenuScene);
+        }
         
     }
 }
