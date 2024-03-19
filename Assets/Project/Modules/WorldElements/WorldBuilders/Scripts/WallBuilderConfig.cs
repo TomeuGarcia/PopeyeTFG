@@ -77,6 +77,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [SerializeField] private Material _fakeMeshMaterial;
         public Material FakeMeshMaterial => _fakeMeshMaterial;
         
+        
+        [Header("META CONFIGURATION")] 
+        [SerializeField] private WallBuilderMetaConfig _metaConfig;
+        public WallBuilderMetaConfig MetaConfig => _metaConfig;
+        
 
         private void OnValidate()
         {
