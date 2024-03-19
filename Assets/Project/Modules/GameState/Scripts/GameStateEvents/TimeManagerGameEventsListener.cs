@@ -16,22 +16,22 @@ namespace Popeye.Modules.GameState
         
         public void StartListening()
         {
-            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePausedEvent>(PauseTime);
-            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumedEvent>(ResumeTime);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(PauseTime);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(ResumeTime);
         }
         
         public void StopListening()
         {
-            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGamePausedEvent>(PauseTime);
-            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGameResumedEvent>(ResumeTime);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGamePaused>(PauseTime);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGameResumed>(ResumeTime);
         }
 
 
-        private void PauseTime(IGameStateEventsDispatcher.OnGamePausedEvent eventData)
+        private void PauseTime(IGameStateEventsDispatcher.OnGamePaused eventData)
         {
             _timeScaleManager.SetPersistingTimeScale(0);
         }
-        private void ResumeTime(IGameStateEventsDispatcher.OnGameResumedEvent eventData)
+        private void ResumeTime(IGameStateEventsDispatcher.OnGameResumed eventData)
         {
             _timeScaleManager.SetPersistingTimeScale(1);
         }

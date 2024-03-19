@@ -14,12 +14,12 @@ namespace Popeye.Modules.GameState
         
         public void InvokeOnGamePaused()
         {
-            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnGamePausedEvent());
+            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnGamePaused());
         }
 
         public void InvokeOnGameResumed()
         {
-            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnGameResumedEvent());
+            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnGameResumed());
         }
     }
 }

@@ -4,6 +4,7 @@ using Popeye.Modules.AudioSystem;
 using Popeye.Modules.GameMenus.Generic;
 using Project.Modules.AudioSystem.Scripts.SoundVolume;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Popeye.Modules.GameMenus.AudioMenu
 {
@@ -15,7 +16,7 @@ namespace Popeye.Modules.GameMenus.AudioMenu
         [SerializeField] private SmartSliderAndConfig _sfxVolumeSliderAndConfig;
         
         
-        protected override void DoInit()
+        protected override void DoInit(InputAction goBackButton)
         {
             float startVolumeMaster = 1.0f;
             float startVolumeMusic = 0.8f;

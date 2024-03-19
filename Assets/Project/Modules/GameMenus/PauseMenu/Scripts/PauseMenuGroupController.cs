@@ -1,10 +1,12 @@
 using System;
 using AYellowpaper;
+using InputSystem;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.GameMenus.Generic;
 using Popeye.Modules.GameState;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Popeye.Modules.GameMenus.PauseMenu
 {
@@ -21,20 +23,43 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
         private IGameStateEventsDispatcher _gameStateEventsDispatcher;
         
+        private PlayerAnchorInputControls _inputUIActions;
+        private InputAction _goBackInput;
+        private InputAction _openMenuInput;
+
+
+        private bool IsBeingShown => _menusCanvasHolder.activeInHierarchy;
         
         private void Start()
         {
             _gameStateEventsDispatcher = ServiceLocator.Instance.GetService<IGameStateEventsDispatcher>();
+
+            _inputUIActions = new InputSystem.PlayerAnchorInputControls();
+            _inputUIActions.Enable();
+            _goBackInput = _inputUIActions.UI.Back;
+            _openMenuInput = _inputUIActions.UI.OpenMenu;
             
-            PauseMenu.Init(Close);
+            PauseMenu.Init(Close, _goBackInput);
             Close();
+        }
+
+        private void OnDestroy()
+        {
+            _inputUIActions.Disable();
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            if (_openMenuInput.WasPressedThisFrame())
             {
-                Open();
+                if (IsBeingShown)
+                {
+                    Close();
+                }
+                else
+                {
+                    Open();
+                }
             }
         }
 

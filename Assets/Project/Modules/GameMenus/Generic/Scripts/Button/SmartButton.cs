@@ -58,5 +58,10 @@ namespace Popeye.Modules.GameMenus.Generic
         {
             _onButtonClickedCallback.Invoke();
         }
+
+        public void SimulateOnButtonClicked()
+        {
+            InvokeOnButtonClicked();
+        }
     }
 }

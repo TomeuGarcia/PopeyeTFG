@@ -3,6 +3,7 @@ using AYellowpaper;
 using Popeye.Modules.GameMenus.AudioMenu;
 using Popeye.Modules.GameMenus.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Popeye.Modules.GameMenus.OptionsMenu
 {
@@ -13,16 +14,11 @@ namespace Popeye.Modules.GameMenus.OptionsMenu
         [SerializeField] private InterfaceReference<AMenuController, MonoBehaviour> _audioOptionsMenu;
         private AMenuController AudioOptionsMenu => _audioOptionsMenu.Value;
 
+        
 
-        private void Start()
+        protected override void DoInit(InputAction goBackInput)
         {
-            
-        }
-
-
-        protected override void DoInit()
-        {
-            AudioOptionsMenu.Init(CloseAudioOptionsMenu);
+            AudioOptionsMenu.Init(CloseAudioOptionsMenu, goBackInput);
             
             _audioOptionsButtonAndConfig.SmartButton.Init(
                 _audioOptionsButtonAndConfig.Config, OpenAudioOptionsMenu);

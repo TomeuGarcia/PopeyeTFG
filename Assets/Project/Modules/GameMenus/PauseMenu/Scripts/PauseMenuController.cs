@@ -2,6 +2,7 @@ using System;
 using AYellowpaper;
 using Popeye.Modules.GameMenus.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Popeye.Modules.GameMenus.PauseMenu
 {
@@ -14,9 +15,9 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
         
 
-        protected override void DoInit()
+        protected override void DoInit(InputAction goBackInput)
         {
-            OptionsMenu.Init(CloseOptionsMenu);
+            OptionsMenu.Init(CloseOptionsMenu, goBackInput);
             
             _optionsButtonAndConfig.SmartButton.Init(
                 _optionsButtonAndConfig.Config, OpenOptionsMenu);

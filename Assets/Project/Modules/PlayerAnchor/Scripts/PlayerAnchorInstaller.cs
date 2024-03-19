@@ -115,7 +115,8 @@ namespace Popeye.Modules.PlayerAnchor
             IFMODAudioManager fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
             IParticleFactory particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
             ITimeFunctionalities timeFunctionalities = ServiceLocator.Instance.GetService<ITimeFunctionalities>();
-            
+            IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
+
             
             // Anchor
             TransformMotion anchorMotion = new TransformMotion();
@@ -179,7 +180,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             // Player
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
-            PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController();
+            PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController(eventSystemService);
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
@@ -206,7 +207,6 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
-            IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
             PlayerGlobalEventsListener playerGlobalEventsListener = 
                 new PlayerGlobalEventsListener(eventSystemService, _player, _anchor);
             PlayerEventsDispatcher playerEventsDispatcher =
