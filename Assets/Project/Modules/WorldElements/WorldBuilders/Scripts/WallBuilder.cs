@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -65,9 +66,31 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                     }
                 }
             }
-
         }
-        
+
+        [System.Serializable]
+        public class CornerPoint
+        {
+            [SerializeField] private Vector3 _position;
+            [SerializeField] private List<CornerPoint> _subPoints;
+            
+            public Vector3 Position
+            {
+                get => _position;
+                set => _position = value;
+            }
+
+            public CornerPoint(Vector3 position)
+            {
+                _position = position;
+                _subPoints = new List<CornerPoint>(3);
+            }
+            
+            public static implicit operator Vector3(CornerPoint cornerPoint)
+            {
+                return cornerPoint.Position;
+            }
+        }
 
         [Header("PARENTS")] 
         [SerializeField] private Transform _cornerWallsParent;
@@ -83,6 +106,9 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Vector3.right * 2, 
             Vector3.right * 2 + Vector3.forward * 3 
         };
+
+        [SerializeField] private CornerPoint[] _cornerPoints;
+        
 
         [Header("SUB-POINTS")]
         [SerializeField] private SubPoints[] _subPointsList;
@@ -111,6 +137,17 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             foreach (SubPoints subPoints in _subPointsList)
             {
                 subPoints.ApplyCorrection(_points.Length - 1);
+            }
+
+            //CopyPointsToCornerPoints();
+        }
+        
+        public void CopyPointsToCornerPoints()
+        {
+            _cornerPoints = new CornerPoint[_points.Length];
+            for (int i = 0; i < _points.Length; ++i)
+            {
+                _cornerPoints[i] = new CornerPoint(_points[i]);
             }
         }
 
@@ -317,7 +354,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
 
 
-        public void CenterAroundPivot()
+        public void CenterAroundPivot(out Vector2 offset)
         {
             Vector2 minimums = Vector2.one * float.MaxValue;
             Vector2 maximums = Vector2.one * float.MinValue;
@@ -332,7 +369,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
 
             
-            Vector2 offset = (minimums + maximums) / 2;
+            offset = (minimums + maximums) / 2;
 
             MovePointsRangeByAmount(_points, offset, 0, _points.Length);
 
@@ -341,6 +378,14 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 MovePointsRangeByAmount(subPoints.points, offset, 0, subPoints.points.Length);
             }
         }
+
+        public void MovePivotToCenter()
+        {
+            CenterAroundPivot(out Vector2 offset);
+
+            transform.position += new Vector3(offset.x, 0, offset.y);
+        }
+        
 
         public void MoveBasePointsRangeByAmount(Vector2 moveAmount, int startInclusive, int endExclusive)
         {
@@ -450,8 +495,12 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Vector3 previousToCurrent = currentPoint - previousPoint;
             float previousToCurrentDistance = previousToCurrent.magnitude;
             Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
-                
-            Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
+
+            Quaternion offsetRotation = Quaternion.identity;
+            if (Vector3.Dot(previousToCurrentDirection, Vector3.up) < 0.99f)
+            {
+                offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
+            }            
                 
             Handles.color = _config.TransparencyConfig
                 .ApplyTransparencyToColor(_config.EditorView.FillBlockColor * _colorMultiplier, Position);

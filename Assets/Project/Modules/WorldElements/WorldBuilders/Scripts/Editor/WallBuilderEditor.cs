@@ -1,13 +1,10 @@
-#if UNITY_EDITOR
-
-using System;
 using UnityEditor;
 using UnityEngine;
 
 namespace Popeye.Modules.WorldElements.WorldBuilders
 {
     [CustomEditor(typeof(WallBuilder))]
-    public class WallBuilderEditor : Editor
+    public class WallBuilderEditor : UnityEditor.Editor
     {
         private WallBuilder _wallBuilder;
         private Vector3[] _points;
@@ -41,7 +38,16 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             if (GUILayout.Button("Center Around Pivot"))
             {
                 Undo.RecordObject(_wallBuilder, "Center Around Pivot");
-                _wallBuilder.CenterAroundPivot();
+                _wallBuilder.CenterAroundPivot(out Vector2 offset);
+                EditorUtility.SetDirty(_wallBuilder);
+            }
+            
+            
+            GUILayout.Space(15);
+            if (GUILayout.Button("Move Pivot To Center"))
+            {
+                Undo.RecordObject(_wallBuilder, "Move Pivot To Center");
+                _wallBuilder.MovePivotToCenter();
                 EditorUtility.SetDirty(_wallBuilder);
             }
             
@@ -127,5 +133,3 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
     }
 }
 
-
-#endif
