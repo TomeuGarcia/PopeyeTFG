@@ -69,10 +69,55 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
 
         [System.Serializable]
+        public class CornerPointsGroup
+        {
+            [SerializeField] private List<CornerPoint> _cornerPoints;
+            public List<CornerPoint> CornerPoints => _cornerPoints;
+
+            public CornerPointsGroup()  : this(3) { }
+            public CornerPointsGroup(int capacity)
+            {
+                _cornerPoints = new List<CornerPoint>(capacity);
+            }
+            public CornerPointsGroup(Vector3[] points)
+            {
+                _cornerPoints = new List<CornerPoint>(points.Length);
+                for (int i = 0; i < points.Length; ++i)
+                {
+                    _cornerPoints.Add(new CornerPoint(points[i]));
+                }
+            }
+
+            private static readonly Vector3 CORRECTION_OFFSET = Vector3.right;
+            public void ApplyCorrections()
+            {
+                if (_cornerPoints.Count < 1)
+                {
+                    return;
+                }
+                
+                CornerPoint previousPoint = _cornerPoints[0];
+                previousPoint.SubPointsGroup.ApplyCorrections();
+                
+                for (int i = 1; i < _cornerPoints.Count; ++i)
+                {
+                    CornerPoint currentPoint = _cornerPoints[i];
+                    if (previousPoint.Position == currentPoint.Position)
+                    {
+                        currentPoint.Position += CORRECTION_OFFSET;
+                    }
+                    previousPoint = currentPoint;
+
+                    currentPoint.SubPointsGroup.ApplyCorrections();
+                }
+            }
+        }
+
+        [System.Serializable]
         public class CornerPoint
         {
             [SerializeField] private Vector3 _position;
-            [SerializeField] private List<CornerPoint> _subPoints;
+            [SerializeField] private CornerPointsGroup _subPointsGroup;
             
             public Vector3 Position
             {
@@ -80,10 +125,16 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 set => _position = value;
             }
 
+            public CornerPointsGroup SubPointsGroup 
+            {
+                get => _subPointsGroup;
+                set => _subPointsGroup = value;
+            }
+
             public CornerPoint(Vector3 position)
             {
                 _position = position;
-                _subPoints = new List<CornerPoint>(3);
+                _subPointsGroup = new CornerPointsGroup();
             }
             
             public static implicit operator Vector3(CornerPoint cornerPoint)
@@ -107,7 +158,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Vector3.right * 2 + Vector3.forward * 3 
         };
 
-        [SerializeField] private CornerPoint[] _cornerPoints;
+        [SerializeField] private CornerPointsGroup _baseCornerPointsGroup;
         
 
         [Header("SUB-POINTS")]
@@ -138,18 +189,25 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             {
                 subPoints.ApplyCorrection(_points.Length - 1);
             }
+            
+            _baseCornerPointsGroup.ApplyCorrections();
 
             //CopyPointsToCornerPoints();
         }
         
         public void CopyPointsToCornerPoints()
         {
-            _cornerPoints = new CornerPoint[_points.Length];
-            for (int i = 0; i < _points.Length; ++i)
+            _baseCornerPointsGroup = new CornerPointsGroup(_points);
+
+            foreach (SubPoints subPoints in _subPointsList)
             {
-                _cornerPoints[i] = new CornerPoint(_points[i]);
+                _baseCornerPointsGroup.CornerPoints[subPoints.StemmingFromIndex].SubPointsGroup =
+                    new CornerPointsGroup(subPoints.points);
             }
+            
+            Debug.Log("Corners copied: " + gameObject.name);
         }
+        
 
         private void Awake()
         {
@@ -184,19 +242,6 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
         }
         
-        public void AddPoint()
-        {
-            Array.Resize(ref _points, _points.Length + 1);
-
-            if (_points.Length > 1)
-            {
-                _points[^1] = _points[^2] + Vector3.right;    
-            }
-            else
-            {
-                _points[0] = Vector3.right;
-            }
-        }
 
         public bool IsReadyForEditor()
         {

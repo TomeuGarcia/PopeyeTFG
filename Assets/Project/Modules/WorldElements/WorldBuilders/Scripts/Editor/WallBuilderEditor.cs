@@ -27,14 +27,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
             GUILayout.Space(20);
             GUILayout.Label("BUTTONS");
-            if (GUILayout.Button("Add Point"))
-            {
-                Undo.RecordObject(_wallBuilder, "Add Point");
-                _wallBuilder.AddPoint();
-                EditorUtility.SetDirty(_wallBuilder);
-            }
-            
-            GUILayout.Space(15);
+
             if (GUILayout.Button("Center Around Pivot"))
             {
                 Undo.RecordObject(_wallBuilder, "Center Around Pivot");
