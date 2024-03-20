@@ -198,7 +198,7 @@ Transform:
   m_Children:
   - {fileID: 799839162377749810}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &799839161237928281
 MonoBehaviour:
@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buttonMesh: {fileID: 799839160394876372}
+  _collider: {fileID: 799839161237928260}
   _buttonTransform: {fileID: 799839160394876395}
   _pressedDuration: 3
   _triggerAllOnce: 1

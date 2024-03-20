@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18154658, g: 0.2271898, b: 0.3074084, a: 1}
+  m_IndirectSpecularColor: {r: 0.17798744, g: 0.22284889, b: 0.30496395, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4399,6 +4399,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 163666321}
   _collider: {fileID: 1238109741}
   _startActivated: 1
+  _colliderIsAlwaysEnabled: 0
 --- !u!1001 &166352348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13477,6 +13478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridMovementActorConfig: {fileID: 11400000, guid: 4ae6abedd8cfc474eaec490c69815719,
     type: 2}
+  _transparencyConfig: {fileID: 0}
   _rectangularAreaWrapper:
     _showArea: 1
     _drawColor: {r: 0.82610524, g: 1, b: 0, a: 1}
@@ -13762,6 +13764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewConfig: {fileID: 11400000, guid: a54609f122332d24fbb898cc897206d5, type: 2}
+  _transparencyConfig: {fileID: 0}
   _gridMovementActorReferences:
   - _underlyingValue: {fileID: 734246762}
   _showAreas: 1
@@ -20807,6 +20810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewConfig: {fileID: 11400000, guid: a54609f122332d24fbb898cc897206d5, type: 2}
+  _transparencyConfig: {fileID: 0}
   _gridMovementActorReferences:
   - _underlyingValue: {fileID: 1546519116}
   _showAreas: 1
@@ -21577,6 +21581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewConfig: {fileID: 11400000, guid: a54609f122332d24fbb898cc897206d5, type: 2}
+  _transparencyConfig: {fileID: 0}
   _gridMovementActorReferences:
   - _underlyingValue: {fileID: 1848268116}
   _showAreas: 1
@@ -21653,6 +21658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridMovementActorConfig: {fileID: 11400000, guid: 4ae6abedd8cfc474eaec490c69815719,
     type: 2}
+  _transparencyConfig: {fileID: 0}
   _rectangularAreaWrapper:
     _showArea: 1
     _drawColor: {r: 0.82610524, g: 1, b: 0, a: 1}
@@ -26913,10 +26919,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1151401866870032477, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -159.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151401866870032477, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151401866870032477, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -77.92
+      objectReference: {fileID: 0}
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -73.25306
+      value: -73.25305
       objectReference: {fileID: 0}
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
@@ -26926,12 +26947,12 @@ PrefabInstance:
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -73.25306
+      value: -73.25307
       objectReference: {fileID: 0}
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.81999946
+      value: 0.8199994
       objectReference: {fileID: 0}
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
@@ -26946,12 +26967,12 @@ PrefabInstance:
     - target: {fileID: 2947591969064500147, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.17629856
+      value: -0.17629857
       objectReference: {fileID: 0}
     - target: {fileID: 6277468705217273969, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -73.25306
+      value: -73.25305
       objectReference: {fileID: 0}
     - target: {fileID: 6277468705217273969, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
@@ -26961,12 +26982,12 @@ PrefabInstance:
     - target: {fileID: 6277468705217273969, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -73.25306
+      value: -73.25307
       objectReference: {fileID: 0}
     - target: {fileID: 6277468705217273969, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.81999946
+      value: 0.8199994
       objectReference: {fileID: 0}
     - target: {fileID: 6277468705217273969, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
@@ -26981,7 +27002,7 @@ PrefabInstance:
     - target: {fileID: 6277468705217273969, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.17629856
+      value: -0.17629857
       objectReference: {fileID: 0}
     - target: {fileID: 8858682826613895691, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
@@ -27445,6 +27466,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 541305169}
   _collider: {fileID: 541305170}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!1 &1449031414
 GameObject:
   m_ObjectHideFlags: 0
@@ -29131,6 +29153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridMovementActorConfig: {fileID: 11400000, guid: 4ae6abedd8cfc474eaec490c69815719,
     type: 2}
+  _transparencyConfig: {fileID: 0}
   _rectangularAreaWrapper:
     _showArea: 1
     _drawColor: {r: 0.82610524, g: 1, b: 0, a: 1}
@@ -29511,6 +29534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewConfig: {fileID: 11400000, guid: a54609f122332d24fbb898cc897206d5, type: 2}
+  _transparencyConfig: {fileID: 0}
   _gridMovementActorReferences:
   - _underlyingValue: {fileID: 1110701816}
   _showAreas: 1
@@ -33416,6 +33440,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1740199825}
   _collider: {fileID: 1740199826}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!1001 &1797540597
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34261,6 +34286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridMovementActorConfig: {fileID: 11400000, guid: 4ae6abedd8cfc474eaec490c69815719,
     type: 2}
+  _transparencyConfig: {fileID: 0}
   _rectangularAreaWrapper:
     _showArea: 1
     _drawColor: {r: 0.82610524, g: 1, b: 0, a: 1}
@@ -37964,6 +37990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewConfig: {fileID: 11400000, guid: a54609f122332d24fbb898cc897206d5, type: 2}
+  _transparencyConfig: {fileID: 0}
   _gridMovementActorReferences:
   - _underlyingValue: {fileID: 2064535310}
   _showAreas: 1
@@ -39407,6 +39434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridMovementActorConfig: {fileID: 11400000, guid: 4ae6abedd8cfc474eaec490c69815719,
     type: 2}
+  _transparencyConfig: {fileID: 0}
   _rectangularAreaWrapper:
     _showArea: 1
     _drawColor: {r: 0.82610524, g: 1, b: 0, a: 1}
@@ -40171,6 +40199,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1677759935}
   _collider: {fileID: 1677759936}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!1 &2098843335
 GameObject:
   m_ObjectHideFlags: 0
