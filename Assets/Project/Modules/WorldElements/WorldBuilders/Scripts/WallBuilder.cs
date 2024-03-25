@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using Popeye.Core.Pool;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -170,12 +171,10 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [SerializeField] private CornerPointsGroup _baseCornerPointsGroup;
         public CornerPointsGroup BaseCornerPointsGroup => _baseCornerPointsGroup;
 
-
-        [SerializeField] private List<GameObject> _spawnedCornersBuffer;
-        private Queue<GameObject> _spawnedCornersLeftBuffer;
-        [SerializeField] private List<GameObject> _spawnedFillsBuffer;
-        private Queue<GameObject> _spawnedFillsLeftBuffer;
         
+        [SerializeField] private SerializableObjectBuffer _cornersObjectBuffer;
+        [SerializeField] private SerializableObjectBuffer _fillsObjectBuffer;
+
         private Block CornerBlock => _config.CornerBlock;
         private Block FillBlock => _config.FillBlock;
         public WallBuilderConfig.EditorViewConfig EditorView => _config.EditorView;
@@ -214,23 +213,14 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 DestroyImmediate(collider);
             }
 
-            _spawnedCornersLeftBuffer = new Queue<GameObject>(_spawnedCornersBuffer);
-            _spawnedCornersBuffer.Clear();
-            
-            _spawnedFillsLeftBuffer = new Queue<GameObject>(_spawnedFillsBuffer);
-            _spawnedFillsBuffer.Clear();
+            _cornersObjectBuffer.SetupBeforeUse();
+            _fillsObjectBuffer.SetupBeforeUse();
 
             FillWallsNew(_baseCornerPointsGroup);
             CreateFakeMesh();
-
-            while (_spawnedCornersLeftBuffer.Count > 0)
-            {
-                DestroyImmediate(_spawnedCornersLeftBuffer.Dequeue());
-            }
-            while (_spawnedFillsLeftBuffer.Count > 0)
-            {
-                DestroyImmediate(_spawnedFillsLeftBuffer.Dequeue());
-            }
+            
+            _cornersObjectBuffer.ClearAfterUse();
+            _fillsObjectBuffer.ClearAfterUse();
         }
         
 
@@ -303,7 +293,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void CreateCornerWall(Vector3 position)
         {
-            CreateWall(_config.CornerBlockPrefab, position, Quaternion.identity, _spawnedCornersLeftBuffer, _spawnedCornersBuffer);
+            CreateWall(_config.CornerBlockPrefab, position, Quaternion.identity, _cornersObjectBuffer);
         }
 
         private void CreateFillWalls(Vector3 previousPoint, Vector3 previousToCurrentDirection, float previousToCurrentDistance,
@@ -320,28 +310,24 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         
         private void CreateFillWall(Vector3 position, Quaternion rotation)
         {
-            CreateWall(_config.FillBlockPrefab, position, rotation, _spawnedFillsLeftBuffer, _spawnedFillsBuffer);
+            CreateWall(_config.FillBlockPrefab, position, rotation, _fillsObjectBuffer);
         }
 
         private void CreateWall(GameObject wallPrefab, Vector3 position, Quaternion rotation, 
-            Queue<GameObject> objectsLeftBuffer, List<GameObject> objectsBuffer)
+            SerializableObjectBuffer objectBuffer)
         {
-            if (objectsLeftBuffer.Count > 0)
+            if (objectBuffer.HasObjectsLeft(out GameObject bufferObject))
             {
-                GameObject bufferObject = objectsLeftBuffer.Dequeue();
                 bufferObject.transform.position = position;
                 bufferObject.transform.rotation = rotation;
                 bufferObject.transform.parent = _fillWallsParent;
-                
-                objectsBuffer.Add(bufferObject);
-                Debug.Log("Recycled");
             }
             else
             {
-                GameObject spawnedObject = Instantiate(wallPrefab, position, rotation, _fillWallsParent);
-                objectsBuffer.Add(spawnedObject);
-                Debug.Log("Spawned");
+                bufferObject = Instantiate(wallPrefab, position, rotation, _fillWallsParent);
             }
+            
+            objectBuffer.AddToSpawnedObjectsBuffer(bufferObject);
             
             _config.WallBuilderDataTracker.OnWallInstantiated();
         }
@@ -455,17 +441,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         {
             OnValidate();
             
-            foreach (GameObject bufferObject in _spawnedCornersBuffer)
-            {
-                DestroyImmediate(bufferObject);
-            }
-            _spawnedCornersBuffer.Clear();
-            
-            foreach (GameObject bufferObject in _spawnedFillsBuffer)
-            {
-                DestroyImmediate(bufferObject);
-            }
-            _spawnedFillsBuffer.Clear();
+            _cornersObjectBuffer.DestroyObjectsAndClearBuffer();
+            _fillsObjectBuffer.DestroyObjectsAndClearBuffer();
 
             while (_collidersParent.TryGetComponent<Collider>(out Collider collider))
             {
