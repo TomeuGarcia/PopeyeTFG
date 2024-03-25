@@ -41,32 +41,6 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
         }
 
-        [System.Serializable]
-        public class SubPoints
-        {
-            [SerializeField] private int _stemmingFromIndex = 0;
-            
-            public Vector3[] points = { 
-                Vector3.left * 2, 
-                Vector3.right * 2, 
-                Vector3.right * 2 + Vector3.forward * 3 
-            };
-
-            public int StemmingFromIndex => _stemmingFromIndex;
-
-            public void ApplyCorrection(int maxIndex)
-            {
-                _stemmingFromIndex = Mathf.Clamp(_stemmingFromIndex, 0, maxIndex);
-
-                for (int i = 1; i < points.Length; ++i)
-                {
-                    if (points[i - 1] == points[i])
-                    {
-                        points[i] += Vector3.right;
-                    }
-                }
-            }
-        }
 
         [System.Serializable]
         public class CornerPointsGroup
@@ -113,6 +87,15 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 }
             }
 
+            public void ApplyOffset(Vector3 offset)
+            {
+                foreach (CornerPoint cornerPoint in CornerPoints)
+                {
+                    cornerPoint.Position += offset;
+                    cornerPoint.SubPointsGroup.ApplyOffset(offset);
+                }
+            }
+            
             public int GetDepth()
             {
                 int depthCount = 0;
@@ -128,12 +111,22 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
                 return Mathf.Max(depths);
             }
+
+            public void AddPoint()
+            {
+                bool isFistPoint = NumberOfCornerPoints < 1;
+                Vector3 position = isFistPoint ? CORRECTION_OFFSET : _cornerPoints[^1] + CORRECTION_OFFSET;
+                CornerPoints.Add(new CornerPoint(position));
+            }
         }
 
         [System.Serializable]
         public class CornerPoint
         {
             [SerializeField] private Vector3 _position;
+            [ProgressBar("isSelected", 1, EColor.Green)] // Dynamic max value constructor
+            public int isSelectedValue = 1;
+            
             [SerializeField] private CornerPointsGroup _subPointsGroup;
             
             public Vector3 Position
@@ -158,6 +151,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             {
                 return cornerPoint.Position;
             }
+
+            public void SetSelected(bool isSelected)
+            {
+                isSelectedValue = isSelected ? 1 : 0;
+            }
         }
 
         [Header("PARENTS")] 
@@ -169,28 +167,19 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [Expandable] [SerializeField] private WallBuilderConfig _config;
         
         [Header("POINTS")]
-        [SerializeField] private Vector3[] _points = { 
-            Vector3.left * 2, 
-            Vector3.right * 2, 
-            Vector3.right * 2 + Vector3.forward * 3 
-        };
-
         [SerializeField] private CornerPointsGroup _baseCornerPointsGroup;
         public CornerPointsGroup BaseCornerPointsGroup => _baseCornerPointsGroup;
-        
 
-        [Header("SUB-POINTS")]
-        [SerializeField] private SubPoints[] _subPointsList;
-        public SubPoints[] SubPointsList => _subPointsList;
+
+        [SerializeField] private List<GameObject> _spawnedCornersBuffer;
+        private Queue<GameObject> _spawnedCornersLeftBuffer;
+        [SerializeField] private List<GameObject> _spawnedFillsBuffer;
+        private Queue<GameObject> _spawnedFillsLeftBuffer;
         
-        
-        public Vector3[] Points => _points;
         private Block CornerBlock => _config.CornerBlock;
         private Block FillBlock => _config.FillBlock;
         public WallBuilderConfig.EditorViewConfig EditorView => _config.EditorView;
-
-        [HideInInspector] public Vector2 moveBy = Vector2.zero;
-        [HideInInspector] public Vector2Int selectedPointsRange = Vector2Int.zero;
+        
 
         private Vector3 Position => transform.position;
 
@@ -202,60 +191,52 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 CornerBlock.UpdateHalfSize();
                 FillBlock.UpdateHalfSize();
             }
-
-            foreach (SubPoints subPoints in _subPointsList)
-            {
-                subPoints.ApplyCorrection(_points.Length - 1);
-            }
             
             _baseCornerPointsGroup.ApplyCorrections();
             
-            //CopyPointsToCornerPoints();
-        }
-        
-        public void CopyPointsToCornerPoints()
-        {
-            _baseCornerPointsGroup = new CornerPointsGroup(_points);
-    
-            foreach (SubPoints subPoints in _subPointsList)
-            {
-                _baseCornerPointsGroup.CornerPoints[subPoints.StemmingFromIndex].SubPointsGroup =
-                    new CornerPointsGroup(subPoints.points);
-            }
-            
-            Debug.Log("Corners copied: " + gameObject.name);
-        }
-        
-
-        private void Awake()
-        {
-            OnValidate();
-
             if (!_cornerWallsParent) _cornerWallsParent = transform;
             if (!_fillWallsParent) _fillWallsParent = transform;
             if (!_collidersParent) _collidersParent = gameObject;
         }
+        
 
-        private void Start()
+
+        private void SpawnWalls()
         {
-            if (_config.MetaConfig.DestroyOnPlay)
+            if (_baseCornerPointsGroup.NumberOfCornerPoints < 1)
             {
-                Destroy(this);
                 return;
             }
 
-            if (_baseCornerPointsGroup.NumberOfCornerPoints > 0)
+
+            while (_collidersParent.TryGetComponent<Collider>(out Collider collider))
             {
-                FillWallsNew(_baseCornerPointsGroup);
-                CreateFakeMesh();
+                DestroyImmediate(collider);
             }
+
+            _spawnedCornersLeftBuffer = new Queue<GameObject>(_spawnedCornersBuffer);
+            _spawnedCornersBuffer.Clear();
             
+            _spawnedFillsLeftBuffer = new Queue<GameObject>(_spawnedFillsBuffer);
+            _spawnedFillsBuffer.Clear();
+
+            FillWallsNew(_baseCornerPointsGroup);
+            CreateFakeMesh();
+
+            while (_spawnedCornersLeftBuffer.Count > 0)
+            {
+                DestroyImmediate(_spawnedCornersLeftBuffer.Dequeue());
+            }
+            while (_spawnedFillsLeftBuffer.Count > 0)
+            {
+                DestroyImmediate(_spawnedFillsLeftBuffer.Dequeue());
+            }
         }
         
 
         public bool IsReadyForEditor()
         {
-            return _config != null && _points.Length > 1;
+            return _config != null && _baseCornerPointsGroup.NumberOfCornerPoints > 1;
         }
 
 
@@ -322,7 +303,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void CreateCornerWall(Vector3 position)
         {
-            InstantiateWall(_config.CornerBlockPrefab, position, Quaternion.identity);
+            CreateWall(_config.CornerBlockPrefab, position, Quaternion.identity, _spawnedCornersLeftBuffer, _spawnedCornersBuffer);
         }
 
         private void CreateFillWalls(Vector3 previousPoint, Vector3 previousToCurrentDirection, float previousToCurrentDistance,
@@ -333,13 +314,35 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             for (; distanceCounter < fillLength; distanceCounter += FillBlock.Length)
             {
                 Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
-                InstantiateWall(_config.FillBlockPrefab, fillPosition, rotation);
+                CreateFillWall(fillPosition, rotation);
             }
         }
-
-        private void InstantiateWall(GameObject wallPrefab, Vector3 position, Quaternion rotation)
+        
+        private void CreateFillWall(Vector3 position, Quaternion rotation)
         {
-            Instantiate(wallPrefab, position, rotation, _fillWallsParent);
+            CreateWall(_config.FillBlockPrefab, position, rotation, _spawnedFillsLeftBuffer, _spawnedFillsBuffer);
+        }
+
+        private void CreateWall(GameObject wallPrefab, Vector3 position, Quaternion rotation, 
+            Queue<GameObject> objectsLeftBuffer, List<GameObject> objectsBuffer)
+        {
+            if (objectsLeftBuffer.Count > 0)
+            {
+                GameObject bufferObject = objectsLeftBuffer.Dequeue();
+                bufferObject.transform.position = position;
+                bufferObject.transform.rotation = rotation;
+                bufferObject.transform.parent = _fillWallsParent;
+                
+                objectsBuffer.Add(bufferObject);
+                Debug.Log("Recycled");
+            }
+            else
+            {
+                GameObject spawnedObject = Instantiate(wallPrefab, position, rotation, _fillWallsParent);
+                objectsBuffer.Add(spawnedObject);
+                Debug.Log("Spawned");
+            }
+            
             _config.WallBuilderDataTracker.OnWallInstantiated();
         }
         
@@ -364,7 +367,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         
         private void CreateColliderForFirst()
         {
-            Vector3 colliderPosition = _points[0];
+            Vector3 colliderPosition = _baseCornerPointsGroup.CornerPoints[0].Position;
             Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length);
 
             DoCreateCollider(colliderPosition, colliderSize);
@@ -375,7 +378,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             colliderSize.x = Mathf.Abs(colliderSize.x);
             colliderSize.y = Mathf.Abs(colliderSize.y);
             colliderSize.z = Mathf.Abs(colliderSize.z);
-
+            
             BoxCollider boxCollider = _collidersParent.AddComponent<BoxCollider>();
             boxCollider.center = colliderPosition + (Vector3.up * _config.HalfColliderHeight);
             boxCollider.size = colliderSize;
@@ -385,20 +388,37 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void CreateFakeMesh()
         {
-            _collidersParent.AddComponent<MeshFilter>();
-            MeshRenderer meshRenderer = _collidersParent.AddComponent<MeshRenderer>();
+            if (!_collidersParent.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
+            {
+                _collidersParent.AddComponent<MeshFilter>();
+                Debug.Log("no mesh filter");
+            }
+
+            if (!_collidersParent.TryGetComponent<MeshRenderer>(out MeshRenderer meshRenderer))
+            {
+                meshRenderer = _collidersParent.AddComponent<MeshRenderer>();
+                Debug.Log("no mesh renderer");
+            }
+            
             meshRenderer.material = _config.FakeMeshMaterial;
             meshRenderer.enabled = false;
         }
 
 
+        public void AddPoint()
+        {
+            _baseCornerPointsGroup.AddPoint();
+        }
+        
         public void CenterAroundPivot(out Vector2 offset)
         {
             Vector2 minimums = Vector2.one * float.MaxValue;
             Vector2 maximums = Vector2.one * float.MinValue;
             
-            foreach (Vector3 point in _points)
+            foreach (CornerPoint baseCornerPoint in _baseCornerPointsGroup.CornerPoints)
             {
+                Vector3 point = baseCornerPoint.Position;
+
                 if (point.x < minimums.x) minimums.x = point.x;
                 if (point.z < minimums.y) minimums.y = point.z;
                 
@@ -408,13 +428,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
             
             offset = (minimums + maximums) / 2;
-
-            MovePointsRangeByAmount(_points, offset, 0, _points.Length);
-
-            foreach (SubPoints subPoints in _subPointsList)
-            {
-                MovePointsRangeByAmount(subPoints.points, offset, 0, subPoints.points.Length);
-            }
+            Vector3 offset3D = new Vector3(offset.x, 0, offset.y);
+            _baseCornerPointsGroup.ApplyOffset(offset3D);
         }
 
         public void MovePivotToCenter()
@@ -425,30 +440,46 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
         
 
-        public void MoveBasePointsRangeByAmount(Vector2 moveAmount, int startInclusive, int endExclusive)
-        {
-            MovePointsRangeByAmount(_points, moveAmount, startInclusive, endExclusive);
-        }
-        
-        public void MovePointsRangeByAmount(Vector3[] points, Vector2 moveAmount, int startInclusive, int endExclusive)
-        {
-            for (int i = startInclusive; i < endExclusive; ++i)
-            {
-                points[i] -= new Vector3(moveAmount.x, 0, moveAmount.y);
-            }
-        }
-
         private Vector3 PointToWorldSpace(Vector3 point)
         {
             return transform.TransformPoint(point);
         }
 
+        public void BakeWalls()
+        {
+            OnValidate();
+            SpawnWalls();
+        }
+        
+        public void ClearBakedWalls()
+        {
+            OnValidate();
+            
+            foreach (GameObject bufferObject in _spawnedCornersBuffer)
+            {
+                DestroyImmediate(bufferObject);
+            }
+            _spawnedCornersBuffer.Clear();
+            
+            foreach (GameObject bufferObject in _spawnedFillsBuffer)
+            {
+                DestroyImmediate(bufferObject);
+            }
+            _spawnedFillsBuffer.Clear();
 
+            while (_collidersParent.TryGetComponent<Collider>(out Collider collider))
+            {
+                DestroyImmediate(collider);
+            }
+        }
+        
 #if UNITY_EDITOR
         private float _colorMultiplier;
         
         private void OnDrawGizmos()
         {
+            if (!IsReadyForEditor()) return;
+            
             int baseDepth = _baseCornerPointsGroup.GetDepth();
             DrawCorners(_baseCornerPointsGroup, 0, baseDepth);
             DrawFills(_baseCornerPointsGroup, _baseCornerPointsGroup.CornerPoints[0], 0, baseDepth);
@@ -530,6 +561,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         
         private void DrawBlock(Block block, Vector3 center, Quaternion rotation)
         {
+            if (Handles.color.a < 0.001f) return;
+            
             Vector3[] framePoints = block.ToFrame(center, rotation);
             for (int i = 0; i < framePoints.Length; ++i)
             {

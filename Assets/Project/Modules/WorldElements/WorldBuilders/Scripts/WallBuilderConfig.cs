@@ -18,11 +18,16 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             [SerializeField] private Color _fillBlockColor = Color.yellow;
             [SerializeField] private Color _fillLineColor = Color.red;
             [SerializeField] private Color _buttonColor = Color.magenta;
+            [SerializeField] private Color _textColor = Color.red;
+            [SerializeField] private Texture2D _textBackground;
+            
             
             public Color CornerBlockColor => _cornerBlockColor;
             public Color FillBlockColor => _fillBlockColor;
             public Color FillLineColor => _fillLineColor;
             public Color ButtonColor => _buttonColor;
+            public Color TextColor => _textColor;
+            public Texture2D TextBackground => _textBackground;
 
             [SerializeField, Range(0.01f, 10.0f)] private float _lineThickness = 2.5f;
             public float LineThickness => _lineThickness;
@@ -30,8 +35,6 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             [SerializeField, Range(0.01f, 10.0f)] private float _buttonSize = 0.2f;
             public float ButtonSize => _buttonSize;
             
-            [SerializeField, Range(0.0f, 2.0f)] private float _stemmingBlocksColorMultiplier = 0.6f;
-            public float StemmingBlocksColorMultiplier => _stemmingBlocksColorMultiplier;
         }
 
 
@@ -77,10 +80,6 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [SerializeField] private Material _fakeMeshMaterial;
         public Material FakeMeshMaterial => _fakeMeshMaterial;
         
-        
-        [Header("META CONFIGURATION")] 
-        [SerializeField] private WallBuilderMetaConfig _metaConfig;
-        public WallBuilderMetaConfig MetaConfig => _metaConfig;
         
 
         private void OnValidate()

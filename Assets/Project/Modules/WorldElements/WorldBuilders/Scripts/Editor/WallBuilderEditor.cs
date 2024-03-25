@@ -9,7 +9,6 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
     public class WallBuilderEditor : UnityEditor.Editor
     {
         private WallBuilder _wallBuilder;
-        private Vector3[] _points;
         private WallBuilder.CornerPointsGroup _baseCornerPointsGroup;
         
         private Transform _handleTransform;
@@ -27,12 +26,20 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             DrawDefaultInspector();
             
             _wallBuilder = target as WallBuilder;
-            _points = _wallBuilder.Points;
             _baseCornerPointsGroup = _wallBuilder.BaseCornerPointsGroup;
 
             GUILayout.Space(20);
             GUILayout.Label("BUTTONS");
 
+            if (GUILayout.Button("Add Base Point"))
+            {
+                Undo.RecordObject(_wallBuilder, "Add Point");
+                _wallBuilder.AddPoint();
+                EditorUtility.SetDirty(_wallBuilder);
+            }
+            
+            
+            GUILayout.Space(15);            
             if (GUILayout.Button("Center Around Pivot"))
             {
                 Undo.RecordObject(_wallBuilder, "Center Around Pivot");
@@ -50,18 +57,22 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
             
             
-            GUILayout.Space(15);
-            _wallBuilder.moveBy = EditorGUILayout.Vector2Field("Move By Amount", _wallBuilder.moveBy);
-            Vector2Int pointsRange = EditorGUILayout.Vector2IntField("Selected Points Range", _wallBuilder.selectedPointsRange);
-            pointsRange.x = Mathf.Max(pointsRange.x, 0);
-            pointsRange.y = Mathf.Min(pointsRange.y, _baseCornerPointsGroup.NumberOfCornerPoints);
-            _wallBuilder.selectedPointsRange = pointsRange;
-            if (GUILayout.Button("Move Points By Amount"))
+            GUILayout.Space(25);
+            if (GUILayout.Button("Bake Walls"))
             {
-                Undo.RecordObject(_wallBuilder, "Move Selected Points Range By Amount");
-                _wallBuilder.MoveBasePointsRangeByAmount(_wallBuilder.moveBy, pointsRange.x, pointsRange.y);
+                Undo.RecordObject(_wallBuilder, "Bake Walls");
+                _wallBuilder.BakeWalls();
                 EditorUtility.SetDirty(_wallBuilder);
             }
+            
+            GUILayout.Space(25);
+            if (GUILayout.Button("Clear Baked Walls"))
+            {
+                Undo.RecordObject(_wallBuilder, "Clear Baked Walls");
+                _wallBuilder.ClearBakedWalls();
+                EditorUtility.SetDirty(_wallBuilder);
+            }
+            
         }
 
 
@@ -74,7 +85,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 return;
             }
             
-            _points = _wallBuilder.Points;
+
             _editorView = _wallBuilder.EditorView;
 
             _baseCornerPointsGroup = _wallBuilder.BaseCornerPointsGroup;
@@ -84,30 +95,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 ? _handleTransform.rotation
                 : Quaternion.identity;
             
-            /*
-            for (int i = 0; i < _points.Length; ++i)
-            {
-                Handles.color = _editorView.CornerButtonColor;
-                DrawPointButton(i, _points, ref _selectedIndex);
-            }
 
-
-            WallBuilder.SubPoints[] subPointsList = _wallBuilder.SubPointsList;
-            foreach (WallBuilder.SubPoints subPoints in subPointsList)
-            {
-                for (int i = 0; i < subPoints.points.Length; ++i)
-                {
-                    Handles.color = _editorView.CornerButtonColor;
-                    DrawPointButton(i, subPoints.points, ref _selectedIndexSubPoints);
-                }
-            }
-
-*/
             int groupId = 0;
             DrawPointButtons(_baseCornerPointsGroup, ref groupId);
         }
 
-        private int _selectedIndexSubPoints = -1;
 
         private void OnDisable()
         {
@@ -121,9 +113,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             for (int i = 0; i < cornerPointsGroup.NumberOfCornerPoints; ++i)
             {
                 WallBuilder.CornerPoint cornerPoint = cornerPointsGroup.CornerPoints[i];
-                
-                
-                
+
                 
                 Vector3 point = _handleTransform.TransformPoint(cornerPoint.Position);
             
@@ -137,43 +127,41 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 
                 if (_selectedIndex == i && _selectedDepth == groupId)
                 {
-                    EditorGUI.BeginChangeCheck();
-                    point = Handles.DoPositionHandle(point, _handleRotation);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(_wallBuilder, "Move point");
-                        EditorUtility.SetDirty(_wallBuilder);
-                        cornerPoint.Position = _handleTransform.InverseTransformPoint(point);
-                    }
+                    DrawMoveButton(point, cornerPoint);
+                    DrawPointInformation(point, cornerPointsGroup, i);
+                    cornerPoint.SetSelected(true);
+                }
+                else
+                {
+                    cornerPoint.SetSelected(false);
                 }
                 
                 DrawPointButtons(cornerPoint.SubPointsGroup, ref groupId);
             }
         }
-        
 
-        private void DrawPointButton(int index, Vector3[] points, ref int selectedIndex)
+
+        private void DrawMoveButton(Vector3 point, WallBuilder.CornerPoint cornerPoint)
         {
-            Vector3 point = _handleTransform.TransformPoint(points[index]);
-            
-            if (Handles.Button(point, _handleRotation, _editorView.ButtonSize, ButtonPickSize, Handles.DotHandleCap))
-            {
-                selectedIndex = index;
-            }
-
-            if (selectedIndex != index) return;
-            
-            
             EditorGUI.BeginChangeCheck();
             point = Handles.DoPositionHandle(point, _handleRotation);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(_wallBuilder, "Move point");
                 EditorUtility.SetDirty(_wallBuilder);
-                points[index] = _handleTransform.InverseTransformPoint(point);
+                cornerPoint.Position = _handleTransform.InverseTransformPoint(point);
             }
         }
 
+        private void DrawPointInformation(Vector3 point, WallBuilder.CornerPointsGroup cornerPointsGroup, int index)
+        {
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = _editorView.TextColor;
+            style.normal.background = _editorView.TextBackground;
+            int depth = _baseCornerPointsGroup.GetDepth() - cornerPointsGroup.GetDepth();
+            string text = " Depth: " + depth + " \n Index: " + index + " ";
+            Handles.Label(point + Vector3.up, text, style);
+        }
         
     }
 }
