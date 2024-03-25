@@ -58,6 +58,15 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         public WallBuilder.Block CornerBlock => _cornerBlock;
         public WallBuilder.Block FillBlock => _fillBlock;
 
+        
+        
+        [Header("EXTRUDING")] 
+        [SerializeField, Range(0f, 5.0f)] private float _cornerExtrudeDistance = 1.0f; 
+        [SerializeField] private Vector3 _extrudePositiveDirection = Vector3.up;
+        public Vector3 ExtrudePositiveOffset => _extrudePositiveDirection * _cornerExtrudeDistance;
+        public Vector3 ExtrudeNegativeOffset => -ExtrudePositiveOffset;
+
+        
 
         [Header("PREFABS")] 
         [SerializeField] private GameObject _cornerBlockPrefab;

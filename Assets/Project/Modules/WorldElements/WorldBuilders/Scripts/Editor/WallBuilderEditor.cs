@@ -20,17 +20,28 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         private WallBuilderConfig.EditorViewConfig _editorView;
         private float ButtonPickSize => _editorView.ButtonSize + 0.05f;
 
-
+        private static readonly Color ADD_POINT_COLOR = Color.cyan;
+        private static readonly Color BAKE_WALLS_COLOR = Color.green;
+        private static readonly Color CLEAR_BAKED_WALLS_COLOR = Color.yellow;
+        
+        
         public override void OnInspectorGUI()
-        {
-            DrawDefaultInspector();
-            
+        {            
             _wallBuilder = target as WallBuilder;
             _baseCornerPointsGroup = _wallBuilder.BaseCornerPointsGroup;
 
+            DrawCustomButtons();
             GUILayout.Space(20);
+            DrawDefaultInspector();
+            
+        }
+
+        private void DrawCustomButtons()
+        {
+            
             GUILayout.Label("BUTTONS");
 
+            GUI.backgroundColor = ADD_POINT_COLOR;
             if (GUILayout.Button("Add Base Point"))
             {
                 Undo.RecordObject(_wallBuilder, "Add Point");
@@ -38,41 +49,47 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 EditorUtility.SetDirty(_wallBuilder);
             }
             
-            
             GUILayout.Space(15);            
-            if (GUILayout.Button("Center Around Pivot"))
+            GUILayout.BeginHorizontal();
+            GUI.backgroundColor = Color.white;
+            if (GUILayout.Button("Center Around Pivot", GUILayout.Width(160)))
             {
                 Undo.RecordObject(_wallBuilder, "Center Around Pivot");
                 _wallBuilder.CenterAroundPivot(out Vector2 offset);
                 EditorUtility.SetDirty(_wallBuilder);
             }
             
-            
-            GUILayout.Space(15);
-            if (GUILayout.Button("Move Pivot To Center"))
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Move Pivot To Center", GUILayout.Width(160)))
             {
                 Undo.RecordObject(_wallBuilder, "Move Pivot To Center");
                 _wallBuilder.MovePivotToCenter();
                 EditorUtility.SetDirty(_wallBuilder);
             }
+            GUILayout.EndHorizontal();
             
             
-            GUILayout.Space(25);
-            if (GUILayout.Button("Bake Walls"))
+            GUILayout.Space(15);            
+            GUILayout.BeginHorizontal();
+            GUI.backgroundColor = BAKE_WALLS_COLOR;
+            if (GUILayout.Button("Bake Walls", GUILayout.Width(160)))
             {
                 Undo.RecordObject(_wallBuilder, "Bake Walls");
                 _wallBuilder.BakeWalls();
                 EditorUtility.SetDirty(_wallBuilder);
             }
             
-            GUILayout.Space(25);
-            if (GUILayout.Button("Clear Baked Walls"))
+            GUILayout.FlexibleSpace();
+            GUI.backgroundColor = CLEAR_BAKED_WALLS_COLOR;
+            if (GUILayout.Button("Clear Baked Walls", GUILayout.Width(160)))
             {
                 Undo.RecordObject(_wallBuilder, "Clear Baked Walls");
                 _wallBuilder.ClearBakedWalls();
                 EditorUtility.SetDirty(_wallBuilder);
             }
+            GUILayout.EndHorizontal();
             
+            GUI.backgroundColor = Color.white;
         }
 
 
