@@ -14,15 +14,15 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [System.Serializable]
         public class EditorViewConfig
         {
-            [SerializeField] private Color _cornerButtonColor = Color.blue;
             [SerializeField] private Color _cornerBlockColor = Color.blue;
             [SerializeField] private Color _fillBlockColor = Color.yellow;
             [SerializeField] private Color _fillLineColor = Color.red;
+            [SerializeField] private Color _buttonColor = Color.magenta;
             
-            public Color CornerButtonColor => _cornerButtonColor;
             public Color CornerBlockColor => _cornerBlockColor;
             public Color FillBlockColor => _fillBlockColor;
             public Color FillLineColor => _fillLineColor;
+            public Color ButtonColor => _buttonColor;
 
             [SerializeField, Range(0.01f, 10.0f)] private float _lineThickness = 2.5f;
             public float LineThickness => _lineThickness;
