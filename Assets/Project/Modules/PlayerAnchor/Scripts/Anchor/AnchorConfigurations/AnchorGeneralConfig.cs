@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.ProjectHelpers;
 using Popeye.Scripts.Collisions;
 using UnityEngine;
@@ -38,5 +39,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         [SerializeField] private CollisionProbingConfig _onVoidProbingConfig;
         
         public CollisionProbingConfig OnVoidProbingConfig => _onVoidProbingConfig;
+
+
+        [Header("VIEW")] 
+        [SerializeField] private GeneralAnchorViewConfig _generalViewConfig;
+        public GeneralAnchorViewConfig GeneralViewConfig => _generalViewConfig;
     }
 }

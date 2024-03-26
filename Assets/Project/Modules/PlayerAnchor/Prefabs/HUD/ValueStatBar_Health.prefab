@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2605113765564963139}
   - component: {fileID: 6374140344776332725}
   - component: {fileID: 2651549483813476829}
+  - component: {fileID: 7809759229414023206}
   m_Layer: 5
   m_Name: Fill_Image
   m_TagString: Untagged
@@ -58,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: f646b84bda34232488c2a7cc1efe9ce5, type: 2}
   m_Color: {r: 0.38042897, g: 0.6054234, b: 0.9716981, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -76,6 +77,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7809759229414023206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2517224039295548630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoInit: 0
+  _image: {fileID: 2651549483813476829}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &3051184901784759301
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +106,7 @@ GameObject:
   - component: {fileID: 7085519553809067607}
   - component: {fileID: 5158893731425765552}
   - component: {fileID: 3563566894072660220}
+  - component: {fileID: 5273853637219891663}
   m_Layer: 5
   m_Name: Background_Image
   m_TagString: Untagged
@@ -152,6 +172,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5273853637219891663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3051184901784759301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoInit: 0
+  _image: {fileID: 3563566894072660220}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color
 --- !u!1 &4684416000730590608
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _imageFillBar: {fileID: 1347154645310188037}
-  _viewConfig: {fileID: 11400000, guid: af560dd6450c6654cb36a4331af58d97, type: 2}
+  _viewConfig: {fileID: 11400000, guid: 94239e8f85c1401419f4cc27daf2aa6c, type: 2}
 --- !u!114 &1347154645310188037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,9 +258,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _holder: {fileID: 3817127338760929739}
-  _backgroundImage: {fileID: 3563566894072660220}
-  _lazyBarFillImage: {fileID: 7027784090832002811}
-  _fillImage: {fileID: 2651549483813476829}
+  _backgroundImage: {fileID: 5273853637219891663}
+  _lazyBarFillImage: {fileID: 5043890534435053687}
+  _fillImage: {fileID: 7809759229414023206}
 --- !u!1 &7129200632853014663
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +272,7 @@ GameObject:
   - component: {fileID: 8610579280466082182}
   - component: {fileID: 2225993771704049294}
   - component: {fileID: 7027784090832002811}
+  - component: {fileID: 5043890534435053687}
   m_Layer: 5
   m_Name: LazyBarFill_Image
   m_TagString: Untagged
@@ -299,3 +338,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5043890534435053687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7129200632853014663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bce6738321243398188fceddb75fdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _autoInit: 0
+  _image: {fileID: 7027784090832002811}
+  _imageMode: 0
+  _materialModeConfig:
+    _fillPropertyName: _FillValue
+    _colorPropertyName: _Color

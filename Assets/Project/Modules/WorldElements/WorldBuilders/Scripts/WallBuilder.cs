@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using NaughtyAttributes;
+using Popeye.Core.Pool;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -40,34 +42,136 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
         }
 
+
         [System.Serializable]
-        public class SubPoints
+        public class CornerPointsGroup
         {
-            [SerializeField] private int _stemmingFromIndex = 0;
-            
-            public Vector3[] points = { 
-                Vector3.left * 2, 
-                Vector3.right * 2, 
-                Vector3.right * 2 + Vector3.forward * 3 
-            };
+            [SerializeField] private List<CornerPoint> _cornerPoints;
+            public List<CornerPoint> CornerPoints => _cornerPoints;
+            public int NumberOfCornerPoints => _cornerPoints.Count;
 
-            public int StemmingFromIndex => _stemmingFromIndex;
-
-            public void ApplyCorrection(int maxIndex)
+            public CornerPointsGroup()  : this(3) { }
+            public CornerPointsGroup(int capacity)
             {
-                _stemmingFromIndex = Mathf.Clamp(_stemmingFromIndex, 0, maxIndex);
-
-                for (int i = 1; i < points.Length; ++i)
+                _cornerPoints = new List<CornerPoint>(capacity);
+            }
+            public CornerPointsGroup(Vector3[] points)
+            {
+                _cornerPoints = new List<CornerPoint>(points.Length);
+                for (int i = 0; i < points.Length; ++i)
                 {
-                    if (points[i - 1] == points[i])
-                    {
-                        points[i] += Vector3.right;
-                    }
+                    _cornerPoints.Add(new CornerPoint(points[i]));
                 }
             }
 
+            private static readonly Vector3 CORRECTION_OFFSET = Vector3.right;
+            public void ApplyCorrections()
+            {
+                if (_cornerPoints.Count < 1)
+                {
+                    return;
+                }
+                
+                CornerPoint previousPoint = _cornerPoints[0];
+                previousPoint.SubPointsGroup.ApplyCorrections();
+                
+                for (int i = 1; i < _cornerPoints.Count; ++i)
+                {
+                    CornerPoint currentPoint = _cornerPoints[i];
+                    if (previousPoint.Position == currentPoint.Position)
+                    {
+                        currentPoint.Position += CORRECTION_OFFSET;
+                    }
+                    
+                    currentPoint.SubPointsGroup.ApplyCorrections();
+                    previousPoint = currentPoint;
+                }
+            }
+
+            public void ApplyOffset(Vector3 offset)
+            {
+                foreach (CornerPoint cornerPoint in CornerPoints)
+                {
+                    cornerPoint.Position += offset;
+                    cornerPoint.SubPointsGroup.ApplyOffset(offset);
+                }
+            }
+            
+            public int GetDepth()
+            {
+                int depthCount = 0;
+
+                if (NumberOfCornerPoints < 1) return 0;
+                
+                int[] depths = new int[NumberOfCornerPoints];
+                
+                for (int i1 = 0; i1 < NumberOfCornerPoints; ++i1)
+                {
+                    depths[i1] = _cornerPoints[i1].SubPointsGroup.GetDepth() + 1;
+                }
+
+                return Mathf.Max(depths);
+            }
+
+            public void AddPoint()
+            {
+                bool isFistPoint = NumberOfCornerPoints < 1;
+                Vector3 position = isFistPoint ? CORRECTION_OFFSET : _cornerPoints[^1] + CORRECTION_OFFSET;
+                CornerPoints.Add(new CornerPoint(position));
+            }
         }
-        
+
+        [System.Serializable]
+        public class CornerPoint
+        {
+            [ProgressBar("isSelected", 1, EColor.Green)]
+            public int isSelectedValue = 1;
+            
+            [SerializeField] private Vector3 _position;
+            
+            [SerializeField] private ExtrudeAmount _extrude;
+            [SerializeField] private CornerPointsGroup _subPointsGroup;
+            
+            [System.Serializable]
+            public struct ExtrudeAmount
+            {
+                [SerializeField, Range(0, 10)] private int _positiveTimes;
+                [SerializeField, Range(0, 10)] private int _negativeTimes;
+                public int PositiveTimes => _positiveTimes;
+                public int NegativeTimes => _negativeTimes;
+            }
+            
+            public Vector3 Position
+            {
+                get => _position;
+                set => _position = value;
+            }
+
+            public CornerPointsGroup SubPointsGroup 
+            {
+                get => _subPointsGroup;
+                set => _subPointsGroup = value;
+            }
+
+            public ExtrudeAmount Extrude => _extrude;
+
+            public CornerPoint(Vector3 position)
+            {
+                _position = position;
+                _subPointsGroup = new CornerPointsGroup();
+                _extrude = new ExtrudeAmount();
+            }
+            
+            public static implicit operator Vector3(CornerPoint cornerPoint)
+            {
+                return cornerPoint.Position;
+            }
+
+            public void SetSelected(bool isSelected)
+            {
+                isSelectedValue = isSelected ? 1 : 0;
+            }
+        }
 
         [Header("PARENTS")] 
         [SerializeField] private Transform _cornerWallsParent;
@@ -78,24 +182,17 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [Expandable] [SerializeField] private WallBuilderConfig _config;
         
         [Header("POINTS")]
-        [SerializeField] private Vector3[] _points = { 
-            Vector3.left * 2, 
-            Vector3.right * 2, 
-            Vector3.right * 2 + Vector3.forward * 3 
-        };
+        [SerializeField] private CornerPointsGroup _baseCornerPointsGroup;
+        public CornerPointsGroup BaseCornerPointsGroup => _baseCornerPointsGroup;
 
-        [Header("SUB-POINTS")]
-        [SerializeField] private SubPoints[] _subPointsList;
-        public SubPoints[] SubPointsList => _subPointsList;
         
-        
-        public Vector3[] Points => _points;
+        [SerializeField] private SerializableObjectBuffer _cornersObjectBuffer;
+        [SerializeField] private SerializableObjectBuffer _fillsObjectBuffer;
+
         private Block CornerBlock => _config.CornerBlock;
         private Block FillBlock => _config.FillBlock;
         public WallBuilderConfig.EditorViewConfig EditorView => _config.EditorView;
-
-        [HideInInspector] public Vector2 moveBy = Vector2.zero;
-        [HideInInspector] public Vector2Int selectedPointsRange = Vector2Int.zero;
+        
 
         private Vector3 Position => transform.position;
 
@@ -107,66 +204,68 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 CornerBlock.UpdateHalfSize();
                 FillBlock.UpdateHalfSize();
             }
-
-            foreach (SubPoints subPoints in _subPointsList)
-            {
-                subPoints.ApplyCorrection(_points.Length - 1);
-            }
-        }
-
-        private void Awake()
-        {
-            OnValidate();
-
+            
+            _baseCornerPointsGroup.ApplyCorrections();
+            
             if (!_cornerWallsParent) _cornerWallsParent = transform;
             if (!_fillWallsParent) _fillWallsParent = transform;
             if (!_collidersParent) _collidersParent = gameObject;
         }
+        
 
-        private void Start()
+
+        private void SpawnWalls()
         {
-            if (_points.Length > 0)
+            if (_baseCornerPointsGroup.NumberOfCornerPoints < 1)
             {
-                FillWalls();
-                CreateFakeMesh();
+                return;
             }
 
-            if (_subPointsList.Length > 0)
+
+            while (_collidersParent.TryGetComponent<Collider>(out Collider collider))
             {
-                foreach (SubPoints subPoints in _subPointsList)
-                {
-                    if (subPoints.points.Length == 0) continue;
-                    FillSubPointsWall(subPoints);
-                }
+                DestroyImmediate(collider);
             }
+
+            _cornersObjectBuffer.SetupBeforeUse();
+            _fillsObjectBuffer.SetupBeforeUse();
+
+            FillWalls(_baseCornerPointsGroup);
+            CreateFakeMesh();
+            
+            _cornersObjectBuffer.ClearAfterUse();
+            _fillsObjectBuffer.ClearAfterUse();
         }
         
-        public void AddPoint()
-        {
-            Array.Resize(ref _points, _points.Length + 1);
-
-            if (_points.Length > 1)
-            {
-                _points[^1] = _points[^2] + Vector3.right;    
-            }
-            else
-            {
-                _points[0] = Vector3.right;
-            }
-        }
 
         public bool IsReadyForEditor()
         {
-            return _config != null && _points.Length > 1;
+            return _config != null && _baseCornerPointsGroup.NumberOfCornerPoints > 1;
         }
 
 
-        private void FillWalls()
+        private void FillWalls(CornerPointsGroup cornerPointsGroup)
         {
-            for (int i = 0; i < _points.Length; ++i)
+            if (cornerPointsGroup.NumberOfCornerPoints < 1) return;
+            
+            
+            List<CornerPoint> cornerPoints = cornerPointsGroup.CornerPoints;
+            
+            for (int i = 0; i < cornerPointsGroup.NumberOfCornerPoints; ++i)
             {
-                Vector3 point = PointToWorldSpace(_points[i]);
+                CornerPoint cornerPoint = cornerPoints[i];
+                Vector3 pointLocal = cornerPoint.Position;
+                Vector3 point = PointToWorldSpace(pointLocal);
                 CreateCornerWall(point);
+                ExtrudeCornerWall(point, cornerPoint);
+                
+                CornerPointsGroup subPointsGroup = cornerPoints[i].SubPointsGroup;
+                if (subPointsGroup.NumberOfCornerPoints > 0)
+                {
+                    Vector3 currentPoint = PointToWorldSpace(subPointsGroup.CornerPoints[0].Position);
+                    CreatFillWallsBetweenPoints(pointLocal, point, currentPoint);
+                    FillWalls(subPointsGroup);
+                }
             }
             
             if (FillBlock.Length < 0.01f)
@@ -175,48 +274,17 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
             
             CreateColliderForFirst();
-            for (int i = 1; i < _points.Length; ++i)
+            for (int i = 1; i < cornerPointsGroup.NumberOfCornerPoints; ++i)
             {
-                Vector3 previousPointLocal = _points[i - 1];
+                Vector3 previousPointLocal = cornerPoints[i - 1].Position;
                 Vector3 previousPoint = PointToWorldSpace(previousPointLocal);
-                Vector3 currentPoint = PointToWorldSpace(_points[i]);
+                Vector3 currentPoint = PointToWorldSpace(cornerPoints[i].Position);
                 
                 CreatFillWallsBetweenPoints(previousPointLocal, previousPoint, currentPoint);
             }
 
         }
 
-        private void FillSubPointsWall(SubPoints subPoints)
-        {
-            Vector3[] points = subPoints.points;
-            
-            for (int i = 0; i < points.Length; ++i)
-            {
-                Vector3 point = PointToWorldSpace(points[i]);
-                CreateCornerWall(point);
-            }
-            
-            if (FillBlock.Length < 0.01f)
-            {
-                return;
-            }
-            
-            
-            Vector3 previousPointLocal = _points[subPoints.StemmingFromIndex];
-            Vector3 previousPoint = PointToWorldSpace(previousPointLocal);
-            Vector3 currentPoint = PointToWorldSpace(points[0]);
-                
-            CreatFillWallsBetweenPoints(previousPointLocal, previousPoint, currentPoint);
-            
-            for (int i = 1; i < points.Length; ++i)
-            {
-                previousPointLocal = points[i - 1];
-                previousPoint = PointToWorldSpace(previousPointLocal);
-                currentPoint = PointToWorldSpace(points[i]);
-                
-                CreatFillWallsBetweenPoints(previousPointLocal, previousPoint, currentPoint);
-            }
-        }
 
 
         private void CreatFillWallsBetweenPoints(Vector3 previousPointLocal, Vector3 previousPoint, Vector3 currentPoint)
@@ -232,7 +300,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 
             CreateFillWalls(previousPoint, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
                 fillLength);
-                
+            
             CreateColliderPreviousToCurrent(previousPointLocal, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
                 fillLength);
         }
@@ -241,8 +309,34 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void CreateCornerWall(Vector3 position)
         {
-            InstantiateWall(_config.CornerBlockPrefab, position, Quaternion.identity);
+            CreateWall(_config.CornerBlockPrefab, position, Quaternion.identity, _cornersObjectBuffer);
         }
+
+        private void ExtrudeCornerWall(Vector3 position, CornerPoint cornerPoint)
+        {
+            bool positiveExtrude = cornerPoint.Extrude.PositiveTimes > 0;
+            if (positiveExtrude)
+            {
+                ExtrudeCornerWallSide(position, _config.ExtrudePositiveOffset, cornerPoint.Extrude.PositiveTimes);
+            }
+            
+            bool negativeExtrude = cornerPoint.Extrude.NegativeTimes > 0;
+            if (negativeExtrude)
+            {
+                ExtrudeCornerWallSide(position, _config.ExtrudeNegativeOffset, cornerPoint.Extrude.NegativeTimes);
+            }
+
+            CreateExtrudeCornerCollider(cornerPoint, positiveExtrude, negativeExtrude);
+        }
+        
+        private void ExtrudeCornerWallSide(Vector3 position, Vector3 offset, int times)
+        {
+            for (int extrudeI = 1; extrudeI <= times; ++extrudeI)
+            {
+                CreateCornerWall(position + (offset * extrudeI));
+            }
+        }
+        
 
         private void CreateFillWalls(Vector3 previousPoint, Vector3 previousToCurrentDirection, float previousToCurrentDistance,
             Quaternion rotation, float fillLength)
@@ -252,13 +346,31 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             for (; distanceCounter < fillLength; distanceCounter += FillBlock.Length)
             {
                 Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
-                InstantiateWall(_config.FillBlockPrefab, fillPosition, rotation);
+                CreateFillWall(fillPosition, rotation);
             }
         }
-
-        private void InstantiateWall(GameObject wallPrefab, Vector3 position, Quaternion rotation)
+        
+        private void CreateFillWall(Vector3 position, Quaternion rotation)
         {
-            Instantiate(wallPrefab, position, rotation, _fillWallsParent);
+            CreateWall(_config.FillBlockPrefab, position, rotation, _fillsObjectBuffer);
+        }
+
+        private void CreateWall(GameObject wallPrefab, Vector3 position, Quaternion rotation, 
+            SerializableObjectBuffer objectBuffer)
+        {
+            if (objectBuffer.HasObjectsLeft(out GameObject bufferObject))
+            {
+                bufferObject.transform.position = position;
+                bufferObject.transform.rotation = rotation;
+                bufferObject.transform.parent = _fillWallsParent;
+            }
+            else
+            {
+                bufferObject = Instantiate(wallPrefab, position, rotation, _fillWallsParent);
+            }
+            
+            objectBuffer.AddToSpawnedObjectsBuffer(bufferObject);
+            
             _config.WallBuilderDataTracker.OnWallInstantiated();
         }
         
@@ -283,18 +395,51 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         
         private void CreateColliderForFirst()
         {
-            Vector3 colliderPosition = _points[0];
+            Vector3 colliderPosition = _baseCornerPointsGroup.CornerPoints[0].Position;
             Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length);
 
             DoCreateCollider(colliderPosition, colliderSize);
         }
 
+        private void CreateExtrudeCornerCollider(CornerPoint cornerPoint, bool positiveExtrude, bool negativeExtrude)
+        {
+            if (!positiveExtrude && !negativeExtrude)
+            {
+                return;
+            }
+
+            Vector3 endPositionPositive = cornerPoint.Position;
+            if (positiveExtrude)
+            {
+                endPositionPositive += cornerPoint.Extrude.PositiveTimes * _config.ExtrudePositiveOffset;
+            }
+            
+            Vector3 endPositionNegative = cornerPoint.Position;
+            if (negativeExtrude)
+            {
+                endPositionNegative += cornerPoint.Extrude.NegativeTimes * _config.ExtrudeNegativeOffset;
+            }
+            
+
+            Vector3 colliderPosition = Vector3.Lerp(endPositionPositive, endPositionNegative, 0.5f);
+
+            int totalExtrudeTimes = cornerPoint.Extrude.PositiveTimes + cornerPoint.Extrude.NegativeTimes;
+            Vector3 colliderScaler = _config.ExtrudePositiveOffset * ((totalExtrudeTimes + 1) / 2f);
+            
+            Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length);
+            colliderSize.x *= Mathf.Max(colliderScaler.x, 1);
+            colliderSize.y *= Mathf.Max(colliderScaler.y, 1);
+            colliderSize.z *= Mathf.Max(colliderScaler.z, 1);
+
+            DoCreateCollider(colliderPosition, colliderSize);
+        }
+        
         private void DoCreateCollider(Vector3 colliderPosition, Vector3 colliderSize)
         {
             colliderSize.x = Mathf.Abs(colliderSize.x);
             colliderSize.y = Mathf.Abs(colliderSize.y);
             colliderSize.z = Mathf.Abs(colliderSize.z);
-
+            
             BoxCollider boxCollider = _collidersParent.AddComponent<BoxCollider>();
             boxCollider.center = colliderPosition + (Vector3.up * _config.HalfColliderHeight);
             boxCollider.size = colliderSize;
@@ -304,20 +449,35 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void CreateFakeMesh()
         {
-            _collidersParent.AddComponent<MeshFilter>();
-            MeshRenderer meshRenderer = _collidersParent.AddComponent<MeshRenderer>();
+            if (!_collidersParent.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
+            {
+                _collidersParent.AddComponent<MeshFilter>();
+            }
+
+            if (!_collidersParent.TryGetComponent<MeshRenderer>(out MeshRenderer meshRenderer))
+            {
+                meshRenderer = _collidersParent.AddComponent<MeshRenderer>();
+            }
+            
             meshRenderer.material = _config.FakeMeshMaterial;
             meshRenderer.enabled = false;
         }
 
 
-        public void CenterAroundPivot()
+        public void AddPoint()
+        {
+            _baseCornerPointsGroup.AddPoint();
+        }
+        
+        public void CenterAroundPivot(out Vector2 offset)
         {
             Vector2 minimums = Vector2.one * float.MaxValue;
             Vector2 maximums = Vector2.one * float.MinValue;
             
-            foreach (Vector3 point in _points)
+            foreach (CornerPoint baseCornerPoint in _baseCornerPointsGroup.CornerPoints)
             {
+                Vector3 point = baseCornerPoint.Position;
+
                 if (point.x < minimums.x) minimums.x = point.x;
                 if (point.z < minimums.y) minimums.y = point.z;
                 
@@ -326,129 +486,144 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
 
             
-            Vector2 offset = (minimums + maximums) / 2;
-
-            MovePointsRangeByAmount(_points, offset, 0, _points.Length);
-
-            foreach (SubPoints subPoints in _subPointsList)
-            {
-                MovePointsRangeByAmount(subPoints.points, offset, 0, subPoints.points.Length);
-            }
+            offset = (minimums + maximums) / 2;
+            Vector3 offset3D = new Vector3(offset.x, 0, offset.y);
+            _baseCornerPointsGroup.ApplyOffset(-offset3D);
         }
 
-        public void MoveBasePointsRangeByAmount(Vector2 moveAmount, int startInclusive, int endExclusive)
+        public void MovePivotToCenter()
         {
-            MovePointsRangeByAmount(_points, moveAmount, startInclusive, endExclusive);
+            CenterAroundPivot(out Vector2 offset);
+
+            transform.position += new Vector3(offset.x, 0, offset.y);
         }
         
-        public void MovePointsRangeByAmount(Vector3[] points, Vector2 moveAmount, int startInclusive, int endExclusive)
-        {
-            for (int i = startInclusive; i < endExclusive; ++i)
-            {
-                points[i] -= new Vector3(moveAmount.x, 0, moveAmount.y);
-            }
-        }
 
-
-
-        private Vector3[] GetCornersOfPointIndices(int previousIndex, int currentIndex)
-        {
-            Vector3 previousPoint = PointToWorldSpace(_points[previousIndex]);
-            Vector3 currentPoint = PointToWorldSpace(_points[currentIndex]);
-
-            Vector3 previousToCurrentDirection = (currentPoint - previousPoint).normalized;
-            Vector3 sideDirection = Vector3.Cross(previousToCurrentDirection, Vector3.up).normalized;
-
-            Vector3 cornerBlockSize = CornerBlock.WorldSpaceSize;
-
-            Vector3 forwardProjectedSize = Vector3.Project(cornerBlockSize, sideDirection) / 2;
-            Vector3 sideProjectedSize = Vector3.Project(cornerBlockSize, previousToCurrentDirection) / 2;
-            
-            Vector3 previousCornerA = previousPoint - forwardProjectedSize - sideProjectedSize;
-            Vector3 previousCornerB = previousPoint + forwardProjectedSize + sideProjectedSize;
-            Vector3 currentCornerA = currentPoint - forwardProjectedSize - sideProjectedSize;
-            Vector3 currentCornerB = currentPoint + forwardProjectedSize + sideProjectedSize;
-
-            Vector3[] corners =
-            {
-                previousCornerA, previousCornerB, currentCornerB, currentCornerA
-            };
-
-            return corners;
-        }
-        
         private Vector3 PointToWorldSpace(Vector3 point)
         {
             return transform.TransformPoint(point);
         }
 
+        public void BakeWalls()
+        {
+            OnValidate();
+            SpawnWalls();
+        }
+        
+        public void ClearBakedWalls()
+        {
+            OnValidate();
+            
+            _cornersObjectBuffer.DestroyObjectsAndClearBuffer();
+            _fillsObjectBuffer.DestroyObjectsAndClearBuffer();
 
+            while (_collidersParent.TryGetComponent<Collider>(out Collider collider))
+            {
+                DestroyImmediate(collider);
+            }
+        }
+        
+        
+        
+        
+        
 #if UNITY_EDITOR
         private float _colorMultiplier;
         
         private void OnDrawGizmos()
         {
-            _colorMultiplier = 1.0f;
-            Draw(_points);
+            if (!IsReadyForEditor()) return;
+            
+            int baseDepth = _baseCornerPointsGroup.GetDepth();
+            DrawCorners(_baseCornerPointsGroup, 0, baseDepth);
+            DrawFills(_baseCornerPointsGroup, _baseCornerPointsGroup.CornerPoints[0], 0, baseDepth);
+        }
+        
+        
+        private void DrawCorners(CornerPointsGroup pointsGroup, int depth, int baseDepth)
+        {
+            float colorMultiplier = 1f - ((float)(depth) / baseDepth);
+            Color color = _config.EditorView.CornerBlockColor * colorMultiplier;
+            color.a = 1f;
 
-            _colorMultiplier = EditorView.StemmingBlocksColorMultiplier;
-            foreach (SubPoints subPoints in _subPointsList)
+            for (int i = 0; i < pointsGroup.NumberOfCornerPoints; ++i)
             {
-                if (subPoints.points.Length == 0) continue;
+                CornerPoint cornerPoint = pointsGroup.CornerPoints[i];
+                Vector3 drawSpacePoint =  PointToWorldSpace(cornerPoint.Position);
                 
-                DrawFillBlocks(
-                    PointToWorldSpace(_points[subPoints.StemmingFromIndex]), 
-                    PointToWorldSpace(subPoints.points[0])
-                    );
+                Handles.color =  ComputeColor(color);
+                DrawBlock(CornerBlock, drawSpacePoint, Quaternion.identity);
+                DrawCornerExtrude(cornerPoint, drawSpacePoint);
 
-                Draw(subPoints.points);
+                DrawCorners(pointsGroup.CornerPoints[i].SubPointsGroup, depth + 1, baseDepth);
+            }
+        }
+
+        private void DrawCornerExtrude(CornerPoint cornerPoint, Vector3 position)
+        {
+            if (cornerPoint.Extrude.PositiveTimes > 0)
+            {
+                DrawCornerExtrudeSide(position, _config.ExtrudePositiveOffset, cornerPoint.Extrude.PositiveTimes + 1);
+            }
+
+            if (cornerPoint.Extrude.NegativeTimes > 0)
+            {
+                DrawCornerExtrudeSide(position, _config.ExtrudeNegativeOffset, cornerPoint.Extrude.NegativeTimes);
+            }
+        }
+
+        private void DrawCornerExtrudeSide(Vector3 originPosition, Vector3 offset, int times)
+        {
+            Vector3 extrudeEndPosition = originPosition + (offset * times);
+                
+            Handles.color = ComputeColor(_config.EditorView.CornerBlockColor);
+            Handles.DrawLine(originPosition, extrudeEndPosition, _config.EditorView.LineThickness);
+            DrawBlock(CornerBlock, extrudeEndPosition, Quaternion.identity);
+        }
+        
+        private void DrawFills(CornerPointsGroup pointsGroup, CornerPoint startPoint, int depth, int baseDepth)
+        {
+            float colorMultiplier = 1f - ((float)(depth) / baseDepth);
+            Color color = _config.EditorView.FillBlockColor * colorMultiplier;
+            color.a = 1f;
+            
+
+            Vector3 previousPoint = PointToWorldSpace(startPoint.Position);
+            Vector3 currentPoint = Vector3.zero;
+            
+            for (int i = 0; i < pointsGroup.NumberOfCornerPoints; ++i)
+            {
+                Vector3 drawSpacePoint =  PointToWorldSpace(pointsGroup.CornerPoints[i].Position);
+                
+                
+                currentPoint = drawSpacePoint;
+                _colorMultiplier = colorMultiplier;
+                DrawFillBlocks(previousPoint, currentPoint);
+                previousPoint = currentPoint;
+                
+                DrawFills(pointsGroup.CornerPoints[i].SubPointsGroup, pointsGroup.CornerPoints[i],
+                    depth + 1, baseDepth);
             }
         }
         
-        private void Draw(Vector3[] points)
-        {
-            Vector3[] drawSpacePoints = new Vector3[points.Length];
-            
-            
-            for (int i = 0; i < points.Length; ++i)
-            {
-                drawSpacePoints[i] = PointToWorldSpace(points[i]);
-                Handles.color = _config.TransparencyConfig
-                    .ApplyTransparencyToColor(_config.EditorView.CornerBlockColor * _colorMultiplier, Position);
-                
-                DrawBlock(CornerBlock, drawSpacePoints[i], Quaternion.identity);
-            }
-
-
-            if (FillBlock.Length < 0.01f)
-            {
-                return;
-            }
-            
-            for (int i = 1; i < points.Length; ++i)
-            {
-                Vector3 previousPoint = drawSpacePoints[i - 1];
-                Vector3 currentPoint = drawSpacePoints[i];
-
-                DrawFillBlocks(previousPoint, currentPoint);
-            }
-        }
 
         private void DrawFillBlocks(Vector3 previousPoint, Vector3 currentPoint)
         {
-            Handles.color = _config.TransparencyConfig
-                .ApplyTransparencyToColor(_config.EditorView.FillLineColor * _colorMultiplier, Position);
+            Handles.color = ComputeColor(_config.EditorView.FillLineColor);
             Handles.DrawLine(previousPoint, currentPoint, _config.EditorView.LineThickness);
             
 
             Vector3 previousToCurrent = currentPoint - previousPoint;
             float previousToCurrentDistance = previousToCurrent.magnitude;
             Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
+
+            Quaternion offsetRotation = Quaternion.identity;
+            if (Vector3.Dot(previousToCurrentDirection, Vector3.up) < 0.99f)
+            {
+                offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
+            }            
                 
-            Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
-                
-            Handles.color = _config.TransparencyConfig
-                .ApplyTransparencyToColor(_config.EditorView.FillBlockColor * _colorMultiplier, Position);
+            Handles.color = ComputeColor(_config.EditorView.FillBlockColor);
 
             float lineLength = previousToCurrentDistance - CornerBlock.Length;
             float distanceCounter = CornerBlock.Length / 2 + FillBlock.Length / 2;
@@ -459,9 +634,16 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 DrawBlock(FillBlock, fillPosition, offsetRotation);
             }
         }
+
+        private Color ComputeColor(Color baseColor)
+        {
+            return _config.TransparencyConfig.ApplyTransparencyToColor(baseColor * _colorMultiplier, Position);
+        }
         
         private void DrawBlock(Block block, Vector3 center, Quaternion rotation)
         {
+            if (Handles.color.a < 0.001f) return;
+            
             Vector3[] framePoints = block.ToFrame(center, rotation);
             for (int i = 0; i < framePoints.Length; ++i)
             {

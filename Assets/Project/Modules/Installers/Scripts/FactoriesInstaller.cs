@@ -24,7 +24,7 @@ public class FactoriesInstaller : MonoBehaviour
     public void Install(ServiceLocator serviceLocator)
     {
         serviceLocator.RegisterService<IParticleFactory>(new ParticleFactory(_particleFactoryConfig, _particleParent));
-        serviceLocator.RegisterService<IHazardFactory>(new HazardsFactory(_hazardFactryConfig,_hazardsParent));
+        serviceLocator.RegisterService<IHazardFactory>(new HazardsFactory(_hazardFactryConfig,_hazardsParent, serviceLocator.GetService<IParticleFactory>()));
         _enemyFactoryInstaller.Install(serviceLocator, ServiceLocator.Instance.GetService<IFMODAudioManager>());
     }
 

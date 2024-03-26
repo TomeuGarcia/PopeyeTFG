@@ -1,5 +1,7 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Popeye.Core.Pool;
+using Popeye.Modules.Camera.CameraZoom;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
@@ -24,7 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
         public void Init(int experience, Transform autoCollectTransform)
         {
             Experience = experience;
-
+            
             Transform particleTransform = transform;
             
             _shapeModule.position = particleTransform.position - autoCollectTransform.position;

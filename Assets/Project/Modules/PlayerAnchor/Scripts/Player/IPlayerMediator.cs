@@ -19,6 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void SetInstantRotation(bool instantRotation);
         void SetCanRotate(bool canRotate);
         void SetCanFallOffLedges(bool canFallOffLedges, bool checkingIgnoreLedges = true);
+        void SetEnabledFallingPhysics(bool fallingPhysicsEnabled);
         float GetDistanceFromAnchor();
         float GetDistanceFromAnchorRatio01();
         Vector3 GetFloorAlignedDirectionToAnchor();
@@ -92,6 +93,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+
+
+        bool CanDoSpecialAttack();
+        void OnSpecialAttackPreparationStart(float durationToComplete);
+        void OnSpecialAttackPreparationInterrupted();
+        void OnSpecialAttackPerformed();
 
     }
 }

@@ -1,3 +1,6 @@
+using Popeye.Core.Services.EventSystem;
+using Popeye.Modules.GameState;
+
 namespace Popeye.Modules.PlayerController.Inputs
 {
     public class PlayerAnchorMovesetInputsController
@@ -16,16 +19,24 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly UnityEngine.InputSystem.InputAction _kick;
         
         private readonly UnityEngine.InputSystem.InputAction _heal;
+        private readonly UnityEngine.InputSystem.InputAction _specialAttack;
         
         private readonly UnityEngine.InputSystem.InputAction _spinAttack_Left;
         private readonly UnityEngine.InputSystem.InputAction _spinAttack_Right;
 
+
+        private readonly IEventSystemService _eventSystemService;
         
-        
-        public PlayerAnchorMovesetInputsController()
+        public PlayerAnchorMovesetInputsController(IEventSystemService eventSystemService)
         {
+            _eventSystemService = eventSystemService;
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
+            
+            
             _playerInputControls = new InputSystem.PlayerAnchorInputControls();
-            _playerInputControls.Enable();
+            EnabledInputs();
+            
 
             _aim = _playerInputControls.Land.Aim;
             _cancelAim = _playerInputControls.Land.CancelAim;
@@ -42,15 +53,40 @@ namespace Popeye.Modules.PlayerController.Inputs
 
             _heal = _playerInputControls.Land.Heal;
             
+            _specialAttack = _playerInputControls.Land.SpecialAttack;
+            
             _spinAttack_Left = _playerInputControls.Land.SpinAttack_Left;
             _spinAttack_Right = _playerInputControls.Land.SpinAttack_Right;
         }
 
         ~PlayerAnchorMovesetInputsController()
         {
-            _playerInputControls.Disable();
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
+            
+            DisabledInputs();
         }
 
+        private void OnGamePausedEvent(IGameStateEventsDispatcher.OnGamePaused eventData)
+        {
+            DisabledInputs();
+        }
+        private void OnGameResumedEvent(IGameStateEventsDispatcher.OnGameResumed onGamePaused)
+        {
+            EnabledInputs();
+        }
+        
+        private void EnabledInputs()
+        {
+            _playerInputControls.Enable();
+        }
+        
+        private void DisabledInputs()
+        {
+            _playerInputControls.Disable();
+        }
+        
+        
 
         public bool Aim_Pressed()
         {
@@ -121,6 +157,19 @@ namespace Popeye.Modules.PlayerController.Inputs
         public bool Heal_Released()
         {
             return _heal.WasReleasedThisFrame();
+        }
+        
+        public bool SpecialAttack_Pressed()
+        {
+            return _specialAttack.WasPressedThisFrame();
+        }
+        public bool SpecialAttack_HeldPressed()
+        {
+            return _specialAttack.IsPressed();
+        }
+        public bool SpecialAttack_Released()
+        {
+            return _specialAttack.WasReleasedThisFrame();
         }
         
         

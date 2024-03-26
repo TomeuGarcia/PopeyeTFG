@@ -12,12 +12,15 @@ namespace Popeye.Modules.Enemies.Components
     {
         private ShieldedMediator _mediator;
         [SerializeField] private float _dashCooldown;
-        [SerializeField] private float _dashingTimeInSeconds;
-        [SerializeField] private float _dashingForce;
+        [SerializeField] private float _telegraphTime;
+        [SerializeField] private int _dashingTimeInMillis;
+        [SerializeField] private float DashingSpeed;
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private CollisionProbingConfig _defaultProbingConfig;
-        [SerializeField] private CollisionProbingConfig _playerProbingConfig;
-        [SerializeField] private Transform _rayCastOrigin;
+        [SerializeField] private CollisionProbingConfig _canSeePlayerProbingConfig;
+        [SerializeField] private Transform _rayCastOriginCenter;
+        [SerializeField] private Transform _rayCastOriginLeft;
+        [SerializeField] private Transform _rayCastOriginRight;
         private float _coolDownTimer = 0f;
         private bool _dashing = false;
         private Transform _playerTransform;
@@ -42,64 +45,106 @@ namespace Popeye.Modules.Enemies.Components
                 else
                 {
                     Vector3 rayCastDirection = (_playerTransform.position - transform.position).normalized;
+                    float rayCastDistance = (_playerTransform.position - transform.position).magnitude;
                     RaycastHit hit;
-                    if (Physics.Raycast(transform.position, rayCastDirection, out hit,_playerProbingConfig.ProbeDistance, _playerProbingConfig.CollisionLayerMask,
+                    if (!Physics.Raycast(transform.position, rayCastDirection, out hit,rayCastDistance, _defaultProbingConfig.CollisionLayerMask,
                             _defaultProbingConfig.QueryTriggerInteraction))
                     {
-                        if (hit.transform.gameObject.layer != _defaultProbingConfig.CollisionLayerMask)
-                        {
-                            _dashing = true;
+                        
                             Dash();
-                        }
-                        _coolDownTimer = 0;
+                            _coolDownTimer = 0;
                     }
                     
                 }
             }
+            else if (_dashing)
+            {
+                if (Physics.Raycast(_rayCastOriginCenter.position, Vector3.down, _defaultProbingConfig.ProbeDistance,
+                        _defaultProbingConfig.CollisionLayerMask,
+                        _defaultProbingConfig.QueryTriggerInteraction))
+                {
+                    
+                }
+                else
+                {
+                    StopDashing();
+                    _mediator.ActivateNavigation();
+                }
+
+                if (Physics.Raycast(_rayCastOriginCenter.position, transform.forward, 1f,
+                        _defaultProbingConfig.CollisionLayerMask,
+                        _defaultProbingConfig.QueryTriggerInteraction) || Physics.Raycast(_rayCastOriginLeft.position, transform.forward, 1f,
+                        _defaultProbingConfig.CollisionLayerMask,
+                        _defaultProbingConfig.QueryTriggerInteraction) || Physics.Raycast(_rayCastOriginRight.position, transform.forward, 1f,
+                        _defaultProbingConfig.CollisionLayerMask,
+                        _defaultProbingConfig.QueryTriggerInteraction))
+                {
+                    _rigidbody.velocity = Vector3.zero;
+                    ResetDashingCooldown();
+                    _dashing = false;
+                    _mediator.Stun();
+                }
+            }
+        }
+
+        public void ResetDashingCooldown()
+        {
+            _coolDownTimer = 0;
         }
 
         private void Dash()
         {
+            _dashing = true;
             _mediator.StartDashing();
-            
+            _mediator.DeactivateNavigation();
             PerformDash();
             
         }
 
         private async UniTaskVoid PerformDash()
         {
-            Vector3 dashEndPosition;
-            Vector3 rayCastDirection = (_playerTransform.position - transform.position).normalized;
-            Vector3 direction = (_playerTransform.position+Vector3.down - transform.position).normalized;
-            RaycastHit hit;
-            if (Physics.Raycast(_rayCastOrigin.position, rayCastDirection, out hit,_defaultProbingConfig.ProbeDistance, _defaultProbingConfig.CollisionLayerMask,
-                    _defaultProbingConfig.QueryTriggerInteraction))
-            {
-                
-                dashEndPosition = hit.point-direction*1f;
-            }
-            else
-            {
-                dashEndPosition = transform.position + direction * _defaultProbingConfig.ProbeDistance;
-            }
-
-            dashEndPosition = new Vector3(dashEndPosition.x, transform.position.y, dashEndPosition.z);
-            float distance = Vector3.Distance(dashEndPosition, transform.position);
-            float duration = (_dashingTimeInSeconds * distance) / _defaultProbingConfig.ProbeDistance;
-            _mediator.DeactivateNavigation();
+            
             
             //telegraph
-            await transform.DOMove(transform.position + (transform.position-dashEndPosition).normalized *0.4f, 0.5f, false).AsyncWaitForCompletion();
-            //dash
-            await transform.DOMove(dashEndPosition, duration, false).AsyncWaitForCompletion();
+            Vector3 targetPosition = new Vector3(_playerTransform.position.x, transform.position.y,
+                _playerTransform.position.z);
             
-            _rigidbody.velocity = Vector3.zero;
-            _mediator.ActivateNavigation();
-            _coolDownTimer = 0;
-            _mediator.StopDashing();
-            _dashing = false;
+            transform.DOLookAt(targetPosition, _telegraphTime);
+            await transform.DOMove(transform.position + (transform.position-targetPosition).normalized *0.4f, _telegraphTime, false).AsyncWaitForCompletion();
+            
+            
+            _rigidbody.velocity = transform.forward * DashingSpeed;
+
+            await UniTask.Delay(_dashingTimeInMillis);
+            if (_dashing)
+            {
+                StopDashing();
+                _mediator.ActivateNavigation();
+            }
+            
             
 
+        }
+
+        private void StopDashing()
+        {
+            _rigidbody.velocity = Vector3.zero;
+            ResetDashingCooldown();
+            _mediator.StopDashing();
+            _dashing = false;
+        }
+        private void OnCollisionEnter(Collision other)
+        {
+           /* if (_dashing)
+            {
+                Debug.Log("collided with the layer "+ other.gameObject.layer +" and the layer we are loking at is: " +_defaultProbingConfig.CollisionLayerMask);
+                if (other.gameObject.layer == _defaultProbingConfig.CollisionLayerMask)
+                {
+                    Debug.Log("it has default layermask");
+                    StopDashing();
+                    _mediator.Stun();
+                }
+            }*/
         }
     }
 }

@@ -26,6 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private Transform _user;
         
+        
 
         
         public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;
@@ -53,7 +54,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private void Awake()
         {
-            _view = new ClawAnchorSnapTargetView(_clawsTransform, _claws);
+            _view = new ClawAnchorSnapTargetView(_clawsTransform, _claws, _config.ViewConfig);
         }
 
 
@@ -107,10 +108,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             {
                 _dashEndSpot.position = floorHit.point + (Vector3.up * HeightDistanceFromFloor);
             }
-            else
-            {
-                Debug.Log("kekewait");
-            }
+
         }
         
         public Vector3 GetDashEndPosition()
@@ -142,12 +140,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void OnAddedAsAimTarget()
         {
-            _view.PlayOpenAnimation(0.2f);
+            _view.PlayOpenAnimation();
         }
 
         public void OnRemovedFromAimTarget()
         {
-            _view.PlayCloseAnimation(0.2f);
+            _view.PlayCloseAnimation();
         }
 
         public void OnUsedAsAimTarget(float delay)
@@ -166,8 +164,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             OnStopBeingUsedEvent?.Invoke();
         }
 
-
-
-
+        public void OnUsedForDash()
+        {
+            _view.PlayUsedForDashAnimation().Forget();
+        }
     }
 }

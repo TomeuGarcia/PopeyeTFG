@@ -106,8 +106,10 @@ namespace Popeye.Modules.PlayerController
 
         [Header("LEDGE")] 
         [SerializeField] private bool _checkLedges = false;
+        [SerializeField, Range(0.0f, 1000.0f)] private float _maxOnLedgeAcceleration = 150f;
         [SerializeField] private LedgeDetectionConfig _ledgeDetectionConfig;
         private LedgeDetectionController _ledgeDetectionController;
+        private bool _isOnLedge = false;
 
 
 
@@ -179,9 +181,13 @@ namespace Popeye.Modules.PlayerController
             if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
             {
                 _movementDirection = _ledgeDetectionController.
-                    UpdateMovementDirectionFromMovementInput(GroundPoint, _movementInput);
+                    UpdateMovementDirectionFromMovementInput(GroundPoint, _movementInput, out _isOnLedge);
                 
                 _desiredVelocity = _movementDirection * _maxSpeed;
+            }
+            else
+            {
+                _isOnLedge = false;
             }
             
             UpdateState();
@@ -194,11 +200,7 @@ namespace Popeye.Modules.PlayerController
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(Position, Position + _rigidbody.velocity);
-            
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(Position, Position + _velocity);
+            _ledgeDetectionController?.DrawGizmos();
         }
 
         private void LateUpdate()
@@ -282,17 +284,18 @@ namespace Popeye.Modules.PlayerController
             float currentX = Vector3.Dot(_velocity, xAxis);
             float currentZ = Vector3.Dot(_velocity, zAxis);
 
-            float acceleration = OnGround ? _maxAcceleration : _maxAirAcceleration;
+            float acceleration = _isOnLedge 
+                ? _maxOnLedgeAcceleration 
+                : (OnGround ? _maxAcceleration : _maxAirAcceleration);
 
             float maxSpeedChange = acceleration * Time.deltaTime;
-            
 
             float newX = Mathf.MoveTowards(currentX, _desiredVelocity.x, maxSpeedChange);
             float newZ = Mathf.MoveTowards(currentZ, _desiredVelocity.z, maxSpeedChange);
 
             _velocity += xAxis * (newX - currentX) + 
                          zAxis * (newZ - currentZ);
-            
+
             if (_isOnSlope)
             {
                 _velocity += _maxSpeed * Vector3.up;
@@ -402,12 +405,7 @@ namespace Popeye.Modules.PlayerController
 
             _lookTransform.localRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
         }
-
-
-        public void GetPushed(Vector3 pushForce)
-        {
-            _rigidbody.AddForce(pushForce, ForceMode.Impulse);
-        }
+        
 
 
         public void ResetRigidbody()
@@ -415,20 +413,29 @@ namespace Popeye.Modules.PlayerController
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
         }
-        
-        public async UniTaskVoid DisableForDuration(float duration)
+
+        public void EnablePhysics()
+        {
+            _rigidbody.useGravity = true;
+            _rigidbody.isKinematic = false;
+            enabled = true;
+        }
+        public void DisablePhysics()
         {
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             _rigidbody.useGravity = false;
             _rigidbody.isKinematic = true;
             enabled = false;
+        }
+        
+        public async UniTaskVoid DisableForDuration(float duration)
+        {
+            DisablePhysics();
             
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             
-            _rigidbody.useGravity = true;
-            _rigidbody.isKinematic = false;
-            enabled = true;
+            EnablePhysics();
         }
 
 

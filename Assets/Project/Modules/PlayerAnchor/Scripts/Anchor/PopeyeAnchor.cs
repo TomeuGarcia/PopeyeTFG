@@ -1,7 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
@@ -10,9 +9,7 @@ using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
-using Popeye.Modules.VFX.ParticleFactories;
 using Project.Modules.WorldElements.DestructiblePlatforms;
-using Project.Scripts.Time.TimeFunctionalities;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -20,7 +17,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
     {
         [SerializeField] private Transform _moveTransform;
-        [SerializeField] private GameObject _fakeAnchor;
+        [SerializeField] private Transform _meshHolder;
 
         private AnchorFSM _stateMachine;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
@@ -40,6 +37,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public IOnVoidChecker OnVoidChecker { get; private set; }
 
         public Transform PositionTransform => _moveTransform;
+        public Transform MeshHolder => _meshHolder;
         public Vector3 Position => _anchorMotion.Position;
         public Vector3 Forward => _anchorMotion.Forward;
         public Quaternion Rotation => _anchorMotion.Rotation;
@@ -82,11 +80,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _cameraFunctionalities = cameraFunctionalities;
 
             OnVoidChecker = onVoidChecker;
-            
-            
-            _anchorView.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(),
-                ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
-                cameraFunctionalities.CameraShaker);
         }
         
         public void ResetState(Vector3 position)
@@ -184,6 +177,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void OnDashedAt(float duration, Ease dashEase)
         {
+            CurrentTrajectorySnapTarget?.OnUsedForDash();
             _anchorChain.SetDashingTowardsView(duration, dashEase);
         }
         public void OnDashedAwayFrom(float duration, Ease dashEase)
@@ -223,6 +217,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void SetGrabbedToThrow()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedToThrow);
+        }
+
+        public void SetAvailableForPickUp()
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
         }
         public void SetRestingOnFloor()
         {
@@ -376,6 +375,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _anchorAudio.PlayDealDamageSound();
             _anchorView.OnDamageDealt(damageHitResult);
+        }
+
+        public void ResetCurrentTrajectorySnapTarget()
+        {
+            CurrentTrajectorySnapTarget = null;
         }
     }
 }
