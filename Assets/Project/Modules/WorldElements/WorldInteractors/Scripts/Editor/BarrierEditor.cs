@@ -27,6 +27,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Editor
         {
             _target = (Barrier)target;
             ResetBarrierState();
+            _showPreview = _showingPreview = false;
         }
 
         private void ResetBarrierState()
