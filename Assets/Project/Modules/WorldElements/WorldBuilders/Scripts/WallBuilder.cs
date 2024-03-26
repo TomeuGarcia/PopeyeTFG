@@ -230,7 +230,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             _cornersObjectBuffer.SetupBeforeUse();
             _fillsObjectBuffer.SetupBeforeUse();
 
-            FillWallsNew(_baseCornerPointsGroup);
+            FillWalls(_baseCornerPointsGroup);
             CreateFakeMesh();
             
             _cornersObjectBuffer.ClearAfterUse();
@@ -244,7 +244,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
 
 
-        private void FillWallsNew(CornerPointsGroup cornerPointsGroup)
+        private void FillWalls(CornerPointsGroup cornerPointsGroup)
         {
             if (cornerPointsGroup.NumberOfCornerPoints < 1) return;
             
@@ -264,7 +264,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 {
                     Vector3 currentPoint = PointToWorldSpace(subPointsGroup.CornerPoints[0].Position);
                     CreatFillWallsBetweenPoints(pointLocal, point, currentPoint);
-                    FillWallsNew(subPointsGroup);
+                    FillWalls(subPointsGroup);
                 }
             }
             
@@ -522,6 +522,10 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 DestroyImmediate(collider);
             }
         }
+        
+        
+        
+        
         
 #if UNITY_EDITOR
         private float _colorMultiplier;
