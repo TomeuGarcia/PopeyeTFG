@@ -51,7 +51,7 @@ namespace Popeye.Modules.Enemies.Components
             return new DamageHitResult(this, gameObject, receivedDamage, _mediator.Position);
         }
 
-        public bool CanBeDamaged(DamageHit damageHit)
+        public virtual bool CanBeDamaged(DamageHit damageHit)
         {
             return !HealthSystem.IsDead() && !HealthSystem.IsInvulnerable;
         }

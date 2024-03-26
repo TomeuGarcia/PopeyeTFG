@@ -11,7 +11,7 @@ namespace Popeye.Modules.CombatSystem
         public int Damage => _config.Damage;
         public Vector3 DamageSourcePosition  { get; set; }
 
-
+        public DamageHitConfig DamageHitConfig => _config;
         public float StunDuration => _config.StunDuration;
     
     

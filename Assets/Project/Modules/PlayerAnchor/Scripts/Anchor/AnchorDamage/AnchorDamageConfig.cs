@@ -81,8 +81,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 ThrowDamageHit = new DamageHit(throwConfig); 
                 PullDamageHit = new DamageHit(pullConfig); 
                 KickDamageHit = new DamageHit(kickConfig); 
-                VerticalLandDamageHit = new DamageHit(spinConfig); 
-                SpinDamageHit = new DamageHit(verticalLandConfig); 
+                VerticalLandDamageHit = new DamageHit(verticalLandConfig); 
+                SpinDamageHit = new DamageHit(spinConfig); 
             }
         }
         

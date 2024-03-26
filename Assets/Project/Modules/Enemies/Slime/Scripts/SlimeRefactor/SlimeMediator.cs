@@ -51,10 +51,14 @@ namespace Popeye.Modules.Enemies
             slimeAnimatorController.Configure(this,ServiceLocator.Instance.GetService<IParticleFactory>());
             _enemyPatrolling.Configure(this);
             _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
-            
+            _damageTrigger.OnDamageDealt += OnDamageDealt;
             PlayMoveAnimation();
         }
 
+        public void OnDamageDealt(DamageHitResult damageHitResult)
+        {
+            Debug.Log("onDamageDealt");
+        }
         public void SetSlimeMind(SlimeMindEnemy slimeMind)
         {
             slimeMindEnemy = slimeMind;
@@ -206,6 +210,7 @@ namespace Popeye.Modules.Enemies
             _enemyPatrolling.ResetPatrolling();
             _slimeTransform.localPosition = Vector3.zero;
             _slimeMovement.StopExplosionForce();
+            _damageTrigger.OnDamageDealt -= OnDamageDealt;
         }
         
         public override void DieFromOrder()

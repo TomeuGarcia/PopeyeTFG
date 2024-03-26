@@ -212,13 +212,13 @@ GameObject:
   - component: {fileID: 5503056508073136983}
   - component: {fileID: 4532151684314390216}
   - component: {fileID: 5402428754416615956}
-  - component: {fileID: 8480382626376952390}
   - component: {fileID: 1687219243861207131}
   - component: {fileID: 225968920832105090}
   - component: {fileID: 1095751144913005411}
   - component: {fileID: 5414311982984017282}
   - component: {fileID: 8838175859767097390}
   - component: {fileID: 3140919241052528534}
+  - component: {fileID: 4275167710365536329}
   m_Layer: 11
   m_Name: Shielded
   m_TagString: Enemy
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f883efb3b7104744ae30a9a84d5605b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyHealth: {fileID: 8480382626376952390}
+  _enemyHealth: {fileID: 4275167710365536329}
   _enemyVisuals: {fileID: 5402428754416615956}
   _shieldedMovement: {fileID: 5503056508073136983}
   _enemyPatrolling: {fileID: 4532151684314390216}
@@ -335,21 +335,6 @@ MonoBehaviour:
   _originalMeshDatas:
   - _mesh: {fileID: 5056197512327966205}
     _originalMaterial: {fileID: 0}
---- !u!114 &8480382626376952390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7761176794808988848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHealth: 80
-  _knockbackRigidbody: {fileID: 1095751144913005411}
-  _knockbackEffectiveness: 0
 --- !u!195 &1687219243861207131
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -473,3 +458,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stunnedTimeInMillis: 1000
+--- !u!114 &4275167710365536329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761176794808988848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d829a4cb65c2747b9a8ed028825ec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 80
+  _knockbackRigidbody: {fileID: 1095751144913005411}
+  _knockbackEffectiveness: 1
+  _passInvulnerableDamageHits:
+  - {fileID: 11400000, guid: b9a8f8a9e869849438d7be73048107ab, type: 2}
+  - {fileID: 11400000, guid: 777546c496e74b64385afd391e328340, type: 2}
