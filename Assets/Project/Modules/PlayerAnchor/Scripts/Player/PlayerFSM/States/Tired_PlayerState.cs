@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             UpdateMovementSpeed();
             _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
             
-            if (_blackboard.cameFromState == PlayerStates.TiredPickingUpAnchor) return;
+            if (_blackboard.CameFromState == PlayerStates.TiredPickingUpAnchor) return;
 
             _blackboard.PlayerMediator.SetCanRotate(true);
             _blackboard.PlayerView.StartTired();
@@ -48,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             }
          
             if (_blackboard.AnchorMediator.IsGrabbedBySnapper() &&
-                _blackboard.cameFromState == PlayerStates.DashingTowardsAnchor)
+                _blackboard.CameFromState == PlayerStates.DashingTowardsAnchor)
             {
                 NextState = PlayerStates.TiredPickingUpAnchor;
                 return true;
@@ -71,14 +71,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private bool ShouldDropAnchor()
         {
             return _blackboard.PlayerStatesConfig.DropAnchorWhenTired &&
-                   _blackboard.cameFromState == PlayerStates.PullingAnchor;
+                   _blackboard.CameFromState == PlayerStates.PullingAnchor;
         }
 
         private void UpdateMovementSpeed()
         {
             bool cameMovingWithAnchor = 
-                _blackboard.cameFromState == PlayerStates.MovingWithAnchor ||
-                _blackboard.cameFromState == PlayerStates.TiredPickingUpAnchor;
+                _blackboard.CameFromState == PlayerStates.MovingWithAnchor ||
+                _blackboard.CameFromState == PlayerStates.TiredPickingUpAnchor;
 
             float maxMovementSpeed = cameMovingWithAnchor
                 ? _blackboard.PlayerStatesConfig.TiredWithAnchorMoveSpeed

@@ -34,12 +34,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
 
 
-            if (_blackboard.cameFromState == PlayerStates.DashingDroppingAnchor)
+            if (_blackboard.CameFromState == PlayerStates.DashingDroppingAnchor)
             {
                 _enterPullingCooldown.SetDuration(_blackboard.PlayerStatesConfig.RollIntoPullCooldown);
                 _enterDashCooldown.SetDuration(_blackboard.PlayerStatesConfig.RollIntoDashCooldown);
             }
-            else if (_blackboard.cameFromState == PlayerStates.ThrowingAnchor)
+            else if (_blackboard.CameFromState == PlayerStates.ThrowingAnchor)
             {
                 _enterPullingCooldown.SetDuration(_blackboard.PlayerStatesConfig.ThrowIntoPullCooldown);
                 _enterDashCooldown.SetDuration(0);
@@ -146,34 +146,45 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanPullAnchor()
         {
+            bool pullInput = _blackboard.MovesetInputsController.Pull_Pressed();
+            
             if (!_enterPullingCooldown.HasFinished())
             {
+                if (pullInput)
+                {
+                    _blackboard.QueuedAnchorPull = true;
+                }
                 return false;
             }
             
-            if (_blackboard.queuedAnchorPull && _blackboard.AnchorMediator.IsRestingOnFloor())
+            if (_blackboard.QueuedAnchorPull && _blackboard.AnchorMediator.IsRestingOnFloor())
             {
-                _blackboard.queuedAnchorPull = false;
+                _blackboard.QueuedAnchorPull = false;
                 return true;
             }
             
-            return _blackboard.MovesetInputsController.Pull_Pressed();
+            return pullInput;
         }
 
         private bool PlayerCanDashTowardsAnchor()
         {
+            bool dashInput = _blackboard.MovesetInputsController.Dash_Pressed();
             if (!_enterDashCooldown.HasFinished())
             {
+                if (dashInput)
+                {
+                    _blackboard.QueuedDashTowardsAnchor = true;
+                }
                 return false;
             }
             
-            if (_blackboard.queuedDashTowardsAnchor)
+            if (_blackboard.QueuedDashTowardsAnchor)
             {
-                _blackboard.queuedDashTowardsAnchor = false;
+                _blackboard.QueuedDashTowardsAnchor = false;
                 return true;
             }
 
-            return _blackboard.MovesetInputsController.Dash_Pressed();
+            return dashInput;
         }
 
         private bool PlayerCanKickAnchor()

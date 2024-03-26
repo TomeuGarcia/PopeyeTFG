@@ -14,15 +14,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public PlayerMovementChecker PlayerMovementChecker { get; private set;  }
 
         // Queues
-        public bool queuedDashTowardsAnchor;
-        public bool queuedAnchorPull;
-        public bool queuedAnchorAim;
-        
+        public bool QueuedDashTowardsAnchor { get; set; }
+        public bool QueuedAnchorPull { get; set; }
+        public bool QueuedAnchorAim { get; set; }
+
         public bool spinAttackTowardsRight;
-        
-        
-        
-        public PlayerStates cameFromState;
+
+
+        public PlayerStates CameFromState { get; set; }
         
         
         
