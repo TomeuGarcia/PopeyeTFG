@@ -177,7 +177,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             style.normal.background = _editorView.TextBackground;
             int depth = _baseCornerPointsGroup.GetDepth() - cornerPointsGroup.GetDepth();
             string text = " Depth: " + depth + " \n Index: " + index + " ";
-            Handles.Label(point + Vector3.up, text, style);
+            Handles.Label(point + Vector3.up * 2, text, style);
         }
         
     }

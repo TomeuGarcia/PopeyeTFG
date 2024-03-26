@@ -129,8 +129,17 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             
             [SerializeField] private Vector3 _position;
             
-            [SerializeField, Range(-10, 10)] private int _extrudeTimes = 0;
+            [SerializeField] private ExtrudeAmount _extrude;
             [SerializeField] private CornerPointsGroup _subPointsGroup;
+            
+            [System.Serializable]
+            public struct ExtrudeAmount
+            {
+                [SerializeField, Range(0, 10)] private int _positiveTimes;
+                [SerializeField, Range(0, 10)] private int _negativeTimes;
+                public int PositiveTimes => _positiveTimes;
+                public int NegativeTimes => _negativeTimes;
+            }
             
             public Vector3 Position
             {
@@ -144,12 +153,13 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 set => _subPointsGroup = value;
             }
 
-            public int ExtrudeTimes => _extrudeTimes;
+            public ExtrudeAmount Extrude => _extrude;
 
             public CornerPoint(Vector3 position)
             {
                 _position = position;
                 _subPointsGroup = new CornerPointsGroup();
+                _extrude = new ExtrudeAmount();
             }
             
             public static implicit operator Vector3(CornerPoint cornerPoint)
@@ -290,7 +300,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 
             CreateFillWalls(previousPoint, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
                 fillLength);
-                
+            
             CreateColliderPreviousToCurrent(previousPointLocal, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
                 fillLength);
         }
@@ -304,36 +314,27 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void ExtrudeCornerWall(Vector3 position, CornerPoint cornerPoint)
         {
-            if (cornerPoint.ExtrudeTimes == 0)
+            bool positiveExtrude = cornerPoint.Extrude.PositiveTimes > 0;
+            if (positiveExtrude)
             {
-                return;
+                ExtrudeCornerWallSide(position, _config.ExtrudePositiveOffset, cornerPoint.Extrude.PositiveTimes);
             }
             
-            int extrudeTimes = Mathf.Abs(cornerPoint.ExtrudeTimes);
-            Vector3 extrudeOffset = cornerPoint.ExtrudeTimes > 0 
-                ? _config.ExtrudePositiveOffset 
-                : _config.ExtrudeNegativeOffset;
-            
-            
-            for (int extrudeI = 1; extrudeI <= extrudeTimes; ++extrudeI)
+            bool negativeExtrude = cornerPoint.Extrude.NegativeTimes > 0;
+            if (negativeExtrude)
             {
-                CreateCornerWall(position + (extrudeOffset * extrudeI));
+                ExtrudeCornerWallSide(position, _config.ExtrudeNegativeOffset, cornerPoint.Extrude.NegativeTimes);
             }
 
-
-            Vector3 startPosition = PointToWorldSpace(position);
-            Vector3 endPosition = PointToWorldSpace(position + (extrudeOffset * extrudeTimes));
-
-            Vector3 colliderPosition = Vector3.Lerp(startPosition, endPosition, 0.5f);
-
-            Vector3 colliderScaler = _config.ExtrudePositiveOffset * (extrudeTimes/2f);
-            
-            Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length);
-            colliderSize.x *= Mathf.Max(colliderScaler.x, 1);
-            colliderSize.y *= Mathf.Max(colliderScaler.y, 1);
-            colliderSize.z *= Mathf.Max(colliderScaler.z, 1);
-
-            DoCreateCollider(colliderPosition, colliderSize);
+            CreateExtrudeCornerCollider(cornerPoint, positiveExtrude, negativeExtrude);
+        }
+        
+        private void ExtrudeCornerWallSide(Vector3 position, Vector3 offset, int times)
+        {
+            for (int extrudeI = 1; extrudeI <= times; ++extrudeI)
+            {
+                CreateCornerWall(position + (offset * extrudeI));
+            }
         }
         
 
@@ -400,6 +401,39 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             DoCreateCollider(colliderPosition, colliderSize);
         }
 
+        private void CreateExtrudeCornerCollider(CornerPoint cornerPoint, bool positiveExtrude, bool negativeExtrude)
+        {
+            if (!positiveExtrude && !negativeExtrude)
+            {
+                return;
+            }
+
+            Vector3 endPositionPositive = cornerPoint.Position;
+            if (positiveExtrude)
+            {
+                endPositionPositive += cornerPoint.Extrude.PositiveTimes * _config.ExtrudePositiveOffset;
+            }
+            
+            Vector3 endPositionNegative = cornerPoint.Position;
+            if (negativeExtrude)
+            {
+                endPositionNegative += cornerPoint.Extrude.NegativeTimes * _config.ExtrudeNegativeOffset;
+            }
+            
+
+            Vector3 colliderPosition = Vector3.Lerp(endPositionPositive, endPositionNegative, 0.5f);
+
+            int totalExtrudeTimes = cornerPoint.Extrude.PositiveTimes + cornerPoint.Extrude.NegativeTimes;
+            Vector3 colliderScaler = _config.ExtrudePositiveOffset * ((totalExtrudeTimes + 1) / 2f);
+            
+            Vector3 colliderSize = new Vector3(_config.ColliderWidth, _config.ColliderHeight, CornerBlock.Length);
+            colliderSize.x *= Mathf.Max(colliderScaler.x, 1);
+            colliderSize.y *= Mathf.Max(colliderScaler.y, 1);
+            colliderSize.z *= Mathf.Max(colliderScaler.z, 1);
+
+            DoCreateCollider(colliderPosition, colliderSize);
+        }
+        
         private void DoCreateCollider(Vector3 colliderPosition, Vector3 colliderSize)
         {
             colliderSize.x = Mathf.Abs(colliderSize.x);
@@ -418,13 +452,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             if (!_collidersParent.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
             {
                 _collidersParent.AddComponent<MeshFilter>();
-                Debug.Log("no mesh filter");
             }
 
             if (!_collidersParent.TryGetComponent<MeshRenderer>(out MeshRenderer meshRenderer))
             {
                 meshRenderer = _collidersParent.AddComponent<MeshRenderer>();
-                Debug.Log("no mesh renderer");
             }
             
             meshRenderer.material = _config.FakeMeshMaterial;
@@ -456,7 +488,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             
             offset = (minimums + maximums) / 2;
             Vector3 offset3D = new Vector3(offset.x, 0, offset.y);
-            _baseCornerPointsGroup.ApplyOffset(offset3D);
+            _baseCornerPointsGroup.ApplyOffset(-offset3D);
         }
 
         public void MovePivotToCenter()
@@ -515,19 +547,34 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 CornerPoint cornerPoint = pointsGroup.CornerPoints[i];
                 Vector3 drawSpacePoint =  PointToWorldSpace(cornerPoint.Position);
                 
-                Handles.color = _config.TransparencyConfig.ApplyTransparencyToColor(color, Position);
+                Handles.color =  ComputeColor(color);
                 DrawBlock(CornerBlock, drawSpacePoint, Quaternion.identity);
-
-                if (cornerPoint.ExtrudeTimes != 0)
-                {
-                    bool positiveExtrude = cornerPoint.ExtrudeTimes > 0;
-                    Vector3 pointExtrude = drawSpacePoint + _config.ExtrudePositiveOffset * 
-                        (cornerPoint.ExtrudeTimes + (positiveExtrude ? 1 : -1));
-                    DrawBlock(CornerBlock, pointExtrude, Quaternion.identity);
-                }
+                DrawCornerExtrude(cornerPoint, drawSpacePoint);
 
                 DrawCorners(pointsGroup.CornerPoints[i].SubPointsGroup, depth + 1, baseDepth);
             }
+        }
+
+        private void DrawCornerExtrude(CornerPoint cornerPoint, Vector3 position)
+        {
+            if (cornerPoint.Extrude.PositiveTimes > 0)
+            {
+                DrawCornerExtrudeSide(position, _config.ExtrudePositiveOffset, cornerPoint.Extrude.PositiveTimes + 1);
+            }
+
+            if (cornerPoint.Extrude.NegativeTimes > 0)
+            {
+                DrawCornerExtrudeSide(position, _config.ExtrudeNegativeOffset, cornerPoint.Extrude.NegativeTimes);
+            }
+        }
+
+        private void DrawCornerExtrudeSide(Vector3 originPosition, Vector3 offset, int times)
+        {
+            Vector3 extrudeEndPosition = originPosition + (offset * times);
+                
+            Handles.color = ComputeColor(_config.EditorView.CornerBlockColor);
+            Handles.DrawLine(originPosition, extrudeEndPosition, _config.EditorView.LineThickness);
+            DrawBlock(CornerBlock, extrudeEndPosition, Quaternion.identity);
         }
         
         private void DrawFills(CornerPointsGroup pointsGroup, CornerPoint startPoint, int depth, int baseDepth)
@@ -558,8 +605,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void DrawFillBlocks(Vector3 previousPoint, Vector3 currentPoint)
         {
-            Handles.color = _config.TransparencyConfig
-                .ApplyTransparencyToColor(_config.EditorView.FillLineColor * _colorMultiplier, Position);
+            Handles.color = ComputeColor(_config.EditorView.FillLineColor);
             Handles.DrawLine(previousPoint, currentPoint, _config.EditorView.LineThickness);
             
 
@@ -573,8 +619,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
             }            
                 
-            Handles.color = _config.TransparencyConfig
-                .ApplyTransparencyToColor(_config.EditorView.FillBlockColor * _colorMultiplier, Position);
+            Handles.color = ComputeColor(_config.EditorView.FillBlockColor);
 
             float lineLength = previousToCurrentDistance - CornerBlock.Length;
             float distanceCounter = CornerBlock.Length / 2 + FillBlock.Length / 2;
@@ -584,6 +629,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 Vector3 fillPosition = previousPoint + (previousToCurrentDirection * distanceCounter);
                 DrawBlock(FillBlock, fillPosition, offsetRotation);
             }
+        }
+
+        private Color ComputeColor(Color baseColor)
+        {
+            return _config.TransparencyConfig.ApplyTransparencyToColor(baseColor * _colorMultiplier, Position);
         }
         
         private void DrawBlock(Block block, Vector3 center, Quaternion rotation)
