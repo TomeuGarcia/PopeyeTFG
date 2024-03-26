@@ -1,3 +1,4 @@
+using System;
 using AYellowpaper;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
@@ -101,7 +102,17 @@ namespace Popeye.Modules.PlayerAnchor
 
 
         public IPlayerMediator PlayerMediator => _player;
-        
+
+
+        private AnchorPuller _anchorPuller_debugReference;
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                _anchorPuller_debugReference.DebugTogglePullMode();
+            }
+        }
 
         public void Install()
         {
@@ -122,6 +133,7 @@ namespace Popeye.Modules.PlayerAnchor
             TransformMotion anchorMotion = new TransformMotion();
             AnchorThrower anchorThrower = new AnchorThrower();
             AnchorPuller anchorPuller = new AnchorPuller();
+            _anchorPuller_debugReference = anchorPuller;
             AnchorKicker anchorKicker = new AnchorKicker();
             AnchorSpinner anchorSpinner = new AnchorSpinner();
             AnchorTrajectoryMaker anchorTrajectoryMaker = new AnchorTrajectoryMaker();

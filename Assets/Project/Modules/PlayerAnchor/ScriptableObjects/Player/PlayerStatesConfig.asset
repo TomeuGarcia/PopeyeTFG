@@ -23,7 +23,6 @@ MonoBehaviour:
   _pullingAnchorMoveSpeed: 5
   _kickingAnchorMoveSpeed: 10
   _spinningAnchorMoveSpeed: 0.5
-  _tiredMoveSpeed: 10
   _healingMoveSpeed: 0.5
   _fallingOnVoidMoveSpeed: 0
   _dashingMoveSpeed: 12
@@ -39,7 +38,12 @@ MonoBehaviour:
   _minRollDuration: 0.1
   _maxRollDuration: 0.3
   _rollInvulnerableDuration: 0.45
+  _tiredWithoutAnchorMoveSpeedMultiplier: 0.8
+  _tiredWithAnchorMoveSpeedMultiplier: 1
   _dropAnchorWhenTired: 0
   _healingDuration: 1
   _enteringSpecialAttackDuration: 0
   _specialAttackExtraSpeed: 5
+  _throwIntoPullCooldown: 0.5
+  _rollIntoPullCooldown: 0.5
+  _rollIntoDashCooldown: 0.5
