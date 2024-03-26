@@ -218,6 +218,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedToThrow);
         }
+
+        public void SetAvailableForPickUp()
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
+        }
         public void SetRestingOnFloor()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.RestingOnFloor);
