@@ -1,5 +1,6 @@
 
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using Popeye.Timers;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -8,9 +9,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     {
         private readonly PlayerStatesBlackboard _blackboard;
 
+        private Timer _enterPullingCooldown;
+        private Timer _enterDashCooldown;
+        
+
         public MovingWithoutAnchor_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
+
+            _enterPullingCooldown = new Timer(0);
+            _enterDashCooldown = new Timer(0);
         }
         
         protected override void DoEnter()
@@ -23,6 +31,26 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
             
             _blackboard.PlayerMediator.PlayerView.PlayEnterMovingWithoutAnchorAnimation();
+
+
+
+            if (_blackboard.CameFromState == PlayerStates.DashingDroppingAnchor)
+            {
+                _enterPullingCooldown.SetDuration(_blackboard.PlayerStatesConfig.RollIntoPullCooldown);
+                _enterDashCooldown.SetDuration(_blackboard.PlayerStatesConfig.RollIntoDashCooldown);
+            }
+            else if (_blackboard.CameFromState == PlayerStates.ThrowingAnchor)
+            {
+                _enterPullingCooldown.SetDuration(_blackboard.PlayerStatesConfig.ThrowIntoPullCooldown);
+                _enterDashCooldown.SetDuration(0);
+            }
+            else
+            {
+                _enterPullingCooldown.SetDuration(0);
+                _enterDashCooldown.SetDuration(0);
+            }
+            _enterPullingCooldown.Clear();
+            _enterDashCooldown.Clear();
         }
 
         public override void Exit()
@@ -33,6 +61,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
+            _enterPullingCooldown.Update(deltaTime);
+            _enterDashCooldown.Update(deltaTime);
+            
+            
             _blackboard.PlayerMediator.UpdateSafeGroundChecking(deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
             if (anchorIsOnVoid)
             {
@@ -114,24 +146,45 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanPullAnchor()
         {
-            if (_blackboard.queuedAnchorPull && _blackboard.AnchorMediator.IsRestingOnFloor())
+            bool pullInput = _blackboard.MovesetInputsController.Pull_Pressed();
+            
+            if (!_enterPullingCooldown.HasFinished())
             {
-                _blackboard.queuedAnchorPull = false;
+                if (pullInput)
+                {
+                    _blackboard.QueuedAnchorPull = true;
+                }
+                return false;
+            }
+            
+            if (_blackboard.QueuedAnchorPull && _blackboard.AnchorMediator.IsRestingOnFloor())
+            {
+                _blackboard.QueuedAnchorPull = false;
                 return true;
             }
             
-            return _blackboard.MovesetInputsController.Pull_Pressed();
+            return pullInput;
         }
 
         private bool PlayerCanDashTowardsAnchor()
         {
-            if (_blackboard.queuedDashTowardsAnchor)
+            bool dashInput = _blackboard.MovesetInputsController.Dash_Pressed();
+            if (!_enterDashCooldown.HasFinished())
             {
-                _blackboard.queuedDashTowardsAnchor = false;
+                if (dashInput)
+                {
+                    _blackboard.QueuedDashTowardsAnchor = true;
+                }
+                return false;
+            }
+            
+            if (_blackboard.QueuedDashTowardsAnchor)
+            {
+                _blackboard.QueuedDashTowardsAnchor = false;
                 return true;
             }
 
-            return _blackboard.MovesetInputsController.Dash_Pressed();
+            return dashInput;
         }
 
         private bool PlayerCanKickAnchor()

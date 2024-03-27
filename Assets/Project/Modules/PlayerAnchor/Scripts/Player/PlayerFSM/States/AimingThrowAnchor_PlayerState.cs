@@ -14,7 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _blackboard.queuedAnchorAim = false;
+            _blackboard.QueuedAnchorAim = false;
             
             _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
             UpdateMovementSpeed();
@@ -69,6 +69,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
             
+            if (PlayerCanDash())
+            {
+                CancelChargingThrow();
+                NextState = PlayerStates.DashingDroppingAnchor;
+                return true;
+            }
+            
             if (_blackboard.MovesetInputsController.Aim_HeldPressed())
             {
                 ChargeThrow(deltaTime);
@@ -99,6 +106,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.CancelChargingThrow();
         }
         
+        
+        private bool PlayerCanDash()
+        {
+            return _blackboard.MovesetInputsController.Dash_Pressed();
+        }
         
         private void UpdateMovementSpeed()
         {

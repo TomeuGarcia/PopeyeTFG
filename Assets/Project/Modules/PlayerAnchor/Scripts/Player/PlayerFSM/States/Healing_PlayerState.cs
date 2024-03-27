@@ -21,7 +21,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _healEndNextState = _blackboard.cameFromState;
+            _healEndNextState = _blackboard.CameFromState;
             _wasInterrupted = false;
 
             float durationToComplete = _blackboard.PlayerStatesConfig.HealingDuration;

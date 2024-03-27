@@ -85,13 +85,17 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         {
             _currentChainViewLogic.UpdateChainPositions(Time.deltaTime, PlayerBindPosition, AnchorBindPosition);
 
-            Vector3[] newChainPositions = _currentChainViewLogic.GetChainPositions();
+            Vector3[] newChainPositions = GetChainPositions();
             _chainView.Update(newChainPositions);
             
             newChainPositions = _chainView.GetUpdatedPositions();
             _vfxChainView.Update(newChainPositions);
         }
-        
+
+        public Vector3[] GetChainPositions()
+        {
+            return _currentChainViewLogic.GetChainPositions();
+        }
 
         public void SetThrownView(AnchorThrowResult throwResult)
         {
