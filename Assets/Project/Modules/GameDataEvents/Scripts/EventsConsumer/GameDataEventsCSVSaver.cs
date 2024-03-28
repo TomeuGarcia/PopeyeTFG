@@ -7,8 +7,8 @@ namespace Popeye.Modules.GameDataEvents
 {
     public class GameDataEventsCSVSaver : IGameDataEventsConsumer
     {
-        private GameDataEventsCSVSaverConfig _config;
-        private List<string> _dataToSave;
+        private readonly GameDataEventsCSVSaverConfig _config;
+        private readonly List<string> _dataToSave;
         private StreamWriter _outWriter;
 
         public GameDataEventsCSVSaver(GameDataEventsCSVSaverConfig config)
@@ -48,7 +48,7 @@ namespace Popeye.Modules.GameDataEvents
         {
             foreach(string dataRow in _dataToSave) 
             { 
-             _outWriter.WriteLine(dataRow);
+                _outWriter.WriteLine(dataRow);
             }
         }
 
@@ -56,7 +56,13 @@ namespace Popeye.Modules.GameDataEvents
         public void AddEventContent(string eventContent)
         {
             _dataToSave.Add(eventContent);
-            Debug.Log(eventContent);
+
+            if (_config.LogToConsole)
+            {
+                Debug.Log(eventContent);
+            }
         }
+        
+        
     }
 }

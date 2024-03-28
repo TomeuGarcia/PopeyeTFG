@@ -59,6 +59,15 @@ namespace Popeye.Modules.GameDataEvents
             string content = "";
 
             content += eventName + CONTENT_SEPARATOR;
+            content += timeStamp + CONTENT_SEPARATOR;
+            content += sceneName + CONTENT_SEPARATOR;
+            content += position + CONTENT_SEPARATOR;
+            content += damageCause + CONTENT_SEPARATOR;
+            content += enemyType + CONTENT_SEPARATOR;
+            content += actionType + CONTENT_SEPARATOR;
+            content += playerHealthCurrent + CONTENT_SEPARATOR;
+            content += playerHealthBeforeEvent + CONTENT_SEPARATOR;
+            content += wasKilled;
 
             return content;
         }

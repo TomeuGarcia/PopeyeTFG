@@ -31,7 +31,12 @@ namespace Popeye.Modules.GameDataEvents
             GenericEventData = genericEventData;
             Position = eventInfo.Position;
             DamageHitName = eventInfo.DamageHitResult.DamageHit.GetName();
-            WasKilled = eventInfo.DamageHitResult.DamageHitTarget.IsDead();            
+
+            if (eventInfo.DamageHitResult.DamageHitTarget != null)
+            {
+                WasKilled = eventInfo.DamageHitResult.DamageHitTarget.IsDead(); 
+            }
+                       
             CurrentHealth = eventInfo.CurrentHealth;
         }
     }
