@@ -10,11 +10,12 @@ namespace Popeye.Modules.GameDataEvents
         private GameDataEventsCSVSaverConfig _config;
         private List<string> _dataToSave;
         private StreamWriter _outWriter;
-        private bool disposedValue;
 
         public GameDataEventsCSVSaver(GameDataEventsCSVSaverConfig config)
         {
             _config = config;
+            _dataToSave = new List<string>(10);
+
         }
 
         private bool DataFileExists()
