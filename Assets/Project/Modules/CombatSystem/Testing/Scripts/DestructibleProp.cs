@@ -78,7 +78,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
                 PlayTakeDamageAnimation(damageHit);
             }
 
-            return new DamageHitResult(this, gameObject, receivedDamage, Position);
+            return new DamageHitResult(this, gameObject, damageHit, receivedDamage, Position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)

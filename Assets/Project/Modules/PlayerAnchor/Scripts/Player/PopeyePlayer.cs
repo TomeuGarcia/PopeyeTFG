@@ -1,6 +1,7 @@
 using System;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerAnchor.Anchor;
@@ -135,6 +136,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void Update()
         {
+            _eventsDispatcher.Update(Time.deltaTime, Position);
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
@@ -279,6 +281,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorThrowStaminaCost);
             
             PlayerView.PlayThrowAnimation();
+            
+            _eventsDispatcher.DispatchOnStartActionEvent("Anchor Throw", Position);
         }
 
         public void PullAnchor()
@@ -287,6 +291,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             LookTowardsAnchorForDuration(0.3f).Forget();
             
             PlayerView.PlayPullAnimation(0.3f).Forget();
+            
+            _eventsDispatcher.DispatchOnStartActionEvent("Anchor Pull", Position);
         }
 
         public void OnPullAnchorComplete()
@@ -331,6 +337,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayDashAnimation(duration, Vector3.ProjectOnPlane((_anchor.Position - Position).normalized,  Vector3.up));
             _playerAudio.PlayDashTowardsAnchorSound();
 
+            _eventsDispatcher.DispatchOnStartActionEvent("Dash", Position);
+            
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
         }
 
@@ -350,6 +358,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             PlayerView.PlayDashAnimation(duration, GetFloorAlignedLookDirection());
             _playerAudio.PlayDashDroppingAnchorSound();
+            
+            _eventsDispatcher.DispatchOnStartActionEvent("Dash Slam", Position);
             
             _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
@@ -561,21 +571,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _staminaSystem.HasMaxStamina();
         }
         
-        public void OnDamageTaken()
+        public void OnDamageTaken(DamageHitResult damageHitResult)
         {
             PlayerView.PlayTakeDamageAnimation();
             _playerAudio.PlayTakeDamageSound();
 
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
+            
+            _eventsDispatcher.DispatchOnTakeDamageEvent(damageHitResult, Position, _playerHealth.GetCurrentHealth());
         }
 
-        public void OnKilledByDamageTaken()
+        public void OnKilledByDamageTaken(DamageHitResult damageHitResult)
         {
             _playerAudio.PlayTakeDamageSound();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
             _eventsDispatcher.DispatchOnDiedEvent();
+        
+            _eventsDispatcher.DispatchOnTakeDamageEvent(damageHitResult, Position, _playerHealth.GetCurrentHealth());
         }
 
+        public void OnHealUsed(int healthBeforeHealing, int currentHealth)
+        {
+            _eventsDispatcher.DispatchOnHealEvent(Position, currentHealth, healthBeforeHealing);
+        }
         public void OnHealed()
         {
             PlayerView.PlayHealAnimation();
@@ -613,6 +631,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlaySpecialAttackAnimation();
             _specialAttackController.StartSpecialAttack();
             WaitForSpecialAttackFinished().Forget();
+            
+            _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
         }
         private async UniTaskVoid WaitForSpecialAttackFinished()
         {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
@@ -31,6 +32,7 @@ namespace Popeye.Modules.Enemies
             
             _shieldedMediator.Init();
             _shieldedMediator.SetBoostDropFactory(ServiceLocator.Instance.GetService<IPowerBoostDropFactory>());
+            _shieldedMediator.SetEventSystem(ServiceLocator.Instance.GetService<IEventSystemService>());
             _shieldedMediator.StartChasing();
         }
 
