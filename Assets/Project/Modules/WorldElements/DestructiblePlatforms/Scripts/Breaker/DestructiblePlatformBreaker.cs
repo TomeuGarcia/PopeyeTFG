@@ -9,13 +9,12 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         [SerializeField] private DestructiblePlatform.BreakMode _breakMode;
         [SerializeField] private bool _startEnabled = true;
         [SerializeField] private Collider _collider;
-        private HashSet<Collider> _queuedCollidersWhileDisabled;
+        private readonly HashSet<Collider> _queuedCollidersWhileDisabled = new HashSet<Collider>(2);
 
 
         private void Awake()
         {
             SetEnabled(_startEnabled);
-            _queuedCollidersWhileDisabled = new HashSet<Collider>(2);
         }
 
         public void SetBreakOverTimeMode()

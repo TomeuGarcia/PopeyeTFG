@@ -1,4 +1,5 @@
 using System;
+using Project.Modules.AudioSystem.Scripts.SoundVolume;
 using UnityEngine;
 
 namespace Popeye.Modules.AudioSystem
@@ -8,14 +9,17 @@ namespace Popeye.Modules.AudioSystem
         private readonly OneShotSoundsController _oneShotSoundsController;
         private readonly LastingSoundsController _lastingSoundsController;
         public GlobalParametersController GlobalParametersController { get; private set; }
+        public SoundVolumeControllersGroup SoundVolumeControllersGroup { get; private set; }
 
         public FMODAudioManager(OneShotSoundsController oneShotSoundsController, 
             LastingSoundsController lastingSoundsController,
-            GlobalParametersController globalParametersController)
+            GlobalParametersController globalParametersController,
+            SoundVolumeControllersGroup soundVolumeControllersGroup)
         {
             _oneShotSoundsController = oneShotSoundsController;
             _lastingSoundsController = lastingSoundsController;
             GlobalParametersController = globalParametersController;
+            SoundVolumeControllersGroup = soundVolumeControllersGroup;
         }
 
 

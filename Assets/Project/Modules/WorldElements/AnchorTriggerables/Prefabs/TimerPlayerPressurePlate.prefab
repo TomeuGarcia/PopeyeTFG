@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 71aa70100efcd334dad4f8d9c14bf5d1, type: 2}
+  - {fileID: 2100000, guid: 5a07c5ab62435dc4fb962064150c0011, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -198,7 +198,7 @@ Transform:
   m_Children:
   - {fileID: 799839162377749810}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &799839161237928281
 MonoBehaviour:
@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buttonMesh: {fileID: 799839160394876372}
+  _collider: {fileID: 799839161237928260}
   _buttonTransform: {fileID: 799839160394876395}
   _pressedDuration: 3
   _triggerAllOnce: 1
@@ -240,7 +241,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.5, z: 1}
+  m_Size: {x: 1.2, y: 0.5, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &799839162377749809
 GameObject:

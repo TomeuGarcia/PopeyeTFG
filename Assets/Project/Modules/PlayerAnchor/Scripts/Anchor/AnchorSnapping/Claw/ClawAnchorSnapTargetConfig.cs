@@ -6,9 +6,14 @@ using UnityEngine;
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "ClawAnchorSnapTargetConfig", 
-        menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "ClawAnchorSnapTargetConfig")]
+        menuName = ScriptableObjectsHelper.SNAPTARGETS_ASSETS_PATH + "ClawAnchorSnapTargetConfig")]
     public class ClawAnchorSnapTargetConfig : ScriptableObject
     {
+        [Header("VIEW")] 
+        [Expandable] [SerializeField] private ClawAnchorSnapTargetViewConfig _viewConfig;
+        public ClawAnchorSnapTargetViewConfig ViewConfig => _viewConfig;
+        
+        
         [Header("COLLISION CHECKING")]
         [Expandable] [SerializeField] private CollisionProbingConfig _floorCollisionProbing;
         

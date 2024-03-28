@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System.Collections;
@@ -6,6 +7,7 @@ using System.Threading;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
+using Timer = Popeye.Timers.Timer;
 
 namespace Popeye.Modules.WorldElements.AnchorTriggerables
 {
@@ -15,6 +17,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
     {
         [Header("REFERENCES")] 
         [SerializeField] private MeshRenderer _buttonMesh;
+        [SerializeField] private Collider _collider;
 
         private Material _timerMaterial;
         [SerializeField] private Transform _buttonTransform;
@@ -24,19 +27,20 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
         [SerializeField] private bool _triggerAllOnce = false;
         private bool _triggeredAllOnceAlready;
-        private bool _isPressed;
 
 
-        [Header("WORLD INTERACTORS")] [SerializeField]
-        private AWorldInteractor[] _worldInteractors;
+        [Header("WORLD INTERACTORS")] 
+        [SerializeField] private AWorldInteractor[] _worldInteractors;
 
         private int _triggeredCount;
 
-        CancellationTokenSource _pressedCancellationSource;
+        private Coroutine _countdownCoroutine = null;
+        private bool CountdownCoroutineIsActive => _countdownCoroutine != null;
 
 
         [Header("ACCEPT TYPES")] 
         [SerializeField] private ObjectTypeAsset[] _acceptTypes;
+        private HashSet<GameObject> _acceptedGameObjects = new HashSet<GameObject>(2);
 
 
         private void OnEnable()
@@ -65,14 +69,11 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private void Awake()
         {
             _triggeredCount = 0;
-            _isPressed = false;
 
             _timerMaterial = _buttonMesh.material;
-            _timerMaterial.SetFloat("_StartTime", -_pressedDuration);
-            _timerMaterial.SetFloat("_FillDuration", _pressedDuration);
-            _timerMaterial.SetFloat("_CanUnfill", 1.0f);
 
             _triggeredAllOnceAlready = false;
+            SetFillValue(0);
         }
 
 
@@ -80,18 +81,21 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         {
             if (_triggeredAllOnceAlready) return;
             
-            if (AcceptsOtherCollider(other))
+            if (AcceptsOtherCollider(other, true))
             {
-                if (_triggeredCount++ > 0) return;
+                if (++_triggeredCount > 1) return;
 
-                if (_isPressed)
+                
+                SetFillValue(1);
+                if (CountdownCoroutineIsActive)
                 {
-                    DeactivateWorldInteractors();
-                    _pressedCancellationSource.Cancel();
-                    _isPressed = false;
+                    StopCoroutine(_countdownCoroutine);
                 }
-
-                SetTriggeredState();
+                else
+                {
+                    PlayTriggerAnimation();
+                    ActivateWorldInteractors();
+                }
             }
         }
 
@@ -99,32 +103,37 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         {
             if (_triggeredAllOnceAlready) return;
 
-            if (AcceptsOtherCollider(other))
+            if (AcceptsOtherCollider(other, false))
             {
                 if (--_triggeredCount > 0) return;
+                
+                _countdownCoroutine = StartCoroutine(StartCountdownTimer());
             }
         }
 
-        private bool AcceptsOtherCollider(Collider other)
+        private bool AcceptsOtherCollider(Collider other, bool addReferenceIfAccepts)
         {
             if (!other.TryGetComponent(out IObjectType otherObjectType)) return false;
+            
+            if (_acceptedGameObjects.Contains(other.gameObject) && addReferenceIfAccepts) return false;
+            if (addReferenceIfAccepts)
+            {
+                _acceptedGameObjects.Add(other.gameObject);
+            }
+            else
+            {
+                _acceptedGameObjects.Remove(other.gameObject);
+            }
+            
             return otherObjectType.IsOfAnyType(_acceptTypes);
         }
 
 
-        private void SetTriggeredState()
-        {
-            PlayTriggerAnimation();
-            ActivateWorldInteractors();
-
-            _pressedCancellationSource = new CancellationTokenSource();
-            StartPressedTimer().Forget();
-        }
+        
 
 
         protected void PlayTriggerAnimation()
         {
-            _timerMaterial.SetFloat("_StartTime", Time.time);
             _buttonTransform.DOLocalMove(Vector3.down * 0.05f, 0.2f);
         }
 
@@ -134,18 +143,31 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         }
 
 
-        private async UniTaskVoid StartPressedTimer()
+        private IEnumerator StartCountdownTimer()
         {
-            _isPressed = true;
-            await UniTask.Delay(MathUtilities.SecondsToMilliseconds(_pressedDuration),
-                cancellationToken: _pressedCancellationSource.Token);
-
-            if (_isPressed && !_triggeredAllOnceAlready)
+            Timer pressedTimer = new Timer(_pressedDuration);
+            while (!pressedTimer.HasFinished())
             {
-                _isPressed = false;
+                pressedTimer.Update(Time.deltaTime);
+                SetFillValue(1-pressedTimer.GetCounterRatio01());
+                
+                yield return null;
+            }
+            
+            
+            if (!_triggeredAllOnceAlready)
+            {
                 DeactivateWorldInteractors();
                 PlayUntriggerAnimation();
             }
+
+            _countdownCoroutine = null;
+            RefreshCollider().Forget();
+        }
+
+        private void SetFillValue(float fillValue)
+        {
+            _timerMaterial.SetFloat("_FillT", fillValue);
         }
 
 
@@ -169,12 +191,21 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private void CancelTimerAndButton()
         {
             _triggeredAllOnceAlready = true;
-            if (_pressedCancellationSource != null)
+            
+            if (CountdownCoroutineIsActive)
             {
-                _pressedCancellationSource.Cancel();
+                SetFillValue(1);
+                StopCoroutine(_countdownCoroutine);
             }
-
-            _timerMaterial.SetFloat("_CanUnfill", 0.0f);
         }
+
+        private async UniTaskVoid RefreshCollider()
+        {
+            _collider.enabled = false;
+            await UniTask.Yield();
+            _triggeredCount = 0;
+            _collider.enabled = true;
+        }
+        
     }
 }

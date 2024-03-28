@@ -7,6 +7,8 @@ namespace Popeye.ProjectHelpers
         
         public const string PLAYER_ANCHOR_ASSETS_PATH = ROOT + "PlayerAnchor/";
         public const string ANCHOR_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Anchor/";
+        public const string ANCHORVIEW_ASSETS_PATH = ANCHOR_ASSETS_PATH + "View/";
+        public const string SNAPTARGETS_ASSETS_PATH = ANCHOR_ASSETS_PATH + "SnapTargets/";
         public const string ANCHORCHAIN_ASSETS_PATH = ANCHOR_ASSETS_PATH + "Chain/";
         public const string PLAYER_ASSETS_PATH = PLAYER_ANCHOR_ASSETS_PATH + "Player/";
         public const string PLAYERUI_ASSETS_PATH = PLAYER_ASSETS_PATH + "UI/";
@@ -37,6 +39,10 @@ namespace Popeye.ProjectHelpers
         
         public const string SCENELOADING_ASSETS_PATH = ROOT + "SceneLoading/";
         public const string VALUESTATS_ASSETS_PATH = ROOT + "ValueStats/";
+        
+        public const string UI_ASSETS_PATH = ROOT + "UI/";
+        public const string UISLIDER_ASSETS_PATH = UI_ASSETS_PATH + "Slider/";
+        public const string UIBUTTON_ASSETS_PATH = UI_ASSETS_PATH + "Button/";
         
         
         public const string ID_ASSETS_PATH = ROOT + "ID/";

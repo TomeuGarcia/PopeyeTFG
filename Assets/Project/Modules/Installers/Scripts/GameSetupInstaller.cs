@@ -3,6 +3,7 @@ using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Scripts.Collisions;
 using Project.Modules.CombatSystem.KnockbackSystem;
@@ -38,6 +39,12 @@ public class GameSetupInstaller : MonoBehaviour
     
     [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
 
+    
+    
+    private TimeManagerGameEventsListener _timeManagerGameEventsListener; 
+    
+    
+
     void Awake()
     {
         Install();
@@ -51,8 +58,9 @@ public class GameSetupInstaller : MonoBehaviour
     private void Install()
     {
         ServiceLocator serviceLocator = ServiceLocator.Instance;
-        
-        serviceLocator.RegisterService<IEventSystemService>(new EventSystemService());
+
+        EventSystemService eventSystemService = new EventSystemService();
+        serviceLocator.RegisterService<IEventSystemService>(eventSystemService);
         
         CombatManagerService combatManagerService = 
             new CombatManagerService(_hitTargetCollisionProbingConfig, 
@@ -70,11 +78,22 @@ public class GameSetupInstaller : MonoBehaviour
         _playerAnchorInstaller.Install();
         
         _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
+
+
+        IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
+        serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
+        
+        _timeManagerGameEventsListener = new TimeManagerGameEventsListener(eventSystemService, timeScaleManager);
+        _timeManagerGameEventsListener.StartListening();
     }
     
     private void Uninstall()
     {
+        _timeManagerGameEventsListener.StopListening();
+        
         ServiceLocator serviceLocator = ServiceLocator.Instance;
+        
+        serviceLocator.RemoveService<IGameStateEventsDispatcher>();
         
         serviceLocator.RemoveService<ICombatManager>();
         serviceLocator.RemoveService<ITimeFunctionalities>();

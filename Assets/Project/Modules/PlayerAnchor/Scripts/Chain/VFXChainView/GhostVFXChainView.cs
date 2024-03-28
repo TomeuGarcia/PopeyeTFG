@@ -33,6 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             public void UpdateNoCollision(float deltaTime)
             {
                 _fullCollisionT -= deltaTime * SPEED;
+                _fullCollisionT = Mathf.Max(_fullCollisionT, 0.0f);
 
                 if (_fullCollisionT > 0.00001f)
                 {
@@ -120,7 +121,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                         toNextDistance, CollisionLayerMask, QueryTriggerInteraction))
                 {
                     UpdateCollision(numHitsForward, hit.point - COLLISION_OFFSET, hit.normal);
-                    
                     ++numHitsForward;
                     if (numHitsForward == NUM_TRACKED_OBSTACLES)
                     {

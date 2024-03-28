@@ -291,32 +291,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void OnPullAnchorComplete()
         {
+            _anchor.SetAvailableForPickUp();
+            
             if (_pullingAnchorFromTheVoid)
             {
                 _pullingAnchorFromTheVoid = false;
-
                 SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorAutoPullStaminaCost);
-                if (!HasStaminaLeft())
-                {
-                    EnterTiredState();
-                }
-                else
-                {
-                    _anchor.SetCarried();
-                }
-                
                 return;
             }
             
             SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorPullStaminaCost);
-            if (HasStaminaLeft())
-            {
-                _anchor.SetCarried();
-            }
-            else
-            {
-                _anchor.SnapToFloor(Position).Forget();
-            }
         }
 
         public async UniTaskVoid QueuePullAnchor()

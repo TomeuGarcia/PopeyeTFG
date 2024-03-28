@@ -93,6 +93,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
             SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 0);
+            SetAnimatorBool(_config.AimingParameterId, false);
         }
         
         public void StartTired()

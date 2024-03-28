@@ -20,7 +20,7 @@ namespace Popeye.Timers
 
         public void SetDuration(float newDuration)
         {
-            _duration = newDuration;
+            _duration = Mathf.Max(newDuration, 0.00000001f);
         }
 
         public void Clear()
