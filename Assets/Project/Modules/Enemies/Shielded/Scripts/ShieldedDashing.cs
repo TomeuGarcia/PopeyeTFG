@@ -79,7 +79,6 @@ namespace Popeye.Modules.Enemies.Components
                         _defaultProbingConfig.CollisionLayerMask,
                         _defaultProbingConfig.QueryTriggerInteraction))
                 {
-                    _rigidbody.velocity = Vector3.zero;
                     ResetDashingCooldown();
                     _dashing = false;
                     _mediator.Stun();
@@ -126,11 +125,11 @@ namespace Popeye.Modules.Enemies.Components
 
         }
 
-        private void StopDashing()
+        public void StopDashing()
         {
             _rigidbody.velocity = Vector3.zero;
             ResetDashingCooldown();
-            _mediator.StopDashing();
+            _mediator.StartChasing();
             _dashing = false;
         }
         private void OnCollisionEnter(Collision other)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 using Random=UnityEngine.Random;
@@ -33,9 +34,22 @@ namespace Popeye.Modules.Enemies.Components
         {
             if (_followPlayer && _playerTransform != null && _navMeshAgent.isActiveAndEnabled)
             {
+                //_navMeshAgent.updateRotation = true;
                 SetDestination(_playerTransform.position);
             }
 
+        }
+
+        public void BackUp()
+        {
+            StopBackUp();
+        }
+
+        private async UniTaskVoid StopBackUp()
+        {
+            _navMeshAgent.speed = 0;
+            await UniTask.Delay(500);
+            _navMeshAgent.speed = _speed;
         }
 
         public void SetTarget(Transform transform)

@@ -57,7 +57,7 @@ namespace Popeye.Modules.Enemies
 
         public void OnDamageDealt(DamageHitResult damageHitResult)
         {
-            Debug.Log("onDamageDealt");
+            _slimeMovement.BackUp();
         }
         public void SetSlimeMind(SlimeMindEnemy slimeMind)
         {

@@ -19,14 +19,14 @@ namespace Popeye.Modules.Enemies.Components
 
         public void Stun()
         {
-            Debug.Log("stunned");
             _stunned = true;
+            _mediator.StopDashing();
+            _mediator.StopMoving();
             PerformStun();
         }
 
         public void CancellStun()
         {
-            Debug.Log("cancell stun");
             _stunned = false;
             _mediator.SetIsInvulnerable(true);
             _mediator.ResetDashingCooldown();
@@ -36,6 +36,8 @@ namespace Popeye.Modules.Enemies.Components
 
         private async UniTaskVoid PerformStun()
         {
+            _mediator.DeactivateNavigation();
+            await UniTask.Delay(350);
             _mediator.SetIsInvulnerable(false);
             await UniTask.Delay(_stunnedTimeInMillis);
             if (_stunned)

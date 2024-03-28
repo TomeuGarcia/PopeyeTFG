@@ -1,3 +1,4 @@
+using System;
 using Popeye.Modules.CombatSystem;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Popeye.Modules.Enemies.Components
         [Header("Attacks that pass invulnerable")] 
         [SerializeField] private DamageHitConfig[] _passInvulnerableDamageHits;
 
+        public Action OnTakePassInvulnerableHit;
       
         public override bool CanBeDamaged(DamageHit damageHit)
         {
@@ -24,7 +26,7 @@ namespace Popeye.Modules.Enemies.Components
             {
                 if (passInvulnerableDamageHit == damageHit.DamageHitConfig)
                 {
-                    return true;
+                    OnTakePassInvulnerableHit?.Invoke();
                 }
             }
 

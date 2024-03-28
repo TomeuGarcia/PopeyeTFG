@@ -17,6 +17,7 @@ namespace Popeye.Modules.Enemies
         
         public virtual void OnHit(DamageHit damageHit)
         {
+            //TODO: write line to csv (position,damageHit,
             _enemyVisuals.PlayHitEffects(_enemyHealth.GetValuePer1Ratio(), damageHit);
         }
         
