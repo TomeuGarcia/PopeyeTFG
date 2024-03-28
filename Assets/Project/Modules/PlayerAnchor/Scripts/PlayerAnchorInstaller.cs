@@ -1,5 +1,6 @@
 using System;
 using AYellowpaper;
+using InputSystem;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
@@ -32,9 +33,11 @@ using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
+using Popeye.Scripts.ValueGating;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 
@@ -192,7 +195,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             // Player
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
-            PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController(eventSystemService);
+            PlayerAnchorMovesetInputsController movesetInputsController = CreateMovesetInputsController(eventSystemService);
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
@@ -379,5 +382,40 @@ namespace Popeye.Modules.PlayerAnchor
             
             return new SafeGroundPhysicsChecker(trackingTransform, physicsCaster, checkFrequency, 1.0f);
         }
+
+        private PlayerAnchorMovesetInputsController CreateMovesetInputsController(IEventSystemService eventSystemService)
+        {
+            PlayerAnchorInputControls playerAnchorInputControls = new PlayerAnchorInputControls();
+
+            ValueGate<InputAction> pullInputGate = new ValueGate<InputAction>(
+                playerAnchorInputControls.Land.Pull,
+                playerAnchorInputControls.Land.NullAction,
+                true
+            );
+            
+            ValueGate<InputAction> dashInputGate = new ValueGate<InputAction>(
+                playerAnchorInputControls.Land.Dash,
+                playerAnchorInputControls.Land.NullAction,
+                true
+            );
+            
+            ValueGate<InputAction> specialAttackInputGate = new ValueGate<InputAction>(
+                playerAnchorInputControls.Land.SpecialAttack,
+                playerAnchorInputControls.Land.NullAction,
+                true
+            );
+
+
+            PlayerAnchorMovesetInputsController movesetInputsController = new (
+                eventSystemService,
+                playerAnchorInputControls,
+                pullInputGate,
+                dashInputGate,
+                specialAttackInputGate
+            );
+
+            return movesetInputsController;
+        }
+        
     }
 }
