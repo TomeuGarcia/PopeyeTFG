@@ -12,7 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         void DispatchOnTakeDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition, int currentHealth);
         void DispatchOnDiedEvent(DamageHitResult damageHitResult, Vector3 playerPosition);
         void DispatchOnRespawnFromDeathEvent();
-        void DispatchOnStartActionEvent(PlayerStates.PlayerStates playerState, Vector3 playerPosition);
+        void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition);
 
 
     }
