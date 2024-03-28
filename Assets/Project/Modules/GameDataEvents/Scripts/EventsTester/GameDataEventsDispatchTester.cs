@@ -62,7 +62,8 @@ namespace Popeye.Modules.GameDataEvents
             _eventSystemService.Dispatch(new OnEnemyTakeDamageEvent(
                 _enemyTakeDamageParameters.Id,
                 _enemyTakeDamageParameters.Position, 
-                _enemyTakeDamageParameters.DamageHit
+                new DamageHitResult(null,null,_enemyTakeDamageParameters.DamageHit,
+                    _enemyTakeDamageParameters.DamageHit.Damage,_enemyTakeDamageParameters.Position)
                 ));
         }
         

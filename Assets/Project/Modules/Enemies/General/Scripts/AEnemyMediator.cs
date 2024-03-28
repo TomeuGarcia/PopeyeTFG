@@ -1,8 +1,11 @@
 using Popeye.Core.Pool;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
+using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
 using Popeye.Modules.Enemies.VFX;
+using Popeye.Modules.GameDataEvents;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -12,17 +15,25 @@ namespace Popeye.Modules.Enemies
         [SerializeField] protected EnemyHealth _enemyHealth;
         [SerializeField] protected EnemyVisuals _enemyVisuals;
         protected IHazardFactory _hazardsFactory;
-
+        protected IEventSystemService _eventSystem;
+        [SerializeField] private EnemyID _enemyID;
         public abstract Vector3 Position { get; }
         
-        public virtual void OnHit(DamageHit damageHit)
+        public virtual void OnHit(DamageHitResult damageHitResult)
         {
-            _enemyVisuals.PlayHitEffects(_enemyHealth.GetValuePer1Ratio(), damageHit);
+            _enemyVisuals.PlayHitEffects(_enemyHealth.GetValuePer1Ratio(), damageHitResult.DamageHit);
+            _eventSystem.Dispatch(new OnEnemyTakeDamageEvent(_enemyID,transform.position,damageHitResult));
         }
-        
-        public virtual void OnDeath(DamageHit damageHit)
+
+        public virtual void OnSeePlayer()
         {
-            _enemyVisuals.PlayDeathEffects(damageHit);
+            _eventSystem.Dispatch(new OnEnemySeesPlayerEvent(_enemyID));
+
+        }
+
+        public virtual void OnDeath(DamageHitResult damageHitResult)
+        {
+            _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
             Recycle();
         }
 
@@ -30,8 +41,20 @@ namespace Popeye.Modules.Enemies
         {
             _hazardsFactory = hazardsFactory;
         }
-        public abstract void OnPlayerClose();
-        public abstract void OnPlayerFar();
+
+        public void SetEventSystem(IEventSystemService eventSystem)
+        {
+            _eventSystem = eventSystem;
+        }
+
+        public virtual void OnPlayerClose()
+        {
+            OnSeePlayer();
+        }
+        public virtual void OnPlayerFar()
+        {
+            
+        }
 
         public abstract void DieFromOrder();
     }
