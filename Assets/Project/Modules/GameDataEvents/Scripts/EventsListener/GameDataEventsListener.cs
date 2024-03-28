@@ -40,7 +40,7 @@ namespace Popeye.Modules.GameDataEvents
         }
 
 
-        private string MakeContentFromEventInfo(string eventName, string timeStamp, string sceneName, 
+        private string MakeContentFromEventData(string eventName, string timeStamp, string sceneName, 
             string position = "", string deathCause = "", string enemyType = "", 
             string actionType = "", string playerCurrentHealth = "")
         {
@@ -51,6 +51,37 @@ namespace Popeye.Modules.GameDataEvents
             return content;
         }
 
+        private void OnPlayerDeath(OnPlayerDeathEvent eventInfo)
+        {
+            PlayerDeathEventData eventData = 
+                new PlayerDeathEventData(GetNewGenericEventData(), eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: PlayerDeathEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                position: eventData.Position.ToString(),
+                deathCause: eventData.DamageHitName
+                );
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        private void OnPlayerTakeDamage(OnPlayerTakeDamageEvent eventInfo)
+        {
+            PlayerTakeDamageEventData eventData =
+                new PlayerTakeDamageEventData(GetNewGenericEventData(), eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: PlayerTakeDamageEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                position: eventData.Position.ToString(),
+                enemyType: eventData.DamageHitName
+                );
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
 
         private void OnEnemySeesPlayer(OnEnemySeesPlayerEvent eventInfo)
         {
@@ -58,10 +89,16 @@ namespace Popeye.Modules.GameDataEvents
                 new EnemySeesPlayerEventData(GetNewGenericEventData(), eventInfo);
 
 
-            string eventContent = "";
+            string eventContent = MakeContentFromEventData(
+                eventName:EnemySeesPlayerEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                enemyType: eventData.EnemyName);
             
             _eventsConsumer.AddEventContent(eventContent);
         }
+
+
         
         // ...
         
