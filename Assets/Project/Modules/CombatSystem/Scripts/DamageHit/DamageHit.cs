@@ -41,7 +41,10 @@ namespace Popeye.Modules.CombatSystem
 
         public string GetName()
         {
-            return _config.name;
+            string damageName = _config.name;
+            damageName = damageName.Replace("DamageHitConfig_", string.Empty);
+            
+            return damageName;
         }
     }
     
