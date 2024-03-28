@@ -9,10 +9,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         public struct OnRespawnFromDeathEvent { }
 
 
-        void DispatchOnTakeDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition, int currentHealth);
         void DispatchOnDiedEvent();
         void DispatchOnRespawnFromDeathEvent();
+        
         void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition);
+        void DispatchOnTakeDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition, int currentHealth);
+        void UpdateDispatchOnUpdateEvent(float deltaTime, Vector3 playerPosition);
 
 
     }

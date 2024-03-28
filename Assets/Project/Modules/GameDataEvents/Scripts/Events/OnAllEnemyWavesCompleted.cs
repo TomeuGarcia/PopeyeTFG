@@ -11,13 +11,13 @@ namespace Popeye.Modules.GameDataEvents
         }
     }
     
-    public class EnemyWaveEndEventData
+    public class AllEnemyWavesCompletedEventData
     {
         public const string NAME = "Enemy Wave End";
         public GenericEventData GenericEventData { get; private set; }
         public int PlayerCurrentHealth { get; private set; }
 
-        public EnemyWaveEndEventData(GenericEventData genericEventData, OnAllEnemyWavesCompletedEvent eventInfo)
+        public AllEnemyWavesCompletedEventData(GenericEventData genericEventData, OnAllEnemyWavesCompletedEvent eventInfo)
         {
             GenericEventData = genericEventData;
             PlayerCurrentHealth = eventInfo.PlayerCurrentHealth;
