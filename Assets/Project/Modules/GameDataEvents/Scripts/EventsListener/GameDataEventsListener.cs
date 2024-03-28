@@ -83,7 +83,7 @@ namespace Popeye.Modules.GameDataEvents
                 sceneName: eventData.GenericEventData.SceneName,
                 position: eventData.Position.ToString(),
                 playerHealthCurrent: eventData.CurrentHealth.ToString(),
-                playerHealthBeforeEvent: "" /*TODO*/);
+                playerHealthBeforeEvent: eventData.HealthBeforeHealing.ToString());
 
             _eventsConsumer.AddEventContent(eventContent);
         }
