@@ -1,6 +1,7 @@
 using System;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerAnchor.Anchor;
@@ -561,19 +562,21 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _staminaSystem.HasMaxStamina();
         }
         
-        public void OnDamageTaken()
+        public void OnDamageTaken(DamageHitResult damageHitResult)
         {
             PlayerView.PlayTakeDamageAnimation();
             _playerAudio.PlayTakeDamageSound();
 
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
+            
+            _eventsDispatcher.DispatchOnTakeDamageEvent(damageHitResult, Position, _playerHealth.GetCurrentHealth());
         }
 
-        public void OnKilledByDamageTaken()
+        public void OnKilledByDamageTaken(DamageHitResult damageHitResult)
         {
             _playerAudio.PlayTakeDamageSound();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
-            _eventsDispatcher.DispatchOnDiedEvent();
+            _eventsDispatcher.DispatchOnDiedEvent(damageHitResult, Position);
         }
 
         public void OnHealed()

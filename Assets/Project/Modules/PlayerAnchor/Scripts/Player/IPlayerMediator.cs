@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
@@ -78,8 +79,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void SetInvulnerable(bool isInvulnerable);
         void SetInvulnerableForDuration(float duration);
 
-        void OnDamageTaken();
-        void OnKilledByDamageTaken();
+        void OnDamageTaken(DamageHitResult damageHitResult);
+        void OnKilledByDamageTaken(DamageHitResult damageHitResult);
         void OnHealed();
         void OnHealStart(float durationToComplete);
         void OnHealInterrupted();
