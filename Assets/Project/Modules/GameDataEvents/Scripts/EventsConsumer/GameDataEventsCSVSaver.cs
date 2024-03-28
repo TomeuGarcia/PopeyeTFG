@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Popeye.Modules.GameDataEvents
 {
-    public class GameDataEventsExcelSaver : IGameDataEventsConsumer
+    public class GameDataEventsCSVSaver : IGameDataEventsConsumer
     {
-        private GameDataEventsExcelSaverConfig _config;
+        private GameDataEventsCSVSaverConfig _config;
 
-        public GameDataEventsExcelSaver(GameDataEventsExcelSaverConfig config)
+        public GameDataEventsCSVSaver(GameDataEventsCSVSaverConfig config)
         {
             _config = config;
             OpenFile();
@@ -32,14 +32,12 @@ namespace Popeye.Modules.GameDataEvents
         {
             // TODO
         }
-        
 
-        public void AddEnemySeesPlayerEvent(EnemySeesPlayerEventData eventData)
+
+        public void AddEventContent(string eventContent)
         {
-            // TODO save to file
+            Debug.Log(eventContent);
             SaveData("TODO");
         }
-
-
     }
 }

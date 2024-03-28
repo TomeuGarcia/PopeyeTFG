@@ -8,6 +8,9 @@ namespace Popeye.Modules.GameDataEvents
         private readonly IGameDataEventsConsumer _eventsConsumer;
         private readonly IActiveSceneDataEventsProvider _activeSceneDataEventsProvider;
 
+        private const string CONTENT_SEPARATOR = ",";
+        
+
         public GameDataEventsListener(IEventSystemService eventSystemService, IGameDataEventsConsumer eventsConsumer,
             IActiveSceneDataEventsProvider activeSceneDataEventsProvider)
         {
@@ -37,12 +40,27 @@ namespace Popeye.Modules.GameDataEvents
         }
 
 
+        private string MakeContentFromEventInfo(string eventName, string timeStamp, string sceneName, 
+            string position = "", string deathCause = "", string enemyType = "", 
+            string actionType = "", string playerCurrentHealth = "")
+        {
+            string content = "";
+
+            content += eventName + CONTENT_SEPARATOR;
+
+            return content;
+        }
+
+
         private void OnEnemySeesPlayer(OnEnemySeesPlayerEvent eventInfo)
         {
             EnemySeesPlayerEventData eventData = 
                 new EnemySeesPlayerEventData(GetNewGenericEventData(), eventInfo);
+
+
+            string eventContent = "";
             
-            _eventsConsumer.AddEnemySeesPlayerEvent(eventData);
+            _eventsConsumer.AddEventContent(eventContent);
         }
         
         // ...

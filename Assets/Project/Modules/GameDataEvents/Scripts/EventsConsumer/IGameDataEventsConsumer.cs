@@ -2,6 +2,6 @@ namespace Popeye.Modules.GameDataEvents
 {
     public interface IGameDataEventsConsumer
     {
-        void AddEnemySeesPlayerEvent(EnemySeesPlayerEventData eventData);
+        void AddEventContent(string eventContent);
     }
 }

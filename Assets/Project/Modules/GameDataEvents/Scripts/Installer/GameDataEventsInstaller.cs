@@ -6,20 +6,20 @@ namespace Popeye.Modules.GameDataEvents
     public class GameDataEventsInstaller : MonoBehaviour
     {
         [SerializeField] private GameDataEventsDispatchTester _eventsDispatchTester;
-        [SerializeField] private GameDataEventsExcelSaverConfig _excelSaverConfig;
+        [SerializeField] private GameDataEventsCSVSaverConfig _csvSaverConfig;
         
         private GameDataEventsListener _eventsListener;
-        private GameDataEventsExcelSaver _gameDataEventsExcelSaver;
+        private GameDataEventsCSVSaver _gameDataEventsCSVSaver;
 
         public void Install(IEventSystemService eventSystemService)
         {
             IActiveSceneDataEventsProvider activeSceneDataEventsProvider = new TestingActiveSceneDataEventsProvider();
             
-            _gameDataEventsExcelSaver = 
-                new GameDataEventsExcelSaver(_excelSaverConfig);
+            _gameDataEventsCSVSaver = 
+                new GameDataEventsCSVSaver(_csvSaverConfig);
                 
             _eventsListener = 
-                new GameDataEventsListener(eventSystemService, _gameDataEventsExcelSaver, activeSceneDataEventsProvider);
+                new GameDataEventsListener(eventSystemService, _gameDataEventsCSVSaver, activeSceneDataEventsProvider);
             
             _eventsListener.StartListening();
             
@@ -29,7 +29,7 @@ namespace Popeye.Modules.GameDataEvents
         public void Uninstall()
         {
             _eventsListener.StopListening();
-            _gameDataEventsExcelSaver.Finish();
+            _gameDataEventsCSVSaver.Finish();
         }
     }
 }
