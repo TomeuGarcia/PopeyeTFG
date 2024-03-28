@@ -41,30 +41,14 @@ namespace Popeye.Modules.GameDataEvents
 
 
         private string MakeContentFromEventData(string eventName, string timeStamp, string sceneName, 
-            string position = "", string deathCause = "", string enemyType = "", 
-            string actionType = "", string playerCurrentHealth = "")
+            string position = "", string damageCause = "", string enemyType = "", 
+            string actionType = "", string playerCurrentHealth = "", string wasKilled = "")
         {
             string content = "";
 
             content += eventName + CONTENT_SEPARATOR;
 
             return content;
-        }
-
-        private void OnPlayerDeath(OnPlayerDeathEvent eventInfo)
-        {
-            PlayerDeathEventData eventData = 
-                new PlayerDeathEventData(GetNewGenericEventData(), eventInfo);
-
-            string eventContent = MakeContentFromEventData(
-                eventName: PlayerDeathEventData.NAME,
-                timeStamp: eventData.GenericEventData.TimeStamp,
-                sceneName: eventData.GenericEventData.SceneName,
-                position: eventData.Position.ToString(),
-                deathCause: eventData.DamageHitName
-                );
-
-            _eventsConsumer.AddEventContent(eventContent);
         }
 
         private void OnPlayerTakeDamage(OnPlayerTakeDamageEvent eventInfo)
@@ -77,7 +61,9 @@ namespace Popeye.Modules.GameDataEvents
                 timeStamp: eventData.GenericEventData.TimeStamp,
                 sceneName: eventData.GenericEventData.SceneName,
                 position: eventData.Position.ToString(),
-                enemyType: eventData.DamageHitName
+                damageCause: eventData.DamageHitName,
+                playerCurrentHealth: eventData.CurrentHealth.ToString(),
+                wasKilled: "" //TODO
                 );
 
             _eventsConsumer.AddEventContent(eventContent);
@@ -98,7 +84,68 @@ namespace Popeye.Modules.GameDataEvents
             _eventsConsumer.AddEventContent(eventContent);
         }
 
+        private void OnPlayerAction(OnPlayerActionEvent eventInfo)
+        {
+            PlayerActionEventData eventData =
+                new PlayerActionEventData(GetNewGenericEventData(),eventInfo);
 
+
+            string eventContent = MakeContentFromEventData(
+                eventName: PlayerActionEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                actionType: eventData.ActionName);
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        private void OnWaveStart(OnEnemyWaveStartEvent eventInfo)
+        {
+            EnemyWaveStartEventData eventData =
+                new EnemyWaveStartEventData(GetNewGenericEventData(),eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: EnemyWaveStartEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                playerCurrentHealth: eventData.PlayerCurrentHealth.ToString());
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        //On_Enemy_All_Waves_End
+
+        private void PlayerUpdate(OnPlayerUpdateEvent eventInfo)
+        {
+            PlayerUpdateEventData eventData =
+                new PlayerUpdateEventData(GetNewGenericEventData(), eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: PlayerUpdateEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                position:  eventData.Position.ToString());
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        private void OnEnemyTakeDamage(OnEnemyTakeDamageEvent eventInfo)
+        {
+            EnemyTakeDamageEventData eventData =
+                new EnemyTakeDamageEventData(GetNewGenericEventData(),eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: EnemyTakeDamageEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                enemyType: eventData.EnemyName,
+                actionType: eventData.DamageHitName,
+                wasKilled: "" /*TODO*/);
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        //OnPlayerRestEvent
         
         // ...
         
