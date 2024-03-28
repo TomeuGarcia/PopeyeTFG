@@ -107,13 +107,23 @@ namespace Popeye.Modules.GameDataEvents
             string eventContent = MakeContentFromEventData(
                 eventName: EnemyWaveStartEventData.NAME,
                 timeStamp: eventData.GenericEventData.TimeStamp,
-                sceneName: eventData.GenericEventData.SceneName,
-                playerCurrentHealth: eventData.PlayerCurrentHealth.ToString());
+                sceneName: eventData.GenericEventData.SceneName);
 
             _eventsConsumer.AddEventContent(eventContent);
         }
 
-        //On_Enemy_All_Waves_End
+        private void OnAllEnemyWavesCompleted(OnAllEnemyWavesCompletedEvent eventInfo)
+        {
+            AllEnemyWavesCompletedEventData eventData =
+                new AllEnemyWavesCompletedEventData(GetNewGenericEventData(),eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: AllEnemyWavesCompletedEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName);
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
 
         private void PlayerUpdate(OnPlayerUpdateEvent eventInfo)
         {
