@@ -39,7 +39,7 @@ public class TurretHealth : MonoBehaviour, IDamageHitTarget
             _enemyVisuals.PlayHitEffects(_healthSystem.GetValuePer1Ratio(), damageHit);
         }
 
-        return new DamageHitResult(this, gameObject, receivedDamage, Position);
+        return new DamageHitResult(this, gameObject, damageHit, receivedDamage, Position);
     }
 
     public bool CanBeDamaged(DamageHit damageHit)

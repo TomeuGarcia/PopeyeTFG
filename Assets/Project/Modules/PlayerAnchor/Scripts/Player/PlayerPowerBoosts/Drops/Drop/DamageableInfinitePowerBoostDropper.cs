@@ -25,7 +25,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops
         {
             _dropFactory.Create(transform.position, Quaternion.identity, _dropConfig);
             
-            return new DamageHitResult(this, gameObject, damageHit.Damage, transform.position);
+            return new DamageHitResult(this, gameObject, damageHit, damageHit.Damage, transform.position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)
