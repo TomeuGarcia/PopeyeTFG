@@ -42,7 +42,7 @@ namespace Popeye.Modules.GameDataEvents
 
         private string MakeContentFromEventData(string eventName, string timeStamp, string sceneName, 
             string position = "", string damageCause = "", string enemyType = "", 
-            string actionType = "", string playerCurrentHealth = "", string wasKilled = "")
+            string actionType = "", string playerHealthCurrent = "", string playerHealthBeforeEvent = "", string wasKilled = "")
         {
             string content = "";
 
@@ -50,6 +50,9 @@ namespace Popeye.Modules.GameDataEvents
 
             return content;
         }
+
+
+        //OnPlayerRestEvent TODO when implemented rest mechanic
 
         private void OnPlayerTakeDamage(OnPlayerTakeDamageEvent eventInfo)
         {
@@ -62,9 +65,54 @@ namespace Popeye.Modules.GameDataEvents
                 sceneName: eventData.GenericEventData.SceneName,
                 position: eventData.Position.ToString(),
                 damageCause: eventData.DamageHitName,
-                playerCurrentHealth: eventData.CurrentHealth.ToString(),
-                wasKilled: "" //TODO
+                playerHealthCurrent: eventData.CurrentHealth.ToString(),
+                wasKilled: eventData.WasKilled.ToString()
                 );
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        private void OnPlayerHeal(OnPlayerHealEvent eventInfo)
+        {
+            PlayerHealEventData eventData =
+                new PlayerHealEventData(GetNewGenericEventData(), eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: PlayerHealEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                position: eventData.Position.ToString(),
+                playerHealthCurrent: eventData.CurrentHealth.ToString(),
+                playerHealthBeforeEvent: "" /*TODO*/);
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        private void OnPlayerUpdate(OnPlayerUpdateEvent eventInfo)
+        {
+            PlayerUpdateEventData eventData =
+                new PlayerUpdateEventData(GetNewGenericEventData(), eventInfo);
+
+            string eventContent = MakeContentFromEventData(
+                eventName: PlayerUpdateEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                position: eventData.Position.ToString());
+
+            _eventsConsumer.AddEventContent(eventContent);
+        }
+
+        private void OnPlayerAction(OnPlayerActionEvent eventInfo)
+        {
+            PlayerActionEventData eventData =
+                new PlayerActionEventData(GetNewGenericEventData(), eventInfo);
+
+
+            string eventContent = MakeContentFromEventData(
+                eventName: PlayerActionEventData.NAME,
+                timeStamp: eventData.GenericEventData.TimeStamp,
+                sceneName: eventData.GenericEventData.SceneName,
+                actionType: eventData.ActionName);
 
             _eventsConsumer.AddEventContent(eventContent);
         }
@@ -84,20 +132,7 @@ namespace Popeye.Modules.GameDataEvents
             _eventsConsumer.AddEventContent(eventContent);
         }
 
-        private void OnPlayerAction(OnPlayerActionEvent eventInfo)
-        {
-            PlayerActionEventData eventData =
-                new PlayerActionEventData(GetNewGenericEventData(),eventInfo);
-
-
-            string eventContent = MakeContentFromEventData(
-                eventName: PlayerActionEventData.NAME,
-                timeStamp: eventData.GenericEventData.TimeStamp,
-                sceneName: eventData.GenericEventData.SceneName,
-                actionType: eventData.ActionName);
-
-            _eventsConsumer.AddEventContent(eventContent);
-        }
+        
 
         private void OnWaveStart(OnEnemyWaveStartEvent eventInfo)
         {
@@ -125,19 +160,7 @@ namespace Popeye.Modules.GameDataEvents
             _eventsConsumer.AddEventContent(eventContent);
         }
 
-        private void PlayerUpdate(OnPlayerUpdateEvent eventInfo)
-        {
-            PlayerUpdateEventData eventData =
-                new PlayerUpdateEventData(GetNewGenericEventData(), eventInfo);
-
-            string eventContent = MakeContentFromEventData(
-                eventName: PlayerUpdateEventData.NAME,
-                timeStamp: eventData.GenericEventData.TimeStamp,
-                sceneName: eventData.GenericEventData.SceneName,
-                position:  eventData.Position.ToString());
-
-            _eventsConsumer.AddEventContent(eventContent);
-        }
+       
 
         private void OnEnemyTakeDamage(OnEnemyTakeDamageEvent eventInfo)
         {
@@ -150,12 +173,12 @@ namespace Popeye.Modules.GameDataEvents
                 sceneName: eventData.GenericEventData.SceneName,
                 enemyType: eventData.EnemyName,
                 actionType: eventData.DamageHitName,
-                wasKilled: "" /*TODO*/);
+                wasKilled: eventData.WasKilled.ToString());
 
             _eventsConsumer.AddEventContent(eventContent);
         }
 
-        //OnPlayerRestEvent
+        
         
         // ...
         
