@@ -17,14 +17,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
 
         public void DispatchOnTakeDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition, int currentHealth)
         {
-            _eventSystemService.Dispatch(new OnPlayerTakeDamageEvent(playerPosition, damageHitResult.DamageHit, currentHealth));
+            _eventSystemService.Dispatch(new OnPlayerTakeDamageEvent(playerPosition, damageHitResult, currentHealth));
         }
 
-        public void DispatchOnDiedEvent(DamageHitResult damageHitResult, Vector3 playerPosition)
+        public void DispatchOnDiedEvent()
         {
             _eventSystemService.Dispatch(new IPlayerEventsDispatcher.OnDieEvent());
-            
-            _eventSystemService.Dispatch(new OnPlayerDeathEvent(playerPosition, damageHitResult.DamageHit));
         }
 
         public void DispatchOnRespawnFromDeathEvent()

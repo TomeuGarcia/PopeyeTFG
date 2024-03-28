@@ -1,11 +1,11 @@
 
 namespace Popeye.Modules.GameDataEvents
 {
-    public struct OnEnemyWaveEndEvent
+    public struct OnAllEnemyWavesCompletedEvent
     {
         public int PlayerCurrentHealth { get; private set; }
 
-        public OnEnemyWaveEndEvent(int playerCurrentHealth)
+        public OnAllEnemyWavesCompletedEvent(int playerCurrentHealth)
         {
             PlayerCurrentHealth = playerCurrentHealth;
         }
@@ -17,7 +17,7 @@ namespace Popeye.Modules.GameDataEvents
         public GenericEventData GenericEventData { get; private set; }
         public int PlayerCurrentHealth { get; private set; }
 
-        public EnemyWaveEndEventData(GenericEventData genericEventData, OnEnemyWaveEndEvent eventInfo)
+        public EnemyWaveEndEventData(GenericEventData genericEventData, OnAllEnemyWavesCompletedEvent eventInfo)
         {
             GenericEventData = genericEventData;
             PlayerCurrentHealth = eventInfo.PlayerCurrentHealth;
