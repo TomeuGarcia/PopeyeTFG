@@ -53,7 +53,7 @@ namespace Popeye.Modules.Enemies.Components
         {
             if (IsPlayerFarEnoughToAppear())
             {
-                _mediator.AppearAnimation();
+                
                 if (_outOfGround)
                 {
                     _mediator.LookAtPlayer(Time.deltaTime);
@@ -67,6 +67,10 @@ namespace Popeye.Modules.Enemies.Components
                     }
 
                     _timer += Time.deltaTime;
+                }
+                else
+                {
+                    _mediator.AppearAnimation();
                 }
             }
             if(!IsPlayerAtCloseDistance())
