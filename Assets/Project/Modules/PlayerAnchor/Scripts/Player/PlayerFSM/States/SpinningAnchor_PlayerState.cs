@@ -20,7 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.SpinningAnchorMoveSpeed);
             _blackboard.PlayerMediator.SetCanRotate(false);
 
-            _blackboard.PlayerMediator.StartSpinningAnchor(_blackboard.cameFromState == PlayerStates.MovingWithAnchor,
+            _blackboard.PlayerMediator.StartSpinningAnchor(_blackboard.CameFromState == PlayerStates.MovingWithAnchor,
                 _blackboard.spinAttackTowardsRight);
 
             _blackboard.spinAttackTowardsRight = false;

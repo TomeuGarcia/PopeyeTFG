@@ -117,6 +117,19 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float EnteringSpecialAttackDuration => _enteringSpecialAttackDuration;
         private float _extraSpeed = 0;
 
+        
+        [Header("COOLDOWNS")] 
+        [SerializeField, Range(0.0f, 10.0f)] private float _throwIntoPullCooldown = 0.2f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _rollIntoPullCooldown = 0.5f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _rollIntoDashCooldown = 0.5f;
+        
+        public float ThrowIntoPullCooldown => _throwIntoPullCooldown;
+        public float RollIntoPullCooldown => _rollIntoPullCooldown;
+        public float RollIntoDashCooldown => _rollIntoDashCooldown;
+        
+        
+        
+        
         public delegate void PlayerStatesEvent();
         public PlayerStatesEvent OnSpeedValueChanged;
 

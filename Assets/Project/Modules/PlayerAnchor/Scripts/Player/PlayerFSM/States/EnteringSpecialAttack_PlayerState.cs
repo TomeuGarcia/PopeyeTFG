@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _endNextState = _blackboard.cameFromState;
+            _endNextState = _blackboard.CameFromState;
             _wasInterrupted = false;
 
             float durationToComplete = _blackboard.PlayerStatesConfig.EnteringSpecialAttackDuration;

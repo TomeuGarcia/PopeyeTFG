@@ -97,11 +97,11 @@ namespace Popeye.Modules.Enemies
         }
         public override Vector3 Position { get; }
         
-        public override void OnDeath(DamageHit damageHit)
+        public override void OnDeath(DamageHitResult damageHitResult)
         {
             _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
             _turretMind.Die();
-            _enemyVisuals.PlayDeathEffects(damageHit);
+            _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
         }
 
         public void LookAtPlayer(float delta)
@@ -125,6 +125,11 @@ namespace Popeye.Modules.Enemies
         public void SetVulnerable()
         {
             _enemyHealth.SetIsInvulnerable(false);
+        }
+
+        public void PlayerSeen()
+        {
+            OnSeePlayer();
         }
         
         public void SetInvulnerable()

@@ -7,6 +7,7 @@ using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
+using Popeye.Modules.GameDataEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Project.Modules.Enemies.General.Scripts.EnemySpwner.Audio;
 
@@ -121,12 +122,17 @@ namespace Popeye.Modules.Enemies.General
             {
                 OnAllWavesFinished?.Invoke();
                 _eventSystemService.Dispatch(new OnCompletedEvent { spawnerGameObject = gameObject });
+                
+                _eventSystemService.Dispatch(new OnAllEnemyWavesCompletedEvent());
             }
         }
 
         private async UniTask SpawnEnemyWave(EnemyWave enemyWave)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(enemyWave.DelayBeforeWaveSpawning));
+            
+            _eventSystemService.Dispatch(new OnEnemyWaveStartEvent());
+            
             
             for (int i = 0; i < enemyWave.SpawnSequence.Length; ++i)
             {

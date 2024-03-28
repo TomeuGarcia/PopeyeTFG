@@ -39,6 +39,13 @@ namespace Popeye.Modules.CombatSystem
             KnockbackHit.UpdateEndPosition(endPosition);
         }
 
+        public string GetName()
+        {
+            string damageName = _config.name;
+            damageName = damageName.Replace("DamageHitConfig_", string.Empty);
+            
+            return damageName;
+        }
     }
     
 }

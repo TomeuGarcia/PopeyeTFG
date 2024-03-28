@@ -161,14 +161,15 @@ namespace Popeye.Modules.Enemies
             return Position;
         }
         
-        public override void OnDeath(DamageHit damageHit)
+        public override void OnDeath(DamageHitResult damageHitResult)
         {
             Divide();
-            base.OnDeath(damageHit);
+            base.OnDeath(damageHitResult);
         }
 
         public override void OnPlayerClose()
         {
+            base.OnPlayerClose();
             StartChasing();
         }
 
