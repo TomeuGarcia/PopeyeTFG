@@ -28,6 +28,7 @@ namespace Popeye.Modules.Enemies
         public virtual void OnSeePlayer()
         {
             _eventSystem.Dispatch(new OnEnemySeesPlayerEvent(_enemyID));
+            Debug.Log(_enemyID + " Has seen the player");
 
         }
 
