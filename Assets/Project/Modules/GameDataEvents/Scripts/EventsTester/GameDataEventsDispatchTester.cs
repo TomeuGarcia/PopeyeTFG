@@ -14,7 +14,6 @@ namespace Popeye.Modules.GameDataEvents
         private IEventSystemService _eventSystemService;
         
         
-        
         [Header("ENEMY SEES PLAYER")] 
         [SerializeField] private EnemySeesPlayerParameters _enemySeesPlayerParameters;
         [System.Serializable]

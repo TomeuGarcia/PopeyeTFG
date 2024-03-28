@@ -17,6 +17,8 @@ namespace Popeye.Modules.GameDataEvents
             _eventSystemService = eventSystemService;
             _eventsConsumer = eventsConsumer;
             _activeSceneDataEventsProvider = activeSceneDataEventsProvider;
+            
+            MakeContentHeaders();
         }
 
 
@@ -26,6 +28,7 @@ namespace Popeye.Modules.GameDataEvents
             _eventSystemService.Subscribe<OnPlayerHealEvent>(OnPlayerHeal);
             _eventSystemService.Subscribe<OnPlayerUpdateEvent>(OnPlayerUpdate);
             _eventSystemService.Subscribe<OnPlayerActionEvent>(OnPlayerAction);
+            
             _eventSystemService.Subscribe<OnEnemySeesPlayerEvent>(OnEnemySeesPlayer);
             _eventSystemService.Subscribe<OnEnemyWaveStartEvent>(OnEnemyWaveStart);
             _eventSystemService.Subscribe<OnAllEnemyWavesCompletedEvent>(OnAllEnemyWavesCompleted);
@@ -38,6 +41,7 @@ namespace Popeye.Modules.GameDataEvents
             _eventSystemService.Unsubscribe<OnPlayerHealEvent>(OnPlayerHeal);
             _eventSystemService.Unsubscribe<OnPlayerUpdateEvent>(OnPlayerUpdate);
             _eventSystemService.Unsubscribe<OnPlayerActionEvent>(OnPlayerAction);
+            
             _eventSystemService.Unsubscribe<OnEnemySeesPlayerEvent>(OnEnemySeesPlayer);
             _eventSystemService.Unsubscribe<OnEnemyWaveStartEvent>(OnEnemyWaveStart);
             _eventSystemService.Unsubscribe<OnAllEnemyWavesCompletedEvent>(OnAllEnemyWavesCompleted);
@@ -53,8 +57,9 @@ namespace Popeye.Modules.GameDataEvents
 
 
         private string MakeContentFromEventData(string eventName, string timeStamp, string sceneName, 
-            string position = "", string damageCause = "", string enemyType = "", 
-            string actionType = "", string playerHealthCurrent = "", string playerHealthBeforeEvent = "", string wasKilled = "")
+            string position = " , , ", string damageCause = " ", string enemyType = " ", 
+            string playerActionType = " ", string playerHealthCurrent = " ", string playerHealthBeforeEvent = " ", 
+            string wasKilled = " ")
         {
             string content = "";
 
@@ -64,12 +69,30 @@ namespace Popeye.Modules.GameDataEvents
             content += position + CONTENT_SEPARATOR;
             content += damageCause + CONTENT_SEPARATOR;
             content += enemyType + CONTENT_SEPARATOR;
-            content += actionType + CONTENT_SEPARATOR;
+            content += playerActionType + CONTENT_SEPARATOR;
             content += playerHealthCurrent + CONTENT_SEPARATOR;
             content += playerHealthBeforeEvent + CONTENT_SEPARATOR;
             content += wasKilled;
 
             return content;
+        }
+        
+        private void MakeContentHeaders()
+        {
+            string content = MakeContentFromEventData(
+                eventName: "Event Name",
+                timeStamp: "Time Stamp",
+                sceneName: "Scene Name",
+                position: "PosX, PosY, PosZ",
+                damageCause: "Damage Cause",
+                enemyType: "Enemy Type",
+                playerActionType: "Player Action Type",
+                playerHealthCurrent: "Current Player Health",
+                playerHealthBeforeEvent: "Player Health Before Event",
+                wasKilled: "Was Killed"
+            );
+            
+            _eventsConsumer.AddEventContent(content);
         }
 
 
@@ -84,7 +107,7 @@ namespace Popeye.Modules.GameDataEvents
                 eventName: PlayerTakeDamageEventData.NAME,
                 timeStamp: eventData.GenericEventData.TimeStamp,
                 sceneName: eventData.GenericEventData.SceneName,
-                position: eventData.Position.ToString(),
+                position: eventData.Position.ToStringParsed(),
                 damageCause: eventData.DamageHitName,
                 playerHealthCurrent: eventData.CurrentHealth.ToString(),
                 wasKilled: eventData.WasKilled.ToString()
@@ -102,7 +125,7 @@ namespace Popeye.Modules.GameDataEvents
                 eventName: PlayerHealEventData.NAME,
                 timeStamp: eventData.GenericEventData.TimeStamp,
                 sceneName: eventData.GenericEventData.SceneName,
-                position: eventData.Position.ToString(),
+                position: eventData.Position.ToStringParsed(),
                 playerHealthCurrent: eventData.CurrentHealth.ToString(),
                 playerHealthBeforeEvent: eventData.HealthBeforeHealing.ToString());
 
@@ -118,7 +141,7 @@ namespace Popeye.Modules.GameDataEvents
                 eventName: PlayerUpdateEventData.NAME,
                 timeStamp: eventData.GenericEventData.TimeStamp,
                 sceneName: eventData.GenericEventData.SceneName,
-                position: eventData.Position.ToString());
+                position: eventData.Position.ToStringParsed());
 
             _eventsConsumer.AddEventContent(eventContent);
         }
@@ -133,7 +156,7 @@ namespace Popeye.Modules.GameDataEvents
                 eventName: PlayerActionEventData.NAME,
                 timeStamp: eventData.GenericEventData.TimeStamp,
                 sceneName: eventData.GenericEventData.SceneName,
-                actionType: eventData.ActionName);
+                playerActionType: eventData.ActionName);
 
             _eventsConsumer.AddEventContent(eventContent);
         }
@@ -193,7 +216,7 @@ namespace Popeye.Modules.GameDataEvents
                 timeStamp: eventData.GenericEventData.TimeStamp,
                 sceneName: eventData.GenericEventData.SceneName,
                 enemyType: eventData.EnemyName,
-                actionType: eventData.DamageHitName,
+                damageCause: eventData.DamageHitName,
                 wasKilled: eventData.WasKilled.ToString());
 
             _eventsConsumer.AddEventContent(eventContent);

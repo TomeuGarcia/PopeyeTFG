@@ -13,7 +13,8 @@ namespace Popeye.Modules.GameDataEvents
 
         public void Install(IEventSystemService eventSystemService)
         {
-            IActiveSceneDataEventsProvider activeSceneDataEventsProvider = new TestingActiveSceneDataEventsProvider();
+            IActiveSceneDataEventsProvider activeSceneDataEventsProvider = 
+                new GameObjectSceneDataEventsProvider(gameObject);
             
             _gameDataEventsCSVSaver = 
                 new GameDataEventsCSVSaver(_csvSaverConfig);

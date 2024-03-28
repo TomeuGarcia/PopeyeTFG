@@ -14,14 +14,9 @@ namespace Popeye.Modules.GameDataEvents
         public GameDataEventsCSVSaver(GameDataEventsCSVSaverConfig config)
         {
             _config = config;
-            _dataToSave = new List<string>(10);
-
+            _dataToSave = new List<string>(300);
         }
-
-        private bool DataFileExists()
-        {
-            return File.Exists(_config.FilePathWithExtention);
-        }
+        
         public void Finish()
         {
             OpenFile();
@@ -31,20 +26,30 @@ namespace Popeye.Modules.GameDataEvents
 
         private void OpenFile()
         {
-            if(DataFileExists())
+            string directoryPath = _config.DirectoryPath;
+            string filePath = _config.FilePathWithExtension;
+
+            if (!Directory.Exists(directoryPath))
             {
-                File.Delete(_config.FilePathWithExtention);
+                Directory.CreateDirectory(directoryPath);
             }
-
-            _outWriter = File.CreateText(_config.FilePathWithExtention);
-
+            
+            if (File.Exists(filePath))
+            {
+                _outWriter = new StreamWriter(filePath, true);
+            }
+            else
+            {
+                _outWriter = File.CreateText(filePath);
+            }
         }
+        
         private void CloseFile()
         {
             _outWriter.Close();
         }
 
-        private void SaveData() //Saves all data stored in _dataToSave at once
+        private void SaveData()
         {
             foreach(string dataRow in _dataToSave) 
             { 

@@ -1,5 +1,10 @@
+using NaughtyAttributes;
 using Popeye.ProjectHelpers;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Popeye.Modules.GameDataEvents
 {
@@ -13,8 +18,21 @@ namespace Popeye.Modules.GameDataEvents
         [SerializeField] private string _fileExtension;
 
         public bool LogToConsole =>  _logToConsole;
-        public string FilePath =>  Application.dataPath + _filePath + _fileName;
-        public string FilePathWithExtention => FilePath + _fileExtension;
+        
+        private string DirectoryPathBuild =>  Application.streamingAssetsPath;
+        private string DirectoryPathProject =>  Application.dataPath;
+        public string DirectoryPath =>  DirectoryPathBuild + _filePath;
+        public string FilePath =>  DirectoryPath + _fileName;
+        public string FilePathWithExtension => FilePath + _fileExtension;
+
+        
+#if UNITY_EDITOR
+        [Button()]
+        private void ShowInFolder()
+        {
+            EditorUtility.RevealInFinder(DirectoryPath);
+        }
+#endif
         
     }
 }

@@ -586,6 +586,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerAudio.PlayTakeDamageSound();
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
             _eventsDispatcher.DispatchOnDiedEvent();
+        
+            _eventsDispatcher.DispatchOnTakeDamageEvent(damageHitResult, Position, _playerHealth.GetCurrentHealth());
         }
 
         public void OnHealUsed(int healthBeforeHealing, int currentHealth)

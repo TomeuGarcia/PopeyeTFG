@@ -14,7 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         public PlayerEventsDispatcher(IEventSystemService eventSystemService)
         {
             _eventSystemService = eventSystemService;
-            _updateTimer = new Timer(0.5f);
+            _updateTimer = new Timer(1.0f);
         }
 
 
