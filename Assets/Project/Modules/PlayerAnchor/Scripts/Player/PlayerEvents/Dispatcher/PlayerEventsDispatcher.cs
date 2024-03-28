@@ -40,7 +40,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _eventSystemService.Dispatch(new OnPlayerTakeDamageEvent(playerPosition, damageHitResult, currentHealth));
         }
 
-        public void UpdateDispatchOnUpdateEvent(float deltaTime, Vector3 playerPosition)
+        public void DispatchOnHealEvent(Vector3 playerPosition, int currentHealth)
+        {
+            _eventSystemService.Dispatch(new OnPlayerHealEvent(playerPosition, currentHealth));
+        }
+
+        public void Update(float deltaTime, Vector3 playerPosition)
         {
             _updateTimer.Update(deltaTime);
             if (_updateTimer.HasFinished())

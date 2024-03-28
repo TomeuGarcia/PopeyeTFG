@@ -136,6 +136,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void Update()
         {
+            _eventsDispatcher.Update(Time.deltaTime, Position);
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
@@ -589,7 +590,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void OnHealUsed()
         {
-            _eventsDispatcher.DispatchOnStartActionEvent("On Heal Used", Position);
+            _eventsDispatcher.DispatchOnHealEvent(Position, _playerHealth.GetCurrentHealth());
         }
         public void OnHealed()
         {
