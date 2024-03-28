@@ -97,6 +97,7 @@ namespace Popeye.Modules.Enemies
         public override Vector3 Position { get; }
         public override void OnPlayerClose()
         {
+            base.OnPlayerClose();
             StartChasing();
         }
         public virtual void DeactivateNavigation()
@@ -116,16 +117,16 @@ namespace Popeye.Modules.Enemies
         {
             _shieldedMind.Die();
         }
-        public override void OnDeath(DamageHit damageHit)
+        public override void OnDeath(DamageHitResult damageHitResult)
         {
             _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
-            _enemyVisuals.PlayDeathEffects(damageHit);
+            _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
             _shieldedMind.Die();
         }
 
-        public override void OnHit(DamageHit damageHit)
+        public override void OnHit(DamageHitResult damageHitResult)
         {
-            base.OnHit(damageHit);
+            base.OnHit(damageHitResult);
             _shieldedStun.CancellStun();
         }
 

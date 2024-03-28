@@ -38,17 +38,15 @@ namespace Popeye.Modules.Enemies.Components
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
             int receivedDamage = HealthSystem.TakeDamage(damageHit.Damage);
-            
+            DamageHitResult hitResult = new DamageHitResult(this, gameObject, damageHit, receivedDamage, _mediator.Position);
+            _mediator.OnHit(hitResult);
             if (IsDead())
             {
-                _mediator.OnDeath(damageHit);
-            }
-            else
-            {
-                _mediator.OnHit(damageHit);
+                _mediator.OnDeath(hitResult);
             }
 
-            return new DamageHitResult(this, gameObject, damageHit, receivedDamage, _mediator.Position);
+
+            return hitResult;
         }
 
         public bool CanBeDamaged(DamageHit damageHit)

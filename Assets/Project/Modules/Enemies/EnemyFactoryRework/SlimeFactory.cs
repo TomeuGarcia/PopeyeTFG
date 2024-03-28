@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.Slime;
@@ -48,6 +49,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             slimeMediator.SetBoostDropFactory(ServiceLocator.Instance.GetService<IPowerBoostDropFactory>());
             slimeMediator.SetSlimeSize(slimeSizeID);
             slimeMediator.SetPlayerTransform(playerTransform);
+            slimeMediator.SetEventSystem(ServiceLocator.Instance.GetService<IEventSystemService>());
         }
         public SlimeMediator[] CreateFromParent(SlimeMindEnemy ownerMind,SlimeMediator parentSlimeMediator,
             Vector3 position,Quaternion rotation)

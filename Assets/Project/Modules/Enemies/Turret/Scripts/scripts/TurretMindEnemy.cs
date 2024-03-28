@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Hazards;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Pool;
 
 namespace Popeye.Modules.Enemies
@@ -55,6 +57,7 @@ namespace Popeye.Modules.Enemies
         {
             base.InitAfterSpawn(hazardFactory);
             _turretMediator.SetHazardFactory(hazardFactory);
+            _turretMediator.SetEventSystem(ServiceLocator.Instance.GetService<IEventSystemService>());
             InitTurret();
         }
 
