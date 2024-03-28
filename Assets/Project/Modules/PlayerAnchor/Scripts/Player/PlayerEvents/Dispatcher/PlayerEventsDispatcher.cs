@@ -11,10 +11,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         private readonly IEventSystemService _eventSystemService;
         private readonly Timer _updateTimer;
 
-        public PlayerEventsDispatcher(IEventSystemService eventSystemService, float updateFrequency)
+        public PlayerEventsDispatcher(IEventSystemService eventSystemService)
         {
             _eventSystemService = eventSystemService;
-            _updateTimer = new Timer(updateFrequency);
+            _updateTimer = new Timer(0.5f);
         }
 
 
@@ -40,9 +40,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _eventSystemService.Dispatch(new OnPlayerTakeDamageEvent(playerPosition, damageHitResult, currentHealth));
         }
 
-        public void DispatchOnHealEvent(Vector3 playerPosition, int currentHealth)
+        public void DispatchOnHealEvent(Vector3 playerPosition, int currentHealth, int healthBeforeHealing)
         {
-            _eventSystemService.Dispatch(new OnPlayerHealEvent(playerPosition, currentHealth));
+            _eventSystemService.Dispatch(new OnPlayerHealEvent(playerPosition, currentHealth, healthBeforeHealing));
         }
 
         public void Update(float deltaTime, Vector3 playerPosition)
