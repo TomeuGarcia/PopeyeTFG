@@ -22,14 +22,26 @@ namespace Popeye.Modules.GameDataEvents
 
         public void StartListening()
         {
+            _eventSystemService.Subscribe<OnPlayerTakeDamageEvent>(OnPlayerTakeDamage);
+            _eventSystemService.Subscribe<OnPlayerHealEvent>(OnPlayerHeal);
+            _eventSystemService.Subscribe<OnPlayerUpdateEvent>(OnPlayerUpdate);
+            _eventSystemService.Subscribe<OnPlayerActionEvent>(OnPlayerAction);
             _eventSystemService.Subscribe<OnEnemySeesPlayerEvent>(OnEnemySeesPlayer);
-            // ...
+            _eventSystemService.Subscribe<OnEnemyWaveStartEvent>(OnEnemyWaveStart);
+            _eventSystemService.Subscribe<OnAllEnemyWavesCompletedEvent>(OnAllEnemyWavesCompleted);
+            _eventSystemService.Subscribe<OnEnemyTakeDamageEvent>(OnEnemyTakeDamage);
         }
         
         public void StopListening()
         {
+            _eventSystemService.Unsubscribe<OnPlayerTakeDamageEvent>(OnPlayerTakeDamage);
+            _eventSystemService.Unsubscribe<OnPlayerHealEvent>(OnPlayerHeal);
+            _eventSystemService.Unsubscribe<OnPlayerUpdateEvent>(OnPlayerUpdate);
+            _eventSystemService.Unsubscribe<OnPlayerActionEvent>(OnPlayerAction);
             _eventSystemService.Unsubscribe<OnEnemySeesPlayerEvent>(OnEnemySeesPlayer);
-            // ...
+            _eventSystemService.Unsubscribe<OnEnemyWaveStartEvent>(OnEnemyWaveStart);
+            _eventSystemService.Unsubscribe<OnAllEnemyWavesCompletedEvent>(OnAllEnemyWavesCompleted);
+            _eventSystemService.Unsubscribe<OnEnemyTakeDamageEvent>(OnEnemyTakeDamage);
         }
 
 
@@ -134,7 +146,7 @@ namespace Popeye.Modules.GameDataEvents
 
         
 
-        private void OnWaveStart(OnEnemyWaveStartEvent eventInfo)
+        private void OnEnemyWaveStart(OnEnemyWaveStartEvent eventInfo)
         {
             EnemyWaveStartEventData eventData =
                 new EnemyWaveStartEventData(GetNewGenericEventData(),eventInfo);
