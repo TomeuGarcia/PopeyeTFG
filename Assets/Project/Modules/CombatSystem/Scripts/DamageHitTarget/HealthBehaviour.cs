@@ -34,7 +34,7 @@ namespace Popeye.Modules.CombatSystem
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
             int receivedDamage = HealthSystem.TakeDamage(damageHit.Damage);
-            DamageHitResult damageHitResult = new DamageHitResult(this, gameObject, receivedDamage,
+            DamageHitResult damageHitResult = new DamageHitResult(this, gameObject, damageHit, receivedDamage,
                 Position);
             
             if (IsDead())

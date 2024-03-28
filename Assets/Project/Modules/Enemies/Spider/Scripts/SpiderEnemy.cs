@@ -176,7 +176,7 @@ namespace Popeye.Modules.Enemies
             
             StartTakeDamageAnimation().Forget();
 
-            return new DamageHitResult(this, gameObject, receivedDamage, Position);
+            return new DamageHitResult(this, gameObject, damageHit, receivedDamage, Position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)

@@ -39,6 +39,10 @@ namespace Popeye.Modules.CombatSystem
             KnockbackHit.UpdateEndPosition(endPosition);
         }
 
+        public string GetName()
+        {
+            return _config.name;
+        }
     }
     
 }

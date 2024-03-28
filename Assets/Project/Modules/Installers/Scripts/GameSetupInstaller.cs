@@ -3,6 +3,7 @@ using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameDataEvents;
 using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Scripts.Collisions;
@@ -31,6 +32,9 @@ public class GameSetupInstaller : MonoBehaviour
 
     [Header("GAME REFERENCES")] 
     [SerializeField] private GameReferencesInstaller _gameReferencesInstaller;
+    
+    [Header("GAME REFERENCES")] 
+    [SerializeField] private GameDataEventsInstaller _gameDataEventsInstaller;
     
     [Header("OTHER")]
     [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
@@ -79,6 +83,8 @@ public class GameSetupInstaller : MonoBehaviour
         
         _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
 
+        _gameDataEventsInstaller.Install(eventSystemService);
+        
 
         IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
         serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
@@ -98,6 +104,7 @@ public class GameSetupInstaller : MonoBehaviour
         serviceLocator.RemoveService<ICombatManager>();
         serviceLocator.RemoveService<ITimeFunctionalities>();
         
+        _gameDataEventsInstaller.Uninstall();
         _gameReferencesInstaller.Uninstall(serviceLocator);
         
         _playerAnchorInstaller.Uninstall();

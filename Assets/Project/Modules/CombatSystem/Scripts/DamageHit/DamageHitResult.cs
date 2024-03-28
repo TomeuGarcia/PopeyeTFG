@@ -8,6 +8,7 @@ namespace Popeye.Modules.CombatSystem
     {
         public IDamageHitTarget DamageHitTarget { get; private set; }
         public GameObject DamageHitTargetGameObject { get; private set; }
+        public DamageHit DamageHit { get; private set; }
         public int ReceivedDamage { get; private set; }
 
 
@@ -18,10 +19,11 @@ namespace Popeye.Modules.CombatSystem
 
 
         public DamageHitResult(IDamageHitTarget damageHitTarget, GameObject damageHitTargetGameObject,
-            int receivedDamage, Vector3 damagedHitTargetPosition)
+            DamageHit damageHit, int receivedDamage, Vector3 damagedHitTargetPosition)
         {
             DamageHitTarget = damageHitTarget;
             DamageHitTargetGameObject = damageHitTargetGameObject;
+            DamageHit = damageHit;
             ReceivedDamage = receivedDamage;
             DamagedHitTargetPosition = damagedHitTargetPosition;
         }
