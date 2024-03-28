@@ -54,6 +54,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void Heal(int healAmount)
         {
+            _playerMediator.OnHealUsed();
             _playerHealthBehaviour.Heal(healAmount);
         }
 

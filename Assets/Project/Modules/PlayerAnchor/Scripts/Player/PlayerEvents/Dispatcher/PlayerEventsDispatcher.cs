@@ -32,9 +32,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _eventSystemService.Dispatch(new IPlayerEventsDispatcher.OnRespawnFromDeathEvent());
         }
 
-        public void DispatchOnStartActionEvent(PlayerStates.PlayerStates playerState, Vector3 playerPosition)
+        public void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition)
         {
-            _eventSystemService.Dispatch(new OnPlayerActionEvent(playerPosition, playerState));
+            _eventSystemService.Dispatch(new OnPlayerActionEvent(playerPosition, actionName));
         }
     }
 }
