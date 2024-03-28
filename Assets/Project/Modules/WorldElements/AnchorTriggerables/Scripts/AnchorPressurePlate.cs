@@ -56,7 +56,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         {
             OnTakeAnchorHit();
     
-            return new DamageHitResult(this, gameObject, 0, Position);
+            return new DamageHitResult(this, gameObject, damageHit, 0, Position);
         }
     
         protected virtual bool CanBeTriggered(DamageHit damageHit)

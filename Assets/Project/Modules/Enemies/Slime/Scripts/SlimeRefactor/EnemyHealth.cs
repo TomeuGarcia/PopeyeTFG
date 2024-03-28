@@ -48,7 +48,7 @@ namespace Popeye.Modules.Enemies.Components
                 _mediator.OnHit(damageHit);
             }
 
-            return new DamageHitResult(this, gameObject, receivedDamage, _mediator.Position);
+            return new DamageHitResult(this, gameObject, damageHit, receivedDamage, _mediator.Position);
         }
 
         public bool CanBeDamaged(DamageHit damageHit)
