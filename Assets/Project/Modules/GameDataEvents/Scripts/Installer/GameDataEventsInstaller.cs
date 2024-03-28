@@ -5,6 +5,7 @@ namespace Popeye.Modules.GameDataEvents
 {
     public class GameDataEventsInstaller : MonoBehaviour
     {
+        [SerializeField] private GameDataEventsDispatchTester _eventsDispatchTester;
         [SerializeField] private GameDataEventsExcelSaverConfig _excelSaverConfig;
         
         private GameDataEventsListener _eventsListener;
@@ -21,6 +22,8 @@ namespace Popeye.Modules.GameDataEvents
                 new GameDataEventsListener(eventSystemService, _gameDataEventsExcelSaver, activeSceneDataEventsProvider);
             
             _eventsListener.StartListening();
+            
+            _eventsDispatchTester.Init(eventSystemService);
         }
         
         public void Uninstall()
