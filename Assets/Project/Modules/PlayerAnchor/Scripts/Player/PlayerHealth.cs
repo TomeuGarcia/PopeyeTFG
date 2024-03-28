@@ -54,8 +54,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void Heal(int healAmount)
         {
-            _playerMediator.OnHealUsed();
+            int healthBeforeHealing = GetCurrentHealth();
             _playerHealthBehaviour.Heal(healAmount);
+            
+            int currentHealth = GetCurrentHealth();
+            
+            _playerMediator.OnHealUsed(healthBeforeHealing, currentHealth);
         }
 
         public bool IsMaxHealth()

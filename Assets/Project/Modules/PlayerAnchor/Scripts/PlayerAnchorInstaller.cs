@@ -222,7 +222,7 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerGlobalEventsListener playerGlobalEventsListener = 
                 new PlayerGlobalEventsListener(eventSystemService, _player, _anchor);
             PlayerEventsDispatcher playerEventsDispatcher =
-                new PlayerEventsDispatcher(eventSystemService, 5.0f);
+                new PlayerEventsDispatcher(eventSystemService);
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 

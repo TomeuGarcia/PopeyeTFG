@@ -81,7 +81,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void OnDamageTaken(DamageHitResult damageHitResult);
         void OnKilledByDamageTaken(DamageHitResult damageHitResult);
-        void OnHealUsed();
+        void OnHealUsed(int healthBeforeHealing, int currentHealth);
         void OnHealed();
         void OnHealStart(float durationToComplete);
         void OnHealInterrupted();

@@ -588,9 +588,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _eventsDispatcher.DispatchOnDiedEvent();
         }
 
-        public void OnHealUsed()
+        public void OnHealUsed(int healthBeforeHealing, int currentHealth)
         {
-            _eventsDispatcher.DispatchOnHealEvent(Position, _playerHealth.GetCurrentHealth());
+            _eventsDispatcher.DispatchOnHealEvent(Position, currentHealth, healthBeforeHealing);
         }
         public void OnHealed()
         {
