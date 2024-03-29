@@ -393,7 +393,13 @@ namespace Popeye.Modules.PlayerAnchor
                 true
             );
             
-            ValueGate<InputAction> dashInputGate = new ValueGate<InputAction>(
+            ValueGate<InputAction> dashTowardsAnchorInputGate = new ValueGate<InputAction>(
+                playerAnchorInputControls.Land.Dash,
+                playerAnchorInputControls.Land.NullAction,
+                true
+            );
+            
+            ValueGate<InputAction> dashDroppingAnchorInputGate = new ValueGate<InputAction>(
                 playerAnchorInputControls.Land.Dash,
                 playerAnchorInputControls.Land.NullAction,
                 true
@@ -410,7 +416,8 @@ namespace Popeye.Modules.PlayerAnchor
                 eventSystemService,
                 playerAnchorInputControls,
                 pullInputGate,
-                dashInputGate,
+                dashTowardsAnchorInputGate,
+                dashDroppingAnchorInputGate,
                 specialAttackInputGate
             );
 

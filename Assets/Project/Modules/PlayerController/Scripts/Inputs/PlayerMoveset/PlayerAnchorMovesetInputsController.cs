@@ -15,10 +15,10 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         private readonly InputAction _pickUp;
         
-        private readonly InputAction _pull;
 
         private readonly IGateValueReader<InputAction> _pullGateValue;
-        private readonly IGateValueReader<InputAction> _dashGateValue;
+        private readonly IGateValueReader<InputAction> _dashTowardsAnchorGateValue;
+        private readonly IGateValueReader<InputAction> _dashDroppingAnchorGateValue;
         private readonly IGateValueReader<InputAction> _specialAttackGateValue;
         private readonly InputAction _kick;
         
@@ -34,7 +34,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             IEventSystemService eventSystemService,
             InputSystem.PlayerAnchorInputControls playerInputControls,
             IGateValueReader<InputAction> pullGateValue,
-            IGateValueReader<InputAction> dashGateValue,
+            IGateValueReader<InputAction> dashTowardsAnchorGateValue,
+            IGateValueReader<InputAction> dashDroppingAnchorGateValue,
             IGateValueReader<InputAction> specialAttackGateValue
             )
         {
@@ -55,7 +56,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             _pickUp = _playerInputControls.Land.PickUp;
 
             _pullGateValue = pullGateValue;
-            _dashGateValue = dashGateValue;
+            _dashTowardsAnchorGateValue = dashTowardsAnchorGateValue;
+            _dashDroppingAnchorGateValue = dashDroppingAnchorGateValue;
             _specialAttackGateValue = specialAttackGateValue;
             
             _kick = _playerInputControls.Land.Kick;
@@ -137,13 +139,17 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         public bool Pull_Pressed()
         {
-            return _pull.WasPressedThisFrame();
+            return _pullGateValue.GetValue().WasPressedThisFrame();
         }
 
 
-        public bool Dash_Pressed()
+        public bool DashTowardsAnchor_Pressed()
         {
-            return _dashGateValue.GetValue().WasPressedThisFrame();
+            return _dashTowardsAnchorGateValue.GetValue().WasPressedThisFrame();
+        }
+        public bool DashDroppingAnchor_Pressed()
+        {
+            return _dashDroppingAnchorGateValue.GetValue().WasPressedThisFrame();
         }
         
         
