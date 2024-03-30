@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3503689719901795780
+--- !u!114 &-1607006925472901934
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,14 +20,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AnchorGhostChain_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 3e87f388ede9b854085ffb527975bb3b,
+  m_Name: ExplodingChain_AbilityFragment_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: aec411823e90aa24186dd9013997032e,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -55,32 +55,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DispalcementMaxAmplitude: 0
-    - _DisplacementContinuity: 1.2
-    - _DisplacementSpeed: 2.5
-    - _GhostFadeT: 0.5
-    - _GhostInOutT: 0.5
-    - _GhostInToOutSharpness: 3
-    - _GhostInteriorToExteriorSharpness: 2
-    - _GhostMidT: 0.5
-    - _GhostSpread: 1.5
-    - _GhostSpreadDistance: 1.5
-    - _GhostToBaseSharpness: 1.2
-    - _GhostTransitionSharpness: 1.5
+    - _ExplodeDuration: 2
+    - _ExplodeStartTime: 74.263405
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _clip: 0.3
     m_Colors:
-    - _BackwardObstaclePosition1: {r: 31.5, g: -2.5800297, b: -141.9, a: 0}
-    - _BackwardObstaclePosition2: {r: 34.970444, g: -0.14999881, b: -141.9, a: 0}
-    - _BaseColor: {r: 0.24528289, g: 0.24528289, b: 0.24528289, a: 1}
-    - _ForwardHitPosition1: {r: 4.9480624, g: 1.8906678, b: -3, a: 0}
-    - _ForwardObstaclePosition1: {r: 18, g: 1.17, b: -153.52, a: 0}
-    - _ForwardObstaclePosition2: {r: 31.5, g: -2.5800269, b: -141.9, a: 0}
-    - _GhostColor: {r: 0, g: 0.7735849, b: 0.5934795, a: 0}
-    - _GhostColor2: {r: 0, g: 0.91761875, b: 0.94509804, a: 0}
-    - _GhostExteriorColor: {r: 0, g: 0.7735849, b: 0.5934795, a: 0}
-    - _GhostInColor: {r: 0, g: 1.5032598, b: 1.7176471, a: 1}
-    - _GhostInteriorColor: {r: 0.031372547, g: 0.6875712, b: 0.7058824, a: 0}
-    - _GhostOutColor: {r: 0.19624422, g: 0.8490566, b: 0.5698509, a: 1}
+    - _ExplodingColor: {r: 0, g: 2.1249616, b: 0.27165014, a: 0}
+    - _ExplodingColorBase: {r: 0.10332855, g: 0.509434, b: 0.21217105, a: 0}
+    - _ExplodingColorEmissive: {r: 0, g: 1.6, b: 0.1663155, a: 0}
   m_BuildTextureStacks: []

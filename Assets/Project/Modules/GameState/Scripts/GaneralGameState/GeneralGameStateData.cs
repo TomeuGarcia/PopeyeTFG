@@ -11,7 +11,7 @@ namespace Popeye.Modules.GameState.GaneralGameState
         menuName = ScriptableObjectsHelper.GAMESTATE_ASSETS_PATH + "GeneralGameStateData")]
     public class GeneralGameStateData : ScriptableObject
     {
-        [Header("FlAGS")] 
+        [Header("FLAGS")] 
         [Scene] [SerializeField] private int _tutorialScene;
         [SerializeField] private int _startingPowerBoostExperience = 0;
 

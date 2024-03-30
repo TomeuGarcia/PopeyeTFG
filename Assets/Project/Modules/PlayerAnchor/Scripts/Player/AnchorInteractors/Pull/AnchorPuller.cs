@@ -108,7 +108,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             trajectoryDistance = 0;
             
             rotationPath = new Quaternion[trajectoryPath.Length];
-            rotationPath[0] = Quaternion.LookRotation((anchorPosition-trajectoryPath[0]).normalized, Vector3.down);
+            rotationPath[0] = _anchor.Rotation;
             for (int i = 1; i < rotationPath.Length; ++i)
             {
                 Vector3 toCurrent = (trajectoryPath[i - 1] - trajectoryPath[i]);
