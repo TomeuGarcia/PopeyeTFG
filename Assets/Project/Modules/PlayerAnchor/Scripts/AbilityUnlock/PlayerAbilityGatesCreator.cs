@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using InputSystem;
+using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Scripts.ValueGating;
 using UnityEngine.InputSystem;
 
@@ -9,21 +10,28 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
     {
         private readonly PlayerAnchorInputControls _playerAnchorInputControls;
         private readonly PlayerUnlockableAbilitiesConfig _unlockableAbilitiesConfig;
+        private readonly IAnchorVerticalThrower _dashAttackVerticalThrower;
+        private readonly IAnchorVerticalThrower _dashDropVerticalThrower;
 
         private ValueGate<InputAction> _pullInputGate;
         private ValueGate<InputAction> _dashTowardsAnchorInputGate;
         private ValueGate<InputAction> _dashDroppingAnchorInputGate;
         private ValueGate<InputAction> _specialAttackInputGate;
+        private ValueGate<IAnchorVerticalThrower> _dashDroppingAnchorThrowerGate;
 
-        private List<PlayerAbilityUnlockGroup> _abilitiesToUnlock;
+        private readonly List<PlayerAbilityUnlockGroup> _abilitiesToUnlock;
         
         
 
         public PlayerAbilityGatesCreator(PlayerAnchorInputControls playerAnchorInputControls,
-            PlayerUnlockableAbilitiesConfig unlockableAbilitiesConfig)
+            PlayerUnlockableAbilitiesConfig unlockableAbilitiesConfig,
+            IAnchorVerticalThrower dashAttackVerticalThrower,
+            IAnchorVerticalThrower dashDropVerticalThrower)
         {
             _playerAnchorInputControls = playerAnchorInputControls;
             _unlockableAbilitiesConfig = unlockableAbilitiesConfig;
+            _dashAttackVerticalThrower = dashAttackVerticalThrower;
+            _dashDropVerticalThrower = dashDropVerticalThrower;
 
             _abilitiesToUnlock = new List<PlayerAbilityUnlockGroup>(4);
         }
@@ -54,21 +62,48 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 _playerAnchorInputControls.Land.SpecialAttack,
                 _unlockableAbilitiesConfig.SpecialAttack
             );
+
+            CreateAnchorVerticalThrowerGate(
+                out _dashDroppingAnchorThrowerGate,
+                _unlockableAbilitiesConfig.DashDroppingAnchorAttack
+            );
         }
 
 
         private void CreateInputGate(out ValueGate<InputAction> inputGate, InputAction openValue, 
             PlayerUnlockableAbilitiesConfig.IChannelAndState channelAndState)
         {
-            inputGate = new ValueGate<InputAction>(
+            CreateGate<InputAction>(
+                out inputGate,
                 openValue,
                 _playerAnchorInputControls.Land.NullAction,
+                channelAndState
+            );
+        }
+        
+        private void CreateAnchorVerticalThrowerGate(out ValueGate<IAnchorVerticalThrower> inputGate, 
+            PlayerUnlockableAbilitiesConfig.IChannelAndState channelAndState)
+        {
+            CreateGate<IAnchorVerticalThrower>(
+                out inputGate,
+                _dashAttackVerticalThrower,
+                _dashDropVerticalThrower,
+                channelAndState
+            );
+        }
+        
+        private void CreateGate<T>(out ValueGate<T> valueGateGate, T openValue, T closedValue,
+            PlayerUnlockableAbilitiesConfig.IChannelAndState channelAndState)
+        {
+            valueGateGate = new ValueGate<T>(
+                openValue,
+                closedValue,
                 channelAndState.IsUnlocked
             );
 
             if (!channelAndState.IsUnlocked)
             {
-                _abilitiesToUnlock.Add(new PlayerAbilityUnlockGroup(inputGate, channelAndState.Channel));
+                _abilitiesToUnlock.Add(new PlayerAbilityUnlockGroup(valueGateGate, channelAndState.Channel));
             }
         }
         
@@ -84,6 +119,13 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             dashTowardsAnchorInputGate = _dashTowardsAnchorInputGate;
             dashDroppingAnchorInputGate = _dashDroppingAnchorInputGate;
             specialAttackInputGate = _specialAttackInputGate;
+        }
+
+        public void GetReadDashDroppingAnchorThrow(
+            out IGateValueReader<IAnchorVerticalThrower> dashDroppingAnchorThrowerGate
+        )
+        {
+            dashDroppingAnchorThrowerGate = _dashDroppingAnchorThrowerGate;
         }
 
         public PlayerAbilityUnlockGroup[] GetAbilitiesToUnlock()

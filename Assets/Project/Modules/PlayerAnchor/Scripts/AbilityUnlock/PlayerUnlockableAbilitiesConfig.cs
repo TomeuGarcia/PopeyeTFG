@@ -45,12 +45,14 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [SerializeField] private ChannelAndState _dashTowardsAnchor;
         [SerializeField] private ChannelAndState _dashDroppingAnchor;
         [SerializeField] private ChannelAndState _specialAttack;
+        [SerializeField] private ChannelAndState _dashDroppingAnchorAttack;
         
         
         public IChannelAndState AnchorPull => _anchorPull;
         public IChannelAndState DashTowardsAnchor => _dashTowardsAnchor;
         public IChannelAndState DashDroppingAnchor => _dashDroppingAnchor;
         public IChannelAndState SpecialAttack => _specialAttack;
+        public IChannelAndState DashDroppingAnchorAttack => _dashDroppingAnchorAttack;
         
 
         private void SetStateToAll(bool isUnlocked)

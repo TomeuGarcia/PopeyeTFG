@@ -1,7 +1,4 @@
-using System;
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
-using Popeye.Modules.PlayerAnchor;
+
 using Popeye.Modules.PlayerAnchor.Anchor;
 using UnityEngine;
 
@@ -13,38 +10,35 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PopeyeAnchor _anchor;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrowConfig _throwConfig;
-        private AnchorThrowConfig _verticalThrowConfig;
         private IThrowDistanceComputer _throwDistanceComputer;
         
         private AnchorTrajectorySnapController _anchorTrajectorySnapController;
 
         private IAnchorTrajectoryView _trajectoryView;
+
+        private AnchorThrowController _anchorThrowController;
         
         
         private float _currentThrowForce01;
         private float _currentThrowCurveForce01;
-
-
-        private Quaternion _verticalThrowStartRotation;
-        private Quaternion _verticalThrowEndRotation;
+        
 
         
         public float ThrowDistance { get; private set; }
-        public Vector3 ThrowDirection { get; private set; }
-        private bool _anchorIsBeingThrown;
-
         public AnchorThrowResult AnchorThrowResult { get; private set; }
-        public AnchorThrowResult AnchorVerticalThrowResult { get; private set; }
 
         
             
         
-        public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
+        public void Configure(
+            IPlayerMediator player, 
+            PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker,
             IThrowDistanceComputer throwDistanceComputer,
-            AnchorThrowConfig throwConfig, AnchorThrowConfig verticalThrowConfig,
+            AnchorThrowConfig throwConfig, 
             AnchorTrajectorySnapController anchorTrajectorySnapController,
-            IAnchorTrajectoryView trajectoryView)
+            IAnchorTrajectoryView trajectoryView,
+            AnchorThrowController anchorThrowController)
         {
             _player = player;
             _anchor = anchor;
@@ -52,25 +46,21 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _throwDistanceComputer = throwDistanceComputer;
             
-            _verticalThrowConfig = verticalThrowConfig;
             _throwConfig = throwConfig;
             _anchorTrajectorySnapController = anchorTrajectorySnapController;
             _trajectoryView = trajectoryView;
 
+            _anchorThrowController = anchorThrowController;
+
             AnchorThrowResult = new AnchorThrowResult(_throwConfig.MoveInterpolationCurve,
                 _throwConfig.RotateInterpolationCurve);
-            AnchorVerticalThrowResult = new AnchorThrowResult(_verticalThrowConfig.MoveInterpolationCurve,
-                _verticalThrowConfig.RotateInterpolationCurve);
-            
+
             ResetThrowForce();
-            
-            _verticalThrowStartRotation = Quaternion.LookRotation(Vector3.up, Vector3.right);
-            _verticalThrowEndRotation = Quaternion.LookRotation(Vector3.down, Vector3.left);
         }
 
         public bool AnchorIsBeingThrown()
         {
-            return _anchorIsBeingThrown;
+            return _anchorThrowController.AnchorIsBeingThrown;
         }
 
 
@@ -136,57 +126,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
             else
             {
-                CorrectEndRotationForVisibility(AnchorThrowResult, _throwConfig);
+                AnchorThrowUtilities.CorrectEndRotationForVisibility(AnchorThrowResult, _throwConfig);
             }
 
             _anchor.SetThrown(AnchorThrowResult).Forget();
-            DoThrowAnchor(AnchorThrowResult).Forget();
+            _anchorThrowController.DoThrowAnchor(AnchorThrowResult).Forget();
             
             _trajectoryView.Hide();
-        }
-
-        public void ThrowAnchorVertically(out float duration)
-        {
-            float distance = _verticalThrowConfig.MaxThrowDistance;
-            duration = _verticalThrowConfig.MaxThrowMoveDuration;
-            
-            Vector3[] throwTrajectory = _anchorTrajectoryMaker.ComputeUpAndDownTrajectory(_anchor.Position, distance,
-                out RaycastHit floorHit);
-            
-            AnchorVerticalThrowResult.Reset(throwTrajectory, Vector3.up, 
-                _verticalThrowStartRotation, _verticalThrowEndRotation, duration, false);
-
-            CorrectEndRotationForVisibility(AnchorVerticalThrowResult, _verticalThrowConfig);
-            
-            _anchor.SetThrownVertically(AnchorVerticalThrowResult, floorHit).Forget();
-            DoThrowAnchor(AnchorVerticalThrowResult).Forget();
-        }
-
-        private async UniTaskVoid DoThrowAnchor(AnchorThrowResult anchorThrowResult)
-        {
-            _anchorIsBeingThrown = true;
-            await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
-            _anchorIsBeingThrown = false;
-
-            OnThrowCompleted(anchorThrowResult);
-        }
-
-        private void OnThrowCompleted(AnchorThrowResult anchorThrowResult)
-        {
-            if (anchorThrowResult.EndsOnVoid)
-            {
-                _player.OnAnchorEndedInVoid();
-                return;
-            }
-            
-            if (_anchorTrajectorySnapController.HasAutoAimTarget)
-            {
-                _anchor.SetGrabbedBySnapper(_anchorTrajectorySnapController.AnchorSnapTarget);
-                _anchorTrajectorySnapController.ClearState();
-                return;
-            }
-            
-            _anchor.SetRestingOnFloor();
         }
         
 
@@ -227,31 +173,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _trajectoryView.Hide();
         }
-        
-        public AnchorThrowResult GetLastAnchorThrowResult()
-        {
-            return AnchorThrowResult;
-        }
 
-
-        private void CorrectEndRotationForVisibility(AnchorThrowResult throwResult, AnchorThrowConfig throwConfig)
-        {
-            Vector3 dir = Vector3.ProjectOnPlane(throwResult.EndLookRotation * Vector3.down, Vector3.up).normalized;
-            Vector3 toCamera = (Vector3.left + Vector3.back).normalized;
-
-            float dot = Vector3.Dot(dir, toCamera);
-            int sign = dot > 0 ? -1 : 1;
-            dot = Mathf.Abs(dot);
-
-                
-            Vector3 forward = (Vector3.down + toCamera * 0.3f).normalized;
-            Vector3 up = toCamera * sign;
-            Quaternion lookToCamera = Quaternion.LookRotation(forward, up);
-
-            float t = throwConfig.EndRotationWeightCurve.Evaluate(dot);
-            
-            throwResult.EndLookRotation =
-                Quaternion.LerpUnclamped(throwResult.EndLookRotation, lookToCamera, throwConfig.CorrectionAmount * t);
-        }
     }
 }
