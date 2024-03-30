@@ -61,6 +61,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _dashTowardsAnchor.SetIsUnlocked(isUnlocked);
             _dashDroppingAnchor.SetIsUnlocked(isUnlocked);
             _specialAttack.SetIsUnlocked(isUnlocked);
+            _dashDroppingAnchorAttack.SetIsUnlocked(isUnlocked);
         }
 
 

@@ -209,7 +209,7 @@ namespace Popeye.Modules.PlayerAnchor
                 anchorVerticalAttackThrower, anchorVerticalDropThrower,
                 out PlayerAnchorMovesetInputsController movesetInputsController,
                 out _abilitiesToUnlockHolder,
-                out IGateValueReader<IAnchorVerticalThrower> anchorVerticalThrowerGate
+                out IGateValueReader<IAnchorVerticalThrower> anchorVerticalThrowerGateValue
             );
             _abilitiesToUnlockHolder.StartListeningToUnlock();
             
@@ -262,7 +262,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
-                _anchor, anchorThrower, anchorVerticalThrowerGate, anchorPuller, anchorKicker, anchorSpinner,
+                _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
                 playerSafeGroundChecker, playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
