@@ -12,9 +12,9 @@ using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
-using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.GameState.GaneralGameState;
+using Popeye.Modules.PlayerAnchor.AbilityUnlock;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
@@ -22,7 +22,6 @@ using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
-using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
@@ -38,7 +37,6 @@ using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 
 namespace Popeye.Modules.PlayerAnchor
@@ -66,7 +64,8 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Powers")] 
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
-        
+        [SerializeField] private PlayerUnlockableAbilitiesConfig _unlockableAbilitiesConfig;
+        private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -194,8 +193,14 @@ namespace Popeye.Modules.PlayerAnchor
                 
             
             // Player
+            CreatePlayerAbilitiesToUnlock(
+                eventSystemService,
+                out PlayerAnchorMovesetInputsController movesetInputsController,
+                out _abilitiesToUnlockHolder
+            );
+            _abilitiesToUnlockHolder.StartListeningToUnlock();
+            
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
-            PlayerAnchorMovesetInputsController movesetInputsController = CreateMovesetInputsController(eventSystemService);
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
@@ -269,6 +274,7 @@ namespace Popeye.Modules.PlayerAnchor
 
         public void Uninstall()
         {
+            _abilitiesToUnlockHolder.StopListeningToUnlock();
             ServiceLocator.Instance.RemoveService<IPowerBoostDropFactory>();
             ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
         }
@@ -383,45 +389,42 @@ namespace Popeye.Modules.PlayerAnchor
             return new SafeGroundPhysicsChecker(trackingTransform, physicsCaster, checkFrequency, 1.0f);
         }
 
-        private PlayerAnchorMovesetInputsController CreateMovesetInputsController(IEventSystemService eventSystemService)
+        private void CreatePlayerAbilitiesToUnlock(
+            IEventSystemService eventSystemService,
+            out PlayerAnchorMovesetInputsController movesetInputsController,
+            out PlayerAbilitiesToUnlockHolder abilitiesToUnlockHolder
+        )
         {
-            PlayerAnchorInputControls playerAnchorInputControls = new PlayerAnchorInputControls();
+            PlayerAnchorInputControls playerAnchorInputControls = 
+                new PlayerAnchorInputControls();
 
-            ValueGate<InputAction> pullInputGate = new ValueGate<InputAction>(
-                playerAnchorInputControls.Land.Pull,
-                playerAnchorInputControls.Land.NullAction,
-                true
-            );
+            _unlockableAbilitiesConfig.SetupState(_generalGameStateData.IsTutorial);
             
-            ValueGate<InputAction> dashTowardsAnchorInputGate = new ValueGate<InputAction>(
-                playerAnchorInputControls.Land.Dash,
-                playerAnchorInputControls.Land.NullAction,
-                true
-            );
+            PlayerAbilityGatesCreator abilityGatesCreator =
+                new PlayerAbilityGatesCreator(playerAnchorInputControls, _unlockableAbilitiesConfig);
             
-            ValueGate<InputAction> dashDroppingAnchorInputGate = new ValueGate<InputAction>(
-                playerAnchorInputControls.Land.Dash,
-                playerAnchorInputControls.Land.NullAction,
-                true
-            );
             
-            ValueGate<InputAction> specialAttackInputGate = new ValueGate<InputAction>(
-                playerAnchorInputControls.Land.SpecialAttack,
-                playerAnchorInputControls.Land.NullAction,
-                true
+            abilityGatesCreator.CreateGates();
+
+            abilityGatesCreator.GetReadInputs(
+                out IGateValueReader<InputAction> pullInput,
+                out IGateValueReader<InputAction> dashTowardsAnchorInput,
+                out IGateValueReader<InputAction> dashDroppingAnchorInput,
+                out IGateValueReader<InputAction> specialAttackInput
             );
 
 
-            PlayerAnchorMovesetInputsController movesetInputsController = new (
+            abilitiesToUnlockHolder = new PlayerAbilitiesToUnlockHolder(abilityGatesCreator.GetAbilitiesToUnlock());
+
+            movesetInputsController = new PlayerAnchorMovesetInputsController(
                 eventSystemService,
                 playerAnchorInputControls,
-                pullInputGate,
-                dashTowardsAnchorInputGate,
-                dashDroppingAnchorInputGate,
-                specialAttackInputGate
+                pullInput,
+                dashTowardsAnchorInput,
+                dashDroppingAnchorInput,
+                specialAttackInput
             );
 
-            return movesetInputsController;
         }
         
     }

@@ -18,10 +18,16 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _unlockAbilityChannel = unlockAbilityChannel;
             _isSubscribed = false;
             
-            SubscribeToEventChannel();
+            
         }
 
-        ~PlayerAbilityUnlockGroup()
+        
+        public void StartListeningToUnlock()
+        {
+            SubscribeToEventChannel();
+        }
+        
+        public void StopListeningToUnlock()
         {
             UnsubscribeToEventChannel();
         }
