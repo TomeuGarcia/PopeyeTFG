@@ -9,7 +9,17 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         menuName = ScriptableObjectsHelper.PLAYERABILITYUNLOCK_ASSETS_PATH + "ChristalViewConfig")]
     public class AbilityUnlockerChristalViewConfig : ScriptableObject
     {
-        [Header("IDLE")]
+        
+        [Header("MATERIALS")] 
+        [SerializeField] private Material _explodingChainSharedMaterial;
+        [SerializeField] private string _explodeStartTimeProperty = "_ExplodeStartTime";
+        public int ExplodeStartTimePropertyId { get; private set; }
+
+        public Material ExplodingChainSharedMaterial => _explodingChainSharedMaterial;
+        
+        
+        
+        [Header("0. IDLE")]
         [SerializeField] private float _idleDelay;
         [SerializeField] private TweenPunchConfig _idleChainPunch;
         public float IdleDelay => _idleDelay;
@@ -17,26 +27,30 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         
         
-        [Header("UNLOCK ANIMATION")]
+        [Header("1. UNLOCK ANIMATION")]
         [SerializeField] private TweenPunchConfig _unlockScalePunch;
         [SerializeField] private TweenPunchConfig _unlockRotationPunch;
         public TweenPunchConfig UnlockScalePunch => _unlockScalePunch;
         public TweenPunchConfig UnlockRotationPunch => _unlockRotationPunch;
 
 
-        [Header("EXPLODE")]
+        [Header("2. EXPLODE")]
         [SerializeField, Range(0f, 5.0f)] private float _explodeDelay = 0.2f;
         public float ExplodeDelay => _explodeDelay;
         
+        
+        [Header("3. CORE MOVE")]
+        [SerializeField, Range(0f, 5.0f)] private float _coreMoveDelay = 0.2f;
+        [SerializeField, Range(0f, 5.0f)] private float _coreMoveDuration = 1.0f;
+        [SerializeField] private AnimationCurve _coreMoveEase = AnimationCurve.EaseInOut(0,0,1,1);
+        [SerializeField] private TweenPunchConfig _coreScalePunch;
+        public float CoreMoveDelay => _coreMoveDelay;
+        public float CoreMoveDuration => _coreMoveDuration;
+        public AnimationCurve CoreMoveEase => _coreMoveEase;
+        public TweenPunchConfig CoreScalePunch => _coreScalePunch;
 
-        [Header("MATERIALS")] 
-        [SerializeField] private Material _explodingChainSharedMaterial;
-        [SerializeField] private string _explodeStartTimeProperty = "_ExplodeStartTime";
-        public int ExplodeStartTimePropertyId { get; private set; }
 
-        public Material ExplodingChainSharedMaterial => _explodingChainSharedMaterial;
-
-
+        
         private void OnValidate()
         {
             ExplodeStartTimePropertyId = Shader.PropertyToID(_explodeStartTimeProperty);
