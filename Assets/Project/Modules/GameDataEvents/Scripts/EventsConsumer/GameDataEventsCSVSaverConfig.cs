@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using Popeye.ProjectHelpers;
 using UnityEngine;
@@ -12,7 +13,13 @@ namespace Popeye.Modules.GameDataEvents
         menuName = ScriptableObjectsHelper.GAMEDATAEVENTS_ASSETS_PATH + "CSVSaverConfig")]
     public class GameDataEventsCSVSaverConfig : ScriptableObject
     {
+        [Header("LOGGING")]
         [SerializeField] private bool _logToConsole = false;
+        
+        [Header("SAVE")]
+        [SerializeField, Range(0f, 10f)] private float _saveFrequencyInMinutes = 1f; 
+        
+        [Header("PATH")]
         [SerializeField] private string _filePath;
         [SerializeField] private string _fileName;
         [SerializeField] private string _fileExtension;
@@ -25,14 +32,7 @@ namespace Popeye.Modules.GameDataEvents
         public string FilePath =>  DirectoryPath + _fileName;
         public string FilePathWithExtension => FilePath + _fileExtension;
 
-        
-#if UNITY_EDITOR
-        [Button()]
-        private void ShowInFolder()
-        {
-            EditorUtility.RevealInFinder(DirectoryPath);
-        }
-#endif
-        
+        public TimeSpan SaveFrequency => TimeSpan.FromMinutes(_saveFrequencyInMinutes);
+
     }
 }
