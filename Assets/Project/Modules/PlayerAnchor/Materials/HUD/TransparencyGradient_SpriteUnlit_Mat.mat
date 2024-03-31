@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1607006925472901934
+--- !u!114 &-3172955786220527724
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ExplodingChain_AbilityFragment_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: aec411823e90aa24186dd9013997032e,
+  m_Name: TransparencyGradient_SpriteUnlit_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: e9a734315d96b6d49b9956f760d488e4,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -37,10 +37,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseColorTexture:
-        m_Texture: {fileID: 2800000, guid: 36e12b6218d6d844a9d7ad06ee6cac77, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -54,13 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _ExplodeDuration: 2
-    - _ExplodeStartTime: 7.1602173
-    - _QueueControl: 0
-    - _QueueOffset: 0
+    m_Floats: []
     m_Colors:
-    - _ExplodingColor: {r: 0, g: 2.1249616, b: 0.27165014, a: 0}
-    - _ExplodingColorBase: {r: 0.05931826, g: 0.2924528, b: 0.12117031, a: 0}
-    - _ExplodingColorEmissive: {r: 0, g: 0.8, b: 0.053020474, a: 0}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

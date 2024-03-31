@@ -59,9 +59,10 @@ namespace Popeye.Core.Services.InformationDisplay
 
         public async UniTask StopShowing(TextDisplayConfig textDisplayConfig)
         {
+            if (_currentDisplay != textDisplayConfig) return;
+            
             await UniTask.WaitUntil(() => !_isShowing);
-            
-            
+
             _isHiding = true;
             
             await _contentFadeGroup.Fade(_currentDisplay.ContentViewExtras.HideFade)
