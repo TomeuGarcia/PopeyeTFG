@@ -20,7 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         
         [Header("0. IDLE")]
-        [SerializeField] private float _idleDelay;
+        [SerializeField, Range(0.0f, 10.0f)] private float _idleDelay;
         [SerializeField] private TweenPunchConfig _idleChainPunch;
         public float IdleDelay => _idleDelay;
         public TweenPunchConfig IdleChainPunch => _idleChainPunch;        
@@ -28,8 +28,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         
         [Header("1. UNLOCK ANIMATION")]
+        [SerializeField, Range(0.0f, 10.0f)] private float _unlockDelay = 0.1f;
         [SerializeField] private TweenPunchConfig _unlockScalePunch;
         [SerializeField] private TweenPunchConfig _unlockRotationPunch;
+        public float UnlockDelay => _unlockDelay;
         public TweenPunchConfig UnlockScalePunch => _unlockScalePunch;
         public TweenPunchConfig UnlockRotationPunch => _unlockRotationPunch;
 

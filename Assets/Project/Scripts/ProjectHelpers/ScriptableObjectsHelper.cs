@@ -29,10 +29,13 @@ namespace Popeye.ProjectHelpers
         
         public const string GAMESTATE_ASSETS_PATH = ROOT + "GameState/";
         
+        
+        
         public const string WORLDELEMENTS_ASSETS_PATH = ROOT + "WorldElements/";
         public const string WALLBUILDER_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "WallBuilder/";
         public const string GRIDMOVEMENT_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "GridMovement/";
-        
+        public const string INFORMATIONDISPLAY_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "InformationDisplay/";
+  
         
         public const string TIME_ASSETS_PATH = ROOT + "Time/";
         public const string HITSTOP_ASSETS_PATH = TIME_ASSETS_PATH + "HitStop/";

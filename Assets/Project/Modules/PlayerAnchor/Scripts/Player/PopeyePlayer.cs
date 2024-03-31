@@ -343,6 +343,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayDashAnimation(duration, Vector3.ProjectOnPlane((_anchor.Position - Position).normalized,  Vector3.up));
             _playerAudio.PlayDashTowardsAnchorSound();
 
+            _eventsDispatcher.DispatchDashTowardsAnchorPerformed();
             _eventsDispatcher.DispatchOnStartActionEvent("Dash", Position);
             
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
@@ -635,6 +636,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _specialAttackController.StartSpecialAttack();
             WaitForSpecialAttackFinished().Forget();
             
+            _eventsDispatcher.DispatchSpecialAttackPerformed();
             _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
         }
         private async UniTaskVoid WaitForSpecialAttackFinished()

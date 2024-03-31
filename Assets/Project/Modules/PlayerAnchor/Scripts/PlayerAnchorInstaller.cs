@@ -172,11 +172,14 @@ namespace Popeye.Modules.PlayerAnchor
                 _anchorGeneralConfig.ThrowConfig, anchorTrajectorySnapController, anchorTrajectoryView,
                 anchorThrowController);
             anchorVerticalAttackThrower.Configure(_anchor, anchorTrajectoryMaker, 
-                _anchorGeneralConfig.VerticalAttackThrowConfig, anchorThrowController);
+                _anchorGeneralConfig.VerticalAttackThrowConfig, anchorThrowController,
+                _playerGeneralConfig.AbilityActionChannels.DashDroppingAnchorAttackDispatcher);
             anchorVerticalDropThrower.Configure(_anchor, anchorTrajectoryMaker, 
-                _anchorGeneralConfig.VerticalDropThrowConfig, anchorThrowController);
+                _anchorGeneralConfig.VerticalDropThrowConfig, anchorThrowController,
+                _playerGeneralConfig.AbilityActionChannels.DashDroppingAnchorDispatcher);
 
-            anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
+            anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig,
+                _playerGeneralConfig.AbilityActionChannels.AnchorPullDispatcher);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
             anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
@@ -243,7 +246,9 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerGlobalEventsListener playerGlobalEventsListener = 
                 new PlayerGlobalEventsListener(eventSystemService, _player, _anchor);
             PlayerEventsDispatcher playerEventsDispatcher =
-                new PlayerEventsDispatcher(eventSystemService);
+                new PlayerEventsDispatcher(eventSystemService, 
+                    _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
+                    _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 

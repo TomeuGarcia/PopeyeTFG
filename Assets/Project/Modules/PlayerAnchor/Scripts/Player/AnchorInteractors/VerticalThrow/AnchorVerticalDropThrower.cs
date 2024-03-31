@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Scripts.EventChannels;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -9,7 +10,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrowConfig _verticalThrowConfig;
         private AnchorThrowController _anchorThrowController;
-
+        private IEmptyEventChannelDispatcher _eventChannelDispatcher;
+        
         public AnchorThrowResult AnchorVerticalThrowResult { get; private set; }
         private Quaternion _verticalThrowStartRotation;
         private Quaternion _verticalThrowEndRotation;
@@ -19,12 +21,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PopeyeAnchor anchor,
             AnchorTrajectoryMaker anchorTrajectoryMaker,
             AnchorThrowConfig verticalThrowConfig,
-            AnchorThrowController anchorThrowController)
+            AnchorThrowController anchorThrowController,
+            IEmptyEventChannelDispatcher eventChannelDispatcher)
         {
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _verticalThrowConfig = verticalThrowConfig;
             _anchorThrowController = anchorThrowController;
+            _eventChannelDispatcher = eventChannelDispatcher;
             
             AnchorVerticalThrowResult = new AnchorThrowResult(_verticalThrowConfig.MoveInterpolationCurve,
                 _verticalThrowConfig.RotateInterpolationCurve);
@@ -47,6 +51,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _anchor.SetDropped(AnchorVerticalThrowResult).Forget();
             
             _anchorThrowController.DoThrowAnchor(AnchorVerticalThrowResult).Forget();
+            
+            _eventChannelDispatcher.RaiseEvent();
         }
         
     }

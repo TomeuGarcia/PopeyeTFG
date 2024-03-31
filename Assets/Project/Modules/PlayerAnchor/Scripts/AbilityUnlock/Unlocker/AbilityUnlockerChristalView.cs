@@ -33,6 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private void Start()
         {
             _coreTargetTransform = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerPositionTransform();
+            _viewConfig.ExplodingChainSharedMaterial.SetFloat(_viewConfig.ExplodeStartTimePropertyId, -10);
         }
 
 
@@ -56,6 +57,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         public async UniTask PlayUnlockAbilityAnimation()
         {
             _playIdleAnimation = false;
+
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.UnlockDelay));
             
             _christalTransform.PunchScale(_viewConfig.UnlockScalePunch);
             await _christalTransform.PunchRotation(_viewConfig.UnlockRotationPunch)
@@ -69,7 +72,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _chainExplosionPS.Play();
             await CoreMoveToTarget();
             
-            ResetViewState(1.0f).Forget(); // Debug
+            //ResetViewState(1.0f).Forget(); // Debug
         }
 
         private async UniTask CoreMoveToTarget()

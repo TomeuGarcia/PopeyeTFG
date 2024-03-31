@@ -20,14 +20,16 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [Header("VIEW")] 
         [SerializeField] private InterfaceReference<IPlayerAbilityUnlockerView, MonoBehaviour> _view;
 
-        [Header("EVENT CHANNEL")] 
-        [SerializeField] private InterfaceReference<IEmptyEventChannelDispatcher, ScriptableObject> _abilityToUnlockEventChannel;
-        
         [Header("WORLD INTERACTORS")]
         [SerializeField] private AWorldInteractor[] _worldInteractors;
         
-        private void Awake()
+        private IEmptyEventChannelDispatcher _abilityToUnlockEventChannel;
+        
+        
+        public void Configure(IEmptyEventChannelDispatcher abilityToUnlockEventChannel)
         {
+            _abilityToUnlockEventChannel = abilityToUnlockEventChannel;
+            
             _healthBehaviour.Configure(this, 1, _hitTargetType, _rigidbody);
             _rigidbody.useGravity = false;
             _rigidbody.isKinematic = true;
@@ -40,7 +42,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private async UniTaskVoid UnlockAbility()
         {
             await _view.Value.PlayUnlockAbilityAnimation();            
-            _abilityToUnlockEventChannel.Value.RaiseEvent();
+            _abilityToUnlockEventChannel.RaiseEvent();
             DisablePlayerCollider();
             ActivateWorldInteractors();
         }

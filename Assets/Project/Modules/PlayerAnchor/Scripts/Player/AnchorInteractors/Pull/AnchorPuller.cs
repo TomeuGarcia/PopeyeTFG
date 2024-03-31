@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Scripts.EventChannels;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -11,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PopeyeAnchor _anchor;
         private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorPullConfig _pullConfig;
+        private IEmptyEventChannelDispatcher _eventChannelDispatcher;
 
         private bool _anchorIsBeingPulled;
         
@@ -19,14 +21,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         
-        public void Configure(IPlayerMediator player, PopeyeAnchor anchor, 
+        public void Configure(
+            IPlayerMediator player, 
+            PopeyeAnchor anchor, 
             AnchorTrajectoryMaker anchorTrajectoryMaker,
-            AnchorPullConfig pullConfig)
+            AnchorPullConfig pullConfig,
+            IEmptyEventChannelDispatcher eventChannelDispatcher)
         {
             _player = player;
             _anchor = anchor;
             _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _pullConfig = pullConfig;
+            _eventChannelDispatcher = eventChannelDispatcher;
 
             AnchorPullResult = new AnchorThrowResult(_pullConfig.MoveInterpolationCurve,
                 _pullConfig.RotateInterpolationCurve);
@@ -82,6 +88,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             
             _anchor.SetPulled(AnchorPullResult, rotationPath);
+            
+            _eventChannelDispatcher.RaiseEvent();
+            
             DoPullAnchor(AnchorPullResult).Forget();
         }
 
