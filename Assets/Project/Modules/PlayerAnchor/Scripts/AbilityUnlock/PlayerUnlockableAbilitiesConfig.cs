@@ -20,14 +20,18 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         public class ChannelAndState : IChannelAndState
         {
             [SerializeField] private EmptyEventChannelAsset _channel;
-            [SerializeField] private bool _isUnlocked;
+            [SerializeField] private bool _startsUnlocked;
 
             public EmptyEventChannelAsset Channel => _channel;
-            public bool IsUnlocked => _isUnlocked;
+            public bool IsUnlocked { get; private set; }
 
             public void SetIsUnlocked(bool isUnlocked)
             {
-                _isUnlocked = isUnlocked;
+                IsUnlocked = isUnlocked;
+            }
+            public void SetIsUnlockedToStartValue()
+            {
+                IsUnlocked = _startsUnlocked;
             }
         }
 
@@ -42,10 +46,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         [Header("CHANNELS & STATES")]
         [SerializeField] private ChannelAndState _anchorPull;
-        [SerializeField] private ChannelAndState _dashTowardsAnchor;
         [SerializeField] private ChannelAndState _dashDroppingAnchor;
-        [SerializeField] private ChannelAndState _specialAttack;
         [SerializeField] private ChannelAndState _dashDroppingAnchorAttack;
+        [SerializeField] private ChannelAndState _dashTowardsAnchor;
+        [SerializeField] private ChannelAndState _specialAttack;
         
         
         public IChannelAndState AnchorPull => _anchorPull;
@@ -54,21 +58,12 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         public IChannelAndState SpecialAttack => _specialAttack;
         public IChannelAndState DashDroppingAnchorAttack => _dashDroppingAnchorAttack;
         
-
-        private void SetStateToAll(bool isUnlocked)
-        {
-            _anchorPull.SetIsUnlocked(isUnlocked);
-            _dashTowardsAnchor.SetIsUnlocked(isUnlocked);
-            _dashDroppingAnchor.SetIsUnlocked(isUnlocked);
-            _specialAttack.SetIsUnlocked(isUnlocked);
-            _dashDroppingAnchorAttack.SetIsUnlocked(isUnlocked);
-        }
-
-
+        
         public void SetupState(bool isTutorial)
         {
             if (_loadMode == LoadMode.UseCurrentState)
             {
+                SetStartingStateToAll();
                 return;
             }
 
@@ -85,6 +80,29 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             }
             
         }
+        
+        private void SetStartingStateToAll()
+        {
+            _anchorPull.SetIsUnlockedToStartValue();
+            _dashDroppingAnchor.SetIsUnlockedToStartValue();
+            _dashDroppingAnchorAttack.SetIsUnlockedToStartValue();
+            _dashTowardsAnchor.SetIsUnlockedToStartValue();
+            _specialAttack.SetIsUnlockedToStartValue();
+        }
+        private void SetStateToAll(bool isUnlocked)
+        {
+            SetState(_anchorPull, isUnlocked);
+            SetState(_dashDroppingAnchor, isUnlocked);
+            SetState(_dashDroppingAnchorAttack, isUnlocked);
+            SetState(_dashTowardsAnchor, isUnlocked);
+            SetState(_specialAttack, isUnlocked);
+        }
+
+        private void SetState(ChannelAndState channelAndState, bool isUnlocked)
+        {
+            channelAndState.SetIsUnlocked(isUnlocked);
+        }
+
         
     }
 }

@@ -71,5 +71,7 @@ namespace Popeye.ProjectHelpers
         
         
         public const string GAMEDATAEVENTS_ASSETS_PATH = ROOT + "GameDataEvents/";
+        
+        public const string SCENES_ASSETS_PATH = CORE_ASSETS_PATH + "Scenes/";
     }
 }

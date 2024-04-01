@@ -64,7 +64,6 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Powers")] 
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
-        [SerializeField] private PlayerUnlockableAbilitiesConfig _unlockableAbilitiesConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
 
         [Header("Player - AutoAim")] 
@@ -118,6 +117,8 @@ namespace Popeye.Modules.PlayerAnchor
 
         public void Install()
         {
+            _generalGameStateData.LoadState();
+            
             // Services
             ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(new CameraFunctionalities(
                 new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value));
@@ -418,16 +419,14 @@ namespace Popeye.Modules.PlayerAnchor
         {
             PlayerAnchorInputControls playerAnchorInputControls = 
                 new PlayerAnchorInputControls();
-
-            _unlockableAbilitiesConfig.SetupState(_generalGameStateData.IsTutorial);
             
             PlayerAbilityGatesCreator abilityGatesCreator =
-                new PlayerAbilityGatesCreator(playerAnchorInputControls, _unlockableAbilitiesConfig,
+                new PlayerAbilityGatesCreator(
+                    playerAnchorInputControls, _generalGameStateData.PlayerUnlockableAbilitiesConfig,
                     dashAttackVerticalThrower, dashDropVerticalThrower);
             
             
             abilityGatesCreator.CreateGates();
-
             abilityGatesCreator.GetReadInputs(
                 out IGateValueReader<InputAction> pullInput,
                 out IGateValueReader<InputAction> dashTowardsAnchorInput,
@@ -438,6 +437,7 @@ namespace Popeye.Modules.PlayerAnchor
                 out dashDroppingAnchorThrowerGate
             );
 
+            
             abilitiesToUnlockHolder = new PlayerAbilitiesToUnlockHolder(abilityGatesCreator.GetAbilitiesToUnlock());
 
             movesetInputsController = new PlayerAnchorMovesetInputsController(
