@@ -74,7 +74,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _chainExplosionPS.Play();
             await CoreMoveToTarget();
             
-            //ResetViewState(1.0f).Forget(); // Debug
+            //ResetViewState(1.0f).Forget(); // Debug to test animation with button
         }
 
         private async UniTask CoreMoveToTarget()
