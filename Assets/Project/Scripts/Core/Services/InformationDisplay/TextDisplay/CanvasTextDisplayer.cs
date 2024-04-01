@@ -17,6 +17,8 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private TextMeshProUGUI _contentText;
 
         private TextDisplayConfig _currentDisplay;
+        private Queue<TextDisplayConfig> _queuedDisplays;
+        private bool _processingQueuedDisplays;
 
         private bool _isShowing = false;
         private bool _isHiding = false;
@@ -26,6 +28,8 @@ namespace Popeye.Core.Services.InformationDisplay
             _backgroundFadeGroup.alpha = 0;
             _contentFadeGroup.alpha = 0;
             _currentDisplay = null;
+            _queuedDisplays = new Queue<TextDisplayConfig>(2);
+            _processingQueuedDisplays = false;
         }
 
         private void OnDestroy()
@@ -34,17 +38,46 @@ namespace Popeye.Core.Services.InformationDisplay
             _contentFadeGroup.DOKill();
         }
 
-        public async UniTask StartShowing(TextDisplayConfig textDisplayConfig)
+        public void StartShowing(TextDisplayConfig textDisplayConfig)
         {
-            if (DisplayWantsToOverwrite(textDisplayConfig))
+            _queuedDisplays.Enqueue(textDisplayConfig);
+            if (_processingQueuedDisplays)
             {
-                await StopShowing(_currentDisplay);
+                return;
             }
+
+            TransitionToNext().Forget();
+        }
+
+        private async UniTask TransitionToNext()
+        {
+            _processingQueuedDisplays = true;
+
+            
+            if (_queuedDisplays.Count == 1)
+            {
+                _currentDisplay = _queuedDisplays.Peek();
+                await StartShowingCurrent();
+                _queuedDisplays.Dequeue();
+            }
+            
+            
+            while (_queuedDisplays.Count > 0)
+            {
+                await StopShowingCurrent();
+                _currentDisplay = _queuedDisplays.Peek();
+                await StartShowingCurrent();
+                _queuedDisplays.Dequeue();
+            }
+            
+            _processingQueuedDisplays = false;
+        } 
+        
+        private async UniTask StartShowingCurrent()
+        {
             await UniTask.WaitUntil(() => !_isHiding);
-
-
+            
             _isShowing = true;
-            _currentDisplay = textDisplayConfig;
 
             _headerText.SetContent(_currentDisplay.Header);
             _contentText.SetContent(_currentDisplay.Description);
@@ -57,10 +90,15 @@ namespace Popeye.Core.Services.InformationDisplay
             _isShowing = false;
         }
 
-        public async UniTask StopShowing(TextDisplayConfig textDisplayConfig)
+        public void StopShowing(TextDisplayConfig textDisplayConfig)
         {
             if (_currentDisplay != textDisplayConfig) return;
-            
+
+            StopShowingCurrent().Forget();
+        }
+        
+        private async UniTask StopShowingCurrent()
+        {
             await UniTask.WaitUntil(() => !_isShowing);
 
             _isHiding = true;
@@ -74,12 +112,6 @@ namespace Popeye.Core.Services.InformationDisplay
             _isHiding = false;
         }
 
-
-        private bool DisplayWantsToOverwrite(TextDisplayConfig textDisplayConfig)
-        {
-            if (_currentDisplay == null) return false;
-            return _currentDisplay != textDisplayConfig;
-        }
         
     }
 }

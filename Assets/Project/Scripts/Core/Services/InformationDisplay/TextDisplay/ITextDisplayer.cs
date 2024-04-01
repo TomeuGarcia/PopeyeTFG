@@ -4,7 +4,7 @@ namespace Popeye.Core.Services.InformationDisplay
 {
     public interface ITextDisplayer
     {
-        UniTask StartShowing(TextDisplayConfig textDisplayConfig);
-        UniTask StopShowing(TextDisplayConfig textDisplayConfig);
+        void StartShowing(TextDisplayConfig textDisplayConfig);
+        void StopShowing(TextDisplayConfig textDisplayConfig);
     }
 }
