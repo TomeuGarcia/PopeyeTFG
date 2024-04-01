@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.Enemies.Components;
+using Popeye.Modules.Enemies.General;
 using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 
@@ -18,6 +20,7 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private EnemyPatrolling.PatrolType _patrolType = EnemyPatrolling.PatrolType.None;
         [SerializeField] private Transform[] _wayPoints;
         [SerializeField] private Transform _transform;
+        
 
 
         private SlimeMediator _slimeMediator;

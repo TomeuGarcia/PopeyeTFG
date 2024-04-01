@@ -154,16 +154,15 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         
         
-        public void SetPulled(AnchorThrowResult anchorPullResult)
+        public void SetPulled(AnchorThrowResult anchorPullResult, Quaternion[] rotationPath)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
             _anchorDamageDealer.DealPullDamage(anchorPullResult).Forget();
             
             
-            _anchorMotion.MoveAlongPath(anchorPullResult.TrajectoryPathPoints, anchorPullResult.Duration, 
-                anchorPullResult.MoveEaseCurve);
-            _anchorMotion.RotateStartToEnd(anchorPullResult.StartLookRotation, anchorPullResult.EndLookRotation,
-                anchorPullResult.Duration, anchorPullResult.RotateEaseCurve);
+            _anchorMotion.MoveAndRotateAlongPath(anchorPullResult.TrajectoryPathPoints, rotationPath, 
+                anchorPullResult.Duration, anchorPullResult.MoveEaseCurve);
+            
             
             _anchorChain.SetPulledView(anchorPullResult);
             
@@ -380,6 +379,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void ResetCurrentTrajectorySnapTarget()
         {
             CurrentTrajectorySnapTarget = null;
+        }
+
+        public Vector3[] GetChainPositions()
+        {
+            return _anchorChain.GetChainPositions();
         }
     }
 }
