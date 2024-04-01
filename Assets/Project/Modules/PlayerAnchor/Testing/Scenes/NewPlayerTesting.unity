@@ -572,7 +572,7 @@ PrefabInstance:
     - target: {fileID: 6472659465508691166, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
       propertyPath: _abilityToUnlock
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8107798442915251512, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
@@ -3604,12 +3604,12 @@ PrefabInstance:
     - target: {fileID: 6472659465508691166, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
       propertyPath: _abilityToUnlock
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8107798442915251512, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
       propertyPath: m_Name
-      value: SoulFragment_Group_DashDrop
+      value: SoulFragment_Group_DashDroppingAnchor
       objectReference: {fileID: 0}
     - target: {fileID: 8707060813440144365, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
@@ -3810,12 +3810,12 @@ PrefabInstance:
     - target: {fileID: 6472659465508691166, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
       propertyPath: _abilityToUnlock
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8107798442915251512, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
       propertyPath: m_Name
-      value: SoulFragment_Group_DashTo
+      value: SoulFragment_Group_DashTowardsAnchor
       objectReference: {fileID: 0}
     - target: {fileID: 8707060813440144365, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
@@ -4739,12 +4739,12 @@ PrefabInstance:
     - target: {fileID: 6472659465508691166, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
       propertyPath: _abilityToUnlock
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8107798442915251512, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
       propertyPath: m_Name
-      value: SoulFragment_Group_DashDropAttack
+      value: SoulFragment_Group_DashDroppingAnchorAttack
       objectReference: {fileID: 0}
     - target: {fileID: 8707060813440144365, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}
@@ -39923,6 +39923,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6472659465508691166, guid: e5da826c518aaba47b0e927c2bb69bc5,
+        type: 3}
+      propertyPath: _abilityToUnlock
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8107798442915251512, guid: e5da826c518aaba47b0e927c2bb69bc5,
         type: 3}

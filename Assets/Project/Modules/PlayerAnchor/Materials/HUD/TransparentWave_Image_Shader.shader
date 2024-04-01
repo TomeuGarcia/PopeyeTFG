@@ -19,9 +19,10 @@ Shader "UI/TransparentWave_Image_Shader"
 
         _WaveOffsetMin ("Wave Offset Min", Range(0, 1)) = 0.1
         _WaveOffsetMax ("Wave Offset Max", Range(0, 1)) = 0.2
-        _CenterSmoothness ("Center Smoothness", Range(0, 30)) = 8
-        _FadeSharpness ("Fade Sharpness", Range(0, 30)) = 16
+        _WaveScrollSpeed ("Wave Scroll Speed", Range(0, 10)) = 1
         _WaveFrequency ("Wave Frequency", Range(0, 30)) = 16
+        _CenterSharpness ("Center Sharpness", Range(0, 30)) = 8
+        _FadeSharpness ("Fade Sharpness", Range(0, 30)) = 16
     }
 
     SubShader
@@ -89,9 +90,9 @@ Shader "UI/TransparentWave_Image_Shader"
             float4 _MainTex_ST;
 
             float _WaveOffsetMin, _WaveOffsetMax;
-            float _CenterSmoothness;
+            float _WaveScrollSpeed, _WaveFrequency;
+            float _CenterSharpness;
             float _FadeSharpness;
-            float _WaveFrequency;
 
             v2f vert(appdata_t v)
             {
@@ -119,9 +120,9 @@ Shader "UI/TransparentWave_Image_Shader"
             {
                 half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * IN.color;
 
-                float widthCurvature = pow(sin01(PI * IN.texcoord.x), _CenterSmoothness);
+                float widthCurvature = pow(sin01(PI * IN.texcoord.x), _CenterSharpness);
 
-                float offsetT = sin01(_Time.y + IN.texcoord.x * _WaveFrequency);
+                float offsetT = sin01((_Time.y * _WaveScrollSpeed) + (IN.texcoord.x * _WaveFrequency));
                 float o = lerp(_WaveOffsetMin, _WaveOffsetMax, offsetT);
                 o = lerp(o, 0, widthCurvature);
 

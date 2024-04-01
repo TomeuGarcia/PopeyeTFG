@@ -7,7 +7,6 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Timers;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 {
@@ -33,13 +32,16 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private void Start()
         {
             _coreTargetTransform = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerPositionTransform();
-            _viewConfig.ExplodingChainSharedMaterial.SetFloat(_viewConfig.ExplodeStartTimePropertyId, -10);
+                        
+            ResetViewState();
         }
 
 
         [Button()]
         public async UniTaskVoid PlayIdleAnimation()
         {
+            if (_playIdleAnimation) return;
+            
             _playIdleAnimation = true;
             while (_playIdleAnimation)
             {
@@ -112,13 +114,20 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private async UniTaskVoid ResetViewState(float delay)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(delay));
+
+            ResetViewState();
             
+            PlayIdleAnimation().Forget();
+        }
+
+        private void ResetViewState()
+        {
             _chainsHolder.SetActive(true);
             _christalHolder.SetActive(true);
             _coreSphere.SetActive(true);
             _coreHolderTransform.localPosition = Vector3.zero;
             
-            PlayIdleAnimation().Forget();
+            _viewConfig.ExplodingChainSharedMaterial.SetFloat(_viewConfig.ExplodeStartTimePropertyId, -10);
         }
     }
 }

@@ -17,19 +17,25 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private TextMeshProUGUI _contentText;
 
         private TextDisplayConfig _currentDisplay;
+        
         private Queue<TextDisplayConfig> _queuedDisplays;
         private bool _processingQueuedDisplays;
 
-        private bool _isShowing = false;
-        private bool _isHiding = false;
+        private bool _isShowing;
+        private bool _isHiding;
         
         private void Awake()
         {
             _backgroundFadeGroup.alpha = 0;
             _contentFadeGroup.alpha = 0;
+            
             _currentDisplay = null;
+            
             _queuedDisplays = new Queue<TextDisplayConfig>(2);
             _processingQueuedDisplays = false;
+            
+            _isShowing = false;
+            _isHiding = false;
         }
 
         private void OnDestroy()

@@ -13,6 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
     {
         public enum Ability
         {
+            None,
             Pull,
             DashDroppingAnchor,
             DashDroppingAnchorAttack,
