@@ -9,6 +9,7 @@ namespace Popeye.Scripts.EventChannels
     {
         private IEmptyEventChannelListenEntry.ChannelEvent OnRequest;
         
+        [SerializeField] private bool _logWarining = true;
         
         public void Subscribe(IEmptyEventChannelListenEntry.ChannelEvent callback)
         {
@@ -27,7 +28,7 @@ namespace Popeye.Scripts.EventChannels
             {
                 OnRequest.Invoke();
             }
-            else
+            else if (_logWarining)
             {
                 Debug.LogWarning( $"An Event was requested but nobody picked it up [{name}]");
             }
