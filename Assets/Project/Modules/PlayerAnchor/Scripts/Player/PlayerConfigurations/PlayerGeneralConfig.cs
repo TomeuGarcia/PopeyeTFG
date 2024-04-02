@@ -61,5 +61,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         [SerializeField] private PlayerGeneralViewConfig _generalViewConfig;
         
         public PlayerGeneralViewConfig GeneralViewConfig => _generalViewConfig;
+        
+        
+        [Header("ACTIONS")] 
+        [SerializeField] private PlayerAbilityActionChannels abilityActionChannels;
+        public PlayerAbilityActionChannels AbilityActionChannels => abilityActionChannels;
     }
 }
