@@ -15,9 +15,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         protected override void DoEnter()
         {
-            if (_blackboard.cameFromState == PlayerStates.TiredPickingUpAnchor) return;
+            UpdateMovementSpeed();
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
             
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.TiredMoveSpeed);
+            if (_blackboard.CameFromState == PlayerStates.TiredPickingUpAnchor) return;
+
             _blackboard.PlayerMediator.SetCanRotate(true);
             _blackboard.PlayerView.StartTired();
 
@@ -29,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
-            
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
         }
 
         public override bool Update(float deltaTime)
@@ -46,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             }
          
             if (_blackboard.AnchorMediator.IsGrabbedBySnapper() &&
-                _blackboard.cameFromState == PlayerStates.DashingTowardsAnchor)
+                _blackboard.CameFromState == PlayerStates.DashingTowardsAnchor)
             {
                 NextState = PlayerStates.TiredPickingUpAnchor;
                 return true;
@@ -69,7 +71,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private bool ShouldDropAnchor()
         {
             return _blackboard.PlayerStatesConfig.DropAnchorWhenTired &&
-                   _blackboard.cameFromState == PlayerStates.PullingAnchor;
+                   _blackboard.CameFromState == PlayerStates.PullingAnchor;
+        }
+
+        private void UpdateMovementSpeed()
+        {
+            bool cameMovingWithAnchor = 
+                _blackboard.CameFromState == PlayerStates.MovingWithAnchor ||
+                _blackboard.CameFromState == PlayerStates.TiredPickingUpAnchor;
+
+            float maxMovementSpeed = cameMovingWithAnchor
+                ? _blackboard.PlayerStatesConfig.TiredWithAnchorMoveSpeed
+                : _blackboard.PlayerStatesConfig.TiredWithoutAnchorMoveSpeed;
+
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
         }
     }
 }

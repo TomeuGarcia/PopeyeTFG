@@ -182,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyHealth: {fileID: 4656662251084337943}
   _enemyVisuals: {fileID: 6891017323650486759}
+  _enemyID: {fileID: 11400000, guid: 6a5b2670b18abdb4e8d0c143fed48ec0, type: 2}
   _turretShooting: {fileID: 4154660649507637291}
   _parabolicProjectile: {fileID: 7378326224867316411, guid: 4e338e253182bdf49a70eaa39a367679,
     type: 3}
@@ -219,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 50
+  _maxHealth: 80
   _knockbackRigidbody: {fileID: 1156818105874790195}
   _knockbackEffectiveness: 0
 --- !u!54 &1156818105874790195
@@ -470,6 +471,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -31.421171
       objectReference: {fileID: 0}
+    - target: {fileID: -6449620441752727428, guid: 6ca6ede76d05e3744be6ea121b396f2a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cbc194d1f4722c84ab6c03c3e91260e2, type: 2}
     - target: {fileID: -6440449514139974201, guid: 6ca6ede76d05e3744be6ea121b396f2a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

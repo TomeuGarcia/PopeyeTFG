@@ -12,6 +12,12 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         {
             
         }
+
+        public void UpdateChecking()
+        {
+            
+        }
+
         private void Awake()
         {
             SetLastSafePosition(transform.position);

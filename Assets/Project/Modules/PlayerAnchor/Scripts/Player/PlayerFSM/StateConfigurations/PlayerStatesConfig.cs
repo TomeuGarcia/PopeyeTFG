@@ -1,4 +1,3 @@
-using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.ProjectHelpers;
 using UnityEngine;
@@ -37,7 +36,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _pullingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _kickingAnchorMoveSpeed = 0.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _spinningAnchorMoveSpeed = 0.5f;
-        [SerializeField, Range(0.0f, 20.0f)] private float _tiredMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _healingMoveSpeed = 2.5f;
         [SerializeField, Range(0.0f, 20.0f)] private float _fallingOnVoidMoveSpeed = 0.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _dashingMoveSpeed = 12.0f;
@@ -50,7 +48,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float PullingAnchorMoveSpeed => _pullingAnchorMoveSpeed;
         public float KickingAnchorMoveSpeed => _kickingAnchorMoveSpeed;
         public float SpinningAnchorMoveSpeed => _spinningAnchorMoveSpeed;
-        public float TiredMoveSpeed => _tiredMoveSpeed;
         public float HealingMoveSpeed => _healingMoveSpeed;
         public float FallingOnVoidMoveSpeed => _fallingOnVoidMoveSpeed;
         public float DashingMoveSpeed => _dashingMoveSpeed;
@@ -99,8 +96,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 
 
         [Header("TIRED")] 
+        [SerializeField, Range(0.0f, 2.0f)] private float _tiredWithoutAnchorMoveSpeedMultiplier = 0.8f;
+        [SerializeField, Range(0.0f, 2.0f)] private float _tiredWithAnchorMoveSpeedMultiplier = 1.0f;
         [SerializeField] private bool _dropAnchorWhenTired = false;
 
+        public float TiredWithoutAnchorMoveSpeed => WithoutAnchorMoveSpeed * _tiredWithoutAnchorMoveSpeedMultiplier;
+        public float TiredWithAnchorMoveSpeed => WithAnchorMoveSpeed * _tiredWithAnchorMoveSpeedMultiplier;
         public bool DropAnchorWhenTired => _dropAnchorWhenTired;
         
         
@@ -115,6 +116,19 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float EnteringSpecialAttackDuration => _enteringSpecialAttackDuration;
         private float _extraSpeed = 0;
 
+        
+        [Header("COOLDOWNS")] 
+        [SerializeField, Range(0.0f, 10.0f)] private float _throwIntoPullCooldown = 0.2f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _rollIntoPullCooldown = 0.5f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _rollIntoDashCooldown = 0.5f;
+        
+        public float ThrowIntoPullCooldown => _throwIntoPullCooldown;
+        public float RollIntoPullCooldown => _rollIntoPullCooldown;
+        public float RollIntoDashCooldown => _rollIntoDashCooldown;
+        
+        
+        
+        
         public delegate void PlayerStatesEvent();
         public PlayerStatesEvent OnSpeedValueChanged;
 

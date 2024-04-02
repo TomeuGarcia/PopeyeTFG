@@ -1,8 +1,11 @@
 using Popeye.Core.Installers;
 using Popeye.Core.Services.EventSystem;
+using Popeye.Core.Services.InformationDisplay;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameDataEvents;
+using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Scripts.Collisions;
 using Project.Modules.CombatSystem.KnockbackSystem;
@@ -31,12 +34,24 @@ public class GameSetupInstaller : MonoBehaviour
     [Header("GAME REFERENCES")] 
     [SerializeField] private GameReferencesInstaller _gameReferencesInstaller;
     
+    [Header("GAME EVENTS")] 
+    [SerializeField] private GameDataEventsInstaller _gameDataEventsInstaller;
+    
+    [Header("INFORMATION DISPLAY")] 
+    [SerializeField] private InformationDisplayInstaller _informationDisplayInstaller;
+    
     [Header("OTHER")]
     [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
     [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
     [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
     
     [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
+
+    
+    
+    private TimeManagerGameEventsListener _timeManagerGameEventsListener; 
+    
+    
 
     void Awake()
     {
@@ -51,8 +66,9 @@ public class GameSetupInstaller : MonoBehaviour
     private void Install()
     {
         ServiceLocator serviceLocator = ServiceLocator.Instance;
-        
-        serviceLocator.RegisterService<IEventSystemService>(new EventSystemService());
+
+        EventSystemService eventSystemService = new EventSystemService();
+        serviceLocator.RegisterService<IEventSystemService>(eventSystemService);
         
         CombatManagerService combatManagerService = 
             new CombatManagerService(_hitTargetCollisionProbingConfig, 
@@ -66,23 +82,39 @@ public class GameSetupInstaller : MonoBehaviour
         
         _objectTypesInstaller.Install();
         _audioInstaller.Install(serviceLocator);
+        _informationDisplayInstaller.Install(serviceLocator);
         _factoriesInstaller.Install(serviceLocator);
         _playerAnchorInstaller.Install();
         
         _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
+
+        _gameDataEventsInstaller.Install(eventSystemService);
+        
+
+        IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
+        serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
+        
+        _timeManagerGameEventsListener = new TimeManagerGameEventsListener(eventSystemService, timeScaleManager);
+        _timeManagerGameEventsListener.StartListening();
     }
     
     private void Uninstall()
     {
+        _timeManagerGameEventsListener.StopListening();
+        
         ServiceLocator serviceLocator = ServiceLocator.Instance;
+        
+        serviceLocator.RemoveService<IGameStateEventsDispatcher>();
         
         serviceLocator.RemoveService<ICombatManager>();
         serviceLocator.RemoveService<ITimeFunctionalities>();
         
+        _gameDataEventsInstaller.Uninstall();
         _gameReferencesInstaller.Uninstall(serviceLocator);
         
         _playerAnchorInstaller.Uninstall();
         _factoriesInstaller.Uninstall(serviceLocator);
+        _informationDisplayInstaller.Uninstall(serviceLocator);
         _audioInstaller.Uninstall(serviceLocator);
         _objectTypesInstaller.Uninstall();
 

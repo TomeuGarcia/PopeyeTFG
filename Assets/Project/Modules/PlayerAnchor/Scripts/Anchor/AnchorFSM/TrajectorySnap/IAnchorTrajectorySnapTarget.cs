@@ -18,5 +18,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         void OnUsedAsAimTarget(float delay);
         void OnStartBeingUsed(Transform user);
         void OnFinishBeingUsed();
+        void OnUsedForDash();
     }
 }

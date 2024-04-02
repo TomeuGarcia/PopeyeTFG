@@ -35,9 +35,20 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
             _checkGroundTimer.Update(deltaTime);
             if (_checkGroundTimer.HasFinished())
             {
-                _checkGroundTimer.Clear();
-                CheckLastSafePosition();
+                DoUpdateChecking();
             }
+        }
+
+        public void UpdateChecking()
+        {
+            _currentTrackedPosition = _positionTrackingTransform.position;
+            DoUpdateChecking();
+        }
+        
+        private void DoUpdateChecking()
+        {
+            _checkGroundTimer.Clear();
+            CheckLastSafePosition();
         }
 
         private void CheckLastSafePosition()

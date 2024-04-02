@@ -1,4 +1,5 @@
 using Popeye.Core.Pool;
+using Popeye.Modules.VFX.ParticleFactories;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Hazards
@@ -8,9 +9,12 @@ namespace Popeye.Modules.Enemies.Hazards
         private ObjectPool _projectilePool;
         private ObjectPool _areaDamagePool;
         private HazardsFactoryConfig _hazardsFactoryConfig;
-        public HazardsFactory(HazardsFactoryConfig hazardsFactoryConfig, Transform parent)
+        private readonly IParticleFactory _particleFactory;
+
+        public HazardsFactory(HazardsFactoryConfig hazardsFactoryConfig, Transform parent, IParticleFactory particleFactory)
         {
             _hazardsFactoryConfig = hazardsFactoryConfig;
+            _particleFactory = particleFactory;
             _projectilePool = new ObjectPool(_hazardsFactoryConfig.ParabolicProjectilePrefab,parent);
             _projectilePool.Init(_hazardsFactoryConfig.ParabolicProjectilesInitialInstances);
             _areaDamagePool = new ObjectPool(_hazardsFactoryConfig.AreaDamageOverTimePrefab,parent);
@@ -19,6 +23,7 @@ namespace Popeye.Modules.Enemies.Hazards
         public ParabolicProjectile CreateParabolicProjectile(Transform origin, Transform targetPosition)
         {
             var projectile = _projectilePool.Spawn<ParabolicProjectile>(origin.position, Quaternion.identity);
+            projectile.SetParticleFactory(_particleFactory);
             projectile.PrepareShot(targetPosition,this,origin);
             return projectile;
         }

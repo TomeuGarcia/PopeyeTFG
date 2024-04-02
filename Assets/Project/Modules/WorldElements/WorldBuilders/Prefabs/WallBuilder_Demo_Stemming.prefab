@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: WallBuilder_Demo_Stemming
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 3161938450611371407}
   - {fileID: 4653013836675311063}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &2923618988762851378
 MonoBehaviour:
@@ -51,23 +51,72 @@ MonoBehaviour:
   _fillWallsParent: {fileID: 3161938450611371407}
   _collidersParent: {fileID: 9051799137085001309}
   _config: {fileID: 11400000, guid: c079101b9a754a247a327667886e070d, type: 2}
-  _points:
-  - {x: -5.0001006, y: 0, z: -4.5000896}
-  - {x: -0.000039577484, y: 0, z: -4.5000896}
-  - {x: 0.00000047683716, y: 0, z: 4.5000896}
-  - {x: 5.0001006, y: 0, z: 4.5000896}
-  _subPointsList:
-  - _stemmingFromIndex: 2
-    points:
-    - {x: -5.0000997, y: 0, z: 4.5000896}
-    - {x: -12.00024, y: 0, z: 4.5000896}
-    - {x: -12.00024, y: 0, z: -0.50000954}
-    - {x: -9.000179, y: 0, z: -0.50000954}
-  - _stemmingFromIndex: 1
-    points:
-    - {x: 7.00014, y: 0, z: -4.5000896}
-  moveBy: {x: 0, y: 0}
-  selectedPointsRange: {x: 0, y: 0}
+  _baseCornerPointsGroup:
+    _cornerPoints:
+    - isSelectedValue: 0
+      _position: {x: -5.0001006, y: 0, z: -4.5000896}
+      _extrudeTimes: 0
+      _subPointsGroup:
+        _cornerPoints: []
+    - isSelectedValue: 0
+      _position: {x: 0.00001001358, y: 0, z: -4.5004005}
+      _extrudeTimes: 0
+      _subPointsGroup:
+        _cornerPoints:
+        - isSelectedValue: 0
+          _position: {x: 7.00014, y: 0, z: -4.5000896}
+          _extrudeTimes: 0
+          _subPointsGroup:
+            _cornerPoints: []
+    - isSelectedValue: 0
+      _position: {x: 0.00000047683716, y: 0, z: 4.5000896}
+      _extrudeTimes: 0
+      _subPointsGroup:
+        _cornerPoints:
+        - isSelectedValue: 0
+          _position: {x: -5.0000997, y: 0, z: 4.5000896}
+          _extrudeTimes: 0
+          _subPointsGroup:
+            _cornerPoints:
+            - isSelectedValue: 0
+              _position: {x: -4.99999, y: 0, z: 9.499599}
+              _extrudeTimes: 0
+              _subPointsGroup:
+                _cornerPoints: []
+            - isSelectedValue: 0
+              _position: {x: 0.00001001358, y: 0, z: 9.499599}
+              _extrudeTimes: 0
+              _subPointsGroup:
+                _cornerPoints: []
+        - isSelectedValue: 0
+          _position: {x: -11.99999, y: 0, z: 4.4995995}
+          _extrudeTimes: 0
+          _subPointsGroup:
+            _cornerPoints: []
+        - isSelectedValue: 0
+          _position: {x: -12.00024, y: 0, z: -0.50000954}
+          _extrudeTimes: 0
+          _subPointsGroup:
+            _cornerPoints: []
+        - isSelectedValue: 0
+          _position: {x: -9.000179, y: 0, z: -0.50000954}
+          _extrudeTimes: 0
+          _subPointsGroup:
+            _cornerPoints: []
+    - isSelectedValue: 0
+      _position: {x: 5.0001006, y: 0, z: 4.5000896}
+      _extrudeTimes: 0
+      _subPointsGroup:
+        _cornerPoints: []
+    - isSelectedValue: 0
+      _position: {x: 5.00001, y: 0, z: 9.499599}
+      _extrudeTimes: 0
+      _subPointsGroup:
+        _cornerPoints: []
+  _cornersObjectBuffer:
+    _spawnedObjectsBuffer: []
+  _fillsObjectBuffer:
+    _spawnedObjectsBuffer: []
 --- !u!1 &6296338534507832279
 GameObject:
   m_ObjectHideFlags: 0

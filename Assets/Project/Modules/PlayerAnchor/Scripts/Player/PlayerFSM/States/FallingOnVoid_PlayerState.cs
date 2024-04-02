@@ -34,7 +34,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _recoverFromFallTimer.Update(deltaTime);
             if (_recoverFromFallTimer.HasFinished())
             {
+                _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
                 _blackboard.PlayerMediator.SetInvulnerable(false);
+
                 bool diedAfterFall = _blackboard.PlayerMediator.TakeFellOnVoidDamage();
 
                 if (diedAfterFall)
@@ -46,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 _blackboard.PlayerMediator.RespawnToLastSafeGround();
                 _blackboard.PlayerMediator.SetInvulnerableForDuration(_blackboard.PlayerStatesConfig.InvulnerableTimeAfterVoidFallRespawn);
                 
-                if (_blackboard.cameFromState == PlayerStates.MovingWithAnchor)
+                if (_blackboard.CameFromState == PlayerStates.MovingWithAnchor)
                 {
                     NextState = PlayerStates.MovingWithAnchor;
                 }

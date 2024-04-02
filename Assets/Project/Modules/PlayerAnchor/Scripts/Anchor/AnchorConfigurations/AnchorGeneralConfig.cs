@@ -15,7 +15,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         [SerializeField] private AnchorDamageConfig _anchorDamageConfig;
         [SerializeField] private AnchorMotionConfig _anchorMotionConfig;
         [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
-        [SerializeField] private AnchorThrowConfig _anchorVerticalThrowConfig;
+        [SerializeField] private AnchorThrowConfig _anchorVerticalDropThrowConfig;
+        [SerializeField] private AnchorThrowConfig _anchorVerticalAttackThrowConfig;
         [SerializeField] private AnchorPullConfig _anchorPullConfig;
         [SerializeField] private AnchorKickConfig _anchorKickConfig;
         [SerializeField] private AnchorSpinConfig _anchorSpinConfig;
@@ -24,7 +25,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         public AnchorDamageConfig DamageConfig => _anchorDamageConfig;
         public AnchorMotionConfig MotionConfig => _anchorMotionConfig;
         public AnchorThrowConfig ThrowConfig => _anchorThrowConfig;
-        public AnchorThrowConfig VerticalThrowConfig => _anchorVerticalThrowConfig;
+        public AnchorThrowConfig VerticalDropThrowConfig => _anchorVerticalDropThrowConfig;
+        public AnchorThrowConfig VerticalAttackThrowConfig => _anchorVerticalAttackThrowConfig;
         public AnchorPullConfig PullConfig => _anchorPullConfig;
         public AnchorKickConfig KickConfig => _anchorKickConfig;
         public AnchorSpinConfig SpinConfig => _anchorSpinConfig;
@@ -40,5 +42,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         
         public CollisionProbingConfig OnVoidProbingConfig => _onVoidProbingConfig;
 
+
+        [Header("VIEW")] 
+        [SerializeField] private GeneralAnchorViewConfig _generalViewConfig;
+        public GeneralAnchorViewConfig GeneralViewConfig => _generalViewConfig;
     }
 }

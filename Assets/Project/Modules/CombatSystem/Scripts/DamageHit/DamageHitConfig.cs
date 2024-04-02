@@ -18,7 +18,6 @@ namespace Popeye.Modules.CombatSystem
         
         public DamageHitTargetType DamageHitTargetTypeMask => _damageHitPreset.TargetMask;
         public int Damage => _damage;
-        public float KnockbackMagnitude => _knockbackMagnitude;
         public float StunDuration => _stunDuration;
 
         public KnockbackHitConfig KnockbackHitConfig => _knockbackHitConfig;

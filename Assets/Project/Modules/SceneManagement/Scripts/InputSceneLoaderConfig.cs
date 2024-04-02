@@ -26,8 +26,5 @@ namespace Popeye.Modules.SceneManagement.Scripts
         [SerializeField] private KeyCode _reloadCurrentSceneKeyCode = KeyCode.R;
         public KeyCode ReloadCurrentSceneKeyCode => _reloadCurrentSceneKeyCode;
         
-        [SerializeField] private KeyCode _quitApplicationKeyCode = KeyCode.Escape;
-        public KeyCode QuitApplicationKeyCode => _quitApplicationKeyCode;
-
     }
 }

@@ -1,3 +1,4 @@
+using Project.Modules.AudioSystem.Scripts.SoundVolume;
 using UnityEngine;
 
 namespace Popeye.Modules.AudioSystem
@@ -5,6 +6,7 @@ namespace Popeye.Modules.AudioSystem
     public interface IFMODAudioManager
     {
         public GlobalParametersController GlobalParametersController { get; }
+        public SoundVolumeControllersGroup SoundVolumeControllersGroup { get; }
         
         
         void PlayOneShot(OneShotFMODSound oneShotSound);

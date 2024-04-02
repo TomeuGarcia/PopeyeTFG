@@ -14,7 +14,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _blackboard.queuedAnchorAim = false;
+            _blackboard.QueuedAnchorAim = false;
+            
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
+            UpdateMovementSpeed();
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
             _blackboard.PlayerMediator.SetInstantRotation(true);
@@ -31,6 +34,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
+            
             _blackboard.PlayerMediator.SetInstantRotation(false);
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
             _blackboard.PlayerMediator.SetCanFallOffLedges(false, true);
@@ -64,6 +69,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
             
+            if (PlayerCanDash())
+            {
+                CancelChargingThrow();
+                NextState = PlayerStates.DashingDroppingAnchor;
+                return true;
+            }
+            
             if (_blackboard.MovesetInputsController.Aim_HeldPressed())
             {
                 ChargeThrow(deltaTime);
@@ -94,5 +106,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.CancelChargingThrow();
         }
         
+        
+        private bool PlayerCanDash()
+        {
+            return _blackboard.MovesetInputsController.DashDroppingAnchor_Pressed();
+        }
+        
+        private void UpdateMovementSpeed()
+        {
+            float maxMovementSpeed = _blackboard.PlayerStatesConfig.AimingMoveSpeed;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
+        }
     }
 }

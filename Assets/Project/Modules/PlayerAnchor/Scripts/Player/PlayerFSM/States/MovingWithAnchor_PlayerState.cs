@@ -106,9 +106,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanAimAnchor()
         {
-            if (_blackboard.queuedAnchorAim)
+            if (_blackboard.QueuedAnchorAim)
             {
-                _blackboard.queuedAnchorAim = false;
+                _blackboard.QueuedAnchorAim = false;
                 return true;
             }
             
@@ -129,7 +129,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanDash()
         {
-            return _blackboard.MovesetInputsController.Dash_Pressed();
+            return _blackboard.MovesetInputsController.DashDroppingAnchor_Pressed();
         }
 
         private bool LateAnchorThrow(float deltaTime)
@@ -164,8 +164,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private void UpdateMovementSpeed()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.WithAnchorMoveSpeed);
-            _blackboard.PlayerMovementChecker.MaxMovementSpeed = _blackboard.PlayerStatesConfig.WithAnchorMoveSpeed;
+            float maxMovementSpeed = _blackboard.PlayerStatesConfig.WithAnchorMoveSpeed;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
         }
     }
 }

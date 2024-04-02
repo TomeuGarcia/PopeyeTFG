@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -29,6 +31,8 @@ namespace Popeye.Modules.Enemies
             }
             
             _shieldedMediator.Init();
+            _shieldedMediator.SetBoostDropFactory(ServiceLocator.Instance.GetService<IPowerBoostDropFactory>());
+            _shieldedMediator.SetEventSystem(ServiceLocator.Instance.GetService<IEventSystemService>());
             _shieldedMediator.StartChasing();
         }
 
@@ -39,7 +43,7 @@ namespace Popeye.Modules.Enemies
 
         public override void SetPatrollingWaypoints(Transform[] waypoints)
         {
- 
+            _shieldedMediator.SetWayPoints(waypoints);
         }
         
         public override void DieFromOrder()

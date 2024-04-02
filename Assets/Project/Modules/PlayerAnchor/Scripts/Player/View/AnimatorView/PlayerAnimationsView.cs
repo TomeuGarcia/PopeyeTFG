@@ -56,7 +56,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayEnterAimingAnimation()
         {
-            SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
+            SetAnimatorBool(_config.MovingWithAnchorParameterId, true);
             SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 0);
             SetAnimatorBool(_config.MovingWithoutAnchorParameterId, false);
             SetAnimatorBool(_config.AimingParameterId, true);
@@ -93,6 +93,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             SetAnimatorBool(_config.MovingWithAnchorParameterId, false);
             SetAnimatorFloat(_config.FMovingWithAnchorParameterId, 0);
+            SetAnimatorBool(_config.AimingParameterId, false);
         }
         
         public void StartTired()

@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 320191541800502219}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.8}
+  m_LocalPosition: {x: 0, y: 0, z: -1.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -270,7 +270,7 @@ Transform:
   - {fileID: 8371242735614521713}
   - {fileID: 542140075044529399}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4131713180568420220
 MonoBehaviour:
@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveTransform: {fileID: 4961382533563393153}
-  _fakeAnchor: {fileID: 0}
+  _meshHolder: {fileID: 2844395377855781948}
   _destructiblePlatformBreaker: {fileID: 2475414617101000845}
   _pull_CameraZoomInOut: {fileID: 11400000, guid: 17be9d73010c2554c88e46ce1f5d67d0,
     type: 2}
@@ -306,8 +306,6 @@ MonoBehaviour:
   _vfxParent: {fileID: 3183404267920450486}
   _anchorThrowHeadFollower: {fileID: 0}
   _specialMotionsTransform: {fileID: 7841744605102467066}
-  _vfxAnchorViewConfig: {fileID: 11400000, guid: 7b8d911b58da25540bfc1fbbbbed5747,
-    type: 2}
 --- !u!114 &7243833051957240061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,6 +437,7 @@ MonoBehaviour:
   _damageTargetsOncePerActivation: 0
   _isKnockbackPushOrigin: 0
   _collider: {fileID: 3566969565084823980}
+  _trackActivations: 0
 --- !u!33 &8381382291774427961
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -626,7 +625,7 @@ Transform:
   m_GameObject: {fileID: 4896630478839212616}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.01, z: 0.75}
+  m_LocalScale: {x: 1, y: 0.01, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8371242735614521713}
@@ -832,6 +831,7 @@ MonoBehaviour:
   _damageTargetsOncePerActivation: 1
   _isKnockbackPushOrigin: 0
   _collider: {fileID: 4875311966008023363}
+  _trackActivations: 1
 --- !u!33 &8555011931730482343
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1078,6 +1078,7 @@ MonoBehaviour:
   _damageTargetsOncePerActivation: 1
   _isKnockbackPushOrigin: 0
   _collider: {fileID: 2565932544106577141}
+  _trackActivations: 0
 --- !u!136 &2565932544106577141
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1222,8 +1223,8 @@ MonoBehaviour:
   _stopFollowDistance: 0.1
   _view:
     _mesh: {fileID: 3930211785847946555}
-    _validColor: {r: 0, g: 0.83137256, b: 0.49411765, a: 1}
-    _notValidColor: {r: 0.8490566, g: 0.16420433, b: 0.3064454, a: 1}
+    _validColor: {r: 0.2, g: 0.8352941, b: 0.5294118, a: 1}
+    _notValidColor: {r: 1, g: 0.18396229, b: 0.35183287, a: 1}
 --- !u!1001 &380001187662411422
 PrefabInstance:
   m_ObjectHideFlags: 0

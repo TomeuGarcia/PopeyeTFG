@@ -10,7 +10,8 @@ namespace Popeye.Core.Installers
         public void Install(ServiceLocator serviceLocator, IPlayerMediator playerMediator)
         {
             GameReferences gameReferences = new GameReferences(
-                playerMediator.GetTargetForEnemies()
+                playerMediator.GetTargetForEnemies(),
+                playerMediator.PositionTransform
             );
             
             serviceLocator.RegisterService<IGameReferences>(gameReferences);
