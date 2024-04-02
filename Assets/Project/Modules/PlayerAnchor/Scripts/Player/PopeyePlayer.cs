@@ -11,6 +11,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Popeye.Scripts.ValueGating;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
@@ -60,6 +61,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private PopeyeAnchor _anchor;
         private IAnchorThrower _anchorThrower;
+        private IGateValueReader<IAnchorVerticalThrower> _anchorVerticalThrower;
         private IAnchorPuller _anchorPuller;
         private IAnchorKicker _anchorKicker;
         private IAnchorSpinner _anchorSpinner;
@@ -86,7 +88,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
             PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
-            IAnchorThrower anchorThrower, IAnchorPuller anchorPuller, IAnchorKicker anchorKicker,
+            IAnchorThrower anchorThrower,
+            IGateValueReader<IAnchorVerticalThrower> anchorVerticalThrower, 
+            IAnchorPuller anchorPuller, 
+            IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
             ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
             IPlayerFocusController focusController, IPlayerSpecialAttackController specialAttackController,
@@ -105,6 +110,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerDasher = playerDasher;
             _anchor = anchor;
             _anchorThrower = anchorThrower;
+            _anchorVerticalThrower = anchorVerticalThrower;
             _anchorPuller = anchorPuller;
             _anchorKicker = anchorKicker;
             _anchorSpinner = anchorSpinner;
@@ -337,6 +343,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayDashAnimation(duration, Vector3.ProjectOnPlane((_anchor.Position - Position).normalized,  Vector3.up));
             _playerAudio.PlayDashTowardsAnchorSound();
 
+            _eventsDispatcher.DispatchDashTowardsAnchorPerformed();
             _eventsDispatcher.DispatchOnStartActionEvent("Dash", Position);
             
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
@@ -349,8 +356,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
                             out float duration);
             
             SpendStamina(_playerGeneralConfig.MovesetConfig.RollStaminaCost);
-            
-            _anchorThrower.ThrowAnchorVertically(out float throwDuration);
+
+            _anchorVerticalThrower.GetValue().ThrowAnchorVertically(out float anchorBusyDuration);
 
             float invulnerableDuration = _playerGeneralConfig.StatesConfig.RollInvulnerableDuration;
             SetInvulnerableForDuration(invulnerableDuration);
@@ -365,11 +372,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             _playerController.enabled = true;
 
-            float extraWaitDuration = throwDuration - duration;
-            if (extraWaitDuration > 0)
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(extraWaitDuration));
-            }
+            float extraWaitDuration = Mathf.Max(0f, anchorBusyDuration - duration);
+            await UniTask.Delay(TimeSpan.FromSeconds(extraWaitDuration));
         }
 
         public void KickAnchor()
@@ -632,6 +636,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _specialAttackController.StartSpecialAttack();
             WaitForSpecialAttackFinished().Forget();
             
+            _eventsDispatcher.DispatchSpecialAttackPerformed();
             _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
         }
         private async UniTaskVoid WaitForSpecialAttackFinished()

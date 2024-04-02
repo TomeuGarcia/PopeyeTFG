@@ -31,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.Dash_Pressed())
+            if (_blackboard.MovesetInputsController.DashTowardsAnchor_Pressed())
             {
                 _blackboard.QueuedDashTowardsAnchor = true;
             }

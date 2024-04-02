@@ -437,16 +437,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             return cappedCurvedTrajectoryPoints;
         }
 
-
+        
         public Vector3[] ComputeUpAndDownTrajectory(Vector3 startPosition, float distance, out RaycastHit floorHit)
         {
             Vector3[] upAndDownTrajectory = ComputeBackAndForthTrajectory(startPosition, Vector3.up, distance);
-            
-            if (CheckFloorHit(upAndDownTrajectory[^1], 0.1f, FloorProbeDistance, out floorHit, 
-                    ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
-            {
-                upAndDownTrajectory[^1] = floorHit.point + (floorHit.normal * 0.005f);
-            }
+
+            CorrectLastPositionWithFloorHit(upAndDownTrajectory, out floorHit);
 
             return upAndDownTrajectory;
         }
@@ -486,6 +482,50 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             return backAndForthTrajectory;
         }
         
+        private void CorrectLastPositionWithFloorHit(Vector3[] trajectory, out RaycastHit floorHit)
+        {
+            if (CheckFloorHit(trajectory[^1], 0.1f, FloorProbeDistance, out floorHit, 
+                    ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                trajectory[^1] = GetPositionTouchingFloor(floorHit);
+            }
+        }
+
+        private Vector3 GetPositionTouchingFloor(RaycastHit floorHit)
+        {
+            return floorHit.point + (floorHit.normal * 0.005f);
+        }
+        
+        public Vector3[] ComputeDownToFloorTrajectory(Vector3 startPosition, out RaycastHit floorHit, 
+            int numberOfSteps = 2)
+        {
+            numberOfSteps = Mathf.Max(numberOfSteps, 2);
+            
+            Vector3 endPosition = Vector3.zero;
+
+            
+            
+            if (CheckFloorHit(startPosition, 0.1f, FloorProbeDistance, out floorHit,
+                    ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                endPosition = GetPositionTouchingFloor(floorHit);
+            }
+            else
+            {
+                endPosition = startPosition + (Vector3.down * FloorProbeDistance);
+            }
+
+            Vector3[] downTrajectory = new Vector3[numberOfSteps];
+            int numberOfStepsMinusOne = numberOfSteps - 1;
+            for (int i = 0; i < numberOfSteps; ++i)
+            {
+                float t = (float)i / numberOfStepsMinusOne;
+                downTrajectory[i] = Vector3.Lerp(startPosition, endPosition, t);
+            }
+            
+            
+            return downTrajectory;
+        }
         
     }
 }
