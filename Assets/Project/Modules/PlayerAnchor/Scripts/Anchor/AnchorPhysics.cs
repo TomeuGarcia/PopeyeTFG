@@ -24,15 +24,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
 
         public void EnableCollision()
-        {
+        {   
+            /*
             _rigidbody.gameObject.SetActive(true);
             _collider.enabled = true;
+            */
         }
         
         public void DisableCollision()
         {
+            // Buttons stop working if uncommented
+            /* 
             _collider.enabled = false;
             _rigidbody.gameObject.SetActive(false);
+            */
         }
 
 

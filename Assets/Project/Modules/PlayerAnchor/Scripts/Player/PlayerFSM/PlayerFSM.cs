@@ -34,7 +34,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private void TransitionToNextState(PlayerStates nextState)
         {
-            Blackboard.cameFromState = CurrentStateType;
+            Blackboard.CameFromState = CurrentStateType;
             CurrentStateType = nextState;
             
             _currentState.Exit();

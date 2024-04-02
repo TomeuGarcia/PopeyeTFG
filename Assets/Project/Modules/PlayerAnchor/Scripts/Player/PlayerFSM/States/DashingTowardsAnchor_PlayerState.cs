@@ -19,7 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         protected override void DoEnter()
         {
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.DashingMoveSpeed);
-            _blackboard.queuedDashTowardsAnchor = false;
+            _blackboard.QueuedDashTowardsAnchor = false;
             
             StartDashing().Forget();
         }
@@ -39,7 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
             if (_blackboard.MovesetInputsController.Aim_Pressed())
             {
-                _blackboard.queuedAnchorAim = true;
+                _blackboard.QueuedAnchorAim = true;
             }
 
             return false;

@@ -69,6 +69,19 @@ namespace Popeye.Modules.PlayerAnchor
             _moveTransform.DOPath(path, duration)
                 .SetEase(ease);
         }
+        public void MoveAndRotateAlongPath(Vector3[] positionPath, Quaternion[] rotationPath, 
+            float duration, AnimationCurve ease)
+        {
+            float rotationStepDuration = duration / rotationPath.Length;
+            
+            _moveTransform.DOKill();
+            _moveTransform.DOPath(positionPath, duration)
+                .SetEase(ease)
+                .OnWaypointChange((index) =>
+                {
+                    Rotate(rotationPath[index], rotationStepDuration);
+                });
+        }
 
         
         public void Rotate(Quaternion endRotation, float duration, Ease ease = Ease.Linear)
