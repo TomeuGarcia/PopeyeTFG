@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waveParticles: 0
   _splatterParticles: 1
+  _bloodHitDirectionalParticles: 22
+  _bloodHitSplashParticles: 24
+  _bloodDripParticles: 23
   _flashSequence:
   - _flashMaterial: {fileID: 2100000, guid: 86a702cb40ddb494cba2c3e3c89b7ead, type: 2}
     _waitTime: 0.05
@@ -25,3 +28,6 @@ MonoBehaviour:
     _waitTime: 0.05
   - _flashMaterial: {fileID: 2100000, guid: 86a702cb40ddb494cba2c3e3c89b7ead, type: 2}
     _waitTime: 0.05
+  _onHitShakeConfig: {fileID: 11400000, guid: 5569af4160078b7408f5cbea911aae22, type: 2}
+  _deathParticles: 13
+  _deathShakeConfig: {fileID: 11400000, guid: 45eab96e894f19d41a6dc6b5bb723b0f, type: 2}
