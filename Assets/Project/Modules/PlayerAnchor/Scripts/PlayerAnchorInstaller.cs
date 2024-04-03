@@ -113,6 +113,11 @@ namespace Popeye.Modules.PlayerAnchor
             {
                 _anchorPuller_debugReference.DebugTogglePullMode();
             }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                _abilitiesToUnlockHolder.DebugUnlockAll();
+            }
         }
 
         public void Install()
