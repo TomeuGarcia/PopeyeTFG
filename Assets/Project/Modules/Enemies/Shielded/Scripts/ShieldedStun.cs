@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Popeye.Modules.Enemies.Components
     {
 
         [SerializeField] private int _stunnedTimeInMillis;
+        [SerializeField] private float _timeUntilSlamDisabled = 3.5f;
         private ShieldedMediator _mediator;
         private bool _stunned = false;
         
@@ -37,7 +39,7 @@ namespace Popeye.Modules.Enemies.Components
         private async UniTaskVoid PerformStun()
         {
             _mediator.DeactivateNavigation();
-            await UniTask.Delay(350);
+            await UniTask.Delay(TimeSpan.FromSeconds(_timeUntilSlamDisabled));
             _mediator.SetIsInvulnerable(false);
             await UniTask.Delay(_stunnedTimeInMillis);
             if (_stunned)

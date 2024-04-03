@@ -13,7 +13,7 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private Vector2 _speeedThreshold = new Vector2(5, 7);
         [SerializeField] private int _spawnForce = 10;
         [SerializeField] private Rigidbody _rb;
-        
+        [SerializeField] private float _stopAfterHitDelay = 5;
         private bool _followPlayer = false;
 
         private AEnemyMediator _mediator;
@@ -34,7 +34,6 @@ namespace Popeye.Modules.Enemies.Components
         {
             if (_followPlayer && _playerTransform != null && _navMeshAgent.isActiveAndEnabled)
             {
-                //_navMeshAgent.updateRotation = true;
                 SetDestination(_playerTransform.position);
             }
 
@@ -48,17 +47,13 @@ namespace Popeye.Modules.Enemies.Components
         private async UniTaskVoid StopBackUp()
         {
             _navMeshAgent.speed = 0;
-            await UniTask.Delay(500);
+            await UniTask.Delay(TimeSpan.FromSeconds(_stopAfterHitDelay));
             _navMeshAgent.speed = _speed;
         }
 
         public void SetTarget(Transform transform)
         {
             _playerTransform = transform;
-           /* if (_navMeshAgent.isActiveAndEnabled && _followPlayer)
-            {
-                StartChasing();
-            }*/
         }
 
         public void ApplyExplosionForce(Vector3 explosionForceDir)
