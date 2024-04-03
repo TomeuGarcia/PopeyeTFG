@@ -33,12 +33,26 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             {
                 IsUnlocked = _startsUnlocked;
             }
+            private void SetIsUnlockedToTrue()
+            {
+                IsUnlocked = true;
+            }
+
+            public void StartListeningToChannelUpdates()
+            {
+                _channel.Subscribe(SetIsUnlockedToTrue);
+            }
+            public void StopListeningToChannelUpdates()
+            {
+                _channel.Unsubscribe(SetIsUnlockedToTrue);
+            }
         }
 
         private enum LoadMode
         {
             UseGameState,
-            UseCurrentState
+            UseCurrentState,
+            EverythingUnlocked,
         }
 
         [Header("GENERAL")] 
@@ -57,6 +71,24 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         public IChannelAndState DashDroppingAnchor => _dashDroppingAnchor;
         public IChannelAndState SpecialAttack => _specialAttack;
         public IChannelAndState DashDroppingAnchorAttack => _dashDroppingAnchorAttack;
+
+
+        public void StartChannelListening()
+        {
+            _anchorPull.StartListeningToChannelUpdates();
+            _dashDroppingAnchor.StartListeningToChannelUpdates();
+            _dashDroppingAnchorAttack.StartListeningToChannelUpdates();
+            _dashTowardsAnchor.StartListeningToChannelUpdates();
+            _specialAttack.StartListeningToChannelUpdates();
+        }
+        public void StopChannelListening()
+        {
+            _anchorPull.StopListeningToChannelUpdates();
+            _dashDroppingAnchor.StopListeningToChannelUpdates();
+            _dashDroppingAnchorAttack.StopListeningToChannelUpdates();
+            _dashTowardsAnchor.StopListeningToChannelUpdates();
+            _specialAttack.StopListeningToChannelUpdates();
+        }
         
         
         public void SetupState(bool isTutorial)
@@ -75,20 +107,32 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 }
                 else
                 {
-                    SetStateToAll(true);
+                    
                 }
+            }
+
+            if (_loadMode == LoadMode.EverythingUnlocked)
+            {
+                SetStateToAll(true);
             }
             
         }
         
         private void SetStartingStateToAll()
         {
-            _anchorPull.SetIsUnlockedToStartValue();
-            _dashDroppingAnchor.SetIsUnlockedToStartValue();
-            _dashDroppingAnchorAttack.SetIsUnlockedToStartValue();
-            _dashTowardsAnchor.SetIsUnlockedToStartValue();
-            _specialAttack.SetIsUnlockedToStartValue();
+            SetIsUnlockedToStartValue(_anchorPull);
+            SetIsUnlockedToStartValue(_dashDroppingAnchor);
+            SetIsUnlockedToStartValue(_dashDroppingAnchorAttack);
+            SetIsUnlockedToStartValue(_dashTowardsAnchor);
+            SetIsUnlockedToStartValue(_specialAttack);
         }
+        
+        private void SetIsUnlockedToStartValue(ChannelAndState channelAndState)
+        {
+            channelAndState.SetIsUnlockedToStartValue();
+        }
+        
+        
         private void SetStateToAll(bool isUnlocked)
         {
             SetState(_anchorPull, isUnlocked);
