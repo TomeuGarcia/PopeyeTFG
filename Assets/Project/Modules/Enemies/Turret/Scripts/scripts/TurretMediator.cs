@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Camera;
+using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
@@ -31,7 +33,7 @@ namespace Popeye.Modules.Enemies
         {
             _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
             _enemyHealth.Configure(this);
-            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(), ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker);
             _turretAnimatorController.Configure(this);
             _turretAnimatorCallback.Configure(this);
             _turretSpineRotator.Configure(this,PlayerTransform);

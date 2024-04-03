@@ -15,7 +15,7 @@ namespace Popeye.Modules.VFX.Generic
         PlayerDashDisappear,
         PlayerDashAppear,
         PlayerDashTrail,
-        SlimeDeathParticles,
+        EnemyDeathParticles,
         EnemySpawnHint,
         PlayerDashGhost,
         HealProcess,
@@ -23,6 +23,9 @@ namespace Popeye.Modules.VFX.Generic
         EnterEnraged,
         EnragedProcess,
         TurretProjectileCollision,
-        TurretAOE
+        TurretAOE,
+        EnemyBloodHitDirectional,
+        EnemyBloodDrip,
+        EnemyBloodHitSplash
     }
 }

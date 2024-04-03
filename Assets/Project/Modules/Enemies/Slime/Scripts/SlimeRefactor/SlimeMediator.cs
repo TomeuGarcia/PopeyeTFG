@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.Camera;
+using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Slime;
@@ -45,7 +47,7 @@ namespace Popeye.Modules.Enemies
 
         public void InitAfterSpawn()
         {
-            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(), ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker);
             _slimeMovement.Configure(this);
             _enemyHealth.Configure(this);
             slimeAnimatorController.Configure(this,ServiceLocator.Instance.GetService<IParticleFactory>());
