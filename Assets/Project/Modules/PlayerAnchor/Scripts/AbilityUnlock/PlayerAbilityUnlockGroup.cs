@@ -47,6 +47,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _unlockAbilityChannel.Unsubscribe(UnlockAbilityAndUnsubscribe);
         }
 
+        public void DebugUnlockAbilityAndUnsubscribe()
+        {
+            UnlockAbilityAndUnsubscribe();
+        }
         private void UnlockAbilityAndUnsubscribe()
         {
             UnlockAbility();
