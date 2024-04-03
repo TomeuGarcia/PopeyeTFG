@@ -26,7 +26,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 abilityToUnlockGroup.StopListeningToUnlock();
             }
         }
-        
+
+
+        public void DebugUnlockAll()
+        {
+            foreach (PlayerAbilityUnlockGroup abilityToUnlockGroup in _abilitiesToUnlock)
+            {
+                abilityToUnlockGroup.DebugUnlockAbilityAndUnsubscribe();
+            }
+        }
         
     }
 }
