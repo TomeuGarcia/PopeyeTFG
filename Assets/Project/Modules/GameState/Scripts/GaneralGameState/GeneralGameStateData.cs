@@ -1,6 +1,9 @@
+using NaughtyAttributes;
+using Popeye.Modules.PlayerAnchor.AbilityUnlock;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 namespace Popeye.Modules.GameState.GaneralGameState
 {
@@ -9,11 +12,17 @@ namespace Popeye.Modules.GameState.GaneralGameState
         menuName = ScriptableObjectsHelper.GAMESTATE_ASSETS_PATH + "GeneralGameStateData")]
     public class GeneralGameStateData : ScriptableObject
     {
-        [Header("FlAGS")] 
-        [SerializeField] private bool _isTutorial;
-        [SerializeField] private int _startingPowerBoostExperience = 0;
+        [Header("FLAGS")] 
+        [SerializeField] private SceneReferenceAsset _tutorialScene;
+        [Expandable] [SerializeField] private PlayerUnlockableAbilitiesConfig _unlockableAbilitiesConfig;
 
-        public bool IsTutorial => _isTutorial;
-        public int StartingPowerBoostExperience => _startingPowerBoostExperience;
+        public bool IsTutorial => _tutorialScene.BuiltInSceneIndex == SceneManager.GetActiveScene().buildIndex;
+        public PlayerUnlockableAbilitiesConfig PlayerUnlockableAbilitiesConfig => _unlockableAbilitiesConfig;
+
+
+        public void LoadState()
+        {
+            _unlockableAbilitiesConfig.SetupState(IsTutorial);
+        }
     }
 }

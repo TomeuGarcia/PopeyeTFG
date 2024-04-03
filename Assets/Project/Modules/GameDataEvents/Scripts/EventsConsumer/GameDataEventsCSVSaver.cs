@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Cysharp.Threading.Tasks;
 
 namespace Popeye.Modules.GameDataEvents
 {
@@ -10,19 +11,49 @@ namespace Popeye.Modules.GameDataEvents
         private readonly GameDataEventsCSVSaverConfig _config;
         private readonly List<string> _dataToSave;
         private StreamWriter _outWriter;
+        private bool _savingData;
 
         public GameDataEventsCSVSaver(GameDataEventsCSVSaverConfig config)
         {
             _config = config;
             _dataToSave = new List<string>(300);
+            _savingData = false;
+        }
+
+        public void Start()
+        {
+            SaveOverTime().Forget();
         }
         
         public void Finish()
         {
-            OpenFile();
-            SaveData();
-            CloseFile();
+            WaitUntilDataIsSaved();
+            SaveCurrentData();
         }
+
+        private void WaitUntilDataIsSaved()
+        {
+            while (_savingData) { }
+        }
+
+        private async UniTaskVoid SaveOverTime()
+        {
+            await UniTask.Delay(_config.SaveFrequency);
+            SaveCurrentData();
+        }
+
+
+        private void SaveCurrentData()
+        {
+            WaitUntilDataIsSaved();
+            
+            _savingData = true;
+            OpenFile();
+            SaveDataToFile();
+            CloseFile();
+            _savingData = false;
+        }
+        
 
         private void OpenFile()
         {
@@ -49,9 +80,12 @@ namespace Popeye.Modules.GameDataEvents
             _outWriter.Close();
         }
 
-        private void SaveData()
+        private void SaveDataToFile()
         {
-            foreach(string dataRow in _dataToSave) 
+            string[] dataToSaveCopy = _dataToSave.ToArray();
+            _dataToSave.Clear();
+            
+            foreach(string dataRow in dataToSaveCopy) 
             { 
                 _outWriter.WriteLine(dataRow);
             }
@@ -60,6 +94,7 @@ namespace Popeye.Modules.GameDataEvents
 
         public void AddEventContent(string eventContent)
         {
+            WaitUntilDataIsSaved();
             _dataToSave.Add(eventContent);
 
             if (_config.LogToConsole)

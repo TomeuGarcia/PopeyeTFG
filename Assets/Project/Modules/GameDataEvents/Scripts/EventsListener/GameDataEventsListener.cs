@@ -8,7 +8,7 @@ namespace Popeye.Modules.GameDataEvents
         private readonly IGameDataEventsConsumer _eventsConsumer;
         private readonly IActiveSceneDataEventsProvider _activeSceneDataEventsProvider;
 
-        private const string CONTENT_SEPARATOR = ",";
+        private const string CONTENT_SEPARATOR = ";";
         
 
         public GameDataEventsListener(IEventSystemService eventSystemService, IGameDataEventsConsumer eventsConsumer,
@@ -57,7 +57,7 @@ namespace Popeye.Modules.GameDataEvents
 
 
         private string MakeContentFromEventData(string eventName, string timeStamp, string sceneName, 
-            string position = " , , ", string damageCause = " ", string enemyType = " ", 
+            string position = " ; ; ", string damageCause = " ", string enemyType = " ", 
             string playerActionType = " ", string playerHealthCurrent = " ", string playerHealthBeforeEvent = " ", 
             string wasKilled = " ")
         {
@@ -83,7 +83,7 @@ namespace Popeye.Modules.GameDataEvents
                 eventName: "Event Name",
                 timeStamp: "Time Stamp",
                 sceneName: "Scene Name",
-                position: "PosX, PosY, PosZ",
+                position: "PosX" + CONTENT_SEPARATOR +"PosY" + CONTENT_SEPARATOR + "PosZ",
                 damageCause: "Damage Cause",
                 enemyType: "Enemy Type",
                 playerActionType: "Player Action Type",
