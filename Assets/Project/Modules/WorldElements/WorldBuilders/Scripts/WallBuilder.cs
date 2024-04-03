@@ -23,6 +23,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             public Vector2 Size => _size;
             public Vector3 WorldSpaceSize =>  new Vector3(_size.x, 0, _size.y);
             public float Length => Size.y;
+            public float HalfLength => Length / 2;
+            public float TolerantHalfLength => HalfLength - 0.01f;
 
             public Vector3[] ToFrame(Vector3 center, Quaternion rotation)
             {
@@ -294,9 +296,10 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             Vector3 previousToCurrentDirection = previousToCurrent / previousToCurrentDistance;
                 
             Quaternion offsetRotation = Quaternion.LookRotation(previousToCurrentDirection, Vector3.up);
-                
-            float fillLength = previousToCurrentDistance - CornerBlock.Length;
 
+            float fillLength = previousToCurrentDistance - CornerBlock.Length; 
+                               
+            
                 
             CreateFillWalls(previousPoint, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
                 fillLength);
@@ -341,7 +344,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         private void CreateFillWalls(Vector3 previousPoint, Vector3 previousToCurrentDirection, float previousToCurrentDistance,
             Quaternion rotation, float fillLength)
         {
-            float distanceCounter = CornerBlock.Length / 2 + FillBlock.Length / 2;
+            float distanceCounter = CornerBlock.HalfLength + FillBlock.HalfLength;
+            fillLength += (_config.DistanceToleranceFillBlock - CornerBlock.TolerantHalfLength);
             
             for (; distanceCounter < fillLength; distanceCounter += FillBlock.Length)
             {
@@ -590,8 +594,9 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
             Vector3 previousPoint = PointToWorldSpace(startPoint.Position);
             Vector3 currentPoint = Vector3.zero;
-            
-            for (int i = 0; i < pointsGroup.NumberOfCornerPoints; ++i)
+
+            int startIndex = pointsGroup == _baseCornerPointsGroup ? 1 : 0;
+            for (int i = startIndex; i < pointsGroup.NumberOfCornerPoints; ++i)
             {
                 Vector3 drawSpacePoint =  PointToWorldSpace(pointsGroup.CornerPoints[i].Position);
                 
@@ -625,8 +630,11 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 
             Handles.color = ComputeColor(_config.EditorView.FillBlockColor);
 
-            float lineLength = previousToCurrentDistance - CornerBlock.Length;
-            float distanceCounter = CornerBlock.Length / 2 + FillBlock.Length / 2;
+            
+            float lineLength = previousToCurrentDistance - CornerBlock.Length + 
+                               (_config.DistanceToleranceFillBlock - CornerBlock.TolerantHalfLength);
+            
+            float distanceCounter = CornerBlock.HalfLength + FillBlock.HalfLength;
 
             for (; distanceCounter < lineLength; distanceCounter += FillBlock.Length)
             {

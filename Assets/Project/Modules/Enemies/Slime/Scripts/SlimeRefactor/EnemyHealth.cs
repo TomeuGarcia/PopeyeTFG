@@ -15,7 +15,7 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private Rigidbody _knockbackRigidbody;
         [SerializeField, Range(0f, 1f)] private float _knockbackEffectiveness = 1f;
 
-        private AEnemyMediator _mediator;
+        protected AEnemyMediator _mediator;
 
 
         public void Configure(AEnemyMediator slimeMediator)
@@ -49,7 +49,7 @@ namespace Popeye.Modules.Enemies.Components
             return hitResult;
         }
 
-        public bool CanBeDamaged(DamageHit damageHit)
+        public virtual bool CanBeDamaged(DamageHit damageHit)
         {
             return !HealthSystem.IsDead() && !HealthSystem.IsInvulnerable;
         }

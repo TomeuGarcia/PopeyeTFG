@@ -39,9 +39,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [Header("VERTICAL LAND")]
         [Expandable] [SerializeField] private DamageHitConfig _verticalLandDamageHit;
         [Expandable] [SerializeField] private DamageHitConfig _verticalLandDamageHit_Enraged;
-        [SerializeField, Range(0f, 5.0f)] private float _verticalLandDamageExtraDuration = 0.2f;
+        [SerializeField, Range(0f, 5.0f)] private float _verticalLandDamageDuration = 0.1f;
         
-        public float VerticalLandDamageExtraDuration => _verticalLandDamageExtraDuration;
+        public float VerticalLandDamageDuration => _verticalLandDamageDuration;
         
         
         [Header("SPIN")]
@@ -81,8 +81,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 ThrowDamageHit = new DamageHit(throwConfig); 
                 PullDamageHit = new DamageHit(pullConfig); 
                 KickDamageHit = new DamageHit(kickConfig); 
-                VerticalLandDamageHit = new DamageHit(spinConfig); 
-                SpinDamageHit = new DamageHit(verticalLandConfig); 
+                VerticalLandDamageHit = new DamageHit(verticalLandConfig); 
+                SpinDamageHit = new DamageHit(spinConfig); 
             }
         }
         

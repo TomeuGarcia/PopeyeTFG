@@ -25,6 +25,7 @@ namespace Popeye.Modules.GameDataEvents
             _eventsListener.StartListening();
             
             _eventsDispatchTester.Init(eventSystemService);
+            _gameDataEventsCSVSaver.Start();
         }
         
         public void Uninstall()

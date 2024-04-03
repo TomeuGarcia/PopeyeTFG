@@ -55,8 +55,10 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [Header("BLOCKS")]
         [SerializeField] private WallBuilder.Block _cornerBlock;
         [SerializeField] private WallBuilder.Block _fillBlock;
+        [SerializeField, Range(0.0f, 2.0f)] private float _distanceToleranceFillBlock = 0.75f;
         public WallBuilder.Block CornerBlock => _cornerBlock;
         public WallBuilder.Block FillBlock => _fillBlock;
+        public float DistanceToleranceFillBlock => _distanceToleranceFillBlock;
 
         
         
