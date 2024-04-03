@@ -4,7 +4,7 @@ namespace Popeye.Modules.GameDataEvents
 {
     public static class DataEventsParsing
     {
-        public static string ToStringParsed(this Vector3 vector, string format = "F", string separator = ",")
+        public static string ToStringParsed(this Vector3 vector, string format = "F", string separator = ";")
         {
             string content =
                 vector.x.ToString(format) + separator +

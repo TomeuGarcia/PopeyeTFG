@@ -1,5 +1,7 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.GameState;
+using Popeye.Scripts.ValueGating;
+using UnityEngine.InputSystem;
 
 namespace Popeye.Modules.PlayerController.Inputs
 {
@@ -7,34 +9,42 @@ namespace Popeye.Modules.PlayerController.Inputs
     {
         private readonly InputSystem.PlayerAnchorInputControls _playerInputControls;
 
-        private readonly UnityEngine.InputSystem.InputAction _aim;
-        private readonly UnityEngine.InputSystem.InputAction _cancelAim;
-        private readonly UnityEngine.InputSystem.InputAction _throw;
+        private readonly InputAction _aim;
+        private readonly InputAction _cancelAim;
+        private readonly InputAction _throw;
         
-        private readonly UnityEngine.InputSystem.InputAction _pickUp;
+        private readonly InputAction _pickUp;
         
-        private readonly UnityEngine.InputSystem.InputAction _pull;
+
+        private readonly IGateValueReader<InputAction> _pullGateValue;
+        private readonly IGateValueReader<InputAction> _dashTowardsAnchorGateValue;
+        private readonly IGateValueReader<InputAction> _dashDroppingAnchorGateValue;
+        private readonly IGateValueReader<InputAction> _specialAttackGateValue;
+        private readonly InputAction _kick;
         
-        private readonly UnityEngine.InputSystem.InputAction _dash;
-        private readonly UnityEngine.InputSystem.InputAction _kick;
+        private readonly InputAction _heal;
         
-        private readonly UnityEngine.InputSystem.InputAction _heal;
-        private readonly UnityEngine.InputSystem.InputAction _specialAttack;
-        
-        private readonly UnityEngine.InputSystem.InputAction _spinAttack_Left;
-        private readonly UnityEngine.InputSystem.InputAction _spinAttack_Right;
+        private readonly InputAction _spinAttack_Left;
+        private readonly InputAction _spinAttack_Right;
 
 
         private readonly IEventSystemService _eventSystemService;
         
-        public PlayerAnchorMovesetInputsController(IEventSystemService eventSystemService)
+        public PlayerAnchorMovesetInputsController(
+            IEventSystemService eventSystemService,
+            InputSystem.PlayerAnchorInputControls playerInputControls,
+            IGateValueReader<InputAction> pullGateValue,
+            IGateValueReader<InputAction> dashTowardsAnchorGateValue,
+            IGateValueReader<InputAction> dashDroppingAnchorGateValue,
+            IGateValueReader<InputAction> specialAttackGateValue
+            )
         {
             _eventSystemService = eventSystemService;
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
-            
-            
-            _playerInputControls = new InputSystem.PlayerAnchorInputControls();
+
+
+            _playerInputControls = playerInputControls;
             EnabledInputs();
             
 
@@ -44,16 +54,15 @@ namespace Popeye.Modules.PlayerController.Inputs
             _throw = _playerInputControls.Land.Throw;
             
             _pickUp = _playerInputControls.Land.PickUp;
-            
-            _pull = _playerInputControls.Land.Pull;
 
-            _dash = _playerInputControls.Land.Dash;
+            _pullGateValue = pullGateValue;
+            _dashTowardsAnchorGateValue = dashTowardsAnchorGateValue;
+            _dashDroppingAnchorGateValue = dashDroppingAnchorGateValue;
+            _specialAttackGateValue = specialAttackGateValue;
             
             _kick = _playerInputControls.Land.Kick;
 
             _heal = _playerInputControls.Land.Heal;
-            
-            _specialAttack = _playerInputControls.Land.SpecialAttack;
             
             _spinAttack_Left = _playerInputControls.Land.SpinAttack_Left;
             _spinAttack_Right = _playerInputControls.Land.SpinAttack_Right;
@@ -130,13 +139,17 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         public bool Pull_Pressed()
         {
-            return _pull.WasPressedThisFrame();
+            return _pullGateValue.GetValue().WasPressedThisFrame();
         }
 
 
-        public bool Dash_Pressed()
+        public bool DashTowardsAnchor_Pressed()
         {
-            return _dash.WasPressedThisFrame();
+            return _dashTowardsAnchorGateValue.GetValue().WasPressedThisFrame();
+        }
+        public bool DashDroppingAnchor_Pressed()
+        {
+            return _dashDroppingAnchorGateValue.GetValue().WasPressedThisFrame();
         }
         
         
@@ -161,15 +174,15 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         public bool SpecialAttack_Pressed()
         {
-            return _specialAttack.WasPressedThisFrame();
+            return _specialAttackGateValue.GetValue().WasPressedThisFrame();
         }
         public bool SpecialAttack_HeldPressed()
         {
-            return _specialAttack.IsPressed();
+            return _specialAttackGateValue.GetValue().IsPressed();
         }
         public bool SpecialAttack_Released()
         {
-            return _specialAttack.WasReleasedThisFrame();
+            return _specialAttackGateValue.GetValue().WasReleasedThisFrame();
         }
         
         

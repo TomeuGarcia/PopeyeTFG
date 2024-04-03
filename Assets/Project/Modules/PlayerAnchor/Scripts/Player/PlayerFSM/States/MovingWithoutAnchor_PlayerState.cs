@@ -168,7 +168,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanDashTowardsAnchor()
         {
-            bool dashInput = _blackboard.MovesetInputsController.Dash_Pressed();
+            bool dashInput = _blackboard.MovesetInputsController.DashTowardsAnchor_Pressed();
             if (!_enterDashCooldown.HasFinished())
             {
                 if (dashInput)
