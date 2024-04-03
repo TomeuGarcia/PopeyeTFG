@@ -15,6 +15,8 @@ namespace Popeye.ProjectHelpers
         
         public const string PLAYERPOWERBOOSTERS_ASSETS_PATH = PLAYER_ASSETS_PATH + "PowerBoosters/";
         public const string PLAYERPOWERBOOSTDROPS_ASSETS_PATH = PLAYERPOWERBOOSTERS_ASSETS_PATH + "Drops/";
+                   
+        public const string PLAYERABILITYUNLOCK_ASSETS_PATH = PLAYER_ASSETS_PATH + "AbilityUnlock/";
 
         public const string ENEMIES_ASSET_PATH = ROOT + "Enemies/";
         public const string ENEMYHINTS_ASSET_PATH =ENEMIES_ASSET_PATH + "Hints/";
@@ -23,14 +25,17 @@ namespace Popeye.ProjectHelpers
         public const string PLAYERCONTROLLER_ASSETS_PATH = ROOT + "PlayerController/";
         public const string CAMERA_ASSETS_PATH = ROOT + "Camera/";
         public const string AUTOAIM_ASSETS_PATH = ROOT + "AutoAim/";
-        
+
         
         public const string GAMESTATE_ASSETS_PATH = ROOT + "GameState/";
+        
+        
         
         public const string WORLDELEMENTS_ASSETS_PATH = ROOT + "WorldElements/";
         public const string WALLBUILDER_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "WallBuilder/";
         public const string GRIDMOVEMENT_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "GridMovement/";
-        
+        public const string INFORMATIONDISPLAY_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "InformationDisplay/";
+  
         
         public const string TIME_ASSETS_PATH = ROOT + "Time/";
         public const string HITSTOP_ASSETS_PATH = TIME_ASSETS_PATH + "HitStop/";
@@ -53,6 +58,9 @@ namespace Popeye.ProjectHelpers
         public const string COMBATSYSTEM_PATH = ROOT + "CombatSystem/";
         
         
+        public const string EVENTCHANNELS_ASSETS_PATH = ROOT + "EventChannels/";
+
+        
         public const string SOUNDSYSTEM_ASSETS_PATH = ROOT + "SoundSystem/";
         
         
@@ -63,5 +71,7 @@ namespace Popeye.ProjectHelpers
         
         
         public const string GAMEDATAEVENTS_ASSETS_PATH = ROOT + "GameDataEvents/";
+        
+        public const string SCENES_ASSETS_PATH = CORE_ASSETS_PATH + "Scenes/";
     }
 }

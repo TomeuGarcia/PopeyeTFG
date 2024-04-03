@@ -39,13 +39,6 @@ namespace Popeye.Modules.Enemies.Components
 
         }
 
-        private void SpawnExplosionParticles()
-        {
-            _particleFactory.Create(ParticleTypes.SlimeDeathParticles, transform.position, Quaternion.identity);
-        }
-        
-
-        
         public void PlayTakeDamage()
         {
             throw new NotImplementedException();
@@ -53,7 +46,7 @@ namespace Popeye.Modules.Enemies.Components
 
         public void PlayDeath()
         {
-            SpawnExplosionParticles();
+            
         }
 
         public void PlayMove()

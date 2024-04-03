@@ -1,6 +1,8 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.GameDataEvents;
+using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using Popeye.Scripts.EventChannels;
 using Popeye.Timers;
 using UnityEngine;
 
@@ -9,11 +11,18 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
     public class PlayerEventsDispatcher : IPlayerEventsDispatcher
     {
         private readonly IEventSystemService _eventSystemService;
+        private readonly IEmptyEventChannelDispatcher _dashTowardsAnchorDispatcher;
+        private readonly IEmptyEventChannelDispatcher _specialAttackEventDispatcher;
         private readonly Timer _updateTimer;
 
-        public PlayerEventsDispatcher(IEventSystemService eventSystemService)
+        public PlayerEventsDispatcher(
+            IEventSystemService eventSystemService, 
+            IEmptyEventChannelDispatcher dashTowardsAnchorDispatcher,
+            IEmptyEventChannelDispatcher specialAttackEventDispatcher)
         {
             _eventSystemService = eventSystemService;
+            _dashTowardsAnchorDispatcher = dashTowardsAnchorDispatcher;
+            _specialAttackEventDispatcher = specialAttackEventDispatcher;
             _updateTimer = new Timer(1.0f);
         }
 
@@ -29,7 +38,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _eventSystemService.Dispatch(new IPlayerEventsDispatcher.OnRespawnFromDeathEvent());
         }
 
-        
+        public void DispatchDashTowardsAnchorPerformed()
+        {
+            _dashTowardsAnchorDispatcher.RaiseEvent();
+        }
+
+        public void DispatchSpecialAttackPerformed()
+        {
+            _specialAttackEventDispatcher.RaiseEvent();
+        }
+
+
         public void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition)
         {
             _eventSystemService.Dispatch(new OnPlayerActionEvent(playerPosition, actionName));

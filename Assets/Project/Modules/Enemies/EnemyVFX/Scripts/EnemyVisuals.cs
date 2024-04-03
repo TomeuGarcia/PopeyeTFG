@@ -5,10 +5,12 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.Enemies.VFX
 {
@@ -22,11 +24,13 @@ namespace Popeye.Modules.Enemies.VFX
         }
 
         [SerializeField] private GeneralEnemyVFXConfig _visualConfig;
+        [SerializeField] private Transform _visualCenter;
 
         [SerializeField] [Tooltip("First mesh on the list will be the one that gets 'hurt'")]
         private List<OriginalMeshData> _originalMeshDatas = new();
 
         private IParticleFactory _particleFactory;
+        private ICameraShaker _cameraShaker;
 
         private void Awake()
         {
@@ -36,15 +40,17 @@ namespace Popeye.Modules.Enemies.VFX
             }
         }
 
-        public void Configure(IParticleFactory particleFactory)
+        public void Configure(IParticleFactory particleFactory, ICameraShaker cameraShaker)
         {
             _particleFactory = particleFactory;
+            _cameraShaker = cameraShaker;
             _originalMeshDatas[0]._mesh.material.SetFloat("_Health", 1.0f);
         }
 
         public virtual void PlayHitEffects(float healthCoef01, DamageHit damageHit)
         {
             _originalMeshDatas[0]._mesh.material.SetFloat("_Health", healthCoef01);
+            _cameraShaker.PlayShake(_visualConfig.OnHitShakeConfig);
 
             ParticlesHitEffect(damageHit);
             FlashHitEffect().Forget();
@@ -53,19 +59,20 @@ namespace Popeye.Modules.Enemies.VFX
         public virtual void PlayDeathEffects(DamageHit damageHit)
         {
             ParticlesHitEffect(damageHit);
+
+            _cameraShaker.PlayShake(_visualConfig.DeathShakeConfig);
+            _particleFactory.Create(_visualConfig.DeathParticles, transform.position, quaternion.identity);
         }
 
         private void ParticlesHitEffect(DamageHit damageHit)
         {
-            //TODO: FIX these two things
-            //get the    position   of the contact point
-            //get the     normal    of the contact poiint
-            
             Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies();
-            Vector3 spawnPos = transform.position + (player.position - transform.position).normalized * 1.25f; //x.xf serves as enemy width
             
-            _particleFactory.Create(_visualConfig.SplatterParticleType, spawnPos, quaternion.identity).LookAt(player);
-            _particleFactory.Create(_visualConfig.WaveParticleType, spawnPos, quaternion.identity).LookAt(player);
+            _particleFactory.Create(_visualConfig.BloodHitSplashParticles, _visualCenter.position, quaternion.identity);
+            
+            Transform bloodDripParticles = _particleFactory.Create(_visualConfig.BloodDripParticles, _visualCenter.position, quaternion.identity);
+            bloodDripParticles.LookAt(player);
+            bloodDripParticles.RotateAround(bloodDripParticles.position, bloodDripParticles.up, 180.0f);
         }
 
         private async UniTaskVoid FlashHitEffect()

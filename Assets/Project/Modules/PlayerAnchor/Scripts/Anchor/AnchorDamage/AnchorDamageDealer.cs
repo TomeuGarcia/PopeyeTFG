@@ -167,21 +167,18 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorVerticalLandDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
             
             DealLandHitDamage(anchorThrowResult.TrajectoryPathPoints, 
-                    anchorThrowResult.Duration, _config.VerticalLandDamageExtraDuration,
-                    anchorThrowResult.MoveEaseCurve, 0.6f)
+                    anchorThrowResult.Duration, _config.VerticalLandDamageDuration)
                 .Forget();
         }
         
-        private async UniTaskVoid DealLandHitDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
-            AnimationCurve ease, float easeThreshold)
+        private async UniTaskVoid DealLandHitDamage(Vector3[] trajectoryPoints, float waitDuration, float damageDuration)
         {
-            var wait = await WaitUntilEase(ease, duration, easeThreshold);
+            await UniTask.Delay(TimeSpan.FromSeconds(waitDuration));
             
             _anchorVerticalLandDamageTrigger.transform.position = trajectoryPoints[^1];
-            
             _anchorVerticalLandDamageTrigger.Activate();
-            await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
-            await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(damageDuration));
             _anchorVerticalLandDamageTrigger.Deactivate();
         }
 

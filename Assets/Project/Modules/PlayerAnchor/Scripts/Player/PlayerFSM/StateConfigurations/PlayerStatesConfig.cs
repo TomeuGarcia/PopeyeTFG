@@ -1,4 +1,3 @@
-using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.ProjectHelpers;
 using UnityEngine;

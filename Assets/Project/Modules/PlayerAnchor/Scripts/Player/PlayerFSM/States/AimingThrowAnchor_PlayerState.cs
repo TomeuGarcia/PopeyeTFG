@@ -109,7 +109,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         private bool PlayerCanDash()
         {
-            return _blackboard.MovesetInputsController.Dash_Pressed();
+            return _blackboard.MovesetInputsController.DashDroppingAnchor_Pressed();
         }
         
         private void UpdateMovementSpeed()

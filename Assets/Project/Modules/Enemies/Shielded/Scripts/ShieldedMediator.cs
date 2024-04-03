@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Camera;
+using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
@@ -40,7 +42,7 @@ namespace Popeye.Modules.Enemies
             _shieldedDashing.Configure(this);
             _shieldedStun.Configure(this);
             _enemyHealth.Configure(this);
-            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(), ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker);
             _enemyHealth.SetIsInvulnerable(true);
             _shieldedHealth.OnTakePassInvulnerableHit += Stun;
         }

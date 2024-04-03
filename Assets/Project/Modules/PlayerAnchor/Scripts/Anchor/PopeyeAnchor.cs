@@ -105,11 +105,22 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _anchorChain.DisableTensionForDuration(duration).Forget();
         }
-        
+
+        public async UniTaskVoid SetDropped(AnchorThrowResult anchorThrowResult)
+        {
+            await DoSetThrown(anchorThrowResult);
+        }
         public async UniTaskVoid SetThrown(AnchorThrowResult anchorThrowResult)
         {
-            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             _anchorDamageDealer.DealThrowDamage(anchorThrowResult);
+            _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
+            _anchorViewExtras.OnThrown();
+            await DoSetThrown(anchorThrowResult);
+        }
+
+        private async UniTask DoSetThrown(AnchorThrowResult anchorThrowResult)
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
             
             _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
                 anchorThrowResult.MoveEaseCurve);
@@ -118,10 +129,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _anchorChain.SetFailedThrow(anchorThrowResult.EndsOnVoid);
             _anchorChain.SetThrownView(anchorThrowResult);
-            
-            _anchorView.PlayThrownAnimation(anchorThrowResult.Duration);
-            _anchorViewExtras.OnThrown();
-            
+
             _anchorAudio.PlayThrowSound();
 
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
@@ -134,15 +142,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public async UniTaskVoid SetThrownVertically(AnchorThrowResult anchorThrowResult, RaycastHit floorHit)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
-            _anchorDamageDealer.DealVerticalLandDamage(anchorThrowResult);
             
             _anchorMotion.MoveAlongPath(anchorThrowResult.TrajectoryPathPoints, anchorThrowResult.Duration, 
                 anchorThrowResult.MoveEaseCurve);
             _anchorMotion.RotateStartToEnd(anchorThrowResult.StartLookRotation,anchorThrowResult.EndLookRotation, 
                 anchorThrowResult.Duration, anchorThrowResult.RotateEaseCurve);
-            
+
+            _anchorDamageDealer.DealVerticalLandDamage(anchorThrowResult);
             _anchorView.PlayVerticalHitAnimation(anchorThrowResult.Duration, floorHit).Forget();
             _anchorViewExtras.OnVerticalHit();
+            
             
             _anchorAudio.PlayThrowSound();
             
