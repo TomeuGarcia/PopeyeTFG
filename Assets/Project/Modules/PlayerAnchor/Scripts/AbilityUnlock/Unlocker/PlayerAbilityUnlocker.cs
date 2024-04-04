@@ -37,15 +37,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             
             _view.Value.PlayIdleAnimation();
         }
-
-
-        private async UniTaskVoid UnlockAbility()
-        {
-            await _view.Value.PlayUnlockAbilityAnimation();            
-            _abilityToUnlockEventChannel.RaiseEvent();
-            DisablePlayerCollider();
-            ActivateWorldInteractors();
-        }
+        
 
         
         public void OnHealed() { }
@@ -53,6 +45,14 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         public void OnKilledByDamageTaken(DamageHitResult damageHitResult)
         {
             UnlockAbility().Forget();
+        }
+        
+        private async UniTaskVoid UnlockAbility()
+        {
+            await _view.Value.PlayUnlockAbilityAnimation();            
+            _abilityToUnlockEventChannel.RaiseEvent();
+            DisablePlayerCollider();
+            ActivateWorldInteractors();
         }
 
         private void DisablePlayerCollider()

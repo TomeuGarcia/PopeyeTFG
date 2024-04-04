@@ -16,7 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private bool _anchorIsBeingPulled;
         
-        
+        public bool IsAutoQueued { get; private set; }
         public AnchorThrowResult AnchorPullResult { get; private set; }
         
         
@@ -59,8 +59,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
             return _anchorIsBeingPulled;
         }
 
-        public void PullAnchor()
+        public void PullAnchor(bool isAutoQueued)
         {
+            IsAutoQueued = isAutoQueued;
+            
             Vector3 anchorPosition = _anchor.Position;
             Vector3 playerPosition = _player.GetAnchorThrowStartPosition();
             Vector3 pullDirection = -_player.GetFloorAlignedDirectionToAnchor();
@@ -88,8 +90,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             
             _anchor.SetPulled(AnchorPullResult, rotationPath);
-            
+
+
             _eventChannelDispatcher.RaiseEvent();
+            
             
             DoPullAnchor(AnchorPullResult).Forget();
         }

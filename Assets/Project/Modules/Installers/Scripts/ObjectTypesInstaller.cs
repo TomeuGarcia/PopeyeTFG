@@ -2,7 +2,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
-namespace Project.Modules.Installers.Scripts
+namespace Popeye.Modules.Installers
 {
     public class ObjectTypesInstaller : MonoBehaviour
     {

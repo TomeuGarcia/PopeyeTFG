@@ -1,9 +1,10 @@
 using System;
+using Cysharp.Threading.Tasks;
 
 namespace Popeye.Scripts.Core.Scenes
 {
     public interface ISceneTransitionScreenFader
     {
-        void FadeScreen(Func<bool> sceneFinishedLoading);
+        UniTaskVoid FadeScreen(Func<bool> sceneFinishedLoading);
     }
 }

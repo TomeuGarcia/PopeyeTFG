@@ -5,18 +5,18 @@ using UnityEngine.SceneManagement;
 
 namespace Popeye.Scripts.Core.Scenes
 {
-    public class LoadSceneAdditivelyCommand : ISceneLoadCommand
+    public class LoadSceneCommand : ISceneLoadCommand
     {
         private readonly int _builtInSceneIndex;
         private readonly float _delay;
 
         public bool FinishedLoading { get; private set; }
         
-        public LoadSceneAdditivelyCommand(string sceneName, float delay) : 
+        public LoadSceneCommand(string sceneName, float delay) : 
             this(SceneManager.GetSceneByName(sceneName).buildIndex, delay)
         {
         }
-        public LoadSceneAdditivelyCommand(int builtInSceneIndex, float delay)
+        public LoadSceneCommand(int builtInSceneIndex, float delay)
         {
             _builtInSceneIndex = builtInSceneIndex;
             _delay = delay;
@@ -28,7 +28,7 @@ namespace Popeye.Scripts.Core.Scenes
             await UniTask.Delay(TimeSpan.FromSeconds(_delay));
             
             await UniTask.WaitUntil(
-                () => SceneManager.LoadSceneAsync(_builtInSceneIndex, LoadSceneMode.Additive).isDone
+                () => SceneManager.LoadSceneAsync(_builtInSceneIndex, LoadSceneMode.Single).isDone
             );
             
             FinishedLoading = true;

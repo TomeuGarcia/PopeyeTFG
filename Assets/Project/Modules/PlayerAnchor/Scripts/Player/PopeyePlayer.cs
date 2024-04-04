@@ -293,7 +293,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PullAnchor()
         {
-            _anchorPuller.PullAnchor();
+            _anchorPuller.PullAnchor(_pullingAnchorFromTheVoid);
+            _pullingAnchorFromTheVoid = false;
+            
             LookTowardsAnchorForDuration(0.3f).Forget();
             
             PlayerView.PlayPullAnimation(0.3f).Forget();
@@ -305,7 +307,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchor.SetAvailableForPickUp();
             
-            if (_pullingAnchorFromTheVoid)
+            if (_anchorPuller.IsAutoQueued)
             {
                 _pullingAnchorFromTheVoid = false;
                 SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorAutoPullStaminaCost);
