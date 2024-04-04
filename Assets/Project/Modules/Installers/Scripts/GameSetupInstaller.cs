@@ -2,7 +2,6 @@ using Popeye.Core.Installers;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.InformationDisplay;
 using Popeye.Core.Services.ServiceLocator;
-using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.GameDataEvents;
 using Popeye.Modules.GameState;
@@ -11,8 +10,6 @@ using Popeye.Scripts.Collisions;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using Project.PhysicsMovement;
 using Project.Scripts.Time.TimeFunctionalities;
-using Project.Scripts.Time.TimeHitStop;
-using Project.Scripts.Time.TimeScale;
 using UnityEngine;
 
 namespace Popeye.Modules.Installers
@@ -20,28 +17,28 @@ namespace Popeye.Modules.Installers
 
     public class GameSetupInstaller : MonoBehaviour
     {
-        [Header("AUDIO")] [SerializeField] private AudioInstaller _audioInstaller;
 
-        [Header("FACTORIES")] [SerializeField] private FactoriesInstaller _factoriesInstaller;
 
-        [Header("PLAYER ANCHOR")] [SerializeField]
-        private PlayerAnchorInstaller _playerAnchorInstaller;
+        [Header("FACTORIES")] 
+        [SerializeField] private FactoriesInstaller _factoriesInstaller;
 
-        [Header("GAME REFERENCES")] [SerializeField]
-        private GameReferencesInstaller _gameReferencesInstaller;
+        [Header("PLAYER ANCHOR")] 
+        [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
 
-        [Header("GAME EVENTS")] [SerializeField]
-        private GameDataEventsInstaller _gameDataEventsInstaller;
+        [Header("GAME REFERENCES")] 
+        [SerializeField] private GameReferencesInstaller _gameReferencesInstaller;
 
-        [Header("INFORMATION DISPLAY")] [SerializeField]
-        private InformationDisplayInstaller _informationDisplayInstaller;
+        [Header("GAME EVENTS")] 
+        [SerializeField] private GameDataEventsInstaller _gameDataEventsInstaller;
 
-        [Header("OTHER")] [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
+        [Header("INFORMATION DISPLAY")] 
+        [SerializeField] private InformationDisplayInstaller _informationDisplayInstaller;
+
+        [Header("OTHER")] 
+        [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
         [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
         [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
-
-        [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
-
+        
 
 
         private TimeManagerGameEventsListener _timeManagerGameEventsListener;
@@ -62,33 +59,30 @@ namespace Popeye.Modules.Installers
         {
             ServiceLocator serviceLocator = ServiceLocator.Instance;
 
-            EventSystemService eventSystemService = new EventSystemService();
-            serviceLocator.RegisterService<IEventSystemService>(eventSystemService);
+            IEventSystemService eventSystemService = serviceLocator.GetService<IEventSystemService>();
+            ITimeFunctionalities timeFunctionalities = serviceLocator.GetService<ITimeFunctionalities>();
+            
+            
 
             CombatManagerService combatManagerService =
                 new CombatManagerService(_hitTargetCollisionProbingConfig,
                     new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig));
             serviceLocator.RegisterService<ICombatManager>(combatManagerService);
 
-            ITimeScaleManager timeScaleManager = new UnityTimeScaleManager();
-            TimeFunctionalities timeFunctionalities =
-                new TimeFunctionalities(timeScaleManager, new HitStopManager(_hitStopManagerConfig, timeScaleManager));
-            serviceLocator.RegisterService<ITimeFunctionalities>(timeFunctionalities);
+            
 
-            _audioInstaller.Install(serviceLocator);
+            
             _informationDisplayInstaller.Install(serviceLocator);
             _factoriesInstaller.Install(serviceLocator);
             _playerAnchorInstaller.Install();
-
             _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
-
             _gameDataEventsInstaller.Install(eventSystemService);
 
 
             IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
             serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
 
-            _timeManagerGameEventsListener = new TimeManagerGameEventsListener(eventSystemService, timeScaleManager);
+            _timeManagerGameEventsListener = new TimeManagerGameEventsListener(eventSystemService, timeFunctionalities.TimeScaleManager);
             _timeManagerGameEventsListener.StartListening();
         }
 
@@ -99,9 +93,8 @@ namespace Popeye.Modules.Installers
             ServiceLocator serviceLocator = ServiceLocator.Instance;
 
             serviceLocator.RemoveService<IGameStateEventsDispatcher>();
-
             serviceLocator.RemoveService<ICombatManager>();
-            serviceLocator.RemoveService<ITimeFunctionalities>();
+            
 
             _gameDataEventsInstaller.Uninstall();
             _gameReferencesInstaller.Uninstall(serviceLocator);
@@ -109,9 +102,6 @@ namespace Popeye.Modules.Installers
             _playerAnchorInstaller.Uninstall();
             _factoriesInstaller.Uninstall(serviceLocator);
             _informationDisplayInstaller.Uninstall(serviceLocator);
-            _audioInstaller.Uninstall(serviceLocator);
-
-            serviceLocator.RemoveService<IEventSystemService>();
         }
     }
 

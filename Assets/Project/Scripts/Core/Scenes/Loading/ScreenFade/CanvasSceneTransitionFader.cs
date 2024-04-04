@@ -15,7 +15,6 @@ namespace Popeye.Scripts.Core.Scenes
         private void Awake()
         {
             _fadeGroup.alpha = 0;
-            DontDestroyOnLoad(gameObject);
         }
 
         public async UniTaskVoid FadeScreen(Func<bool> sceneFinishedLoading)

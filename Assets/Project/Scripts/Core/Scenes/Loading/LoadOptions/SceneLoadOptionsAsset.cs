@@ -12,4 +12,5 @@ namespace Popeye.Scripts.Core.Scenes
 
         public SceneLoadOptions AdditiveSceneLoadOptions => _additiveSceneLoadOptions;
     }
+    
 }

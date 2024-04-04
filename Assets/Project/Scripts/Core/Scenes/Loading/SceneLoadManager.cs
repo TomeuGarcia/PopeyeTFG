@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using Popeye.Core.Services.CommandQueue;
+using UnityEngine;
 
 namespace Popeye.Scripts.Core.Scenes
 {
@@ -27,7 +28,7 @@ namespace Popeye.Scripts.Core.Scenes
             SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
             
             LoadSceneAdditivelyCommand loadSceneCommand = 
-                new LoadSceneAdditivelyCommand(sceneReference.BuiltInSceneIndex, loadOptions.DelayBeforeLoading);
+                new LoadSceneAdditivelyCommand(sceneReference.SceneName, loadOptions.DelayBeforeLoading);
             DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
         }
 
@@ -36,8 +37,9 @@ namespace Popeye.Scripts.Core.Scenes
             SceneReferenceAsset sceneReference = sceneLoadGroup.sceneReference;
             SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
             
+            Debug.Log("loading: " + sceneReference.SceneName + " " + sceneReference.BuiltInSceneIndex);
             LoadSceneCommand loadSceneCommand = 
-                new LoadSceneCommand(sceneReference.BuiltInSceneIndex, loadOptions.DelayBeforeLoading);
+                new LoadSceneCommand(sceneReference.SceneName, loadOptions.DelayBeforeLoading);
             DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
         }
 
