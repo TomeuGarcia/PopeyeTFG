@@ -20,9 +20,6 @@ namespace Popeye.Modules.Installers
 
     public class GameSetupInstaller : MonoBehaviour
     {
-        [Header("OBJECT TYPES")] 
-        [SerializeField] private ObjectTypesInstaller _objectTypesInstaller;
-
         [Header("AUDIO")] [SerializeField] private AudioInstaller _audioInstaller;
 
         [Header("FACTORIES")] [SerializeField] private FactoriesInstaller _factoriesInstaller;
@@ -78,7 +75,6 @@ namespace Popeye.Modules.Installers
                 new TimeFunctionalities(timeScaleManager, new HitStopManager(_hitStopManagerConfig, timeScaleManager));
             serviceLocator.RegisterService<ITimeFunctionalities>(timeFunctionalities);
 
-            _objectTypesInstaller.Install();
             _audioInstaller.Install(serviceLocator);
             _informationDisplayInstaller.Install(serviceLocator);
             _factoriesInstaller.Install(serviceLocator);
@@ -114,7 +110,6 @@ namespace Popeye.Modules.Installers
             _factoriesInstaller.Uninstall(serviceLocator);
             _informationDisplayInstaller.Uninstall(serviceLocator);
             _audioInstaller.Uninstall(serviceLocator);
-            _objectTypesInstaller.Uninstall();
 
             serviceLocator.RemoveService<IEventSystemService>();
         }
