@@ -162,7 +162,6 @@ namespace Popeye.Modules.PlayerAnchor
             IAnchorViewExtras anchorViewExtras = new AnchorViewExtras(_anchorDropShadow);
             
             Material chainMaterialCopy = new Material(chainViewLogicGeneralConfig.BoneSharedMaterial);
-            chainViewLogicGeneralConfig.ApplyMaterialToBonePrefabs(chainMaterialCopy);
             IVFXChainView vfxChainView = new GhostVFXChainView(chainViewLogicGeneralConfig.ObstacleCollisionProbingConfig, chainMaterialCopy, 
                 _player.AnchorGrabToThrowHolder);
 
@@ -200,7 +199,7 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, vfxChainView, _chainPlayerBindTransform, _chainAnchorBindTransform, 
-                chainViewLogicGeneralConfig);
+                chainViewLogicGeneralConfig, chainMaterialCopy);
             _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
                 _anchorPhysics, _anchorCollisions, anchorView, anchorViewExtras, anchorAudio, 
                 _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);

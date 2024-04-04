@@ -12,11 +12,12 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private readonly Vector3[] _updatedPositions;
         
         public BoneChainChainView(BoneChain boneChain, int numberOfBones, float chainDistance, float boneLength,
-            Bone bonePrefab, Bone boneEndEffectorPrefab)
+            Bone bonePrefab, Bone boneEndEffectorPrefab, Material chainBonesMaterial)
         {
             _boneChain = boneChain;
             _boneChain.AwakeConfigure(numberOfBones, true, boneLength, bonePrefab, boneEndEffectorPrefab);
             _boneChain.StartInit();
+            _boneChain.SetMaterialToBones(chainBonesMaterial);
 
 
             _stateMachine = new BoneChainChainViewFSM(boneChain, chainDistance);
