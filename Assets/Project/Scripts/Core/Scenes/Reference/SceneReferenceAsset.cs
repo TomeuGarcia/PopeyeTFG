@@ -10,9 +10,11 @@ namespace Popeye.Scripts.Core.Scenes
     {
         [SerializeField] private string _sceneName;
         public string SceneName => _sceneName;
-        public int BuiltInSceneIndex => SceneManager.GetSceneByName(_sceneName).buildIndex;
 
-
+        
+        
+        
+        
         public void SetSceneName(string sceneName)
         {
             _sceneName = sceneName;

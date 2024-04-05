@@ -6,23 +6,18 @@ namespace Popeye.Scripts.Core.Scenes
 {
     public class UnloadSceneCommand : ICommand
     {
-        private readonly int _builtInSceneIndex;
+        private readonly string _sceneName;
         
         public UnloadSceneCommand(string sceneName)
-        : this(SceneManager.GetSceneByName(sceneName).buildIndex)
         {
+            _sceneName = sceneName;
         }
         
-        public UnloadSceneCommand(int builtInSceneIndex)
-        {
-            _builtInSceneIndex = builtInSceneIndex;
-        }
+
         
         public async UniTask Execute()
         {
-            await UniTask.WaitUntil(
-                () => SceneManager.UnloadSceneAsync(_builtInSceneIndex).isDone
-            );
+            SceneManager.UnloadSceneAsync(_sceneName);
         }
         
     }

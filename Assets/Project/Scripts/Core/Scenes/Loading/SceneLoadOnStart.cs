@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Popeye.Scripts.Core.Scenes
 {
-    public class LoadSceneOnStart : MonoBehaviour
+    public class SceneLoadOnStart : MonoBehaviour
     {
         [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _loadSceneGroup;
         

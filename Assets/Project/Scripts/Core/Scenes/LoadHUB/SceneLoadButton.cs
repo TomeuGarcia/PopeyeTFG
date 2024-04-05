@@ -37,6 +37,11 @@ namespace Popeye.Scripts.Core.Scenes
             _sceneLoadManager.LoadSceneAdditively(_sceneLoadGroup);
             _buttonPressedCallback?.Invoke();
         }
+
+        public void DisableClicking()
+        {
+            _button.onClick.RemoveAllListeners();
+        }
         
     }
 }

@@ -29,35 +29,53 @@ namespace Popeye.Scripts.Core.Scenes
             
             LoadSceneAdditivelyCommand loadSceneCommand = 
                 new LoadSceneAdditivelyCommand(sceneReference.SceneName, loadOptions.DelayBeforeLoading);
-            DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
+            DoLoadSceneAdditively(sceneReference, loadOptions, loadSceneCommand);
         }
-
-        public void LoadScene(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
-        {
-            SceneReferenceAsset sceneReference = sceneLoadGroup.sceneReference;
-            SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
-            
-            Debug.Log("loading: " + sceneReference.SceneName + " " + sceneReference.BuiltInSceneIndex);
-            LoadSceneCommand loadSceneCommand = 
-                new LoadSceneCommand(sceneReference.SceneName, loadOptions.DelayBeforeLoading);
-            DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
-        }
-
-        private void DoLoadScene(SceneReferenceAsset sceneReference, SceneLoadOptions loadOptions,
+        private void DoLoadSceneAdditively(SceneReferenceAsset sceneReference, SceneLoadOptions loadOptions,
             ISceneLoadCommand sceneLoadCommand)
         {
-            UnloadAndClearCurrentScenes(
-                loadOptions.UnloadPreviousPersistentScenes, 
-                loadOptions.UnloadPreviousNonPersistentScenes);
-            SaveSceneReference(sceneReference, loadOptions.IsPersistentScene);
-
             _commandQueueService.AddCommand(sceneLoadCommand);
 
             if (loadOptions.FadeScreen)
             {
                 _screenFader.FadeScreen(() => sceneLoadCommand.FinishedLoading);
             }
+            
+            
+            UnloadAndClearCurrentScenes(
+                loadOptions.UnloadPreviousPersistentScenes, 
+                loadOptions.UnloadPreviousNonPersistentScenes);
+                
+            SaveSceneReference(sceneReference, loadOptions.IsPersistentScene);
         }
+        
+        public void LoadScene(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
+        {
+            SceneReferenceAsset sceneReference = sceneLoadGroup.sceneReference;
+            SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
+            
+            LoadSceneCommand loadSceneCommand = 
+                new LoadSceneCommand(sceneReference.SceneName, loadOptions.DelayBeforeLoading);
+            
+            
+            DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
+        }
+        private void DoLoadScene(SceneReferenceAsset sceneReference, SceneLoadOptions loadOptions,
+            ISceneLoadCommand sceneLoadCommand)
+        {
+            _commandQueueService.AddCommand(sceneLoadCommand);
+
+            if (loadOptions.FadeScreen)
+            {
+                _screenFader.FadeScreen(() => sceneLoadCommand.FinishedLoading);
+            }
+            
+            _persistentScenes.Clear();
+            _nonPersistentScenes.Clear();
+                
+            SaveSceneReference(sceneReference, loadOptions.IsPersistentScene);
+        }
+
 
         
         public void UnloadScene(SceneReferenceAsset sceneReference)
@@ -68,7 +86,7 @@ namespace Popeye.Scripts.Core.Scenes
         private void DoUnloadScene(SceneReferenceAsset sceneReference)
         {
             UnloadSceneCommand unloadSceneCommand = 
-                new UnloadSceneCommand(sceneReference.BuiltInSceneIndex);
+                new UnloadSceneCommand(sceneReference.SceneName);
             _commandQueueService.AddCommand(unloadSceneCommand);
         }
 

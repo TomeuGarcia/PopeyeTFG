@@ -9,6 +9,7 @@ namespace Popeye.Scripts.Core.Scenes
         [Header("BUTTONS")]
         [SerializeField] private RectTransform _buttonsHolder;
         [SerializeField] private SceneLoadButton _sceneLoadButtonPrefab;
+        private SceneLoadButton[] _buttons;
         
         [Header("GAMEPLAY SCENE")]
         [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _gameplayScene;
@@ -24,10 +25,16 @@ namespace Popeye.Scripts.Core.Scenes
         {
             _sceneLoadManager = ServiceLocator.Instance.GetService<ISceneLoadManager>();
             
-            foreach (ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup in _scenesToLoad)
+            _buttons = new SceneLoadButton[_scenesToLoad.Length];
+            
+            for (int i = 0; i < _scenesToLoad.Length; ++i)
             {
+                ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup = _scenesToLoad[i];
+            
                 SceneLoadButton sceneLoadButton = Instantiate(_sceneLoadButtonPrefab, _buttonsHolder);
                 sceneLoadButton.Configure(_sceneLoadManager, sceneLoadGroup, OnSceneButtonPressed);
+
+                _buttons[i] = sceneLoadButton;
             }
         }
 
@@ -35,6 +42,11 @@ namespace Popeye.Scripts.Core.Scenes
         {
             // Load gameplay scene too
             //_sceneLoadManager.LoadSceneAdditively(_gameplayScene);
+
+            foreach (SceneLoadButton sceneLoadButton in _buttons)
+            {
+                sceneLoadButton.DisableClicking();
+            }
         }
         
     }
