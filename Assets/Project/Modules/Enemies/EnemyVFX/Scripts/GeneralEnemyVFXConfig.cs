@@ -19,7 +19,8 @@ namespace Popeye.Modules.Enemies.VFX
         [SerializeField] private ParticleTypes _splatterParticles;
         [SerializeField] private ParticleTypes _bloodHitDirectionalParticles;
         [SerializeField] private ParticleTypes _bloodHitSplashParticles;
-        [SerializeField] private ParticleTypes _bloodDripParticles;
+        [SerializeField] private ParticleTypes _bloodDripHitParticles;
+        [SerializeField] private ParticleTypes _bloodDripDeathParticles;
         [SerializeField] private List<MaterialFlash> _flashSequence = new();
         [SerializeField] private CameraShakeConfig _onHitShakeConfig;
         
@@ -31,7 +32,8 @@ namespace Popeye.Modules.Enemies.VFX
         public ParticleTypes SplatterParticleType => _splatterParticles;
         public ParticleTypes BloodHitDirectionalParticles => _bloodHitDirectionalParticles;
         public ParticleTypes BloodHitSplashParticles => _bloodHitSplashParticles;
-        public ParticleTypes BloodDripParticles => _bloodDripParticles;
+        public ParticleTypes BloodDripHitParticles => _bloodDripHitParticles;
+        public ParticleTypes BloodDripDeathParticles => _bloodDripDeathParticles;
         public List<MaterialFlash> FlashSequence => _flashSequence;
         public CameraShakeConfig OnHitShakeConfig => _onHitShakeConfig;
         public ParticleTypes DeathParticles => _deathParticles;
