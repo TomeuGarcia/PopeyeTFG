@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Camera;
+using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
@@ -24,10 +26,14 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private Material _stunnedMaterial;
         [SerializeField] private Material _invulnerableMaterial;
         [SerializeField] private MeshRenderer _body;
+        [SerializeField] private EnemyHealthPassInvulnerableAttacks _shieldedHealth;
+        
         
         [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
         private IPowerBoostDropFactory _powerBoostDropFactory;
         private bool _chasing = false;
+
+        [SerializeField] private Rigidbody _rigidbody;
         internal override void Init()
         {
             _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
@@ -36,8 +42,9 @@ namespace Popeye.Modules.Enemies
             _shieldedDashing.Configure(this);
             _shieldedStun.Configure(this);
             _enemyHealth.Configure(this);
-            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>());
+            _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(), ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker);
             _enemyHealth.SetIsInvulnerable(true);
+            _shieldedHealth.OnTakePassInvulnerableHit += Stun;
         }
 
         public void SetShieldedMind(ShieldedMind shieldedMind)
@@ -63,6 +70,13 @@ namespace Popeye.Modules.Enemies
             _shieldedMovement.StartChasing();
         }
 
+        public void StopMoving()
+        {
+            _chasing = false;
+            _enemyPatrolling.SetPatrolling(false);
+            _shieldedMovement.StopChasing();
+        }
+
         public void StartPatrolling()
         {
             _chasing = false;
@@ -82,9 +96,10 @@ namespace Popeye.Modules.Enemies
         }
         public void StopDashing()
         {
-            _chasing = true;
-            _shieldedMovement.StartChasing();
+            _shieldedDashing.StopDashing();
         }
+
+        
         public bool IsChasing()
         {
             return _chasing;
@@ -92,6 +107,7 @@ namespace Popeye.Modules.Enemies
         internal override void Release()
         {
             _enemyPatrolling.ResetPatrolling();
+            _shieldedHealth.OnTakePassInvulnerableHit -= Stun;
         }
 
         public override Vector3 Position { get; }
@@ -132,6 +148,7 @@ namespace Popeye.Modules.Enemies
 
         public void Stun()
         {
+            _rigidbody.velocity = Vector3.zero;
             _shieldedStun.Stun();
         }
 

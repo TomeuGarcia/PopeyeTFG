@@ -113,6 +113,11 @@ namespace Popeye.Modules.PlayerAnchor
             {
                 _anchorPuller_debugReference.DebugTogglePullMode();
             }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                _abilitiesToUnlockHolder.DebugUnlockAll();
+            }
         }
 
         public void Install()
@@ -216,6 +221,7 @@ namespace Popeye.Modules.PlayerAnchor
                 out IGateValueReader<IAnchorVerticalThrower> anchorVerticalThrowerGateValue
             );
             _abilitiesToUnlockHolder.StartListeningToUnlock();
+            _generalGameStateData.PlayerUnlockableAbilitiesConfig.StartChannelListening();
             
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
@@ -293,6 +299,7 @@ namespace Popeye.Modules.PlayerAnchor
 
         public void Uninstall()
         {
+            _generalGameStateData.PlayerUnlockableAbilitiesConfig.StopChannelListening();
             _abilitiesToUnlockHolder.StopListeningToUnlock();
             ServiceLocator.Instance.RemoveService<IPowerBoostDropFactory>();
             ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
