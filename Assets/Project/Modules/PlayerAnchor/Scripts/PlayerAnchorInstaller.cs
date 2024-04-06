@@ -268,7 +268,7 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
-            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, playerInstantTranslation);
+            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, playerInstantTranslation, playerStateMachine);
             _popeyePlayerPlacer.StartListening();
             
             _playerController.AwakeConfigure();
@@ -293,10 +293,11 @@ namespace Popeye.Modules.PlayerAnchor
                 playerSafeGroundChecker, playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
-
+/*
             IPlayerStatesCreator playerStatesCreator = _generalGameStateData.IsTutorial
                 ? new TutorialPlayerStatesCreator()
-                : new DefaultPlayerStatesCreator();
+                : new DefaultPlayerStatesCreator();*/
+            IPlayerStatesCreator playerStatesCreator = new TutorialPlayerStatesCreator();
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD

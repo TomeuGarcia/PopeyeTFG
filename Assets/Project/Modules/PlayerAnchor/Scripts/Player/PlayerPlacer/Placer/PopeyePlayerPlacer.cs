@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
+using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
@@ -7,15 +8,18 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
     {
         private readonly IPlacePopeyePlayerEventChannelListenEntry _placeEventChannelListenEntry;
         private readonly IPlayerInstantTranslation _playerInstantTranslation;
+        private readonly PlayerFSM _playerStateMachine;
 
 
         public PopeyePlayerPlacer(
             IPlacePopeyePlayerEventChannelListenEntry placeEventChannelListenEntry,
-            IPlayerInstantTranslation playerInstantTranslation
+            IPlayerInstantTranslation playerInstantTranslation,
+            PlayerFSM playerStateMachine
         )
         {
             _placeEventChannelListenEntry = placeEventChannelListenEntry;
             _playerInstantTranslation = playerInstantTranslation;
+            _playerStateMachine = playerStateMachine;
         }
 
         public void StartListening()
@@ -35,10 +39,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             if (placingData.startCarryingAnchor)
             {
                 // Es puto lia
+                _playerStateMachine.OverwriteState(PlayerStates.PlayerStates.Spawning);
             }
             else
             {
                 _playerInstantTranslation.TranslateAnchor(placingData.anchorPosition, placingData.anchorRotation);
+                _playerStateMachine.OverwriteState(PlayerStates.PlayerStates.SpawningWithAnchorOnFloor);
             }
             
         }
