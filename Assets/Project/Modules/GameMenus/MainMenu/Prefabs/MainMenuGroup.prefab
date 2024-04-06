@@ -362,7 +362,12 @@ MonoBehaviour:
   _quitButtonAndConfig:
     _smartButton: {fileID: 7418815798667340116}
     _config: {fileID: 11400000, guid: fb4cc9d255de2ec4180641b1d81b9474, type: 2}
-  _gameScene: 1
+  _coreGmeSceneLoadGroup:
+    sceneReference: {fileID: 11400000, guid: 93f4cdf482836554bb22399e22315137, type: 2}
+    loadOptions: {fileID: 11400000, guid: 2fa5878013d1ddc489905cac8aa3ef30, type: 2}
+  _gameSceneLoadGroup:
+    sceneReference: {fileID: 11400000, guid: 697801776738ad445abc0a63b8d98046, type: 2}
+    loadOptions: {fileID: 11400000, guid: 18ef88cddd7da2f44baef36ea5c3f77e, type: 2}
 --- !u!1 &5637340247809866736
 GameObject:
   m_ObjectHideFlags: 0

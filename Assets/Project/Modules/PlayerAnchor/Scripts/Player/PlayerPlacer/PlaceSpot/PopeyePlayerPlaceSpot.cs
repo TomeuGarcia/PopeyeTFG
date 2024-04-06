@@ -3,6 +3,7 @@ using AYellowpaper;
 using NaughtyAttributes;
 using Popeye.Scripts.EntityPlacing;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
 {
@@ -24,18 +25,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         private PopeyePlayerPlacingData _popeyePlayerPlacingData;
         
         
-        private void OnValidate()
-        {
-            if (_config && _playerPreview.HasAllReferences() && _anchorPreview.HasAllReferences())
-            {
-                _playerPreview.UpdateView(_config.PlayerViewData);
-                _anchorPreview.UpdateView(_config.AnchorViewData);
-            }
-        }
         
         private void Start()
         {
-            QueryPlacePlayerHere();
+            
+            //QueryPlacePlayerHere();
         }
         
 
@@ -55,12 +49,20 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             };
             
             DestroyPreviews();
+            //QueryPlacePlayerHere();
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         
-
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            QueryPlacePlayerHere();
+        }
+        
         private void QueryPlacePlayerHere()
         {
+            
             _placeEventChannelDispatcher.RaiseEvent(_popeyePlayerPlacingData);
         }
 
@@ -68,6 +70,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         {
             _playerPreview.DestroyView();
             _anchorPreview.DestroyView();
+        }
+
+        public void UpdateView()
+        {
+            if (_config && _playerPreview.HasAllReferences() && _anchorPreview.HasAllReferences())
+            {
+                _playerPreview.UpdateView(_config.PlayerViewData);
+                _anchorPreview.UpdateView(_config.AnchorViewData);
+            }
         }
     }
     

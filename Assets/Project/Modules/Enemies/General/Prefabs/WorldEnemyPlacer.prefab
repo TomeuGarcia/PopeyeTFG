@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418986908292266948}
   - component: {fileID: 4149582752248903952}
+  - component: {fileID: 7011877745022158270}
   m_Layer: 2
   m_Name: WorldEnemyPlacer
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   - {fileID: 7256202050056883254}
   - {fileID: 7191464264025833879}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4149582752248903952
 MonoBehaviour:
@@ -54,6 +55,19 @@ MonoBehaviour:
     _viewGameObject: {fileID: 4835209610756631808}
     _meshFilter: {fileID: 5005100359778651790}
     _meshRenderer: {fileID: 2099137147570021464}
+--- !u!114 &7011877745022158270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846385568898150880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79c00c7877624b73b74d8fb535692aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _worldEnemyPlacer: {fileID: 4149582752248903952}
 --- !u!1 &4835209610756631808
 GameObject:
   m_ObjectHideFlags: 0

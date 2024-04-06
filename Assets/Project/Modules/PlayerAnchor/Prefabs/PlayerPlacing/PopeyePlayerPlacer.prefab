@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 7577701286041960970}
   - component: {fileID: 3999558571259426305}
   - component: {fileID: 2917086593924843255}
+  - component: {fileID: 2400271980622820398}
   m_Layer: 2
   m_Name: PopeyePlayerPlacer
   m_TagString: Untagged
@@ -116,7 +117,7 @@ Transform:
   - {fileID: 8431436181710557697}
   - {fileID: 6947830949993634871}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3999558571259426305
 MonoBehaviour:
@@ -155,6 +156,19 @@ MonoBehaviour:
     _meshFilter: {fileID: 399580199574819201}
     _meshRenderer: {fileID: 8972295791369392117}
   _startsCarryingAnchor: 1
+--- !u!114 &2400271980622820398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207946688129154425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee775892c6d4fd4953e0c57df286a2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _popeyePlayerPlaceSpot: {fileID: 2917086593924843255}
 --- !u!1 &2332776773649439846
 GameObject:
   m_ObjectHideFlags: 0

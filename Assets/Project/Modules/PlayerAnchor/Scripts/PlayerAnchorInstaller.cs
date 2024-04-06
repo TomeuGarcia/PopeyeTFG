@@ -245,7 +245,7 @@ namespace Popeye.Modules.PlayerAnchor
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
 
             PopeyePlayerInstantTranslation playerInstantTranslation =
-                new PopeyePlayerInstantTranslation(_playerController, playerMotion, anchorMotion);
+                new PopeyePlayerInstantTranslation(_playerController, playerMotion, _anchor, anchorMotion);
             
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
@@ -271,8 +271,8 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
-            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, playerInstantTranslation, 
-                playerStateMachine, playerAutoActionsQueue);
+            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
+                playerInstantTranslation, playerStateMachine);
             _popeyePlayerPlacer.StartListening();
             
             _playerController.AwakeConfigure();

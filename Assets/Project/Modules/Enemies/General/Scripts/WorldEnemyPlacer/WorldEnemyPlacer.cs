@@ -38,22 +38,11 @@ namespace Project.Modules.Enemies.General
         
         private Vector3 SpawnPosition => transform.position;
 
-        private void OnValidate()
-        {
-            if (_enemyID && _config && _enemyPreview.HasAllReferences())
-            {
-                _enemyPreview.UpdateView(_config.GetViewDataForEnemy(_enemyID));
-            }
-        }
 
-
-        private void Awake()
-        {
-            _enemyPreview.DestroyView();
-        }
-
+        
         private void Start()
         {
+            _enemyPreview.DestroyView();
             SpawnEnemy();
         }
 
@@ -64,6 +53,16 @@ namespace Project.Modules.Enemies.General
             AEnemy enemy = enemyFactory.Create(_enemyID, SpawnPosition, Quaternion.identity);
             _enemyWaypointsInitializer.Value.SetEnemyWaypoints(enemy);
         }
+        
+
+        public void UpdateView()
+        {
+            if (_enemyID && _config && _enemyPreview.HasAllReferences())
+            {
+                _enemyPreview.UpdateView(_config.GetViewDataForEnemy(_enemyID));
+            }
+        }
+        
         
         
     }

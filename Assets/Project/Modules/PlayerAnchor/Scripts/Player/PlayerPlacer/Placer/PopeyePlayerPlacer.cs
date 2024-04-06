@@ -1,3 +1,7 @@
+using System;
+using Cysharp.Threading.Tasks;
+using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
@@ -10,20 +14,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         private readonly IPlacePopeyePlayerEventChannelListenEntry _placeEventChannelListenEntry;
         private readonly IPlayerInstantTranslation _playerInstantTranslation;
         private readonly PlayerFSM _playerStateMachine;
-        private readonly IPlayerAutoActionsQueue _playerAutoActionsQueue;
 
 
         public PopeyePlayerPlacer(
             IPlacePopeyePlayerEventChannelListenEntry placeEventChannelListenEntry,
             IPlayerInstantTranslation playerInstantTranslation,
-            PlayerFSM playerStateMachine,
-            IPlayerAutoActionsQueue playerAutoActionsQueue
+            PlayerFSM playerStateMachine
         )
         {
             _placeEventChannelListenEntry = placeEventChannelListenEntry;
             _playerInstantTranslation = playerInstantTranslation;
             _playerStateMachine = playerStateMachine;
-            _playerAutoActionsQueue = playerAutoActionsQueue;
         }
 
         public void StartListening()
@@ -38,20 +39,20 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
 
         private void PlacePlayer(PopeyePlayerPlacingData placingData)
         {
-            _playerInstantTranslation.TranslatePlayer(placingData.playerPosition, placingData.playerRotation);
+            _playerInstantTranslation.TranslatePlayerAndPauseForAFrame(placingData.playerPosition, placingData.playerRotation);
+            _playerInstantTranslation.TranslateAnchorAndReset(placingData.anchorPosition, placingData.anchorRotation);
 
             if (placingData.startCarryingAnchor)
             {
-                // Es puto lia
-                //_playerStateMachine.OverwriteState(PlayerStates.PlayerStates.Spawning);
-                _playerAutoActionsQueue.TryQueueAnchorPull();
+                _playerStateMachine.OverwriteState(PlayerStates.PlayerStates.Spawning);
             }
             else
             {
-                _playerInstantTranslation.TranslateAnchor(placingData.anchorPosition, placingData.anchorRotation);
                 _playerStateMachine.OverwriteState(PlayerStates.PlayerStates.SpawningWithAnchorOnFloor);
             }
-            
         }
+        
+
+        
     }
 }
