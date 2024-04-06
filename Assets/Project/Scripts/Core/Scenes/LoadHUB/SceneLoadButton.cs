@@ -9,15 +9,13 @@ namespace Popeye.Scripts.Core.Scenes
     {
         [SerializeField] private Button _button;
         [SerializeField] private TextMeshProUGUI _text;
-        private ISceneLoadManager _sceneLoadManager;
         private ISceneLoadManager.SceneAdditiveLoadGroup _sceneLoadGroup;
-        private Action _buttonPressedCallback;
+        private Action<ISceneLoadManager.SceneAdditiveLoadGroup> _buttonPressedCallback;
         
         
-        public void Configure(ISceneLoadManager sceneLoadManager, ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup,
-            Action buttonPressedCallback)
+        public void Configure(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup,
+            Action<ISceneLoadManager.SceneAdditiveLoadGroup> buttonPressedCallback)
         {
-            _sceneLoadManager = sceneLoadManager;
             _sceneLoadGroup = sceneLoadGroup;
             _buttonPressedCallback = buttonPressedCallback;
             
@@ -34,8 +32,7 @@ namespace Popeye.Scripts.Core.Scenes
 
         private void OnButtonPressed()
         {
-            _sceneLoadManager.LoadSceneAdditively(_sceneLoadGroup);
-            _buttonPressedCallback?.Invoke();
+            _buttonPressedCallback?.Invoke(_sceneLoadGroup);
         }
 
         public void DisableClicking()

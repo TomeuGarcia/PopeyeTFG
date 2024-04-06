@@ -10,25 +10,33 @@ namespace Popeye.Modules.Installers
 {
     public class FactoriesInstaller : MonoBehaviour
     {
+        [Header("PARTICLES")]
         [SerializeField] private ParticleFactoryConfig _particleFactoryConfig;
+        [SerializeField] private Transform _particleParent;
+        
+        [Header("ENEMIES")]
         [SerializeField] private EnemyFactoryInstaller _enemyFactoryInstaller;
         [SerializeField] private HazardsFactoryConfig _hazardFactryConfig;
         [SerializeField] private Transform _hazardsParent;
 
-        [SerializeField] private Transform _particleParent;
     
-        public void Install(ServiceLocator serviceLocator)
+        public void Install(ServiceLocator serviceLocator, IFMODAudioManager audioManager)
         {
-            serviceLocator.RegisterService<IParticleFactory>(new ParticleFactory(_particleFactoryConfig, _particleParent));
-            serviceLocator.RegisterService<IHazardFactory>(new HazardsFactory(_hazardFactryConfig,_hazardsParent, serviceLocator.GetService<IParticleFactory>()));
-            _enemyFactoryInstaller.Install(serviceLocator, ServiceLocator.Instance.GetService<IFMODAudioManager>());
+            ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent);
+            HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, particleFactory);
+            
+            serviceLocator.RegisterService<IParticleFactory>(particleFactory);
+            serviceLocator.RegisterService<IHazardFactory>(hazardsFactory);
+            
+            _enemyFactoryInstaller.Install(serviceLocator, audioManager);
         }
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
-            serviceLocator.RemoveService<IParticleFactory>();
-            serviceLocator.RemoveService<IHazardFactory>();
             _enemyFactoryInstaller.Uninstall(serviceLocator);
+            
+            serviceLocator.RemoveService<IHazardFactory>();
+            serviceLocator.RemoveService<IParticleFactory>();
         }
     }
 

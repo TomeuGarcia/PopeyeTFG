@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Popeye.Modules.Enemies.General;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.EntityPlacing;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Modules.Enemies.General
 {
@@ -11,9 +13,9 @@ namespace Project.Modules.Enemies.General
     public class WorldEnemyPlacerConfig : ScriptableObject
     {
         [SerializeField] private WorldEnemyPlacer.EditorViewElement[] _viewElements;
-        [SerializeField] private WorldEnemyPlacer.EditorViewElement.ViewData _missingEnemyIdToViewData;
+        [SerializeField] private WorldEntityPlacerViewData _missingEnemyIdToViewData;
 
-        private Dictionary<EnemyID, WorldEnemyPlacer.EditorViewElement.ViewData> _enemyIdToViewData;
+        private Dictionary<EnemyID, WorldEntityPlacerViewData> _enemyIdToViewData;
 
         private void OnValidate()
         {
@@ -31,15 +33,15 @@ namespace Project.Modules.Enemies.General
         private void InitEnemyIdToViewData()
         {
             _enemyIdToViewData = 
-                new Dictionary<EnemyID, WorldEnemyPlacer.EditorViewElement.ViewData>(_viewElements.Length);
+                new Dictionary<EnemyID, WorldEntityPlacerViewData>(_viewElements.Length);
 
             foreach ( WorldEnemyPlacer.EditorViewElement editorViewElement in _viewElements)
             {
-                _enemyIdToViewData.Add(editorViewElement.EnemyID, editorViewElement.Data);
+                _enemyIdToViewData.Add(editorViewElement.EnemyID, editorViewElement.ViewData);
             }
         }
 
-        public WorldEnemyPlacer.EditorViewElement.ViewData GetViewDataForEnemy(EnemyID enemyID)
+        public WorldEntityPlacerViewData GetViewDataForEnemy(EnemyID enemyID)
         {
             if (!_enemyIdToViewData.TryGetValue(enemyID, out var viewData))
             {

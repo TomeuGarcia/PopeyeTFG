@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 3575201745362238480}
   - component: {fileID: 1386922943215149762}
   m_Layer: 0
-  m_Name: GameSetupInstaller
+  m_Name: GameplayCoreInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,7 +173,7 @@ Transform:
   - {fileID: 7274483664309925864}
   - {fileID: 5001171340976732915}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1386922943215149762
 MonoBehaviour:
@@ -307,6 +307,8 @@ MonoBehaviour:
   _powerBoostDropFactoryConfig: {fileID: 11400000, guid: c1acdb7662fefee4099c6bed11ebc1e3,
     type: 2}
   _autoAimCreator: {fileID: 752198695613597362}
+  _placePopeyePlayerEventChannel: {fileID: 11400000, guid: 78858b44672000849a30fc75b70340eb,
+    type: 2}
   _anchor: {fileID: 0}
   _anchorPhysics: {fileID: 0}
   _anchorCollisions: {fileID: 0}

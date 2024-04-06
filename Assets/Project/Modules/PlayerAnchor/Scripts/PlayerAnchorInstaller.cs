@@ -20,8 +20,10 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
@@ -69,6 +71,9 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
 
+        [Header("Player - Placing")]
+        [SerializeField] private PlacePopeyePlayerEventChannelAsset _placePopeyePlayerEventChannel;
+
         [Space(20)] 
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
@@ -106,6 +111,9 @@ namespace Popeye.Modules.PlayerAnchor
 
 
         private AnchorPuller _anchorPuller_debugReference;
+        private PopeyePlayerPlacer _popeyePlayerPlacer;
+        
+        
 
         private void Update()
         {
@@ -125,11 +133,12 @@ namespace Popeye.Modules.PlayerAnchor
             _generalGameStateData.LoadState();
             
             // Services
-            ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(new CameraFunctionalities(
-                new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value));
+            CameraFunctionalities cameraFunctionalities = new CameraFunctionalities(
+                new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value);
+            
+            ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(cameraFunctionalities);
             
             
-            ICameraFunctionalities cameraFunctionalities = ServiceLocator.Instance.GetService<ICameraFunctionalities>();
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
             IFMODAudioManager fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
             IParticleFactory particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
@@ -234,6 +243,9 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
             IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
 
+            PopeyePlayerInstantTranslation playerInstantTranslation =
+                new PopeyePlayerInstantTranslation(_playerController, playerMotion, anchorMotion);
+            
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
             IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
@@ -256,6 +268,9 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
+            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, playerInstantTranslation);
+            _popeyePlayerPlacer.StartListening();
+            
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor, playerMovementChecker);
@@ -272,7 +287,8 @@ namespace Popeye.Modules.PlayerAnchor
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
             _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, playerMotion, playerDasher,
+                playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
+                playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
                 playerSafeGroundChecker, playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
                 playerGlobalEventsListener, playerEventsDispatcher);
@@ -298,6 +314,7 @@ namespace Popeye.Modules.PlayerAnchor
 
         public void Uninstall()
         {
+            _popeyePlayerPlacer.StopListening();
             _generalGameStateData.PlayerUnlockableAbilitiesConfig.StopChannelListening();
             _abilitiesToUnlockHolder.StopListeningToUnlock();
             ServiceLocator.Instance.RemoveService<IPowerBoostDropFactory>();

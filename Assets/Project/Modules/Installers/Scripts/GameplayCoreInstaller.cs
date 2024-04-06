@@ -2,6 +2,7 @@ using Popeye.Core.Installers;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.InformationDisplay;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.GameDataEvents;
 using Popeye.Modules.GameState;
@@ -15,7 +16,7 @@ using UnityEngine;
 namespace Popeye.Modules.Installers
 {
 
-    public class GameSetupInstaller : MonoBehaviour
+    public class GameplayCoreInstaller : MonoBehaviour
     {
 
 
@@ -61,6 +62,7 @@ namespace Popeye.Modules.Installers
 
             IEventSystemService eventSystemService = serviceLocator.GetService<IEventSystemService>();
             ITimeFunctionalities timeFunctionalities = serviceLocator.GetService<ITimeFunctionalities>();
+            IFMODAudioManager audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
             
             
 
@@ -73,7 +75,7 @@ namespace Popeye.Modules.Installers
 
             
             _informationDisplayInstaller.Install(serviceLocator);
-            _factoriesInstaller.Install(serviceLocator);
+            _factoriesInstaller.Install(serviceLocator, audioManager);
             _playerAnchorInstaller.Install();
             _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
             _gameDataEventsInstaller.Install(eventSystemService);

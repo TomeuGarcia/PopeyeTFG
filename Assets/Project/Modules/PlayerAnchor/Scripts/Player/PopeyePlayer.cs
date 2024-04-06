@@ -6,6 +6,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -57,6 +58,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
+        private IPlayerInstantTranslation _playerInstantTranslation;
         private PlayerDasher _playerDasher;
         
         private PopeyeAnchor _anchor;
@@ -86,7 +88,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
             IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
-            PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
+            PlayerMovementChecker playerMovementChecker, 
+            TransformMotion playerMotion, IPlayerInstantTranslation playerInstantTranslation,
+            PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower,
             IGateValueReader<IAnchorVerticalThrower> anchorVerticalThrower, 
@@ -107,6 +111,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _staminaSystem = staminaSystem;
             _playerMovementChecker = playerMovementChecker;
             _playerMotion = playerMotion;
+            _playerInstantTranslation = playerInstantTranslation;
             _playerDasher = playerDasher;
             _anchor = anchor;
             _anchorThrower = anchorThrower;
@@ -494,16 +499,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void RespawnToLastSafeGround()
         {
             SetEnabledFallingPhysics(true);
-            _playerController.ResetRigidbody();
+            
             Vector3 respawnPosition = _safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset;
-            _playerMotion.SetPosition(respawnPosition);
+            Quaternion respawnRotation = _playerMotion.Rotation;
+            _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
+
             _safeGroundChecker.UpdateChecking();
         }
         public void RespawnFromDeath()
         {
-            _playerController.ResetRigidbody();
-            _playerMotion.SetPosition(_respawnCheckpointChecker.Value.BestSafePosition);  
-            _playerMotion.SetRotation(Quaternion.identity);
+            Vector3 respawnPosition = _respawnCheckpointChecker.Value.BestSafePosition;
+            Quaternion respawnRotation = Quaternion.identity;
+            _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
+            
             _playerHealth.HealToMax();
             PlayerHealing.ResetHeals();
             ResetAnchor();

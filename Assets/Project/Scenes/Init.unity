@@ -271,7 +271,7 @@ GameObject:
   - component: {fileID: 1158558159}
   - component: {fileID: 1158558158}
   m_Layer: 0
-  m_Name: StartLoadScene
+  m_Name: LoadNextScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -289,6 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7801bbe60848adbe05df04aaf19876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _loadAdditively: 0
   _loadSceneGroup:
     sceneReference: {fileID: 11400000, guid: c10687e028a4e7842ada002df1654bb2, type: 2}
     loadOptions: {fileID: 11400000, guid: 39ec8a1b2bfd26e4cb3e3c0fa769d5a0, type: 2}

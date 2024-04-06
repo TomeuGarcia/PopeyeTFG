@@ -10,12 +10,9 @@ namespace Popeye.Scripts.Core.Scenes
         [SerializeField] private RectTransform _buttonsHolder;
         [SerializeField] private SceneLoadButton _sceneLoadButtonPrefab;
         private SceneLoadButton[] _buttons;
-        
-        [Header("GAMEPLAY SCENE")]
-        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _gameplayScene;
-        
-        [Header("SCENES")]
-        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup[] _scenesToLoad;
+
+        [Header("CONFIGURATION")] 
+        [SerializeField] private SceneLoadingHubConfig _config;
         
         
         private ISceneLoadManager _sceneLoadManager;
@@ -24,24 +21,30 @@ namespace Popeye.Scripts.Core.Scenes
         private void Awake()
         {
             _sceneLoadManager = ServiceLocator.Instance.GetService<ISceneLoadManager>();
+
+            ISceneLoadManager.SceneAdditiveLoadGroup[] scenesToLoad = _config.ScenesToLoad;
             
-            _buttons = new SceneLoadButton[_scenesToLoad.Length];
+            _buttons = new SceneLoadButton[scenesToLoad.Length];
             
-            for (int i = 0; i < _scenesToLoad.Length; ++i)
+            for (int i = 0; i < scenesToLoad.Length; ++i)
             {
-                ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup = _scenesToLoad[i];
+                ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup = scenesToLoad[i];
             
                 SceneLoadButton sceneLoadButton = Instantiate(_sceneLoadButtonPrefab, _buttonsHolder);
-                sceneLoadButton.Configure(_sceneLoadManager, sceneLoadGroup, OnSceneButtonPressed);
+                sceneLoadButton.Configure(sceneLoadGroup, OnSceneButtonPressed);
 
                 _buttons[i] = sceneLoadButton;
             }
         }
 
-        private void OnSceneButtonPressed()
+        private void OnSceneButtonPressed(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
         {
-            // Load gameplay scene too
-            //_sceneLoadManager.LoadSceneAdditively(_gameplayScene);
+            if (NeedsToLoadGameplayCore(sceneLoadGroup))
+            {
+                _sceneLoadManager.LoadSceneAdditively(_config.GameplayCoreSceneGroup);
+            }
+            _sceneLoadManager.LoadSceneAdditively(sceneLoadGroup);
+
 
             foreach (SceneLoadButton sceneLoadButton in _buttons)
             {
@@ -49,5 +52,9 @@ namespace Popeye.Scripts.Core.Scenes
             }
         }
         
+        private bool NeedsToLoadGameplayCore(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
+        {
+            return sceneLoadGroup.sceneReference != _config.MainMenuScene;
+        }
     }
 }
