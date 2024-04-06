@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _blackboard.queuedAnchorPull = false;
+            _blackboard.QueuedAnchorPull = false;
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.PullingAnchorMoveSpeed);
             StartPulling().Forget();
@@ -33,7 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_anchorPullingFinished)
             {
-                NextState = PlayerStates.MovingWithAnchor;
+                NextState = PlayerStates.PickingUpAnchor;
                 return true;
             }
             
@@ -43,12 +43,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid StartPulling()
         {
             _blackboard.PlayerMediator.PullAnchor();
-
             _anchorPullingFinished = false;
-            await UniTask.WaitUntil(() => !_blackboard.AnchorMediator.IsBeingPulled());
-            _anchorPullingFinished = true;
 
+            await UniTask.WaitUntil(() => !_blackboard.AnchorMediator.IsBeingPulled());
+            
             _blackboard.PlayerMediator.OnPullAnchorComplete();
+            _anchorPullingFinished = true;
         }
     }
 }

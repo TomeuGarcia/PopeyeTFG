@@ -6,9 +6,8 @@ namespace Popeye.Core.Services.GameReferences
 {
     public interface IGameReferences
     {
-        Transform GetPlayer();
-        void SetPlayer(Transform playerTransform);
-
-
+        Transform GetPlayerTargetForEnemies();
+        Transform GetPlayerPositionTransform();
+        
     }
 }

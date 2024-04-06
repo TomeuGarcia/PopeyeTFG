@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aa1e633556b4d3596a77187aeb8b7fe, type: 3}
+  m_Name: PowerBoostDropFactoryConfig
+  m_EditorClassIdentifier: 
+  _defaultDropPrefab: {fileID: 4071621770937719304, guid: 9ea8863af04f0a84b855d3b6031764ed,
+    type: 3}
+  _defaultInitialInstances: 10
+  _dropConfigToPoolsData:
+  - _dropPrefab: {fileID: 4071621770937719304, guid: 9ea8863af04f0a84b855d3b6031764ed,
+      type: 3}
+    _experienceAmount: 1
+    _initialInstances: 10
+  - _dropPrefab: {fileID: 4071621770937719304, guid: 9195e5a1b9b60ab489912f826df2b7f5,
+      type: 3}
+    _experienceAmount: 3
+    _initialInstances: 5
+  - _dropPrefab: {fileID: 4071621770937719304, guid: 3f4e469354480ca45819e2f4f8684dd4,
+      type: 3}
+    _experienceAmount: 5
+    _initialInstances: 5
+  - _dropPrefab: {fileID: 4071621770937719304, guid: 374d5595c6ed7944bb91c21553fc3729,
+      type: 3}
+    _experienceAmount: 25
+    _initialInstances: 5

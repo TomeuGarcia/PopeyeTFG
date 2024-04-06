@@ -16,7 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 
         public void Exit()
         {
-            _blackboard.AnchorPhysics.EnableTension();
+            _blackboard.AnchorPhysics.EnableCollision();
         }
     }
 }

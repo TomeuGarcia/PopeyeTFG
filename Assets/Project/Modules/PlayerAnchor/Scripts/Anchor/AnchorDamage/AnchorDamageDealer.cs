@@ -21,12 +21,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
 
         private bool _sidewaysKnockbackIsRight;
-        
-        private DamageHit _throwDamageHit;
-        private DamageHit _pullDamageHit;
-        private DamageHit _kickDamageHit;
-        private DamageHit _spinDamageHit;
-        private DamageHit _verticalLandDamageHit;
+
+        private DamageHit ThrowDamageHit => _config.ThrowDamageHit;
+        private DamageHit PullDamageHit => _config.PullDamageHit;
+        private DamageHit KickDamageHit => _config.KickDamageHit;
+        private DamageHit SpinDamageHit => _config.SpinDamageHit;
+        private DamageHit VerticalLandDamageHit => _config.VerticalLandDamageHit;
 
         public void Configure(IAnchorMediator anchor,
             AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
@@ -35,22 +35,19 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchor = anchor;
             
             _config = anchorDamageConfig;
+            _config.Init();
+            
             _damageStartTransform = damageStartTransform;
 
-            _throwDamageHit = new DamageHit(_config.AnchorThrowDamageHit); 
-            _pullDamageHit = new DamageHit(_config.AnchorPullDamageHit); 
-            _kickDamageHit = new DamageHit(_config.AnchorKickDamageHit); 
-            _verticalLandDamageHit = new DamageHit(_config.AnchorVerticalLandDamageHit); 
-            _spinDamageHit = new DamageHit(_config.AnchorSpinDamageHit); 
-            
-            _anchorThrowDamageTrigger.Configure(combatManager, _throwDamageHit);
+
+            _anchorThrowDamageTrigger.Configure(combatManager);
             _anchorThrowDamageTrigger.Deactivate();
 
-            _anchorSpinDamageTrigger.Configure(combatManager, _spinDamageHit);
+            _anchorSpinDamageTrigger.Configure(combatManager);
             _anchorSpinDamageTrigger.Deactivate();
             
             
-            _anchorVerticalLandDamageTrigger.Configure(combatManager, _verticalLandDamageHit);
+            _anchorVerticalLandDamageTrigger.Configure(combatManager);
             _anchorVerticalLandDamageTrigger.Deactivate();
             
 
@@ -87,19 +84,19 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void DealThrowDamage(AnchorThrowResult anchorThrowResult)
         {
-            DealForwardThrowDamage(anchorThrowResult, _throwDamageHit, _config.ThrowDamageExtraDuration);
+            DealForwardThrowDamage(anchorThrowResult, ThrowDamageHit, _config.ThrowDamageExtraDuration);
         }
 
         public async UniTaskVoid DealPullDamage(AnchorThrowResult anchorPullResult)
         {
             _anchorThrowDamageTrigger.OnBeforeDamageDealt += SetPullAttackKnockbackEndPosition;
-            await DealBackwardThrowDamage(anchorPullResult, _pullDamageHit, _config.PullDamageExtraDuration);
+            await DealBackwardThrowDamage(anchorPullResult, PullDamageHit, _config.PullDamageExtraDuration);
             _anchorThrowDamageTrigger.OnBeforeDamageDealt -= SetPullAttackKnockbackEndPosition;
         }
         
         public void DealKickDamage(AnchorThrowResult anchorKickResult)
         {
-            DealForwardThrowDamage(anchorKickResult, _kickDamageHit, _config.KickDamageExtraDuration);
+            DealForwardThrowDamage(anchorKickResult, KickDamageHit, _config.KickDamageExtraDuration);
         }
 
         
@@ -166,25 +163,22 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void DealVerticalLandDamage(AnchorThrowResult anchorThrowResult)
         {
-            _anchorVerticalLandDamageTrigger.SetDamageHit(_verticalLandDamageHit);
+            _anchorVerticalLandDamageTrigger.SetDamageHit(VerticalLandDamageHit);
             _anchorVerticalLandDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
             
             DealLandHitDamage(anchorThrowResult.TrajectoryPathPoints, 
-                    anchorThrowResult.Duration, _config.VerticalLandDamageExtraDuration,
-                    anchorThrowResult.MoveEaseCurve, 0.6f)
+                    anchorThrowResult.Duration, _config.VerticalLandDamageDuration)
                 .Forget();
         }
         
-        private async UniTaskVoid DealLandHitDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
-            AnimationCurve ease, float easeThreshold)
+        private async UniTaskVoid DealLandHitDamage(Vector3[] trajectoryPoints, float waitDuration, float damageDuration)
         {
-            var wait = await WaitUntilEase(ease, duration, easeThreshold);
+            await UniTask.Delay(TimeSpan.FromSeconds(waitDuration));
             
             _anchorVerticalLandDamageTrigger.transform.position = trajectoryPoints[^1];
-            
             _anchorVerticalLandDamageTrigger.Activate();
-            await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
-            await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(damageDuration));
             _anchorVerticalLandDamageTrigger.Deactivate();
         }
 

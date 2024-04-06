@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7fb1e8050e9496aafd6fe0d08c3dad0, type: 3}
+  m_Name: PlayerPowerBoostController
+  m_EditorClassIdentifier: 
+  _powerBoostLevels:
+  - {fileID: 11400000, guid: af83c1c25a443474abb1bbbebffd896a, type: 2}
+  - {fileID: 11400000, guid: aac4a26df95119c4b88101c1b0709318, type: 2}
+  - {fileID: 11400000, guid: df59be4ff8c108546af9b7392273e9e5, type: 2}
+  _levelLoseAmount: 3
+  _accumulatedExperience: 0
+  _debugExperienceToAdd: 5

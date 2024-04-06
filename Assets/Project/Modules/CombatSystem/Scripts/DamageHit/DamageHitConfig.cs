@@ -1,10 +1,11 @@
+using Popeye.ProjectHelpers;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem
 {
-    [CreateAssetMenu(fileName = "DamageHitConfig_AttackName", 
-        menuName = "Popeye/CombatSystem/DamageHitConfig")]
+    [CreateAssetMenu(fileName = "DamageHitConfig_ATTACK_NAME", 
+        menuName = ScriptableObjectsHelper.COMBATSYSTEM_PATH + "DamageHitConfig")]
     public class DamageHitConfig : ScriptableObject
     {
         [SerializeField] private DamageHitTargetPreset _damageHitPreset;
@@ -17,7 +18,6 @@ namespace Popeye.Modules.CombatSystem
         
         public DamageHitTargetType DamageHitTargetTypeMask => _damageHitPreset.TargetMask;
         public int Damage => _damage;
-        public float KnockbackMagnitude => _knockbackMagnitude;
         public float StunDuration => _stunDuration;
 
         public KnockbackHitConfig KnockbackHitConfig => _knockbackHitConfig;

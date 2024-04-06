@@ -1,4 +1,5 @@
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.AutoAim

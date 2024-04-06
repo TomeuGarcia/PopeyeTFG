@@ -1,11 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Popeye.Core.Installers;
+using Popeye.Core.Services.EventSystem;
+using Popeye.Core.Services.InformationDisplay;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameDataEvents;
+using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Scripts.Collisions;
 using Project.Modules.CombatSystem.KnockbackSystem;
+using Project.Modules.Installers.Scripts;
 using Project.PhysicsMovement;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
@@ -15,14 +19,39 @@ using UnityEngine;
 
 public class GameSetupInstaller : MonoBehaviour
 {
+    [Header("OBJECT TYPES")]
+    [SerializeField] private ObjectTypesInstaller _objectTypesInstaller;
+
+    [Header("AUDIO")] 
+    [SerializeField] private AudioInstaller _audioInstaller;
+    
+    [Header("FACTORIES")]
     [SerializeField] private FactoriesInstaller _factoriesInstaller;
+    
+    [Header("PLAYER ANCHOR")]
     [SerializeField] private PlayerAnchorInstaller _playerAnchorInstaller;
 
+    [Header("GAME REFERENCES")] 
+    [SerializeField] private GameReferencesInstaller _gameReferencesInstaller;
+    
+    [Header("GAME EVENTS")] 
+    [SerializeField] private GameDataEventsInstaller _gameDataEventsInstaller;
+    
+    [Header("INFORMATION DISPLAY")] 
+    [SerializeField] private InformationDisplayInstaller _informationDisplayInstaller;
+    
+    [Header("OTHER")]
     [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
     [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
     [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
     
     [SerializeField] private HitStopManagerConfig _hitStopManagerConfig;
+
+    
+    
+    private TimeManagerGameEventsListener _timeManagerGameEventsListener; 
+    
+    
 
     void Awake()
     {
@@ -36,26 +65,59 @@ public class GameSetupInstaller : MonoBehaviour
 
     private void Install()
     {
+        ServiceLocator serviceLocator = ServiceLocator.Instance;
+
+        EventSystemService eventSystemService = new EventSystemService();
+        serviceLocator.RegisterService<IEventSystemService>(eventSystemService);
+        
         CombatManagerService combatManagerService = 
             new CombatManagerService(_hitTargetCollisionProbingConfig, 
                 new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig));
-        ServiceLocator.Instance.RegisterService<ICombatManager>(combatManagerService);
+        serviceLocator.RegisterService<ICombatManager>(combatManagerService);
 
         ITimeScaleManager timeScaleManager = new UnityTimeScaleManager();
         TimeFunctionalities timeFunctionalities =
             new TimeFunctionalities(timeScaleManager, new HitStopManager(_hitStopManagerConfig, timeScaleManager));
-        ServiceLocator.Instance.RegisterService<ITimeFunctionalities>(timeFunctionalities);
+        serviceLocator.RegisterService<ITimeFunctionalities>(timeFunctionalities);
         
-        _factoriesInstaller.Install();
+        _objectTypesInstaller.Install();
+        _audioInstaller.Install(serviceLocator);
+        _informationDisplayInstaller.Install(serviceLocator);
+        _factoriesInstaller.Install(serviceLocator);
         _playerAnchorInstaller.Install();
+        
+        _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
+
+        _gameDataEventsInstaller.Install(eventSystemService);
+        
+
+        IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
+        serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
+        
+        _timeManagerGameEventsListener = new TimeManagerGameEventsListener(eventSystemService, timeScaleManager);
+        _timeManagerGameEventsListener.StartListening();
     }
     
     private void Uninstall()
     {
-        ServiceLocator.Instance.RemoveService<ICombatManager>();
-        ServiceLocator.Instance.RemoveService<ITimeFunctionalities>();
+        _timeManagerGameEventsListener.StopListening();
         
-        _factoriesInstaller.Uninstall();
+        ServiceLocator serviceLocator = ServiceLocator.Instance;
+        
+        serviceLocator.RemoveService<IGameStateEventsDispatcher>();
+        
+        serviceLocator.RemoveService<ICombatManager>();
+        serviceLocator.RemoveService<ITimeFunctionalities>();
+        
+        _gameDataEventsInstaller.Uninstall();
+        _gameReferencesInstaller.Uninstall(serviceLocator);
+        
         _playerAnchorInstaller.Uninstall();
+        _factoriesInstaller.Uninstall(serviceLocator);
+        _informationDisplayInstaller.Uninstall(serviceLocator);
+        _audioInstaller.Uninstall(serviceLocator);
+        _objectTypesInstaller.Uninstall();
+
+        serviceLocator.RemoveService<IEventSystemService>();
     }
 }

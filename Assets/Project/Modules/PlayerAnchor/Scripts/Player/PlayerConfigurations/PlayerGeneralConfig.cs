@@ -1,9 +1,16 @@
 using System;
+using NaughtyAttributes;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
+using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 using UnityEngine.Serialization;
+
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
 {
@@ -12,24 +19,52 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerGeneralConfig")]
     public class PlayerGeneralConfig : ScriptableObject
     {
-        [Header("Health")] 
-        [SerializeField, Range(0, 300)] private int _maxHealth = 100;
-        [SerializeField, Range(0, 300)] private int _potionHealAmount = 30;
-        [SerializeField, Range(0.0f, 5.0f)] private float _invulnerableDurationAfterHit = 1.0f;
-        
-        
-        public int MaxHealth => _maxHealth;
-        public int PotionHealAmount => _potionHealAmount;
-        public float InvulnerableDurationAfterHit => _invulnerableDurationAfterHit;
-
-
         [Header("OTHER CONFIGURATIONS")] 
-        [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
-        [SerializeField] private PlayerStatesConfig _playerStatesConfig;
-        [SerializeField] private TimeStaminaConfig_SO _playerStaminaConfig;
-
+        [Expandable] [SerializeField] private PlayerMovesetConfig _playerMovesetConfig;
+        [Expandable] [SerializeField] private PlayerStatesConfig _playerStatesConfig;
         public PlayerMovesetConfig MovesetConfig => _playerMovesetConfig;
         public PlayerStatesConfig StatesConfig => _playerStatesConfig;
-        public TimeStaminaConfig_SO StaminaConfig => _playerStaminaConfig;
+        
+        
+        [Header("STAMINA")]
+        [Expandable] [SerializeField] private PlayerStaminaSystemConfig _playerStaminaConfig;
+        public PlayerStaminaSystemConfig StaminaConfig => _playerStaminaConfig;
+
+        
+        [Header("HEALTH")]
+        [SerializeField] private PlayerHealthConfig _playerHealthConfig;
+        [SerializeField] private PotionsPlayerHealingConfig _potionsHealingConfig;
+        public PlayerHealthConfig PlayerHealthConfig => _playerHealthConfig;
+        public PotionsPlayerHealingConfig PotionsHealingConfig => _potionsHealingConfig;
+        
+        
+        [Header("FOCUS")]
+        [Expandable] [SerializeField] private PlayerFocusConfig _focusConfig;
+        public PlayerFocusConfig FocusConfig => _focusConfig;
+
+        
+        [Header("GROUND / VOID checking")] 
+        [SerializeField] private CollisionProbingConfig _safeGroundProbingConfig;
+        [SerializeField] private CollisionProbingConfig _onVoidProbingConfig;
+        [SerializeField] private DamageHitConfig _voidFallDamageConfig;
+        [SerializeField] private ObjectTypeAsset _notSafeGroundType;
+        [SerializeField] private Vector3 _respawnFromVoidPositionOffset = new Vector3(0,2,0);
+        
+        public CollisionProbingConfig SafeGroundProbingConfig => _safeGroundProbingConfig;
+        public CollisionProbingConfig OnVoidProbingConfig => _onVoidProbingConfig;
+        public DamageHitConfig VoidFallDamageConfig => _voidFallDamageConfig;
+        public ObjectTypeAsset NotSafeGroundType => _notSafeGroundType;
+        public Vector3 RespawnFromVoidPositionOffset => _respawnFromVoidPositionOffset;
+
+        
+        [Header("VIEW")] 
+        [SerializeField] private PlayerGeneralViewConfig _generalViewConfig;
+        
+        public PlayerGeneralViewConfig GeneralViewConfig => _generalViewConfig;
+        
+        
+        [Header("ACTIONS")] 
+        [SerializeField] private PlayerAbilityActionChannels abilityActionChannels;
+        public PlayerAbilityActionChannels AbilityActionChannels => abilityActionChannels;
     }
 }

@@ -4,13 +4,28 @@ namespace Popeye.Modules.VFX.Generic
     {
         EnemyOnHitWave,
         EnemyOnHitSplatter,
-        AnchorCarryTrail,
+        AnchorRetrieveTrail,
         AnchorThrowTrail,
         AnchorThrowHead,
         AnchorSlamHead,
         AnchorSlamGroundHit,
         AnchorSlamGroundDecal,
         AnchorHitGroundDecal,
-        AnchorThrowSoftTrail
+        AnchorThrowSoftTrail,
+        PlayerDashDisappear,
+        PlayerDashAppear,
+        PlayerDashTrail,
+        EnemyDeathParticles,
+        EnemySpawnHint,
+        PlayerDashGhost,
+        HealProcess,
+        HealCompleted,
+        EnterEnraged,
+        EnragedProcess,
+        TurretProjectileCollision,
+        TurretAOE,
+        EnemyBloodHitDirectional,
+        EnemyBloodDrip,
+        EnemyBloodHitSplash
     }
 }

@@ -14,5 +14,10 @@ namespace Popeye.Modules.Camera.CameraZoom
         public float ZoomDistance => _zoomDistance;
         public float Duration => _duration;
         public AnimationCurve EaseCurve => _easeCurve;
+
+        public void SetDuration(float newDuration)
+        {
+            _duration = newDuration;
+        }
     }
 }

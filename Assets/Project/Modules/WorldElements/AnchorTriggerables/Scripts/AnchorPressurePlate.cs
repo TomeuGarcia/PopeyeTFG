@@ -1,6 +1,8 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
@@ -9,13 +11,17 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 {
     public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget
     {
-       
+        [Header("MOVE")] 
+        [SerializeField] private Vector3 _triggerMoveBy = Vector3.zero;
+        
+        
         [Header("REFERENCES")]
         [SerializeField] private Material _triggeredMaterial;
         [SerializeField] private Material _notTriggeredMaterial;
         [SerializeField] private MeshRenderer _buttonMesh;
         [SerializeField] private Transform _buttonTransform;
         [SerializeField] protected BoxCollider _collider;
+        [SerializeField] private OneShotFMODSound _activatedSound;
     
         [Header("WORLD INTERACTORS")]
         [SerializeField] private AWorldInteractor[] _worldInteractors;
@@ -50,7 +56,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         {
             OnTakeAnchorHit();
     
-            return new DamageHitResult(this, gameObject, 0, Position);
+            return new DamageHitResult(this, gameObject, damageHit, 0, Position);
         }
     
         protected virtual bool CanBeTriggered(DamageHit damageHit)
@@ -77,12 +83,13 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         protected void PlayTriggerAnimation()
         {
             _buttonMesh.material = _triggeredMaterial;
-            _buttonTransform.DOLocalMove(Vector3.down * 0.05f, 0.2f);
+            _buttonTransform.DOBlendableLocalMoveBy(_triggerMoveBy, 0.2f);
+            ServiceLocator.Instance.GetService<IFMODAudioManager>().PlayOneShotAttached(_activatedSound, gameObject);
         }
         protected void PlayUntriggerAnimation()
         {
             _buttonMesh.material = _notTriggeredMaterial;
-            _buttonTransform.DOLocalMove(Vector3.zero, 0.2f);
+            _buttonTransform.DOLocalMove(-_triggerMoveBy, 0.2f);
         }
     
     

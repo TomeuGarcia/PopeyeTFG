@@ -1,4 +1,4 @@
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Scripts.Collisions;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using UnityEngine;
 
@@ -34,7 +34,6 @@ namespace Popeye.Modules.CombatSystem
                 return false;
             }
 
-            
             damageHitResult = hitTarget.TakeHitDamage(damageHit);
             SetDamageHitResultContactValues(damageHit, damageHitResult);
 

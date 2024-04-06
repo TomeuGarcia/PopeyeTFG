@@ -21,7 +21,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         [Header("MOVEMENT")] 
         [SerializeField] private AnimationCurve _moveInterpolationCurve;
+        [SerializeField] private AnimationCurve _rotateInterpolationCurve;
         public AnimationCurve MoveInterpolationCurve => _moveInterpolationCurve;
+        public AnimationCurve RotateInterpolationCurve => _rotateInterpolationCurve;
         
         
         [Header("DURATIONS")]
@@ -33,12 +35,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
         
-        [Header("PULL TRAJECTORY BEND")] 
+        [Header("PULL TRAJECTORY BEND")]
         [SerializeField, Range(2, 16)] private int _trajectoryBendSharpness = 5;
-
         public int TrajectoryBendSharpness => _trajectoryBendSharpness;
 
+        
+        [Header("STRAIGHT vs CHAIN trajectory by distance")]
+        [SerializeField] private AnimationCurve _trajectoryByDistance = AnimationCurve.Linear(0,0,1,1);
+        public AnimationCurve TrajectoryByDistance => _trajectoryByDistance;
 
+        
         private void OnValidate()
         {
             _maxPullDistance = Mathf.Max(_maxPullDistance, _minPullDistance);

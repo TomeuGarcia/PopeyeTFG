@@ -1,7 +1,5 @@
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerController.AutoAim;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Project.Modules.PlayerController.Testing.AutoAim.Scripts
 {

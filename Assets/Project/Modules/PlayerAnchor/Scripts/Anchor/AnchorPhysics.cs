@@ -18,22 +18,26 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _anchorMediator = anchorMediator;
             
-            _rigidbody.transform.localPosition = Vector3.zero;
             _rigidbody.interpolation = RigidbodyInterpolation.None;
             _rigidbody.isKinematic = true;
         }
         
 
-        public void EnableTension()
-        {
+        public void EnableCollision()
+        {   
+            /*
             _rigidbody.gameObject.SetActive(true);
             _collider.enabled = true;
+            */
         }
         
-        public void DisableTension()
+        public void DisableCollision()
         {
+            // Buttons stop working if uncommented
+            /* 
             _collider.enabled = false;
             _rigidbody.gameObject.SetActive(false);
+            */
         }
 
 

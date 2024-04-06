@@ -56,5 +56,25 @@ namespace Popeye.Modules.Enemies
       {
          InvokeOnDeathComplete();
       }
+
+      internal override void Init()
+      {
+         throw new NotImplementedException();
+      }
+
+      internal override void Release()
+      {
+         throw new NotImplementedException();
+      }
+
+      public override void SetPatrollingWaypoints(Transform[] waypoints)
+      {
+         throw new NotImplementedException();
+      }
+
+      public override void DieFromOrder()
+      {
+         throw new NotImplementedException();
+      }
    }
 }

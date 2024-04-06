@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NaughtyAttributes;
 using Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,8 +10,8 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
     [System.Serializable]
     public class InterpolatorRecycleParticleData
     {
-        [SerializeField] private MaterialFloatSetupConfig[] _floatSetupDatas;
-        [SerializeField] private MaterialFloatInterpolationConfig[] _floatInterpolationDatas;
+        [SerializeField, Expandable] private MaterialFloatSetupConfig[] _floatSetupDatas;
+        [SerializeField, Expandable] private MaterialFloatInterpolationConfig[] _floatInterpolationDatas;
         [SerializeField] private GameObject[] _meshSources;
         
         private List<Material> _materials = new();

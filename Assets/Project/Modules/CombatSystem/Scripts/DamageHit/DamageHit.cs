@@ -5,20 +5,17 @@ using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem
 {
-    public class DamageHit 
+    public class DamageHit
     {
-        public int Damage { get; set; }
+        private readonly DamageHitConfig _config;
+        public int Damage => _config.Damage;
         public Vector3 DamageSourcePosition  { get; set; }
-    
 
-        public float StunDuration  { get; set; }
+        public DamageHitConfig DamageHitConfig => _config;
+        public float StunDuration => _config.StunDuration;
     
     
-        private DamageHitTargetType _damageHitTargetTypeMask;
-        public DamageHitTargetType DamageHitTargetTypeMask
-        {
-            get { return _damageHitTargetTypeMask; }
-        }
+        public DamageHitTargetType DamageHitTargetTypeMask => _config.DamageHitTargetTypeMask;
 
 
         public KnockbackHit KnockbackHit { get; private set; }
@@ -26,12 +23,9 @@ namespace Popeye.Modules.CombatSystem
     
         public DamageHit(DamageHitConfig config)
         {
-            _damageHitTargetTypeMask = config.DamageHitTargetTypeMask;
-            Damage = config.Damage;
+            _config = config;
             DamageSourcePosition = Vector3.zero;
-            StunDuration = config.StunDuration;
 
-            
             KnockbackHit = new KnockbackHit(config.KnockbackHitConfig);
         }
         
@@ -45,6 +39,13 @@ namespace Popeye.Modules.CombatSystem
             KnockbackHit.UpdateEndPosition(endPosition);
         }
 
+        public string GetName()
+        {
+            string damageName = _config.name;
+            damageName = damageName.Replace("DamageHitConfig_", string.Empty);
+            
+            return damageName;
+        }
     }
     
 }

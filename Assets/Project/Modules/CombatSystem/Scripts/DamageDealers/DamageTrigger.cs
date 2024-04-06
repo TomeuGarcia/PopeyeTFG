@@ -15,6 +15,9 @@ namespace Popeye.Modules.CombatSystem
         [SerializeField] private bool _isKnockbackPushOrigin = false;
         [SerializeField] private Collider _collider;
 
+        [SerializeField] private bool _trackActivations = false;
+        private int _activationsCount = 0;
+        
         public Vector3 Position => transform.position;
         
         
@@ -23,6 +26,15 @@ namespace Popeye.Modules.CombatSystem
 
         
         private void OnTriggerEnter(Collider other)
+        {
+            CheckApplyDamage(other);
+        }
+        private void OnTriggerStay(Collider other)
+        {
+            CheckApplyDamage(other);
+        }
+
+        private void CheckApplyDamage(Collider other)
         {
             if (_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
             {
@@ -34,7 +46,7 @@ namespace Popeye.Modules.CombatSystem
         
         
         
-        public void Configure(ICombatManager combatManager, DamageHit damageHit)
+        public void Configure(ICombatManager combatManager, DamageHit damageHit = null)
         {
             _damageDealer = new DamageDealer();
             _damageDealer.Configure(combatManager, damageHit);
@@ -51,10 +63,22 @@ namespace Popeye.Modules.CombatSystem
         public void Activate()
         {
             _hitTargetsHistory.Clear();
+            
+            if (_trackActivations)
+            {
+                if (++_activationsCount > 1) return;
+            }
+            
             _collider.enabled = true;
         } 
         public void Deactivate()
         {
+            if (_trackActivations)
+            {
+                _activationsCount = Mathf.Max(_activationsCount - 1, 0);
+                if (_activationsCount > 0) return;
+            }
+            
             _collider.enabled = false;
         }
 
@@ -88,9 +112,10 @@ namespace Popeye.Modules.CombatSystem
             OnBeforeDamageDealt?.Invoke(this, collider.gameObject);
             if (_damageDealer.TryDealDamage(collider.gameObject, out DamageHitResult damageHitResult))
             {
-                _hitTargetsHistory.Add(damageHitResult.DamageHitTargetGameObject);
                 OnDamageDealt?.Invoke(damageHitResult);
             }
+            
+            _hitTargetsHistory.Add(collider.gameObject);
         }
         
     }

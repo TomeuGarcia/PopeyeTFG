@@ -5,6 +5,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorSnapTarget : IAnchorTrajectorySnapTarget
     {
-        public Vector3 GetLookDirection();
+        Vector3 GetLookDirection();
     }
 }

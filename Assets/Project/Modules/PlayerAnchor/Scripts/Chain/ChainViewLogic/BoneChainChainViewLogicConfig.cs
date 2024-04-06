@@ -1,9 +1,7 @@
-using System;
 using DG.Tweening;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Popeye.Modules.PlayerAnchor.Chain

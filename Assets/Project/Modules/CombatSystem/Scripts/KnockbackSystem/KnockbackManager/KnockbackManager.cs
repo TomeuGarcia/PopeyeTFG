@@ -1,4 +1,4 @@
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Scripts.Collisions;
 using Project.PhysicsMovement;
 using UnityEngine;
 

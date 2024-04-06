@@ -1,6 +1,7 @@
 using System;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.DropShadow
@@ -10,8 +11,11 @@ namespace Popeye.Modules.PlayerAnchor.DropShadow
         menuName = ScriptableObjectsHelper.PLAYER_ANCHOR_ASSETS_PATH + "DropShadowConfig")]
     public class DropShadowConfig : ScriptableObject
     {
-        [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
-        public LayerMask ObstacleLayerMask => _obstacleProbingConfig.ObstaclesLayerMask;
+        [SerializeField] private CollisionProbingConfig _floorCOllisionProbingConfig;
+        [SerializeField] private Vector3 _probeOffset = new Vector3(0,1.5f, 0);
+        public LayerMask ObstacleLayerMask => _floorCOllisionProbingConfig.CollisionLayerMask;
+        public float ProbeDistance => _floorCOllisionProbingConfig.ProbeDistance;
+        public Vector3 ProbeOffset => _probeOffset;
 
 
         [SerializeField, Range(0, 0.1f)] private float _displacementFromFloor = 0.01f;

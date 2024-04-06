@@ -1,6 +1,6 @@
 using NaughtyAttributes;
-using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Chain

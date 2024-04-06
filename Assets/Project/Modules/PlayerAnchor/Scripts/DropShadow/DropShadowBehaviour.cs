@@ -1,5 +1,3 @@
-using System;
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -20,8 +18,9 @@ namespace Popeye.Modules.PlayerAnchor.DropShadow
 
         private void UpdateShadow()
         {
-            if (Physics.Raycast(_ownerTransform.position, Vector3.down,  out RaycastHit hit,
-                    100, _dropShadowConfig.ObstacleLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(_ownerTransform.position + _dropShadowConfig.ProbeOffset, Vector3.down, 
+                    out RaycastHit hit,
+                    _dropShadowConfig.ProbeDistance, _dropShadowConfig.ObstacleLayerMask, QueryTriggerInteraction.Ignore))
             {
                 SetPosition(hit.point, hit.normal);
                 SetRotation(hit.normal);

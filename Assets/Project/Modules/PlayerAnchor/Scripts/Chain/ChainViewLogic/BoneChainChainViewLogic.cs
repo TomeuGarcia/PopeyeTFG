@@ -55,8 +55,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainPositions = new Vector3[_chainBoneCount];
 
             _controllerIK.enabled = false;
-            
-            //_boneChainIK.Bones[0].gameObject.SetActive(false);
         }
 
 
@@ -75,9 +73,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             }
             MakeChainRestOnFloor();
             
-            
-            
-            //_chainIK.gameObject.SetActive(true);
+
             _controllerIK.enabled = true;
 
             _transitionT = 0f;
@@ -100,7 +96,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         public void OnViewExit()
         {
-            //_boneChainIK.Bones[0].gameObject.SetActive(false);
             _controllerIK.enabled = false;
         }
 

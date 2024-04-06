@@ -3,14 +3,21 @@ using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
 using DG.Tweening;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorMediator
     {
+        Transform PositionTransform { get; }
+        Transform MeshHolder { get; }
         Vector3 Position { get; }
         IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; }
+        DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
+        
+        IOnVoidChecker OnVoidChecker { get; }
 
         void SetPosition(Vector3 position);
         void SetRotation(Quaternion rotation);
@@ -18,6 +25,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         bool IsBeingThrown();
         bool IsBeingPulled();
         bool IsRestingOnFloor();
+        bool IsBeingCarried();
 
         bool IsGrabbedBySnapper();
 
@@ -42,5 +50,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         void OnDamageDealt(DamageHitResult damageHitResult);
 
+        void ResetCurrentTrajectorySnapTarget();
     }
 }
