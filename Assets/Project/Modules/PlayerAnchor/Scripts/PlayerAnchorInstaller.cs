@@ -20,6 +20,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
@@ -261,14 +262,17 @@ namespace Popeye.Modules.PlayerAnchor
             IPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
+            PlayerAutoActionsQueue playerAutoActionsQueue = new PlayerAutoActionsQueue(_player, _anchor);
+            
             PlayerGlobalEventsListener playerGlobalEventsListener = 
-                new PlayerGlobalEventsListener(eventSystemService, _player, _anchor);
+                new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue);
             PlayerEventsDispatcher playerEventsDispatcher =
                 new PlayerEventsDispatcher(eventSystemService, 
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
-            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, playerInstantTranslation, playerStateMachine);
+            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, playerInstantTranslation, 
+                playerStateMachine, playerAutoActionsQueue);
             _popeyePlayerPlacer.StartListening();
             
             _playerController.AwakeConfigure();

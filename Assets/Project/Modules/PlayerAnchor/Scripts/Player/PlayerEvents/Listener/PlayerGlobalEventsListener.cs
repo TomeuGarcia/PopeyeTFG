@@ -1,22 +1,20 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
 {
     public class PlayerGlobalEventsListener : IPlayerGlobalEventsListener
     {
         private readonly IEventSystemService _eventSystemService;
-        private readonly IPlayerMediator _player;
-        private readonly IAnchorMediator _anchor;
-
+        private readonly IPlayerAutoActionsQueue _playerAutoActionsQueue;
 
         public PlayerGlobalEventsListener(IEventSystemService eventSystemService, 
-            IPlayerMediator player, IAnchorMediator anchor)
+            IPlayerAutoActionsQueue playerAutoActionsQueue)
         {
             _eventSystemService = eventSystemService;
-            _player = player;
-            _anchor = anchor;
+            _playerAutoActionsQueue = playerAutoActionsQueue;
         }
         
         public void StartListening()
@@ -33,10 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         
         private void OnEnemySpawnerActivated(EnemySpawner.OnActivatedEvent data)
         {
-            if (!_anchor.IsBeingCarried() && !_anchor.IsBeingPulled())
-            {
-                _player.QueuePullAnchor().Forget();
-            }
+            _playerAutoActionsQueue.TryQueueAnchorPull();
         }
         
     }
