@@ -1,4 +1,5 @@
 using Popeye.Core.Services.CommandQueue;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
@@ -9,9 +10,11 @@ namespace Popeye.Modules.Installers
     {
         [SerializeField] private CanvasSceneTransitionFader _screenFader;
         
-        public void Install(ServiceLocator serviceLocator, ICommandQueueService commandQueueService)
+        public void Install(ServiceLocator serviceLocator, 
+            ICommandQueueService commandQueueService, IEventSystemService eventSystemService)
         {
-            SceneLoadManager sceneLoadManager = new SceneLoadManager(commandQueueService, _screenFader);
+            SceneLoadManager sceneLoadManager = 
+                new SceneLoadManager(commandQueueService, eventSystemService, _screenFader);
 
             serviceLocator.RegisterService<ISceneLoadManager>(sceneLoadManager);
         }

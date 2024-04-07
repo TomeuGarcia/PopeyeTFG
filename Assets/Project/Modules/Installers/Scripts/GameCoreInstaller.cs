@@ -53,7 +53,7 @@ namespace Popeye.Modules.Installers
             
             
             _audioInstaller.Install(serviceLocator);
-            _sceneLoadingInstaller.Install(serviceLocator, commandQueueService);
+            _sceneLoadingInstaller.Install(serviceLocator, commandQueueService, eventSystemService);
         }
 
         private void Uninstall()

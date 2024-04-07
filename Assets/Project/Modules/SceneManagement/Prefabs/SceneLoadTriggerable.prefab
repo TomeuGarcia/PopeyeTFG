@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &792091744721626730
 MonoBehaviour:
@@ -47,8 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50291f8c8ab34fa8b0015c094769b3f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 0
   _triggerOnceGroup: {fileID: 8756526113642439964}
+  _sceneLoadGroup:
+    sceneReference: {fileID: 0}
+    loadOptions: {fileID: 11400000, guid: 18ef88cddd7da2f44baef36ea5c3f77e, type: 2}
 --- !u!114 &8756526113642439964
 MonoBehaviour:
   m_ObjectHideFlags: 0

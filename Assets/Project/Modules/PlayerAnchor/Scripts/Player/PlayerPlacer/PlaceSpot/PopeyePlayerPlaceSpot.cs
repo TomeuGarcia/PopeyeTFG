@@ -49,8 +49,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             };
             
             DestroyPreviews();
-            //QueryPlacePlayerHere();
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            QueryPlacePlayerHere();
+           // SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         

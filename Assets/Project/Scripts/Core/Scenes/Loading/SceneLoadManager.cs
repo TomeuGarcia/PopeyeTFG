@@ -1,25 +1,27 @@
 using System.Collections.Generic;
-
 using Popeye.Core.Services.CommandQueue;
-using UnityEngine;
+using Popeye.Core.Services.EventSystem;
 
 namespace Popeye.Scripts.Core.Scenes
 {
     public class SceneLoadManager : ISceneLoadManager
     {
         private readonly ICommandQueueService _commandQueueService;
+        private readonly IEventSystemService _eventSystemService;
         private readonly ISceneTransitionScreenFader _screenFader;
 
-        private readonly HashSet<SceneReferenceAsset> _persistentScenes;
-        private readonly HashSet<SceneReferenceAsset> _nonPersistentScenes;
+        private readonly List<SceneReferenceAsset> _persistentScenes;
+        private readonly List<SceneReferenceAsset> _nonPersistentScenes;
         
 
-        public SceneLoadManager(ICommandQueueService commandQueueService, ISceneTransitionScreenFader screenFader)
+        public SceneLoadManager(ICommandQueueService commandQueueService, IEventSystemService eventSystemService, 
+            ISceneTransitionScreenFader screenFader)
         {
             _commandQueueService = commandQueueService;
+            _eventSystemService = eventSystemService;
             _screenFader = screenFader;
-            _persistentScenes = new HashSet<SceneReferenceAsset>(5);
-            _nonPersistentScenes = new HashSet<SceneReferenceAsset>(5);
+            _persistentScenes = new List<SceneReferenceAsset>(5);
+            _nonPersistentScenes = new List<SceneReferenceAsset>(5);
         }
 
         public void LoadSceneAdditively(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
@@ -34,6 +36,7 @@ namespace Popeye.Scripts.Core.Scenes
         private void DoLoadSceneAdditively(SceneReferenceAsset sceneReference, SceneLoadOptions loadOptions,
             ISceneLoadCommand sceneLoadCommand)
         {
+            _eventSystemService.Dispatch<>(new ISceneLoadManager.OnStartLoadingAdditiveSceneEvent(sceneReference));
             _commandQueueService.AddCommand(sceneLoadCommand);
 
             if (loadOptions.FadeScreen)
@@ -85,11 +88,30 @@ namespace Popeye.Scripts.Core.Scenes
         }
         private void DoUnloadScene(SceneReferenceAsset sceneReference)
         {
+            _eventSystemService.Dispatch<>(new ISceneLoadManager.OnStartUnloadingSceneEvent(sceneReference));
+            
             UnloadSceneCommand unloadSceneCommand = 
                 new UnloadSceneCommand(sceneReference.SceneName);
             _commandQueueService.AddCommand(unloadSceneCommand);
         }
 
+        
+        public void ReloadCurrentScene(SceneLoadOptionsAsset loadOptions)
+        {
+            if (_nonPersistentScenes.Count < 1)
+            {
+                return;
+            }
+
+            SceneReferenceAsset lastLoadedScene = _nonPersistentScenes[^1];
+            UnloadScene(lastLoadedScene);
+            LoadSceneAdditively(new ISceneLoadManager.SceneAdditiveLoadGroup
+            {
+                sceneReference = lastLoadedScene,
+                loadOptions = loadOptions
+            });
+        }
+        
 
         private void SaveSceneReference(SceneReferenceAsset sceneReference, bool isPersistentScene)
         {
@@ -131,7 +153,7 @@ namespace Popeye.Scripts.Core.Scenes
             }
         }
 
-        private void UnloadAllAndClear(HashSet<SceneReferenceAsset> scenesReferences)
+        private void UnloadAllAndClear(List<SceneReferenceAsset> scenesReferences)
         {
             foreach (SceneReferenceAsset sceneReference in scenesReferences)
             {
