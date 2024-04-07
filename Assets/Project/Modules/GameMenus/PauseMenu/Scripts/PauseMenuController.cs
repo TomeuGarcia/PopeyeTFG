@@ -3,6 +3,7 @@ using AYellowpaper;
 using NaughtyAttributes;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.GameMenus.Generic;
+using Popeye.Modules.GameState;
 using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,7 +22,7 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         [SerializeField] private SmartButtonAndConfig _quitButtonAndConfig;
         [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _mainMenuSceneLoadGroup; 
         
-        
+        private IGameStateEventsDispatcher _gameStateEventsDispatcher;
 
         protected override void DoInit(InputAction goBackInput)
         {
@@ -35,6 +36,8 @@ namespace Popeye.Modules.GameMenus.PauseMenu
                 _quitButtonAndConfig.Config, QuitToMainMenu);
 
             CloseOptionsMenu();
+            
+            _gameStateEventsDispatcher = ServiceLocator.Instance.GetService<IGameStateEventsDispatcher>();
         }
 
 
@@ -53,6 +56,7 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
         private void QuitToMainMenu()
         {
+            _gameStateEventsDispatcher.InvokeOnGameResumed();
             ServiceLocator.Instance.GetService<ISceneLoadManager>().LoadScene(_mainMenuSceneLoadGroup);
         }
         

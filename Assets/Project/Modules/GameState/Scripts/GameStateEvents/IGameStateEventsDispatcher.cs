@@ -4,8 +4,10 @@ namespace Popeye.Modules.GameState
     {
         public struct OnGamePaused{}
         public struct OnGameResumed{}
+        public struct OnExitToMainMenu{}
 
         void InvokeOnGamePaused();
         void InvokeOnGameResumed();
+        void InvokeOnExitToMainMenu();
     }
 }

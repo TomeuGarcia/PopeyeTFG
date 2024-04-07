@@ -15,7 +15,7 @@ namespace Project.Modules.GameMenus.MainMenu.Scripts
         [SerializeField] private SmartButtonAndConfig _quitButtonAndConfig;
 
         [Header("GAME SCENE")]
-        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _coreGmeSceneLoadGroup;
+        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _coreGameSceneLoadGroup;
         [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _gameSceneLoadGroup;
 
         private ISceneLoadManager _sceneLoadManager;
@@ -35,7 +35,7 @@ namespace Project.Modules.GameMenus.MainMenu.Scripts
 
         private void PlayGame()
         {
-            _sceneLoadManager.LoadScene(_coreGmeSceneLoadGroup);
+            _sceneLoadManager.LoadSceneAdditively(_coreGameSceneLoadGroup);
             _sceneLoadManager.LoadSceneAdditively(_gameSceneLoadGroup);
         }
         

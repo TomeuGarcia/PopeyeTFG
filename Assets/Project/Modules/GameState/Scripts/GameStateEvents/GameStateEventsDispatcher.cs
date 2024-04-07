@@ -21,5 +21,10 @@ namespace Popeye.Modules.GameState
         {
             _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnGameResumed());
         }
+
+        public void InvokeOnExitToMainMenu()
+        {
+            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnExitToMainMenu());
+        }
     }
 }
