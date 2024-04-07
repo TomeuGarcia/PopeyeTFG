@@ -1,5 +1,6 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Scripts.Core.Scenes;
+using Popeye.Scripts.Core.Scenes.PlayedScene;
 using UnityEngine;
 
 namespace Popeye.Modules.GameDataEvents
@@ -9,18 +10,21 @@ namespace Popeye.Modules.GameDataEvents
         [SerializeField] private GameDataEventsDispatchTester _eventsDispatchTester;
         [SerializeField] private GameDataEventsCSVSaverConfig _csvSaverConfig;
 
+        [SerializeField] private SceneReferenceAsset _ignoreScene;
+        
         private IEventSystemService _eventSystemService;
         
         private LastLoadedSceneDataEventsProvider _activeSceneDataEventsProvider;
         private GameDataEventsListener _eventsListener;
         private GameDataEventsCSVSaver _gameDataEventsCSVSaver;
 
-        public void Install(IEventSystemService eventSystemService)
+        public void Install(IEventSystemService eventSystemService, 
+            ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
             _eventSystemService = eventSystemService;
         
             _activeSceneDataEventsProvider = 
-                new LastLoadedSceneDataEventsProvider(eventSystemService);
+                new LastLoadedSceneDataEventsProvider(currentlyPlayedSceneProvider);
             
             _gameDataEventsCSVSaver = 
                 new GameDataEventsCSVSaver(_csvSaverConfig);
@@ -38,13 +42,17 @@ namespace Popeye.Modules.GameDataEvents
 
         private void OnFirstSceneLoaded(ISceneLoadManager.OnStartLoadingAdditiveSceneEvent eventData)
         {
+            if (ReferenceEquals(eventData.SceneReference, _ignoreScene))
+            {
+                return;
+            }
+            
             _eventSystemService.Unsubscribe<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>(OnFirstSceneLoaded);
-            StartListeningToEvents();
+            StartListeningToEvents(eventData.SceneReference);
         }
         
-        private void StartListeningToEvents()
+        private void StartListeningToEvents(ISceneReference startScene)
         {
-            _activeSceneDataEventsProvider.StartListening();
             _eventsListener.StartListening();
             
             _gameDataEventsCSVSaver.Start();
@@ -52,7 +60,6 @@ namespace Popeye.Modules.GameDataEvents
         
         public void Uninstall()
         {
-            _activeSceneDataEventsProvider.StopListening();
             _eventsListener.StopListening();
             _gameDataEventsCSVSaver.Finish();
         }

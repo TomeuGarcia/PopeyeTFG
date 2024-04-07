@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Popeye.Core.Services.CommandQueue;
 using Popeye.Core.Services.EventSystem;
+using UnityEngine;
 
 namespace Popeye.Scripts.Core.Scenes
 {
@@ -30,13 +31,12 @@ namespace Popeye.Scripts.Core.Scenes
             SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
             
             LoadSceneAdditivelyCommand loadSceneCommand = 
-                new LoadSceneAdditivelyCommand(sceneReference.SceneName, loadOptions.DelayBeforeLoading);
+                new (sceneReference, loadOptions.DelayBeforeLoading, OnStartLoadingSceneAdditively);
             DoLoadSceneAdditively(sceneReference, loadOptions, loadSceneCommand);
         }
         private void DoLoadSceneAdditively(SceneReferenceAsset sceneReference, SceneLoadOptions loadOptions,
             ISceneLoadCommand sceneLoadCommand)
         {
-            _eventSystemService.Dispatch<>(new ISceneLoadManager.OnStartLoadingAdditiveSceneEvent(sceneReference));
             _commandQueueService.AddCommand(sceneLoadCommand);
 
             if (loadOptions.FadeScreen)
@@ -51,6 +51,7 @@ namespace Popeye.Scripts.Core.Scenes
                 
             SaveSceneReference(sceneReference, loadOptions.IsPersistentScene);
         }
+
         
         public void LoadScene(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
         {
@@ -58,7 +59,7 @@ namespace Popeye.Scripts.Core.Scenes
             SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
             
             LoadSceneCommand loadSceneCommand = 
-                new LoadSceneCommand(sceneReference.SceneName, loadOptions.DelayBeforeLoading);
+                new LoadSceneCommand(sceneReference, loadOptions.DelayBeforeLoading);
             
             
             DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
@@ -88,10 +89,8 @@ namespace Popeye.Scripts.Core.Scenes
         }
         private void DoUnloadScene(SceneReferenceAsset sceneReference)
         {
-            _eventSystemService.Dispatch<>(new ISceneLoadManager.OnStartUnloadingSceneEvent(sceneReference));
-            
             UnloadSceneCommand unloadSceneCommand = 
-                new UnloadSceneCommand(sceneReference.SceneName);
+                new (sceneReference, OnStartUnloadingSceneAdditively);
             _commandQueueService.AddCommand(unloadSceneCommand);
         }
 
@@ -161,5 +160,20 @@ namespace Popeye.Scripts.Core.Scenes
             }
             scenesReferences.Clear();
         }
+        
+        
+        
+        
+        private void OnStartLoadingSceneAdditively(ISceneReference sceneReference)
+        {
+            _eventSystemService.Dispatch<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>
+                (new ISceneLoadManager.OnStartLoadingAdditiveSceneEvent(sceneReference));
+        }
+        private void OnStartUnloadingSceneAdditively(ISceneReference sceneReference)
+        {
+            _eventSystemService.Dispatch<ISceneLoadManager.OnStartUnloadingSceneEvent>
+                (new ISceneLoadManager.OnStartUnloadingSceneEvent(sceneReference));
+        }
+
     }
 }

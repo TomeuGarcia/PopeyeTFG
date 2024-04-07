@@ -7,15 +7,20 @@ namespace Popeye.Scripts.Core.Scenes
 {
     public class LoadSceneAdditivelyCommand : ISceneLoadCommand
     {
-        private readonly string _sceneName;
+        private readonly ISceneReference _sceneReference;
         private readonly float _delay;
+        private readonly Action<ISceneReference> _startLoadingCallback;
 
         public bool FinishedLoading { get; private set; }
+
         
-        public LoadSceneAdditivelyCommand(string sceneName, float delay)
+        
+        public LoadSceneAdditivelyCommand(ISceneReference sceneReference, float delay, 
+            Action<ISceneReference> startLoadingCallback)
         {
-            _sceneName = sceneName;
+            _sceneReference = sceneReference;
             _delay = delay;
+            _startLoadingCallback = startLoadingCallback;
             FinishedLoading = false;
         }
 
@@ -24,7 +29,8 @@ namespace Popeye.Scripts.Core.Scenes
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_delay));
 
-            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
+            _startLoadingCallback?.Invoke(_sceneReference);
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(_sceneReference.SceneName, LoadSceneMode.Additive);
             
             await UniTask.WaitUntil(
                 () => loadOperation.isDone

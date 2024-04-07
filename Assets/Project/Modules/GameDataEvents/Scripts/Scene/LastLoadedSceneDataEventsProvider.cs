@@ -1,37 +1,23 @@
-using Popeye.Core.Services.EventSystem;
-using Popeye.Scripts.Core.Scenes;
+using Popeye.Scripts.Core.Scenes.PlayedScene;
+
 
 namespace Popeye.Modules.GameDataEvents
 {
     public class LastLoadedSceneDataEventsProvider : IActiveSceneDataEventsProvider
     {
-        private readonly IEventSystemService _eventSystemService;
-        private SceneReferenceAsset _currentActiveScene;
+        private readonly ICurrentlyPlayedSceneProvider _currentlyPlayedSceneProvider;
 
         
-        public LastLoadedSceneDataEventsProvider(IEventSystemService eventSystemService)
+        public LastLoadedSceneDataEventsProvider(ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
-            _eventSystemService = eventSystemService;
+            _currentlyPlayedSceneProvider = currentlyPlayedSceneProvider;
         }
         
         public string GetActiveSceneName()
         {
-            return _currentActiveScene.SceneName;
+            return _currentlyPlayedSceneProvider.CurrentlyPlayedScene.SceneName;
         }
-
-        public void StartListening()
-        {
-            _eventSystemService.Subscribe<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>(UpdateCurrentActiveScene);
-        }
-        public void StopListening()
-        {
-            _eventSystemService.Subscribe<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>(UpdateCurrentActiveScene);
-        }
-
-
-        private void UpdateCurrentActiveScene(ISceneLoadManager.OnStartLoadingAdditiveSceneEvent eventData)
-        {
-            _currentActiveScene = eventData.SceneReference;
-        }
+        
+        
     }
 }

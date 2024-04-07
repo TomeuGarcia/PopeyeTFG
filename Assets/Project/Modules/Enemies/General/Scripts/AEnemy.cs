@@ -3,6 +3,7 @@ using Popeye.Core.Pool;
 using Popeye.IDSystem;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -11,11 +12,19 @@ namespace Popeye.Modules.Enemies
     {
         protected Transform _attackTarget;
         public Action<AEnemy> OnDeathComplete;
+        public Action<AEnemy> OnRecycleComplete;
         protected IHazardFactory _hazardFactory;
+        private ISceneReference _belongingScene;
         
         [Header("GENERIC")]
         [SerializeField] private EnemyID _id;
         public ID Id => _id;
+        
+        
+        private void OnDisable()
+        {
+            OnRecycleComplete?.Invoke(this);
+        }
         
         public abstract void SetPatrollingWaypoints(Transform[] waypoints);
         public virtual void AwakeInit(Transform attackTarget)
@@ -40,5 +49,16 @@ namespace Popeye.Modules.Enemies
 
         public abstract void DieFromOrder();
 
+
+        public void SetBelongingScene(ISceneReference sceneReference)
+        {
+            _belongingScene = sceneReference;
+        }
+
+        public bool BelongsToScene(ISceneReference sceneReference)
+        {
+            return ReferenceEquals(_belongingScene, sceneReference);
+        }
+        
     }
 }

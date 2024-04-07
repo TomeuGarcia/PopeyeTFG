@@ -8,6 +8,7 @@ using Popeye.Modules.GameDataEvents;
 using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Scripts.Collisions;
+using Popeye.Scripts.Core.Scenes.PlayedScene;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using Project.PhysicsMovement;
 using Project.Scripts.Time.TimeFunctionalities;
@@ -39,9 +40,11 @@ namespace Popeye.Modules.Installers
         [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
         [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
         [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
+
+
+
+        private LastLoadedSceneProvider _lastLoadedSceneProvider;
         
-
-
         private TimeManagerGameEventsListener _timeManagerGameEventsListener;
 
 
@@ -63,7 +66,10 @@ namespace Popeye.Modules.Installers
             IEventSystemService eventSystemService = serviceLocator.GetService<IEventSystemService>();
             ITimeFunctionalities timeFunctionalities = serviceLocator.GetService<ITimeFunctionalities>();
             IFMODAudioManager audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
-            
+
+
+            _lastLoadedSceneProvider = new LastLoadedSceneProvider(eventSystemService);
+            _lastLoadedSceneProvider.StartListeningToSceneUpdates();
             
 
             CombatManagerService combatManagerService =
@@ -75,10 +81,10 @@ namespace Popeye.Modules.Installers
 
             
             _informationDisplayInstaller.Install(serviceLocator);
-            _factoriesInstaller.Install(serviceLocator, audioManager);
+            _factoriesInstaller.Install(serviceLocator, audioManager, eventSystemService, _lastLoadedSceneProvider);
             _playerAnchorInstaller.Install();
             _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
-            _gameDataEventsInstaller.Install(eventSystemService);
+            _gameDataEventsInstaller.Install(eventSystemService, _lastLoadedSceneProvider);
 
 
             IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
@@ -104,6 +110,8 @@ namespace Popeye.Modules.Installers
             _playerAnchorInstaller.Uninstall();
             _factoriesInstaller.Uninstall(serviceLocator);
             _informationDisplayInstaller.Uninstall(serviceLocator);
+            
+            _lastLoadedSceneProvider.StopListeningToSceneUpdates();
         }
     }
 

@@ -7,14 +7,14 @@ namespace Popeye.Scripts.Core.Scenes
 {
     public class LoadSceneCommand : ISceneLoadCommand
     {
-        private readonly string _sceneName;
+        private readonly ISceneReference _sceneReference;
         private readonly float _delay;
 
         public bool FinishedLoading { get; private set; }
         
-        public LoadSceneCommand(string sceneName, float delay)
+        public LoadSceneCommand(ISceneReference sceneReference, float delay)
         {
-            _sceneName = sceneName;
+            _sceneReference = sceneReference;
             _delay = delay;
             FinishedLoading = false;
         }
@@ -22,8 +22,8 @@ namespace Popeye.Scripts.Core.Scenes
         public async UniTask Execute()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_delay));
-
-            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Single);
+            
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(_sceneReference.SceneName, LoadSceneMode.Single);
             
             await UniTask.WaitUntil(
                 () => loadOperation.isDone

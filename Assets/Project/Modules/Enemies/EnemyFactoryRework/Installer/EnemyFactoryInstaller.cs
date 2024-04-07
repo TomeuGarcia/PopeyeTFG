@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Scripts.Core.Scenes.PlayedScene;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.EnemyFactories
@@ -11,9 +13,11 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     {
         [SerializeField] private EnemyFactoryInstallerConfiguration _installerConfiguration;
         [SerializeField] private SpecificCaseEnemyHinterFactoryConfig _enemyHinterFactoryConfig;
-        
+        private MindCreatorsEnemyFactory _mindCreatorsEnemyFactory;
 
-        public void Install(ServiceLocator serviceLocator, IFMODAudioManager audioManager)
+        public void Install(ServiceLocator serviceLocator, 
+            IFMODAudioManager audioManager, IEventSystemService eventSystemService,
+            ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
             var hazardsFactory = serviceLocator.GetService<IHazardFactory>();
             Dictionary<EnemyID, EnemyFactoryInstallerConfiguration.EnemyMindPrefabSpawnData> enemyIdToPrefab 
@@ -41,8 +45,10 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             }
 
 
-            MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new MindCreatorsEnemyFactory(enemyIdToMindFactory);
-            serviceLocator.RegisterService<IEnemyFactory>(mindCreatorsEnemyFactory);
+            _mindCreatorsEnemyFactory = 
+                new MindCreatorsEnemyFactory(enemyIdToMindFactory, eventSystemService, currentlyPlayedSceneProvider);
+            _mindCreatorsEnemyFactory.StartListeningToSceneUpdates();
+            serviceLocator.RegisterService<IEnemyFactory>(_mindCreatorsEnemyFactory);
 
 
             SpecificCaseEnemyHinterFactory enemyHinterFactory =
@@ -52,6 +58,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
+            _mindCreatorsEnemyFactory.StopListeningToSceneUpdates();
             serviceLocator.RemoveService<IEnemyHinterFactory>();
             serviceLocator.RemoveService<IEnemyFactory>();
         }

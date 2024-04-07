@@ -11,20 +11,20 @@ namespace Popeye.Scripts.Core.Scenes
 
         public readonly struct OnStartLoadingAdditiveSceneEvent
         {
-            private readonly SceneReferenceAsset _sceneReference;
-            public SceneReferenceAsset SceneReference => _sceneReference;
+            private readonly ISceneReference _sceneReference;
+            public ISceneReference SceneReference => _sceneReference;
 
-            public OnStartLoadingAdditiveSceneEvent(SceneReferenceAsset sceneReference)
+            public OnStartLoadingAdditiveSceneEvent(ISceneReference sceneReference)
             {
                 _sceneReference = sceneReference;
             }
         }
         public readonly struct OnStartUnloadingSceneEvent
         {
-            private readonly SceneReferenceAsset _sceneReference;
-            public SceneReferenceAsset SceneReference => _sceneReference;
+            private readonly ISceneReference _sceneReference;
+            public ISceneReference SceneReference => _sceneReference;
             
-            public OnStartUnloadingSceneEvent(SceneReferenceAsset sceneReference)
+            public OnStartUnloadingSceneEvent(ISceneReference sceneReference)
             {
                 _sceneReference = sceneReference;
             }
@@ -35,5 +35,6 @@ namespace Popeye.Scripts.Core.Scenes
         void LoadScene(SceneAdditiveLoadGroup sceneLoadGroup);
         void UnloadScene(SceneReferenceAsset sceneReference);
         void ReloadCurrentScene(SceneLoadOptionsAsset loadOptions);
+        
     }
 }
