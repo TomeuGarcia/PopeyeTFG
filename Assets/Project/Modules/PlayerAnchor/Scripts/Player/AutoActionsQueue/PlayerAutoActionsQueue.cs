@@ -25,5 +25,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue
 
             return anchorCanBePulled;
         }
+
+        public void ProtectPlayerWhenSceneLoading()
+        {
+            _player.DisableSafeGroundCheckingForDuration(2.0f).Forget();
+        }
     }
 }

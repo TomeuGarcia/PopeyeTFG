@@ -13,8 +13,8 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     {
         [SerializeField] private EnemyFactoryInstallerConfiguration _installerConfiguration;
         [SerializeField] private SpecificCaseEnemyHinterFactoryConfig _enemyHinterFactoryConfig;
-        private MindCreatorsEnemyFactory _mindCreatorsEnemyFactory;
-
+        private CreatedEnemiesRecycler _createdEnemiesRecycler;
+        
         public void Install(ServiceLocator serviceLocator, 
             IFMODAudioManager audioManager, IEventSystemService eventSystemService,
             ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
@@ -45,10 +45,11 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             }
 
 
-            _mindCreatorsEnemyFactory = 
-                new MindCreatorsEnemyFactory(enemyIdToMindFactory, eventSystemService, currentlyPlayedSceneProvider);
-            _mindCreatorsEnemyFactory.StartListeningToSceneUpdates();
-            serviceLocator.RegisterService<IEnemyFactory>(_mindCreatorsEnemyFactory);
+            _createdEnemiesRecycler = new CreatedEnemiesRecycler(eventSystemService, currentlyPlayedSceneProvider);
+            MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new (enemyIdToMindFactory, _createdEnemiesRecycler);
+            _createdEnemiesRecycler.StartListeningToSceneUpdates();
+            
+            serviceLocator.RegisterService<IEnemyFactory>(mindCreatorsEnemyFactory);
 
 
             SpecificCaseEnemyHinterFactory enemyHinterFactory =
@@ -58,7 +59,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
-            _mindCreatorsEnemyFactory.StopListeningToSceneUpdates();
+            _createdEnemiesRecycler.StopListeningToSceneUpdates();
             serviceLocator.RemoveService<IEnemyHinterFactory>();
             serviceLocator.RemoveService<IEnemyFactory>();
         }

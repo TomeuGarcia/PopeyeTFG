@@ -70,7 +70,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private ISafeGroundChecker _safeGroundChecker;
         private IOnVoidChecker _onVoidChecker;
-        
+        private bool _safeGroundCheckingIsDisabled = false;
+
         private bool _pullingAnchorFromTheVoid;
 
         private IPlayerFocusController _focusController;
@@ -539,6 +540,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid)
         {
+            if (_safeGroundCheckingIsDisabled)
+            {
+                playerIsOnVoid = false;
+                anchorIsOnVoid = false;
+                return;
+            }
+            
             _safeGroundChecker.UpdateChecking(deltaTime);
             _onVoidChecker.UpdateChecking(deltaTime);
             _anchor.OnVoidChecker.UpdateChecking(deltaTime);
@@ -546,8 +554,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
             playerIsOnVoid = _onVoidChecker.IsOnVoid;
             anchorIsOnVoid = _anchor.OnVoidChecker.IsOnVoid;
         }
-        
-        
+
+        public async UniTaskVoid DisableSafeGroundCheckingForDuration(float duration)
+        {
+            _safeGroundCheckingIsDisabled = true;
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            _safeGroundCheckingIsDisabled = false;
+            _onVoidChecker.ClearState();
+        }
+
 
         private async UniTaskVoid DropTargetForEnemies(float duration)
         {
