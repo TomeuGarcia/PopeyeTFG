@@ -8,11 +8,10 @@ using UnityEngine;
 
 namespace Popeye.Modules.Enemies
 {
-    public abstract class AEnemy : RecyclableObject
+    public abstract class AEnemy : SceneTrackableRecyclableObject
     {
         protected Transform _attackTarget;
         public Action<AEnemy> OnDeathComplete;
-        public Action<AEnemy> OnRecycleComplete;
         protected IHazardFactory _hazardFactory;
         private ISceneReference _belongingScene;
         
@@ -21,10 +20,6 @@ namespace Popeye.Modules.Enemies
         public ID Id => _id;
         
         
-        private void OnDisable()
-        {
-            OnRecycleComplete?.Invoke(this);
-        }
         
         public abstract void SetPatrollingWaypoints(Transform[] waypoints);
         public virtual void AwakeInit(Transform attackTarget)
@@ -48,17 +43,11 @@ namespace Popeye.Modules.Enemies
         }
 
         public abstract void DieFromOrder();
-
-
-        public void SetBelongingScene(ISceneReference sceneReference)
-        {
-            _belongingScene = sceneReference;
-        }
-
-        public bool BelongsToScene(ISceneReference sceneReference)
-        {
-            return ReferenceEquals(_belongingScene, sceneReference);
-        }
         
+
+        public override void OnBelongSceneWasUnloaded()
+        {
+            DieFromOrder();
+        }
     }
 }

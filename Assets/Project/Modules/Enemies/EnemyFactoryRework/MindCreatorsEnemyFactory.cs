@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using Popeye.Core.Services.EventSystem;
-using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.Enemies.General;
-using Popeye.Scripts.Core.Scenes;
-using Popeye.Scripts.Core.Scenes.PlayedScene;
+using Popeye.Scripts.Core.Scenes.ObjectTracking;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.EnemyFactories
@@ -11,29 +8,24 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     public class MindCreatorsEnemyFactory: IEnemyFactory
     {
         private readonly Dictionary<EnemyID,IEnemyMindFactoryCreator> _enemyTypeToFactoryCreator;
-        private readonly CreatedEnemiesRecycler _createdEnemiesRecycler;
+        private readonly ISceneObjectsTracker _createdEnemiesRecycler;
         
         public MindCreatorsEnemyFactory(Dictionary<EnemyID, IEnemyMindFactoryCreator> enemyTypeToFactoryCreator,
-            CreatedEnemiesRecycler createdEnemiesRecycler)
+            ISceneObjectsTracker createdEnemiesRecycler)
         {
             _enemyTypeToFactoryCreator = enemyTypeToFactoryCreator;
             _createdEnemiesRecycler = createdEnemiesRecycler;
         }
-        
         
 
         public AEnemy Create(EnemyID enemyID, Vector3 position, Quaternion rotation)
         {
             AEnemy enemy = _enemyTypeToFactoryCreator[enemyID].Create(enemyID,position,rotation);
             
-            _createdEnemiesRecycler.StartTrackingEnemy(enemy);
+            _createdEnemiesRecycler.StartTrackingObject(enemy);
             
             return enemy;
         }
 
-
-
-        
-        
     }
 }

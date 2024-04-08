@@ -4,6 +4,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Scripts.Core.Scenes.ObjectTracking;
 using Popeye.Scripts.Core.Scenes.PlayedScene;
 using UnityEngine;
 
@@ -13,11 +14,12 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     {
         [SerializeField] private EnemyFactoryInstallerConfiguration _installerConfiguration;
         [SerializeField] private SpecificCaseEnemyHinterFactoryConfig _enemyHinterFactoryConfig;
-        private CreatedEnemiesRecycler _createdEnemiesRecycler;
         
-        public void Install(ServiceLocator serviceLocator, 
-            IFMODAudioManager audioManager, IEventSystemService eventSystemService,
-            ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
+        public void Install(
+            ServiceLocator serviceLocator, 
+            IFMODAudioManager audioManager, 
+            ISceneObjectsTracker createdEnemiesRecycler
+            )
         {
             var hazardsFactory = serviceLocator.GetService<IHazardFactory>();
             Dictionary<EnemyID, EnemyFactoryInstallerConfiguration.EnemyMindPrefabSpawnData> enemyIdToPrefab 
@@ -45,9 +47,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             }
 
 
-            _createdEnemiesRecycler = new CreatedEnemiesRecycler(eventSystemService, currentlyPlayedSceneProvider);
-            MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new (enemyIdToMindFactory, _createdEnemiesRecycler);
-            _createdEnemiesRecycler.StartListeningToSceneUpdates();
+            MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new (enemyIdToMindFactory, createdEnemiesRecycler);
             
             serviceLocator.RegisterService<IEnemyFactory>(mindCreatorsEnemyFactory);
 
@@ -59,7 +59,6 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
-            _createdEnemiesRecycler.StopListeningToSceneUpdates();
             serviceLocator.RemoveService<IEnemyHinterFactory>();
             serviceLocator.RemoveService<IEnemyFactory>();
         }

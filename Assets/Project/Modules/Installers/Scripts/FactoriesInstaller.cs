@@ -4,6 +4,7 @@ using Popeye.Modules.AudioSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Scripts.Core.Scenes.ObjectTracking;
 using Popeye.Scripts.Core.Scenes.PlayedScene;
 using UnityEngine;
 
@@ -21,22 +22,36 @@ namespace Popeye.Modules.Installers
         [SerializeField] private HazardsFactoryConfig _hazardFactryConfig;
         [SerializeField] private Transform _hazardsParent;
 
+
+        private SceneObjectsTracker _createdParticlesRecycler;
+        private SceneObjectsTracker _createdEnemiesRecycler;
+        
     
         public void Install(ServiceLocator serviceLocator, 
             IFMODAudioManager audioManager, IEventSystemService eventSystemService,
             ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
+            _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); // <-- EricR971 use this for blood,
+                                                                                                                   // pass it as ISceneObjectsTracker
+            _createdEnemiesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider);
+            
             ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent);
             HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, particleFactory);
             
             serviceLocator.RegisterService<IParticleFactory>(particleFactory);
             serviceLocator.RegisterService<IHazardFactory>(hazardsFactory);
             
-            _enemyFactoryInstaller.Install(serviceLocator, audioManager, eventSystemService, currentlyPlayedSceneProvider);
+            _enemyFactoryInstaller.Install(serviceLocator, audioManager, _createdEnemiesRecycler);
+            
+            _createdParticlesRecycler.StartListeningToSceneUpdates();
+            _createdEnemiesRecycler.StartListeningToSceneUpdates();
         }
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
+            _createdEnemiesRecycler.StopListeningToSceneUpdates();
+            _createdParticlesRecycler.StopListeningToSceneUpdates();
+        
             _enemyFactoryInstaller.Uninstall(serviceLocator);
             
             serviceLocator.RemoveService<IHazardFactory>();
