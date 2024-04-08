@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using NaughtyAttributes;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
@@ -11,11 +12,10 @@ namespace Popeye.Scripts.Core.Scenes
     {
         [Header("COMPONENTS")]
         [SerializeField] private CanvasGroup _fadeGroup;
-        
-        [Header("CONFIGURATION")]
-        [SerializeField] private TweenFadeConfig _fadeIn = TweenFadeConfig.FadeIn();
-        [SerializeField] private TweenFadeConfig _fadeOut = TweenFadeConfig.FadeOut();
-        [SerializeField, Range(0.0f, 10.0f)] private float _minimumTimeFededIn = 1.0f;
+
+        [Header("CONFIGURATION")] 
+        [Expandable] [SerializeField] private SceneTransitionScreenFaderConfig _config;
+
 
         private bool _isFading;
 
@@ -45,8 +45,7 @@ namespace Popeye.Scripts.Core.Scenes
             _isFading = true;
             
             
-            _fadeGroup.Fade(_fadeIn);
-            //await _fadeGroup.Fade(_fadeIn).AsyncWaitForCompletion();
+            _fadeGroup.Fade(_config.FadeIn);
     
             
             float timeBeforeLoading = Time.time;
@@ -54,19 +53,17 @@ namespace Popeye.Scripts.Core.Scenes
             for (int i = 0; i < _sceneFinishedLoadingAwaits.Count; ++i)
             {
                 await UniTask.WaitUntil(_sceneFinishedLoadingAwaits[i]);
-                Debug.Log("waited " + i);
             }
 
 
             float timeAfterLoading = Time.time;
-            float remainingFadedInTime = _minimumTimeFededIn - (timeAfterLoading - timeBeforeLoading);
-            if (remainingFadedInTime > 0)
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(remainingFadedInTime));
-            }
+            float remainingFadedInTime = Mathf.Max(0, _config.MinimumTimeFadedIn - (timeAfterLoading - timeBeforeLoading));
+            remainingFadedInTime += _config.ExtraTimeFadedIn;
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(remainingFadedInTime));
 
             
-            await _fadeGroup.Fade(_fadeOut).AsyncWaitForCompletion();
+            await _fadeGroup.Fade(_config.FadeOut).AsyncWaitForCompletion();
 
             _isFading = false;
             _sceneFinishedLoadingAwaits.Clear();
