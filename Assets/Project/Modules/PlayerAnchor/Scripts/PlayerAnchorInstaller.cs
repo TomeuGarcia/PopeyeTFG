@@ -297,11 +297,8 @@ namespace Popeye.Modules.PlayerAnchor
                 playerSafeGroundChecker, playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
-/*
-            IPlayerStatesCreator playerStatesCreator = _generalGameStateData.IsTutorial
-                ? new TutorialPlayerStatesCreator()
-                : new DefaultPlayerStatesCreator();*/
-            IPlayerStatesCreator playerStatesCreator = new TutorialPlayerStatesCreator();
+
+            IPlayerStatesCreator playerStatesCreator = new DefaultPlayerStatesCreator();
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
