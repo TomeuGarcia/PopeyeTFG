@@ -111,18 +111,12 @@ namespace Popeye.Modules.PlayerAnchor
         public IPlayerMediator PlayerMediator => _player;
 
 
-        private AnchorPuller _anchorPuller_debugReference;
         private PopeyePlayerPlacer _popeyePlayerPlacer;
         
         
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                _anchorPuller_debugReference.DebugTogglePullMode();
-            }
-
             if (Input.GetKeyDown(KeyCode.U))
             {
                 _abilitiesToUnlockHolder.DebugUnlockAll();
@@ -157,7 +151,6 @@ namespace Popeye.Modules.PlayerAnchor
             AnchorVerticalDropThrower anchorVerticalDropThrower = new AnchorVerticalDropThrower();
             AnchorThrower anchorThrower = new AnchorThrower();
             AnchorPuller anchorPuller = new AnchorPuller();
-            _anchorPuller_debugReference = anchorPuller;
             AnchorKicker anchorKicker = new AnchorKicker();
             AnchorSpinner anchorSpinner = new AnchorSpinner();
             

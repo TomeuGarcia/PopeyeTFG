@@ -38,22 +38,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 _pullConfig.RotateInterpolationCurve);
         }
 
-        private float debug_pullMultiplyMode = 0f;
-        public void DebugTogglePullMode()
-        {
-            if (debug_pullMultiplyMode > 0.5f)
-            {
-                debug_pullMultiplyMode = 0f;
-                Debug.Log("STRAIGHT PULL");
-            }
-            else
-            {
-                debug_pullMultiplyMode = 1f;
-                Debug.Log("CHAIN PULL");
-            }
-        }
-
-
         public bool AnchorIsBeingPulled()
         {
             return _anchorIsBeingPulled;
@@ -108,8 +92,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             Vector3[] chainPositions = _anchor.GetChainPositions();
             float distanceRatio = _pullConfig.TrajectoryByDistance
-                .Evaluate(ComputeDistanceRatio(_player.GetDistanceFromAnchor()))
-                * debug_pullMultiplyMode;
+                .Evaluate(ComputeDistanceRatio(_player.GetDistanceFromAnchor()));
             
             for (int i = 0; i < trajectoryPath.Length - 1; ++i)
             {
