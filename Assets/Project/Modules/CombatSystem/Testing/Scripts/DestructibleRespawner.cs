@@ -7,7 +7,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
     {
         private DestructibleProp[] _destructibleProps;
 
-        protected override void AwakeInit()
+        protected override void DoAwake()
         {
             _destructibleProps = new DestructibleProp[transform.childCount];
             for (int i = 0; i < transform.childCount; ++i)
