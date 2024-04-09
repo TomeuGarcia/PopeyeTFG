@@ -54,7 +54,7 @@ namespace Popeye.Scripts.Core.Scenes
         
         private bool NeedsToLoadGameplayCore(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
         {
-            return sceneLoadGroup.sceneReference != _config.MainMenuScene;
+            return !ReferenceEquals(sceneLoadGroup.SceneReference, _config.MainMenuScene);
         }
     }
 }

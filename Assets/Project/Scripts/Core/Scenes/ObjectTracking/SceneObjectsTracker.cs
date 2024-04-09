@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Popeye.Core.Services.EventSystem;
+using Popeye.Modules.GameState;
 using Popeye.Scripts.Core.Scenes.PlayedScene;
 
 namespace Popeye.Scripts.Core.Scenes.ObjectTracking
@@ -25,14 +26,14 @@ namespace Popeye.Scripts.Core.Scenes.ObjectTracking
         
         public void StartListeningToSceneUpdates()
         {
-            _eventSystemService.Subscribe<ISceneLoadManager.OnStartUnloadingSceneEvent>(OnStartUnloadingScene);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartUnloadingScene>(OnStartUnloadingScene);
         }
         public void StopListeningToSceneUpdates()
         {
-            _eventSystemService.Unsubscribe<ISceneLoadManager.OnStartUnloadingSceneEvent>(OnStartUnloadingScene);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartUnloadingScene>(OnStartUnloadingScene);
         }
 
-        private void OnStartUnloadingScene(ISceneLoadManager.OnStartUnloadingSceneEvent eventData)
+        private void OnStartUnloadingScene(IGameStateEventsDispatcher.OnStartUnloadingScene eventData)
         {
             NotifyCurrentlyActiveObjectsIfBelongToScene(eventData.SceneReference);
         }

@@ -3,6 +3,7 @@ using Popeye.Core.Services.CommandQueue;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.GameState;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using Project.Scripts.Time.TimeScale;
@@ -52,8 +53,12 @@ namespace Popeye.Modules.Installers
             serviceLocator.RegisterService<ICommandQueueService>(commandQueueService);
             
             
+            IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
+            serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
+            
+            
             _audioInstaller.Install(serviceLocator);
-            _sceneLoadingInstaller.Install(serviceLocator, commandQueueService, eventSystemService);
+            _sceneLoadingInstaller.Install(serviceLocator, commandQueueService, gameStateEventsDispatcher);
         }
 
         private void Uninstall()
@@ -64,7 +69,7 @@ namespace Popeye.Modules.Installers
             _sceneLoadingInstaller.Uninstall(serviceLocator);
             _audioInstaller.Uninstall(serviceLocator);
             
-            
+            serviceLocator.RemoveService<IGameStateEventsDispatcher>();
             serviceLocator.RemoveService<ICommandQueueService>();
             serviceLocator.RemoveService<ITimeFunctionalities>();
             serviceLocator.RemoveService<IEventSystemService>();

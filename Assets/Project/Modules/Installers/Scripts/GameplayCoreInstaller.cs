@@ -87,9 +87,7 @@ namespace Popeye.Modules.Installers
             _gameDataEventsInstaller.Install(eventSystemService, _lastLoadedSceneProvider);
 
 
-            IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
-            serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
-
+            
             _timeManagerGameEventsListener = new TimeManagerGameEventsListener(eventSystemService, timeFunctionalities.TimeScaleManager);
             _timeManagerGameEventsListener.StartListening();
         }
@@ -100,7 +98,6 @@ namespace Popeye.Modules.Installers
 
             ServiceLocator serviceLocator = ServiceLocator.Instance;
 
-            serviceLocator.RemoveService<IGameStateEventsDispatcher>();
             serviceLocator.RemoveService<ICombatManager>();
             
 

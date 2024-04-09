@@ -1,4 +1,5 @@
 using Popeye.Core.Services.EventSystem;
+using Popeye.Modules.GameState;
 using Popeye.Scripts.Core.Scenes;
 using Popeye.Scripts.Core.Scenes.PlayedScene;
 using UnityEngine;
@@ -35,19 +36,19 @@ namespace Popeye.Modules.GameDataEvents
             _eventsDispatchTester.Init(eventSystemService);
             
             
-            _eventSystemService.Subscribe<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>(OnFirstSceneLoaded);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnFirstSceneLoaded);
         }
 
 
 
-        private void OnFirstSceneLoaded(ISceneLoadManager.OnStartLoadingAdditiveSceneEvent eventData)
+        private void OnFirstSceneLoaded(IGameStateEventsDispatcher.OnStartLoadingAdditiveScene eventData)
         {
             if (ReferenceEquals(eventData.SceneReference, _ignoreScene))
             {
                 return;
             }
             
-            _eventSystemService.Unsubscribe<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>(OnFirstSceneLoaded);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnFirstSceneLoaded);
             StartListeningToEvents(eventData.SceneReference);
         }
         

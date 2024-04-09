@@ -10,17 +10,19 @@ namespace Popeye.Scripts.Core.Scenes
         private readonly ISceneReference _sceneReference;
         private readonly float _delay;
         private readonly Action<ISceneReference> _startLoadingCallback;
+        private readonly Action<ISceneReference> _finishLoadingCallback;
 
         public bool FinishedLoading { get; private set; }
 
         
         
         public LoadSceneAdditivelyCommand(ISceneReference sceneReference, float delay, 
-            Action<ISceneReference> startLoadingCallback)
+            Action<ISceneReference> startLoadingCallback, Action<ISceneReference> finishLoadingCallback)
         {
             _sceneReference = sceneReference;
             _delay = delay;
             _startLoadingCallback = startLoadingCallback;
+            _finishLoadingCallback = finishLoadingCallback;
             FinishedLoading = false;
         }
 
@@ -37,6 +39,7 @@ namespace Popeye.Scripts.Core.Scenes
             );
             
             FinishedLoading = true;
+            _finishLoadingCallback?.Invoke(_sceneReference);
         }
         
     }

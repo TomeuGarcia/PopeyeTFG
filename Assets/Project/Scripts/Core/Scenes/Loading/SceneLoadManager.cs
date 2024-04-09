@@ -1,40 +1,43 @@
 using System.Collections.Generic;
 using Popeye.Core.Services.CommandQueue;
-using Popeye.Core.Services.EventSystem;
-using UnityEngine;
+using Popeye.Modules.GameState;
+
 
 namespace Popeye.Scripts.Core.Scenes
 {
     public class SceneLoadManager : ISceneLoadManager
     {
         private readonly ICommandQueueService _commandQueueService;
-        private readonly IEventSystemService _eventSystemService;
         private readonly ISceneTransitionScreenFader _screenFader;
+        private readonly IGameStateEventsDispatcher _gameStateEventsDispatcher;
 
-        private readonly List<SceneReferenceAsset> _persistentScenes;
-        private readonly List<SceneReferenceAsset> _nonPersistentScenes;
+        private readonly List<ISceneReference> _persistentScenes;
+        private readonly List<ISceneReference> _nonPersistentScenes;
+
+        private ISceneReference _lastLoadedScene;
         
 
-        public SceneLoadManager(ICommandQueueService commandQueueService, IEventSystemService eventSystemService, 
-            ISceneTransitionScreenFader screenFader)
+        public SceneLoadManager(ICommandQueueService commandQueueService,
+            ISceneTransitionScreenFader screenFader, IGameStateEventsDispatcher gameStateEventsDispatcher)
         {
             _commandQueueService = commandQueueService;
-            _eventSystemService = eventSystemService;
             _screenFader = screenFader;
-            _persistentScenes = new List<SceneReferenceAsset>(5);
-            _nonPersistentScenes = new List<SceneReferenceAsset>(5);
+            _gameStateEventsDispatcher = gameStateEventsDispatcher;
+            _persistentScenes = new List<ISceneReference>(5);
+            _nonPersistentScenes = new List<ISceneReference>(5);
         }
 
         public void LoadSceneAdditively(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
         {
-            SceneReferenceAsset sceneReference = sceneLoadGroup.sceneReference;
-            SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
+            ISceneReference sceneReference = sceneLoadGroup.SceneReference;
+            SceneLoadOptions loadOptions = sceneLoadGroup.LoadOptions;
             
             LoadSceneAdditivelyCommand loadSceneCommand = 
-                new (sceneReference, loadOptions.DelayBeforeLoading, OnStartLoadingSceneAdditively);
+                new (sceneReference, loadOptions.DelayBeforeLoading, 
+                    OnStartLoadingSceneAdditively, OnFinishLoadingSceneAdditively);
             DoLoadSceneAdditively(sceneReference, loadOptions, loadSceneCommand);
         }
-        private void DoLoadSceneAdditively(SceneReferenceAsset sceneReference, SceneLoadOptions loadOptions,
+        private void DoLoadSceneAdditively(ISceneReference sceneReference, SceneLoadOptions loadOptions,
             ISceneLoadCommand sceneLoadCommand)
         {
             _commandQueueService.AddCommand(sceneLoadCommand);
@@ -55,8 +58,8 @@ namespace Popeye.Scripts.Core.Scenes
         
         public void LoadScene(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
         {
-            SceneReferenceAsset sceneReference = sceneLoadGroup.sceneReference;
-            SceneLoadOptions loadOptions = sceneLoadGroup.loadOptions.AdditiveSceneLoadOptions;
+            ISceneReference sceneReference = sceneLoadGroup.SceneReference;
+            SceneLoadOptions loadOptions = sceneLoadGroup.LoadOptions;
             
             LoadSceneCommand loadSceneCommand = 
                 new LoadSceneCommand(sceneReference, loadOptions.DelayBeforeLoading);
@@ -64,7 +67,9 @@ namespace Popeye.Scripts.Core.Scenes
             
             DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
         }
-        private void DoLoadScene(SceneReferenceAsset sceneReference, SceneLoadOptions loadOptions,
+        
+
+        private void DoLoadScene(ISceneReference sceneReference, SceneLoadOptions loadOptions,
             ISceneLoadCommand sceneLoadCommand)
         {
             _commandQueueService.AddCommand(sceneLoadCommand);
@@ -82,12 +87,12 @@ namespace Popeye.Scripts.Core.Scenes
 
 
         
-        public void UnloadScene(SceneReferenceAsset sceneReference)
+        private void UnloadScene(ISceneReference sceneReference)
         {
             DoUnloadScene(sceneReference);
             RemoveSceneReference(sceneReference);
         }
-        private void DoUnloadScene(SceneReferenceAsset sceneReference)
+        private void DoUnloadScene(ISceneReference sceneReference)
         {
             UnloadSceneCommand unloadSceneCommand = 
                 new (sceneReference, OnStartUnloadingSceneAdditively);
@@ -102,17 +107,18 @@ namespace Popeye.Scripts.Core.Scenes
                 return;
             }
 
-            SceneReferenceAsset lastLoadedScene = _nonPersistentScenes[^1];
+            ISceneReference lastLoadedScene = _nonPersistentScenes[^1];
+            SceneLoadOptions additiveLoadOptions = loadOptions.AdditiveSceneLoadOptions;
             UnloadScene(lastLoadedScene);
-            LoadSceneAdditively(new ISceneLoadManager.SceneAdditiveLoadGroup
-            {
-                sceneReference = lastLoadedScene,
-                loadOptions = loadOptions
-            });
+            
+            LoadSceneAdditivelyCommand loadSceneCommand = 
+                new (lastLoadedScene, additiveLoadOptions.DelayBeforeLoading, 
+                    OnStartLoadingSceneAdditively, OnFinishLoadingSceneAdditively);
+            DoLoadSceneAdditively(lastLoadedScene, additiveLoadOptions, loadSceneCommand);
         }
         
 
-        private void SaveSceneReference(SceneReferenceAsset sceneReference, bool isPersistentScene)
+        private void SaveSceneReference(ISceneReference sceneReference, bool isPersistentScene)
         {
             if (isPersistentScene)
             {
@@ -122,9 +128,11 @@ namespace Popeye.Scripts.Core.Scenes
             {
                 _nonPersistentScenes.Add(sceneReference);
             }
+
+            _lastLoadedScene = sceneReference;
         }
 
-        private void RemoveSceneReference(SceneReferenceAsset sceneReference)
+        private void RemoveSceneReference(ISceneReference sceneReference)
         {
             if (_persistentScenes.Contains(sceneReference))
             {
@@ -150,15 +158,17 @@ namespace Popeye.Scripts.Core.Scenes
             {
                 UnloadAllAndClear(_nonPersistentScenes);
             }
+            
+            _lastLoadedScene = null;
         }
 
-        private void UnloadAllAndClear(List<SceneReferenceAsset> scenesReferences)
+        private void UnloadAllAndClear(List<ISceneReference> scenesReferences)
         {
-            foreach (SceneReferenceAsset sceneReference in scenesReferences)
+            foreach (ISceneReference sceneReference in scenesReferences)
             {
                 DoUnloadScene(sceneReference);
             }
-            scenesReferences.Clear();
+            scenesReferences.Clear();            
         }
         
         
@@ -166,13 +176,18 @@ namespace Popeye.Scripts.Core.Scenes
         
         private void OnStartLoadingSceneAdditively(ISceneReference sceneReference)
         {
-            _eventSystemService.Dispatch<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>
-                (new ISceneLoadManager.OnStartLoadingAdditiveSceneEvent(sceneReference));
+            _gameStateEventsDispatcher.InvokeOnStartLoadingAdditiveScene(sceneReference);
+        }
+        private void OnFinishLoadingSceneAdditively(ISceneReference sceneReference)
+        {
+            if (sceneReference == _lastLoadedScene)
+            {
+                _gameStateEventsDispatcher.InvokeOnFinishLoadingScenes();
+            }
         }
         private void OnStartUnloadingSceneAdditively(ISceneReference sceneReference)
         {
-            _eventSystemService.Dispatch<ISceneLoadManager.OnStartUnloadingSceneEvent>
-                (new ISceneLoadManager.OnStartUnloadingSceneEvent(sceneReference));
+            _gameStateEventsDispatcher.InvokeOnStartUnloadingScene(sceneReference);
         }
 
     }

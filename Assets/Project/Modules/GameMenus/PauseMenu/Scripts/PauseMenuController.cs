@@ -56,7 +56,7 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
         private void QuitToMainMenu()
         {
-            _gameStateEventsDispatcher.InvokeOnGameResumed();
+            _gameStateEventsDispatcher.InvokeOnExitToMainMenu();
             ServiceLocator.Instance.GetService<ISceneLoadManager>().LoadScene(_mainMenuSceneLoadGroup);
         }
         

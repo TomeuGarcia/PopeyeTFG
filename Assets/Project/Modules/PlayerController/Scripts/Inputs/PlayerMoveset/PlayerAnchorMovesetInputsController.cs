@@ -40,12 +40,11 @@ namespace Popeye.Modules.PlayerController.Inputs
             )
         {
             _eventSystemService = eventSystemService;
-            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
-            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
+            StartListeningToGameEvents();
 
 
             _playerInputControls = playerInputControls;
-            EnabledInputs();
+            EnableInputs();
             
 
             _aim = _playerInputControls.Land.Aim;
@@ -70,27 +69,59 @@ namespace Popeye.Modules.PlayerController.Inputs
 
         ~PlayerAnchorMovesetInputsController()
         {
+            StopListeningToGameEvents();            
+            DisableInputs();
+        }
+
+        private void StartListeningToGameEvents()
+        {
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnExitToMainMenu>(OnExitToMainMenuEvent);
+            
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingAdditiveSceneEvent);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnOnFinishLoadingScenes);
+        }
+        private void StopListeningToGameEvents()
+        {
             _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
             _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumedEvent);
-            
-            DisabledInputs();
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnExitToMainMenu>(OnExitToMainMenuEvent);
+                        
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingAdditiveSceneEvent);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnOnFinishLoadingScenes);
         }
+        
 
         private void OnGamePausedEvent(IGameStateEventsDispatcher.OnGamePaused eventData)
         {
-            DisabledInputs();
+            DisableInputs();
         }
-        private void OnGameResumedEvent(IGameStateEventsDispatcher.OnGameResumed onGamePaused)
+        private void OnGameResumedEvent(IGameStateEventsDispatcher.OnGameResumed eventData)
         {
-            EnabledInputs();
+            EnableInputs();
+        }
+        private void OnExitToMainMenuEvent(IGameStateEventsDispatcher.OnExitToMainMenu eventData)
+        {
+            DisableInputs();
+        }
+        private void OnStartLoadingAdditiveSceneEvent(IGameStateEventsDispatcher.OnStartLoadingAdditiveScene eventData)
+        {
+            DisableInputs();
+        }
+        private void OnOnFinishLoadingScenes(IGameStateEventsDispatcher.OnFinishLoadingScenes eventData)
+        {
+            EnableInputs();
         }
         
-        private void EnabledInputs()
+        
+        
+        private void EnableInputs()
         {
             _playerInputControls.Enable();
         }
         
-        private void DisabledInputs()
+        private void DisableInputs()
         {
             _playerInputControls.Disable();
         }

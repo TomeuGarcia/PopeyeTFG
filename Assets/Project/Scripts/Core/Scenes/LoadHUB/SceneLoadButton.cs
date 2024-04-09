@@ -21,7 +21,7 @@ namespace Popeye.Scripts.Core.Scenes
             
             _button.onClick.AddListener(OnButtonPressed);
 
-            _text.text = _sceneLoadGroup.sceneReference.SceneName;
+            _text.text = _sceneLoadGroup.SceneReference.SceneName;
         }
 
         private void OnDestroy()

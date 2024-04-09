@@ -1,4 +1,5 @@
 using Popeye.Core.Services.EventSystem;
+using Popeye.Modules.GameState;
 
 namespace Popeye.Scripts.Core.Scenes.PlayedScene
 {
@@ -16,14 +17,14 @@ namespace Popeye.Scripts.Core.Scenes.PlayedScene
         
         public void StartListeningToSceneUpdates()
         {
-            _eventSystemService.Subscribe<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>(OnStartLoadingScene);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingScene);
         }
         public void StopListeningToSceneUpdates()
         {
-            _eventSystemService.Unsubscribe<ISceneLoadManager.OnStartLoadingAdditiveSceneEvent>(OnStartLoadingScene);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingScene);
         }
 
-        private void OnStartLoadingScene(ISceneLoadManager.OnStartLoadingAdditiveSceneEvent eventData)
+        private void OnStartLoadingScene(IGameStateEventsDispatcher.OnStartLoadingAdditiveScene eventData)
         {
             CurrentlyPlayedScene = eventData.SceneReference;
         }
