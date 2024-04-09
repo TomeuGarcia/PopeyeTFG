@@ -31,7 +31,6 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
                 await Listener.OnActivateRelayStarted();
             }
             
-            
             if (_awaitMode == AwaitMode.AwaitAll)
             {
                 await AwaitAllRelayEnterActivatedState();
@@ -41,7 +40,6 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
                 await AwaitOnlyFirstRelayEnterActivatedState();
             }
 
-            
             if (NotifyListener)
             {
                 Listener.OnActivateRelayFinished();

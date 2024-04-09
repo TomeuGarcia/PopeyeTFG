@@ -70,7 +70,7 @@ namespace Popeye.Modules.Camera.TargetSwapper
 
             UpdateCameraBlendDuration(cameraTarget);
             
-            await UniTask.Delay(TimeSpan.FromSeconds(ActiveSwapDuration));
+            await UniTask.Delay(TimeSpan.FromSeconds(ActiveSwapDuration), ignoreTimeScale: _ignoreTimeScale);
         }
 
         private void UpdateCameraBlendDuration(CameraTarget cameraTarget)
