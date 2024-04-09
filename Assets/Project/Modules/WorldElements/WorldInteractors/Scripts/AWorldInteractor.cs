@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 
@@ -27,7 +28,6 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             if (++_currentActivationInputsCount == _activationInputsCount)
             {
                 EnterActivatedState();
-                OnEnterActivated?.Invoke();
             }        
         }
     
@@ -45,9 +45,25 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         }
 
 
+        public void EnterActivatedState()
+        {
+            DoEnterActivatedState();
+            OnEnterActivated?.Invoke();
+        }
+
+        public void EnterDeactivatedState()
+        {
+            DoEnterDeactivatedState();
+        }
+
         protected abstract void DoAwake();
-        protected abstract void EnterActivatedState();
-        protected abstract void EnterDeactivatedState();
+        protected abstract void DoEnterActivatedState();
+        protected abstract void DoEnterDeactivatedState();
+
+        public virtual async UniTask EnterActivatedStateAwait()
+        {
+            await UniTask.Yield();
+        }
     }
     
 }

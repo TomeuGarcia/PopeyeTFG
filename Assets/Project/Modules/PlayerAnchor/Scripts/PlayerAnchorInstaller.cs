@@ -1,5 +1,6 @@
 using System;
 using AYellowpaper;
+using Cinemachine;
 using InputSystem;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
@@ -11,6 +12,7 @@ using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
+using Popeye.Modules.Camera.TargetSwapper;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.GameState.GaneralGameState;
@@ -52,6 +54,11 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("CAMERA")] 
         [SerializeField] private InterfaceReference<ICameraController, MonoBehaviour> _isometricCamera;
         [SerializeField] private InterfaceReference<ICameraShaker, MonoBehaviour> _cameraShaker;
+        
+        [Header("Camera - Swapping")]
+        [SerializeField] private CinemachineBrain _cameraBrain;
+        [SerializeField] private CinemachineVirtualCamera _playerCamera;
+        [SerializeField] private CinemachineVirtualCamera[] _utilityCameras;
         
         
         [Space(20)]
@@ -126,10 +133,16 @@ namespace Popeye.Modules.PlayerAnchor
         public void Install()
         {
             _generalGameStateData.LoadState();
+
+            CameraSwapDurationComputerByDistance cameraSwapDurationComputer =
+                new CameraSwapDurationComputerByDistance(0.1f, 2.0f, 0.05f);
+            CameraTargetSwapperCM cameraTargetSwapper =
+                new CameraTargetSwapperCM(_cameraBrain, _playerCamera, _utilityCameras, 
+                    cameraSwapDurationComputer, true);
             
             // Services
             CameraFunctionalities cameraFunctionalities = new CameraFunctionalities(
-                new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value);
+                new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value, cameraTargetSwapper);
             
             ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(cameraFunctionalities);
             

@@ -50,20 +50,24 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             SetCollisionEnabled(_startActivated);
         }
 
-        protected override void EnterActivatedState()
+        protected override void DoEnterActivatedState()
         {
             SetState(_activatedStateSpot, _activateDuration);
             SetCollisionEnabled(true);
             _isActivated = true;
         }
 
-        protected override void EnterDeactivatedState()
+        protected override void DoEnterDeactivatedState()
         {
             SetState(_deactivatedStateSpot, _deactivateDuration);
             SetCollisionEnabledDelayed(false, _deactivateDuration).Forget();
             _isActivated = false;
         }
 
+        public override async UniTask EnterActivatedStateAwait()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_activateDuration));
+        }
 
         private void SetStateInstantly(Transform goalStateSpot)
         {

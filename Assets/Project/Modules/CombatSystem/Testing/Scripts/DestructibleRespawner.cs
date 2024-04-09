@@ -16,12 +16,12 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             }
         }
 
-        protected override void EnterActivatedState()
+        protected override void DoEnterActivatedState()
         {
             RespawnDestructibleProps();
         }
 
-        protected override void EnterDeactivatedState()
+        protected override void DoEnterDeactivatedState()
         {
             
         }
