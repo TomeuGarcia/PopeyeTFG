@@ -37,7 +37,8 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         {
             _gameStateEventsDispatcher = ServiceLocator.Instance.GetService<IGameStateEventsDispatcher>();
             _eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
-
+            StartListeningToEvents();
+            
             _background.SetActive(true);
             
             _inputUIActions = new InputSystem.PlayerAnchorInputControls();
@@ -51,16 +52,17 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
         private void OnDestroy()
         {
+            StopListeningToEvents();
             DisableInputs();
         }
 
-        private void OnEnable()
+        private void StartListeningToEvents()
         {
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingSceneEvent);
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnFinishLoadingScenesEvent);
         }
         
-        private void OnDisable()
+        private void StopListeningToEvents()
         {
             _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingSceneEvent);
             _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnFinishLoadingScenesEvent);
