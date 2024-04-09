@@ -18,7 +18,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
 
         private void Awake()
         {
-            AwakeInit();
+            DoAwake();
         }
 
 
@@ -45,7 +45,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         }
 
 
-        protected abstract void AwakeInit();
+        protected abstract void DoAwake();
         protected abstract void EnterActivatedState();
         protected abstract void EnterDeactivatedState();
     }

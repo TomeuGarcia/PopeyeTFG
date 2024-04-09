@@ -68,7 +68,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         private IInformationDisplayService _informationDisplayService;
         
         
-        protected override void AwakeInit() { }
+        protected override void DoAwake() { }
 
         public void Configure(TextDisplayConfig informationToDisplay, 
             IEmptyEventChannelListenEntry actionToStopShowing, int performedTimesToStopShowing)

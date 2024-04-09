@@ -35,7 +35,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         
         
 
-        protected override void AwakeInit()
+        protected override void DoAwake()
         {
             _isActivated = _startActivated;
             if (_startActivated)
