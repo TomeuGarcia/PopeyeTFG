@@ -236,9 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _visualConfig: {fileID: 11400000, guid: 90394f6157b5d0f4c8ae29f601adc48f, type: 2}
-  _bleedingPoint: {fileID: 5303980640531213646}
   _visualCenter: {fileID: 1779198282268632722}
-  _enemyWidth: 1
   _originalMeshDatas:
   - _mesh: {fileID: 7038506736569069873}
     _originalMaterial: {fileID: 0}
@@ -392,6 +390,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 4607dee9af85fd142849dec75d922edc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cbc194d1f4722c84ab6c03c3e91260e2, type: 2}
     - target: {fileID: 919132149155446097, guid: 4607dee9af85fd142849dec75d922edc,
         type: 3}
       propertyPath: m_Name
