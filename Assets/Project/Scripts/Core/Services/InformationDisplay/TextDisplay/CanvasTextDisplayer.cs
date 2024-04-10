@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.AudioSystem;
@@ -11,6 +12,7 @@ namespace Popeye.Core.Services.InformationDisplay
 {
     public class CanvasTextDisplayer : MonoBehaviour, ITextDisplayer
     {
+        [SerializeField] private InterfaceReference<ITextDisplayViewEffects, MonoBehaviour> _displayViewEffects;
         [SerializeField] private CanvasGroup _backgroundFadeGroup;
         [SerializeField] private CanvasGroup _contentFadeGroup;
         [SerializeField] private TextMeshProUGUI _headerText;
@@ -133,6 +135,8 @@ namespace Popeye.Core.Services.InformationDisplay
             _contentText.color = displayConfig.TextDisplaySettings.DescriptionColor;
             
             _audioManager.PlayOneShot(displayConfig.TextDisplaySettings.Sound);
+            
+            _displayViewEffects.Value.UpdateView(displayConfig.TextDisplaySettings);
         }
         
     }
