@@ -5,6 +5,7 @@ using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
+using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
@@ -14,17 +15,20 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         private readonly IPlacePopeyePlayerEventChannelListenEntry _placeEventChannelListenEntry;
         private readonly IPlayerInstantTranslation _playerInstantTranslation;
         private readonly PlayerFSM _playerStateMachine;
+        private readonly EnvironmentFollower _environmentFollower;
 
 
         public PopeyePlayerPlacer(
             IPlacePopeyePlayerEventChannelListenEntry placeEventChannelListenEntry,
             IPlayerInstantTranslation playerInstantTranslation,
-            PlayerFSM playerStateMachine
+            PlayerFSM playerStateMachine,
+            EnvironmentFollower environmentFollower
         )
         {
             _placeEventChannelListenEntry = placeEventChannelListenEntry;
             _playerInstantTranslation = playerInstantTranslation;
             _playerStateMachine = playerStateMachine;
+            _environmentFollower = environmentFollower;
         }
 
         public void StartListening()
@@ -50,6 +54,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             {
                 _playerStateMachine.OverwriteState(PlayerStates.PlayerStates.SpawningWithAnchorOnFloor);
             }
+
+            _environmentFollower.Configure(placingData.environmentFollowData);
         }
         
 

@@ -1,3 +1,4 @@
+using Popeye.Modules.VFX.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
@@ -10,5 +11,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         public Quaternion anchorRotation;
 
         public bool startCarryingAnchor;
+        
+        public EnvironmentFollowData environmentFollowData;
+    }
+
+    [System.Serializable]
+    public struct EnvironmentFollowData
+    {
+        public EnvironmentFollower.EnvironmentElementConfig waterConfig;
+        public EnvironmentFollower.EnvironmentElementConfig rainConfig;
     }
 }
