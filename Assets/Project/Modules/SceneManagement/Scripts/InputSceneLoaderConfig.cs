@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
 
 namespace Popeye.Modules.SceneManagement.Scripts
@@ -11,19 +12,23 @@ namespace Popeye.Modules.SceneManagement.Scripts
         [System.Serializable]
         public class SceneLoadData
         {
-            [Scene] [SerializeField, Min(0)] private int _builtInSceneIndex;
+            [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _sceneLoadGroup;
             [SerializeField] private KeyCode _loadKeyCode;
 
-            public int BuiltInSceneIndex => _builtInSceneIndex;
+            public ISceneLoadManager.SceneAdditiveLoadGroup SceneLoadGroup => _sceneLoadGroup;
             public KeyCode LoadKeyCode => _loadKeyCode;
         }
 
-
+        
+        [Header("SCENES")]
         [SerializeField] private SceneLoadData[] _scenesData;
         public SceneLoadData[] ScenesData => _scenesData;
         
         
+        [Header("RELOAD CURRENT SCENE")]
+        [SerializeField] private SceneLoadOptionsAsset _reloadCurrentLoadOptions;
         [SerializeField] private KeyCode _reloadCurrentSceneKeyCode = KeyCode.R;
+        public SceneLoadOptionsAsset ReloadCurrentLoadOptions => _reloadCurrentLoadOptions;
         public KeyCode ReloadCurrentSceneKeyCode => _reloadCurrentSceneKeyCode;
         
     }

@@ -1,4 +1,7 @@
 using System;
+using Popeye.Core.Services.GameReferences;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
 
@@ -10,6 +13,13 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [SerializeField] private PlayerAbilityUnlocker _playerAbilityUnlocker;
         [SerializeField] private TutorialInformationDisplay _tutorialInformationDisplay;
         [SerializeField] private GeneralInitializePlayerAbilityUnlockerConfig _initializeConfig;
+
+        [Header("VIEW")] 
+        [SerializeField] private AbilityUnlockerChristalView _christalView;
+        
+        [Header("SOUNDS")]
+        [SerializeField] private AbilityUnlockerChristalAudio _christalAudio;
+        
         
         [Header("TYPE")]
         [SerializeField] private GeneralInitializePlayerAbilityUnlockerConfig.Ability _abilityToUnlock;
@@ -31,8 +41,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _initializeConfig.GetReferences(_abilityToUnlock,
                 out GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences);
             
+            _christalAudio.Configure(ServiceLocator.Instance.GetService<IFMODAudioManager>());
+            _christalView.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);            
             
-            _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel);
+            _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, _christalView);
             
             _tutorialInformationDisplay.Configure(configureReferences.TutorialInfoToDisplay,
                 configureReferences.TutorialHideChannel, configureReferences.TimesToStopShowing);

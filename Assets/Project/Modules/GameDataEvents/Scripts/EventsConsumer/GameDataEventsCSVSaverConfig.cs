@@ -17,6 +17,7 @@ namespace Popeye.Modules.GameDataEvents
         [SerializeField] private bool _logToConsole = false;
         
         [Header("SAVE")]
+        [SerializeField] private bool _saveInEditor = false; 
         [SerializeField, Range(0f, 10f)] private float _saveFrequencyInMinutes = 1f; 
         
         [Header("PATH")]
@@ -32,6 +33,7 @@ namespace Popeye.Modules.GameDataEvents
         public string FilePath =>  DirectoryPath + _fileName;
         public string FilePathWithExtension => FilePath + _fileExtension;
 
+        public bool SaveInEditor => _saveInEditor; 
         public TimeSpan SaveFrequency => TimeSpan.FromMinutes(_saveFrequencyInMinutes);
 
     }

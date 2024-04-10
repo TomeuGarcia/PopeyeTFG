@@ -36,7 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         public void Configure(IChainPhysics chainPhysics, IVFXChainView vfxChainView,
             Transform playerBindTransform, Transform anchorBindTransform,
-            ChainViewLogicGeneralConfig generalConfig)
+            ChainViewLogicGeneralConfig generalConfig, Material chainBonesMaterial)
         {
             _chainPhysics = chainPhysics;
             _playerBindTransform = playerBindTransform;
@@ -48,7 +48,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
                 generalConfig.MaxChainLength, boneLength,
-                generalConfig.BonePrefab, generalConfig.BoneEndEffectorPrefab);
+                generalConfig.BonePrefab, generalConfig.BoneEndEffectorPrefab,
+                chainBonesMaterial);
             
             _thrownChainViewLogic = 
                 new SpiralThrowChainViewLogic(generalConfig.ThrowViewLogicConfig, 
@@ -75,7 +76,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                     generalConfig.ChainBoneCount);
             
             _currentChainViewLogic = _carriedChainViewLogic;
-            SetCarriedView();
             
             _boneChainIK.AwakeConfigure(generalConfig.ChainBoneCount, false, boneLength);
         }

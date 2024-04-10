@@ -68,7 +68,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         private IInformationDisplayService _informationDisplayService;
         
         
-        protected override void AwakeInit() { }
+        protected override void DoAwake() { }
 
         public void Configure(TextDisplayConfig informationToDisplay, 
             IEmptyEventChannelListenEntry actionToStopShowing, int performedTimesToStopShowing)
@@ -84,12 +84,12 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             _stopDisplayingCondition.Finish();
         }
 
-        protected override void EnterActivatedState()
+        protected override void DoEnterActivatedState()
         {
             StartShowing();
         }
 
-        protected override void EnterDeactivatedState()
+        protected override void DoEnterDeactivatedState()
         {
             _stopDisplayingCondition.Finish();
         }

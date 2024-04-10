@@ -94,6 +94,11 @@ namespace Popeye.Modules.GameDataEvents
 
         public void AddEventContent(string eventContent)
         {
+
+#if UNITY_EDITOR
+            if (!_config.SaveInEditor) return;
+#endif
+            
             WaitUntilDataIsSaved();
             _dataToSave.Add(eventContent);
 

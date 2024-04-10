@@ -1,5 +1,8 @@
+using System;
 using NaughtyAttributes;
+using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.GameMenus.Generic;
+using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,8 +15,17 @@ namespace Project.Modules.GameMenus.MainMenu.Scripts
         [SerializeField] private SmartButtonAndConfig _quitButtonAndConfig;
 
         [Header("GAME SCENE")]
-        [Scene] [SerializeField] private int _gameScene; 
+        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _coreGameSceneLoadGroup;
+        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _gameSceneLoadGroup;
+
+        private ISceneLoadManager _sceneLoadManager;
         
+        
+        private void Awake()
+        {
+            _sceneLoadManager = ServiceLocator.Instance.GetService<ISceneLoadManager>();
+        }
+
         private void Start()
         {
             _playButtonAndConfig.SmartButton.Init(_playButtonAndConfig.Config, PlayGame);
@@ -23,7 +35,8 @@ namespace Project.Modules.GameMenus.MainMenu.Scripts
 
         private void PlayGame()
         {
-            SceneManager.LoadScene(_gameScene);
+            _sceneLoadManager.LoadSceneAdditively(_coreGameSceneLoadGroup);
+            _sceneLoadManager.LoadSceneAdditively(_gameSceneLoadGroup);
         }
         
         private void QuitGame()
