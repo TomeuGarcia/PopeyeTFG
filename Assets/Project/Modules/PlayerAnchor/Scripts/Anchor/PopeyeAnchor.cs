@@ -165,6 +165,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void SetPulled(AnchorThrowResult anchorPullResult, Quaternion[] rotationPath)
         {
+            if (IsGrabbedBySnapper())
+            {
+                CurrentTrajectorySnapTarget.OnUsedForPulling();
+            }
+        
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Pulled);
             _anchorDamageDealer.DealPullDamage(anchorPullResult).Forget();
             

@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 934041114915014742}
   - component: {fileID: 6177653698299486624}
   m_Layer: 0
-  m_Name: Bottom_Image
+  m_Name: BottomEffect_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,6 +164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8712396205391881109}
   - component: {fileID: 3641266670732326924}
+  - component: {fileID: 7810643985129455879}
   m_Layer: 0
   m_Name: TextDisplayer
   m_TagString: Untagged
@@ -204,10 +205,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6902616fc37a449b8297923c338925d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _displayViewEffects:
+    _underlyingValue: {fileID: 7810643985129455879}
   _backgroundFadeGroup: {fileID: 3573655675081764687}
   _contentFadeGroup: {fileID: 2588487623005984497}
   _headerText: {fileID: 6984139834362759015}
   _contentText: {fileID: 2767492903996681442}
+--- !u!114 &7810643985129455879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4877103371687433940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 862e223dd32d4a6dbe6af7fd9e2c1ca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectImage: {fileID: 6177653698299486624}
+  _imageColorAlphaOverride: 0.6
 --- !u!1 &4944197609986521730
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +394,7 @@ RectTransform:
   m_Children:
   - {fileID: 8712396205391881109}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

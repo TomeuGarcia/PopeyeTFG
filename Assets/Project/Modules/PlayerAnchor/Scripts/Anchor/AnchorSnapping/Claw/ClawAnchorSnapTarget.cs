@@ -51,6 +51,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public UsedEvents OnStartBeingUsedEvent;
         public UsedEvents OnStopBeingUsedEvent;
+        public UsedEvents OnQuickPullUsedEvent;
 
         private void Awake()
         {
@@ -162,6 +163,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             _user = null;
             OnStopBeingUsedEvent?.Invoke();
+        }
+
+        public void OnUsedForPulling()
+        {
+            OnQuickPullUsedEvent?.Invoke();
         }
 
         public void OnUsedForDash()

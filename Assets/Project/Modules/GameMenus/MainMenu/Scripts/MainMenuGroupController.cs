@@ -13,10 +13,14 @@ namespace Project.Modules.GameMenus.MainMenu.Scripts
         [Header("BUTTONS")]
         [SerializeField] private SmartButtonAndConfig _playButtonAndConfig;
         [SerializeField] private SmartButtonAndConfig _quitButtonAndConfig;
+        [SerializeField] private SmartButtonAndConfig _debugSceneHubButtonAndConfig;
 
         [Header("GAME SCENE")]
         [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _coreGameSceneLoadGroup;
         [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _gameSceneLoadGroup;
+        
+        [Header("DEBUG SCENES HUB")]
+        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _scenesHubLoadGroup;
 
         private ISceneLoadManager _sceneLoadManager;
         
@@ -30,6 +34,7 @@ namespace Project.Modules.GameMenus.MainMenu.Scripts
         {
             _playButtonAndConfig.SmartButton.Init(_playButtonAndConfig.Config, PlayGame);
             _quitButtonAndConfig.SmartButton.Init(_quitButtonAndConfig.Config, QuitGame);
+            _debugSceneHubButtonAndConfig.SmartButton.Init(_debugSceneHubButtonAndConfig.Config, LoadScenesHub);
         }
 
 
@@ -38,11 +43,16 @@ namespace Project.Modules.GameMenus.MainMenu.Scripts
             _sceneLoadManager.LoadSceneAdditively(_coreGameSceneLoadGroup);
             _sceneLoadManager.LoadSceneAdditively(_gameSceneLoadGroup);
         }
+        private void LoadScenesHub()
+        {
+            _sceneLoadManager.LoadSceneAdditively(_scenesHubLoadGroup);
+        }
         
         private void QuitGame()
         {
             Application.Quit();
         }
+        
         
     }
 }
