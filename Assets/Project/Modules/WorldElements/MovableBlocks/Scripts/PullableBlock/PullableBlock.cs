@@ -45,9 +45,9 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             _gridMovementActorBehaviour.QueueMove(pullDirection);
         }
 
-        public void TryPullTowardsDirectionUntilPosition(Vector2 pullDirection, Vector3 position)
+        public void TryPullTowardsDirectionUntilEnd(Vector2 pullDirection)
         {
-            _gridMovementActorBehaviour.QueueMoveUntilPosition(pullDirection, position);
+            _gridMovementActorBehaviour.QueueMoveUntilEnd(pullDirection);
         }
 
         private void OnMoveStarted(GridMovementActorBehaviour.MovementStep movementStep)

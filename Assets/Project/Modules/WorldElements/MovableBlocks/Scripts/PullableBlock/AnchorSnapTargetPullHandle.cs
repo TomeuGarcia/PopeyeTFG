@@ -141,7 +141,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         
         private void PullUntilUser()
         {
-            _pullableBlock.TryPullTowardsDirectionUntilPosition(_pullDirection, _anchorSnapTarget.GetUserPosition());
+            _pullableBlock.TryPullTowardsDirectionUntilEnd(_pullDirection);
         }
         
     }

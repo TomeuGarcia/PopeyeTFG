@@ -86,19 +86,15 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             QueueMoveWithMoveAmount(direction, MoveAmount);
         }
         
-        public void QueueMoveUntilPosition(Vector2 direction, Vector3 position)
+        public void QueueMoveUntilEnd(Vector2 direction)
         {
-            //Vector3 lastPosition = transform.position;
-            //float moveAmount = 
-            for (int i = 5; i > 1; --i)
+            if (_associatedMovementArea.ComputeMaxDisplacement(this, direction, 
+                    MoveAmount, out float endMoveAmount))
             {
-                MovementStep temp = new MovementStep(direction, MoveAmount * i);
-                if (CanMove(temp))
-                {
-                    QueueMoveWithMoveAmount(direction, MoveAmount * i);
-                    break;
-                }
+                QueueMoveWithMoveAmount(direction, endMoveAmount);
             }
+            
+            // else: move is not valid, should queue not valid move to play CantMove animation
         }
         
 
