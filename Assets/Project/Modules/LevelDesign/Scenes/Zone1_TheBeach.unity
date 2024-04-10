@@ -10220,6 +10220,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 963236396}
   _collider: {fileID: 963236391}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &202307169
 Transform:
   m_ObjectHideFlags: 0
@@ -19763,6 +19764,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1526397683}
   _collider: {fileID: 1526397678}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &409554648
 Transform:
   m_ObjectHideFlags: 0
@@ -29231,6 +29233,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1713820610}
   _collider: {fileID: 0}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &609520780
 Transform:
   m_ObjectHideFlags: 0
@@ -36300,6 +36303,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 829905360}
   _collider: {fileID: 829905355}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &797161768
 Transform:
   m_ObjectHideFlags: 0
@@ -36891,7 +36895,7 @@ Transform:
   - {fileID: 451611095}
   - {fileID: 1209542229}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &802854847
 PrefabInstance:
@@ -39457,6 +39461,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 940581720}
   _collider: {fileID: 940581721}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &855675814
 Transform:
   m_ObjectHideFlags: 0
@@ -40636,6 +40641,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1742036248}
   _collider: {fileID: 1742036243}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &876781398
 Transform:
   m_ObjectHideFlags: 0
@@ -45509,6 +45515,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1689047472}
   _collider: {fileID: 0}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &955207705
 Transform:
   m_ObjectHideFlags: 0
@@ -50145,6 +50152,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 833865148}
   _collider: {fileID: 833865143}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &1079195973
 Transform:
   m_ObjectHideFlags: 0
@@ -54015,6 +54023,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1734335004}
   _collider: {fileID: 1734334999}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &1168138355
 Transform:
   m_ObjectHideFlags: 0
@@ -55371,6 +55380,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 512187450}
   _collider: {fileID: 512187445}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &1211028616
 Transform:
   m_ObjectHideFlags: 0
@@ -63496,7 +63506,7 @@ PrefabInstance:
     - target: {fileID: 2148306565348459085, guid: 58bda1c846a109c4586b52a210fe715d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2148306565348459085, guid: 58bda1c846a109c4586b52a210fe715d,
         type: 3}
@@ -69053,6 +69063,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 227367206}
   _collider: {fileID: 0}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &1484590043
 Transform:
   m_ObjectHideFlags: 0
@@ -71876,6 +71887,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 943945895677206110, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 943945895677206110, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 943945895677206110, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 943945895677206110, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 943945895677206110, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1151401866870032477, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -71929,6 +71965,31 @@ PrefabInstance:
     - target: {fileID: 5147365875078981244, guid: 61359a5635263194cb04184fb741ba5e,
         type: 3}
       propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5314779756975334209, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5314779756975334209, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5314779756975334209, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5314779756975334209, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5314779756975334209, guid: 61359a5635263194cb04184fb741ba5e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6277468705217273969, guid: 61359a5635263194cb04184fb741ba5e,
@@ -78425,6 +78486,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 1518873137}
   _collider: {fileID: 1518873138}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &1699414915
 Transform:
   m_ObjectHideFlags: 0
@@ -83345,6 +83407,7 @@ MonoBehaviour:
   _barrierTransform: {fileID: 58672773}
   _collider: {fileID: 58672768}
   _startActivated: 0
+  _colliderIsAlwaysEnabled: 0
 --- !u!4 &1742896621
 Transform:
   m_ObjectHideFlags: 0
