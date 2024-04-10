@@ -80,9 +80,31 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
         }
 
 
+        
         public void QueueMove(Vector2 direction)
         {
-            _queuedMoves.Enqueue(new MovementStep(direction, MoveAmount));
+            QueueMoveWithMoveAmount(direction, MoveAmount);
+        }
+        
+        public void QueueMoveUntilPosition(Vector2 direction, Vector3 position)
+        {
+            //Vector3 lastPosition = transform.position;
+            //float moveAmount = 
+            for (int i = 5; i > 1; --i)
+            {
+                MovementStep temp = new MovementStep(direction, MoveAmount * i);
+                if (CanMove(temp))
+                {
+                    QueueMoveWithMoveAmount(direction, MoveAmount * i);
+                    break;
+                }
+            }
+        }
+        
+
+        private void QueueMoveWithMoveAmount(Vector2 direction, float moveAmount)
+        {
+            _queuedMoves.Enqueue(new MovementStep(direction, moveAmount));
             
             if (!_processingQueuedMoves)
             {
