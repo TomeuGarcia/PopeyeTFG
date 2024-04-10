@@ -31,8 +31,12 @@ namespace Popeye.Modules.Camera.Target
         
         private void UpdateTransform()
         {
-            TargetTransform.localPosition = _config.LocalPosition;
             TargetTransform.localRotation = _config.LocalRotation;
+            
+            if (_config.OverrideLocalPosition)
+            {
+                TargetTransform.localPosition = _config.LocalPosition;                
+            }
         }
 
         

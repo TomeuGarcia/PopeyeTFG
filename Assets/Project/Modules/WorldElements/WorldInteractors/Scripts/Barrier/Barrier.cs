@@ -50,20 +50,24 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             SetCollisionEnabled(_startActivated);
         }
 
-        protected override void EnterActivatedState()
+        protected override void DoEnterActivatedState()
         {
             SetState(_activatedStateSpot, _activateDuration);
             SetCollisionEnabled(true);
             _isActivated = true;
         }
 
-        protected override void EnterDeactivatedState()
+        protected override void DoEnterDeactivatedState()
         {
             SetState(_deactivatedStateSpot, _deactivateDuration);
             SetCollisionEnabledDelayed(false, _deactivateDuration).Forget();
             _isActivated = false;
         }
 
+        public override async UniTask EnterActivatedStateAwait()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_activateDuration), ignoreTimeScale: true);
+        }
 
         private void SetStateInstantly(Transform goalStateSpot)
         {
@@ -73,8 +77,10 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         
         private void SetState(Transform goalStateSpot, float duration)
         {
-            _barrierTransform.DOMove(goalStateSpot.position, duration);
-            _barrierTransform.DORotateQuaternion(goalStateSpot.rotation, duration);
+            _barrierTransform.DOMove(goalStateSpot.position, duration)
+                .SetUpdate(true);
+            _barrierTransform.DORotateQuaternion(goalStateSpot.rotation, duration)
+                .SetUpdate(true);
         }
 
 
@@ -87,7 +93,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         }
         private async UniTaskVoid SetCollisionEnabledDelayed(bool isEnabled, float delay)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay), ignoreTimeScale: true);
             SetCollisionEnabled(isEnabled);
         }
 

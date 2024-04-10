@@ -41,6 +41,12 @@ namespace Popeye.Modules.GameState
         void InvokeOnStartLoadingAdditiveScene(ISceneReference sceneReference);
         void InvokeOnFinishLoadingScenes();
         void InvokeOnStartUnloadingScene(ISceneReference sceneReference);
+     
         
+        public readonly struct OnStartCameraAnimation { }
+        public readonly struct OnFinishCameraAnimation { }
+        
+        void InvokeOnStartCameraAnimation();
+        void InvokeOnFinishCameraAnimation();
     }
 }
