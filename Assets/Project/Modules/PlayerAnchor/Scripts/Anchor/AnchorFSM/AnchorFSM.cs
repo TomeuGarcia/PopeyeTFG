@@ -29,10 +29,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates
 
         public void Reset()
         {
-            _currentState.Exit();
-            CurrentStateType = AnchorStates.Carried;
-            _currentState = _states[CurrentStateType];
-            _currentState.Enter();
+            OverwriteState(AnchorStates.Carried);
         }
     }
 }
