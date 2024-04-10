@@ -157,46 +157,13 @@ namespace Popeye.InverseKinematics.Bones
                 Bones[boneIndex].SetWorldRotation(Quaternion.AngleAxis(angle, axis) * Bones[boneIndex].Rotation);
             }
         }
-        
-        
-        public void FromPositions2(Vector3[] positions)
+
+
+        public void SetMaterialToBones(Material material)
         {
-            int i = 0;
-            for (; i < 1; ++i)
+            foreach (Bone bone in Bones)
             {
-                Vector3 oldDirection = (Bones[i + 1].Position - Bones[i].Position).normalized;
-                Vector3 newDirection = positions[i + 1] - positions[i];
-
-                UpdateBonePosition(i, oldDirection, newDirection);
-            }
-
-
-            int numberOfBonesMinusTwo = _numberOfBones - 2;
-            for (; i < numberOfBonesMinusTwo; ++i)
-            {
-                Vector3 oldDirection = (Bones[i + 1].Position - Bones[i].Position).normalized;
-                
-                Vector3 newToNext = positions[i + 1] - positions[i];
-
-                bool nextIsInsideCurrent = newToNext.sqrMagnitude < 0.1f;
-                if (nextIsInsideCurrent)
-                {
-                    UpdateBonePosition(i, oldDirection, Vector3.down);
-                    UpdateBonePosition(++i, oldDirection, Vector3.up);
-                    continue;
-                }
-                
-                Vector3 newDirection = newToNext.normalized;
-                UpdateBonePosition(i, oldDirection, newDirection);
-            }
-            
-            
-            for (; i < _numberOfBones - 1; ++i)
-            {
-                Vector3 oldDirection = (Bones[i + 1].Position - Bones[i].Position).normalized;
-                Vector3 newDirection = positions[i + 1] - positions[i];
-
-                UpdateBonePosition(i, oldDirection, newDirection);
+                bone.SetMaterial(material);
             }
         }
 

@@ -19,6 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         IOnVoidChecker OnVoidChecker { get; }
 
+        void ResetState(Vector3 position);
         void SetPosition(Vector3 position);
         void SetRotation(Quaternion rotation);
         

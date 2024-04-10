@@ -1,6 +1,7 @@
 using System;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.AudioSystem.SoundVolume;
 using Popeye.Modules.GameMenus.Generic;
 using Project.Modules.AudioSystem.Scripts.SoundVolume;
 using UnityEngine;
@@ -19,27 +20,33 @@ namespace Popeye.Modules.GameMenus.AudioMenu
         protected override void DoInit(InputAction goBackButton)
         {
             float startVolumeMaster = 1.0f;
-            float startVolumeMusic = 0.8f;
+            float startVolumeMusic = 0.5f;
             float startVolumeAmbient = 0.5f;
             float startVolumeSFX = 0.8f;
 
 
             SoundVolumeControllersGroup soundVolumeControllersGroup
                 = ServiceLocator.Instance.GetService<IFMODAudioManager>().SoundVolumeControllersGroup;
+
+
+            InitVolumeSlider(_masterVolumeSliderAndConfig, soundVolumeControllersGroup.MasterVolumeController, 
+                startVolumeMaster);
             
+            InitVolumeSlider(_musicVolumeSliderAndConfig, soundVolumeControllersGroup.MusicVolumeController, 
+                startVolumeMusic);
             
+            InitVolumeSlider(_ambientVolumeSliderAndConfig, soundVolumeControllersGroup.AmbientVolumeController, 
+                startVolumeAmbient);
             
-            _masterVolumeSliderAndConfig.SmartSlider.Init(_masterVolumeSliderAndConfig.Config,
-                startVolumeMaster, soundVolumeControllersGroup.MasterVolumeController.SetVolume);
-            
-            _musicVolumeSliderAndConfig.SmartSlider.Init(_musicVolumeSliderAndConfig.Config,
-                startVolumeMusic, soundVolumeControllersGroup.MusicVolumeController.SetVolume);
-                        
-            _ambientVolumeSliderAndConfig.SmartSlider.Init(_ambientVolumeSliderAndConfig.Config,
-                startVolumeAmbient, soundVolumeControllersGroup.AmbientVolumeController.SetVolume);
-                        
-            _sfxVolumeSliderAndConfig.SmartSlider.Init(_sfxVolumeSliderAndConfig.Config,
-                startVolumeSFX, soundVolumeControllersGroup.SFXVolumeController.SetVolume);
+            InitVolumeSlider(_sfxVolumeSliderAndConfig, soundVolumeControllersGroup.SFXVolumeController, 
+                startVolumeSFX);
+        }
+
+        private void InitVolumeSlider(SmartSliderAndConfig sliderAndConfig,
+            ISoundVolumeController soundVolumeController, float startVolume)
+        {
+            sliderAndConfig.SmartSlider.Init(sliderAndConfig.Config, startVolume, soundVolumeController.SetVolume);
+            soundVolumeController.SetVolume(startVolume);
         }
 
 

@@ -10,6 +10,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             Spawning_PlayerState spawningState 
                 = new Spawning_PlayerState(blackboard);
+            SpawningWithAnchorOnFloor_PlayerState spawningWithAnchorOnFloorState 
+                = new SpawningWithAnchorOnFloor_PlayerState(blackboard);
             Dead_PlayerState deadState 
                 = new Dead_PlayerState(blackboard);
 
@@ -54,6 +56,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             Dictionary<PlayerStates, APlayerState> states = new Dictionary<PlayerStates, APlayerState>()
             {
                 { PlayerStates.Spawning , spawningState },
+                { PlayerStates.SpawningWithAnchorOnFloor, spawningWithAnchorOnFloorState },
                 { PlayerStates.Dead , deadState },
                 
                 { PlayerStates.MovingWithAnchor , movingWithAnchor },

@@ -29,9 +29,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
 
 
-        public void EnterSetup(float dashDuration, Ease dashEase)
+        public void EnterSetup(float foldDuration, Ease dashEase)
         {
-            _duration = dashDuration;
+            _duration = foldDuration;
 
             _globalT = 0;
             DOTween.To(

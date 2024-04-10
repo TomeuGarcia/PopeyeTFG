@@ -16,7 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private bool _anchorIsBeingPulled;
         
-        
+        public bool IsAutoQueued { get; private set; }
         public AnchorThrowResult AnchorPullResult { get; private set; }
         
         
@@ -38,29 +38,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 _pullConfig.RotateInterpolationCurve);
         }
 
-        private float debug_pullMultiplyMode = 0f;
-        public void DebugTogglePullMode()
-        {
-            if (debug_pullMultiplyMode > 0.5f)
-            {
-                debug_pullMultiplyMode = 0f;
-                Debug.Log("STRAIGHT PULL");
-            }
-            else
-            {
-                debug_pullMultiplyMode = 1f;
-                Debug.Log("CHAIN PULL");
-            }
-        }
-
-
         public bool AnchorIsBeingPulled()
         {
             return _anchorIsBeingPulled;
         }
 
-        public void PullAnchor()
+        public void PullAnchor(bool isAutoQueued)
         {
+            IsAutoQueued = isAutoQueued;
+            
             Vector3 anchorPosition = _anchor.Position;
             Vector3 playerPosition = _player.GetAnchorThrowStartPosition();
             Vector3 pullDirection = -_player.GetFloorAlignedDirectionToAnchor();
@@ -88,8 +74,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             
             _anchor.SetPulled(AnchorPullResult, rotationPath);
-            
+
+
             _eventChannelDispatcher.RaiseEvent();
+            
             
             DoPullAnchor(AnchorPullResult).Forget();
         }
@@ -104,8 +92,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             Vector3[] chainPositions = _anchor.GetChainPositions();
             float distanceRatio = _pullConfig.TrajectoryByDistance
-                .Evaluate(ComputeDistanceRatio(_player.GetDistanceFromAnchor()))
-                * debug_pullMultiplyMode;
+                .Evaluate(ComputeDistanceRatio(_player.GetDistanceFromAnchor()));
             
             for (int i = 0; i < trajectoryPath.Length - 1; ++i)
             {

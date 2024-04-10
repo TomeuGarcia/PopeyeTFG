@@ -1,37 +1,62 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.VFX.ParticleFactories;
-using Popeye.Modules.CombatSystem;
-using Popeye.Modules.Enemies;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Hazards;
-using Unity.VisualScripting;
+using Popeye.Scripts.Core.Scenes.ObjectTracking;
+using Popeye.Scripts.Core.Scenes.PlayedScene;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class FactoriesInstaller : MonoBehaviour
+
+namespace Popeye.Modules.Installers
 {
-    [SerializeField] private ParticleFactoryConfig _particleFactoryConfig;
-    [SerializeField] private EnemyFactoryInstaller _enemyFactoryInstaller;
-    [SerializeField] private HazardsFactoryConfig _hazardFactryConfig;
-    [SerializeField] private Transform _hazardsParent;
+    public class FactoriesInstaller : MonoBehaviour
+    {
+        [Header("PARTICLES")]
+        [SerializeField] private ParticleFactoryConfig _particleFactoryConfig;
+        [SerializeField] private Transform _particleParent;
+        
+        [Header("ENEMIES")]
+        [SerializeField] private EnemyFactoryInstaller _enemyFactoryInstaller;
+        [SerializeField] private HazardsFactoryConfig _hazardFactryConfig;
+        [SerializeField] private Transform _hazardsParent;
 
-    [SerializeField] private Transform _particleParent;
+
+        private SceneObjectsTracker _createdParticlesRecycler;
+        private SceneObjectsTracker _createdEnemiesRecycler;
+        
     
-    public void Install(ServiceLocator serviceLocator)
-    {
-        serviceLocator.RegisterService<IParticleFactory>(new ParticleFactory(_particleFactoryConfig, _particleParent));
-        serviceLocator.RegisterService<IHazardFactory>(new HazardsFactory(_hazardFactryConfig,_hazardsParent, serviceLocator.GetService<IParticleFactory>()));
-        _enemyFactoryInstaller.Install(serviceLocator, ServiceLocator.Instance.GetService<IFMODAudioManager>());
+        public void Install(ServiceLocator serviceLocator, 
+            IFMODAudioManager audioManager, IEventSystemService eventSystemService,
+            ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
+        {
+            _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); 
+            
+            _createdEnemiesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider);
+            
+            ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent, _createdParticlesRecycler);
+            HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, particleFactory);
+            
+            serviceLocator.RegisterService<IParticleFactory>(particleFactory);
+            serviceLocator.RegisterService<IHazardFactory>(hazardsFactory);
+            
+            _enemyFactoryInstaller.Install(serviceLocator, audioManager, _createdEnemiesRecycler);
+            
+            _createdParticlesRecycler.StartListeningToSceneUpdates();
+            _createdEnemiesRecycler.StartListeningToSceneUpdates();
+        }
+
+        public void Uninstall(ServiceLocator serviceLocator)
+        {
+            _createdEnemiesRecycler.StopListeningToSceneUpdates();
+            _createdParticlesRecycler.StopListeningToSceneUpdates();
+        
+            _enemyFactoryInstaller.Uninstall(serviceLocator);
+            
+            serviceLocator.RemoveService<IHazardFactory>();
+            serviceLocator.RemoveService<IParticleFactory>();
+        }
     }
 
-    public void Uninstall(ServiceLocator serviceLocator)
-    {
-        serviceLocator.RemoveService<IParticleFactory>();
-        serviceLocator.RemoveService<IHazardFactory>();
-        _enemyFactoryInstaller.Uninstall(serviceLocator);
-    }
 }
