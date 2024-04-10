@@ -17,20 +17,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         [SerializeField] private WorldEntityPreviewComponents _playerPreview;
         [SerializeField] private WorldEntityPreviewComponents _anchorPreview;
         
-        [Header("CONFIGURATION")]
+        [Header("PLAYER SPECIFICS")]
         [SerializeField] private bool _startsCarryingAnchor = true;
         
+        [Header("ENVIRONMENT SPECIFICS")]
+        [SerializeField] private EnvironmentFollowData _environmentFollowData;
 
+        
         private IPlacePopeyePlayerEventChannelDispatcher _placeEventChannelDispatcher;
         private PopeyePlayerPlacingData _popeyePlayerPlacingData;
         
-        
-        
-        private void Start()
-        {
-            
-            //QueryPlacePlayerHere();
-        }
         
 
         public void Configure(IPlacePopeyePlayerEventChannelDispatcher placeEventChannelDispatcher)
@@ -45,24 +41,19 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
                 anchorPosition = _anchorPreview.PlaceTransform.position,
                 anchorRotation = _anchorPreview.PlaceTransform.rotation,
 
-                startCarryingAnchor = _startsCarryingAnchor
+                startCarryingAnchor = _startsCarryingAnchor,
+                
+                environmentFollowData = _environmentFollowData
             };
             
             DestroyPreviews();
             QueryPlacePlayerHere();
-           // SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            QueryPlacePlayerHere();
-        }
+
         
         private void QueryPlacePlayerHere()
-        {
-            
+        {            
             _placeEventChannelDispatcher.RaiseEvent(_popeyePlayerPlacingData);
         }
 

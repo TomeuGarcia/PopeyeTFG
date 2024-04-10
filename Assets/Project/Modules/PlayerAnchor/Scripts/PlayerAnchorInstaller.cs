@@ -33,6 +33,7 @@ using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.MaterialHelpers;
@@ -59,7 +60,9 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private CinemachineBrain _cameraBrain;
         [SerializeField] private CinemachineVirtualCamera _playerCamera;
         [SerializeField] private CinemachineVirtualCamera[] _utilityCameras;
-        
+
+        [Header("ENVIRONMENT")] 
+        [SerializeField] private EnvironmentFollower _environmentFollower;
         
         [Space(20)]
         [Header("PLAYER")]
@@ -278,7 +281,7 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
-                playerInstantTranslation, playerStateMachine);
+                playerInstantTranslation, playerStateMachine, _environmentFollower);
             _popeyePlayerPlacer.StartListening();
             
             _playerController.AwakeConfigure();
