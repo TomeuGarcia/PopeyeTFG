@@ -60,12 +60,18 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         {
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingSceneEvent);
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnFinishLoadingScenesEvent);
+            
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartCameraAnimation>(OnStartCameraAnimationEvent);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnFinishCameraAnimation>(OnFinishCameraAnimationEvent);
         }
         
         private void StopListeningToEvents()
         {
             _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingSceneEvent);
             _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnFinishLoadingScenesEvent);
+            
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartCameraAnimation>(OnStartCameraAnimationEvent);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnFinishCameraAnimation>(OnFinishCameraAnimationEvent);
         }
 
         private void Update()
@@ -115,6 +121,15 @@ namespace Popeye.Modules.GameMenus.PauseMenu
             DisableInputs();
         }
         private void OnFinishLoadingScenesEvent(IGameStateEventsDispatcher.OnFinishLoadingScenes eventData)
+        {
+            EnableInputs();
+        }
+        
+        private void OnStartCameraAnimationEvent(IGameStateEventsDispatcher.OnStartCameraAnimation eventData)
+        {
+            DisableInputs();
+        }
+        private void OnFinishCameraAnimationEvent(IGameStateEventsDispatcher.OnFinishCameraAnimation eventData)
         {
             EnableInputs();
         }

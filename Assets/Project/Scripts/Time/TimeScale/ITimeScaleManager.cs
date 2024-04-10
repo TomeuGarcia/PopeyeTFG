@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-using Project.Scripts.Core.Transitions;
 
 namespace Project.Scripts.Time.TimeScale
 {
@@ -8,6 +6,7 @@ namespace Project.Scripts.Time.TimeScale
         float CurrentTimeScale { get; }
         
         void SetTimeScale(float timeScale);
-        void SetPersistingTimeScale(float persistingTimeScale);
+        void ResumeTimeScalePersisting(bool always = false);
+        void PauseTimeScalePersisting(bool always = false);
     }
 }

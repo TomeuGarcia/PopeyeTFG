@@ -43,7 +43,15 @@ namespace Popeye.Modules.GameState
         {
             _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnStartUnloadingScene(sceneReference));
         }
-        
-        
+
+        public void InvokeOnStartCameraAnimation()
+        {
+            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnStartCameraAnimation());
+        }
+
+        public void InvokeOnFinishCameraAnimation()
+        {
+            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnFinishCameraAnimation());
+        }
     }
 }
