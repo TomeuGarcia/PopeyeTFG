@@ -16,7 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates
         public Transform AnchorCarryHolder { get; private set; }
         public Transform AnchorGrabToThrowHolder { get; private set; }
         public Transform PlayerPositionTransform { get; private set; }
-
+        
         
         public void Configure(IAnchorMediator anchorMediator,
             TransformMotion anchorMotion, AnchorMotionConfig anchorMotionConfig,

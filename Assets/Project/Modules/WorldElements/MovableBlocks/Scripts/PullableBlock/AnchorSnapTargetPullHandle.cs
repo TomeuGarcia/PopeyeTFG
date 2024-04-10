@@ -51,11 +51,13 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         {
             _anchorSnapTarget.OnStartBeingUsedEvent += StartCheckPulling;
             _anchorSnapTarget.OnStopBeingUsedEvent += StopCheckPulling;
+            _anchorSnapTarget.OnQuickPullUsedEvent += OnQuickPull;
         }
         private void OnDisable()
         {
             _anchorSnapTarget.OnStartBeingUsedEvent -= StartCheckPulling;
             _anchorSnapTarget.OnStopBeingUsedEvent -= StopCheckPulling;
+            _anchorSnapTarget.OnQuickPullUsedEvent -= OnQuickPull;
         }
 
         private void Update()
@@ -74,6 +76,11 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             }
         }
 
+        private void OnQuickPull()
+        {
+            PullUntilUser();
+        }
+        
         private void StartCheckPulling()
         {
             _checkPulling = true;
@@ -130,6 +137,11 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         private void Pull()
         {
             _pullableBlock.TryPullTowardsDirection(_pullDirection);
+        }
+        
+        private void PullUntilUser()
+        {
+            _pullableBlock.TryPullTowardsDirectionUntilPosition(_pullDirection, _anchorSnapTarget.GetUserPosition());
         }
         
     }

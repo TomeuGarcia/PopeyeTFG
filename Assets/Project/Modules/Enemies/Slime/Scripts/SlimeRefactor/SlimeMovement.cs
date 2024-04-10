@@ -15,7 +15,7 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private float _stopAfterHitDelay = 5;
         private bool _followPlayer = false;
-
+        [SerializeField] private float _speedAfterHit = 0.2f;
         private AEnemyMediator _mediator;
 
 
@@ -46,7 +46,7 @@ namespace Popeye.Modules.Enemies.Components
 
         private async UniTaskVoid StopBackUp()
         {
-            _navMeshAgent.speed = 0;
+            _navMeshAgent.speed = _speedAfterHit;
             await UniTask.Delay(TimeSpan.FromSeconds(_stopAfterHitDelay));
             _navMeshAgent.speed = _speed;
         }
