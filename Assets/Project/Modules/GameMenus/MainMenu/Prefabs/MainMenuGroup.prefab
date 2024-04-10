@@ -840,7 +840,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
-      objectReference: {fileID: 2550631962337341324}
+      objectReference: {fileID: 1682587714550371999}
     - target: {fileID: 5876134433920646867, guid: 033c237ae2e22ca43b3bbcd60ab04cbb,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
@@ -867,6 +867,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ace5881cde8495b97fe8966d9bd7419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7843403200390737113 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5876134433920646867, guid: 033c237ae2e22ca43b3bbcd60ab04cbb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4419549135606403594}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &5104260351016429644
@@ -996,7 +1008,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 2550631962337341324}
+      objectReference: {fileID: 7843403200390737113}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1159,7 +1171,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
-      objectReference: {fileID: 1682587714550371999}
+      objectReference: {fileID: 7843403200390737113}
     - target: {fileID: 5876134433920646867, guid: 033c237ae2e22ca43b3bbcd60ab04cbb,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
