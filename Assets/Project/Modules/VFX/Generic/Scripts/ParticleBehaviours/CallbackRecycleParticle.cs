@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 {
-    public class CallbackRecycleParticle : RecyclableObject
+    public class CallbackRecycleParticle : SceneTrackableRecyclableObject
     {
         [SerializeField] private List<ParticleSystem> _particleSystems = new();
         private int _completedParticles;
@@ -42,5 +42,10 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         }
 
         internal override void Release() { }
+        public override void OnBelongSceneWasUnloaded()
+        {
+            ForceStop();
+            Recycle();
+        }
     }
 }

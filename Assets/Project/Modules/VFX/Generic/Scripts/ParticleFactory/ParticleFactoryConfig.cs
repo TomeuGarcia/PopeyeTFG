@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Popeye.Core.Pool;
 using Popeye.Modules.VFX.Generic;
 using Popeye.ProjectHelpers;
@@ -26,6 +27,7 @@ namespace Popeye.Modules.VFX.ParticleFactories
         }
         
         [SerializeField] private ParticleTypeToRecyclable[] _particleTypeToPrefabs;
+        [SerializeField] private ParticleTypes[] _persistentParticleTypes;
 
         public Dictionary<ParticleTypes, ObjectPool> GetTypeToPoolDictionary(Transform parent)
         {
@@ -40,6 +42,11 @@ namespace Popeye.Modules.VFX.ParticleFactories
             }
 
             return typeToPool;
+        }
+
+        public bool IsScenePersistent(ParticleTypes particleType)
+        {
+            return _persistentParticleTypes.Contains(particleType);
         }
     }
 }

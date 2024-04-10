@@ -25,7 +25,8 @@ namespace Popeye.Modules.VFX.Generic
         TurretProjectileCollision,
         TurretAOE,
         EnemyBloodHitDirectional,
-        EnemyBloodDrip,
-        EnemyBloodHitSplash
+        EnemyBloodHitDrip,
+        EnemyBloodHitSplash,
+        EnemyBloodDeathDrip
     }
 }
