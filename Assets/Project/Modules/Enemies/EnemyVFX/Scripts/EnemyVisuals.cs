@@ -60,7 +60,7 @@ namespace Popeye.Modules.Enemies.VFX
         {
             _cameraShaker.PlayShake(_visualConfig.DeathShakeConfig);
             _particleFactory.Create(_visualConfig.DeathParticles, transform.position, quaternion.identity);
-            _particleFactory.Create(_visualConfig.BloodDripHitParticles, _visualCenter.position, quaternion.identity);
+            _particleFactory.Create(_visualConfig.BloodDripDeathParticles, _visualCenter.position, quaternion.identity);
             
             ParticlesHitEffect(damageHit);
         }
@@ -68,9 +68,7 @@ namespace Popeye.Modules.Enemies.VFX
         private void ParticlesHitEffect(DamageHit damageHit)
         {
             _particleFactory.Create(_visualConfig.BloodHitSplashParticles, _visualCenter.position, quaternion.identity);
-            
             _particleFactory.Create(_visualConfig.BloodDripHitParticles, _visualCenter.position, quaternion.identity);
-            //bloodDripParticles.RotateAround(bloodDripParticles.position, bloodDripParticles.up, 180.0f);
         }
 
         private async UniTaskVoid FlashHitEffect()
