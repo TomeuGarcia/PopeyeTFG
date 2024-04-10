@@ -31,11 +31,11 @@ namespace Popeye.Modules.Installers
             IFMODAudioManager audioManager, IEventSystemService eventSystemService,
             ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
-            _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); // <-- EricR971 use this for blood,
-                                                                                                                   // pass it as ISceneObjectsTracker
+            _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); 
+            
             _createdEnemiesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider);
             
-            ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent);
+            ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent, _createdParticlesRecycler);
             HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, particleFactory);
             
             serviceLocator.RegisterService<IParticleFactory>(particleFactory);

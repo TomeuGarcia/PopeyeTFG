@@ -38,17 +38,8 @@ namespace Popeye.Modules.VFX.Testing
             {
                 UpdateLight(0);
             }
-
+            
             _directionalLight.position += _cookieScrollSpeed * Time.deltaTime;
-
-            if (_directionalLight.position.x >= _cookieScale.x)
-            {
-                _directionalLight.position += Vector3.left * _cookieScale.x;
-            }
-            if (_directionalLight.position.z >= _cookieScale.z)
-            {
-                _directionalLight.position += Vector3.left * _cookieScale.z;
-            }
         }
 
         private void UpdateLight(int indexDisplacement)
