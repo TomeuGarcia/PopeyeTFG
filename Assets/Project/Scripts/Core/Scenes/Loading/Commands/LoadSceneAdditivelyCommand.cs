@@ -1,32 +1,45 @@
+using System;
 using Cysharp.Threading.Tasks;
-using Popeye.Core.Services.CommandQueue;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Popeye.Scripts.Core.Scenes
 {
-    public class LoadSceneAdditivelyCommand : ICommand
+    public class LoadSceneAdditivelyCommand : ISceneLoadCommand
     {
-        private readonly int _builtInSceneIndex;
-        
+        private readonly ISceneReference _sceneReference;
+        private readonly float _delay;
+        private readonly Action<ISceneReference> _startLoadingCallback;
+        private readonly Action<ISceneReference> _finishLoadingCallback;
+
         public bool FinishedLoading { get; private set; }
+
         
-        public LoadSceneAdditivelyCommand(string sceneName) : 
-            this(SceneManager.GetSceneByName(sceneName).buildIndex)
+        
+        public LoadSceneAdditivelyCommand(ISceneReference sceneReference, float delay, 
+            Action<ISceneReference> startLoadingCallback, Action<ISceneReference> finishLoadingCallback)
         {
-        }
-        public LoadSceneAdditivelyCommand(int builtInSceneIndex)
-        {
-            _builtInSceneIndex = builtInSceneIndex;
+            _sceneReference = sceneReference;
+            _delay = delay;
+            _startLoadingCallback = startLoadingCallback;
+            _finishLoadingCallback = finishLoadingCallback;
             FinishedLoading = false;
         }
+
         
         public async UniTask Execute()
         {
+            await UniTask.Delay(TimeSpan.FromSeconds(_delay));
+
+            _startLoadingCallback?.Invoke(_sceneReference);
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(_sceneReference.SceneName, LoadSceneMode.Additive);
+            
             await UniTask.WaitUntil(
-                () => SceneManager.LoadSceneAsync(_builtInSceneIndex, LoadSceneMode.Additive).isDone
+                () => loadOperation.isDone
             );
             
             FinishedLoading = true;
+            _finishLoadingCallback?.Invoke(_sceneReference);
         }
         
     }

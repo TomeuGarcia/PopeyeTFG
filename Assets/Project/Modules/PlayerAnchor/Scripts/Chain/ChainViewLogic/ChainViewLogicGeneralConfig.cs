@@ -70,20 +70,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public FoldingChainViewLogicConfig DashingTowardsViewLogicConfig => _dashingTowardsViewLogicConfig;
         public SpiralThrowChainViewLogicConfig DashingAwayViewLogicConfig => _dashingAwayViewLogicConfig;
 
-        
-        public void ApplyMaterialToBonePrefabs(Material material)
-        {
-            if (_boneSharedMaterial)
-            {
-                if (_bonePrefab)
-                {
-                    _bonePrefab.SetMaterial(material);
-                }
-                if (_boneEndEffectorPrefab)
-                {
-                    _boneEndEffectorPrefab.SetMaterial(material);
-                }
-            }
-        }
+
     }
 }

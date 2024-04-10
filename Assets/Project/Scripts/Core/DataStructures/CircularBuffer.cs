@@ -1,3 +1,5 @@
+using System;
+
 namespace Project.Scripts.Core.DataStructures
 {
     public class CircularBuffer<T>
@@ -6,11 +8,19 @@ namespace Project.Scripts.Core.DataStructures
         private int _tail;
         private int _head;
 
+        public T[] Elements => _elements;
         public int Length => _elements.Length;
 
         public CircularBuffer(int size)
         {
             _elements = new T[size];
+            _tail = _head = 0;
+        }
+        public CircularBuffer(T[] source)
+        {
+            _elements = new T[source.Length];
+            Array.Copy(source, _elements, source.Length);
+            
             _tail = _head = 0;
         }
 

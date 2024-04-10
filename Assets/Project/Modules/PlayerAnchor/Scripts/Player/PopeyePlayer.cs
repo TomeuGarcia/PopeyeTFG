@@ -6,6 +6,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -57,6 +58,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
+        private IPlayerInstantTranslation _playerInstantTranslation;
         private PlayerDasher _playerDasher;
         
         private PopeyeAnchor _anchor;
@@ -68,7 +70,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private ISafeGroundChecker _safeGroundChecker;
         private IOnVoidChecker _onVoidChecker;
-        
+        private bool _safeGroundCheckingIsDisabled = false;
+
         private bool _pullingAnchorFromTheVoid;
 
         private IPlayerFocusController _focusController;
@@ -86,7 +89,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
             IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
-            PlayerMovementChecker playerMovementChecker, TransformMotion playerMotion, PlayerDasher playerDasher,
+            PlayerMovementChecker playerMovementChecker, 
+            TransformMotion playerMotion, IPlayerInstantTranslation playerInstantTranslation,
+            PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower,
             IGateValueReader<IAnchorVerticalThrower> anchorVerticalThrower, 
@@ -107,6 +112,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _staminaSystem = staminaSystem;
             _playerMovementChecker = playerMovementChecker;
             _playerMotion = playerMotion;
+            _playerInstantTranslation = playerInstantTranslation;
             _playerDasher = playerDasher;
             _anchor = anchor;
             _anchorThrower = anchorThrower;
@@ -293,7 +299,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PullAnchor()
         {
-            _anchorPuller.PullAnchor();
+            _anchorPuller.PullAnchor(_pullingAnchorFromTheVoid);
+            _pullingAnchorFromTheVoid = false;
+            
             LookTowardsAnchorForDuration(0.3f).Forget();
             
             PlayerView.PlayPullAnimation(0.3f).Forget();
@@ -305,7 +313,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _anchor.SetAvailableForPickUp();
             
-            if (_pullingAnchorFromTheVoid)
+            if (_anchorPuller.IsAutoQueued)
             {
                 _pullingAnchorFromTheVoid = false;
                 SpendStamina(_playerGeneralConfig.MovesetConfig.AnchorAutoPullStaminaCost);
@@ -492,16 +500,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void RespawnToLastSafeGround()
         {
             SetEnabledFallingPhysics(true);
-            _playerController.ResetRigidbody();
+            
             Vector3 respawnPosition = _safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset;
-            _playerMotion.SetPosition(respawnPosition);
+            Quaternion respawnRotation = _playerMotion.Rotation;
+            _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
+
             _safeGroundChecker.UpdateChecking();
         }
         public void RespawnFromDeath()
         {
-            _playerController.ResetRigidbody();
-            _playerMotion.SetPosition(_respawnCheckpointChecker.Value.BestSafePosition);  
-            _playerMotion.SetRotation(Quaternion.identity);
+            Vector3 respawnPosition = _respawnCheckpointChecker.Value.BestSafePosition;
+            Quaternion respawnRotation = Quaternion.identity;
+            _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
+            
             _playerHealth.HealToMax();
             PlayerHealing.ResetHeals();
             ResetAnchor();
@@ -529,6 +540,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid)
         {
+            if (_safeGroundCheckingIsDisabled)
+            {
+                playerIsOnVoid = false;
+                anchorIsOnVoid = false;
+                return;
+            }
+            
             _safeGroundChecker.UpdateChecking(deltaTime);
             _onVoidChecker.UpdateChecking(deltaTime);
             _anchor.OnVoidChecker.UpdateChecking(deltaTime);
@@ -536,8 +554,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
             playerIsOnVoid = _onVoidChecker.IsOnVoid;
             anchorIsOnVoid = _anchor.OnVoidChecker.IsOnVoid;
         }
-        
-        
+
+        public async UniTaskVoid DisableSafeGroundCheckingForDuration(float duration)
+        {
+            _safeGroundCheckingIsDisabled = true;
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            _safeGroundCheckingIsDisabled = false;
+            _onVoidChecker.ClearState();
+        }
+
 
         private async UniTaskVoid DropTargetForEnemies(float duration)
         {

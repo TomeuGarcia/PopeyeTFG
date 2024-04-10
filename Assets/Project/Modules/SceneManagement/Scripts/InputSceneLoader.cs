@@ -1,14 +1,20 @@
 using System;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Popeye.Modules.SceneManagement.Scripts
 {
     public class InputSceneLoader : MonoBehaviour
     {
         [SerializeField] private InputSceneLoaderConfig _inputSceneLoaderConfig;
-        private InputSceneLoaderConfig.SceneLoadData _lastLoadedSceneLoadData;
-        
+
+        private ISceneLoadManager _sceneLoadManager;
+
+        private void Start()
+        {
+            _sceneLoadManager = ServiceLocator.Instance.GetService<ISceneLoadManager>();
+        }
 
         private void Update()
         {
@@ -22,7 +28,7 @@ namespace Popeye.Modules.SceneManagement.Scripts
             {
                 if (Input.GetKeyDown(sceneLoadData.LoadKeyCode))
                 {
-                    LoadScene(sceneLoadData);
+                    LoadScene(sceneLoadData.SceneLoadGroup);
                 }
             }
 
@@ -32,14 +38,14 @@ namespace Popeye.Modules.SceneManagement.Scripts
             }
         }
 
-        private void LoadScene(InputSceneLoaderConfig.SceneLoadData sceneLoadData)
+        private void LoadScene(ISceneLoadManager.SceneAdditiveLoadGroup sceneLoadGroup)
         {
-            SceneManager.LoadScene(sceneLoadData.BuiltInSceneIndex);
+            _sceneLoadManager.LoadSceneAdditively(sceneLoadGroup);
         }
 
         private void ReloadCurrentScene()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            _sceneLoadManager.ReloadCurrentScene(_inputSceneLoaderConfig.ReloadCurrentLoadOptions);
         }
         
     }
