@@ -13,14 +13,7 @@ namespace Popeye.Modules.Enemies.General
         
         [Header("ACCEPT TYPES")] 
         [SerializeField] private ObjectTypeAsset _playerType;
-
-        private void Start()
-        {
-            if (_playerType == null)
-            {
-                _playerType = ServiceLocator.Instance.GetService<IObjectTypesGameService>().PlayerObjectType;
-            }
-        }
+        
 
         private void OnTriggerEnter(Collider other)
         {

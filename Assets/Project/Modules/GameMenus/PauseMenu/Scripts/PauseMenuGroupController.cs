@@ -24,6 +24,7 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
 
         private IGameStateEventsDispatcher _gameStateEventsDispatcher;
+        private IEventSystemService _eventSystemService;
         
         private PlayerAnchorInputControls _inputUIActions;
         private InputAction _goBackInput;
@@ -35,11 +36,13 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         private void Start()
         {
             _gameStateEventsDispatcher = ServiceLocator.Instance.GetService<IGameStateEventsDispatcher>();
-
+            _eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
+            StartListeningToEvents();
+            
             _background.SetActive(true);
             
             _inputUIActions = new InputSystem.PlayerAnchorInputControls();
-            _inputUIActions.Enable();
+            EnableInputs();
             _goBackInput = _inputUIActions.UI.Back;
             _openMenuInput = _inputUIActions.UI.OpenMenu;
             
@@ -49,7 +52,20 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
         private void OnDestroy()
         {
-            _inputUIActions.Disable();
+            StopListeningToEvents();
+            DisableInputs();
+        }
+
+        private void StartListeningToEvents()
+        {
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingSceneEvent);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnFinishLoadingScenesEvent);
+        }
+        
+        private void StopListeningToEvents()
+        {
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartLoadingAdditiveScene>(OnStartLoadingSceneEvent);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnFinishLoadingScenes>(OnFinishLoadingScenesEvent);
         }
 
         private void Update()
@@ -82,7 +98,26 @@ namespace Popeye.Modules.GameMenus.PauseMenu
             
             _gameStateEventsDispatcher.InvokeOnGameResumed();
         }
-        
+
+
+        private void EnableInputs()
+        {
+            _inputUIActions.Enable();
+        }
+        private void DisableInputs()
+        {
+            _inputUIActions.Disable();
+        }
+
+
+        private void OnStartLoadingSceneEvent(IGameStateEventsDispatcher.OnStartLoadingAdditiveScene eventData)
+        {
+            DisableInputs();
+        }
+        private void OnFinishLoadingScenesEvent(IGameStateEventsDispatcher.OnFinishLoadingScenes eventData)
+        {
+            EnableInputs();
+        }
         
     }
 }

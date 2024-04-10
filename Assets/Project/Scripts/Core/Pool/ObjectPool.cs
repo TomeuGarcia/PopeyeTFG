@@ -25,7 +25,7 @@ namespace Popeye.Core.Pool
             
             for (var i = 0; i < numberOfInitialObjects; i++)
             {
-                var instance = InstantiateNewInstance(Vector3.zero, Quaternion.identity);
+                var instance = InstantiateNewInstance(_objectPoolParent.position, Quaternion.identity);
                 instance.gameObject.SetActive(false);
                 _recycledObjects.Enqueue(instance);
             }

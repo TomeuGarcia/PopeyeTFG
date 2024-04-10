@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Modules.AudioSystem;
 using Popeye.Scripts.TextUtilities;
 using Project.Scripts.TweenExtensions;
 using TMPro;
@@ -17,6 +17,7 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private TextMeshProUGUI _contentText;
 
         private TextDisplayConfig _currentDisplay;
+        private IFMODAudioManager _audioManager;
         
         private Queue<TextDisplayConfig> _queuedDisplays;
         private bool _processingQueuedDisplays;
@@ -36,6 +37,11 @@ namespace Popeye.Core.Services.InformationDisplay
             
             _isShowing = false;
             _isHiding = false;
+        }
+
+        private void Start()
+        {
+            _audioManager = ServiceLocator.ServiceLocator.Instance.GetService<IFMODAudioManager>();
         }
 
         private void OnDestroy()
@@ -85,8 +91,7 @@ namespace Popeye.Core.Services.InformationDisplay
             
             _isShowing = true;
 
-            _headerText.SetContent(_currentDisplay.Header);
-            _contentText.SetContent(_currentDisplay.Description);
+            SetTextContents(_currentDisplay);
             
             await _backgroundFadeGroup.Fade(_currentDisplay.BackgroundViewExtras.ShowFade)
                     .AsyncWaitForCompletion();
@@ -118,6 +123,17 @@ namespace Popeye.Core.Services.InformationDisplay
             _isHiding = false;
         }
 
+
+        private void SetTextContents(TextDisplayConfig displayConfig)
+        {
+            _headerText.SetContent(displayConfig.Header);
+            _headerText.color = displayConfig.TextDisplaySettings.HeaderColor;
+            
+            _contentText.SetContent(displayConfig.Description);
+            _contentText.color = displayConfig.TextDisplaySettings.DescriptionColor;
+            
+            _audioManager.PlayOneShot(displayConfig.TextDisplaySettings.Sound);
+        }
         
     }
 }

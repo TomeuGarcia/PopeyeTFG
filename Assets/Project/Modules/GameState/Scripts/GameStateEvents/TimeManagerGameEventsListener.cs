@@ -16,25 +16,41 @@ namespace Popeye.Modules.GameState
         
         public void StartListening()
         {
-            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(PauseTime);
-            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(ResumeTime);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePaused);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumed);
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnExitToMainMenu>(OnExitToMainMenu);
         }
         
         public void StopListening()
         {
-            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGamePaused>(PauseTime);
-            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGameResumed>(ResumeTime);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePaused);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnGameResumed>(OnGameResumed);
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnExitToMainMenu>(OnExitToMainMenu);
         }
 
+        
+        private void OnGamePaused(IGameStateEventsDispatcher.OnGamePaused eventData)
+        {
+            PauseTime();
+        }
+        private void OnGameResumed(IGameStateEventsDispatcher.OnGameResumed eventData)
+        {
+            ResumeTime();
+        }
+        private void OnExitToMainMenu(IGameStateEventsDispatcher.OnExitToMainMenu eventData)
+        {
+            ResumeTime();
+        }
 
-        private void PauseTime(IGameStateEventsDispatcher.OnGamePaused eventData)
+        private void PauseTime()
         {
             _timeScaleManager.SetPersistingTimeScale(0);
         }
-        private void ResumeTime(IGameStateEventsDispatcher.OnGameResumed eventData)
+        private void ResumeTime()
         {
             _timeScaleManager.SetPersistingTimeScale(1);
         }
+        
         
         
     }

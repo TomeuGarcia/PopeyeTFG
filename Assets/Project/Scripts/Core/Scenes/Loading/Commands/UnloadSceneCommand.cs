@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.CommandQueue;
 using UnityEngine.SceneManagement;
@@ -6,23 +7,21 @@ namespace Popeye.Scripts.Core.Scenes
 {
     public class UnloadSceneCommand : ICommand
     {
-        private readonly int _builtInSceneIndex;
+        private readonly ISceneReference _sceneReference;        
+        private readonly Action<ISceneReference> _startUnloadingCallback;
         
-        public UnloadSceneCommand(string sceneName)
-        : this(SceneManager.GetSceneByName(sceneName).buildIndex)
+        public UnloadSceneCommand(ISceneReference sceneReference, Action<ISceneReference> startUnloadingCallback)
         {
+            _sceneReference = sceneReference;
+            _startUnloadingCallback = startUnloadingCallback;
         }
         
-        public UnloadSceneCommand(int builtInSceneIndex)
-        {
-            _builtInSceneIndex = builtInSceneIndex;
-        }
+
         
         public async UniTask Execute()
         {
-            await UniTask.WaitUntil(
-                () => SceneManager.UnloadSceneAsync(_builtInSceneIndex).isDone
-            );
+            _startUnloadingCallback?.Invoke(_sceneReference);
+            SceneManager.UnloadSceneAsync(_sceneReference.SceneName);
         }
         
     }

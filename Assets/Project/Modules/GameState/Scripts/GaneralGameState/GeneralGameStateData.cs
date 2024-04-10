@@ -16,7 +16,7 @@ namespace Popeye.Modules.GameState.GaneralGameState
         [SerializeField] private SceneReferenceAsset _tutorialScene;
         [Expandable] [SerializeField] private PlayerUnlockableAbilitiesConfig _unlockableAbilitiesConfig;
 
-        public bool IsTutorial => _tutorialScene.BuiltInSceneIndex == SceneManager.GetActiveScene().buildIndex;
+        public bool IsTutorial => _tutorialScene.SceneName == SceneManager.GetActiveScene().name;
         public PlayerUnlockableAbilitiesConfig PlayerUnlockableAbilitiesConfig => _unlockableAbilitiesConfig;
 
 
