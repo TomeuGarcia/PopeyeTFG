@@ -7,16 +7,16 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
     [System.Serializable]
     public class WorldInteractorsAndRelayListener
     {
-        private enum AwaitMode
+        private enum SequenceAwaitMode
         {
-            AwaitAll,
-            AwaitOnlyFirst
+            PlayAndAwaitAllSequentially,
+            PlayAllAtOnceButAwaitOnlyFirst
         }
         
         
         [SerializeField] private bool _notifyListenerOnlyOnce = true;
         [SerializeField] private InterfaceReference<IWorldInteractorRelayListener, MonoBehaviour> _listener;
-        [SerializeField] private AwaitMode _awaitMode = AwaitMode.AwaitOnlyFirst;
+        [SerializeField] private SequenceAwaitMode _awaitMode = SequenceAwaitMode.PlayAllAtOnceButAwaitOnlyFirst;
         [SerializeField] private AWorldInteractor[] _worldInteractors;
         private IWorldInteractorRelayListener Listener => _listener.Value;
         private bool IsFirstTime => _relayedTimesCounter == 0;
@@ -24,6 +24,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
 
         private bool NotifyListener => !_notifyListenerOnlyOnce || (IsFirstTime && _notifyListenerOnlyOnce);
 
+        
         public async UniTask RelayEnterActivatedState()
         {
             if (NotifyListener)
@@ -31,11 +32,11 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
                 await Listener.OnActivateRelayStarted();
             }
             
-            if (_awaitMode == AwaitMode.AwaitAll)
+            if (_awaitMode == SequenceAwaitMode.PlayAndAwaitAllSequentially)
             {
                 await AwaitAllRelayEnterActivatedState();
             }
-            else if (_awaitMode == AwaitMode.AwaitOnlyFirst)
+            else if (_awaitMode == SequenceAwaitMode.PlayAllAtOnceButAwaitOnlyFirst)
             {
                 await AwaitOnlyFirstRelayEnterActivatedState();
             }
