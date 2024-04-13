@@ -27,15 +27,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private QuadraticBezierCurve _pointsCurve;
         
         
-        public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
-            ObstacleProbingConfig obstacleProbingConfig, AnchorPullConfig anchorPullConfig,
+        public void Configure(
+            ObstacleProbingConfig obstacleProbingConfig, 
+            AnchorPullConfig anchorPullConfig,
             int numberOfPoints)
         {
-            _trajectoryEndSpot = trajectoryEndSpot;
             _obstacleProbingConfig = obstacleProbingConfig;
             _anchorPullConfig = anchorPullConfig;
-
-            _trajectoryEndSpot.Hide();
             
             _straightLineTrajectoryPoints = new Vector3[2];
             _curvedTrajectoryPoints = new Vector3[numberOfPoints];
@@ -44,22 +42,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _pointsCurve = new QuadraticBezierCurve();
         }
         
-        
-        public void ShowTrajectoryEndSpot()
-        {
-            _trajectoryEndSpot.Show();
-        }
-        public void HideTrajectoryEndSpot()
-        {
-            _trajectoryEndSpot.Hide();
-        }
-
-
-
-        public void MakeTrajectoryEndSpotMatchSpot(Vector3 position, Vector3 lookDirection, bool endsOnFloor)
-        {
-            _trajectoryEndSpot.MatchSpot(position, lookDirection, endsOnFloor);
-        }
         
         public Vector3[] ComputeCurvedTrajectory(Vector3 startPosition, Vector3 goalPosition, int numberOfSteps,
             out float trajectoryDistance)

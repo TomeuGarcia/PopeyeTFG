@@ -78,7 +78,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             if (_blackboard.MovesetInputsController.Aim_HeldPressed())
             {
-                ChargeThrow(deltaTime);
+                UpdateChargingThrow();
             }
             
             
@@ -91,9 +91,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.StartChargingThrow();
         }
         
-        private void ChargeThrow(float deltaTime)
+        private void UpdateChargingThrow()
         {
-            _blackboard.PlayerMediator.ChargeThrow(deltaTime);
+            _blackboard.PlayerMediator.UpdateChargingThrow();
         }
 
         private void StopChargingThrow()

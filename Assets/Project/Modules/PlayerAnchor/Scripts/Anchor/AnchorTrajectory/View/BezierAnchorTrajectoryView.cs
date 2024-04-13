@@ -40,7 +40,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             AnchorTrajectoryViewConfig config, int linePoints)
         {
             _config = config;
-            
+
             InitLineRenderer(firstLine);
             _firstLineViewData = new LineViewData(firstLine, linePoints);
             
@@ -66,7 +66,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _secondLineViewData.Hide();
         }
 
-        public void DrawTrajectory(Vector3[] trajectoryPoints, bool trajectoryHitsObstacle, int lastIndexBeforeCollision)
+        public void DrawTrajectory(Vector3[] trajectoryPoints, bool trajectoryHitsObstacle, int lastIndexBeforeCollision, 
+            bool endsOnVoid)
         {
             if (trajectoryHitsObstacle && lastIndexBeforeCollision > -1)
             {

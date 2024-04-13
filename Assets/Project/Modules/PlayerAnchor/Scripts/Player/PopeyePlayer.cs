@@ -265,25 +265,23 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void StartChargingThrow()
         {
-            _anchorThrower.ResetThrowForce();
+            _anchorThrower.StartThrow();
             _anchor.SetGrabbedToThrow();
-            _anchor.OnStartChargingThrow();
         }
 
-        public void ChargeThrow(float deltaTime)
+        public void UpdateChargingThrow()
         {
-            _anchorThrower.IncrementThrowForce(deltaTime);
-            _anchor.OnKeepChargingThrow();
+            _anchorThrower.UpdateThrowTrajectory();
         }
 
         public void StopChargingThrow()
         {
-            _anchor.OnStopChargingThrow();
+            _anchorThrower.FinishThrow();
         }
 
         public void CancelChargingThrow()
         {
-            _anchorThrower.CancelChargingThrow();
+            _anchorThrower.CancelThrow();
             _anchor.SetCarried();
         }
 

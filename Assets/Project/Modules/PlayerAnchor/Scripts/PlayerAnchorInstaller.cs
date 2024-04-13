@@ -194,7 +194,7 @@ namespace Popeye.Modules.PlayerAnchor
             anchorMotion.Configure(_anchor.PositionTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, throwDistanceComputer,
                 _anchorGeneralConfig.ThrowConfig, anchorTrajectorySnapController, anchorTrajectoryView,
-                anchorThrowController);
+                anchorThrowController, _anchorTrajectoryEndSpot);
             anchorVerticalAttackThrower.Configure(_anchor, anchorTrajectoryMaker, 
                 _anchorGeneralConfig.VerticalAttackThrowConfig, anchorThrowController,
                 _playerGeneralConfig.AbilityActionChannels.DashDroppingAnchorAttackDispatcher);
@@ -206,7 +206,7 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerGeneralConfig.AbilityActionChannels.AnchorPullDispatcher);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
-            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
+            anchorTrajectoryMaker.Configure(_obstacleProbingConfig, 
                 _anchorGeneralConfig.PullConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);

@@ -35,7 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void PickUpAnchor();
         void StartChargingThrow();
-        void ChargeThrow(float deltaTime);
+        void UpdateChargingThrow();
         void StopChargingThrow();
         void CancelChargingThrow();
         void ThrowAnchor();
