@@ -60,9 +60,10 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             _anchorSnapTarget.OnQuickPullUsedEvent -= OnQuickPull;
         }
 
+        
         private void Update()
         {
-            UpdateCheckPulling();
+            //UpdateCheckStepPulling();
         }
         
         public void Configure(IPullableBlock pullableBlock)
@@ -78,7 +79,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
 
         private void OnQuickPull()
         {
-            PullUntilUser();
+            PullUntilEnd();
         }
         
         private void StartCheckPulling()
@@ -93,7 +94,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             _checkPulling = false;
         }
 
-        private void UpdateCheckPulling()
+        private void UpdateCheckStepPulling()
         {
             if (CanPull())
             {
@@ -139,7 +140,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             _pullableBlock.TryPullTowardsDirection(_pullDirection);
         }
         
-        private void PullUntilUser()
+        private void PullUntilEnd()
         {
             _pullableBlock.TryPullTowardsDirectionUntilEnd(_pullDirection);
         }

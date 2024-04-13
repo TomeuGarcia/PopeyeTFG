@@ -16,10 +16,12 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             public Vector2 Direction { get; private set; }
             public Vector2 MoveDisplacement { get; private set; }
             public Vector3 MoveWorldDisplacement { get; private set; }
+            public float MoveAmount { get; private set; }
             
             public MovementStep(Vector2 direction, float moveAmount)
             {
                 Direction = direction;
+                MoveAmount = moveAmount;
                 MoveDisplacement = Direction * moveAmount;
                 MoveWorldDisplacement = new Vector3(MoveDisplacement.x, 0, MoveDisplacement.y);
             }
@@ -93,8 +95,11 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             {
                 QueueMoveWithMoveAmount(direction, endMoveAmount);
             }
-            
-            // else: move is not valid, should queue not valid move to play CantMove animation
+            else
+            {
+                // else: move is not valid, queue not valid move
+                QueueMove(direction);
+            }
         }
         
 
@@ -145,11 +150,16 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             
             Vector3 endPosition = transform.position + movementStep.MoveWorldDisplacement;
 
-            await transform.DOMove(endPosition, MoveDuration)
+            await transform.DOMove(endPosition, ComputeMoveDuration(movementStep))
                 .SetEase(MoveEase)
                 .AsyncWaitForCompletion();
 
             IsMoving = false;
+        }
+
+        private float ComputeMoveDuration(MovementStep movementStep)
+        {
+            return (MoveDuration / MoveAmount) * movementStep.MoveAmount;
         }
         
         private void OnMoved(MovementStep movementStep)
