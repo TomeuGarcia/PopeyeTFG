@@ -97,8 +97,7 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             }
             else
             {
-                // else: move is not valid, queue not valid move
-                QueueMove(direction);
+                QueueMove(direction); // Queue normal Move to play NotValidMove
             }
         }
         

@@ -61,10 +61,12 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         }
 
         
+        /* // Uncomment to allow Stepped Pulling
         private void Update()
         {
-            //UpdateCheckStepPulling();
+            UpdateCheckStepPulling();
         }
+        */
         
         public void Configure(IPullableBlock pullableBlock)
         {
