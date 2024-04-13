@@ -10,11 +10,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly PlayerAudioFMODConfig _config;
 
 
-        public PlayerAudioFMOD(GameObject playerGameObject, IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config)
+        public PlayerAudioFMOD(GameObject playerGameObject,
+            IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config)
         {
             _playerGameObject = playerGameObject;
             _fmodAudioManager = fmodAudioManager;
             _config = config;
+        }
+        
+        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
+        {
+            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _playerGameObject);
         }
         
         public void StartPlayingStepsSounds()
@@ -42,10 +48,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayOneShotAttached(_config.TakeDamage);
         }
 
-        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
+        
+        public void OnLeftFootstep()
         {
-            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _playerGameObject);
+            PlayOneShotAttached(_config.LeftFootstepSound);
         }
+
+        public void OnRightFootstep()
+        {
+            PlayOneShotAttached(_config.RightFootstepSound);
+        }
+        
+        
     }
 }
 
