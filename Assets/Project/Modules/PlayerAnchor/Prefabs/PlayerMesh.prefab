@@ -1269,7 +1269,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6020230742101208403}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce6e4d19409536a4db66964da8c0dca8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4662552018064177531}
   m_SourcePrefab: {fileID: 100100000, guid: ce6e4d19409536a4db66964da8c0dca8, type: 3}
 --- !u!137 &894941082672795941 stripped
 SkinnedMeshRenderer:
@@ -1325,3 +1329,21 @@ SkinnedMeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 8275857432642969217}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &9086198809527641040 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ce6e4d19409536a4db66964da8c0dca8,
+    type: 3}
+  m_PrefabInstance: {fileID: 8275857432642969217}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4662552018064177531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9086198809527641040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567651f8ff04410cbfe5283bb55e919a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
