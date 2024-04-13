@@ -1,6 +1,6 @@
 using System;
 using AYellowpaper;
-using DG.Tweening;
+using NaughtyAttributes;
 using Popeye.Modules.WorldElements.MovableBlocks.GridMovement;
 using UnityEngine;
 
@@ -9,9 +9,15 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
     [RequireComponent(typeof(GridMovementActorBehaviour))]
     public class PullableBlock : MonoBehaviour, IPullableBlock
     {
-        private GridMovementActorBehaviour _gridMovementActorBehaviour;
+        [Header("HANDLES")]
         [SerializeField] private InterfaceReference<IPullableBlockPullHandle, MonoBehaviour>[] _handles;
+        private GridMovementActorBehaviour _gridMovementActorBehaviour;
+
+
+        [Header("CONFIG")] 
+        [Expandable] [SerializeField] private PullableBlockConfig _config;
         private PullableBlockView _pullableBlockView;
+
         
         public bool IsMoving => _gridMovementActorBehaviour.IsMoving;
         
@@ -24,7 +30,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
                 _handles[i].Value.Configure(this);
             }
 
-            _pullableBlockView = new PullableBlockView();
+            _pullableBlockView = new PullableBlockView(_config.ViewConfig);
         }
 
         private void OnEnable()
@@ -45,9 +51,9 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             _gridMovementActorBehaviour.QueueMove(pullDirection);
         }
 
-        public void TryPullTowardsDirectionUntilPosition(Vector2 pullDirection, Vector3 position)
+        public void TryPullTowardsDirectionUntilEnd(Vector2 pullDirection)
         {
-            _gridMovementActorBehaviour.QueueMoveUntilPosition(pullDirection, position);
+            _gridMovementActorBehaviour.QueueMoveUntilEnd(pullDirection);
         }
 
         private void OnMoveStarted(GridMovementActorBehaviour.MovementStep movementStep)
@@ -66,6 +72,5 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             }
         }
 
-        
     }
 }

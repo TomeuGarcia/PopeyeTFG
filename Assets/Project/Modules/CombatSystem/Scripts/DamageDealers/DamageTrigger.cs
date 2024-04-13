@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Popeye.Modules.PlayerAnchor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.CombatSystem
 {

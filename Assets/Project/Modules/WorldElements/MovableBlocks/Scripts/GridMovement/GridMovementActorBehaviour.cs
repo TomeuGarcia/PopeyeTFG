@@ -16,10 +16,12 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             public Vector2 Direction { get; private set; }
             public Vector2 MoveDisplacement { get; private set; }
             public Vector3 MoveWorldDisplacement { get; private set; }
+            public float MoveAmount { get; private set; }
             
             public MovementStep(Vector2 direction, float moveAmount)
             {
                 Direction = direction;
+                MoveAmount = moveAmount;
                 MoveDisplacement = Direction * moveAmount;
                 MoveWorldDisplacement = new Vector3(MoveDisplacement.x, 0, MoveDisplacement.y);
             }
@@ -86,18 +88,16 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             QueueMoveWithMoveAmount(direction, MoveAmount);
         }
         
-        public void QueueMoveUntilPosition(Vector2 direction, Vector3 position)
+        public void QueueMoveUntilEnd(Vector2 direction)
         {
-            //Vector3 lastPosition = transform.position;
-            //float moveAmount = 
-            for (int i = 5; i > 1; --i)
+            if (_associatedMovementArea.ComputeMaxDisplacement(this, direction, 
+                    MoveAmount, out float endMoveAmount))
             {
-                MovementStep temp = new MovementStep(direction, MoveAmount * i);
-                if (CanMove(temp))
-                {
-                    QueueMoveWithMoveAmount(direction, MoveAmount * i);
-                    break;
-                }
+                QueueMoveWithMoveAmount(direction, endMoveAmount);
+            }
+            else
+            {
+                QueueMove(direction); // Queue normal Move to play NotValidMove
             }
         }
         
@@ -149,11 +149,16 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
             
             Vector3 endPosition = transform.position + movementStep.MoveWorldDisplacement;
 
-            await transform.DOMove(endPosition, MoveDuration)
+            await transform.DOMove(endPosition, ComputeMoveDuration(movementStep))
                 .SetEase(MoveEase)
                 .AsyncWaitForCompletion();
 
             IsMoving = false;
+        }
+
+        private float ComputeMoveDuration(MovementStep movementStep)
+        {
+            return (MoveDuration / MoveAmount) * movementStep.MoveAmount;
         }
         
         private void OnMoved(MovementStep movementStep)

@@ -97,7 +97,48 @@ namespace Popeye.Modules.WorldElements.MovableBlocks.GridMovement
 
             _gridMovementActorReferences = _references.ToArray();
         }
-        
+
+
+        public bool ComputeMaxDisplacement(IGridMovementActor gridMovementActor, Vector2 movementDirection, 
+            float moveAmountStepDistance, out float endMoveAmount)
+        {
+            Vector2 moveAmountStep = movementDirection * moveAmountStepDistance;
+            
+            if (!CanMoveAfterDisplacement(gridMovementActor, moveAmountStep))
+            {
+                endMoveAmount = 0;
+                return false;
+            }
+
+            int moveTimes = 0;
+            Vector2 movementDisplacement = moveAmountStep;
+            do
+            {
+                movementDisplacement += moveAmountStep;
+                ++moveTimes;
+            } 
+            while (CanMoveAfterDisplacement(gridMovementActor, movementDisplacement));
+
+            
+            endMoveAmount = moveAmountStepDistance * moveTimes;
+            
+            return true;
+        }
+
+        private RectangularArea GetGridMovementActorBelongArea(IGridMovementActor gridMovementActor)
+        {
+            for (int i = 0; i < _areaWrappers.Count; ++i)
+            {
+                RectangularArea rectangularArea = _areaWrappers[i].RectangularArea;
+                if (rectangularArea.AreaContainsPoint(gridMovementActor.AreaBounds.center))
+                {
+                    return rectangularArea;
+                }
+                    
+            }
+
+            return null;
+        }
         
         public bool CanMoveAfterDisplacement(IGridMovementActor gridMovementActor, Vector2 movementDisplacement)
         {
