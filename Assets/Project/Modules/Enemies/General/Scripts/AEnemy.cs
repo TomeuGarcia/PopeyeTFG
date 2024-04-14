@@ -3,19 +3,23 @@ using Popeye.Core.Pool;
 using Popeye.IDSystem;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
 {
-    public abstract class AEnemy : RecyclableObject
+    public abstract class AEnemy : SceneTrackableRecyclableObject
     {
         protected Transform _attackTarget;
         public Action<AEnemy> OnDeathComplete;
         protected IHazardFactory _hazardFactory;
+        private ISceneReference _belongingScene;
         
         [Header("GENERIC")]
         [SerializeField] private EnemyID _id;
         public ID Id => _id;
+        
+        
         
         public abstract void SetPatrollingWaypoints(Transform[] waypoints);
         public virtual void AwakeInit(Transform attackTarget)
@@ -39,6 +43,11 @@ namespace Popeye.Modules.Enemies
         }
 
         public abstract void DieFromOrder();
+        
 
+        public override void OnBelongSceneWasUnloaded()
+        {
+            DieFromOrder();
+        }
     }
 }

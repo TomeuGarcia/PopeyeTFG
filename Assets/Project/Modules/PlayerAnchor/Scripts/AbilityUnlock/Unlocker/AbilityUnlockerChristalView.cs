@@ -25,13 +25,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [Header("CONFIG")]
         [Expandable] [SerializeField] private AbilityUnlockerChristalViewConfig _viewConfig;
 
-
+        private IAbilityUnlockerChristalAudio _audio;
+        
         private bool _playIdleAnimation;
         private Transform _coreTargetTransform;
 
-        private void Start()
+        public void Configure(IGameReferences gameReferences, IAbilityUnlockerChristalAudio audio)
         {
-            _coreTargetTransform = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerPositionTransform();
+            _coreTargetTransform = gameReferences.GetPlayerPositionTransform();
+            _audio = audio;
                         
             ResetViewState();
         }
@@ -62,10 +64,12 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.UnlockDelay));
             
+            _audio.PlayHitSound(gameObject);
             _christalTransform.PunchScale(_viewConfig.UnlockScalePunch);
             await _christalTransform.PunchRotation(_viewConfig.UnlockRotationPunch)
                 .AsyncWaitForCompletion();
 
+            _audio.PlayBreakSound(gameObject);
             _viewConfig.ExplodingChainSharedMaterial.SetFloat(_viewConfig.ExplodeStartTimePropertyId, Time.time);
             await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.ExplodeDelay));
             
@@ -104,6 +108,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 await UniTask.Yield();
             }
             
+            _audio.PlayCollectedSound(gameObject);
             _coreSphere.SetActive(false);
             _coreContactPS.Play();
 

@@ -58,21 +58,17 @@ namespace Popeye.Modules.Enemies.VFX
 
         public virtual void PlayDeathEffects(DamageHit damageHit)
         {
-            ParticlesHitEffect(damageHit);
-
             _cameraShaker.PlayShake(_visualConfig.DeathShakeConfig);
             _particleFactory.Create(_visualConfig.DeathParticles, transform.position, quaternion.identity);
+            _particleFactory.Create(_visualConfig.BloodDripDeathParticles, _visualCenter.position, quaternion.identity);
+            
+            ParticlesHitEffect(damageHit);
         }
 
         private void ParticlesHitEffect(DamageHit damageHit)
         {
-            Transform player = ServiceLocator.Instance.GetService<IGameReferences>().GetPlayerTargetForEnemies();
-            
             _particleFactory.Create(_visualConfig.BloodHitSplashParticles, _visualCenter.position, quaternion.identity);
-            
-            Transform bloodDripParticles = _particleFactory.Create(_visualConfig.BloodDripParticles, _visualCenter.position, quaternion.identity);
-            bloodDripParticles.LookAt(player);
-            bloodDripParticles.RotateAround(bloodDripParticles.position, bloodDripParticles.up, 180.0f);
+            _particleFactory.Create(_visualConfig.BloodDripHitParticles, _visualCenter.position, quaternion.identity);
         }
 
         private async UniTaskVoid FlashHitEffect()

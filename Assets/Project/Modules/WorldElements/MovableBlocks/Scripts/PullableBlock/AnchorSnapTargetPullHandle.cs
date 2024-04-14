@@ -51,17 +51,22 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         {
             _anchorSnapTarget.OnStartBeingUsedEvent += StartCheckPulling;
             _anchorSnapTarget.OnStopBeingUsedEvent += StopCheckPulling;
+            _anchorSnapTarget.OnQuickPullUsedEvent += OnQuickPull;
         }
         private void OnDisable()
         {
             _anchorSnapTarget.OnStartBeingUsedEvent -= StartCheckPulling;
             _anchorSnapTarget.OnStopBeingUsedEvent -= StopCheckPulling;
+            _anchorSnapTarget.OnQuickPullUsedEvent -= OnQuickPull;
         }
 
+        
+        /* // Uncomment to allow Stepped Pulling
         private void Update()
         {
-            UpdateCheckPulling();
+            UpdateCheckStepPulling();
         }
+        */
         
         public void Configure(IPullableBlock pullableBlock)
         {
@@ -74,6 +79,11 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             }
         }
 
+        private void OnQuickPull()
+        {
+            PullUntilEnd();
+        }
+        
         private void StartCheckPulling()
         {
             _checkPulling = true;
@@ -86,7 +96,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
             _checkPulling = false;
         }
 
-        private void UpdateCheckPulling()
+        private void UpdateCheckStepPulling()
         {
             if (CanPull())
             {
@@ -130,6 +140,11 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
         private void Pull()
         {
             _pullableBlock.TryPullTowardsDirection(_pullDirection);
+        }
+        
+        private void PullUntilEnd()
+        {
+            _pullableBlock.TryPullTowardsDirectionUntilEnd(_pullDirection);
         }
         
     }

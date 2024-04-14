@@ -1,4 +1,3 @@
-using Popeye.Modules.WorldElements.MovableBlocks.GridMovement;
 using UnityEngine;
 
 namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
@@ -7,6 +6,7 @@ namespace Project.Modules.WorldElements.MovableBlocks.PullableBlocks
     {
         bool IsMoving { get; }
         void TryPullTowardsDirection(Vector2 pullDirection);
+        void TryPullTowardsDirectionUntilEnd(Vector2 pullDirection);
 
     }
 }

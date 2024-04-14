@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Scripts.Core.Scenes.ObjectTracking;
+using Popeye.Scripts.Core.Scenes.PlayedScene;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.EnemyFactories
@@ -12,8 +15,11 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         [SerializeField] private EnemyFactoryInstallerConfiguration _installerConfiguration;
         [SerializeField] private SpecificCaseEnemyHinterFactoryConfig _enemyHinterFactoryConfig;
         
-
-        public void Install(ServiceLocator serviceLocator, IFMODAudioManager audioManager)
+        public void Install(
+            ServiceLocator serviceLocator, 
+            IFMODAudioManager audioManager, 
+            ISceneObjectsTracker createdEnemiesRecycler
+            )
         {
             var hazardsFactory = serviceLocator.GetService<IHazardFactory>();
             Dictionary<EnemyID, EnemyFactoryInstallerConfiguration.EnemyMindPrefabSpawnData> enemyIdToPrefab 
@@ -41,7 +47,8 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             }
 
 
-            MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new MindCreatorsEnemyFactory(enemyIdToMindFactory);
+            MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new (enemyIdToMindFactory, createdEnemiesRecycler);
+            
             serviceLocator.RegisterService<IEnemyFactory>(mindCreatorsEnemyFactory);
 
 
