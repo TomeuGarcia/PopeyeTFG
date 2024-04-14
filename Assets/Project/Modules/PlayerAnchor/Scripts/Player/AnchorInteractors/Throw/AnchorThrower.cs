@@ -116,8 +116,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _anchor.SetThrown(AnchorThrowResult).Forget();
             _anchorThrowController.DoThrowAnchor(AnchorThrowResult).Forget();
-            
-            _trajectoryView.Hide();
         }
         
 
@@ -125,6 +123,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _throwDistanceComputer.ClearState();
             _trajectoryEndSpot.Show();
+            _trajectoryView.Show();
         }
         public void FinishThrow()
         {

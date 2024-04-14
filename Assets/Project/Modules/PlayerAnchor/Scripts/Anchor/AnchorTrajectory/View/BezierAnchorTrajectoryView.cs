@@ -30,9 +30,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 _lineRenderer.SetPositions(_points);
             }
 
+            public void Show()
+            {
+                _lineRenderer.enabled = true;
+            }
             public void Hide()
             {
-                _lineRenderer.positionCount = 0;
+                _lineRenderer.enabled = false;
             }
         }
 
@@ -48,6 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _secondLineViewData = new LineViewData(secondLine, linePoints);
             
             _curve = new QuadraticBezierCurve();
+            Hide();
         }
 
         private void InitLineRenderer(LineRenderer line)
@@ -58,6 +63,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             line.alignment = _config.Alignment;
             line.textureMode = _config.TextureMode;
             line.shadowCastingMode = ShadowCastingMode.Off;
+        }
+
+        public void Show()
+        {
+            _firstLineViewData.Show();
+            _secondLineViewData.Show();
         }
 
         public void Hide()

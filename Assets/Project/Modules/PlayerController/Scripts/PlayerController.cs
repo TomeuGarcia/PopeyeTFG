@@ -36,9 +36,10 @@ namespace Popeye.Modules.PlayerController
 
 
         [Header("LOOK")] 
-        [SerializeField] public bool useLookInput = true;
+        [SerializeField] public bool _startUsingLookInput = true;
         [SerializeField] private Transform _lookTransform;
         [SerializeField] private OverTimeLookRotationUpdater.Configuration _lookOverTimeConfig;
+        public bool UseLookInput { get; set; }
         
         
         public Vector3 LookDirection => _lookTransform.forward;
@@ -160,23 +161,28 @@ namespace Popeye.Modules.PlayerController
             _ledgeDetectionController = new LedgeDetectionController(_ledgeDetectionConfig);
 
             CanRotate = true;
+            UseLookInput = _startUsingLookInput;
 
             _instantLookRotationUpdater = new InstantLookRotationUpdater(_lookTransform);
             _overTimeLookRotationUpdater = new OverTimeLookRotationUpdater(_lookTransform, _lookOverTimeConfig);
             SetOverTimeRotationMode();
         }
 
-        private void Update()
+        public void DoUpdate()
         {
             _movementInput = MovementInputHandler.GetMovementInput();
 
-            _lookInput = useLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
             _movementDirection = _movementInput;
             
             _desiredVelocity = _movementDirection * _maxSpeed;
+            
+            if (CanRotate)
+            {
+                UpdateLookTransform();
+            }
         }
         
-        private void FixedUpdate()
+        public void DoFixedUpdate()
         {
             if (_checkLedges && _movementInput.sqrMagnitude > 0.01f)
             {
@@ -197,20 +203,13 @@ namespace Popeye.Modules.PlayerController
 
             ClearState();
         }
-
+        
+        
         private void OnDrawGizmos()
         {
             _ledgeDetectionController?.DrawGizmos();
         }
-
-        private void LateUpdate()
-        {
-            if (CanRotate)
-            {
-                UpdateLookTransform();
-            }
-        }
-
+        
         private void OnCollisionEnter(Collision collision)
         {
             EvaluateCollision(collision);
@@ -382,8 +381,10 @@ namespace Popeye.Modules.PlayerController
         }
 
 
-        private void UpdateLookTransform()
+        public void UpdateLookTransform()
         {
+            _lookInput = UseLookInput ? MovementInputHandler.GetLookInput() : Vector3.zero;
+
             bool usingLookInput = _lookInput.sqrMagnitude > 0.1f;
             Vector3 lookDirection = usingLookInput ? _lookInput : _movementInput;
 

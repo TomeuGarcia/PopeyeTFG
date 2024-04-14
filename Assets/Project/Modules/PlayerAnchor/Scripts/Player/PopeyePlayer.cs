@@ -148,10 +148,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void Update()
         {
+            _playerController.DoUpdate();
             _eventsDispatcher.Update(Time.deltaTime, Position);
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
+        }
+
+        private void FixedUpdate()
+        {
+            _playerController.DoFixedUpdate();
         }
 
         private void ResetAnchor()
@@ -167,7 +173,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void SetCanUseRotateInput(bool canUseRotateInput)
         {
-            _playerController.useLookInput = canUseRotateInput;
+            _playerController.UseLookInput = canUseRotateInput;
+            if (canUseRotateInput)
+            {
+                _playerController.UpdateLookTransform();
+            }
         }
 
         public void SetInstantRotation(bool instantRotation)
