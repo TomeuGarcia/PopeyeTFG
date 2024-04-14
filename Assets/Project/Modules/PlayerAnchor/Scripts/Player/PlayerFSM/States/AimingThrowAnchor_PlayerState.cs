@@ -28,8 +28,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
 
             _blackboard.PlayerMediator.PlayerView.PlayEnterAimingAnimation();
-            
+
             StartChargingThrow();
+            UpdateChargingThrow();
         }
 
         public override void Exit()
