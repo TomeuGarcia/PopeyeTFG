@@ -1,17 +1,20 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.GameState;
 using Popeye.Scripts.ValueGating;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Popeye.Modules.PlayerController.Inputs
 {
-    public class PlayerAnchorMovesetInputsController
+    public class PlayerAnchorMovesetInputsController : IInputsUpdater
     {
         private readonly InputSystem.PlayerAnchorInputControls _playerInputControls;
 
         private readonly InputAction _aim;
         private readonly InputAction _cancelAim;
         private readonly InputAction _throw;
+        private readonly IInputBuffer[] _inputBuffers;
+        private readonly InputPressedBuffer _throwInputBuffer;
         
         private readonly InputAction _pickUp;
         
@@ -51,6 +54,12 @@ namespace Popeye.Modules.PlayerController.Inputs
             _cancelAim = _playerInputControls.Land.CancelAim;
             
             _throw = _playerInputControls.Land.Throw;
+            _throwInputBuffer = new InputPressedBuffer(_playerInputControls.Land.Throw, 0.2f);
+
+            _inputBuffers = new[]
+            {
+                _throwInputBuffer
+            };
             
             _pickUp = _playerInputControls.Land.PickUp;
 
@@ -73,6 +82,14 @@ namespace Popeye.Modules.PlayerController.Inputs
             DisableInputs();
         }
 
+        public void Update(float deltaTime)
+        {
+            foreach (IInputBuffer inputBuffer in _inputBuffers)
+            {
+                inputBuffer.Update(deltaTime);
+            }
+        }
+        
         private void StartListeningToGameEvents()
         {
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnGamePaused>(OnGamePausedEvent);
@@ -151,7 +168,8 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         public bool Throw_Pressed()
         {
-            return _throw.WasPressedThisFrame();
+            return _throwInputBuffer.WasPressed();  ////////////////////////////////////
+            return _throw.WasPressedThisFrame(); 
         }
         public bool Throw_HeldPressed()
         {

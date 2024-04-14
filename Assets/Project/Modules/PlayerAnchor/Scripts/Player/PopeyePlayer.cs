@@ -12,6 +12,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Scripts.ValueGating;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
@@ -44,6 +45,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public Transform AnchorCarryHolder => _anchorCarryHolder;
         public Transform AnchorGrabToThrowHolder => _anchorGrabToThrowHolder;
+
+        private IInputsUpdater _playerInputsUpdater;
         
         private PlayerFSM _stateMachine;
         private PlayerController.PlayerController _playerController;
@@ -85,7 +88,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
         
 
-        public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
+        public void Configure(
+            IInputsUpdater playerInputsUpdater,
+            PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
             IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
@@ -102,6 +107,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IPlayerFocusController focusController, IPlayerSpecialAttackController specialAttackController,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
+            _playerInputsUpdater = playerInputsUpdater;
             _stateMachine = stateMachine;
             _playerController = playerController;
             _playerGeneralConfig = playerGeneralConfig;
@@ -148,6 +154,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void Update()
         {
+            _playerInputsUpdater.Update(Time.deltaTime);
             _playerController.DoUpdate();
             _eventsDispatcher.Update(Time.deltaTime, Position);
             _stateMachine.Update(Time.deltaTime);
