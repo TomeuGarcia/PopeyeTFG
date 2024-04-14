@@ -75,6 +75,10 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
         [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
 
+        [Header("Player - Animator")] 
+        [SerializeField] private PlayerAnimatorEvents _playerAnimatorEvents;
+        
+        
         [Header("Player - Powers")] 
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
@@ -259,6 +263,7 @@ namespace Popeye.Modules.PlayerAnchor
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
             IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
+            _playerAnimatorEvents.AddFootstepsListener(playerAudio);
 
             PlayerFocusController playerFocusController =
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
