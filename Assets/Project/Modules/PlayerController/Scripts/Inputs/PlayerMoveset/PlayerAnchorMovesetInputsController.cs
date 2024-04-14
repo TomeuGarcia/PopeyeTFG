@@ -13,14 +13,14 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly InputAction _aim;
         private readonly InputAction _cancelAim;
         private readonly InputAction _throw;
-        private readonly IInputBuffer[] _inputBuffers;
         private readonly InputPressedBuffer _throwInputBuffer;
+        private readonly InputPressedBuffer _aimInputBuffer;
         
         private readonly InputAction _pickUp;
         
 
-        private readonly IGateValueReader<InputAction> _pullGateValue;
-        private readonly IGateValueReader<InputAction> _dashTowardsAnchorGateValue;
+        private readonly IGateValueReader<InputPressedBuffer> _pullGateValue;
+        private readonly IGateValueReader<InputPressedBuffer> _dashTowardsAnchorGateValue;
         private readonly IGateValueReader<InputAction> _dashDroppingAnchorGateValue;
         private readonly IGateValueReader<InputAction> _specialAttackGateValue;
         private readonly InputAction _kick;
@@ -36,8 +36,9 @@ namespace Popeye.Modules.PlayerController.Inputs
         public PlayerAnchorMovesetInputsController(
             IEventSystemService eventSystemService,
             InputSystem.PlayerAnchorInputControls playerInputControls,
-            IGateValueReader<InputAction> pullGateValue,
-            IGateValueReader<InputAction> dashTowardsAnchorGateValue,
+            PlayerMovesetInputsConfig playerMovesetInputsConfig,
+            IGateValueReader<InputPressedBuffer> pullGateValue,
+            IGateValueReader<InputPressedBuffer> dashTowardsAnchorGateValue,
             IGateValueReader<InputAction> dashDroppingAnchorGateValue,
             IGateValueReader<InputAction> specialAttackGateValue
             )
@@ -54,12 +55,10 @@ namespace Popeye.Modules.PlayerController.Inputs
             _cancelAim = _playerInputControls.Land.CancelAim;
             
             _throw = _playerInputControls.Land.Throw;
-            _throwInputBuffer = new InputPressedBuffer(_playerInputControls.Land.Throw, 0.2f);
+            _aimInputBuffer = new InputPressedBuffer(_playerInputControls.Land.Aim, playerMovesetInputsConfig.AimInputBufferDuration);
+            _throwInputBuffer = new InputPressedBuffer(_playerInputControls.Land.Throw, playerMovesetInputsConfig.ThrowInputBufferDuration);
 
-            _inputBuffers = new[]
-            {
-                _throwInputBuffer
-            };
+
             
             _pickUp = _playerInputControls.Land.PickUp;
 
@@ -74,6 +73,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             
             _spinAttack_Left = _playerInputControls.Land.SpinAttack_Left;
             _spinAttack_Right = _playerInputControls.Land.SpinAttack_Right;
+            
+
         }
 
         ~PlayerAnchorMovesetInputsController()
@@ -84,10 +85,10 @@ namespace Popeye.Modules.PlayerController.Inputs
 
         public void Update(float deltaTime)
         {
-            foreach (IInputBuffer inputBuffer in _inputBuffers)
-            {
-                inputBuffer.Update(deltaTime);
-            }
+            _aimInputBuffer.Update(deltaTime);
+            _throwInputBuffer.Update(deltaTime);
+            _pullGateValue.GetValue().Update(deltaTime);
+            _dashTowardsAnchorGateValue.GetValue().Update(deltaTime);
         }
         
         private void StartListeningToGameEvents()
@@ -147,7 +148,7 @@ namespace Popeye.Modules.PlayerController.Inputs
 
         public bool Aim_Pressed()
         {
-            return _aim.WasPressedThisFrame();
+            return _aimInputBuffer.WasPressed();
         }
         public bool Aim_HeldPressed()
         {
@@ -188,13 +189,13 @@ namespace Popeye.Modules.PlayerController.Inputs
         
         public bool Pull_Pressed()
         {
-            return _pullGateValue.GetValue().WasPressedThisFrame();
+            return _pullGateValue.GetValue().WasPressed();
         }
 
 
         public bool DashTowardsAnchor_Pressed()
         {
-            return _dashTowardsAnchorGateValue.GetValue().WasPressedThisFrame();
+            return _dashTowardsAnchorGateValue.GetValue().WasPressed();
         }
         public bool DashDroppingAnchor_Pressed()
         {

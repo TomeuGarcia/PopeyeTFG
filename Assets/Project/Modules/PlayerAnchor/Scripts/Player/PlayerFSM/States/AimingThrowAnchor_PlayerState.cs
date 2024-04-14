@@ -13,9 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         }
         
         protected override void DoEnter()
-        {
-            _blackboard.QueuedAnchorAim = false;
-            
+        {            
             _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
             UpdateMovementSpeed();
             

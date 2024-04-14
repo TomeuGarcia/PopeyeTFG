@@ -28,6 +28,5 @@ namespace Popeye.Modules.PlayerController.Inputs
         {
             return !_bufferTimer.HasFinished();
         }
-        
     }
 }
