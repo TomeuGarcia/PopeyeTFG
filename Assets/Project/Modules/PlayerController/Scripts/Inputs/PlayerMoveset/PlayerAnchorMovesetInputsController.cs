@@ -11,13 +11,9 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly InputSystem.PlayerAnchorInputControls _playerInputControls;
 
         private readonly InputAction _aim;
-        private readonly InputAction _cancelAim;
-        private readonly InputAction _throw;
-        private readonly InputPressedBuffer _throwInputBuffer;
         private readonly InputPressedBuffer _aimInputBuffer;
         
-        private readonly InputAction _pickUp;
-        
+        private readonly InputPressedBuffer _throwInputBuffer;
 
         private readonly IGateValueReader<InputPressedBuffer> _pullGateValue;
         private readonly IGateValueReader<InputPressedBuffer> _dashTowardsAnchorGateValue;
@@ -52,16 +48,11 @@ namespace Popeye.Modules.PlayerController.Inputs
             
 
             _aim = _playerInputControls.Land.Aim;
-            _cancelAim = _playerInputControls.Land.CancelAim;
             
-            _throw = _playerInputControls.Land.Throw;
             _aimInputBuffer = new InputPressedBuffer(_playerInputControls.Land.Aim, playerMovesetInputsConfig.AimInputBufferDuration);
             _throwInputBuffer = new InputPressedBuffer(_playerInputControls.Land.Throw, playerMovesetInputsConfig.ThrowInputBufferDuration);
 
-
             
-            _pickUp = _playerInputControls.Land.PickUp;
-
             _pullGateValue = pullGateValue;
             _dashTowardsAnchorGateValue = dashTowardsAnchorGateValue;
             _dashDroppingAnchorGateValue = dashDroppingAnchorGateValue;
@@ -160,32 +151,12 @@ namespace Popeye.Modules.PlayerController.Inputs
         }
         
         
-        public bool CancelAim_Pressed()
-        {
-            return _cancelAim.WasReleasedThisFrame();
-            //return _cancelAim.WasPressedThisFrame();
-        }
-        
         
         public bool Throw_Pressed()
         {
-            return _throwInputBuffer.WasPressed();  ////////////////////////////////////
-            return _throw.WasPressedThisFrame(); 
+            return _throwInputBuffer.WasPressed();
         }
-        public bool Throw_HeldPressed()
-        {
-            return _throw.IsPressed();
-        }
-        public bool Throw_Released()
-        {
-            return _throw.WasReleasedThisFrame();
-        }
-        
-        
-        public bool PickUp_Pressed()
-        {
-            return _pickUp.WasPressedThisFrame();
-        }
+
         
         public bool Pull_Pressed()
         {
