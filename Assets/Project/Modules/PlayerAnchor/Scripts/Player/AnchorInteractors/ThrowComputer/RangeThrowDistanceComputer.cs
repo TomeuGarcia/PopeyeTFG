@@ -14,8 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public float ComputeThrowDistance(float throwForce01)
         {
-            return Mathf.Lerp(_throwConfig.MinThrowDistance, _throwConfig.MaxThrowDistance, 
-                throwForce01);
+            return _throwConfig.MaxThrowDistance;
         }
 
         public void ClearState()

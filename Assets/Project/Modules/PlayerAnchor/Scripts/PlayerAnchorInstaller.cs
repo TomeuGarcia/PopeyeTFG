@@ -77,7 +77,9 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Animator")] 
         [SerializeField] private PlayerAnimatorEvents _playerAnimatorEvents;
-        
+
+        [Header("Player - Inputs")] 
+        [SerializeField] private PlayerMovesetInputsConfig _playerMovesetInputsConfig;
         
         [Header("Player - Powers")] 
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
@@ -198,7 +200,7 @@ namespace Popeye.Modules.PlayerAnchor
             anchorMotion.Configure(_anchor.PositionTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, throwDistanceComputer,
                 _anchorGeneralConfig.ThrowConfig, anchorTrajectorySnapController, anchorTrajectoryView,
-                anchorThrowController);
+                anchorThrowController, _anchorTrajectoryEndSpot);
             anchorVerticalAttackThrower.Configure(_anchor, anchorTrajectoryMaker, 
                 _anchorGeneralConfig.VerticalAttackThrowConfig, anchorThrowController,
                 _playerGeneralConfig.AbilityActionChannels.DashDroppingAnchorAttackDispatcher);
@@ -210,7 +212,7 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerGeneralConfig.AbilityActionChannels.AnchorPullDispatcher);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
-            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
+            anchorTrajectoryMaker.Configure(_obstacleProbingConfig, 
                 _anchorGeneralConfig.PullConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
@@ -304,7 +306,8 @@ namespace Popeye.Modules.PlayerAnchor
             _playerController.InputCorrector =
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
-            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
+            _player.Configure(movesetInputsController, 
+                playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
@@ -465,10 +468,10 @@ namespace Popeye.Modules.PlayerAnchor
                     dashAttackVerticalThrower, dashDropVerticalThrower);
             
             
-            abilityGatesCreator.CreateGates();
+            abilityGatesCreator.CreateGates(_playerMovesetInputsConfig);
             abilityGatesCreator.GetReadInputs(
-                out IGateValueReader<InputAction> pullInput,
-                out IGateValueReader<InputAction> dashTowardsAnchorInput,
+                out IGateValueReader<InputPressedBuffer> pullInput,
+                out IGateValueReader<InputPressedBuffer> dashTowardsAnchorInput,
                 out IGateValueReader<InputAction> dashDroppingAnchorInput,
                 out IGateValueReader<InputAction> specialAttackInput
             );
@@ -482,6 +485,7 @@ namespace Popeye.Modules.PlayerAnchor
             movesetInputsController = new PlayerAnchorMovesetInputsController(
                 eventSystemService,
                 playerAnchorInputControls,
+                _playerMovesetInputsConfig,
                 pullInput,
                 dashTowardsAnchorInput,
                 dashDroppingAnchorInput,

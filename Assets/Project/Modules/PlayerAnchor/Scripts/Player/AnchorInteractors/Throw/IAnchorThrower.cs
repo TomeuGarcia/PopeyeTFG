@@ -1,13 +1,13 @@
-using Popeye.Modules.PlayerAnchor.Anchor;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
     public interface IAnchorThrower
     {
         public bool AnchorIsBeingThrown();
+        public void UpdateThrowTrajectory();
         public void ThrowAnchor();
-        public void CancelChargingThrow();
-        public void ResetThrowForce();
-        public void IncrementThrowForce(float deltaTime);
+        public void CancelThrow();
+        public void StartThrow();
+        public void FinishThrow();
     }
 }
