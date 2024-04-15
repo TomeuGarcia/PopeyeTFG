@@ -12,9 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1def0652fbaf48c89200fce30bd8decd, type: 3}
   m_Name: HazardsFactoryConfig
   m_EditorClassIdentifier: 
-  _areaDamageOverTimePrefab: {fileID: 7843934647530321542, guid: 733bcf9a22cc1fe42b18017c46b80ae2,
-    type: 3}
-  _areaDamageOverTimeInitialInstances: 50
-  _parabolicProjectilePrefab: {fileID: 7378326224867316411, guid: 4e338e253182bdf49a70eaa39a367679,
-    type: 3}
-  _parabolicProjectilesInitialInstances: 50
+  _areaDamagePoolData:
+    _prefab: {fileID: 7843934647530321542, guid: 733bcf9a22cc1fe42b18017c46b80ae2,
+      type: 3}
+    _initialInstances: 15
+  _parabolicProjectilePoolData:
+    _prefab: {fileID: 7378326224867316411, guid: 4e338e253182bdf49a70eaa39a367679,
+      type: 3}
+    _initialInstances: 15
+  _flatStraightProjectilePoolData:
+    _prefab: {fileID: 7713062162118136225, guid: d9667ef633ef89b489922feeec9b09eb,
+      type: 3}
+    _initialInstances: 15
+  _explosionProjectilePoolData:
+    _prefab: {fileID: 8611668509427915949, guid: 5f7557a8d58a4954a8b77c24fc0b3024,
+      type: 3}
+    _initialInstances: 15

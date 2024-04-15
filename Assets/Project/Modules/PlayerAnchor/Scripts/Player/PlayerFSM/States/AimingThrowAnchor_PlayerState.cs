@@ -13,9 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         }
         
         protected override void DoEnter()
-        {
-            _blackboard.QueuedAnchorAim = false;
-            
+        {            
             _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
             UpdateMovementSpeed();
             
@@ -28,8 +26,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
 
             _blackboard.PlayerMediator.PlayerView.PlayEnterAimingAnimation();
-            
+
             StartChargingThrow();
+            UpdateChargingThrow();
         }
 
         public override void Exit()
@@ -78,7 +77,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             if (_blackboard.MovesetInputsController.Aim_HeldPressed())
             {
-                ChargeThrow(deltaTime);
+                UpdateChargingThrow();
             }
             
             
@@ -91,9 +90,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.StartChargingThrow();
         }
         
-        private void ChargeThrow(float deltaTime)
+        private void UpdateChargingThrow()
         {
-            _blackboard.PlayerMediator.ChargeThrow(deltaTime);
+            _blackboard.PlayerMediator.UpdateChargingThrow();
         }
 
         private void StopChargingThrow()

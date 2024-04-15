@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Trajectory_Mat
-  m_Shader: {fileID: 4800000, guid: 1afdc2e251e19fe48bd2c4b8cbe59751, type: 3}
+  m_Shader: {fileID: 4800000, guid: 12af7fb245e909c49976f36fbf58c71c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -31,11 +31,15 @@ Material:
     m_Floats:
     - _StartTime: 49
     - _TimeOverwrite: -1
+    - _TipIsVisible: 0
+    - _TipLength: 1.5
     - _WaveDirection: 1
     - _WaveDuration: 3
     - _WaveFrequency: 0.8
     - _WaveSharpness: 1
     - _WaveSpeed: -5.6
     m_Colors:
-    - _WaveColor: {r: 0, g: 0.83137256, b: 0.49411765, a: 1}
+    - _TipColor: {r: 1, g: 0.18396229, b: 0.35183287, a: 1}
+    - _TipPosition: {r: 0, g: 0, b: 0, a: 0}
+    - _WaveColor: {r: 0.2, g: 0.8352941, b: 0.5294118, a: 1}
   m_BuildTextureStacks: []

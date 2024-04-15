@@ -67,7 +67,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 new FoldingChainViewLogic(generalConfig.DashingTowardsViewLogicConfig,
                     generalConfig.ChainBoneCount);
 
-            _carriedChainViewLogic = 
+            _carriedChainViewLogic =
                 new FoldingChainViewLogic(generalConfig.PickedUpTowardsViewLogicConfig,
                     generalConfig.ChainBoneCount);
 

@@ -1,6 +1,7 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Hazards;
@@ -28,7 +29,7 @@ namespace Popeye.Modules.Installers
         
     
         public void Install(ServiceLocator serviceLocator, 
-            IFMODAudioManager audioManager, IEventSystemService eventSystemService,
+            IFMODAudioManager audioManager, IEventSystemService eventSystemService, ICombatManager combatManager,
             ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
             _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); 
@@ -36,7 +37,7 @@ namespace Popeye.Modules.Installers
             _createdEnemiesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider);
             
             ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent, _createdParticlesRecycler);
-            HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, particleFactory);
+            HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, combatManager, particleFactory);
             
             serviceLocator.RegisterService<IParticleFactory>(particleFactory);
             serviceLocator.RegisterService<IHazardFactory>(hazardsFactory);

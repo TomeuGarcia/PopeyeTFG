@@ -106,12 +106,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         private bool PlayerCanAimAnchor()
         {
-            if (_blackboard.QueuedAnchorAim)
-            {
-                _blackboard.QueuedAnchorAim = false;
-                return true;
-            }
-            
             return _blackboard.MovesetInputsController.Aim_Pressed();
         }
 
