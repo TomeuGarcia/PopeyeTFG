@@ -28,7 +28,6 @@ namespace Popeye.Modules.Enemies.Hazards
         public void PlayDispenseAnimation()
         {
             _spitterHolder.DOComplete();
-            //_spitterHolder.localScale = Vector3.one;
             _spitterHolder.DOLocalRotateQuaternion(Quaternion.identity, _config.DispenseScalePunch.Duration)
                 .SetEase(Ease.InOutSine);
             _spitterHolder.PunchScale(_config.DispenseScalePunch);
