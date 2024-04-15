@@ -20,11 +20,11 @@ namespace Popeye.Modules.Enemies.Hazards
             _areaDamagePool = new ObjectPool(_hazardsFactoryConfig.AreaDamageOverTimePrefab,parent);
             _areaDamagePool.Init(_hazardsFactoryConfig.AreaDamageOverTimeInitialInstances);
         }
-        public ParabolicProjectile CreateParabolicProjectile(Transform origin, Transform targetPosition)
+        public ParabolicProjectile CreateParabolicProjectile(Transform origin, Transform targetPosition, float maxDistance,float minDistance)
         {
             var projectile = _projectilePool.Spawn<ParabolicProjectile>(origin.position, Quaternion.identity);
             projectile.SetParticleFactory(_particleFactory);
-            projectile.PrepareShot(targetPosition,this,origin);
+            projectile.PrepareShot(targetPosition,this,origin,maxDistance,minDistance);
             return projectile;
         }
 

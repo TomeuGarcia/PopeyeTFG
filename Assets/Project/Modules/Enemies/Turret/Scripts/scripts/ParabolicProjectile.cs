@@ -9,7 +9,6 @@ using Popeye.Modules.Enemies.Hazards;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -25,6 +24,7 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] private TrailRenderer _trail;
     private Vector3 _lastFrameTargetPosition = Vector3.zero;
     private bool _shoot = false;
+    private bool _shootRandom = false;
 
     private DamageHit _contactDamageHit;
     [SerializeField] private DamageHitConfig _contactDamageConfig;
@@ -38,6 +38,10 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] ParticleTypes _projectileArea;
     
     private IParticleFactory _particleFactory;
+    private float _minDistance;
+    private float _maxDistance;
+
+    private Vector3 _randomTarget;
 
 
     private void Update()
@@ -60,6 +64,20 @@ public class ParabolicProjectile : RecyclableObject
                     _bulletBody.enabled = true;
                     Movement(groundDirection.normalized, v0, angle, time);
                 }
+                else if (_shootRandom)
+                {
+                    Vector3 direction = _randomTarget - _firePoint.position;
+                    Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
+                    Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
+                    float angle;
+                    float v0;
+                    float time;
+                    
+                    CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
+                    _shootRandom = false;
+                    _bulletBody.enabled = true;
+                    Movement(groundDirection.normalized, v0, angle, time);
+                }
 
             
                 _lastFrameTargetPosition = _playerTransform.position;
@@ -72,17 +90,20 @@ public class ParabolicProjectile : RecyclableObject
         _particleFactory = particleFactory;
     }
     
-    public void PrepareShot(Transform playerTransform,IHazardFactory hazardFactory,Transform firePoint)
+    public void PrepareShot(Transform playerTransform,IHazardFactory hazardFactory,Transform firePoint,float maxDistance,float minDistance)
     {
         _shoot = false;
         _hazardFactory = hazardFactory;
         _playerTransform = playerTransform;
+        _minDistance = minDistance;
+        _maxDistance = maxDistance;
         _firePoint = firePoint;
         _bulletBody.enabled = false;
         _trail.Clear();
         _trail.enabled = false;
         gameObject.SetActive(true);
     }
+    
 
     private void Start()
     {
@@ -95,7 +116,16 @@ public class ParabolicProjectile : RecyclableObject
         _shoot = true;
     }
 
-    
+    public void ShootRandom()
+    {
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+        float distance = UnityEngine.Random.Range(_minDistance, _maxDistance);
+        float x = transform.position.x + Mathf.Cos(angle) * distance;
+        float z = transform.position.z + Mathf.Sin(angle) * distance;
+        float y = transform.position.y;
+        _randomTarget = new Vector3(x, y, z);
+        _shootRandom = true;
+    }
 
     private async UniTaskVoid Movement(Vector3 direction, float v0,float angle,float time)
     {
