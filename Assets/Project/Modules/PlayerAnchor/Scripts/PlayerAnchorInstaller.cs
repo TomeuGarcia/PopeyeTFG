@@ -95,7 +95,6 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
-        [SerializeField] private AnchorCollisions _anchorCollisions;
         [SerializeField] private VFXAnchorView _vfxAnchorView;
         [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
@@ -218,15 +217,14 @@ namespace Popeye.Modules.PlayerAnchor
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorTrajectorySnapController.Configure();
-            _anchorCollisions.Configure(_obstacleProbingConfig);
 
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, vfxChainView, _chainPlayerBindTransform, _chainAnchorBindTransform, 
                 chainViewLogicGeneralConfig, chainMaterialCopy);
-            _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorCollisions, anchorView, anchorViewExtras, anchorAudio, 
+            _anchor.Configure(anchorStateMachine, anchorThrower, anchorPuller, anchorMotion,
+                _anchorPhysics, anchorView, anchorViewExtras, anchorAudio, 
                 _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);
 
             IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial

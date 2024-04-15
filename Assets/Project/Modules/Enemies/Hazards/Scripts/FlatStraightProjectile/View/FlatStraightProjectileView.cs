@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Hazards
@@ -7,12 +9,14 @@ namespace Popeye.Modules.Enemies.Hazards
     public class FlatStraightProjectileView : MonoBehaviour, IFlatStraightProjectileView
     {
         [SerializeField] private Transform _testTweenTransform;
+        private FlatStraightProjectileViewConfig _config;
         
         private IParticleFactory _particleFactory;
         
-        public void Configure(IParticleFactory particleFactory)
+        public void Configure(IParticleFactory particleFactory, FlatStraightProjectileViewConfig config)
         {
             _particleFactory = particleFactory;
+            _config = config;
         }
 
         public void ResetView()
@@ -22,18 +26,20 @@ namespace Popeye.Modules.Enemies.Hazards
 
         public void PlayStartShootAnimation()
         {
-            _testTweenTransform.DOPunchScale(Vector3.forward, 0.5f, 4);
+            _testTweenTransform.PunchScale(_config.StartShootScalePunch);
         }
 
-        public void PlayHitObjectAnimation()
+        public async UniTask PlayObjectContactAnimation()
         {
-            _testTweenTransform.DOPunchScale(Vector3.back, 0.2f, 4);
+            _testTweenTransform.DOComplete();
+            await _testTweenTransform.PunchScale(_config.ObjectContactScalePunch)
+                .AsyncWaitForCompletion();
         }
 
         public void PlayDisappearAnimation(float duration)
         {
-            _testTweenTransform.DOScale(Vector3.zero, duration)
-                .SetEase(Ease.InOutQuad);
+            _config.DisappearScale.SetDuration(duration);
+            _testTweenTransform.Scale(_config.DisappearScale);
         }
         
     }

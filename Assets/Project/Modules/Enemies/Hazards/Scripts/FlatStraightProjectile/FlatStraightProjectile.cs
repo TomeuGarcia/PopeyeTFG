@@ -18,6 +18,7 @@ namespace Popeye.Modules.Enemies.Hazards
         [SerializeField] private InterfaceReference<IFlatStraightProjectileView, MonoBehaviour> _view;
         [SerializeField] private PhysicsMovementBehaviour _physicsMovement;
         private IFlatStraightProjectileView View => _view.Value;
+        private IFlatStraightProjectileAudio Audio => _config.Audio;
 
         private Lifetime _lifetime;
         
@@ -28,6 +29,8 @@ namespace Popeye.Modules.Enemies.Hazards
             _damageTrigger.Deactivate();
             _damageTrigger.OnDamageDealt -= OnDamageDealtEvent;
             _damageTrigger.OnEnterFinish -= OnTriggerEnterFinishEvent;
+            
+            Audio.StopMovingSound();
         }
 
         public void Configure(ICombatManager combatManager, IParticleFactory particleFactory)
@@ -35,13 +38,16 @@ namespace Popeye.Modules.Enemies.Hazards
             SetupDamageTrigger(combatManager);
             _lifetime = new Lifetime(_config.MaximumLifetime, OnLifetimeFinish);
             
-            View.Configure(particleFactory);
+            View.Configure(particleFactory, _config.ViewConfig);
             View.ResetView();
             View.PlayStartShootAnimation();
             
             _physicsMovement.UseGravity(false);
             _physicsMovement.MovementSpeed = _config.MovementSpeed;
             _physicsMovement.MovementDirection = transform.forward;
+            
+            Audio.Configure();
+            Audio.PlayMovingSound(gameObject);
         }
 
         private void SetupDamageTrigger(ICombatManager combatManager)
@@ -55,17 +61,27 @@ namespace Popeye.Modules.Enemies.Hazards
 
         private void OnDamageDealtEvent(DamageHitResult damageHitResult)
         {
-            View.PlayHitObjectAnimation();
+            
         }
         
         private void OnTriggerEnterFinishEvent()
         {
+            _damageTrigger.Deactivate();
             _lifetime.Cancel();
+            Audio.PlayObjectContactSound(gameObject);
+            
+            DoHitObjectSequence().Forget();
+        }
+
+        private async UniTaskVoid DoHitObjectSequence()
+        {
+            await View.PlayObjectContactAnimation();
             StartDisappearing();
         }
 
         private void OnLifetimeFinish()
         {
+            Audio.PlayLifetimeEndSound(gameObject);
             StartDisappearing();
         }
 

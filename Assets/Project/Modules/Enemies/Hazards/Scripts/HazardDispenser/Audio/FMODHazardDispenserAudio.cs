@@ -10,8 +10,8 @@ namespace Popeye.Modules.Enemies.Hazards
     {
         private IFMODAudioManager _audioManager;
         
-        [Expandable] [SerializeField] private OneShotFMODSound _prepare;
-        [Expandable] [SerializeField] private OneShotFMODSound _dispense;
+        [Expandable] [SerializeField] private OneShotFMODSound _prepareSound;
+        [Expandable] [SerializeField] private OneShotFMODSound _dispenseSound;
 
         
         public void Configure()
@@ -22,12 +22,12 @@ namespace Popeye.Modules.Enemies.Hazards
 
         public void PlayPrepareSound(GameObject source)
         {
-            _audioManager.PlayOneShotAttached(_prepare, source);
+            _audioManager.PlayOneShotAttached(_prepareSound, source);
         }
 
         public void PlayDispenseSound(GameObject source)
         {
-            _audioManager.PlayOneShotAttached(_dispense, source);
+            _audioManager.PlayOneShotAttached(_dispenseSound, source);
         }
     }
 }
