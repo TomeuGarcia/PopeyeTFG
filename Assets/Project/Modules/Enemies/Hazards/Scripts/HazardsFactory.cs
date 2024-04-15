@@ -38,11 +38,11 @@ namespace Popeye.Modules.Enemies.Hazards
            return _areaDamagePool.Spawn<AreaDamageOverTime>(position, rotation);
         }
         
-        public ParabolicProjectile CreateParabolicProjectile(Transform origin, Transform targetPosition)
+        public ParabolicProjectile CreateParabolicProjectile(Transform origin, Transform targetPosition, float maxDistance,float minDistance)
         {
             ParabolicProjectile projectile = _parabolicProjectilePool.Spawn<ParabolicProjectile>(origin.position, Quaternion.identity);
             projectile.SetParticleFactory(_particleFactory);
-            projectile.PrepareShot(targetPosition,this,origin);
+            projectile.PrepareShot(targetPosition,this,origin,maxDistance,minDistance);
             return projectile;
         }
 

@@ -37,15 +37,18 @@ namespace Popeye.Modules.Enemies.Components
        private float _squaredPlayerDistanceThresholdToAppear;
        private bool _playerInSight = false;
 
+
+       [SerializeField] private int _numberOfShots = 3;
        public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
             _mediator = turetMediator;
             _playerTransform = playerTransform;
             _hazardsFactory = hazardFactory;
-            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform);
-            _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
             _squaredPlayerDistanceThresholdToAppear = _playerDistanceThresholdToAppear * _playerDistanceThresholdToAppear;
             _squaredPlayerDistanceThresholdToHide = _playerDistanceThresholdToHide * _playerDistanceThresholdToHide;
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
+            _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
+           
         }
 
 
@@ -109,7 +112,7 @@ namespace Popeye.Modules.Enemies.Components
         {
             
             _timer = 0;
-            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform);
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
             _outOfGround = true;
         }
         public void InsideGround()
@@ -120,7 +123,17 @@ namespace Popeye.Modules.Enemies.Components
         public void Shoot()
         {
             _currentProjectile.Shoot();
-            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform);
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_playerDistanceThreshold,
+                _playerDistanceThresholdToHide);
+        }
+
+        public void MultipleShoot()
+        {
+            for (int i = 0; i < _numberOfShots; i++)
+            {
+                _currentProjectile.ShootRandom();
+                _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
+            }
         }
         private void OnDestroy()
         {
