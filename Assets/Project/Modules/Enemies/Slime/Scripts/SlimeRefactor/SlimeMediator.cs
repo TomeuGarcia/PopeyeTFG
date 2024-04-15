@@ -8,6 +8,7 @@ using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
+using Popeye.Modules.Enemies.Hazards;
 using Popeye.Modules.Enemies.Slime;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;
@@ -20,6 +21,7 @@ namespace Popeye.Modules.Enemies
 {
     public class SlimeMediator : AEnemyMediator
     {
+        [SerializeField] private bool _explosive = false;
         [SerializeField] private SlimeMovement _slimeMovement;
         [FormerlySerializedAs("_squashStretchAnimator")] [SerializeField] private SlimeAnimatorController slimeAnimatorController;
         [SerializeField] private EnemyPatrolling _enemyPatrolling;
@@ -145,6 +147,11 @@ namespace Popeye.Modules.Enemies
             else
             {
                 _slimeSounds.PlayDeathSound(_audioManager, _slimeTransform.gameObject, SlimeSizeID);
+                if (_explosive)
+                {
+                    Explosion explosion =  ServiceLocator.Instance.GetService<IHazardFactory>().CreateExplosion(_slimeTransform.position, Quaternion.identity, ExplosionSize.Small);
+                    explosion.StartExplosion();
+                }
             }
             
             slimeMindEnemy.RemoveSlimeFromList(this);
