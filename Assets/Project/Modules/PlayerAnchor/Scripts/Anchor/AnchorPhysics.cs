@@ -6,8 +6,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
     {
 
         [SerializeField] private Rigidbody _rigidbody;
-        [SerializeField] private Collider _collider;
-        
+        [SerializeField] private SphereCollider _collider;
+
+        private float _originalRadius;
         
         
         private IAnchorMediator _anchorMediator;
@@ -20,11 +21,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             
             _rigidbody.interpolation = RigidbodyInterpolation.None;
             _rigidbody.isKinematic = true;
+
+            _originalRadius = _collider.radius;
         }
         
 
         public void EnableCollision()
         {   
+            _collider.radius = _originalRadius;
             /*
             _rigidbody.gameObject.SetActive(true);
             _collider.enabled = true;
@@ -33,6 +37,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         public void DisableCollision()
         {
+            _collider.radius = 0.01f;
+
             // Buttons stop working if uncommented
             /* 
             _collider.enabled = false;

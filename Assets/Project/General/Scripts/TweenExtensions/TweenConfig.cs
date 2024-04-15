@@ -14,5 +14,10 @@ namespace Project.Scripts.TweenExtensions
         public float Duration => _duration;
         public Ease Ease => _ease;
 
+        public void SetDuration(float duration)
+        {
+            _duration = duration;
+        }
+
     }
 }
