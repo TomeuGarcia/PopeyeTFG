@@ -208,7 +208,7 @@ Transform:
   - {fileID: 5001171340976732915}
   - {fileID: 6993181967057281109}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1386922943215149762
 MonoBehaviour:
@@ -430,6 +430,7 @@ MonoBehaviour:
   _utilityCameras:
   - {fileID: 6871338679640036159}
   - {fileID: 5076949877932039831}
+  _environmentFollower: {fileID: 0}
   _player: {fileID: 0}
   _playerController: {fileID: 0}
   _playerHealthBehaviour: {fileID: 0}
@@ -441,6 +442,9 @@ MonoBehaviour:
     type: 2}
   _playerAudioConfig: {fileID: 11400000, guid: 58a82a5f79aeb3b4d82f6e0787694180, type: 2}
   _playerRenderersMaterialAssigner: {fileID: 0}
+  _playerAnimatorEvents: {fileID: 0}
+  _playerMovesetInputsConfig: {fileID: 11400000, guid: 35fe09c78676c0b41bf0ff4bdac1b05e,
+    type: 2}
   _powerBoostDropFactoryConfig: {fileID: 11400000, guid: c1acdb7662fefee4099c6bed11ebc1e3,
     type: 2}
   _autoAimCreator: {fileID: 752198695613597362}

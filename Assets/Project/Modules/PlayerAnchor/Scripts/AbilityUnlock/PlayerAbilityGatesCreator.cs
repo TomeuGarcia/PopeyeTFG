@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using InputSystem;
 using Popeye.Modules.PlayerAnchor.Player;
+using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Scripts.ValueGating;
 using UnityEngine.InputSystem;
 
@@ -13,8 +14,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private readonly IAnchorVerticalThrower _dashAttackVerticalThrower;
         private readonly IAnchorVerticalThrower _dashDropVerticalThrower;
 
-        private ValueGate<InputAction> _pullInputGate;
-        private ValueGate<InputAction> _dashTowardsAnchorInputGate;
+        private ValueGate<InputPressedBuffer> _pullInputGate;
+        private ValueGate<InputPressedBuffer> _dashTowardsAnchorInputGate;
         private ValueGate<InputAction> _dashDroppingAnchorInputGate;
         private ValueGate<InputAction> _specialAttackInputGate;
         private ValueGate<IAnchorVerticalThrower> _dashDroppingAnchorThrowerGate;
@@ -37,17 +38,19 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         }
 
 
-        public void CreateGates()
-        {
+        public void CreateGates(PlayerMovesetInputsConfig playerMovesetInputsConfig)
+        {            
             CreateInputGate(
                 out _pullInputGate,
-                _playerAnchorInputControls.Land.Pull,
+                new InputPressedBuffer(_playerAnchorInputControls.Land.Pull, 
+                    playerMovesetInputsConfig.PullInputBufferDuration),
                 _unlockableAbilitiesConfig.AnchorPull
             );
             
             CreateInputGate(
                 out _dashTowardsAnchorInputGate,
-                _playerAnchorInputControls.Land.Dash,
+                new InputPressedBuffer(_playerAnchorInputControls.Land.Dash, 
+                    playerMovesetInputsConfig.DashTowardsAnchorInputBufferDuration),
                 _unlockableAbilitiesConfig.DashTowardsAnchor
             );
             
@@ -70,6 +73,16 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         }
 
 
+        private void CreateInputGate(out ValueGate<InputPressedBuffer> inputGate, InputPressedBuffer openValue, 
+            PlayerUnlockableAbilitiesConfig.IChannelAndState channelAndState)
+        {
+            CreateGate<InputPressedBuffer>(
+                out inputGate,
+                openValue,
+                 new InputPressedBuffer(_playerAnchorInputControls.Land.NullAction, 0f),
+                channelAndState
+            );
+        }
         private void CreateInputGate(out ValueGate<InputAction> inputGate, InputAction openValue, 
             PlayerUnlockableAbilitiesConfig.IChannelAndState channelAndState)
         {
@@ -109,8 +122,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
 
         public void GetReadInputs(
-            out IGateValueReader<InputAction> pullInputGate,
-            out IGateValueReader<InputAction> dashTowardsAnchorInputGate,
+            out IGateValueReader<InputPressedBuffer> pullInputGate,
+            out IGateValueReader<InputPressedBuffer> dashTowardsAnchorInputGate,
             out IGateValueReader<InputAction> dashDroppingAnchorInputGate,
             out IGateValueReader<InputAction> specialAttackInputGate
         )

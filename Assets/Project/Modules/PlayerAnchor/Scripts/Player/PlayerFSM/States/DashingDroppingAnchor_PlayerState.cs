@@ -33,11 +33,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 return true;
             }
 
-            if (_blackboard.MovesetInputsController.Pull_Pressed())
-            {
-                _blackboard.QueuedAnchorPull = true;
-            }
-
             return false;
         }
         

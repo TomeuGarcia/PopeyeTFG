@@ -62,14 +62,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         private async UniTaskVoid DoKickAnchor(AnchorThrowResult anchorThrowResult)
         {
-            _anchorTrajectoryMaker.ShowTrajectoryEndSpot();
-            _anchorTrajectoryMaker.MakeTrajectoryEndSpotMatchSpot(anchorThrowResult.LastTrajectoryPathPoint, 
-                Vector3.up, !anchorThrowResult.EndsOnVoid);
-            
             await UniTask.Delay(TimeSpan.FromSeconds(anchorThrowResult.Duration));
             
-            _anchorTrajectoryMaker.HideTrajectoryEndSpot();
-
             OnKickCompleted(anchorThrowResult);
         }
 
