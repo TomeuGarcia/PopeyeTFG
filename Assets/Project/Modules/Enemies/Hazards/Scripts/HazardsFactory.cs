@@ -1,4 +1,5 @@
 using Popeye.Core.Pool;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using UnityEngine;
 
@@ -6,14 +7,17 @@ namespace Popeye.Modules.Enemies.Hazards
 {
     public class HazardsFactory : IHazardFactory
     {
+        private readonly ICombatManager _combatManager;
         private readonly IParticleFactory _particleFactory;
         
         private readonly ObjectPool _areaDamagePool;
         private readonly ObjectPool _parabolicProjectilePool;
         private readonly ObjectPool _flatStraightProjectilePool;
 
-        public HazardsFactory(HazardsFactoryConfig hazardsFactoryConfig, Transform parent, IParticleFactory particleFactory)
+        public HazardsFactory(HazardsFactoryConfig hazardsFactoryConfig, Transform parent, 
+            ICombatManager combatManager, IParticleFactory particleFactory)
         {
+            _combatManager = combatManager;
             _particleFactory = particleFactory;
                         
             _areaDamagePool = new ObjectPool(hazardsFactoryConfig.AreaDamagePoolData.Prefab, parent);
@@ -45,14 +49,14 @@ namespace Popeye.Modules.Enemies.Hazards
         public FlatStraightProjectile CreateFlatStraightProjectile(Vector3 position, Quaternion rotation)
         {
             FlatStraightProjectile projectile = _flatStraightProjectilePool.Spawn<FlatStraightProjectile>(position, rotation);
-            projectile.Configure(_particleFactory);
+            projectile.Configure(_combatManager, _particleFactory);
             return projectile;
         }
 
         public Explosion CreateExplosion(Vector3 position, Quaternion rotation, ExplosionSize size)
         {
             Explosion explosion = _parabolicProjectilePool.Spawn<Explosion>(position, rotation);
-            explosion.Configure(_particleFactory, size);
+            explosion.Configure(_combatManager, _particleFactory, size);
             return explosion;
         }
         

@@ -1,10 +1,12 @@
 using Popeye.Core.Pool;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 
 namespace Popeye.Modules.Enemies.Hazards
 {
     public class Explosion : RecyclableObject
     {
+        private ICombatManager _combatManager;
         private IParticleFactory _particleFactory;
         private ExplosionSize _size;
         
@@ -19,8 +21,9 @@ namespace Popeye.Modules.Enemies.Hazards
         }
 
 
-        public void Configure(IParticleFactory particleFactory, ExplosionSize size)
+        public void Configure(ICombatManager combatManager, IParticleFactory particleFactory, ExplosionSize size)
         {
+            _combatManager = combatManager;
             _particleFactory = particleFactory;
             _size = size;
         }
