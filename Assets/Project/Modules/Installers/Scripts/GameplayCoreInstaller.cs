@@ -82,7 +82,8 @@ namespace Popeye.Modules.Installers
 
             
             _informationDisplayInstaller.Install(serviceLocator);
-            _factoriesInstaller.Install(serviceLocator, audioManager, eventSystemService, _lastLoadedSceneProvider);
+            _factoriesInstaller.Install(serviceLocator, audioManager, eventSystemService, combatManagerService, 
+                _lastLoadedSceneProvider);
             _playerAnchorInstaller.Install();
             _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
             _gameDataEventsInstaller.Install(eventSystemService, _lastLoadedSceneProvider);
