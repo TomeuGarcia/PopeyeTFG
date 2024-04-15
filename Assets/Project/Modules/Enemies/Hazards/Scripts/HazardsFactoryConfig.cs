@@ -1,3 +1,4 @@
+using Popeye.Core.Pool;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -8,13 +9,17 @@ namespace Popeye.Modules.Enemies.Hazards
     public class HazardsFactoryConfig : ScriptableObject
     {
         [System.Serializable]
-        public class PoolData<T>
+        public class PoolData<T> where T : RecyclableObject
         {
             [SerializeField] private T _prefab;
             [SerializeField] private int _initialInstances = 15;
             
-            public T Prefab => _prefab;
-            public int InitialInstances => _initialInstances;
+            public ObjectPool ToObjectPool(Transform parent)
+            {
+                ObjectPool objectPool = new ObjectPool(_prefab, parent);
+                objectPool.Init(_initialInstances);
+                return objectPool;
+            }
         }
 
         

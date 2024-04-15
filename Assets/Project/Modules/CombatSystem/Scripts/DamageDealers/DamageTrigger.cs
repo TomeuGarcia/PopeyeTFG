@@ -21,25 +21,27 @@ namespace Popeye.Modules.CombatSystem
         
         public Action<DamageTrigger, GameObject> OnBeforeDamageDealt;
         public Action<DamageHitResult> OnDamageDealt;
+        public Action OnEnterFinish;
 
         
         private void OnTriggerEnter(Collider other)
         {
             CheckApplyDamage(other);
+            OnEnterFinish?.Invoke();
         }
         private void OnTriggerStay(Collider other)
         {
             CheckApplyDamage(other);
         }
 
-        private void CheckApplyDamage(Collider other)
+        private bool CheckApplyDamage(Collider other)
         {
             if (_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
             {
-                return;
+                return false;
             }
 
-            TryDealDamage(other);
+            return TryDealDamage(other);
         }
         
         
@@ -99,7 +101,7 @@ namespace Popeye.Modules.CombatSystem
         
         
 
-        private void TryDealDamage(Collider collider)
+        private bool TryDealDamage(Collider collider)
         {
             _damageDealer.UpdatePosition(Position);
             if (_isKnockbackPushOrigin)
@@ -108,12 +110,16 @@ namespace Popeye.Modules.CombatSystem
             }
             
             OnBeforeDamageDealt?.Invoke(this, collider.gameObject);
-            if (_damageDealer.TryDealDamage(collider.gameObject, out DamageHitResult damageHitResult))
+
+            bool canDealDamage = _damageDealer.TryDealDamage(collider.gameObject, out DamageHitResult damageHitResult);
+            if (canDealDamage)
             {
                 OnDamageDealt?.Invoke(damageHitResult);
             }
             
             _hitTargetsHistory.Add(collider.gameObject);
+
+            return canDealDamage;
         }
         
     }

@@ -13,24 +13,18 @@ namespace Popeye.Modules.Enemies.Hazards
         private readonly ObjectPool _areaDamagePool;
         private readonly ObjectPool _parabolicProjectilePool;
         private readonly ObjectPool _flatStraightProjectilePool;
+        private readonly ObjectPool _explosionPool;
 
         public HazardsFactory(HazardsFactoryConfig hazardsFactoryConfig, Transform parent, 
             ICombatManager combatManager, IParticleFactory particleFactory)
         {
             _combatManager = combatManager;
             _particleFactory = particleFactory;
-                        
-            _areaDamagePool = new ObjectPool(hazardsFactoryConfig.AreaDamagePoolData.Prefab, parent);
-            _areaDamagePool.Init(hazardsFactoryConfig.AreaDamagePoolData.InitialInstances);
-            
-            _parabolicProjectilePool = new ObjectPool(hazardsFactoryConfig.ParabolicProjectilePoolData.Prefab, parent);
-            _parabolicProjectilePool.Init(hazardsFactoryConfig.ParabolicProjectilePoolData.InitialInstances);
 
-            _flatStraightProjectilePool = new ObjectPool(hazardsFactoryConfig.FlatStraightProjectilePoolData.Prefab, parent);
-            _flatStraightProjectilePool.Init(hazardsFactoryConfig.FlatStraightProjectilePoolData.InitialInstances);
-            
-            _flatStraightProjectilePool = new ObjectPool(hazardsFactoryConfig.ExplosionProjectilePoolData.Prefab, parent);
-            _flatStraightProjectilePool.Init(hazardsFactoryConfig.ExplosionProjectilePoolData.InitialInstances);
+            _areaDamagePool = hazardsFactoryConfig.AreaDamagePoolData.ToObjectPool(parent);
+            _parabolicProjectilePool = hazardsFactoryConfig.ParabolicProjectilePoolData.ToObjectPool(parent);
+            _flatStraightProjectilePool = hazardsFactoryConfig.FlatStraightProjectilePoolData.ToObjectPool(parent);
+            _explosionPool = hazardsFactoryConfig.ExplosionProjectilePoolData.ToObjectPool(parent);
         }
 
         public AreaDamageOverTime CreateDamageArea(Vector3 position, Quaternion rotation)
@@ -55,7 +49,7 @@ namespace Popeye.Modules.Enemies.Hazards
 
         public Explosion CreateExplosion(Vector3 position, Quaternion rotation, ExplosionSize size)
         {
-            Explosion explosion = _parabolicProjectilePool.Spawn<Explosion>(position, rotation);
+            Explosion explosion = _explosionPool.Spawn<Explosion>(position, rotation);
             explosion.Configure(_combatManager, _particleFactory, size);
             return explosion;
         }
