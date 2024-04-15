@@ -35,6 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayTakeDamageAnimation()
         {
+            _particleFactory.Create(_config.TakeDamageOnHit, _transformHolder.position, quaternion.identity);
         }
 
         public void PlayRespawnAnimation()

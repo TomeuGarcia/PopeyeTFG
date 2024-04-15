@@ -78,7 +78,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayHealAnimation()
         {
-            //TODO
+            DoPlayHealAnimation().Forget();
+        }
+
+        private async UniTaskVoid DoPlayHealAnimation()
+        {
+            float aaaaaaa = 0.1f; 
+            _material.DOFloat(0.2f, _config.DashingProperty, aaaaaaa).SetEase(Ease.Linear);
+            await UniTask.Delay(TimeSpan.FromSeconds(aaaaaaa));
+            _material.DOFloat(0.0f, _config.DashingProperty, 0.2f).SetEase(Ease.InCirc);
         }
         public void PlayStartHealingAnimation(float durationToComplete)
         {
