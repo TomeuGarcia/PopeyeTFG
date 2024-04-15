@@ -17,6 +17,11 @@ namespace Popeye.Timers
             SetDuration(duration);
             Clear();
         }
+        public Timer(float duration, float startTime)
+        {
+            SetDuration(duration);
+            Update(startTime);
+        }
 
         public void SetDuration(float newDuration)
         {

@@ -310,19 +310,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         
 
-        public void OnStartChargingThrow()
-        {
-            _anchorTrajectoryMaker.ShowTrajectoryEndSpot();
-        }
-        public void OnKeepChargingThrow()
-        {
-            _anchorThrower.UpdateThrowTrajectory();
-        }
-        public void OnStopChargingThrow()
-        {
-            _anchorTrajectoryMaker.HideTrajectoryEndSpot();
-        }
-
         
         
         public async UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition)
