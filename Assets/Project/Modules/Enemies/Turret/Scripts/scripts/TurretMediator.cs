@@ -115,6 +115,11 @@ namespace Popeye.Modules.Enemies
             _turretShooting.Shoot();
         }
 
+        public void MultipleShoot()
+        {
+            _turretShooting.MultipleShoot();
+        }
+
         public void SetOutOfGround()
         {
             _turretShooting.SetOutOfGround();
