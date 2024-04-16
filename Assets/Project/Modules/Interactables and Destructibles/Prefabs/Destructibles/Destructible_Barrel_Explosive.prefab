@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7149057237761670254}
   m_Layer: 0
-  m_Name: Destructible_Barrel
+  m_Name: Destructible_Barrel_Explosive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_Children:
   - {fileID: 2890205028609630641}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3429116545248151130
 PrefabInstance:
@@ -63,17 +63,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3381f5701fb749b4994244e7e9c11973,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 58.002346
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3381f5701fb749b4994244e7e9c11973,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3381f5701fb749b4994244e7e9c11973,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -108.48977
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3381f5701fb749b4994244e7e9c11973,
         type: 3}
@@ -110,6 +110,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3381f5701fb749b4994244e7e9c11973,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2b7bf0c4a6e43c24f902c20bb41449c9, type: 2}
     - target: {fileID: 919132149155446097, guid: 3381f5701fb749b4994244e7e9c11973,
         type: 3}
       propertyPath: m_Name
