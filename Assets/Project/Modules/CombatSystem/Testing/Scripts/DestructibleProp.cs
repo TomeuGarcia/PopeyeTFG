@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem.Testing.Scripts
 {
-    public class DestructibleProp : MonoBehaviour, IDamageHitTarget, IKnockbackHitTarget, IAutoAimTarget
+    public class DestructibleProp : MonoBehaviour, IDamageHitTarget, IKnockbackHitTarget, IAutoAimTarget, IHealthUserBehaviour
     {
         [Header("COMPONENTS")]
         [SerializeField] private Rigidbody _rigidbody;
@@ -26,6 +26,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         private Quaternion _spawnRotation;
 
         private Transform Transform => transform;
+        
         
         
         public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;

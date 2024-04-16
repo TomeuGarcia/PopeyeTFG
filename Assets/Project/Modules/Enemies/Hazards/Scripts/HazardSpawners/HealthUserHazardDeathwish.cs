@@ -1,9 +1,9 @@
-using Popeye.Modules.Enemies.Hazards;
+using Popeye.Modules.ValueStatSystem;
 using UnityEngine;
 
-namespace Popeye.Modules.CombatSystem.Testing.Scripts
+namespace Popeye.Modules.Enemies.Hazards
 {
-    public class DestructiblePropHazardDeathwish : ADestructiblePropDeathwish
+    public class HealthUserHazardDeathwish : AHealthUserDeathwish
     {
         [Header("HAZARD")]
         [SerializeField] private AHazardSpawner _hazardSpawner;
