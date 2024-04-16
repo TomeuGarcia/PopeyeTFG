@@ -40,14 +40,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition);
 
-        bool IsObstructedByObstacles();
         
-        void SubscribeToOnObstacleHit(Action<Collider> callback);
-        void UnsubscribeToOnObstacleHit(Action<Collider> callback);
-        void EnableObstacleHitForDuration(float duration);
-
-        void OnTryUsingWhenObstructed();
-
 
         void OnDamageDealt(DamageHitResult damageHitResult);
 

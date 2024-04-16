@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.Generic.ParticleBehaviours;
 using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
@@ -34,6 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayTakeDamageAnimation()
         {
+            _particleFactory.Create(_config.TakeDamageOnHit, _transformHolder.position, quaternion.identity);
         }
 
         public void PlayRespawnAnimation()
@@ -46,13 +48,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayHealAnimation()
         {
-            _particleFactory.Create(_config.HealCompletedParticleType, Vector3.zero, quaternion.identity, _transformHolder)
-                .gameObject.GetComponent<CallbackRecycleParticle>();
+            _particleFactory.Create(_config.HealCompletedParticleType, Vector3.zero, quaternion.identity, _transformHolder);
         }
         public void PlayStartHealingAnimation(float durationToComplete)
         {
-            _healingParticlesToInterrupt = _particleFactory.Create(_config.HealProcessParticleType, Vector3.zero, quaternion.identity, _transformHolder)
-                .gameObject.GetComponent<CallbackRecycleParticle>();
+            _healingParticlesToInterrupt = _particleFactory.Create(_config.HealProcessParticleType, Vector3.zero,
+                    quaternion.identity, _transformHolder).gameObject.GetComponent<CallbackRecycleParticle>();
         }
         public void PlayHealingInterruptedAnimation()
         {

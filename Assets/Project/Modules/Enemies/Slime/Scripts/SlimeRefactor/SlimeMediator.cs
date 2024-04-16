@@ -8,6 +8,7 @@ using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.EnemyFactories;
+using Popeye.Modules.Enemies.Hazards;
 using Popeye.Modules.Enemies.Slime;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;

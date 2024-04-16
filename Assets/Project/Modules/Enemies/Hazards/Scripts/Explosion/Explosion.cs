@@ -1,6 +1,8 @@
+using System;
 using Popeye.Core.Pool;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
+using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Hazards
 {
@@ -9,15 +11,19 @@ namespace Popeye.Modules.Enemies.Hazards
         private ICombatManager _combatManager;
         private IParticleFactory _particleFactory;
         private ExplosionSize _size;
+        [SerializeField] private ExplosionHazardConfig _explosionHazardConfig;
+        [SerializeField] private float _lifeTime=1;
+        [SerializeField] private Collider _collider;
+        private DamageHitConfig _damageHitConfig;
         
         internal override void Init()
         {
-            throw new System.NotImplementedException();
+            _collider.enabled = false;
         }
 
         internal override void Release()
         {
-            throw new System.NotImplementedException();
+            _collider.enabled = false;
         }
 
 
@@ -30,10 +36,16 @@ namespace Popeye.Modules.Enemies.Hazards
 
         public void StartExplosion()
         {
-            // TODO
-            // Parse data from config (damage, scale, etc.) using _size
+            float size = _explosionHazardConfig.GetScaleBySize(_size);
+            transform.localScale = new Vector3(size, size, size);
+            _collider.enabled = true;
+            Invoke("Recycle",_lifeTime);
         }
-        
-        
+
+        private void OnTriggerEnter(Collider other)
+        {
+            _combatManager.TryDealDamage(other.gameObject, _explosionHazardConfig.GetDamageHitBySize(_size), out DamageHitResult damageHitResult);
+
+        }
     }
 }

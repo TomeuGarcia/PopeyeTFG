@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Components
 {
-    public class EnemyHealth : MonoBehaviour, IDamageHitTarget, IKnockbackHitTarget
+    public class EnemyHealth : MonoBehaviour, IDamageHitTarget, IKnockbackHitTarget,IHealthUserBehaviour
     {
         public HealthSystem HealthSystem { get; private set; }
         [SerializeField, Range(0, 100)] private int _maxHealth = 50;

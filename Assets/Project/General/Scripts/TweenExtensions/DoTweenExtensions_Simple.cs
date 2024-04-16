@@ -39,6 +39,17 @@ namespace Project.Scripts.TweenExtensions
                 .SetEase(config.Ease);
         }
         
+        public static Tweener RotateBy(this Transform target, TweenConfig config, bool completeBeforeApplying = false)
+        {
+            if (completeBeforeApplying)
+            {
+                target.DOComplete();
+            }
+            
+            return target.DOBlendableRotateBy(config.Value, config.Duration)
+                .SetEase(config.Ease);
+        }
+        
         // MOVE
         public static Tweener Move(this Transform target, TweenConfig config, bool completeBeforeApplying = false)
         {
