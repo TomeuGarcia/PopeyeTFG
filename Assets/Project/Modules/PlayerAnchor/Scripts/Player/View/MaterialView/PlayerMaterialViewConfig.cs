@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration;
 using UnityEngine;
@@ -9,17 +10,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
     [System.Serializable]
     public class PlayerMaterialViewConfig
     {
-        [SerializeField] private Color _normalColor;
-        [SerializeField] private Color _damagedColor;
-        [SerializeField] private Color _healColor;
-        public Color NormalColor => _normalColor;
-        public Color DamagedColor => _damagedColor;
-        public Color HealColor => _healColor;
+        [Header("HEAL")]
+        [SerializeField] private string _healProperty;
+        [SerializeField] private float _healAppearTime;
+        [SerializeField] private Ease _healAppearEase;
+        [SerializeField] private float _healDisappearTime;
+        [SerializeField] private Ease _healDisappearEase;
         
-        
-        [Header("DAMAGED")]
-        [SerializeField] private List<MaterialFlash> _flashSequence = new();
-        public List<MaterialFlash> FlashSequence => _flashSequence;
+        public string HealProperty => _healProperty;
+        public float HealAppearTime => _healAppearTime;
+        public Ease HealAppearEase => _healAppearEase;
+        public float HealDisappearTime => _healDisappearTime;
+        public Ease HealDisappearEase => _healDisappearEase;
 
         [Header("TIRED")]
         [SerializeField] private string _isTiredProperty;
