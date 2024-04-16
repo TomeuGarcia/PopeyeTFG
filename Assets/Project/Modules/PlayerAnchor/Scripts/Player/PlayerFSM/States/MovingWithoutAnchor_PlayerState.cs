@@ -184,11 +184,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) && 
                    _blackboard.PlayerMediator.CanSpinAnchor();
         }
-
-        private bool IsAnchorObstructed()
-        {
-            return _blackboard.AnchorMediator.IsObstructedByObstacles();
-        }
+        
         
         private bool PlayerCanHeal(out bool hasHealsLeft)
         {

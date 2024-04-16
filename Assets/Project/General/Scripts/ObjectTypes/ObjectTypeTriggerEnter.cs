@@ -48,9 +48,13 @@ namespace Popeye.Scripts.ObjectTypes
             return objectTypeBehaviour.IsOfAnyType(_acceptObjectTypes);
         }
 
-        private void Disable()
+        public void Disable()
         {
             _collider.enabled = false;
+        }
+        public void Enable()
+        {
+            _collider.enabled = true;
         }
     }
 }
