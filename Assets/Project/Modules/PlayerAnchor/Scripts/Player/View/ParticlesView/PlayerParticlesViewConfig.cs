@@ -28,6 +28,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Ease _dashTrailRotationEase;
         [SerializeField] private Ease _dashTrailScaleEase;
         
+        [Header("TAKE DAMAGE")]
+        [SerializeField] private ParticleTypes _takeDamageOnHit;
+        
         public ParticleTypes HealProcessParticleType => _healProcessParticleType;
         public ParticleTypes HealCompletedParticleType => _healCompletedParticleType;
         public ParticleTypes EnragedStartParticleTypes => _enragedStartParticleTypes;
@@ -41,5 +44,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public Vector3 DashTrailRotation => _dashTrailRotation;
         public Ease DashTrailRotationEase => _dashTrailRotationEase;
         public Ease DashTrailScaleEase => _dashTrailScaleEase;
+        public ParticleTypes TakeDamageOnHit => _takeDamageOnHit;
     }
 }

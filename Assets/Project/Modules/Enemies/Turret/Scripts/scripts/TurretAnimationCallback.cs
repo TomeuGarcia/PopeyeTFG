@@ -6,6 +6,7 @@ namespace Popeye.Modules.Enemies.Components
 {
     public class TurretAnimationCallback : MonoBehaviour
     {
+        [SerializeField] private bool _multipleShot = false;
         protected TurretMediator _mediator;
 
         public void Configure(TurretMediator mediator)
@@ -15,7 +16,15 @@ namespace Popeye.Modules.Enemies.Components
 
         public void Shoot()
         {
-            _mediator.Shoot();
+            if (_multipleShot)
+            {
+                _mediator.MultipleShoot();
+            }
+            else
+            {
+                _mediator.Shoot();
+            }
+            
         }
 
         public void TurretFinishedShooting()
