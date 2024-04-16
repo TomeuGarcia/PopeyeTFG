@@ -51,6 +51,7 @@ namespace Popeye.Modules.Enemies.Hazards
         {
             Explosion explosion = _explosionPool.Spawn<Explosion>(position, rotation);
             explosion.Configure(_combatManager, _particleFactory, size);
+            explosion.StartExplosion();
             return explosion;
         }
         
