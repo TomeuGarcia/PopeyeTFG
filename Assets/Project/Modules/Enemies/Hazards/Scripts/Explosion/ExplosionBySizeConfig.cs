@@ -9,7 +9,8 @@ namespace Popeye.Modules.Enemies.Hazards
     public struct ExplosionBySizeConfig
     {
         public ExplosionSize size;
-        public DamageHit damageHitConfig;
+        public DamageHitConfig damageHitConfig;
+        
         public float scale;
 
     }

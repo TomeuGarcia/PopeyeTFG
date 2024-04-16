@@ -46,6 +46,15 @@ namespace Popeye.Modules.Enemies.EnemyFactories
                 enemyIdToMindFactory[slimeEnemyID] = slimeMindFactoryCreator;
             }
 
+            // Setup Explosive Slime
+            SlimeFactoryConfiguration explosiveSlimeFactoryConfiguration = _installerConfiguration.ExplosiveSlimeFactoryConfiguration;
+            SlimeMindFactoryCreator explosiveSlimeMindFactoryCreator = 
+                new SlimeMindFactoryCreator(explosiveSlimeFactoryConfiguration, transform, hazardsFactory, audioManager);
+            slimeEnemyIDs = explosiveSlimeFactoryConfiguration.GetSlimeEnemyIDs();
+            foreach (var slimeEnemyID in slimeEnemyIDs)
+            {
+                enemyIdToMindFactory[slimeEnemyID] = explosiveSlimeMindFactoryCreator;
+            }
 
             MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new (enemyIdToMindFactory, createdEnemiesRecycler);
             

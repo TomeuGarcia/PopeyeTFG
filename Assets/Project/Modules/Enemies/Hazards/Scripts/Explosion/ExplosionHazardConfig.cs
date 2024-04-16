@@ -12,7 +12,6 @@ namespace Popeye.Modules.Enemies.Hazards
     public class ExplosionHazardConfig : ScriptableObject
     {
         [SerializeField] private ExplosionBySizeConfig[] _sizeConfigs;
-        [SerializeField] private DamageHit _defaultDamageHitConfig;
         [SerializeField] private float _defaultScale = 3;
 
         public DamageHit  GetDamageHitBySize(ExplosionSize size)
@@ -21,11 +20,11 @@ namespace Popeye.Modules.Enemies.Hazards
             {
                 if (config.size == size)
                 {
-                    return config.damageHitConfig;
+                    return new DamageHit(config.damageHitConfig);
                 }
             }
 
-            return _defaultDamageHitConfig;
+            return null;
         }
 
         public float GetScaleBySize(ExplosionSize size)
