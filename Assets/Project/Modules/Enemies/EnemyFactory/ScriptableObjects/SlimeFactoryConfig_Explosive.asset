@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dc97fc0d556406ca5fd3bcdff9d1d5b, type: 3}
+  m_Name: SlimeFactoryConfig_Explosive
+  m_EditorClassIdentifier: 
+  _slimeMindPrefab: {fileID: 2711686069890572797, guid: 1aa550e15c32f6e47a3788220fbda8d2,
+    type: 3}
+  _numberOfInitialSlimes: 30
+  _slimeMindAndSizeDatas:
+  - _slimeMindId: {fileID: 11400000, guid: fa97666e71225e946ae8482284ed575a, type: 2}
+    _mediatorPrefab: {fileID: 4924014901260253396, guid: 095db172b517fac45bdeb3735cfbecd1,
+      type: 3}
+    _numberOfInitialObjects: 15
+    _slimeSizeId: {fileID: 11400000, guid: af8f650ec8a60e14eb22d08afe88fe3e, type: 2}
+    _nextChildrenSpawnData:
+      slimeSizeId: {fileID: 0}
+      childsToSpawn: 0
