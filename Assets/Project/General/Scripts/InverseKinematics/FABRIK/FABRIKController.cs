@@ -6,17 +6,13 @@ namespace Popeye.InverseKinematics.FABRIK
 
     public class FABRIKController
     {
-        private readonly float _angleThreshold;
-        private readonly float _distanceToEndEffectorTolerance;
-        private readonly int _maxTries;
+        private readonly FABRIKControllerConfig _config;
 
         private readonly List<FABRIKJointChain> _jointChains;
 
-        public FABRIKController(int maxTries = 10)
+        public FABRIKController(FABRIKControllerConfig config)
         {
-            _angleThreshold = 1.0f;
-            _distanceToEndEffectorTolerance = 0.01f;
-            _maxTries = maxTries;
+            _config = config;
 
             _jointChains = new List<FABRIKJointChain>();
         }
@@ -46,13 +42,13 @@ namespace Popeye.InverseKinematics.FABRIK
 
 
             Vector3 targetPosition = jointChain.IsTargetUnreachable() ? 
-                jointChain.RootToTarget * (jointChain.DistancesSum + _distanceToEndEffectorTolerance) : 
+                jointChain.RootToTarget * (jointChain.DistancesSum + _config.DistanceToEndEffectorTolerance) : 
                 jointChain.TargetPosition;
 
             int tries = 0;
             
-            while (jointChain.EndEffectorCopyToTargetDistance(targetPosition) > _distanceToEndEffectorTolerance
-                   && tries++ < _maxTries)
+            while (jointChain.EndEffectorCopyToTargetDistance(targetPosition) > _config.DistanceToEndEffectorTolerance
+                   && tries++ < _config.MaxTries)
             {
                 ForwardReaching(jointChain);
                 BackwardReaching(jointChain);
@@ -130,9 +126,13 @@ namespace Popeye.InverseKinematics.FABRIK
                 Vector3 axis = Vector3.Cross(oldDirection, newDirection).normalized;
                 float angle = Mathf.Acos(Vector3.Dot(oldDirection, newDirection)) * Mathf.Rad2Deg;
 
-                if (angle > _angleThreshold)
+                if (angle > _config.AngleThreshold)
                 {
-                    jointChain.Joints[i].rotation = Quaternion.AngleAxis(angle, axis) * jointChain.Joints[i].rotation;
+                    Quaternion originRotation = jointChain.Joints[i].rotation;
+                    Quaternion goalRotation = Quaternion.AngleAxis(angle, axis) * originRotation;
+                    float t = Mathf.Clamp01(Time.deltaTime * _config.LerpSpeed);
+                    Quaternion currentRotation = Quaternion.Slerp(originRotation, goalRotation, t);
+                    jointChain.Joints[i].rotation = currentRotation;//Quaternion.AngleAxis(angle, axis) * jointChain.Joints[i].rotation;
                 }
             }
         }
