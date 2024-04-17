@@ -890,7 +890,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cbc194d1f4722c84ab6c03c3e91260e2, type: 2}
+  - {fileID: 2100000, guid: a3dfa16bf69578b4e9e0578c08daf2c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1820,7 +1820,7 @@ MonoBehaviour:
   _playerDistanceThreshold: 15
   _playerDistanceThresholdToHide: 5
   _playerDistanceThresholdToAppear: 6
-  _numberOfShots: 3
+  _numberOfShots: 5
 --- !u!114 &5585137727194799300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1845,6 +1845,7 @@ MonoBehaviour:
   _turretAnimatorCallback: {fileID: 6528270357543172861}
   _turretSpineRotator: {fileID: 7974128956540601288}
   _powerBoostDrop: {fileID: 11400000, guid: 9a6c97ea504c67549aee2b386b739b50, type: 2}
+  _turretSounds: {fileID: 11400000, guid: 72d5e6a5ba3bdb6499b9ed3e2c51c04b, type: 2}
 --- !u!114 &6891017323650486759
 MonoBehaviour:
   m_ObjectHideFlags: 0

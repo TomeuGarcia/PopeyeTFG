@@ -126,6 +126,7 @@ namespace Popeye.Modules.Enemies
 
         public void MultipleShoot()
         {
+            _turretSounds.PlayTurretShot(_audioManager,this.gameObject);
             _turretShooting.MultipleShoot();
         }
 
