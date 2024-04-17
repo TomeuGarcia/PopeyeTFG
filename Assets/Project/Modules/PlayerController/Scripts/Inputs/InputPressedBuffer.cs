@@ -20,6 +20,11 @@ namespace Popeye.Modules.PlayerController.Inputs
             {
                 _bufferTimer.Clear();
             }
+
+            if (_inputAction.WasReleasedThisFrame())
+            {
+                _bufferTimer.Update(_bufferTimer.Duration);
+            }
             
             _bufferTimer.Update(deltaTime);
         }

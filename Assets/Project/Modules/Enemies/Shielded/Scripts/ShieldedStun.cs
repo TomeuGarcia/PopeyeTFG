@@ -9,7 +9,7 @@ namespace Popeye.Modules.Enemies.Components
     public class ShieldedStun : MonoBehaviour
     {
 
-        [SerializeField] private int _stunnedTimeInMillis;
+        [SerializeField] private float _stunnedTime = 0.5f;
         [SerializeField] private float _timeUntilSlamDisabled = 3.5f;
         private ShieldedMediator _mediator;
         private bool _stunned = false;
@@ -41,7 +41,7 @@ namespace Popeye.Modules.Enemies.Components
             _mediator.DeactivateNavigation();
             await UniTask.Delay(TimeSpan.FromSeconds(_timeUntilSlamDisabled));
             _mediator.SetIsInvulnerable(false);
-            await UniTask.Delay(_stunnedTimeInMillis);
+            await UniTask.Delay(TimeSpan.FromSeconds(_stunnedTime));
             if (_stunned)
             {
                 CancellStun();
