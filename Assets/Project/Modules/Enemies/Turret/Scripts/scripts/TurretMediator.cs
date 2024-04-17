@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Modules.Enemies.Turret;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -28,9 +30,11 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private TurretSpineRotator _turretSpineRotator;
         [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
         private IPowerBoostDropFactory _powerBoostDropFactory;
-        
+        [SerializeField] private TurretSoundConfig _turretSounds;
+        private IFMODAudioManager _audioManager;
         internal override void Init()
         {
+            _audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
             _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(), ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker);
@@ -87,14 +91,17 @@ namespace Popeye.Modules.Enemies
         
         public void StopShootingAnimation()
         {
+            
             _turretAnimatorController.StopShootingAnimation();
         }
         public void AppearAnimation()
         {
+            _turretSounds.PlayTurretDigUp(_audioManager,this.gameObject);
             _turretAnimatorController.AppearAnimation();
         }
         public void HideAnimation()
         {
+            _turretSounds.PlayTurretDigDown(_audioManager,this.gameObject);
             _turretAnimatorController.HideAnimation();
         }
         public override Vector3 Position { get; }
@@ -103,6 +110,7 @@ namespace Popeye.Modules.Enemies
         {
             _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
             _turretMind.Die();
+            _turretSounds.PlayTurretDeath(_audioManager,this.gameObject);
             _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
         }
 
@@ -112,6 +120,7 @@ namespace Popeye.Modules.Enemies
         }
         public void Shoot()
         {
+            _turretSounds.PlayTurretShot(_audioManager,this.gameObject);
             _turretShooting.Shoot();
         }
 
@@ -122,6 +131,8 @@ namespace Popeye.Modules.Enemies
 
         public void SetOutOfGround()
         {
+            
+
             _turretShooting.SetOutOfGround();
         }
         public void SetInsideGround()
