@@ -132,7 +132,7 @@ namespace Popeye.InverseKinematics.FABRIK
                     Quaternion goalRotation = Quaternion.AngleAxis(angle, axis) * originRotation;
                     float t = Mathf.Clamp01(Time.deltaTime * _config.LerpSpeed);
                     Quaternion currentRotation = Quaternion.Slerp(originRotation, goalRotation, t);
-                    jointChain.Joints[i].rotation = currentRotation;//Quaternion.AngleAxis(angle, axis) * jointChain.Joints[i].rotation;
+                    jointChain.Joints[i].rotation = currentRotation;
                 }
             }
         }
