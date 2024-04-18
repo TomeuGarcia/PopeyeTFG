@@ -12,32 +12,36 @@ namespace Popeye.Modules.Enemies.Hazards
     public class ExplosionHazardConfig : ScriptableObject
     {
         [SerializeField] private ExplosionBySizeConfig[] _sizeConfigs;
-        [SerializeField] private float _defaultScale = 3;
+        [SerializeField, Range(0f, 5.0f)] private float _lifeTime = 1f;
 
-        public DamageHit  GetDamageHitBySize(ExplosionSize size)
+        public float LifeTime => _lifeTime;
+        
+        
+        public DamageHit GetPlayerDamageHitBySize(ExplosionSize size)
         {
-            foreach(ExplosionBySizeConfig config in _sizeConfigs)
-            {
-                if (config.size == size)
-                {
-                    return new DamageHit(config.damageHitConfig);
-                }
-            }
-
-            return null;
+            return new DamageHit(GetSizeConfig(size).playerDamageHitConfig);
+        }
+        public DamageHit GetOtherDamageHitBySize(ExplosionSize size)
+        {
+            return new DamageHit(GetSizeConfig(size).otherDamageHitConfig);
         }
 
         public float GetScaleBySize(ExplosionSize size)
         {
+            return GetSizeConfig(size).scale;
+        }
+
+        private ExplosionBySizeConfig GetSizeConfig(ExplosionSize size)
+        {
             foreach(ExplosionBySizeConfig config in _sizeConfigs)
             {
                 if (config.size == size)
                 {
-                    return config.scale;
+                    return config;
                 }
             }
 
-            return _defaultScale;
+            return default;
         }
         
     }
