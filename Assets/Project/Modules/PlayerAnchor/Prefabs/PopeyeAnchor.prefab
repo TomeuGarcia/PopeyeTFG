@@ -1008,6 +1008,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ec0ce91dd923f44cb45931525a80529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _config:
+    _angleThreshold: 1
+    _distanceToEndEffectorTolerance: 0.01
+    _maxTries: 10
+    _lerpSpeed: 80
 --- !u!1 &9018746730959198548
 GameObject:
   m_ObjectHideFlags: 0
