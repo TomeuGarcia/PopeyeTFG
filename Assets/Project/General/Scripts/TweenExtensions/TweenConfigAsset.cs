@@ -8,6 +8,7 @@ namespace Project.Scripts.TweenExtensions
     public class TweenConfigAsset : ScriptableObject
     {
         [SerializeField] private TweenConfig _config;
+        public TweenConfig Config => _config;
         
         public static implicit operator TweenConfig(TweenConfigAsset asset)
         {

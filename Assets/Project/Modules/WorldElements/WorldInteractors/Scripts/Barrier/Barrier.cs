@@ -10,19 +10,26 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         
     public class Barrier : AWorldInteractor
     {
+        [System.Serializable]
+        private struct StateEaseData
+        {
+            
+        }
+        
         [Header("ACTIVATED")]
         [SerializeField] private Transform _activatedStateSpot;
         [SerializeField, Range(0.0f, 10.0f)] private float _activateDuration = 0.5f;
+        [SerializeField] private bool _activatedColliderEnabledState = true;
 
         [Header("DEACTIVATED")]
         [SerializeField] private Transform _deactivatedStateSpot;
         [SerializeField, Range(0.0f, 10.0f)] private float _deactivateDuration = 0.5f;
-
+        [SerializeField] private bool _deactivatedColliderEnabledState = false;
+        
         [Header("REFERENCES")]
         [SerializeField] private Transform _barrierTransform;
         [SerializeField] private Collider _collider;
         [SerializeField] private bool _startActivated = false;
-        [SerializeField] private bool _colliderIsAlwaysEnabled = false;
 
         private bool _isActivated = false;
 
@@ -78,23 +85,27 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         private void SetState(Transform goalStateSpot, float duration)
         {
             _barrierTransform.DOMove(goalStateSpot.position, duration)
-                .SetUpdate(true);
+                .SetUpdate(true)
+                .SetEase(Ease.OutBounce);
             _barrierTransform.DORotateQuaternion(goalStateSpot.rotation, duration)
-                .SetUpdate(true);
+                .SetUpdate(true)
+                .SetEase(Ease.OutBounce);
         }
 
 
-        private void SetCollisionEnabled(bool isEnabled)
+        private void SetCollisionEnabled(bool isActivated)
         {
-            if (_collider != null && !_colliderIsAlwaysEnabled)
+            if (_collider != null)
             {
-                _collider.enabled = isEnabled;
+                _collider.enabled = isActivated
+                    ? _activatedColliderEnabledState 
+                    : _deactivatedColliderEnabledState;
             }
         }
-        private async UniTaskVoid SetCollisionEnabledDelayed(bool isEnabled, float delay)
+        private async UniTaskVoid SetCollisionEnabledDelayed(bool isActivated, float delay)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(delay), ignoreTimeScale: true);
-            SetCollisionEnabled(isEnabled);
+            SetCollisionEnabled(isActivated);
         }
 
 
