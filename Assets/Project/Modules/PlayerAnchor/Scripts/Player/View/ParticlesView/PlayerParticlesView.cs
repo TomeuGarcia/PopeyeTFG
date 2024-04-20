@@ -15,7 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly Transform _transformHolder;
         private readonly IParticleFactory _particleFactory;
 
-        private CallbackRecycleParticle _healingParticlesToInterrupt;
+        private InterpolatorRecycleParticle _healingParticlesToInterrupt;
         private CallbackRecycleParticle _enragedParticlesToInterrupt;
 
         public PlayerParticlesView(PlayerParticlesViewConfig config, Transform transformHolder, IParticleFactory particleFactory)
@@ -53,7 +53,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayStartHealingAnimation(float durationToComplete)
         {
             _healingParticlesToInterrupt = _particleFactory.Create(_config.HealProcessParticleType, Vector3.zero,
-                    quaternion.identity, _transformHolder).gameObject.GetComponent<CallbackRecycleParticle>();
+                    quaternion.identity, _transformHolder).gameObject.GetComponent<InterpolatorRecycleParticle>();
         }
         public void PlayHealingInterruptedAnimation()
         {

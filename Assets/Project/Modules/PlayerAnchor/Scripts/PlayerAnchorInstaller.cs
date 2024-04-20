@@ -90,6 +90,7 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Placing")]
         [SerializeField] private PlacePopeyePlayerEventChannelAsset _placePopeyePlayerEventChannel;
+        [SerializeField] private CheckpointTriggerChecker _playerCheckpointTriggerChecker;
 
         [Space(20)] 
         [Header("ANCHOR")] 
@@ -286,13 +287,13 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
-                playerInstantTranslation, playerStateMachine, _environmentFollower);
+                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerCheckpointTriggerChecker);
             _popeyePlayerPlacer.StartListening();
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor, playerMovementChecker);
-            playerMotion.Configure(_playerController.Transform, _playerController.Transform);
+            playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
@@ -309,7 +310,8 @@ namespace Popeye.Modules.PlayerAnchor
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
+                _playerCheckpointTriggerChecker, playerSafeGroundChecker, 
+                playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
 

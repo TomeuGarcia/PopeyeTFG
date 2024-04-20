@@ -8,16 +8,9 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
     public class AnchorToggleablePressurePlate : AnchorPressurePlate
     {
 
-        protected override bool CanBeTriggered(DamageHit damageHit)
+        protected override bool CanBeTriggered()
         {
-            /*
-            if (!_collider.bounds.Contains(damageHit.Position))
-            {
-                return false;
-            }
-            */
-
-            return damageHit.Damage > 10;
+            return true;
         }
 
         protected override void OnTakeAnchorHit()
@@ -37,8 +30,6 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
                 ActivateWorldInteractors();
             }
-
-
 
         }
 

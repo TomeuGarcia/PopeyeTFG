@@ -1,26 +1,25 @@
+using System;
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.WorldElements.WorldInteractors;
+using Project.Scripts.TweenExtensions;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.AnchorTriggerables
 {
     public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget
     {
         [Header("MOVE")] 
-        [SerializeField] private Vector3 _triggerMoveBy = Vector3.zero;
-        
-        
+        [SerializeField] private TweenConfigAsset _triggeredMoveBy;
+
         [Header("REFERENCES")]
         [SerializeField] private Material _triggeredMaterial;
         [SerializeField] private Material _notTriggeredMaterial;
         [SerializeField] private MeshRenderer _buttonMesh;
         [SerializeField] private Transform _buttonTransform;
-        [SerializeField] protected BoxCollider _collider;
         [SerializeField] private OneShotFMODSound _activatedSound;
     
         [Header("WORLD INTERACTORS")]
@@ -36,10 +35,10 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
             _buttonMesh.material = _notTriggeredMaterial;
             _isTriggered = false;
         }
-    
+        
         public bool CanBeDamaged(DamageHit damageHit)
         {
-            return CanBeTriggered(damageHit);
+            return CanBeTriggered();
         }
     
         public bool IsDead()
@@ -59,16 +58,9 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
             return new DamageHitResult(this, gameObject, damageHit, 0, Position);
         }
     
-        protected virtual bool CanBeTriggered(DamageHit damageHit)
+        protected virtual bool CanBeTriggered()
         {
-            /*
-            if (!_collider.bounds.Contains(damageHit.Position))
-            {
-                return false;
-            }
-            */
-    
-            return !_isTriggered && damageHit.Damage > 10;
+            return !_isTriggered;
         }
     
         protected virtual void OnTakeAnchorHit()
@@ -83,13 +75,15 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         protected void PlayTriggerAnimation()
         {
             _buttonMesh.material = _triggeredMaterial;
-            _buttonTransform.DOBlendableLocalMoveBy(_triggerMoveBy, 0.2f);
+
+            _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config);
+            
             ServiceLocator.Instance.GetService<IFMODAudioManager>().PlayOneShotAttached(_activatedSound, gameObject);
         }
         protected void PlayUntriggerAnimation()
         {
             _buttonMesh.material = _notTriggeredMaterial;
-            _buttonTransform.DOLocalMove(-_triggerMoveBy, 0.2f);
+            _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config.Undo());
         }
     
     
