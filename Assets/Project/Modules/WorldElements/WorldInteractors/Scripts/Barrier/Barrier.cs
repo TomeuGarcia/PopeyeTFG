@@ -56,14 +56,14 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
 
         protected override void DoEnterActivatedState()
         {
-            SetState(_activatedStateSpot, ActivateDuration, _activatedEase.Value.Ease);
+            SetState(_activatedStateSpot, _activatedEase.Value);
             SetCollisionEnabled(true);
             _isActivated = true;
         }
 
         protected override void DoEnterDeactivatedState()
         {
-            SetState(_deactivatedStateSpot, DeactivateDuration, _deactivatedEase.Value.Ease);
+            SetState(_deactivatedStateSpot, _deactivatedEase.Value);
             SetCollisionEnabledDelayed(false, DeactivateDuration).Forget();
             _isActivated = false;
         }
@@ -79,14 +79,14 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             _barrierTransform.rotation = goalStateSpot.rotation;
         }
         
-        private void SetState(Transform goalStateSpot, float duration, Ease ease)
+        private void SetState(Transform goalStateSpot, TweenEaseConfig easeConfig)
         {
-            _barrierTransform.DOMove(goalStateSpot.position, duration)
+            _barrierTransform.DOMove(goalStateSpot.position, easeConfig.Duration)
                 .SetUpdate(true)
-                .SetEase(ease);
-            _barrierTransform.DORotateQuaternion(goalStateSpot.rotation, duration)
+                .SetEase(easeConfig);
+            _barrierTransform.DORotateQuaternion(goalStateSpot.rotation, easeConfig.Duration)
                 .SetUpdate(true)
-                .SetEase(ease);
+                .SetEase(easeConfig);
         }
 
 
