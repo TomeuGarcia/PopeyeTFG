@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Project.Scripts.TweenExtensions
 {
+    [System.Serializable]
     public class TweenEaseConfig
     {
         [SerializeField, Range(0.01f, 5.0f)] private float _duration = 0.5f;
