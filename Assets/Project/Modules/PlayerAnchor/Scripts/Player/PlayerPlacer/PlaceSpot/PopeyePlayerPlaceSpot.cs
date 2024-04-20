@@ -17,6 +17,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         [SerializeField] private WorldEntityPreviewComponents _playerPreview;
         [SerializeField] private WorldEntityPreviewComponents _anchorPreview;
         
+        [Header("PLAYER RESPAWN")]
+        [SerializeField] private bool _isNewPlayerRespawn = true;
+        
         [Header("PLAYER SPECIFICS")]
         [SerializeField] private bool _startsCarryingAnchor = true;
         
@@ -41,6 +44,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
                 anchorPosition = _anchorPreview.PlaceTransform.position,
                 anchorRotation = _anchorPreview.PlaceTransform.rotation,
 
+                isNewPlayerRespawn = _isNewPlayerRespawn,
+                
                 startCarryingAnchor = _startsCarryingAnchor,
                 
                 environmentFollowData = _environmentFollowData
