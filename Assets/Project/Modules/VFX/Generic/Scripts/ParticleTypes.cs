@@ -27,6 +27,7 @@ namespace Popeye.Modules.VFX.Generic
         EnemyBloodHitDirectional,
         EnemyBloodHitDrip,
         EnemyBloodHitSplash,
-        EnemyBloodDeathDrip
+        EnemyBloodDeathDrip,
+        Explosion
     }
 }
