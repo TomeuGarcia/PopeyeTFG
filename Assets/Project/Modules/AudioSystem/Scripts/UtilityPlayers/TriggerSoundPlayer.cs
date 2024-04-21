@@ -7,9 +7,6 @@ namespace Popeye.Modules.AudioSystem
 {
     public class TriggerSoundPlayer : MonoBehaviour
     {
-        private IFMODAudioManager _fmodAudioManager;
-
-
         [Header("TRIGGER MODE")]
         [SerializeField] private bool _playOnEnter = true;
         [SerializeField] private bool _stopOnExit = true;
@@ -17,24 +14,24 @@ namespace Popeye.Modules.AudioSystem
         [Header("ACCEPT TYPES")]
         [SerializeField] private ObjectTypeAsset[] _acceptObjectTypes;
 
-        [Header("SOUNDS")] 
+        [Header("AUDIO MANAGER")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
+        [Header("SOUNDS")]
         [SerializeField] private GameObject _soundSource;
         [SerializeField] private OneShotFMODSound[] _oneShotSounds;
         [SerializeField] private LastingFMODSound[] _lastingSounds;
-        
-        
-        private void Start()
-        {
-            _fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
-        }
 
+        private LastingFMODSound.SoundId[] _lastingSoundIds;
+        
+        
         private void OnTriggerEnter(Collider other)
         {
             if (!_playOnEnter) return;
             if (!AcceptsOther(other)) return;
             
-            _fmodAudioManager.PlayOneShotsAttached(_oneShotSounds, _soundSource);
-            _fmodAudioManager.PlayLastingSounds(_lastingSounds, _soundSource);
+            _audioManager.PlayOneShotsAttached(_oneShotSounds, _soundSource);
+            _lastingSoundIds = _audioManager.PlayLastingSounds(_lastingSounds, _soundSource);
         }
 
         private void OnTriggerExit(Collider other)
@@ -42,7 +39,7 @@ namespace Popeye.Modules.AudioSystem
             if (!_stopOnExit) return;
             if (!AcceptsOther(other)) return;
         
-            _fmodAudioManager.StopLastingSounds(_lastingSounds);
+            _audioManager.StopLastingSounds(_lastingSoundIds);
         }
 
         private bool AcceptsOther(Collider other)

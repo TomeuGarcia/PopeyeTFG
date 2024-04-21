@@ -56,7 +56,14 @@ namespace Popeye.Modules.Enemies.Hazards
             float size = _explosionHazardConfig.GetScaleBySize(_size);
             transform.localScale = Vector3.one * size;
             
-            Invoke("Recycle", _explosionHazardConfig.LifeTime);
+            _explosionHazardConfig.ExplosionAudio.PlayExplosionSound(gameObject);
+            
+            Invoke("FinishExplosion", _explosionHazardConfig.LifeTime);
+        }
+
+        private void FinishExplosion()
+        {
+            Recycle();
         }
         
     }

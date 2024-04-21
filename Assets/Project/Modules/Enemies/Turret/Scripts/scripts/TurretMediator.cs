@@ -31,10 +31,9 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
         private IPowerBoostDropFactory _powerBoostDropFactory;
         [SerializeField] private TurretSoundConfig _turretSounds;
-        private IFMODAudioManager _audioManager;
+
         internal override void Init()
         {
-            _audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
             _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
             _enemyHealth.Configure(this);
             _enemyVisuals.Configure(ServiceLocator.Instance.GetService<IParticleFactory>(), ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker);
@@ -96,12 +95,12 @@ namespace Popeye.Modules.Enemies
         }
         public void AppearAnimation()
         {
-            _turretSounds.PlayTurretDigUp(_audioManager,this.gameObject);
+            _turretSounds.PlayTurretDigUp(gameObject);
             _turretAnimatorController.AppearAnimation();
         }
         public void HideAnimation()
         {
-            _turretSounds.PlayTurretDigDown(_audioManager,this.gameObject);
+            _turretSounds.PlayTurretDigDown(gameObject);
             _turretAnimatorController.HideAnimation();
         }
         public override Vector3 Position { get; }
@@ -110,7 +109,7 @@ namespace Popeye.Modules.Enemies
         {
             _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
             _turretMind.Die();
-            _turretSounds.PlayTurretDeath(_audioManager,this.gameObject);
+            _turretSounds.PlayTurretDeath(gameObject);
             _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
         }
 
@@ -120,13 +119,13 @@ namespace Popeye.Modules.Enemies
         }
         public void Shoot()
         {
-            _turretSounds.PlayTurretShot(_audioManager,this.gameObject);
+            _turretSounds.PlayTurretShot(gameObject);
             _turretShooting.Shoot();
         }
 
         public void MultipleShoot()
         {
-            _turretSounds.PlayTurretShot(_audioManager,this.gameObject);
+            _turretSounds.PlayTurretShot(gameObject);
             _turretShooting.MultipleShoot();
         }
 

@@ -50,29 +50,33 @@ namespace Popeye.Modules.AudioSystem
         }
 
 
-        public void PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject)
+        public LastingFMODSound.SoundId PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject)
         {
-            _lastingSoundsController.Play(lastingSound, attachedGameObject.transform);
+            return _lastingSoundsController.Play(lastingSound, attachedGameObject.transform);            
         }
 
-        public void StopLastingSound(LastingFMODSound lastingSound)
+        public void StopLastingSound(LastingFMODSound.SoundId lastingSoundId)
         {
-            _lastingSoundsController.Stop(lastingSound);
+            _lastingSoundsController.Stop(lastingSoundId);
         }
 
-        public void PlayLastingSounds(LastingFMODSound[] lastingSounds, GameObject attachedGameObject)
+        public LastingFMODSound.SoundId[] PlayLastingSounds(LastingFMODSound[] lastingSounds, GameObject attachedGameObject)
         {
-            foreach (LastingFMODSound lastingSound in lastingSounds)
+            LastingFMODSound.SoundId[] soundIds = new LastingFMODSound.SoundId[lastingSounds.Length];
+            
+            for (int i = 0; i < lastingSounds.Length; ++i)
             {
-                PlayLastingSound(lastingSound, attachedGameObject);
+                soundIds[i] = PlayLastingSound(lastingSounds[i], attachedGameObject);
             }
+
+            return soundIds;
         }
 
-        public void StopLastingSounds(LastingFMODSound[] lastingSounds)
+        public void StopLastingSounds(LastingFMODSound.SoundId[] lastingSoundIds)
         {
-            foreach (LastingFMODSound lastingSound in lastingSounds)
+            foreach (LastingFMODSound.SoundId lastingSoundId in lastingSoundIds)
             {
-                StopLastingSound(lastingSound);
+                StopLastingSound(lastingSoundId);
             }
         }
 

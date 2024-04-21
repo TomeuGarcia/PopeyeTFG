@@ -5,29 +5,26 @@ namespace Popeye.Modules.AudioSystem
 {
     public class WhenLoadedSoundPlayer : MonoBehaviour
     {
-        private IFMODAudioManager _fmodAudioManager;
-
+        [Header("AUDIO MANAGER")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
         [Header("SOUNDS")]
         [SerializeField] private GameObject _soundSource;
         [SerializeField] private OneShotFMODSound[] _oneShotSounds;
         [SerializeField] private LastingFMODSound[] _lastingSounds;
         
+        private LastingFMODSound.SoundId[] _lastingSoundIds;
+
         
-        private void Start()
-        {
-            _fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
-        }
-
-
         private void OnEnable()
         {
-            _fmodAudioManager.PlayOneShotsAttached(_oneShotSounds, _soundSource);
-            _fmodAudioManager.PlayLastingSounds(_lastingSounds, _soundSource);
+            _audioManager.PlayOneShotsAttached(_oneShotSounds, _soundSource);
+            _lastingSoundIds = _audioManager.PlayLastingSounds(_lastingSounds, _soundSource);
         }
 
         private void OnDisable()
         {
-            _fmodAudioManager.StopLastingSounds(_lastingSounds);
+            _audioManager.StopLastingSounds(_lastingSoundIds);
         }
         
         

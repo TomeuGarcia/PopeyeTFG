@@ -1,3 +1,4 @@
+using System;
 using FMODUnity;
 using Popeye.Core.Pool;
 using UnityEngine;
@@ -9,8 +10,12 @@ namespace Popeye.Modules.AudioSystem
         [SerializeField] private FMODUnity.StudioEventEmitter _eventEmitter;
 
         private LastingFMODSound _currentSound;
-        
-        
+
+        private void Awake()
+        {
+            _eventEmitter.AllowFadeout = true;
+        }
+
         internal override void Init()
         {
             

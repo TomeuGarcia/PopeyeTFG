@@ -9,17 +9,14 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         menuName = ScriptableObjectsHelper.PLAYERABILITYUNLOCK_ASSETS_PATH + "ChristalSounds")]
     public class AbilityUnlockerChristalAudio : ScriptableObject, IAbilityUnlockerChristalAudio
     {
+        [Header("AUDIO MANAGER")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
+        [Header("SOUNDS")]
         [SerializeField] private OneShotFMODSound _hit;
         [SerializeField] private OneShotFMODSound _break;
         [SerializeField] private OneShotFMODSound _collected;
 
-        private IFMODAudioManager _audioManager;
-        
-        
-        public void Configure(IFMODAudioManager audioManager)
-        {
-            _audioManager = audioManager;
-        }
         
         
         public void PlayHitSound(GameObject source)

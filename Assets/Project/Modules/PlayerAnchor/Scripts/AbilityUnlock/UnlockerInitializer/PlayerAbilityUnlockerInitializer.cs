@@ -41,7 +41,6 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _initializeConfig.GetReferences(_abilityToUnlock,
                 out GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences);
             
-            _christalAudio.Configure(ServiceLocator.Instance.GetService<IFMODAudioManager>());
             _christalView.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);            
             
             _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, _christalView);

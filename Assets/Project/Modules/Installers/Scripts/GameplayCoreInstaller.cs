@@ -65,7 +65,6 @@ namespace Popeye.Modules.Installers
 
             IEventSystemService eventSystemService = serviceLocator.GetService<IEventSystemService>();
             ITimeFunctionalities timeFunctionalities = serviceLocator.GetService<ITimeFunctionalities>();
-            IFMODAudioManager audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
 
 
             _lastLoadedSceneProvider = new LastLoadedSceneProvider(eventSystemService);
@@ -82,7 +81,7 @@ namespace Popeye.Modules.Installers
 
             
             _informationDisplayInstaller.Install(serviceLocator);
-            _factoriesInstaller.Install(serviceLocator, audioManager, eventSystemService, combatManagerService, 
+            _factoriesInstaller.Install(serviceLocator, eventSystemService, combatManagerService, 
                 _lastLoadedSceneProvider);
             _playerAnchorInstaller.Install();
             _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);

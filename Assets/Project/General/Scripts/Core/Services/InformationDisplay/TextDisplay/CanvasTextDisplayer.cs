@@ -12,6 +12,10 @@ namespace Popeye.Core.Services.InformationDisplay
 {
     public class CanvasTextDisplayer : MonoBehaviour, ITextDisplayer
     {
+        [Header("AUDIO")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+    
+        [Header("COMPONENTS")]
         [SerializeField] private InterfaceReference<ITextDisplayViewEffects, MonoBehaviour> _displayViewEffects;
         [SerializeField] private CanvasGroup _backgroundFadeGroup;
         [SerializeField] private CanvasGroup _contentFadeGroup;
@@ -19,7 +23,6 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private TextMeshProUGUI _contentText;
 
         private TextDisplayConfig _currentDisplay;
-        private IFMODAudioManager _audioManager;
         
         private Queue<TextDisplayConfig> _queuedDisplays;
         private bool _processingQueuedDisplays;
@@ -39,11 +42,6 @@ namespace Popeye.Core.Services.InformationDisplay
             
             _isShowing = false;
             _isHiding = false;
-        }
-
-        private void Start()
-        {
-            _audioManager = ServiceLocator.ServiceLocator.Instance.GetService<IFMODAudioManager>();
         }
 
         private void OnDestroy()
