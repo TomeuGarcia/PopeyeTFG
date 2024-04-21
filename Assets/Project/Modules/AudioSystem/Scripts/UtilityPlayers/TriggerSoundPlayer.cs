@@ -21,6 +21,8 @@ namespace Popeye.Modules.AudioSystem
         [SerializeField] private GameObject _soundSource;
         [SerializeField] private OneShotFMODSound[] _oneShotSounds;
         [SerializeField] private LastingFMODSound[] _lastingSounds;
+
+        private LastingFMODSound.SoundId[] _lastingSoundIds;
         
         
         private void OnTriggerEnter(Collider other)
@@ -29,7 +31,7 @@ namespace Popeye.Modules.AudioSystem
             if (!AcceptsOther(other)) return;
             
             _audioManager.PlayOneShotsAttached(_oneShotSounds, _soundSource);
-            _audioManager.PlayLastingSounds(_lastingSounds, _soundSource);
+            _lastingSoundIds = _audioManager.PlayLastingSounds(_lastingSounds, _soundSource);
         }
 
         private void OnTriggerExit(Collider other)
@@ -37,7 +39,7 @@ namespace Popeye.Modules.AudioSystem
             if (!_stopOnExit) return;
             if (!AcceptsOther(other)) return;
         
-            _audioManager.StopLastingSounds(_lastingSounds);
+            _audioManager.StopLastingSounds(_lastingSoundIds);
         }
 
         private bool AcceptsOther(Collider other)

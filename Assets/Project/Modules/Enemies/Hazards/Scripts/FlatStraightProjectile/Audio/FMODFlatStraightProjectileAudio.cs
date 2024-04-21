@@ -14,18 +14,19 @@ namespace Popeye.Modules.Enemies.Hazards
         [Header("SOUNDS")]
         [Expandable] [SerializeField] private LastingFMODSound _movingSound; 
         [Expandable] [SerializeField] private OneShotFMODSound _objectContactSound; 
-        [Expandable] [SerializeField] private OneShotFMODSound _lifetimeEndSound; 
-        
-        
+        [Expandable] [SerializeField] private OneShotFMODSound _lifetimeEndSound;
 
+
+        private LastingFMODSound.SoundId _movingSoundId;
+        
         public void PlayMovingSound(GameObject source)
         {
-            _audioManager.PlayLastingSound(_movingSound, source);
+            _movingSoundId = _audioManager.PlayLastingSound(_movingSound, source);
         }
 
         public void StopMovingSound()
         {
-            _audioManager.StopLastingSound(_movingSound);
+            _audioManager.StopLastingSound(_movingSoundId);
         }
 
         public void PlayObjectContactSound(GameObject source)

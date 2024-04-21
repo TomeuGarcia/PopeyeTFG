@@ -13,16 +13,18 @@ namespace Popeye.Modules.AudioSystem
         [SerializeField] private OneShotFMODSound[] _oneShotSounds;
         [SerializeField] private LastingFMODSound[] _lastingSounds;
         
+        private LastingFMODSound.SoundId[] _lastingSoundIds;
+
         
         private void OnEnable()
         {
             _audioManager.PlayOneShotsAttached(_oneShotSounds, _soundSource);
-            _audioManager.PlayLastingSounds(_lastingSounds, _soundSource);
+            _lastingSoundIds = _audioManager.PlayLastingSounds(_lastingSounds, _soundSource);
         }
 
         private void OnDisable()
         {
-            _audioManager.StopLastingSounds(_lastingSounds);
+            _audioManager.StopLastingSounds(_lastingSoundIds);
         }
         
         

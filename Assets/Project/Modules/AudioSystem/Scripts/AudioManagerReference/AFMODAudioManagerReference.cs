@@ -31,24 +31,24 @@ namespace Popeye.Modules.AudioSystem
             _audioManager.PlayOneShotsAttached(oneShotSounds, attachedGameObject);
         }
 
-        public void PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject)
+        public LastingFMODSound.SoundId PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject)
         {
-            _audioManager.PlayLastingSound(lastingSound, attachedGameObject);
+            return _audioManager.PlayLastingSound(lastingSound, attachedGameObject);
         }
 
-        public void StopLastingSound(LastingFMODSound lastingSound)
+        public void StopLastingSound(LastingFMODSound.SoundId lastingSoundId)
         {
-            _audioManager.StopLastingSound(lastingSound);
+            _audioManager.StopLastingSound(lastingSoundId);
         }
 
-        public void PlayLastingSounds(LastingFMODSound[] lastingSounds, GameObject attachedGameObject)
+        public LastingFMODSound.SoundId[] PlayLastingSounds(LastingFMODSound[] lastingSounds, GameObject attachedGameObject)
         {
-            _audioManager.PlayLastingSounds(lastingSounds, attachedGameObject);
+            return _audioManager.PlayLastingSounds(lastingSounds, attachedGameObject);
         }
 
-        public void StopLastingSounds(LastingFMODSound[] lastingSounds)
+        public void StopLastingSounds(LastingFMODSound.SoundId[] lastingSoundIds)
         {
-            _audioManager.StopLastingSounds(lastingSounds);
+            _audioManager.StopLastingSounds(lastingSoundIds);
         }
 
         public void StopAllSounds()
