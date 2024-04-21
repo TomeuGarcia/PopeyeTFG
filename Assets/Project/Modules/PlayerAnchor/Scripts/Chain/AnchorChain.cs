@@ -32,6 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         private Vector3 PlayerBindPosition => _playerBindTransform.position;
         private Vector3 AnchorBindPosition => _anchorBindTransform.position;
+        public Vector3 EndBindPosition => PlayerBindPosition;
         
         
         public void Configure(IChainPhysics chainPhysics, IVFXChainView vfxChainView,

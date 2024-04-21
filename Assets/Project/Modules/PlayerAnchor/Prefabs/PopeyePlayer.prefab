@@ -398,7 +398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1663238115100152791}
-  useLookInput: 1
+  _startUsingLookInput: 1
   _lookTransform: {fileID: 2041502078564415168}
   _lookOverTimeConfig:
     _rotationSpeed: 1000
@@ -941,6 +941,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5661473675443739433}
   - component: {fileID: 3863730451507063996}
+  - component: {fileID: 5713232600979843912}
   m_Layer: 0
   m_Name: PopeyePlayer
   m_TagString: Untagged
@@ -964,7 +965,7 @@ Transform:
   - {fileID: 1252742472128866447}
   - {fileID: 6668082300037902310}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3863730451507063996
 MonoBehaviour:
@@ -983,13 +984,25 @@ MonoBehaviour:
   _anchorThrowStart: {fileID: 2450885935754783890}
   _targetForEnemies: {fileID: 713660627178412460}
   _targetForCamera: {fileID: 8322469419176788749}
-  _respawnCheckpointChecker:
-    _underlyingValue: {fileID: 3218012436837454115}
   _destructiblePlatformBreaker: {fileID: 3415662257221133472}
   _meshHolderTransform: {fileID: 2041502078564415168}
   _renderer: {fileID: 2116012679240791379}
   _animator: {fileID: 6009713918096670091}
   _focusDropCollector: {fileID: 2310154199985845200}
+--- !u!114 &5713232600979843912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9136561622102621228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e57182f9764143bc5c8dea2ffdbd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anchorChain: {fileID: 66049599787169222}
+  _startIndex: 3
 --- !u!1001 &1190752105491818490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1088,6 +1101,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22996d8743ffb5548b3ba1f438041ace, type: 3}
+--- !u!114 &66049599787169222 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1183533531616088636, guid: 22996d8743ffb5548b3ba1f438041ace,
+    type: 3}
+  m_PrefabInstance: {fileID: 1190752105491818490}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2259574bc7194459a9a2dd6959b5904e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1252742472128866447 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 136449527110061941, guid: 22996d8743ffb5548b3ba1f438041ace,
