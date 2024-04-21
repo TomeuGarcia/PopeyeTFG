@@ -51,6 +51,9 @@ namespace Popeye.Modules.PlayerAnchor
     {
         [Header("GAME STATE")] 
         [SerializeField] private GeneralGameStateData _generalGameStateData;
+
+        [Header("AUDIO")] 
+        [SerializeField] private AFMODAudioManagerReference _audioManagerReference;
         
         [Header("CAMERA")] 
         [SerializeField] private InterfaceReference<ICameraController, MonoBehaviour> _isometricCamera;
@@ -75,6 +78,12 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
         [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
 
+        [Header("Player - Animator")] 
+        [SerializeField] private PlayerAnimatorEvents _playerAnimatorEvents;
+
+        [Header("Player - Inputs")] 
+        [SerializeField] private PlayerMovesetInputsConfig _playerMovesetInputsConfig;
+        
         [Header("Player - Powers")] 
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
@@ -84,12 +93,12 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Placing")]
         [SerializeField] private PlacePopeyePlayerEventChannelAsset _placePopeyePlayerEventChannel;
+        [SerializeField] private CheckpointTriggerChecker _playerCheckpointTriggerChecker;
 
         [Space(20)] 
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
-        [SerializeField] private AnchorCollisions _anchorCollisions;
         [SerializeField] private VFXAnchorView _vfxAnchorView;
         [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
@@ -151,7 +160,6 @@ namespace Popeye.Modules.PlayerAnchor
             
             
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
-            IFMODAudioManager fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
             IParticleFactory particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
             ITimeFunctionalities timeFunctionalities = ServiceLocator.Instance.GetService<ITimeFunctionalities>();
             IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
@@ -184,7 +192,7 @@ namespace Popeye.Modules.PlayerAnchor
             IVFXChainView vfxChainView = new GhostVFXChainView(chainViewLogicGeneralConfig.ObstacleCollisionProbingConfig, chainMaterialCopy, 
                 _player.AnchorGrabToThrowHolder);
 
-            IAnchorAudio anchorAudio = new AnchorAudioFMOD(_anchor.PositionTransform.gameObject, fmodAudioManager, _anchorAudioConfig);
+            IAnchorAudio anchorAudio = new AnchorAudioFMOD(_anchor.PositionTransform.gameObject, _audioManagerReference, _anchorAudioConfig);
             IThrowDistanceComputer throwDistanceComputer =
                 new MovingForwardRangeThrowDistanceComputer(_anchorGeneralConfig.ThrowConfig, _playerController);
 
@@ -194,7 +202,7 @@ namespace Popeye.Modules.PlayerAnchor
             anchorMotion.Configure(_anchor.PositionTransform);
             anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, throwDistanceComputer,
                 _anchorGeneralConfig.ThrowConfig, anchorTrajectorySnapController, anchorTrajectoryView,
-                anchorThrowController);
+                anchorThrowController, _anchorTrajectoryEndSpot);
             anchorVerticalAttackThrower.Configure(_anchor, anchorTrajectoryMaker, 
                 _anchorGeneralConfig.VerticalAttackThrowConfig, anchorThrowController,
                 _playerGeneralConfig.AbilityActionChannels.DashDroppingAnchorAttackDispatcher);
@@ -206,21 +214,20 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerGeneralConfig.AbilityActionChannels.AnchorPullDispatcher);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
-            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
+            anchorTrajectoryMaker.Configure(_obstacleProbingConfig, 
                 _anchorGeneralConfig.PullConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
             anchorTrajectorySnapController.Configure();
-            _anchorCollisions.Configure(_obstacleProbingConfig);
 
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
             _anchorChain.Configure(chainPhysics, vfxChainView, _chainPlayerBindTransform, _chainAnchorBindTransform, 
                 chainViewLogicGeneralConfig, chainMaterialCopy);
-            _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorCollisions, anchorView, anchorViewExtras, anchorAudio, 
+            _anchor.Configure(anchorStateMachine, anchorThrower, anchorPuller, anchorMotion,
+                _anchorPhysics, anchorView, anchorViewExtras, anchorAudio, 
                 _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);
 
             IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial
@@ -258,7 +265,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
-            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, fmodAudioManager, _playerAudioConfig);
+            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, _audioManagerReference, _playerAudioConfig);
+            _playerAnimatorEvents.AddFootstepsListener(playerAudio);
 
             PlayerFocusController playerFocusController =
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
@@ -281,13 +289,13 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
-                playerInstantTranslation, playerStateMachine, _environmentFollower);
+                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerCheckpointTriggerChecker);
             _popeyePlayerPlacer.StartListening();
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor, playerMovementChecker);
-            playerMotion.Configure(_playerController.Transform, _playerController.Transform);
+            playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
@@ -299,11 +307,13 @@ namespace Popeye.Modules.PlayerAnchor
             _playerController.InputCorrector =
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
-            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
+            _player.Configure(movesetInputsController, 
+                playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
-                playerSafeGroundChecker, playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
+                _playerCheckpointTriggerChecker, playerSafeGroundChecker, 
+                playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
 
@@ -460,10 +470,10 @@ namespace Popeye.Modules.PlayerAnchor
                     dashAttackVerticalThrower, dashDropVerticalThrower);
             
             
-            abilityGatesCreator.CreateGates();
+            abilityGatesCreator.CreateGates(_playerMovesetInputsConfig);
             abilityGatesCreator.GetReadInputs(
-                out IGateValueReader<InputAction> pullInput,
-                out IGateValueReader<InputAction> dashTowardsAnchorInput,
+                out IGateValueReader<InputPressedBuffer> pullInput,
+                out IGateValueReader<InputPressedBuffer> dashTowardsAnchorInput,
                 out IGateValueReader<InputAction> dashDroppingAnchorInput,
                 out IGateValueReader<InputAction> specialAttackInput
             );
@@ -477,6 +487,7 @@ namespace Popeye.Modules.PlayerAnchor
             movesetInputsController = new PlayerAnchorMovesetInputsController(
                 eventSystemService,
                 playerAnchorInputControls,
+                _playerMovesetInputsConfig,
                 pullInput,
                 dashTowardsAnchorInput,
                 dashDroppingAnchorInput,

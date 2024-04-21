@@ -9,22 +9,32 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly IFMODAudioManager _fmodAudioManager;
         private readonly PlayerAudioFMODConfig _config;
 
+        private LastingFMODSound.SoundId _footstepsSoundId;
 
-        public PlayerAudioFMOD(GameObject playerGameObject, IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config)
+        public PlayerAudioFMOD(GameObject playerGameObject,
+            IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config)
         {
             _playerGameObject = playerGameObject;
             _fmodAudioManager = fmodAudioManager;
             _config = config;
         }
         
+        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
+        {
+            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _playerGameObject);
+        }
+        
         public void StartPlayingStepsSounds()
         {
-            _fmodAudioManager.PlayLastingSound(_config.FootstepsSound, _playerGameObject);
+            _footstepsSoundId = _fmodAudioManager.PlayLastingSound(_config.FootstepsSound, _playerGameObject);
         }
 
         public void StopPlayingStepsSounds()
         {
-            _fmodAudioManager.StopLastingSound(_config.FootstepsSound);
+            if (_footstepsSoundId != null)
+            {
+                _fmodAudioManager.StopLastingSound(_footstepsSoundId);
+            }
         }
 
         public void PlayDashTowardsAnchorSound()
@@ -42,10 +52,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayOneShotAttached(_config.TakeDamage);
         }
 
-        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
+        
+        public void OnLeftFootstep()
         {
-            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _playerGameObject);
+            PlayOneShotAttached(_config.LeftFootstepSound);
         }
+
+        public void OnRightFootstep()
+        {
+            PlayOneShotAttached(_config.RightFootstepSound);
+        }
+        
+        
     }
 }
 

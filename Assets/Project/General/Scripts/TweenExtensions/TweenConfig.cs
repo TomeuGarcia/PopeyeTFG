@@ -14,5 +14,22 @@ namespace Project.Scripts.TweenExtensions
         public float Duration => _duration;
         public Ease Ease => _ease;
 
+        private TweenConfig(Vector3 value, float duration, Ease ease)
+        {
+            _value = value;
+            _duration = duration;
+            _ease = ease;
+        }
+
+        public void SetDuration(float duration)
+        {
+            _duration = duration;
+        }
+
+        public TweenConfig Undo()
+        {
+            return new TweenConfig(-_value, _duration, _ease);
+        }
+        
     }
 }

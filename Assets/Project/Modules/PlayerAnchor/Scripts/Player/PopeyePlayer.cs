@@ -12,6 +12,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Scripts.ValueGating;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
@@ -25,7 +26,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _anchorThrowStart;
         [SerializeField] private Transform _targetForEnemies;
         [SerializeField] private Transform _targetForCamera;
-        [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
         [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
 
         [SerializeField] private Transform _meshHolderTransform;
@@ -44,6 +44,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public Transform AnchorCarryHolder => _anchorCarryHolder;
         public Transform AnchorGrabToThrowHolder => _anchorGrabToThrowHolder;
+
+        private IInputsUpdater _playerInputsUpdater;
         
         private PlayerFSM _stateMachine;
         private PlayerController.PlayerController _playerController;
@@ -68,6 +70,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IAnchorKicker _anchorKicker;
         private IAnchorSpinner _anchorSpinner;
 
+        private ISafeGroundChecker _deathRespawnCheckpointChecker;
         private ISafeGroundChecker _safeGroundChecker;
         private IOnVoidChecker _onVoidChecker;
         private bool _safeGroundCheckingIsDisabled = false;
@@ -85,7 +88,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public DestructiblePlatformBreaker DestructiblePlatformBreaker => _destructiblePlatformBreaker;
         
 
-        public void Configure(PlayerFSM stateMachine, PlayerController.PlayerController playerController,
+        public void Configure(
+            IInputsUpdater playerInputsUpdater,
+            PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
             IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
@@ -98,10 +103,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorPuller anchorPuller, 
             IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
-            ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
+            ISafeGroundChecker  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
+            IOnVoidChecker onVoidChecker,
             IPlayerFocusController focusController, IPlayerSpecialAttackController specialAttackController,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
+            _playerInputsUpdater = playerInputsUpdater;
             _stateMachine = stateMachine;
             _playerController = playerController;
             _playerGeneralConfig = playerGeneralConfig;
@@ -123,6 +130,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _playerAudio = playerAudio;
 
+            _deathRespawnCheckpointChecker = deathRespawnCheckpointChecker;
             _safeGroundChecker = safeGroundChecker;
             _onVoidChecker = onVoidChecker;
 
@@ -148,10 +156,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void Update()
         {
+            _playerInputsUpdater.Update(Time.deltaTime);
+            _playerController.DoUpdate();
             _eventsDispatcher.Update(Time.deltaTime, Position);
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
+        }
+
+        private void FixedUpdate()
+        {
+            _playerController.DoFixedUpdate();
         }
 
         private void ResetAnchor()
@@ -167,7 +182,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void SetCanUseRotateInput(bool canUseRotateInput)
         {
-            _playerController.useLookInput = canUseRotateInput;
+            _playerController.UseLookInput = canUseRotateInput;
+            if (canUseRotateInput)
+            {
+                _playerController.UpdateLookTransform();
+            }
         }
 
         public void SetInstantRotation(bool instantRotation)
@@ -265,25 +284,23 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void StartChargingThrow()
         {
-            _anchorThrower.ResetThrowForce();
+            _anchorThrower.StartThrow();
             _anchor.SetGrabbedToThrow();
-            _anchor.OnStartChargingThrow();
         }
 
-        public void ChargeThrow(float deltaTime)
+        public void UpdateChargingThrow()
         {
-            _anchorThrower.IncrementThrowForce(deltaTime);
-            _anchor.OnKeepChargingThrow();
+            _anchorThrower.UpdateThrowTrajectory();
         }
 
         public void StopChargingThrow()
         {
-            _anchor.OnStopChargingThrow();
+            _anchorThrower.FinishThrow();
         }
 
         public void CancelChargingThrow()
         {
-            _anchorThrower.CancelChargingThrow();
+            _anchorThrower.CancelThrow();
             _anchor.SetCarried();
         }
 
@@ -509,7 +526,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         public void RespawnFromDeath()
         {
-            Vector3 respawnPosition = _respawnCheckpointChecker.Value.BestSafePosition;
+            Vector3 respawnPosition = _deathRespawnCheckpointChecker.BestSafePosition;
             Quaternion respawnRotation = Quaternion.identity;
             _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
             

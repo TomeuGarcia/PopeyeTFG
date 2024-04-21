@@ -20,13 +20,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private Transform _meshHolder;
 
         private AnchorFSM _stateMachine;
-        private AnchorTrajectoryMaker _anchorTrajectoryMaker;
         private AnchorThrower _anchorThrower;
         private AnchorPuller _anchorPuller;
         private TransformMotion _anchorMotion;
 
         private AnchorPhysics _anchorPhysics;
-        private AnchorCollisions _anchorCollisions;
         private IAnchorView _anchorView;
         private IAnchorViewExtras _anchorViewExtras;
         private AnchorDamageDealer _anchorDamageDealer;
@@ -52,9 +50,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private CameraZoomInOutConfig _pull_CameraZoomInOut;
         [SerializeField] private CameraShakeConfig _restOnFloor_CameraShake;
 
-        public void Configure(AnchorFSM stateMachine, AnchorTrajectoryMaker anchorTrajectoryMaker,
+        public void Configure(AnchorFSM stateMachine,
             AnchorThrower anchorThrower, AnchorPuller anchorPuller, TransformMotion anchorMotion,
-            AnchorPhysics anchorPhysics, AnchorCollisions anchorCollisions, 
+            AnchorPhysics anchorPhysics,
             IAnchorView anchorView, IAnchorViewExtras anchorViewExtras,
             IAnchorAudio anchorAudio,
             AnchorDamageDealer anchorDamageDealer, AnchorChain anchorChain,
@@ -62,13 +60,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             IOnVoidChecker onVoidChecker)
         {
             _stateMachine = stateMachine;
-            _anchorTrajectoryMaker = anchorTrajectoryMaker;
             _anchorThrower = anchorThrower;
             _anchorPuller = anchorPuller;
             _anchorMotion = anchorMotion;
 
             _anchorPhysics = anchorPhysics;
-            _anchorCollisions = anchorCollisions;
             _anchorView = anchorView;
             _anchorViewExtras = anchorViewExtras;
             _anchorDamageDealer = anchorDamageDealer;
@@ -310,19 +306,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         
 
-        public void OnStartChargingThrow()
-        {
-            _anchorTrajectoryMaker.ShowTrajectoryEndSpot();
-        }
-        public void OnKeepChargingThrow()
-        {
-            _anchorThrower.UpdateThrowTrajectory();
-        }
-        public void OnStopChargingThrow()
-        {
-            _anchorTrajectoryMaker.HideTrajectoryEndSpot();
-        }
-
         
         
         public async UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition)
@@ -339,11 +322,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 SetRestingOnFloor();
             }
         }
-
-        public bool IsObstructedByObstacles()
-        {
-            return _anchorCollisions.IsObstructedByObstacles(Position, Rotation);
-        }
+        
 
         private bool ExistsFloorUnderAnchor()
         {
@@ -363,22 +342,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
         
         
-        
-        public void SubscribeToOnObstacleHit(Action<Collider> callback)
-        {
-            _anchorCollisions.SubscribeToOnObstacleHit(callback);
-        }
-
-        public void UnsubscribeToOnObstacleHit(Action<Collider> callback)
-        {
-            _anchorCollisions.UnsubscribeToOnObstacleHit(callback);
-        }
-
-        public void EnableObstacleHitForDuration(float duration)
-        {
-            _anchorCollisions.EnableObstacleHitForDuration(duration).Forget();
-        }
-
         public void OnTryUsingWhenObstructed()
         {
             _anchorView.PlayObstructedAnimation();

@@ -9,8 +9,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     {
         private readonly PlayerStatesBlackboard _blackboard;
 
-        private Timer _enterPullingCooldown;
-        private Timer _enterDashCooldown;
+        private readonly Timer _enterPullingCooldown;
+        private readonly Timer _enterDashCooldown;
         
 
         public MovingWithoutAnchor_PlayerState(PlayerStatesBlackboard blackboard)
@@ -150,16 +150,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             if (!_enterPullingCooldown.HasFinished())
             {
-                if (pullInput)
-                {
-                    _blackboard.QueuedAnchorPull = true;
-                }
                 return false;
             }
             
-            if (_blackboard.QueuedAnchorPull && _blackboard.AnchorMediator.IsRestingOnFloor())
+            if (pullInput && _blackboard.AnchorMediator.IsRestingOnFloor())
             {
-                _blackboard.QueuedAnchorPull = false;
                 return true;
             }
             
@@ -171,17 +166,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             bool dashInput = _blackboard.MovesetInputsController.DashTowardsAnchor_Pressed();
             if (!_enterDashCooldown.HasFinished())
             {
-                if (dashInput)
-                {
-                    _blackboard.QueuedDashTowardsAnchor = true;
-                }
                 return false;
-            }
-            
-            if (_blackboard.QueuedDashTowardsAnchor)
-            {
-                _blackboard.QueuedDashTowardsAnchor = false;
-                return true;
             }
 
             return dashInput;
@@ -199,11 +184,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) && 
                    _blackboard.PlayerMediator.CanSpinAnchor();
         }
-
-        private bool IsAnchorObstructed()
-        {
-            return _blackboard.AnchorMediator.IsObstructedByObstacles();
-        }
+        
         
         private bool PlayerCanHeal(out bool hasHealsLeft)
         {

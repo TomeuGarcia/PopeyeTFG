@@ -112,9 +112,11 @@ MonoBehaviour:
       _elasticity: 0.25
       _ease: 17
   _materialViewConfig:
-    _normalColor: {r: 1, g: 1, b: 1, a: 1}
-    _damagedColor: {r: 0.9607844, g: 0.13333334, b: 0.14901961, a: 1}
-    _healColor: {r: 0.34117648, g: 0.9333334, b: 0.56078434, a: 1}
+    _healProperty: _isDashing
+    _healAppearTime: 0.1
+    _healAppearEase: 1
+    _healDisappearTime: 0.2
+    _healDisappearEase: 20
     _flashSequence: []
     _isTiredProperty: _IsTired
     _tiredTransitionTime: 0.25

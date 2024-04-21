@@ -199,6 +199,7 @@ MonoBehaviour:
   _playerDistanceThreshold: 15
   _playerDistanceThresholdToHide: 5
   _playerDistanceThresholdToAppear: 6
+  _numberOfShots: 4
 --- !u!114 &5585137727194799300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +224,7 @@ MonoBehaviour:
   _turretAnimatorCallback: {fileID: 6528270357543172861}
   _turretSpineRotator: {fileID: 7974128956540601288}
   _powerBoostDrop: {fileID: 11400000, guid: 9a6c97ea504c67549aee2b386b739b50, type: 2}
+  _turretSounds: {fileID: 11400000, guid: 72d5e6a5ba3bdb6499b9ed3e2c51c04b, type: 2}
 --- !u!114 &6891017323650486759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4eb277744ee448a5f0fcc0d7c8ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 80
+  _maxHealth: 4
   _knockbackRigidbody: {fileID: 1156818105874790195}
   _knockbackEffectiveness: 0
 --- !u!54 &1156818105874790195
@@ -1357,6 +1359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0b1f889c430ed40912301a7f0a9ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _multipleShot: 0
 --- !u!114 &7974128956540601288
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,6 +12,10 @@ namespace Project.Modules.Enemies.Slime.Scripts.SlimeRefactor
         menuName = ScriptableObjectsHelper.ENEMIES_ASSET_PATH + "SlimeSoundsConfig")]
     public class SlimeSoundsConfig : ScriptableObject
     {
+        [Header("AUDIO MANAGER")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
+        [Header("SOUNDS")]
         [Expandable] [SerializeField] private OneShotFMODSound _divide;
         [Expandable] [SerializeField] private OneShotFMODSound _death;
 
@@ -41,20 +45,20 @@ namespace Project.Modules.Enemies.Slime.Scripts.SlimeRefactor
         }
 
 
-        public void PlayDivideSound(IFMODAudioManager audioManager, GameObject attachedGameObject, SlimeSizeID sizeID)
+        public void PlayDivideSound(GameObject attachedGameObject, SlimeSizeID sizeID)
         {
-            PlayOneShotSound(audioManager, attachedGameObject, sizeID, _divide);
+            PlayOneShotSound(attachedGameObject, sizeID, _divide);
         }
-        public void PlayDeathSound(IFMODAudioManager audioManager, GameObject attachedGameObject, SlimeSizeID sizeID)
+        public void PlayDeathSound(GameObject attachedGameObject, SlimeSizeID sizeID)
         {
-            PlayOneShotSound(audioManager, attachedGameObject, sizeID, _death);
+            PlayOneShotSound(attachedGameObject, sizeID, _death);
         }
 
-        private void PlayOneShotSound(IFMODAudioManager audioManager, GameObject attachedGameObject, 
+        private void PlayOneShotSound(GameObject attachedGameObject, 
             SlimeSizeID sizeID, OneShotFMODSound sound)
         {
             _slimeSizeParameter.Value = _sizeToParameterValueDictionary[sizeID];
-            audioManager.PlayOneShotAttached(sound, attachedGameObject);
+            _audioManager.PlayOneShotAttached(sound, attachedGameObject);
         }
         
         

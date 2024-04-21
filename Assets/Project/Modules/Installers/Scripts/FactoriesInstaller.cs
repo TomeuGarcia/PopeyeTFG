@@ -1,6 +1,7 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.CombatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Modules.Enemies.EnemyFactories;
 using Popeye.Modules.Enemies.Hazards;
@@ -28,20 +29,20 @@ namespace Popeye.Modules.Installers
         
     
         public void Install(ServiceLocator serviceLocator, 
-            IFMODAudioManager audioManager, IEventSystemService eventSystemService,
+            IEventSystemService eventSystemService, ICombatManager combatManager,
             ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
-            _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); // <-- EricR971 use this for blood,
-                                                                                                                   // pass it as ISceneObjectsTracker
+            _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); 
+            
             _createdEnemiesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider);
             
-            ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent);
-            HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, particleFactory);
+            ParticleFactory particleFactory = new ParticleFactory(_particleFactoryConfig, _particleParent, _createdParticlesRecycler);
+            HazardsFactory hazardsFactory = new HazardsFactory(_hazardFactryConfig, _hazardsParent, combatManager, particleFactory);
             
             serviceLocator.RegisterService<IParticleFactory>(particleFactory);
             serviceLocator.RegisterService<IHazardFactory>(hazardsFactory);
             
-            _enemyFactoryInstaller.Install(serviceLocator, audioManager, _createdEnemiesRecycler);
+            _enemyFactoryInstaller.Install(serviceLocator, _createdEnemiesRecycler);
             
             _createdParticlesRecycler.StartListeningToSceneUpdates();
             _createdEnemiesRecycler.StartListeningToSceneUpdates();

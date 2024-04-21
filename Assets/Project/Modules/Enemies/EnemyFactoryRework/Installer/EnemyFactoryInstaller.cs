@@ -17,7 +17,6 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         
         public void Install(
             ServiceLocator serviceLocator, 
-            IFMODAudioManager audioManager, 
             ISceneObjectsTracker createdEnemiesRecycler
             )
         {
@@ -39,13 +38,22 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             // Setup Slime
             SlimeFactoryConfiguration slimeFactoryConfiguration = _installerConfiguration.SlimeFactoryConfiguration;
             SlimeMindFactoryCreator slimeMindFactoryCreator = 
-                new SlimeMindFactoryCreator(slimeFactoryConfiguration, transform, hazardsFactory, audioManager);
+                new SlimeMindFactoryCreator(slimeFactoryConfiguration, transform, hazardsFactory);
             EnemyID[] slimeEnemyIDs = slimeFactoryConfiguration.GetSlimeEnemyIDs();
             foreach (var slimeEnemyID in slimeEnemyIDs)
             {
                 enemyIdToMindFactory[slimeEnemyID] = slimeMindFactoryCreator;
             }
 
+            // Setup Explosive Slime
+            SlimeFactoryConfiguration explosiveSlimeFactoryConfiguration = _installerConfiguration.ExplosiveSlimeFactoryConfiguration;
+            SlimeMindFactoryCreator explosiveSlimeMindFactoryCreator = 
+                new SlimeMindFactoryCreator(explosiveSlimeFactoryConfiguration, transform, hazardsFactory);
+            slimeEnemyIDs = explosiveSlimeFactoryConfiguration.GetSlimeEnemyIDs();
+            foreach (var slimeEnemyID in slimeEnemyIDs)
+            {
+                enemyIdToMindFactory[slimeEnemyID] = explosiveSlimeMindFactoryCreator;
+            }
 
             MindCreatorsEnemyFactory mindCreatorsEnemyFactory = new (enemyIdToMindFactory, createdEnemiesRecycler);
             

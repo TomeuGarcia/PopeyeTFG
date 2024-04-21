@@ -20,14 +20,11 @@ namespace Popeye.Modules.AudioSystem.Testing
         [SerializeField] private LastingFMODSound[] _lastingSounds;
 
 
-
-        private IFMODAudioManager _fmodAudioManager;
+        [Header("AUDIO MANAGER")]
+        [SerializeField] private AFMODAudioManagerReference _fmodAudioManager;
         
         private void Start()
         {
-            _fmodAudioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
-            
-            
             foreach (var onShotSound in _oneShotSounds)
             {
                 OneShotSoundInterface oneShotSoundInterface = Instantiate(_oneShotInterfacePrefab, _oneShotInterfaceHolder);

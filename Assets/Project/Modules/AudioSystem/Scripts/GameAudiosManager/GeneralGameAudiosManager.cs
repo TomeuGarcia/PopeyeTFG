@@ -10,7 +10,7 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         [SerializeField] private InterfaceReference<IGameAudiosManager, MonoBehaviour>[] _subGameAudiosManagers;
 
 
-        public void Init(IFMODAudioManager audioManager, IEventSystemService eventSystemService)
+        public void Init(AFMODAudioManagerReference audioManager, IEventSystemService eventSystemService)
         {
             foreach (InterfaceReference<IGameAudiosManager, MonoBehaviour> subGameAudiosManager in _subGameAudiosManagers)
             {

@@ -65,23 +65,24 @@ namespace Popeye.Modules.Installers
 
             IEventSystemService eventSystemService = serviceLocator.GetService<IEventSystemService>();
             ITimeFunctionalities timeFunctionalities = serviceLocator.GetService<ITimeFunctionalities>();
-            IFMODAudioManager audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
 
 
             _lastLoadedSceneProvider = new LastLoadedSceneProvider(eventSystemService);
             _lastLoadedSceneProvider.StartListeningToSceneUpdates();
-            
 
+
+            KnockbackManager knockbackManager =
+                new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig);
             CombatManagerService combatManagerService =
-                new CombatManagerService(_hitTargetCollisionProbingConfig,
-                    new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig));
+                new CombatManagerService(_hitTargetCollisionProbingConfig, knockbackManager);
             serviceLocator.RegisterService<ICombatManager>(combatManagerService);
 
             
 
             
             _informationDisplayInstaller.Install(serviceLocator);
-            _factoriesInstaller.Install(serviceLocator, audioManager, eventSystemService, _lastLoadedSceneProvider);
+            _factoriesInstaller.Install(serviceLocator, eventSystemService, combatManagerService, 
+                _lastLoadedSceneProvider);
             _playerAnchorInstaller.Install();
             _gameReferencesInstaller.Install(serviceLocator, _playerAnchorInstaller.PlayerMediator);
             _gameDataEventsInstaller.Install(eventSystemService, _lastLoadedSceneProvider);

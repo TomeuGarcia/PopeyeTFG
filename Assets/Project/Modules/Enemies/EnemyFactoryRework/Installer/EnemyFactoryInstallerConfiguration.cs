@@ -35,7 +35,9 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
         [Header("SLIMES")] 
         [Expandable] [SerializeField] private SlimeFactoryConfiguration _slimeFactoryConfiguration;
+        [Expandable] [SerializeField] private SlimeFactoryConfiguration _explosiveSlimeFactoryConfiguration;
         public SlimeFactoryConfiguration SlimeFactoryConfiguration => _slimeFactoryConfiguration;
+        public SlimeFactoryConfiguration ExplosiveSlimeFactoryConfiguration => _explosiveSlimeFactoryConfiguration;
 
         public Dictionary<EnemyID, EnemyMindPrefabSpawnData> GetEnemyToPrefabDictionary()
         {

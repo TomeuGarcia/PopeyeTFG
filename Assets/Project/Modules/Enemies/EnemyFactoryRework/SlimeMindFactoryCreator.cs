@@ -17,7 +17,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         private readonly SlimeFactory _slimeFactory;
 
         public SlimeMindFactoryCreator(SlimeFactoryConfiguration slimeFactoryConfiguration, Transform parent, 
-            IHazardFactory hazardFactory, IFMODAudioManager audioManager)
+            IHazardFactory hazardFactory)
         {
             _hazardFactory = hazardFactory;
             Dictionary<SlimeSizeID, ObjectPool> slimeSizeToPool; 
@@ -27,7 +27,7 @@ namespace Popeye.Modules.Enemies.EnemyFactories
                 out slimeSizeToPool, out slimeSizeToNextSize, out _slimeTypeToSize);
             
             
-            _slimeFactory = new SlimeFactory(slimeSizeToPool, slimeSizeToNextSize, audioManager);
+            _slimeFactory = new SlimeFactory(slimeSizeToPool, slimeSizeToNextSize);
             
             _slimeMindPool = new ObjectPool(slimeFactoryConfiguration.SlimeMindPrefab, parent);
             _slimeMindPool.Init(slimeFactoryConfiguration.NumberOfInitialSlimes);

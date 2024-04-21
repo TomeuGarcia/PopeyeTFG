@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.VFX.ParticleFactories;
+using Project.Modules.Enemies.Turret;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies
@@ -28,7 +30,8 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private TurretSpineRotator _turretSpineRotator;
         [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
         private IPowerBoostDropFactory _powerBoostDropFactory;
-        
+        [SerializeField] private TurretSoundConfig _turretSounds;
+
         internal override void Init()
         {
             _turretShooting.Configure(this,_hazardsFactory,PlayerTransform);
@@ -87,14 +90,17 @@ namespace Popeye.Modules.Enemies
         
         public void StopShootingAnimation()
         {
+            
             _turretAnimatorController.StopShootingAnimation();
         }
         public void AppearAnimation()
         {
+            _turretSounds.PlayTurretDigUp(gameObject);
             _turretAnimatorController.AppearAnimation();
         }
         public void HideAnimation()
         {
+            _turretSounds.PlayTurretDigDown(gameObject);
             _turretAnimatorController.HideAnimation();
         }
         public override Vector3 Position { get; }
@@ -103,6 +109,7 @@ namespace Popeye.Modules.Enemies
         {
             _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
             _turretMind.Die();
+            _turretSounds.PlayTurretDeath(gameObject);
             _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
         }
 
@@ -112,11 +119,20 @@ namespace Popeye.Modules.Enemies
         }
         public void Shoot()
         {
+            _turretSounds.PlayTurretShot(gameObject);
             _turretShooting.Shoot();
+        }
+
+        public void MultipleShoot()
+        {
+            _turretSounds.PlayTurretShot(gameObject);
+            _turretShooting.MultipleShoot();
         }
 
         public void SetOutOfGround()
         {
+            
+
             _turretShooting.SetOutOfGround();
         }
         public void SetInsideGround()
