@@ -11,9 +11,17 @@ namespace Popeye.Modules.Enemies.Hazards
         menuName = ScriptableObjectsHelper.HAZARDS_ASSET_PATH + "ExplosionHazardConfig")]
     public class ExplosionHazardConfig : ScriptableObject
     {
+        [Header("SIZE")]
         [SerializeField] private ExplosionBySizeConfig[] _sizeConfigs;
+        
+        [Header("LOGIC")]
         [SerializeField, Range(0f, 5.0f)] private float _lifeTime = 1f;
 
+        [Header("AUDIO")]
+        [SerializeField] private FMODExplosionAudio _explosionAudio;
+        public IExplosionAudio ExplosionAudio => _explosionAudio;
+        
+        
         public float LifeTime => _lifeTime;
         
         
