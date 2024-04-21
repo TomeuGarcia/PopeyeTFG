@@ -11,7 +11,10 @@ namespace Project.Modules.Enemies.Turret
         menuName = ScriptableObjectsHelper.ENEMIES_ASSET_PATH + "TurretSoundsConfig")]
     public class TurretSoundConfig : ScriptableObject
     {
-
+        [Header("AUDIO MANAGER")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
+        [Header("SOUNDS")]
         [Expandable] [SerializeField] private OneShotFMODSound _turretAppear;
         [Expandable] [SerializeField] private OneShotFMODSound _turretDeath;
         [Expandable] [SerializeField] private OneShotFMODSound _turretDigUp;
@@ -19,38 +22,38 @@ namespace Project.Modules.Enemies.Turret
         [Expandable] [SerializeField] private OneShotFMODSound _turretDamageArea;
         [Expandable] [SerializeField] private OneShotFMODSound _turretShot;
 
-        public void PlayTurretAppear(IFMODAudioManager audioManager, GameObject attachedGameObject)
+        public void PlayTurretAppear(GameObject attachedGameObject)
         {
-            PlayOneShotSound(audioManager, attachedGameObject, _turretAppear);
+            PlayOneShotSound(attachedGameObject, _turretAppear);
         }
 
-        public void PlayTurretShot(IFMODAudioManager audioManager, GameObject attachedGameObject)
+        public void PlayTurretShot(GameObject attachedGameObject)
         {
-            PlayOneShotSound(audioManager, attachedGameObject, _turretShot);
+            PlayOneShotSound(attachedGameObject, _turretShot);
         }
-        public void PlayTurretDeath(IFMODAudioManager audioManager, GameObject attachedGameObject)
+        public void PlayTurretDeath(GameObject attachedGameObject)
         {
-            PlayOneShotSound(audioManager, attachedGameObject, _turretDeath);
+            PlayOneShotSound(attachedGameObject, _turretDeath);
         }
-        public void PlayTurretDigUp(IFMODAudioManager audioManager, GameObject attachedGameObject)
+        public void PlayTurretDigUp(GameObject attachedGameObject)
         {
-            PlayOneShotSound(audioManager, attachedGameObject, _turretDigUp);
-        }
-        
-        public void PlayTurretDigDown(IFMODAudioManager audioManager, GameObject attachedGameObject)
-        {
-            PlayOneShotSound(audioManager, attachedGameObject, _turretDigDown);
+            PlayOneShotSound(attachedGameObject, _turretDigUp);
         }
         
-        public void PlayAreaDamage(IFMODAudioManager audioManager, GameObject attachedGameObject)
+        public void PlayTurretDigDown(GameObject attachedGameObject)
         {
-            PlayOneShotSound(audioManager, attachedGameObject, _turretDamageArea);
+            PlayOneShotSound(attachedGameObject, _turretDigDown);
+        }
+        
+        public void PlayAreaDamage(GameObject attachedGameObject)
+        {
+            PlayOneShotSound(attachedGameObject, _turretDamageArea);
         }
 
-        private void PlayOneShotSound(IFMODAudioManager audioManager, GameObject attachedGameObject,
+        private void PlayOneShotSound(GameObject attachedGameObject,
             OneShotFMODSound sound)
         {
-            audioManager.PlayOneShotAttached(sound, attachedGameObject);
+            _audioManager.PlayOneShotAttached(sound, attachedGameObject);
         }
     }
 }

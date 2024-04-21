@@ -11,6 +11,9 @@ namespace Popeye.Modules.AudioSystem
 {
     public class AudioInstaller : MonoBehaviour
     {
+        [Header("REFERENCE")] 
+        [SerializeField] private FMODAudioManagerReference _audioManagerReference;
+        
         [Header("LASTING SOUNDS")]
         [SerializeField] private LastingSoundsControllerConfig _lastingSoundsControllerConfig;
         [SerializeField] private Transform _lastingSoundsParent;
@@ -46,24 +49,19 @@ namespace Popeye.Modules.AudioSystem
             
             IFMODAudioManager fmodAudioManager = 
                 new FMODAudioManager(oneShotSoundsController, lastingSoundsController, globalParametersController,
-                    soundVolumeControllersGroup);
+                    soundVolumeControllersGroup);            
+            _audioManagerReference.Configure(fmodAudioManager);
             
-            fmodAudioManager.GlobalParametersController.StartListeningToParameters();
+            _audioManagerReference.GlobalParametersController.StartListeningToParameters();
             
-            serviceLocator.RegisterService<IFMODAudioManager>(fmodAudioManager);
-            
-            _gameAudiosManager.Value.Init(fmodAudioManager, serviceLocator.GetService<IEventSystemService>());
+            _gameAudiosManager.Value.Init(_audioManagerReference, serviceLocator.GetService<IEventSystemService>());
             _gameAudiosManager.Value.StartListeningToGameEvents();
         }
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
-            IFMODAudioManager fmodAudioManager = serviceLocator.GetService<IFMODAudioManager>(); 
-            
-            fmodAudioManager.GlobalParametersController.StopListeningToParameters();
-            fmodAudioManager.StopAllSounds();
-            
-            serviceLocator.RemoveService<IFMODAudioManager>();
+            _audioManagerReference.GlobalParametersController.StopListeningToParameters();
+            _audioManagerReference.StopAllSounds();
         }
         
         private void OnDestroy()

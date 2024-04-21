@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using Popeye.Scripts.ObjectTypes;
+using Project.Scripts.TweenExtensions;
 using UnityEngine;
 using Timer = Popeye.Timers.Timer;
 
@@ -16,12 +17,13 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
     public class TimerPlayerPressurePlate : MonoBehaviour
     {
         [Header("REFERENCES")] 
+        [SerializeField] private Transform _buttonTransform;
         [SerializeField] private MeshRenderer _buttonMesh;
         [SerializeField] private Collider _collider;
-
         private Material _timerMaterial;
-        [SerializeField] private Transform _buttonTransform;
 
+        [SerializeField] private TweenConfigAsset _triggeredMoveBy;
+        
         [Header("TIMER")] 
         [SerializeField, Range(0.0f, 30.0f)] private float _pressedDuration = 3.0f;
 
@@ -134,12 +136,12 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
         protected void PlayTriggerAnimation()
         {
-            _buttonTransform.DOLocalMove(Vector3.down * 0.05f, 0.2f);
+            _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config);
         }
 
         protected void PlayUntriggerAnimation()
         {
-            _buttonTransform.DOLocalMove(Vector3.up * 0.05f, 0.2f);
+            _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config.Undo());
         }
 
 

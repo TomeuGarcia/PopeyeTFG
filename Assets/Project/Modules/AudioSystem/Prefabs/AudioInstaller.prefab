@@ -125,7 +125,7 @@ Transform:
   - {fileID: 8421621900725079027}
   - {fileID: 1853564623033999772}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1298202652517695298
 MonoBehaviour:
@@ -139,6 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 840cfbb1b05b4f629c67b37b0c1acb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _audioManagerReference: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335,
+    type: 2}
   _lastingSoundsControllerConfig: {fileID: 11400000, guid: 90066cb14119502459bd8ef45ac4bcd6,
     type: 2}
   _lastingSoundsParent: {fileID: 8421621900725079027}

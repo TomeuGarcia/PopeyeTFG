@@ -26,7 +26,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private Transform _anchorThrowStart;
         [SerializeField] private Transform _targetForEnemies;
         [SerializeField] private Transform _targetForCamera;
-        [SerializeField] private InterfaceReference<ISafeGroundChecker, MonoBehaviour> _respawnCheckpointChecker;
         [SerializeField] private DestructiblePlatformBreaker _destructiblePlatformBreaker;
 
         [SerializeField] private Transform _meshHolderTransform;
@@ -71,6 +70,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IAnchorKicker _anchorKicker;
         private IAnchorSpinner _anchorSpinner;
 
+        private ISafeGroundChecker _deathRespawnCheckpointChecker;
         private ISafeGroundChecker _safeGroundChecker;
         private IOnVoidChecker _onVoidChecker;
         private bool _safeGroundCheckingIsDisabled = false;
@@ -103,7 +103,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorPuller anchorPuller, 
             IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
-            ISafeGroundChecker safeGroundChecker, IOnVoidChecker onVoidChecker,
+            ISafeGroundChecker  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
+            IOnVoidChecker onVoidChecker,
             IPlayerFocusController focusController, IPlayerSpecialAttackController specialAttackController,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
@@ -129,6 +130,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _playerAudio = playerAudio;
 
+            _deathRespawnCheckpointChecker = deathRespawnCheckpointChecker;
             _safeGroundChecker = safeGroundChecker;
             _onVoidChecker = onVoidChecker;
 
@@ -524,7 +526,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         public void RespawnFromDeath()
         {
-            Vector3 respawnPosition = _respawnCheckpointChecker.Value.BestSafePosition;
+            Vector3 respawnPosition = _deathRespawnCheckpointChecker.BestSafePosition;
             Quaternion respawnRotation = Quaternion.identity;
             _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
             

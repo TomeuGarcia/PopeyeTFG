@@ -15,10 +15,10 @@ namespace Popeye.Modules.AudioSystem
         void PlayOneShotsAttached(OneShotFMODSound[] oneShotSounds, GameObject attachedGameObject);
         
         
-        void PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject);
-        void StopLastingSound(LastingFMODSound lastingSound);
-        void PlayLastingSounds(LastingFMODSound[] lastingSounds, GameObject attachedGameObject);
-        void StopLastingSounds(LastingFMODSound[] lastingSounds);
+        LastingFMODSound.SoundId PlayLastingSound(LastingFMODSound lastingSound, GameObject attachedGameObject);
+        void StopLastingSound(LastingFMODSound.SoundId lastingSoundId);
+        LastingFMODSound.SoundId[]  PlayLastingSounds(LastingFMODSound[] lastingSounds, GameObject attachedGameObject);
+        void StopLastingSounds(LastingFMODSound.SoundId[] lastingSoundIds);
 
         
         void StopAllSounds();
