@@ -13,7 +13,6 @@ namespace Popeye.Modules.Enemies.EnemyFactories
     {
         private Dictionary<SlimeSizeID, ObjectPool> _slimeSizeToPool;
         private Dictionary<SlimeSizeID, SlimeChildSpawnData> _slimeSizeToNextSize;
-        private readonly IFMODAudioManager _audioManager;
 
         [System.Serializable]
         public struct SlimeChildSpawnData
@@ -23,12 +22,10 @@ namespace Popeye.Modules.Enemies.EnemyFactories
         }
 
         public SlimeFactory(Dictionary<SlimeSizeID, ObjectPool> slimeSizeToPool, 
-            Dictionary<SlimeSizeID, SlimeChildSpawnData> slimeSizeToNextSize,
-            IFMODAudioManager audioManager)
+            Dictionary<SlimeSizeID, SlimeChildSpawnData> slimeSizeToNextSize)
         {
             _slimeSizeToPool = slimeSizeToPool;
             _slimeSizeToNextSize = slimeSizeToNextSize;
-            _audioManager = audioManager;
         }
 
         public SlimeMediator CreateNew(SlimeSizeID slimeSizeID, SlimeMindEnemy ownerMind,Vector3 position,Quaternion rotation)
@@ -45,7 +42,6 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             slimeMediator.InitAfterSpawn();
             slimeMediator.SetSlimeMind(ownerMind);
             slimeMediator.SetSlimeFactory(this);
-            slimeMediator.SetAudioManager(_audioManager);
             slimeMediator.SetBoostDropFactory(ServiceLocator.Instance.GetService<IPowerBoostDropFactory>());
             slimeMediator.SetSlimeSize(slimeSizeID);
             slimeMediator.SetPlayerTransform(playerTransform);

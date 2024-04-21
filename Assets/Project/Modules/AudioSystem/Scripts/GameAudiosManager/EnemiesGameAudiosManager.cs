@@ -9,13 +9,14 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
     {
         [Header("CONFIGURATION")] 
         [SerializeField] private EnemySpawnerAudioConfig _enemySpawnerAudioConfig;
+
+        private AFMODAudioManagerReference _audioManager;
         
-        private IFMODAudioManager _audioManager;
         private IEventSystemService _eventSystemService;
         
         
     
-        public void Init(IFMODAudioManager audioManager, IEventSystemService eventSystemService)
+        public void Init(AFMODAudioManagerReference audioManager, IEventSystemService eventSystemService)
         {
             _audioManager = audioManager;
             _eventSystemService = eventSystemService;

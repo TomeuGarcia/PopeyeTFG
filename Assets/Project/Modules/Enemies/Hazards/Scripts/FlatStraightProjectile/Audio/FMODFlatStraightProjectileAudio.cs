@@ -8,16 +8,15 @@ namespace Popeye.Modules.Enemies.Hazards
     [System.Serializable]
     public class FMODFlatStraightProjectileAudio : IFlatStraightProjectileAudio
     {
-        private IFMODAudioManager _audioManager; 
+        [Header("AUDIO MANAGER")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
+        [Header("SOUNDS")]
         [Expandable] [SerializeField] private LastingFMODSound _movingSound; 
         [Expandable] [SerializeField] private OneShotFMODSound _objectContactSound; 
         [Expandable] [SerializeField] private OneShotFMODSound _lifetimeEndSound; 
         
         
-        public void Configure()
-        {
-            _audioManager = ServiceLocator.Instance.GetService<IFMODAudioManager>();
-        }
 
         public void PlayMovingSound(GameObject source)
         {

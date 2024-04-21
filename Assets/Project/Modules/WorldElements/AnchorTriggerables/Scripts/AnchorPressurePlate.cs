@@ -20,6 +20,9 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         [SerializeField] private Material _notTriggeredMaterial;
         [SerializeField] private MeshRenderer _buttonMesh;
         [SerializeField] private Transform _buttonTransform;
+        
+        [Header("AUDIO")]
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
         [SerializeField] private OneShotFMODSound _activatedSound;
     
         [Header("WORLD INTERACTORS")]
@@ -78,7 +81,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
             _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config);
             
-            ServiceLocator.Instance.GetService<IFMODAudioManager>().PlayOneShotAttached(_activatedSound, gameObject);
+            _audioManager.PlayOneShotAttached(_activatedSound, gameObject);
         }
         protected void PlayUntriggerAnimation()
         {
