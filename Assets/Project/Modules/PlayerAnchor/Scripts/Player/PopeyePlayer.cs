@@ -79,7 +79,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private IPlayerFocusController _focusController;
         private IPlayerSpecialAttackController[] _specialAttackControllers;
-        private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[1];
+        private int _currentSpecialAttackIndex = 1;
+        private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[_currentSpecialAttackIndex];
         
         private IPlayerGlobalEventsListener _globalEventsListener;
         private IPlayerEventsDispatcher _eventsDispatcher;
@@ -163,6 +164,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
+
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                Debug.Log("Special Attack: RAGE");
+                _currentSpecialAttackIndex = 0;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                Debug.Log("Special Attack: SPIKES");
+                _currentSpecialAttackIndex = 1;
+            }
         }
 
         private void FixedUpdate()
