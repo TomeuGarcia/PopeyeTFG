@@ -1,7 +1,9 @@
 using System;
 using Popeye.Core.Pool;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Hazards
@@ -38,6 +40,7 @@ namespace Popeye.Modules.Enemies.Hazards
         {
             float size = _explosionHazardConfig.GetScaleBySize(_size);
             transform.localScale = new Vector3(size, size, size);
+            _particleFactory.Create(ParticleTypes.Explosion, transform.position, quaternion.identity);
             _collider.enabled = true;
             Invoke("Recycle",_lifeTime);
         }
