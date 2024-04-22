@@ -40,7 +40,16 @@ namespace Popeye.Modules.Enemies.Hazards
         {
             float size = _explosionHazardConfig.GetScaleBySize(_size);
             transform.localScale = new Vector3(size, size, size);
+
             _particleFactory.Create(ParticleTypes.Explosion, transform.position, quaternion.identity);
+            Transform decal = _particleFactory.Create(ParticleTypes.ExplosionDecal, transform.position, quaternion.identity);
+            
+            RaycastHit raycastHit;
+            Physics.Raycast(transform.position, Vector3.down, out raycastHit, 1.0f);
+            decal.up = raycastHit.normal;
+            float randomRotation = UnityEngine.Random.Range(0.0f, 360.0f);
+            decal.RotateAround(decal.up, randomRotation);
+            
             _collider.enabled = true;
             Invoke("Recycle",_lifeTime);
         }
