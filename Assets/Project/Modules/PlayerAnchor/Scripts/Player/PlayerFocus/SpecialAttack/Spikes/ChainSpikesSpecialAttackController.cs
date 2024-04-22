@@ -15,7 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         [SerializeField] private ChainSpike _chainSpikePrefab;
 
-        [SerializeField] private float _duration = 1.0f;
+        [SerializeField] private float _duration = 1.2f;
         [SerializeField] private float _delay = 0.1f;
         private bool _isBeingPerformed = false;
 
@@ -105,9 +105,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
                 UpdateSpikesPositioningState();
             }            
         }
-        
-        
+
+
         private void UpdateSpikesPositioningState()
+        {
+            UpdateSpikesPositioningState_Double();
+        }
+        private void UpdateSpikesPositioningState_Alternating()
         {
             Vector3[] chainPositions = _anchorChain.GetChainPositions();
             int numberOfChains = chainPositions.Length;
@@ -121,7 +125,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             
             
             int count = 0;
-            for (float f = startIndex; f < endIndex; f += indexStep)
+            for (float f = startIndex; f < endIndex && count < _numberOfPoints; f += indexStep)
             {
                 float t = f % 1f;
                 int currentIndex = (int)f;
@@ -136,6 +140,43 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
                 _spikesPositioning[count].position = position;
                 _spikesPositioning[count].normal = normal;
+
+                ++count;
+            }
+        }
+        private void UpdateSpikesPositioningState_Double()
+        {
+            Vector3[] chainPositions = _anchorChain.GetChainPositions();
+            int numberOfChains = chainPositions.Length;
+            
+            int startIndex = (int)(numberOfChains * _startRatio);
+            int endIndex = (int)(numberOfChains * _endRatio);
+            
+            float indexAmount = endIndex - startIndex;
+
+            float indexStep = indexAmount / _numberOfPoints;
+            
+            
+            int count = 0;
+            for (float f = startIndex; f < endIndex && count < _numberOfPoints; f += indexStep * 2)
+            {
+                float t = f % 1f;
+                int currentIndex = (int)f;
+                int previousIndex = (int)f - 1;
+
+                Vector3 previousPosition = chainPositions[previousIndex];
+                Vector3 currentPosition = chainPositions[currentIndex];
+                
+                Vector3 position = Vector3.LerpUnclamped(previousPosition, currentPosition, t);
+                Vector3 normal = Vector3.Cross((currentPosition - previousPosition), Vector3.up).normalized;
+
+                _spikesPositioning[count].position = position;
+                _spikesPositioning[count].normal = normal;
+
+                ++count;
+                
+                _spikesPositioning[count].position = position;
+                _spikesPositioning[count].normal = -normal;
 
                 ++count;
             }

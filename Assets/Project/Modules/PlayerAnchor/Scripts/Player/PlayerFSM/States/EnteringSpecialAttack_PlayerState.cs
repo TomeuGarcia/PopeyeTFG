@@ -24,7 +24,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _exitData.enterState = _blackboard.CameFromState;
             _wasInterrupted = false;
 
-            float durationToComplete = _blackboard.PlayerStatesConfig.EnteringSpecialAttackDuration;
+            float durationToComplete = PopeyePlayer.debugIsSpinning 
+                ? 0.5f
+                : _blackboard.PlayerStatesConfig.EnteringSpecialAttackDuration;
+            
             _ragingActionTimer = new Timer(durationToComplete);
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.EnteringSpecialAttackMoveSpeed);

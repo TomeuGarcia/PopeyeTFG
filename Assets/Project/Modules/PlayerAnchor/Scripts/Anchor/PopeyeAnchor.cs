@@ -240,6 +240,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorViewExtras.OnRestingOnFloor();
             
             _anchorChain.SetRestingOnFloorView();
+            _anchorMotion.ResetScale();
             
             _cameraFunctionalities.CameraShaker.PlayShake(_restOnFloor_CameraShake);
         }
@@ -261,6 +262,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public void OnStartSpinning()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);
+            _anchorDamageDealer.StartDealingSpinDamage(false);
         }
 
         public void SetSpinning(bool spinningToTheRight)
@@ -271,9 +273,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlaySpinningAnimation();
         }
 
-        public void OnKeepSpinning()
+        public void OnKeepSpinning(Vector3 position, Quaternion rotation)
         {
-            _anchorDamageDealer.UpdateSpinningDamage(Position, Rotation);
+            _anchorDamageDealer.UpdateSpinningDamage(position, rotation);
         }
 
         public void OnStopSpinning()

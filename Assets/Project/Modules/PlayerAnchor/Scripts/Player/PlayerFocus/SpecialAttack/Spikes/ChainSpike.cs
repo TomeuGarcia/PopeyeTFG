@@ -52,13 +52,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         }
 
         public async UniTaskVoid PlaySpawnAnimation()
-        {
-            _damageTrigger.Activate();            
-            
+        {            
             await _meshHolder.Scale(_preScaleUpTween)
                 .AsyncWaitForCompletion();
             await _meshHolder.Scale(_scaleUpTween)
                 .AsyncWaitForCompletion();
+            
+            _damageTrigger.Activate();            
+
             _meshHolder.DOBlendableLocalRotateBy(Vector3.forward * 180f, _delayBeforeScaleDown).SetEase(Ease.InOutSine);
             
             await UniTask.Delay(TimeSpan.FromSeconds(_delayBeforeScaleDown));

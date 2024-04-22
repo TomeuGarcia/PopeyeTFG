@@ -43,7 +43,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorThrowDamageTrigger.Configure(combatManager);
             _anchorThrowDamageTrigger.Deactivate();
 
-            _anchorSpinDamageTrigger.Configure(combatManager);
+            _anchorSpinDamageTrigger.Configure(combatManager, SpinDamageHit);
             _anchorSpinDamageTrigger.Deactivate();
             
             
@@ -195,6 +195,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         private void SetPushSidewaysKnockback(DamageTrigger damageTrigger, GameObject tryHitObject)
         {
+            Debug.Log(tryHitObject.name);
+                        
             Vector3 pushDirection = _sidewaysKnockbackIsRight
                 ? damageTrigger.transform.right
                 : -damageTrigger.transform.right;

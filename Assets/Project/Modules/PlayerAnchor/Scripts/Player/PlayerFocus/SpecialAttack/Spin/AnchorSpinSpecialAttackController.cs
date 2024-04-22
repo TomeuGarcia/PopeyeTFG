@@ -95,11 +95,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _isBeingPerformed = true;
             _playerMediator.SetCanRotate(false);
 
+            _anchorMediator.OnStartSpinning();
+            
             while (_loopTime < _fullLoopTime)
             {
                 UpdateSpin();
                 await UniTask.Yield();
             }
+            
+            _anchorMediator.OnStopSpinning();
 
             _anchorMediator.SnapToFloor(_playerMediator.Position);
             
@@ -132,11 +136,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
         private void UpdateSpin()
         {
-            Vector3 spinOffset = new Vector3(
-                Mathf.Cos(_loopTime),
-                0,
-                Mathf.Sin(_loopTime)
-                );
+            float spinT = (_loopTime - _startOffset) / (_fullLoopTime - _startOffset);
+            spinT = Mathf.Sin(spinT * (Mathf.PI / 2));
+            
+        
+            float cos = Mathf.Cos(_loopTime);
+            float sin = Mathf.Sin(_loopTime);
+        
+            Vector3 spinOffset = new Vector3(cos, 0,sin);
             spinOffset *= _spinDistance;
 
             Vector3 spinCenter = _playerMediator.Position;
@@ -145,12 +152,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
             spinPosition = Vector3.LerpUnclamped(_anchorMotion.Position, spinPosition, _startPositioningT);
 
-            Vector3 spinOffsetDirection = (spinPosition - spinCenter).normalized;
-            Quaternion rotation = Quaternion.LookRotation(spinOffsetDirection, Vector3.up);
+            
+            Vector3 tangent = new Vector3(-sin,  0,cos);
 
-
-            float spinT = (_loopTime - _startOffset) / (_fullLoopTime - _startOffset);
-            spinT = Mathf.Sin(spinT * (Mathf.PI / 2));
+            Vector3 anchorLookDirectionStraight = (spinPosition - spinCenter).normalized;
+            Vector3 anchorLookDirectionTilted = (anchorLookDirectionStraight - tangent).normalized;
+            Vector3 anchorLookDirection =
+                Vector3.LerpUnclamped(anchorLookDirectionTilted, anchorLookDirectionStraight, spinT);
+            
+            
+            Quaternion rotation = Quaternion.LookRotation(anchorLookDirection, Vector3.up);
             
             
             _anchorMotion.SetPosition(spinPosition);
@@ -165,6 +176,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             playerLookAtPosition = Vector3.LerpUnclamped(playerLookAtPosition, spinPosition, spinT);
             
             _playerMediator.LookTowardsPosition(playerLookAtPosition);
+
+
+            Vector3 damagePosition = Vector3.LerpUnclamped(spinCenter, spinPosition, 0.5f);
+            Quaternion damageRotation = rotation;
+            _anchorMediator.OnKeepSpinning(damagePosition, damageRotation);
         }
         
 
