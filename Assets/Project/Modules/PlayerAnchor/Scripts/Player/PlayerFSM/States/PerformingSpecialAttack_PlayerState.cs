@@ -31,7 +31,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (_blackboard.PlayerMediator.OnSpecialAttackFinished())
             {
-                NextState = _exitData.enterState;
+                if (PopeyePlayer.debugIsSpinning)
+                {
+                    NextState = PlayerStates.MovingWithoutAnchor;
+                }
+                else
+                {
+                    NextState = _exitData.enterState;
+                }
+                
                 return true;
             }
 

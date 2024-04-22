@@ -80,7 +80,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IPlayerFocusController _focusController;
         private IPlayerSpecialAttackController[] _specialAttackControllers;
         private int _currentSpecialAttackIndex = 1;
+        public static bool debugIsSpinning = true;
         private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[_currentSpecialAttackIndex];
+        
         
         private IPlayerGlobalEventsListener _globalEventsListener;
         private IPlayerEventsDispatcher _eventsDispatcher;
@@ -169,11 +171,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
             {
                 Debug.Log("Special Attack: RAGE");
                 _currentSpecialAttackIndex = 0;
+                debugIsSpinning = false;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                Debug.Log("Special Attack: SPIKES");
+                Debug.Log("Special Attack: SPIN");
                 _currentSpecialAttackIndex = 1;
+                debugIsSpinning = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                Debug.Log("Special Attack: SPIKES");
+                _currentSpecialAttackIndex = 2;
+                debugIsSpinning = false;
             }
         }
 

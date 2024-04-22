@@ -31,6 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         bool IsGrabbedBySnapper();
 
 
+        void OnStartSpinning();
         void SetSpinning(bool spinningToTheRight);
         void OnKeepSpinning();
         void OnStopSpinning();

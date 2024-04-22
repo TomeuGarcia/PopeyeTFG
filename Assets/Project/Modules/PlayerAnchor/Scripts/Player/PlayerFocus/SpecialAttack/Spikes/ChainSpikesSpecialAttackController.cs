@@ -17,7 +17,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         [SerializeField] private float _duration = 1.0f;
         [SerializeField] private float _delay = 0.1f;
-        private bool _isActive = false;
+        private bool _isBeingPerformed = false;
 
         private ChainSpike.SpikePositioning[] _spikesPositioning;
         private ChainSpike[] _spikes;
@@ -60,7 +60,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         public bool SpecialAttackIsBeingPerformed()
         {
-            return _isActive;
+            return _isBeingPerformed;
         }
 
         public void StartSpecialAttack()
@@ -79,12 +79,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         public bool SpecialAttackHasFinished()
         {
-            return !_isActive;
+            return !_isBeingPerformed;
         }
 
         private async UniTaskVoid Activate()
         {
-            _isActive = true;
+            _isBeingPerformed = true;
 
             for (int i = 0; i < _spikes.Length; ++i)
             {
@@ -93,29 +93,20 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             }
             
             await UniTask.Delay(TimeSpan.FromSeconds(_duration));
-            _isActive = false;
+            _isBeingPerformed = false;
         }
 
+        
+        
         private void LateUpdate()
         {
-            if (_isActive)
+            if (_isBeingPerformed)
             {
                 UpdateSpikesPositioningState();
             }            
         }
-
-        private void OnDrawGizmos()
-        {
-            for (int i = 0; i < _spikesPositioning.Length; ++i)
-            {
-                Vector3 position = _spikesPositioning[i].position;
-                Vector3 normal = _spikesPositioning[i].normal;
-                
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(position + normal, 0.5f);
-                Gizmos.DrawLine(position, position + normal * 6);
-            }
-        }
+        
+        
         private void UpdateSpikesPositioningState()
         {
             Vector3[] chainPositions = _anchorChain.GetChainPositions();

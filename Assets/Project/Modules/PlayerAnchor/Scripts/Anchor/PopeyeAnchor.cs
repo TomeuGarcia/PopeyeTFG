@@ -258,6 +258,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
         }
 
+        public void OnStartSpinning()
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);
+        }
+
         public void SetSpinning(bool spinningToTheRight)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);

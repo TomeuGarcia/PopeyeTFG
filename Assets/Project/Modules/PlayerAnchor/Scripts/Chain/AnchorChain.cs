@@ -131,6 +131,10 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _dashingAwayChainViewLogic.EnterSetup(dashDuration);
             TransitionViewLogic(_dashingAwayChainViewLogic);
         }
+        public void SetSpinningView()
+        {
+            SetDashingAwayView(0.15f, Ease.InOutSine);
+        }
 
         private void TransitionViewLogic(IChainViewLogic newViewLogic)
         {

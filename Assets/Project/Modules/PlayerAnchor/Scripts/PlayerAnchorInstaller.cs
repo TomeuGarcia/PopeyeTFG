@@ -27,6 +27,7 @@ using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -280,9 +281,13 @@ namespace Popeye.Modules.PlayerAnchor
                     specialAttackToggleables);
 
             _spikesSpecialAttack.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
+            AnchorSpinSpecialAttackController anchorSpinSpecialAttackController = 
+                new AnchorSpinSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
+                    _anchor, anchorMotion, _player);
             IPlayerSpecialAttackController[] playerSpecialAttacks =
             {
                 playerSpecialAttackController,
+                anchorSpinSpecialAttackController,
                 _spikesSpecialAttack
             };
 
