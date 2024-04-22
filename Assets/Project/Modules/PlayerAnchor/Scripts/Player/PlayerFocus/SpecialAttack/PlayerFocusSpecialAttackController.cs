@@ -1,6 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.PlayerAnchor.Anchor;
+
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
 {
@@ -12,11 +12,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
 
         private bool _isBeingPerformed;
         
-        public PlayerFocusSpecialAttackController(IPlayerFocusSpender focusSpender, PlayerFocusAttackConfig focusAttackConfig,
-            ISpecialAttackToggleable[] specialAttackToggleables)
+        public PlayerFocusSpecialAttackController(
+            IPlayerFocusSpender focusSpender, 
+            PlayerFocusAttackConfig focusAttackConfig,
+            ISpecialAttackToggleable[] specialAttackToggleables
+            )
         {
             _focusSpender = focusSpender;
-            _focusAttackConfig = focusAttackConfig;
+            _focusAttackConfig = focusAttackConfig;            
             _specialAttackToggleables = specialAttackToggleables;
             
             foreach (ISpecialAttackToggleable specialAttackToggleable in _specialAttackToggleables)
@@ -41,7 +44,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
             _focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
             DoSpecialAttack().Forget();
         }
-        
+
+        public bool SpecialAttackHasFinished()
+        {
+            return true;
+        }
+
         private async UniTaskVoid DoSpecialAttack()
         {
             foreach (ISpecialAttackToggleable specialAttackToggleable in _specialAttackToggleables)

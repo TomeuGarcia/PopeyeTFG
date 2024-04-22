@@ -1,4 +1,6 @@
 using System;
+using Cysharp.Threading.Tasks;
+using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Chain;
 using UnityEngine;
 
@@ -11,60 +13,122 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         [SerializeField, Range(0f, 1f)] private float _endRatio = 0.8f;
         [SerializeField, Range(0, 20)] private int _numberOfPoints = 6;
 
-        private Vector3[] _chainPositions;
-        private Vector3[] _chainForwards = new Vector3[0];
-        private Vector3[] _chainNormals = new Vector3[0];
+        [SerializeField] private ChainSpike _chainSpikePrefab;
+
+        [SerializeField] private float _duration = 1.0f;
+        [SerializeField] private float _delay = 0.1f;
+        private bool _isActive = false;
+
+        private ChainSpike.SpikePositioning[] _spikesPositioning;
+        private ChainSpike[] _spikes;
+
+        private IPlayerFocusSpender _focusSpender;
+        private PlayerFocusAttackConfig _focusAttackConfig;
+        private IAnchorMediator _anchorMediator;
         
+        public void Configure(IPlayerFocusSpender focusSpender, 
+            PlayerFocusAttackConfig focusAttackConfig,
+            IAnchorMediator anchorMediator)
+        {
+            _focusSpender = focusSpender;
+            _focusAttackConfig = focusAttackConfig;
+            _anchorMediator = anchorMediator;
+        }
+
+        private void OnValidate()
+        {
+            _spikesPositioning = new ChainSpike.SpikePositioning[_numberOfPoints];
+            _spikes = new ChainSpike[_numberOfPoints];
+            
+            for (int i = 0; i < _numberOfPoints; ++i)
+            {
+                _spikesPositioning[i] = new ChainSpike.SpikePositioning();
+            }
+        }
+
+        private void Awake()
+        {
+            OnValidate();
+        }
+
         public bool CanDoSpecialAttack()
         {
-            return true;
+            return _focusSpender.HasEnoughFocus(_focusAttackConfig.RequiredFocusToPerform) && 
+                   !SpecialAttackIsBeingPerformed() &&
+                   !_anchorMediator.IsBeingCarried();
         }
 
         public bool SpecialAttackIsBeingPerformed()
         {
-            return false;
+            return _isActive;
         }
 
         public void StartSpecialAttack()
         {
+            _focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
+        
+            for (int i = 0; i < _numberOfPoints; ++i)
+            {
+                ChainSpike chainSpike = Instantiate(_chainSpikePrefab, transform);
+                chainSpike.Init(_spikesPositioning[i]);
+                _spikes[i] = chainSpike;
+            }
+
+            Activate().Forget();
+        }
+
+        public bool SpecialAttackHasFinished()
+        {
+            return !_isActive;
+        }
+
+        private async UniTaskVoid Activate()
+        {
+            _isActive = true;
+
+            for (int i = 0; i < _spikes.Length; ++i)
+            {
+                _spikes[i].PlaySpawnAnimation().Forget();
+                await UniTask.Delay(TimeSpan.FromSeconds(_delay));
+            }
             
+            await UniTask.Delay(TimeSpan.FromSeconds(_duration));
+            _isActive = false;
         }
 
         private void LateUpdate()
         {
-            _chainPositions = _anchorChain.GetChainPositions();
-
-            if (_chainForwards.Length != _chainPositions.Length)
+            if (_isActive)
             {
-                _chainForwards = new Vector3[_chainPositions.Length];
-                _chainNormals = new Vector3[_chainPositions.Length];
-            }
-            
-            for (int i = 0; i < _chainPositions.Length - 1; ++i)
-            {
-                Vector3 chainForward = _chainPositions[i + 1] - _chainPositions[i];
-                Vector3 chainNormal = Vector3.Cross(chainForward, Vector3.up).normalized;
-
-                _chainNormals[i] = chainNormal;
-            }
-            Vector3 lastChainForward = _anchorChain.EndBindPosition - _chainPositions[^2];
-            Vector3 lastChainNormal = Vector3.Cross(lastChainForward, Vector3.up).normalized;
-
-            _chainNormals[^1] = lastChainNormal;
+                UpdateSpikesPositioningState();
+            }            
         }
 
         private void OnDrawGizmos()
         {
-            if (_chainPositions == null) return;
+            for (int i = 0; i < _spikesPositioning.Length; ++i)
+            {
+                Vector3 position = _spikesPositioning[i].position;
+                Vector3 normal = _spikesPositioning[i].normal;
+                
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(position + normal, 0.5f);
+                Gizmos.DrawLine(position, position + normal * 6);
+            }
+        }
+        private void UpdateSpikesPositioningState()
+        {
+            Vector3[] chainPositions = _anchorChain.GetChainPositions();
+            int numberOfChains = chainPositions.Length;
             
-            int startIndex = (int)(_chainPositions.Length * _startRatio);
-            int endIndex = (int)(_chainPositions.Length * _endRatio);
+            int startIndex = (int)(numberOfChains * _startRatio);
+            int endIndex = (int)(numberOfChains * _endRatio);
             
             float indexAmount = endIndex - startIndex;
 
             float indexStep = indexAmount / _numberOfPoints;
             
-
+            
             int count = 0;
             for (float f = startIndex; f < endIndex; f += indexStep)
             {
@@ -72,19 +136,18 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
                 int currentIndex = (int)f;
                 int previousIndex = (int)f - 1;
 
-                Vector3 position = Vector3.LerpUnclamped(_chainPositions[previousIndex], _chainPositions[currentIndex], t);
-                Vector3 normal = Vector3.LerpUnclamped(_chainNormals[previousIndex], _chainNormals[currentIndex], t);
+                Vector3 previousPosition = chainPositions[previousIndex];
+                Vector3 currentPosition = chainPositions[currentIndex];
                 
+                Vector3 position = Vector3.LerpUnclamped(previousPosition, currentPosition, t);
+                Vector3 normal = Vector3.Cross((currentPosition - previousPosition), Vector3.up).normalized;
                 normal *= (count % 2 == 0) ? 1 : -1;
-                
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(position + normal, 0.5f);
-                Gizmos.DrawLine(position, position + normal * 6);
+
+                _spikesPositioning[count].position = position;
+                _spikesPositioning[count].normal = normal;
 
                 ++count;
             }
-
-
         }
         
         

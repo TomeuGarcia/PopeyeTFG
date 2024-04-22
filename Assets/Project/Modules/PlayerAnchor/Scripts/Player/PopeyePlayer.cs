@@ -78,7 +78,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private bool _pullingAnchorFromTheVoid;
 
         private IPlayerFocusController _focusController;
-        private IPlayerSpecialAttackController _specialAttackController;
+        private IPlayerSpecialAttackController[] _specialAttackControllers;
+        private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[1];
         
         private IPlayerGlobalEventsListener _globalEventsListener;
         private IPlayerEventsDispatcher _eventsDispatcher;
@@ -105,7 +106,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorSpinner anchorSpinner,
             ISafeGroundChecker  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
             IOnVoidChecker onVoidChecker,
-            IPlayerFocusController focusController, IPlayerSpecialAttackController specialAttackController,
+            IPlayerFocusController focusController, IPlayerSpecialAttackController[] specialAttackControllers,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _playerInputsUpdater = playerInputsUpdater;
@@ -141,7 +142,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _focusController = focusController;
             _focusDropCollector.Init(_focusController);
             
-            _specialAttackController = specialAttackController;
+            _specialAttackControllers = specialAttackControllers;
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
@@ -659,7 +660,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public bool CanDoSpecialAttack()
         {
-            return _specialAttackController.CanDoSpecialAttack();
+            return SpecialAttackController.CanDoSpecialAttack();
         }
 
         public void OnSpecialAttackPreparationStart(float durationToComplete)
@@ -675,15 +676,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnSpecialAttackPerformed()
         {
             PlayerView.PlaySpecialAttackAnimation();
-            _specialAttackController.StartSpecialAttack();
+            SpecialAttackController.StartSpecialAttack();
             WaitForSpecialAttackFinished().Forget();
             
             _eventsDispatcher.DispatchSpecialAttackPerformed();
             _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
         }
+        public bool OnSpecialAttackFinished()
+        {
+            return SpecialAttackController.SpecialAttackHasFinished();
+        }
         private async UniTaskVoid WaitForSpecialAttackFinished()
         {
-            await UniTask.WaitUntil(() => !_specialAttackController.SpecialAttackIsBeingPerformed());
+            await UniTask.WaitUntil(() => !SpecialAttackController.SpecialAttackIsBeingPerformed());
             PlayerView.PlaySpecialAttackFinishAnimation();
         }
         

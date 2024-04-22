@@ -26,6 +26,7 @@ using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
@@ -77,7 +78,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
         [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
-
+        
         [Header("Player - Animator")] 
         [SerializeField] private PlayerAnimatorEvents _playerAnimatorEvents;
 
@@ -87,6 +88,7 @@ namespace Popeye.Modules.PlayerAnchor
         [Header("Player - Powers")] 
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
+        [SerializeField] private ChainSpikesSpecialAttackController _spikesSpecialAttack;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -272,10 +274,18 @@ namespace Popeye.Modules.PlayerAnchor
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
             ISpecialAttackToggleable[] specialAttackToggleables = 
                 { _anchorGeneralConfig.DamageConfig, _playerGeneralConfig.StatesConfig };
+            
             PlayerFocusSpecialAttackController playerSpecialAttackController
                 = new PlayerFocusSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig,
                     specialAttackToggleables);
-            
+
+            _spikesSpecialAttack.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
+            IPlayerSpecialAttackController[] playerSpecialAttacks =
+            {
+                playerSpecialAttackController,
+                _spikesSpecialAttack
+            };
+
             IPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
@@ -313,7 +323,7 @@ namespace Popeye.Modules.PlayerAnchor
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
                 _playerCheckpointTriggerChecker, playerSafeGroundChecker, 
-                playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
+                playerOnVoidChecker, playerFocusController, playerSpecialAttacks,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
 

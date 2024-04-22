@@ -1,24 +1,27 @@
 using Popeye.Timers;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class EnteringSpecialAttack_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private PlayerStates _endNextState;
+        private readonly PerformingSpecialAttack_PlayerState.TransitionExitData _exitData;
         private Timer _ragingActionTimer;
         private bool _wasInterrupted;
         
-        public EnteringSpecialAttack_PlayerState(PlayerStatesBlackboard blackboard)
+        public EnteringSpecialAttack_PlayerState(PlayerStatesBlackboard blackboard, 
+            PerformingSpecialAttack_PlayerState.TransitionExitData exitData)
         {
             _blackboard = blackboard;
-            _endNextState = PlayerStates.None;
+            _exitData = exitData;
+            _exitData.enterState = PlayerStates.None;
         }
         
         
         protected override void DoEnter()
         {
-            _endNextState = _blackboard.CameFromState;
+            _exitData.enterState = _blackboard.CameFromState;
             _wasInterrupted = false;
 
             float durationToComplete = _blackboard.PlayerStatesConfig.EnteringSpecialAttackDuration;
@@ -44,14 +47,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 if (_ragingActionTimer.HasFinished())
                 {
                     _blackboard.PlayerMediator.OnSpecialAttackPerformed();
-                    NextState = _endNextState;
+                    //NextState = _endNextState;
+                    //return true;
+                    
+                    NextState = PlayerStates.PerformingSpecialAttack;
                     return true;
                 }
             }
             else if (_blackboard.MovesetInputsController.SpecialAttack_Released())
             {
                 _wasInterrupted = true;
-                NextState = _endNextState;
+                NextState = _exitData.enterState;
                 return true;
             }
 

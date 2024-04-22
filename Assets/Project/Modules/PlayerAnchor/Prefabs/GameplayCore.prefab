@@ -11407,6 +11407,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2177388964853534063}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5872370099316778535 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5713232600979843912, guid: 4c926eca4bc34f2419ddf931b08c4baf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2177388964853534063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e57182f9764143bc5c8dea2ffdbd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6405983057515278388 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5102925946691599707, guid: 4c926eca4bc34f2419ddf931b08c4baf,
@@ -11970,6 +11982,11 @@ PrefabInstance:
       objectReference: {fileID: 6517949336412105614}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
+      propertyPath: _spikesSpecialAttack
+      value: 
+      objectReference: {fileID: 5872370099316778535}
+    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
       propertyPath: _playerAnimatorEvents
       value: 
       objectReference: {fileID: 3339008747403455119}
@@ -12010,6 +12027,11 @@ PrefabInstance:
       objectReference: {fileID: 5630546514496348566}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
+      propertyPath: _subSpecialAttacks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
       propertyPath: _cameraShaker._underlyingValue
       value: 
       objectReference: {fileID: 6549223224258503855}
@@ -12033,6 +12055,11 @@ PrefabInstance:
       propertyPath: _isometricCamera._underlyingValue
       value: 
       objectReference: {fileID: 7531898491009611764}
+    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
+      propertyPath: _subSpecialAttacks.Array.data[0]._underlyingValue
+      value: 
+      objectReference: {fileID: 5872370099316778535}
     - target: {fileID: 9053774706851966266, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: m_AnchorMax.y

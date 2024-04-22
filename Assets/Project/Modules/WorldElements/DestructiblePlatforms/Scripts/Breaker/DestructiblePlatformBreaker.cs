@@ -60,6 +60,11 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         {
             foreach (Collider other in _queuedCollidersWhileDisabled)
             {
+                if (other == null)
+                {
+                    continue;
+                }                
+                
                 if (_collider.bounds.Intersects(other.bounds))
                 {
                     TryBreakDestructiblePlatform(other);
