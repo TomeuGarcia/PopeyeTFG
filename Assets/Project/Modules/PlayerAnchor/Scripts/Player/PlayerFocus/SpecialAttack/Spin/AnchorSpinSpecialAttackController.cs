@@ -66,7 +66,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         
         public void StartSpecialAttack()
         {
-            _focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
+            //_focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
 
 
             _anchorMediator.OnStartSpinning();
