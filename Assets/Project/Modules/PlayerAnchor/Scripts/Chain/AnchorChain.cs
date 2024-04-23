@@ -28,6 +28,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private FoldingChainViewLogic _dashingTowardsChainViewLogic;
         private SpiralThrowChainViewLogic _dashingAwayChainViewLogic;
         private FoldingChainViewLogic _carriedChainViewLogic;
+        private SemicircleChainViewLogic _spinningChainViewLogic;
 
 
         private Vector3 PlayerBindPosition => _playerBindTransform.position;
@@ -50,7 +51,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
                 generalConfig.MaxChainLength, boneLength,
                 generalConfig.BonePrefab, generalConfig.BoneEndEffectorPrefab,
-                chainBonesMaterial);
+                chainBonesMaterial, 1f);
             
             _thrownChainViewLogic = 
                 new SpiralThrowChainViewLogic(generalConfig.ThrowViewLogicConfig, 
@@ -71,6 +72,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _carriedChainViewLogic =
                 new FoldingChainViewLogic(generalConfig.PickedUpTowardsViewLogicConfig,
                     generalConfig.ChainBoneCount);
+
+            _spinningChainViewLogic =
+                new SemicircleChainViewLogic(generalConfig.ChainBoneCount, Vector3.down, 2f, 0.5f, 0.5f);
 
             _dashingAwayChainViewLogic = 
                 new SpiralThrowChainViewLogic(generalConfig.DashingAwayViewLogicConfig, 
@@ -133,7 +137,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
         public void SetSpinningView()
         {
-            SetDashingAwayView(0.15f, Ease.InOutSine);
+            TransitionViewLogic(_spinningChainViewLogic);
+            //SetDashingAwayView(0.15f, Ease.InOutSine);
         }
 
         private void TransitionViewLogic(IChainViewLogic newViewLogic)

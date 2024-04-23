@@ -12,34 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e060dc4470549fa8df6488aecee625a, type: 3}
   m_Name: AnchorThrowConfig
   m_EditorClassIdentifier: 
-  _throwForceCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: -0.050633848
-      outSlope: -0.050633848
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.093158655
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _maxThrowForceChargeDuration: 0.1
-  _minThrowMoveDuration: 0.2
   _maxThrowMoveDuration: 0.3
-  _minThrowDistance: 9
   _maxThrowDistance: 9
   _movingForwardExtraDistanceData:
     _distance: 0
@@ -193,6 +166,34 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _endRotationCorrection:
+    _weightCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0.07747125
+        outSlope: 0.07747125
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.114992715
+      - serializedVersion: 3
+        time: 1
+        value: 0.40089095
+        inSlope: -1.2453995
+        outSlope: -1.2453995
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.062591076
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _correctionAmount: 0.6
+    _frontToCameraWeight: 2
+    _backToCameraWeight: 0.8
   _endRotationWeightCurve:
     serializedVersion: 2
     m_Curve:

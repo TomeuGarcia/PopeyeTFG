@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Anchor;
@@ -12,19 +13,26 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         private readonly IAnchorMediator _anchorMediator;
         private readonly TransformMotion _anchorMotion;
         private readonly IPlayerMediator _playerMediator;
+        private readonly AnchorThrowConfig.RotationCorrection _spinEndFloorRotationCorrection;
 
         private bool _isBeingPerformed;
         private int _numberOfLoops = 2;
         private float _totalDuration = 1.0f;
         
-        private float _spinDistance = 7.0f;
+        private float _startSpinDistance = 4.0f;
+        private float _endSpinDistance = 7.0f;
         
         private float _startPositioningDuration = 0.2f;
         private float _startPositioningT;
+        
+        private float _endPositioningDuration = 0.15f;
+        private float _endPositioningT;
 
         private float _loopTime;
         private float _fullLoopTime;
         private float _startOffset;
+
+        private Quaternion _endRotation;
         
         
         public AnchorSpinSpecialAttackController(
@@ -32,13 +40,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             PlayerFocusAttackConfig focusAttackConfig,
             IAnchorMediator anchorMediator,
             TransformMotion anchorMotion,
-            IPlayerMediator playerMediator)
+            IPlayerMediator playerMediator,
+            AnchorThrowConfig.RotationCorrection spinEndFloorRotationCorrection)
         {
             _focusSpender = focusSpender;
             _focusAttackConfig = focusAttackConfig;
             _anchorMediator = anchorMediator;
             _anchorMotion = anchorMotion;
             _playerMediator = playerMediator;
+            _spinEndFloorRotationCorrection = spinEndFloorRotationCorrection;
         }
         
         
@@ -85,6 +95,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _loopTime = _startOffset;
             _fullLoopTime = (Mathf.PI * 2 * _numberOfLoops) + _startOffset;
             
+            ComputeFinishRotation();
             UpdateLoopTimeAsync().Forget();
             DoStartSpecialAttack().Forget();
         }
@@ -94,7 +105,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         {
             _isBeingPerformed = true;
             _playerMediator.SetCanRotate(false);
-
+            
             _anchorMediator.OnStartSpinning();
             
             while (_loopTime < _fullLoopTime)
@@ -114,6 +125,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         private async UniTaskVoid UpdateLoopTimeAsync()
         {
             _loopTime = _startOffset;
+            _startPositioningT = 0;
+            _endPositioningT = 0;
+
             DOTween.To(
                     () => _loopTime,
                     (loopTime) => _loopTime = loopTime,
@@ -123,7 +137,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                 .SetEase(Ease.InOutQuad);
             
             
-            _startPositioningT = 0;
             DOTween.To(
                     () => _startPositioningT,
                     (t) => _startPositioningT = t,
@@ -131,6 +144,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                     _startPositioningDuration
                 )
                 .SetEase(Ease.InQuad);
+
+
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0, _totalDuration - _endPositioningDuration)));
+            DOTween.To(
+                    () => _endPositioningT,
+                    (t) => _endPositioningT = t,
+                    1f,
+                    _endPositioningDuration
+                )
+                .SetEase(Ease.OutSine);
         }
         
 
@@ -144,12 +167,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             float sin = Mathf.Sin(_loopTime);
         
             Vector3 spinOffset = new Vector3(cos, 0,sin);
-            spinOffset *= _spinDistance;
+
+            float spinRadius = Mathf.Lerp(_startSpinDistance, _endSpinDistance, spinT);
+            spinOffset *= spinRadius;
 
             Vector3 spinCenter = _playerMediator.Position;
-
             Vector3 spinPosition = spinCenter + spinOffset;
-
             spinPosition = Vector3.LerpUnclamped(_anchorMotion.Position, spinPosition, _startPositioningT);
 
             
@@ -159,31 +182,40 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             Vector3 anchorLookDirectionTilted = (anchorLookDirectionStraight - tangent).normalized;
             Vector3 anchorLookDirection =
                 Vector3.LerpUnclamped(anchorLookDirectionTilted, anchorLookDirectionStraight, spinT);
-            
-            
             Quaternion rotation = Quaternion.LookRotation(anchorLookDirection, Vector3.up);
             
             
+            rotation = Quaternion.SlerpUnclamped(rotation, _endRotation, _endPositioningT);
+            
             _anchorMotion.SetPosition(spinPosition);
             _anchorMotion.SetRotation(rotation);
+            
             
             Vector3 playerLookAtPosition = spinCenter + new Vector3(
                 Mathf.Cos(_loopTime + (Mathf.PI /2)),
                 0,
                 Mathf.Sin(_loopTime + (Mathf.PI /2))
             );
-            
             playerLookAtPosition = Vector3.LerpUnclamped(playerLookAtPosition, spinPosition, spinT);
-            
             _playerMediator.LookTowardsPosition(playerLookAtPosition);
 
 
-            Vector3 damagePosition = Vector3.LerpUnclamped(spinCenter, spinPosition, 0.5f);
-            Quaternion damageRotation = rotation;
-            _anchorMediator.OnKeepSpinning(damagePosition, damageRotation);
+            Quaternion damageRotation = Quaternion.LookRotation(anchorLookDirectionStraight, Vector3.up);
+            _anchorMediator.OnKeepSpinning(spinCenter, damageRotation, spinRadius);
+        }
+
+
+        private void ComputeFinishRotation()
+        {
+            float cos = Mathf.Cos(_fullLoopTime);
+            float sin = Mathf.Sin(_fullLoopTime);
+        
+            Vector3 endSpinDirection = new Vector3(cos, 0,sin);
+            
+            Quaternion rotation = Quaternion.LookRotation(Vector3.down, endSpinDirection);
+            _endRotation = AnchorThrowUtilities.CorrectRotationForVisibility(rotation, _spinEndFloorRotationCorrection);
         }
         
-
         public bool SpecialAttackHasFinished()
         {
             return !_isBeingPerformed;

@@ -72,7 +72,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             _anchorAudio = anchorAudio;
             
-            
             _cameraFunctionalities = cameraFunctionalities;
 
             OnVoidChecker = onVoidChecker;
@@ -273,21 +272,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlaySpinningAnimation();
         }
 
-        public void OnKeepSpinning(Vector3 position, Quaternion rotation)
+        public void OnKeepSpinning(Vector3 spinCenter, Quaternion rotation, float spinRadius)
         {
-            _anchorDamageDealer.UpdateSpinningDamage(position, rotation);
+            _anchorDamageDealer.UpdateSpinningDamage(spinCenter, rotation, spinRadius);
         }
 
         public void OnStopSpinning()
         {
             _anchorDamageDealer.StopDealingSpinDamage();
         }
-
-        public UniTaskVoid SnapToFloor()
-        {
-            throw new NotImplementedException();
-        }
-
+        
 
         public bool IsBeingThrown()
         {

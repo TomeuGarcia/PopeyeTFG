@@ -34,7 +34,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         void OnStartSpinning();
         void SetSpinning(bool spinningToTheRight);
-        void OnKeepSpinning(Vector3 position, Quaternion rotation);
+        void OnKeepSpinning(Vector3 position, Quaternion rotation, float spinRadius);
         void OnStopSpinning();
         
         void OnDashedAt(float duration, Ease dashEase);

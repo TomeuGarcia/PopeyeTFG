@@ -283,7 +283,8 @@ namespace Popeye.Modules.PlayerAnchor
             _spikesSpecialAttack.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
             AnchorSpinSpecialAttackController anchorSpinSpecialAttackController = 
                 new AnchorSpinSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
-                    _anchor, anchorMotion, _player);
+                    _anchor, anchorMotion, _player,
+                    _anchorGeneralConfig.ThrowConfig.EndRotationCorrection);
             IPlayerSpecialAttackController[] playerSpecialAttacks =
             {
                 playerSpecialAttackController,

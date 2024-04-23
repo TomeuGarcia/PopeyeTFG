@@ -111,7 +111,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
             else
             {
-                AnchorThrowUtilities.CorrectEndRotationForVisibility(AnchorThrowResult, _throwConfig);
+                AnchorThrowUtilities.CorrectEndRotationForVisibility(AnchorThrowResult, _throwConfig.EndRotationCorrection);
             }
 
             _anchor.SetThrown(AnchorThrowResult).Forget();

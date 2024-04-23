@@ -156,6 +156,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void ClearTweens()
         {
             _meshHolderTransform.DOComplete();
+            _meshHolderTransform.localScale = Vector3.one;
         }
         private void KillTweens()
         {

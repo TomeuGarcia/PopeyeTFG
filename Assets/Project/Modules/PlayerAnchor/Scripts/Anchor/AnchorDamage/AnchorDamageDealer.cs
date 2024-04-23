@@ -17,8 +17,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private TransformMotion _spinDamageTriggerMotion;
         
         [SerializeField] private DamageTrigger _anchorThrowDamageTrigger;
-        [SerializeField] private DamageTrigger _anchorSpinDamageTrigger;
         [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
+        [SerializeField] private DamageTrigger _anchorSpinDamageTrigger;
+        [SerializeField] private BoxCollider _anchorSpinCollider;
+        [SerializeField] private Transform _anchorSpinTrail;
 
         private bool _sidewaysKnockbackIsRight;
 
@@ -195,8 +197,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         private void SetPushSidewaysKnockback(DamageTrigger damageTrigger, GameObject tryHitObject)
         {
-            Debug.Log(tryHitObject.name);
-                        
             Vector3 pushDirection = _sidewaysKnockbackIsRight
                 ? damageTrigger.transform.right
                 : -damageTrigger.transform.right;
@@ -224,11 +224,15 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorSpinDamageTrigger.Activate();
             _anchorSpinDamageTrigger.OnBeforeDamageDealt += SetPushSidewaysKnockback;
         }
-        public void UpdateSpinningDamage(Vector3 position, Quaternion rotation)
+        public void UpdateSpinningDamage(Vector3 spinCenter, Quaternion rotation, float spinRadius)
         {
-            _spinDamageTriggerMotion.SetPosition(position);
+            _spinDamageTriggerMotion.SetPosition(spinCenter);
             _spinDamageTriggerMotion.SetRotation(rotation);
-            
+
+            _anchorSpinTrail.localPosition = (Vector3.forward * spinRadius) + (Vector3.left * 0.5f);
+            spinRadius += 1.5f; // Add extra collider size
+            _anchorSpinCollider.size = new Vector3(2, 2, spinRadius);
+            _anchorSpinCollider.center = Vector3.forward * (spinRadius / 2);
         }
         public void StopDealingSpinDamage()
         {
