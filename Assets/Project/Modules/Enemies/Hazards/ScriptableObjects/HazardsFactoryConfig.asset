@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1def0652fbaf48c89200fce30bd8decd, type: 3}
+  m_Name: HazardsFactoryConfig
+  m_EditorClassIdentifier: 
+  _areaDamagePoolData:
+    _prefab: {fileID: 7843934647530321542, guid: 733bcf9a22cc1fe42b18017c46b80ae2,
+      type: 3}
+    _initialInstances: 15
+  _parabolicProjectilePoolData:
+    _prefab: {fileID: 7378326224867316411, guid: 4e338e253182bdf49a70eaa39a367679,
+      type: 3}
+    _initialInstances: 15
+  _flatStraightProjectilePoolData:
+    _prefab: {fileID: 7713062162118136225, guid: d9667ef633ef89b489922feeec9b09eb,
+      type: 3}
+    _initialInstances: 15
+  _explosionProjectilePoolData:
+    _prefab: {fileID: 2147616592756800007, guid: e6a68328215e4de42bf9cfaa5ad12900,
+      type: 3}
+    _initialInstances: 15

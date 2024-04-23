@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class Tired_PlayerState : APlayerState
@@ -13,24 +15,77 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         protected override void DoEnter()
         {
-            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.TiredMoveSpeed);
+            UpdateMovementSpeed();
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
+            
+            if (_blackboard.CameFromState == PlayerStates.TiredPickingUpAnchor) return;
+
+            _blackboard.PlayerMediator.SetCanRotate(true);
             _blackboard.PlayerView.StartTired();
+
+            if (ShouldDropAnchor())
+            {
+                _blackboard.AnchorMediator.SnapToFloor(_blackboard.PlayerMediator.Position).Forget();
+            }
         }
 
         public override void Exit()
         {
-            _blackboard.PlayerView.EndTired();
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
         }
 
         public override bool Update(float deltaTime)
         {
             if (_blackboard.PlayerMediator.HasMaxStamina())
             {
-                NextState = PlayerStates.MovingWithoutAnchor;
+                _blackboard.PlayerView.EndTired();
+
+                NextState = _blackboard.AnchorMediator.IsBeingCarried()
+                    ? PlayerStates.MovingWithAnchor
+                    : PlayerStates.MovingWithoutAnchor;
+                
+                return true;
+            }
+         
+            if (_blackboard.AnchorMediator.IsGrabbedBySnapper() &&
+                _blackboard.CameFromState == PlayerStates.DashingTowardsAnchor)
+            {
+                NextState = PlayerStates.TiredPickingUpAnchor;
+                return true;
+            }
+            if (PlayerCanPickUpAnchor())
+            {
+                NextState = PlayerStates.TiredPickingUpAnchor;
                 return true;
             }
 
             return false;
+        }
+        
+        private bool PlayerCanPickUpAnchor()
+        {
+            return _blackboard.AnchorMediator.IsRestingOnFloor() && 
+                   _blackboard.PlayerMediator.GetDistanceFromAnchor() < _blackboard.PlayerStatesConfig.AnchorPickUpDistance;
+        }
+
+        private bool ShouldDropAnchor()
+        {
+            return _blackboard.PlayerStatesConfig.DropAnchorWhenTired &&
+                   _blackboard.CameFromState == PlayerStates.PullingAnchor;
+        }
+
+        private void UpdateMovementSpeed()
+        {
+            bool cameMovingWithAnchor = 
+                _blackboard.CameFromState == PlayerStates.MovingWithAnchor ||
+                _blackboard.CameFromState == PlayerStates.TiredPickingUpAnchor;
+
+            float maxMovementSpeed = cameMovingWithAnchor
+                ? _blackboard.PlayerStatesConfig.TiredWithAnchorMoveSpeed
+                : _blackboard.PlayerStatesConfig.TiredWithoutAnchorMoveSpeed;
+
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
         }
     }
 }

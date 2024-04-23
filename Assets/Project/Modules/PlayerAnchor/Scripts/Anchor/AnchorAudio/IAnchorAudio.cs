@@ -1,12 +1,13 @@
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public interface IAnchorAudio
     {
-        void Configure(GameObject anchorGameObject);
         void PlayThrowSound();
+        void PlayPullSound();
         void PlayPickedUpSound();
         void PlayDealDamageSound();
+        void PlayLandOnFloorSound();
     }
 }

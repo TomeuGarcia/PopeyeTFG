@@ -1,0 +1,32 @@
+namespace Popeye.Modules.VFX.Generic
+{
+    public enum ParticleTypes
+    {
+        EnemyOnHitWave,
+        EnemyOnHitSplatter,
+        AnchorRetrieveTrail,
+        AnchorThrowTrail,
+        AnchorThrowHead,
+        AnchorSlamHead,
+        AnchorSlamGroundHit,
+        AnchorSlamGroundDecal,
+        AnchorHitGroundDecal,
+        AnchorThrowSoftTrail,
+        PlayerDashDisappear,
+        PlayerDashAppear,
+        PlayerDashTrail,
+        EnemyDeathParticles,
+        EnemySpawnHint,
+        PlayerDashGhost,
+        HealProcess,
+        HealCompleted,
+        EnterEnraged,
+        EnragedProcess,
+        TurretProjectileCollision,
+        TurretAOE,
+        EnemyBloodHitDirectional,
+        EnemyBloodHitDrip,
+        EnemyBloodHitSplash,
+        EnemyBloodDeathDrip
+    }
+}

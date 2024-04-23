@@ -20,14 +20,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.SpinningAnchorMoveSpeed);
             _blackboard.PlayerMediator.SetCanRotate(false);
 
-            _blackboard.PlayerMediator.StartSpinningAnchor(_blackboard.cameFromState == PlayerStates.MovingWithAnchor,
+            _blackboard.PlayerMediator.StartSpinningAnchor(_blackboard.CameFromState == PlayerStates.MovingWithAnchor,
                 _blackboard.spinAttackTowardsRight);
 
             _blackboard.spinAttackTowardsRight = false;
             _stoppingSpinning = false;
             _obstacleHit = false;
             
-            _blackboard.AnchorMediator.SubscribeToOnObstacleHit(OnAnchorHitObstacle);
+            //_blackboard.AnchorMediator.SubscribeToOnObstacleHit(OnAnchorHitObstacle);
         }
 
         public override void Exit()
@@ -36,7 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
             if (!_obstacleHit)
             {
-                _blackboard.AnchorMediator.UnsubscribeToOnObstacleHit(OnAnchorHitObstacle);
+                //_blackboard.AnchorMediator.UnsubscribeToOnObstacleHit(OnAnchorHitObstacle);
             }
         }
 
@@ -75,7 +75,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             if (!_obstacleHit)
             {
-                _blackboard.AnchorMediator.UnsubscribeToOnObstacleHit(OnAnchorHitObstacle);
+                //_blackboard.AnchorMediator.UnsubscribeToOnObstacleHit(OnAnchorHitObstacle);
                 _obstacleHit = true;
             }
             

@@ -18,7 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            _blackboard.queuedDashTowardsAnchor = false;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.DashingMoveSpeed);
             
             StartDashing().Forget();
         }
@@ -34,11 +34,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 NextState = PlayerStates.PickingUpAnchor;
                 //NextState = PlayerStates.MovingWithoutAnchor; // Player won't pick up anchor if on snap target
                 return true;
-            }
-
-            if (_blackboard.MovesetInputsController.Throw_Pressed())
-            {
-                _blackboard.queuedAnchorThrow = true;
             }
 
             return false;

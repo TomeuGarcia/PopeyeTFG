@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerController.Inputs
@@ -9,6 +7,8 @@ namespace Popeye.Modules.PlayerController.Inputs
         private Transform _cameraTransform;
         private InputSystem.PlayerAnchorInputControls _playerInputControls;
 
+        public Vector3 ForwardAxis { get; private set; }
+        public Vector3 RightAxis { get; private set; }
 
         public CameraAxisMovementInput(Transform cameraTransform)
         {
@@ -16,6 +16,8 @@ namespace Popeye.Modules.PlayerController.Inputs
 
             _playerInputControls = new InputSystem.PlayerAnchorInputControls();
             _playerInputControls.Enable();
+
+            UpdateMovementAxis();
         }
 
         ~CameraAxisMovementInput()
@@ -41,15 +43,21 @@ namespace Popeye.Modules.PlayerController.Inputs
 
         private Vector3 ToCameraAlignedInput(Vector2 input)
         {
+            UpdateMovementAxis();
+            
             input = Vector2.ClampMagnitude(input, 1.0f);
-
             Vector3 result = Vector3.zero;
-            Vector3 forward = Vector3.Cross(_cameraTransform.right, Vector3.up).normalized;
-
-            result += _cameraTransform.right * input.x;
-            result += forward * input.y;
+            
+            result += RightAxis * input.x;
+            result += ForwardAxis * input.y;
 
             return result;
+        }
+
+        private void UpdateMovementAxis()
+        {
+            RightAxis = _cameraTransform.right;
+            ForwardAxis = Vector3.Cross(RightAxis, Vector3.up).normalized;
         }
     }
 }

@@ -1,0 +1,22 @@
+using Cysharp.Threading.Tasks;
+using Popeye.Modules.CombatSystem;
+using UnityEngine;
+
+namespace Popeye.Modules.PlayerAnchor.Anchor
+{
+    public interface IAnchorView
+    {
+        void ResetView();
+        UniTaskVoid PlayVerticalHitAnimation(float duration, RaycastHit floorHit);
+        UniTaskVoid PlayThrownAnimation(float duration);
+        UniTaskVoid PlayPulledAnimation(float duration);
+        void PlayKickedAnimation(float duration);
+        void PlayCarriedAnimation();
+        void PlayRestOnFloorAnimation();
+        
+        void PlaySpinningAnimation();
+        void PlayObstructedAnimation();
+        void StopCarry();
+        void OnDamageDealt(DamageHitResult damageHitResult);
+    }
+}

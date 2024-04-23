@@ -1,0 +1,46 @@
+using System;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace Popeye.Scripts.Core.Scenes
+{
+    public class LoadSceneAdditivelyCommand : ISceneLoadCommand
+    {
+        private readonly ISceneReference _sceneReference;
+        private readonly float _delay;
+        private readonly Action<ISceneReference> _startLoadingCallback;
+        private readonly Action<ISceneReference> _finishLoadingCallback;
+
+        public bool FinishedLoading { get; private set; }
+
+        
+        
+        public LoadSceneAdditivelyCommand(ISceneReference sceneReference, float delay, 
+            Action<ISceneReference> startLoadingCallback, Action<ISceneReference> finishLoadingCallback)
+        {
+            _sceneReference = sceneReference;
+            _delay = delay;
+            _startLoadingCallback = startLoadingCallback;
+            _finishLoadingCallback = finishLoadingCallback;
+            FinishedLoading = false;
+        }
+
+        
+        public async UniTask Execute()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_delay));
+
+            _startLoadingCallback?.Invoke(_sceneReference);
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(_sceneReference.SceneName, LoadSceneMode.Additive);
+            
+            await UniTask.WaitUntil(
+                () => loadOperation.isDone
+            );
+            
+            FinishedLoading = true;
+            _finishLoadingCallback?.Invoke(_sceneReference);
+        }
+        
+    }
+}

@@ -12,9 +12,11 @@ namespace Popeye.Modules.Enemies.Components
         private Transform[] _wayPoints;
         private int _wayPointIndex;
         [SerializeField] private float _playerDistanceThreshold;
+        [SerializeField] private float _playerDistanceThresholdToStartFollowing;
         [SerializeField] private float _wayPointDistanceThreshold;
         private float _squaredWayPointDistanceThreshold;
         private float _squaredPlayerDistanceThreshold;
+        private float _squaredPlayerDistanceThresholdToStartFollowing;
         private AEnemyMediator _mediator;
         private Vector3 _target;
         private bool _patrolling;
@@ -34,6 +36,7 @@ namespace Popeye.Modules.Enemies.Components
         public void Start()
         {
             _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
+            _squaredPlayerDistanceThresholdToStartFollowing = _playerDistanceThresholdToStartFollowing * _playerDistanceThresholdToStartFollowing;
         }
 
         private void Update()
@@ -48,7 +51,6 @@ namespace Popeye.Modules.Enemies.Components
                         _mediator.OnPlayerClose();
                         return;
                     }
-                    
                     if (IsCloseToWayPoint())
                     {
                         UpdateWaypointDestination();
@@ -70,11 +72,14 @@ namespace Popeye.Modules.Enemies.Components
         public void SetWayPoints(Transform[] wayPoints)
         {
             _wayPoints = wayPoints;
-
             _patrolType = PatrolType.FixedWaypoints;
-            UpdateWaypointDestination();
             _squaredWayPointDistanceThreshold = _wayPointDistanceThreshold * _wayPointDistanceThreshold;
-            SetPatrolling(true);
+        }
+
+        public void ResetPatrolling()
+        {
+            _patrolType = PatrolType.None;
+            _patrolling = false;
         }
         public void SetPatrolling(bool patrolling)
         {
@@ -115,7 +120,7 @@ namespace Popeye.Modules.Enemies.Components
         
         private bool IsPlayerAtCloseDistance()
         {
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
+            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThresholdToStartFollowing;
         }
         private bool IsPlayerAtFarDistance()
         {

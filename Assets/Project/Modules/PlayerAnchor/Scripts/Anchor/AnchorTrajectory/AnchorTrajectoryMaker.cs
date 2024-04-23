@@ -2,10 +2,11 @@ using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Project.Scripts.Math.Curves;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class AnchorTrajectoryMaker
     {
@@ -22,72 +23,25 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         private AnchorTrajectoryEndSpot _trajectoryEndSpot;
         private AnchorPullConfig _anchorPullConfig;
-        
 
-        private LineRenderer _debugLine;
-        private LineRenderer _debugLine2;
-        private LineRenderer _debugLine3;
-
-        public bool drawDebugLines = false;
+        private QuadraticBezierCurve _pointsCurve;
         
-        public void Configure(AnchorTrajectoryEndSpot trajectoryEndSpot, 
-            ObstacleProbingConfig obstacleProbingConfig, AnchorPullConfig anchorPullConfig,
-            LineRenderer debugLine, LineRenderer debugLine2, LineRenderer debugLine3)
+        
+        public void Configure(
+            ObstacleProbingConfig obstacleProbingConfig, 
+            AnchorPullConfig anchorPullConfig,
+            int numberOfPoints)
         {
-            _trajectoryEndSpot = trajectoryEndSpot;
             _obstacleProbingConfig = obstacleProbingConfig;
             _anchorPullConfig = anchorPullConfig;
-
-            _trajectoryEndSpot.Hide();
             
             _straightLineTrajectoryPoints = new Vector3[2];
-            _curvedTrajectoryPoints = new Vector3[10];
+            _curvedTrajectoryPoints = new Vector3[numberOfPoints];
             
-            
-            _debugLine = debugLine;
-            _debugLine2 = debugLine2;
-            _debugLine3 = debugLine3;
+
+            _pointsCurve = new QuadraticBezierCurve();
         }
-
-        public void DrawDebugLines()
-        {
-            DrawDebugLines(_straightLineTrajectoryPoints, _curvedTrajectoryPoints);
-        }
-        private void DrawDebugLines(Vector3[] trajectory1, Vector3[] trajectory2, Vector3[] trajectory3 = null)
-        {
-            _debugLine.positionCount = trajectory1.Length;
-            _debugLine.SetPositions(trajectory1);
-            
-            _debugLine2.positionCount = trajectory2.Length;
-            _debugLine2.SetPositions(trajectory2);
-
-            if (trajectory3 != null)
-            {
-                _debugLine3.positionCount = trajectory2.Length;
-                _debugLine3.SetPositions(trajectory2);
-            }
-
-        }
-
         
-        
-        public void ShowTrajectoryEndSpot()
-        {
-            _trajectoryEndSpot.Show();
-            _debugLine2.gameObject.SetActive(true);
-        }
-        public void HideTrajectoryEndSpot()
-        {
-            _trajectoryEndSpot.Hide();
-            _debugLine2.gameObject.SetActive(false);
-        }
-
-
-
-        public void MakeTrajectoryEndSpotMatchSpot(Vector3 position, Vector3 lookDirection, bool endsOnFloor)
-        {
-            _trajectoryEndSpot.MatchSpot(position, lookDirection, endsOnFloor);
-        }
         
         public Vector3[] ComputeCurvedTrajectory(Vector3 startPosition, Vector3 goalPosition, int numberOfSteps,
             out float trajectoryDistance)
@@ -142,54 +96,54 @@ namespace Project.Modules.PlayerAnchor.Anchor
         public Vector3[] ComputeUpdatedTrajectory(Vector3 startPosition, Vector3 direction, Vector3 floorNormal,
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance,
             out bool trajectoryEndsOnTheFloor,
-            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             return DoComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
-                out obstacleHit, out trajectoryHitsObstacle);
+                out obstacleHit, out trajectoryHitsObstacle, out lastIndexBeforeCollision);
         }
         
         public Vector3[] ComputeUpdatedTrajectoryWithAutoAim(Vector3 startPosition, Vector3 direction, Vector3 floorNormal, 
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance, out bool trajectoryEndsOnTheFloor, 
-            out IAutoAimTarget autoAimTarget, out bool validAutoAimTarget, 
-            out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle)
+            out IAnchorTrajectorySnapTarget snapTarget, out bool validSnapTarget, 
+            out RaycastHit  obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             
-            if (CheckForAutoAimTarget(_straightLineTrajectoryPoints, out autoAimTarget))
+            if (CheckForAutoAimTarget(_straightLineTrajectoryPoints, out snapTarget))
             {
-                if (autoAimTarget.CanBeAimedFromPosition(startPosition))
+                if (snapTarget.CanBeAimedFromPosition(startPosition))
                 {
-                    MakeAutoTargetTrajectory(_curvedTrajectoryPoints, startPosition, floorNormal, heightOffsetCurve,
-                        out trajectoryDistance, autoAimTarget);
-                    
-                    validAutoAimTarget = true;
+                    MakeSnapTargetTrajectory(_curvedTrajectoryPoints, startPosition, out trajectoryDistance, snapTarget);
+
+                    validSnapTarget = true;
                     trajectoryEndsOnTheFloor = true;
                     obstacleHit = default;
                     trajectoryHitsObstacle = false;
+                    lastIndexBeforeCollision = -1;
                     
                     return _curvedTrajectoryPoints;
                 }
             }
 
-            validAutoAimTarget = false;
+            validSnapTarget = false;
             return ComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
-                out obstacleHit, out trajectoryHitsObstacle);
+                out obstacleHit, out trajectoryHitsObstacle, out lastIndexBeforeCollision);
         }
 
         private Vector3[] DoComputeUpdatedTrajectory(Vector3 startPosition, Vector3 direction, Vector3 floorNormal,
             AnimationCurve heightOffsetCurve, float distance, out float trajectoryDistance,
             out bool trajectoryEndsOnTheFloor,
-            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle)
+            out RaycastHit obstacleHit, out bool trajectoryHitsObstacle, out int lastIndexBeforeCollision)
         {
             MakeCurvedTrajectory(_curvedTrajectoryPoints, startPosition, direction, distance, 
                 floorNormal, heightOffsetCurve, out trajectoryDistance);
 
             
             bool obstacleInTheWayOfTheTrajectory =
-                CheckFirstHitInTrajectory(_curvedTrajectoryPoints, 0.1f, out int lastIndexBeforeCollision,
+                CheckFirstHitInTrajectory(_curvedTrajectoryPoints, 0.1f, out lastIndexBeforeCollision,
                     out obstacleHit, ObstaclesLayerMask, QueryTriggerInteraction.Ignore);
             if (obstacleInTheWayOfTheTrajectory)
             {
@@ -278,12 +232,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         
 
-        private bool CheckForAutoAimTarget(Vector3[] trajectoryPoints, out IAutoAimTarget autoAimTarget)
+        private bool CheckForAutoAimTarget(Vector3[] trajectoryPoints, out IAnchorTrajectorySnapTarget snapTarget)
         {
             if (CheckAtopHitInTrajectoryPoint(trajectoryPoints, 0, 0.5f, out RaycastHit hit,
                     AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
-                if (CheckHitIsAutoAimTarget(hit, out autoAimTarget))
+                if (CheckHitIsAutoAimTarget(hit, out snapTarget))
                 {
                     return true;
                 }
@@ -292,19 +246,19 @@ namespace Project.Modules.PlayerAnchor.Anchor
             if (CheckFirstHitInTrajectory(trajectoryPoints, 0.5f, out int lastIndexBeforeCollision, 
                     out hit, AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
-                if (CheckHitIsAutoAimTarget(hit, out autoAimTarget))
+                if (CheckHitIsAutoAimTarget(hit, out snapTarget))
                 {
                     return true;
                 }
             }
 
-            autoAimTarget = null;
+            snapTarget = null;
             return false;
         }
 
-        private bool CheckHitIsAutoAimTarget(RaycastHit hit, out IAutoAimTarget autoAimTarget)
+        private bool CheckHitIsAutoAimTarget(RaycastHit hit, out IAnchorTrajectorySnapTarget snapTarget)
         {
-            return hit.collider.gameObject.TryGetComponent<IAutoAimTarget>(out autoAimTarget);
+            return hit.collider.gameObject.TryGetComponent<IAnchorTrajectorySnapTarget>(out snapTarget);
         }
 
         private bool CheckFirstHitInTrajectory(Vector3[] trajectoryPoints, float extraDistance, out int lastIndexBeforeCollision,
@@ -361,19 +315,21 @@ namespace Project.Modules.PlayerAnchor.Anchor
         }
         
 
-        private void MakeAutoTargetTrajectory(Vector3[] trajectoryPoints, Vector3 startPosition, Vector3 floorNormal, 
-            AnimationCurve heightOffsetCurve, out float trajectoryDistance, IAutoAimTarget autoAimTarget)
+        private void MakeSnapTargetTrajectory(Vector3[] trajectoryPoints, Vector3 startPosition, 
+            out float trajectoryDistance, IAnchorTrajectorySnapTarget snapTarget)
         {
-            Vector3 autoAimTargetPosition = autoAimTarget.GetAimLockPosition();
-            Vector3 startToAutoAim = autoAimTargetPosition - startPosition;
-            Vector3 projectedStartToAutoAim = Vector3.ProjectOnPlane(startToAutoAim, floorNormal); 
-            Vector3 direction = projectedStartToAutoAim.normalized;
-            float distance = projectedStartToAutoAim.magnitude;
-                
-            MakeCurvedTrajectory(trajectoryPoints, startPosition, 
-                direction, distance, floorNormal, heightOffsetCurve, out trajectoryDistance);
-            RemakeTrajectoryEnd(trajectoryPoints, autoAimTargetPosition, 
-                trajectoryDistance, out trajectoryDistance);
+            Vector3 snapTargetPosition = snapTarget.GetAimLockPosition();
+            Vector3 snapTargetToStartDirection = (startPosition - snapTargetPosition).normalized;
+            Vector3 lastPointControl = snapTargetPosition + snapTargetToStartDirection;
+            lastPointControl.y = startPosition.y;
+            Vector3 firstPointControl = Vector3.Lerp(startPosition, lastPointControl, 0.5f);
+
+            _pointsCurve.P0 = startPosition;
+            _pointsCurve.P1 = firstPointControl;
+            _pointsCurve.P2 = lastPointControl;
+            _pointsCurve.P3 = snapTargetPosition;
+            
+            _pointsCurve.FillPointsFromCurve(trajectoryPoints, out trajectoryDistance);
         }
 
         private bool RemakeTrajectoryAfterCollisionHit(Vector3[] trajectoryPoints, int lastIndexBeforeCollision,
@@ -463,16 +419,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return cappedCurvedTrajectoryPoints;
         }
 
-
+        
         public Vector3[] ComputeUpAndDownTrajectory(Vector3 startPosition, float distance, out RaycastHit floorHit)
         {
             Vector3[] upAndDownTrajectory = ComputeBackAndForthTrajectory(startPosition, Vector3.up, distance);
-            
-            if (CheckFloorHit(upAndDownTrajectory[^1], 0.1f, FloorProbeDistance, out floorHit, 
-                    ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
-            {
-                upAndDownTrajectory[^1] = floorHit.point + (floorHit.normal * 0.2f);
-            }
+
+            CorrectLastPositionWithFloorHit(upAndDownTrajectory, out floorHit);
 
             return upAndDownTrajectory;
         }
@@ -512,6 +464,50 @@ namespace Project.Modules.PlayerAnchor.Anchor
             return backAndForthTrajectory;
         }
         
+        private void CorrectLastPositionWithFloorHit(Vector3[] trajectory, out RaycastHit floorHit)
+        {
+            if (CheckFloorHit(trajectory[^1], 0.1f, FloorProbeDistance, out floorHit, 
+                    ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                trajectory[^1] = GetPositionTouchingFloor(floorHit);
+            }
+        }
+
+        private Vector3 GetPositionTouchingFloor(RaycastHit floorHit)
+        {
+            return floorHit.point + (floorHit.normal * 0.005f);
+        }
+        
+        public Vector3[] ComputeDownToFloorTrajectory(Vector3 startPosition, out RaycastHit floorHit, 
+            int numberOfSteps = 2)
+        {
+            numberOfSteps = Mathf.Max(numberOfSteps, 2);
+            
+            Vector3 endPosition = Vector3.zero;
+
+            
+            
+            if (CheckFloorHit(startPosition, 0.1f, FloorProbeDistance, out floorHit,
+                    ObstaclesLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                endPosition = GetPositionTouchingFloor(floorHit);
+            }
+            else
+            {
+                endPosition = startPosition + (Vector3.down * FloorProbeDistance);
+            }
+
+            Vector3[] downTrajectory = new Vector3[numberOfSteps];
+            int numberOfStepsMinusOne = numberOfSteps - 1;
+            for (int i = 0; i < numberOfSteps; ++i)
+            {
+                float t = (float)i / numberOfStepsMinusOne;
+                downTrajectory[i] = Vector3.Lerp(startPosition, endPosition, t);
+            }
+            
+            
+            return downTrajectory;
+        }
         
     }
 }

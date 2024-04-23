@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -7,11 +9,18 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public interface IPlayerMediator
     {
         Vector3 Position { get; }
+        Transform PositionTransform { get; }
+        IPlayerView PlayerView { get; }
+        IPlayerHealing PlayerHealing { get; }
+        IPlayerStaminaPower PlayerStaminaPower { get; }
+        DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
         void SetCanUseRotateInput(bool canUseRotateInput);
+        void SetInstantRotation(bool instantRotation);
         void SetCanRotate(bool canRotate);
-        void SetCanFallOffLedges(bool canFallOffLedges);
+        void SetCanFallOffLedges(bool canFallOffLedges, bool checkingIgnoreLedges = true);
+        void SetEnabledFallingPhysics(bool fallingPhysicsEnabled);
         float GetDistanceFromAnchor();
         float GetDistanceFromAnchorRatio01();
         Vector3 GetFloorAlignedDirectionToAnchor();
@@ -26,12 +35,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         void PickUpAnchor();
         void StartChargingThrow();
-        void ChargeThrow(float deltaTime);
+        void UpdateChargingThrow();
         void StopChargingThrow();
         void CancelChargingThrow();
         void ThrowAnchor();
         void PullAnchor();
         void OnPullAnchorComplete();
+        UniTaskVoid QueuePullAnchor();
         
         UniTask DashTowardsAnchor();
         UniTask DashForward();
@@ -47,32 +57,51 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
 
         void OnAnchorEndedInVoid();
+        void OnPlayerFellOnVoid();
+        bool TakeFellOnVoidDamage();
+        void RespawnToLastSafeGround();
         void OnTryUsingObstructedAnchor();
 
 
         void LookTowardsPosition(Vector3 position);
         void LookTowardsAnchor();
         UniTaskVoid LookTowardsAnchorForDuration(float duration);
+
+
+        void DropTargetForCamera();
+        void ResetTargetForCamera();
         
 
         bool HasStaminaLeft();
         bool HasMaxStamina();
 
 
-        bool CanHeal();
-        UniTask UseHeal();
-        void HealToMax();
-        
-        void OnDamageTaken();
-        void OnKilledByDamageTaken();
-        void OnHealed();
+        void SetInvulnerable(bool isInvulnerable);
+        void SetInvulnerableForDuration(float duration);
 
+        void OnDamageTaken(DamageHitResult damageHitResult);
+        void OnKilledByDamageTaken(DamageHitResult damageHitResult);
+        void OnHealUsed(int healthBeforeHealing, int currentHealth);
+        void OnHealed();
+        void OnHealStart(float durationToComplete);
+        void OnHealInterrupted();
 
         Transform GetTargetForEnemies();
-        void Respawn();
+        void RespawnFromDeath();
 
 
         void OnStartMoving();
         void OnStopMoving();
+
+
+        void UpdateSafeGroundChecking(float deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+        UniTaskVoid DisableSafeGroundCheckingForDuration(float duration);
+
+
+        bool CanDoSpecialAttack();
+        void OnSpecialAttackPreparationStart(float durationToComplete);
+        void OnSpecialAttackPreparationInterrupted();
+        void OnSpecialAttackPerformed();
+
     }
 }

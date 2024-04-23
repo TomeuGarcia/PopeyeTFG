@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Popeye.Modules.Camera
 {
     [RequireComponent(typeof(UnityEngine.Camera))]
-    public class OrbitingCamera : MonoBehaviour
+    public class OrbitingCamera : MonoBehaviour, ICameraController
     {
         [SerializeField] private UnityEngine.Camera _camera;
         [SerializeField] private Transform _focus;
@@ -135,8 +135,7 @@ namespace Popeye.Modules.Camera
         {
             _distance = distance;
         }
-        
-        
+
     }
 }
 

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b5112131f2a98c4fb9577e393740579, type: 3}
+  m_Name: GeneralEnemyVFXConfig
+  m_EditorClassIdentifier: 
+  _waveParticles: 0
+  _splatterParticles: 1
+  _bloodHitDirectionalParticles: 22
+  _bloodHitSplashParticles: 24
+  _bloodDripHitParticles: 23
+  _bloodDripDeathParticles: 25
+  _flashSequence:
+  - _flashMaterial: {fileID: 2100000, guid: 86a702cb40ddb494cba2c3e3c89b7ead, type: 2}
+    _waitTime: 0.05
+  - _flashMaterial: {fileID: 2100000, guid: d53b284abe63ffb42b73f49b3d0f7376, type: 2}
+    _waitTime: 0.05
+  - _flashMaterial: {fileID: 2100000, guid: 86a702cb40ddb494cba2c3e3c89b7ead, type: 2}
+    _waitTime: 0.05
+  - _flashMaterial: {fileID: 2100000, guid: d53b284abe63ffb42b73f49b3d0f7376, type: 2}
+    _waitTime: 0.05
+  - _flashMaterial: {fileID: 2100000, guid: 86a702cb40ddb494cba2c3e3c89b7ead, type: 2}
+    _waitTime: 0.05
+  _onHitShakeConfig: {fileID: 11400000, guid: 5569af4160078b7408f5cbea911aae22, type: 2}
+  _deathParticles: 13
+  _deathShakeConfig: {fileID: 11400000, guid: 45eab96e894f19d41a6dc6b5bb723b0f, type: 2}

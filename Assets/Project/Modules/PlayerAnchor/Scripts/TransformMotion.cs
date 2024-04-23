@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor
+namespace Popeye.Modules.PlayerAnchor
 {
     public class TransformMotion
     {
@@ -9,6 +9,7 @@ namespace Project.Modules.PlayerAnchor
         private Transform _rotateTransform;
 
         public Vector3 Position => _moveTransform.position;
+        public Vector3 Forward => _moveTransform.forward;
         public Quaternion Rotation => _rotateTransform.rotation;
 
         ~TransformMotion()
@@ -68,6 +69,19 @@ namespace Project.Modules.PlayerAnchor
             _moveTransform.DOPath(path, duration)
                 .SetEase(ease);
         }
+        public void MoveAndRotateAlongPath(Vector3[] positionPath, Quaternion[] rotationPath, 
+            float duration, AnimationCurve ease)
+        {
+            float rotationStepDuration = duration / rotationPath.Length;
+            
+            _moveTransform.DOKill();
+            _moveTransform.DOPath(positionPath, duration)
+                .SetEase(ease)
+                .OnWaypointChange((index) =>
+                {
+                    Rotate(rotationPath[index], rotationStepDuration);
+                });
+        }
 
         
         public void Rotate(Quaternion endRotation, float duration, Ease ease = Ease.Linear)
@@ -121,6 +135,12 @@ namespace Project.Modules.PlayerAnchor
                 .SetEase(ease);
             _rotateTransform.DOLocalRotateQuaternion(localRotation, duration)
                 .SetEase(ease);
+        }
+
+        public void ResetScale()
+        {
+            _moveTransform.localScale = Vector3.one;
+            _rotateTransform.localScale = Vector3.one;
         }
     }
 }

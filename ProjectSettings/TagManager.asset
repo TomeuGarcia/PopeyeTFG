@@ -9,6 +9,7 @@ TagManager:
   - Anchor
   - GroundedAnchor
   - Floor
+  - NoCollide
   layers:
   - Default
   - TransparentFX
@@ -27,9 +28,9 @@ TagManager:
   - Triggerable
   - RaycastOnly
   - DynamicObstacle
-  - 
-  - 
-  - 
+  - OnlyHitDefault
+  - Anchor
+  - OnlyIgnoreDefault
   - 
   - 
   - 

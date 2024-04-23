@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 using Random=UnityEngine.Random;
@@ -12,9 +13,9 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private Vector2 _speeedThreshold = new Vector2(5, 7);
         [SerializeField] private int _spawnForce = 10;
         [SerializeField] private Rigidbody _rb;
-        
+        [SerializeField] private float _stopAfterHitDelay = 5;
         private bool _followPlayer = false;
-
+        [SerializeField] private float _speedAfterHit = 0.2f;
         private AEnemyMediator _mediator;
 
 
@@ -38,13 +39,21 @@ namespace Popeye.Modules.Enemies.Components
 
         }
 
+        public void BackUp()
+        {
+            StopBackUp();
+        }
+
+        private async UniTaskVoid StopBackUp()
+        {
+            _navMeshAgent.speed = _speedAfterHit;
+            await UniTask.Delay(TimeSpan.FromSeconds(_stopAfterHitDelay));
+            _navMeshAgent.speed = _speed;
+        }
+
         public void SetTarget(Transform transform)
         {
             _playerTransform = transform;
-           /* if (_navMeshAgent.isActiveAndEnabled && _followPlayer)
-            {
-                StartChasing();
-            }*/
         }
 
         public void ApplyExplosionForce(Vector3 explosionForceDir)

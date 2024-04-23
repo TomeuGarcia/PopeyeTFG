@@ -1,4 +1,4 @@
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
@@ -7,26 +7,29 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         private IPlayerMediator _playerMediator;
         private HealthBehaviour _playerHealthBehaviour;
-        private int _potionHealAmount;
+        private DamageHit _voidDamageHit;
+        
+        
         
         public void Configure(IPlayerMediator playerMediator, HealthBehaviour playerHealthBehaviour, int maxHealth,
-            int potionHealAmount)
+            Rigidbody knockbackRigidbody, DamageHitConfig voidDamageHitConfig)
         {
             _playerMediator = playerMediator;
-            _potionHealAmount = potionHealAmount;
 
             _playerHealthBehaviour = playerHealthBehaviour;
-            _playerHealthBehaviour.Configure(this, maxHealth, DamageHitTargetType.Player);
+            _playerHealthBehaviour.Configure(this, maxHealth, DamageHitTargetType.Player, knockbackRigidbody);
+
+            _voidDamageHit = new DamageHit(voidDamageHitConfig);
         }
 
         public void OnDamageTaken(DamageHitResult damageHitResult)
         {
-            _playerMediator.OnDamageTaken();
+            _playerMediator.OnDamageTaken(damageHitResult);
         }
 
         public void OnKilledByDamageTaken(DamageHitResult damageHitResult)
         {
-            _playerMediator.OnKilledByDamageTaken();
+            _playerMediator.OnKilledByDamageTaken(damageHitResult);
         }
 
         public void OnHealed()
@@ -44,19 +47,40 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerHealthBehaviour.HealthSystem.SetInvulnerableForDuration(duration);
         }
         
-        public void UseHeal()
-        {
-            _playerHealthBehaviour.Heal(_potionHealAmount);
-        }
         public void HealToMax()
         {
             _playerHealthBehaviour.HealToMax();
+        }
+
+        public void Heal(int healAmount)
+        {
+            int healthBeforeHealing = GetCurrentHealth();
+            _playerHealthBehaviour.Heal(healAmount);
+            
+            int currentHealth = GetCurrentHealth();
+            
+            _playerMediator.OnHealUsed(healthBeforeHealing, currentHealth);
         }
 
         public bool IsMaxHealth()
         {
             return _playerHealthBehaviour.IsMaxHealth();
         }
+
+        public bool IsDead()
+        {
+            return _playerHealthBehaviour.IsDead();
+        }
         
+        public int GetCurrentHealth()
+        {
+            return _playerHealthBehaviour.HealthSystem.CurrentHealth;
+        }
+
+
+        public void TakeVoidFallDamage()
+        {
+            _playerHealthBehaviour.TakeHitDamage(_voidDamageHit);
+        }
     }
 }

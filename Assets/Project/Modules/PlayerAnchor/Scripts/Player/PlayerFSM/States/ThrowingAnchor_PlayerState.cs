@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -30,15 +31,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.Dash_Pressed())
-            {
-                _blackboard.queuedDashTowardsAnchor = true;
-            }
-            if (_blackboard.MovesetInputsController.Pull_Pressed())
-            {
-                _blackboard.queuedAnchorPull = true;
-            }
-            
             if (_anchorThrowFinished)
             {
                 NextState = PlayerStates.MovingWithoutAnchor;

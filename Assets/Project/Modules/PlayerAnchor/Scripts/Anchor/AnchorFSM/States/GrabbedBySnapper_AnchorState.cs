@@ -1,4 +1,7 @@
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
+
+using UnityEngine;
+
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 {
     public class GrabbedBySnapper_AnchorState : IAnchorState
     {
@@ -12,13 +15,17 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         
         public void Enter()
         {
-            _blackboard.AnchorPhysics.EnableTension();
+            _blackboard.AnchorPhysics.EnableCollision();
             _blackboard.AnchorChain.EnableTension();
+            
+            _blackboard.AnchorMediator.CurrentTrajectorySnapTarget.OnStartBeingUsed(_blackboard.PlayerPositionTransform);
         }
 
         public void Exit()
         {
             _blackboard.TransformMotion.Unparent();
+            _blackboard.AnchorMediator.CurrentTrajectorySnapTarget.OnFinishBeingUsed();
+            _blackboard.AnchorMediator.ResetCurrentTrajectorySnapTarget();
         }
         
         

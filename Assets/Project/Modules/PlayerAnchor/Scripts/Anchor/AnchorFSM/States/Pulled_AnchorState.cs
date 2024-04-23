@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 {
     public class Pulled_AnchorState : IAnchorState
     {
@@ -13,7 +13,7 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         
         public void Enter()
         {
-            _blackboard.AnchorPhysics.EnableTension();
+            _blackboard.AnchorPhysics.EnableCollision();
         }
 
         public void Exit()

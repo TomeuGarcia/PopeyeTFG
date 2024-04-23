@@ -13,42 +13,73 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         }
         
         protected override void DoEnter()
-        {
-            _blackboard.queuedAnchorThrow = false;
+        {            
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
+            UpdateMovementSpeed();
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.AimingMoveSpeed);
+            _blackboard.PlayerMediator.SetInstantRotation(true);
             _blackboard.PlayerMediator.SetCanUseRotateInput(true);
-            _blackboard.PlayerMediator.SetCanFallOffLedges(false);
+            _blackboard.PlayerMediator.SetCanFallOffLedges(false, false);
             
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
+
+            _blackboard.PlayerMediator.PlayerView.PlayEnterAimingAnimation();
+
             StartChargingThrow();
+            UpdateChargingThrow();
         }
 
         public override void Exit()
         {
+            _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
+            
+            _blackboard.PlayerMediator.SetInstantRotation(false);
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
-            _blackboard.PlayerMediator.SetCanFallOffLedges(true);
+            _blackboard.PlayerMediator.SetCanFallOffLedges(false, true);
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
             
             StopChargingThrow();
         }
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.CancelAim_Pressed())
+            _blackboard.PlayerMediator.UpdateSafeGroundChecking(deltaTime, out bool playerIsOnVoid, out bool anchorIsOnVoid);
+            if (playerIsOnVoid)
+            {
+                CancelChargingThrow();
+                _blackboard.PlayerMediator.OnPlayerFellOnVoid();
+                NextState = PlayerStates.FallingOnVoid;
+                return true;
+            }
+            
+            if (_blackboard.MovesetInputsController.Aim_Released())
             {
                 CancelChargingThrow();
                 NextState = PlayerStates.MovingWithAnchor;
                 return true;
             }
             
-            if (_blackboard.MovesetInputsController.Throw_HeldPressed())
-            {
-                ChargeThrow(deltaTime);
-            }
-            else if (_blackboard.MovesetInputsController.Throw_Released())
+            if (_blackboard.MovesetInputsController.Throw_Pressed())
             {
                 NextState = PlayerStates.ThrowingAnchor;
                 return true;
             }
+            
+            if (PlayerCanDash())
+            {
+                CancelChargingThrow();
+                NextState = PlayerStates.DashingDroppingAnchor;
+                return true;
+            }
+            
+            if (_blackboard.MovesetInputsController.Aim_HeldPressed())
+            {
+                UpdateChargingThrow();
+            }
+            
             
             return false;
         }
@@ -59,9 +90,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.StartChargingThrow();
         }
         
-        private void ChargeThrow(float deltaTime)
+        private void UpdateChargingThrow()
         {
-            _blackboard.PlayerMediator.ChargeThrow(deltaTime);
+            _blackboard.PlayerMediator.UpdateChargingThrow();
         }
 
         private void StopChargingThrow()
@@ -74,5 +105,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.CancelChargingThrow();
         }
         
+        
+        private bool PlayerCanDash()
+        {
+            return _blackboard.MovesetInputsController.DashDroppingAnchor_Pressed();
+        }
+        
+        private void UpdateMovementSpeed()
+        {
+            float maxMovementSpeed = _blackboard.PlayerStatesConfig.AimingMoveSpeed;
+            _blackboard.PlayerMediator.SetMaxMovementSpeed(maxMovementSpeed);
+            _blackboard.PlayerMovementChecker.MaxMovementSpeed = maxMovementSpeed;
+        }
     }
 }

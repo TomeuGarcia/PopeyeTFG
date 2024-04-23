@@ -1,26 +1,66 @@
+using Popeye.Modules.AudioSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
-    public class PlayerAudioFMOD : MonoBehaviour, IPlayerAudio
+    public class PlayerAudioFMOD : IPlayerAudio
     {
-        [SerializeField] private FMODUnity.StudioEventEmitter _footstepsEventEmitter;
-        private GameObject _playerGameObject;
-        
-        
-        public void Configure(GameObject playerGameObject)
+        private readonly GameObject _playerGameObject;
+        private readonly IFMODAudioManager _fmodAudioManager;
+        private readonly PlayerAudioFMODConfig _config;
+
+        private LastingFMODSound.SoundId _footstepsSoundId;
+
+        public PlayerAudioFMOD(GameObject playerGameObject,
+            IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config)
         {
             _playerGameObject = playerGameObject;
+            _fmodAudioManager = fmodAudioManager;
+            _config = config;
+        }
+        
+        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
+        {
+            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _playerGameObject);
         }
         
         public void StartPlayingStepsSounds()
         {
-            _footstepsEventEmitter.Play();
+            _footstepsSoundId = _fmodAudioManager.PlayLastingSound(_config.FootstepsSound, _playerGameObject);
         }
 
         public void StopPlayingStepsSounds()
         {
-            _footstepsEventEmitter.Stop();
+            if (_footstepsSoundId != null)
+            {
+                _fmodAudioManager.StopLastingSound(_footstepsSoundId);
+            }
+        }
+
+        public void PlayDashTowardsAnchorSound()
+        {
+            PlayOneShotAttached(_config.DashTowardsAnchorSound);
+        }
+
+        public void PlayDashDroppingAnchorSound()
+        {
+            PlayOneShotAttached(_config.DashDroppingAnchor);
+        }
+
+        public void PlayTakeDamageSound()
+        {
+            PlayOneShotAttached(_config.TakeDamage);
+        }
+
+        
+        public void OnLeftFootstep()
+        {
+            PlayOneShotAttached(_config.LeftFootstepSound);
+        }
+
+        public void OnRightFootstep()
+        {
+            PlayOneShotAttached(_config.RightFootstepSound);
         }
         
         

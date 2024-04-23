@@ -1,4 +1,6 @@
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
+using UnityEngine;
+
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 {
     public class RestingOnFloor_AnchorState : IAnchorState
     {
@@ -13,10 +15,14 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates.States
         public void Enter()
         {
             _blackboard.AnchorChain.EnableTension();
+            
+            _blackboard.AnchorMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
+            _blackboard.AnchorMediator.DestructiblePlatformBreaker.SetEnabled(true);
         }
 
         public void Exit()
         {
+            _blackboard.AnchorMediator.DestructiblePlatformBreaker.SetEnabled(false);
         }
     }
 }

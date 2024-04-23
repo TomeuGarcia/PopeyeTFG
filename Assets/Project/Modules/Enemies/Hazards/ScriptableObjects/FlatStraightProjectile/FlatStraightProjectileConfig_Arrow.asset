@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b488fe7a364784a08f53decfd3bee1, type: 3}
+  m_Name: FlatStraightProjectileConfig_Arrow
+  m_EditorClassIdentifier: 
+  _damageHitConfig: {fileID: 11400000, guid: 5ae995a32393ada468f311fd695ba63f, type: 2}
+  _maximumLifetime: 2
+  _disappearDuration: 0.3
+  _movementSpeed: 8
+  _viewConfig:
+    _startShootScalePunch:
+      _value: {x: 0, y: 0, z: 1}
+      _duration: 0.3
+      _vibrato: 3
+      _elasticity: 1
+      _ease: 4
+    _objectContactScalePunch:
+      _value: {x: 0.5, y: 0.5, z: -0.8}
+      _duration: 0.3
+      _vibrato: 7
+      _elasticity: 1
+      _ease: 4
+    _disappearScale:
+      _value: {x: 0, y: 0, z: 0}
+      _duration: 0.3
+      _ease: 4
+  _audio:
+    _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
+    _movingSound: {fileID: 11400000, guid: cba1df247bef8b942a71d429e9d75bd7, type: 2}
+    _objectContactSound: {fileID: 11400000, guid: c60d7753295a8184597fe8fb14d04fc3,
+      type: 2}
+    _lifetimeEndSound: {fileID: 11400000, guid: 3a582809de2ff74469f0b7d5a646f425,
+      type: 2}

@@ -9,6 +9,8 @@ namespace Popeye.Modules.PlayerController.Inputs
     {
         private InputSystem.PlayerAnchorInputControls _playerInputControls;
 
+        public Vector3 ForwardAxis => Vector3.forward;
+        public Vector3 RightAxis => Vector3.right;
 
         public WorldAxisMovementInput()
         {

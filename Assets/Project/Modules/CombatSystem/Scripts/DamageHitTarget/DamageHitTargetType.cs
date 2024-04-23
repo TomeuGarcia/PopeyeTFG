@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Project.Modules.CombatSystem
+namespace Popeye.Modules.CombatSystem
 {
     [Flags]
     public enum DamageHitTargetType : int
     {
-        None = 0,                   // 0
-        Player = 1 << 0,            // 1
-        Enemy = 1 << 1,             // 2
-        Destructible = 1 << 2,      // 4
-        Interactable = 1 << 3       // 8 
-                                    // 16 ...
+        None = 0,                       // 0
+        Player = 1 << 0,                // 1
+        Enemy = 1 << 1,                 // 2
+        Destructible = 1 << 2,          // 4
+        Interactable = 1 << 3,          // 8 
+                                        // 32 ...
     }
     
     

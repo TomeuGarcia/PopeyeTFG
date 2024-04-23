@@ -13,5 +13,6 @@ namespace Popeye.Modules.Camera.CameraZoom
         
         UniTaskVoid ZoomInOutToDefault(CameraZoomInOutConfig zoomInOutConfig);
         UniTaskVoid ZoomOutInToDefault(CameraZoomInOutConfig zoomInOutConfig);
+        void KillCurrentZoom();
     }
 }

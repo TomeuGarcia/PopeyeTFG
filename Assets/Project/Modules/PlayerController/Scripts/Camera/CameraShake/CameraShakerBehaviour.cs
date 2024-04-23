@@ -19,9 +19,10 @@ namespace Popeye.Modules.Camera.CameraShake
         {
             _orbitingCamera.FocusTransform.DOComplete();
             await _orbitingCamera.FocusTransform.DOPunchPosition(
-                    Vector3.down * shakeConfig.Strength, shakeConfig.Duration)
+                    shakeConfig.Direction * shakeConfig.Strength, shakeConfig.Duration)
                 .SetEase(shakeConfig.EaseCurve)
                 .AsyncWaitForCompletion();
         }
+
     }
 }

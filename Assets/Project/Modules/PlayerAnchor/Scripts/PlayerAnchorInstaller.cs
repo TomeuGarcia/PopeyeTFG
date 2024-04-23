@@ -1,54 +1,110 @@
 using System;
 using AYellowpaper;
+using Cinemachine;
+using InputSystem;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.PlayerAnchor.Player;
-using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
-using Popeye.Modules.PlayerController;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.Camera;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
+using Popeye.Modules.Camera.TargetSwapper;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
-using Popeye.Modules.ValueStatSystem;
-using Project.Modules.CombatSystem;
-using Project.Modules.PlayerAnchor.Anchor;
-using Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
-using Project.Modules.PlayerAnchor.Anchor.AnchorStates;
-using Project.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameState.GaneralGameState;
+using Popeye.Modules.PlayerAnchor.AbilityUnlock;
+using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
+using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
+using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
+using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
+using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
+using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
+using Popeye.Modules.PlayerAnchor.Player.Stamina;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
+using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Modules.VFX.Generic;
+using Popeye.Modules.VFX.ParticleFactories;
+using Popeye.Scripts.Collisions;
+using Popeye.Scripts.MaterialHelpers;
+using Popeye.Scripts.ObjectTypes;
+using Popeye.Scripts.ValueGating;
+using Project.Scripts.Time.TimeFunctionalities;
+using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.InputSystem;
 
-namespace Project.Modules.PlayerAnchor
+
+namespace Popeye.Modules.PlayerAnchor
 {
     public class PlayerAnchorInstaller : MonoBehaviour
     {
+        [Header("GAME STATE")] 
+        [SerializeField] private GeneralGameStateData _generalGameStateData;
+
+        [Header("AUDIO")] 
+        [SerializeField] private AFMODAudioManagerReference _audioManagerReference;
+        
         [Header("CAMERA")] 
-        [SerializeField] private OrbitingCamera _isometricCamera;
+        [SerializeField] private InterfaceReference<ICameraController, MonoBehaviour> _isometricCamera;
         [SerializeField] private InterfaceReference<ICameraShaker, MonoBehaviour> _cameraShaker;
         
+        [Header("Camera - Swapping")]
+        [SerializeField] private CinemachineBrain _cameraBrain;
+        [SerializeField] private CinemachineVirtualCamera _playerCamera;
+        [SerializeField] private CinemachineVirtualCamera[] _utilityCameras;
+
+        [Header("ENVIRONMENT")] 
+        [SerializeField] private EnvironmentFollower _environmentFollower;
         
         [Space(20)]
         [Header("PLAYER")]
         [SerializeField] private PopeyePlayer _player;
         [SerializeField] private Popeye.Modules.PlayerController.PlayerController _playerController;
-        [SerializeField] private InterfaceReference<IPlayerView, MonoBehaviour> _playerView;
         [SerializeField] private HealthBehaviour _playerHealthBehaviour;
         [SerializeField] private PlayerGeneralConfig _playerGeneralConfig;
         [SerializeField] private ObstacleProbingConfig _obstacleProbingConfig;
-        [SerializeField] private InterfaceReference<IPlayerAudio, MonoBehaviour> _playerAudioRef;
+        [SerializeField] private CollisionProbingConfig _dashFloorProbingConfig;
+        [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
+        [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
 
+        [Header("Player - Animator")] 
+        [SerializeField] private PlayerAnimatorEvents _playerAnimatorEvents;
+
+        [Header("Player - Inputs")] 
+        [SerializeField] private PlayerMovesetInputsConfig _playerMovesetInputsConfig;
+        
+        [Header("Player - Powers")] 
+        [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
+        private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
+
+        [Header("Player - AutoAim")] 
+        [SerializeField] private AutoAimCreator _autoAimCreator;
+
+        [Header("Player - Placing")]
+        [SerializeField] private PlacePopeyePlayerEventChannelAsset _placePopeyePlayerEventChannel;
+        [SerializeField] private CheckpointTriggerChecker _playerCheckpointTriggerChecker;
 
         [Space(20)] 
         [Header("ANCHOR")] 
         [SerializeField] private PopeyeAnchor _anchor;
         [SerializeField] private AnchorPhysics _anchorPhysics;
-        [SerializeField] private AnchorCollisions _anchorCollisions;
-        [SerializeField] private InterfaceReference<IAnchorView, MonoBehaviour> _anchorView;
+        [SerializeField] private VFXAnchorView _vfxAnchorView;
+        [SerializeField] private DropShadowBehaviour _anchorDropShadow;
         [SerializeField] private AnchorGeneralConfig _anchorGeneralConfig;
-        [SerializeField] private Transform _anchorMoveTransform;
-        [SerializeField] private InterfaceReference<IAnchorAudio, MonoBehaviour> _anchorAudioRef;
+        [SerializeField] private AnchorAudioFMODConfig _anchorAudioConfig;
+        [SerializeField] private LineRenderer _anchorTrajectoryLine1;
+        [SerializeField] private LineRenderer _anchorTrajectoryLine2;
 
         
         [Header("Anchor Damage")] 
@@ -60,7 +116,9 @@ namespace Project.Modules.PlayerAnchor
         [Header("CHAIN")]
         [SerializeField] private AnchorChain _anchorChain;
         [SerializeField] private InterfaceReference<IChainPhysics, MonoBehaviour> _chainPhysics;
+        [SerializeField] private ChainViewLogicGeneralConfig chainViewLogicGeneralConfig;
 
+        
         [SerializeField] private Transform _chainPlayerBindTransform;
         [SerializeField] private Transform _chainAnchorBindTransform;
 
@@ -68,127 +126,375 @@ namespace Project.Modules.PlayerAnchor
         [Header("HUD")] 
         [SerializeField] private PlayerHUD _playerHUD;
 
-        
-        [Header("DEBUG")]
-        [SerializeField] private LineRenderer debugLine;
-        [SerializeField] private LineRenderer debugLine2;
-        [SerializeField] private LineRenderer debugLine3;
-        [SerializeField] private bool drawDebugLines = true;
-        private AnchorTrajectoryMaker trajectoryMaker;
-        private AnchorThrower AanchorThrower;
 
+        public IPlayerMediator PlayerMediator => _player;
+
+
+        private PopeyePlayerPlacer _popeyePlayerPlacer;
         
         
-        private void OnValidate()
+
+        private void Update()
         {
-            if (trajectoryMaker != null)
+            if (Input.GetKeyDown(KeyCode.U))
             {
-                trajectoryMaker.drawDebugLines = drawDebugLines;
+                _abilitiesToUnlockHolder.DebugUnlockAll();
             }
-        }
-
-
-        private void Start()
-        {
-            OnValidate();
         }
 
         public void Install()
         {
+            _generalGameStateData.LoadState();
+
+            CameraSwapDurationComputerByDistance cameraSwapDurationComputer =
+                new CameraSwapDurationComputerByDistance(0.1f, 2.0f, 0.05f);
+            CameraTargetSwapperCM cameraTargetSwapper =
+                new CameraTargetSwapperCM(_cameraBrain, _playerCamera, _utilityCameras, 
+                    cameraSwapDurationComputer, true);
+            
             // Services
-            ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(new CameraFunctionalities(
-                new CameraZoomer(_isometricCamera), _cameraShaker.Value));
+            CameraFunctionalities cameraFunctionalities = new CameraFunctionalities(
+                new CameraZoomer(_isometricCamera.Value), _cameraShaker.Value, cameraTargetSwapper);
             
-            ServiceLocator.Instance.RegisterService<IGameReferences>(new GameReferences(_player.GetTargetForEnemies()));
+            ServiceLocator.Instance.RegisterService<ICameraFunctionalities>(cameraFunctionalities);
             
             
-            ICameraFunctionalities cameraFunctionalities = ServiceLocator.Instance.GetService<ICameraFunctionalities>();
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
+            IParticleFactory particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
+            ITimeFunctionalities timeFunctionalities = ServiceLocator.Instance.GetService<ITimeFunctionalities>();
+            IEventSystemService eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
 
             
             // Anchor
             TransformMotion anchorMotion = new TransformMotion();
+            
+            AnchorTrajectorySnapController anchorTrajectorySnapController = new AnchorTrajectorySnapController();
+            AnchorThrowController anchorThrowController =
+                new AnchorThrowController(_player, _anchor, anchorTrajectorySnapController);
+            AnchorVerticalAttackThrower anchorVerticalAttackThrower = new AnchorVerticalAttackThrower(); 
+            AnchorVerticalDropThrower anchorVerticalDropThrower = new AnchorVerticalDropThrower();
             AnchorThrower anchorThrower = new AnchorThrower();
             AnchorPuller anchorPuller = new AnchorPuller();
             AnchorKicker anchorKicker = new AnchorKicker();
             AnchorSpinner anchorSpinner = new AnchorSpinner();
+            
             AnchorTrajectoryMaker anchorTrajectoryMaker = new AnchorTrajectoryMaker();
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
-            AnchorAutoAimController anchorAutoAimController = new AnchorAutoAimController();
-            IAnchorAudio anchorAudio = _anchorAudioRef.Value;
+            IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchor.PositionTransform, _anchorGeneralConfig.OnVoidProbingConfig);
+            IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
+                _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
+                _anchorGeneralConfig.TrajectoryConfig.ViewConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
+            IAnchorViewExtras anchorViewExtras = new AnchorViewExtras(_anchorDropShadow);
             
+            Material chainMaterialCopy = new Material(chainViewLogicGeneralConfig.BoneSharedMaterial);
+            IVFXChainView vfxChainView = new GhostVFXChainView(chainViewLogicGeneralConfig.ObstacleCollisionProbingConfig, chainMaterialCopy, 
+                _player.AnchorGrabToThrowHolder);
+
+            IAnchorAudio anchorAudio = new AnchorAudioFMOD(_anchor.PositionTransform.gameObject, _audioManagerReference, _anchorAudioConfig);
+            IThrowDistanceComputer throwDistanceComputer =
+                new MovingForwardRangeThrowDistanceComputer(_anchorGeneralConfig.ThrowConfig, _playerController);
+
+            IAnchorView anchorView = CreateAnchorView(_anchorGeneralConfig.GeneralViewConfig, _anchor.MeshHolder,
+                particleFactory, timeFunctionalities.HitStopManager, cameraFunctionalities.CameraShaker);
             
-            anchorMotion.Configure(_anchorMoveTransform);
-            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker,  
-                _anchorGeneralConfig.ThrowConfig, _anchorGeneralConfig.VerticalThrowConfig, 
-                anchorAutoAimController);
-            anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig);
+            anchorMotion.Configure(_anchor.PositionTransform);
+            anchorThrower.Configure(_player, _anchor, anchorTrajectoryMaker, throwDistanceComputer,
+                _anchorGeneralConfig.ThrowConfig, anchorTrajectorySnapController, anchorTrajectoryView,
+                anchorThrowController, _anchorTrajectoryEndSpot);
+            anchorVerticalAttackThrower.Configure(_anchor, anchorTrajectoryMaker, 
+                _anchorGeneralConfig.VerticalAttackThrowConfig, anchorThrowController,
+                _playerGeneralConfig.AbilityActionChannels.DashDroppingAnchorAttackDispatcher);
+            anchorVerticalDropThrower.Configure(_anchor, anchorTrajectoryMaker, 
+                _anchorGeneralConfig.VerticalDropThrowConfig, anchorThrowController,
+                _playerGeneralConfig.AbilityActionChannels.DashDroppingAnchorDispatcher);
+
+            anchorPuller.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.PullConfig,
+                _playerGeneralConfig.AbilityActionChannels.AnchorPullDispatcher);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
-            anchorTrajectoryMaker.Configure(_anchorTrajectoryEndSpot, _obstacleProbingConfig, 
-                _anchorGeneralConfig.PullConfig, debugLine, debugLine2, debugLine3);
-            anchorStatesBlackboard.Configure(anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, _anchorChain, 
-                _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder);
-            anchorStateMachine.Setup(anchorStatesBlackboard);
+            anchorTrajectoryMaker.Configure(_obstacleProbingConfig, 
+                _anchorGeneralConfig.PullConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
+            anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
+                _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
-            anchorAutoAimController.Configure();
-            _anchorCollisions.Configure(_obstacleProbingConfig);
-            anchorAudio.Configure(_anchorMoveTransform.gameObject);
+            anchorTrajectorySnapController.Configure();
 
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
             _anchorPhysics.Configure(_anchor);
-            _anchorChain.Configure(chainPhysics, _chainPlayerBindTransform, _chainAnchorBindTransform);
-            _anchor.Configure(anchorStateMachine, anchorTrajectoryMaker, anchorThrower, anchorPuller, anchorMotion,
-                _anchorPhysics, _anchorCollisions, _anchorView.Value, anchorAudio, _anchorDamageDealer, _anchorChain, cameraFunctionalities);
+            _anchorChain.Configure(chainPhysics, vfxChainView, _chainPlayerBindTransform, _chainAnchorBindTransform, 
+                chainViewLogicGeneralConfig, chainMaterialCopy);
+            _anchor.Configure(anchorStateMachine, anchorThrower, anchorPuller, anchorMotion,
+                _anchorPhysics, anchorView, anchorViewExtras, anchorAudio, 
+                _anchorDamageDealer, _anchorChain, cameraFunctionalities, anchorOnVoidChecker);
 
-            
+            IAnchorStatesCreator anchorStatesCreator = _generalGameStateData.IsTutorial
+                ? new TutorialAnchorStatesCreator()
+                : new DefaultAnchorStatesCreator();
+            anchorStateMachine.Configure(anchorStatesBlackboard, anchorStatesCreator);
+
+                
             
             // Player
-            IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.CameraTransform);
-            PlayerAnchorMovesetInputsController movesetInputsController = new PlayerAnchorMovesetInputsController();
+            CreatePlayerAbilitiesToUnlock(
+                eventSystemService,
+                anchorVerticalAttackThrower, anchorVerticalDropThrower,
+                out PlayerAnchorMovesetInputsController movesetInputsController,
+                out _abilitiesToUnlockHolder,
+                out IGateValueReader<IAnchorVerticalThrower> anchorVerticalThrowerGateValue
+            );
+            _abilitiesToUnlockHolder.StartListeningToUnlock();
+            _generalGameStateData.PlayerUnlockableAbilitiesConfig.StartChannelListening();
+            
+            IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
-            TimeStaminaSystem playerStamina = new TimeStaminaSystem(_playerGeneralConfig.StaminaConfig);
+            PlayerStaminaSystem playerStamina = new PlayerStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
-            PlayerMovement playerMovement = new PlayerMovement();
-            IPlayerAudio playerAudio = _playerAudioRef.Value;
-            
-            
-            playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, _playerView.Value, 
-                movesetInputsController, _anchor);
-            playerMotion.Configure(_playerController.Transform, _playerController.Transform);
-            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.MaxHealth,
-                _playerGeneralConfig.PotionHealAmount);
-            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, _obstacleProbingConfig);
-            playerMovement.Configure(_player, _playerController);
-            playerAudio.Configure(_playerController.gameObject);
+            PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
+            ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
+                _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
+            IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
 
-            _player.Configure(playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                _playerView.Value, playerAudio, playerHealth, playerStamina, playerMovement, playerMotion, playerDasher,
-                _anchor, anchorThrower, anchorPuller, anchorKicker, anchorSpinner);
-            _playerController.MovementInputHandler = movementInputHandler;
+            PopeyePlayerInstantTranslation playerInstantTranslation =
+                new PopeyePlayerInstantTranslation(_playerController, playerMotion, _anchor, anchorMotion);
             
-            playerStateMachine.Setup(playerStatesBlackboard);
+            Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
+            IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
+            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, _audioManagerReference, _playerAudioConfig);
+            _playerAnimatorEvents.AddFootstepsListener(playerAudio);
+
+            PlayerFocusController playerFocusController =
+                new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
+            ISpecialAttackToggleable[] specialAttackToggleables = 
+                { _anchorGeneralConfig.DamageConfig, _playerGeneralConfig.StatesConfig };
+            PlayerFocusSpecialAttackController playerSpecialAttackController
+                = new PlayerFocusSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig,
+                    specialAttackToggleables);
+            
+            IPlayerHealing playerHealing = 
+                new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
+
+            PlayerAutoActionsQueue playerAutoActionsQueue = new PlayerAutoActionsQueue(_player, _anchor);
+            
+            PlayerGlobalEventsListener playerGlobalEventsListener = 
+                new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue);
+            PlayerEventsDispatcher playerEventsDispatcher =
+                new PlayerEventsDispatcher(eventSystemService, 
+                    _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
+                    _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
+            
+            _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
+                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerCheckpointTriggerChecker);
+            _popeyePlayerPlacer.StartListening();
+            
+            _playerController.AwakeConfigure();
+            playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
+                movesetInputsController, _anchor, playerMovementChecker);
+            playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
+            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
+                _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
+            playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
+                _obstacleProbingConfig, _dashFloorProbingConfig);
+            playerMovementChecker.Configure(_player, _playerController);
+
+
+            _playerController.MovementInputHandler = movementInputHandler;
+            _playerController.InputCorrector =
+                new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
+            
+            _player.Configure(movesetInputsController, 
+                playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
+                playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
+                playerMotion, playerInstantTranslation, playerDasher,
+                _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
+                _playerCheckpointTriggerChecker, playerSafeGroundChecker, 
+                playerOnVoidChecker, playerFocusController, playerSpecialAttackController,
+                playerGlobalEventsListener, playerEventsDispatcher);
+
+
+            IPlayerStatesCreator playerStatesCreator = new DefaultPlayerStatesCreator();
+            playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
-            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina);
+            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerFocusController);
             
             
-            // Debug
-            trajectoryMaker = anchorTrajectoryMaker;
-            AanchorThrower = anchorThrower;
+            PowerBoostDropFactory powerBoostDropFactory =
+                new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);
+            
+            
+            ServiceLocator.Instance.RegisterService<IPowerBoostDropFactory>(powerBoostDropFactory);
+            
         }
 
 
         public void Uninstall()
         {
+            _popeyePlayerPlacer.StopListening();
+            _generalGameStateData.PlayerUnlockableAbilitiesConfig.StopChannelListening();
+            _abilitiesToUnlockHolder.StopListeningToUnlock();
+            ServiceLocator.Instance.RemoveService<IPowerBoostDropFactory>();
             ServiceLocator.Instance.RemoveService<ICameraFunctionalities>();
-            ServiceLocator.Instance.RemoveService<IGameReferences>();
         }
+
+
+
+        private IPlayerView CreatePlayerView(PlayerGeneralViewConfig playerGeneralViewConfig, PopeyePlayer player, Material playerMaterial)
+        {
+            IPlayerView playerSquashAndStretchView = new PlayerSquashAndStretchView(
+                playerGeneralViewConfig.SquashStretchViewConfig,
+                player.MeshHolderTransform
+            );
+
+            IPlayerView playerMaterialView = new PlayerMaterialView(
+                playerGeneralViewConfig.MaterialViewConfig,
+                playerMaterial,
+                player.Renderer.transform
+            );
+
+            IPlayerView playerParticleView = new PlayerParticlesView(
+                playerGeneralViewConfig.ParticlesViewConfig,
+                player.MeshHolderTransform,
+                ServiceLocator.Instance.GetService<IParticleFactory>()
+            );
+            
+            IPlayerView playerGameFeelEffectsView = new PlayerGameFeelEffectsView(
+                playerGeneralViewConfig.GameFeelEffectsViewConfig,
+                ServiceLocator.Instance.GetService<ITimeFunctionalities>().HitStopManager,
+                ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraShaker,
+                ServiceLocator.Instance.GetService<ICameraFunctionalities>().CameraZoomer
+            );
+
+            IPlayerView animationsPlayerView = new PlayerAnimationsView(
+                _playerGeneralConfig.GeneralViewConfig.AnimatorViewConfig,
+                _player.Animator
+            );
+
+
+            IPlayerView[] playerSubViews =
+            {
+                playerSquashAndStretchView,
+                playerMaterialView,
+                playerParticleView,
+                playerGameFeelEffectsView,
+                animationsPlayerView
+            };
+            
+            
+            PlayerGeneralView playerGeneralView = new PlayerGeneralView(playerSubViews);
+
+            return playerGeneralView;
+        }
+        
+        private IAnchorView CreateAnchorView(GeneralAnchorViewConfig anchorGeneralViewConfig, Transform anchorMeshHolder,
+            IParticleFactory particleFactory, IHitStopManager hitStopManager, ICameraShaker cameraShaker)
+        {
+            IAnchorView anchorStretchView = new StretchAnchorView(
+                anchorGeneralViewConfig.StretchViewConfig, anchorMeshHolder
+            );
+            
+            _vfxAnchorView.Configure(
+                anchorGeneralViewConfig.VfxViewConfig,
+                particleFactory,
+                hitStopManager,
+                cameraShaker
+            );
+
+            IAnchorView[] anchorSubViews =
+            {
+                anchorStretchView,
+                _vfxAnchorView
+            };
+            
+            
+            GeneralAnchorView anchorGeneralView = new GeneralAnchorView(anchorSubViews);
+
+            return anchorGeneralView;
+        }
+        
+
+        private IOnVoidChecker CreateOnVoidChecker(Transform castOriginTransform, CollisionProbingConfig voidProbingConfig,
+            float checkFrequency = 0.15f)
+        {
+            ICastComputer castComputer = new CastComputerGlobal(castOriginTransform, Vector3.up * 1, Vector3.down);
+            PhysicsCastRequirementsProcessor castRequirementsProcessor = new PhysicsCastRequirementsProcessor();
+            
+            IPhysicsCaster physicsCaster = 
+                new PhysicsSphereCaster(castComputer, voidProbingConfig, castRequirementsProcessor, 0.5f);
+
+            IOnVoidChecker onVoidChecker = new OnVoidPhysicsChecker(physicsCaster, checkFrequency); 
+            
+            return onVoidChecker;
+        }
+        
+        private ISafeGroundChecker CreateSafeGroundChecker(Transform trackingTransform, 
+            CollisionProbingConfig groundProbingConfig, ObjectTypeAsset safeGroundIgnoreType,
+            float checkFrequency = 1.0f)
+        {
+            ICastComputer castComputer = new CastComputerGlobal(trackingTransform, Vector3.up * 2, Vector3.down);
+            
+            IPhysicsCastRequirement[] physicsCastRequirements =
+            {
+                new IgnoreObjectTypeRequirement(safeGroundIgnoreType)
+            };
+            PhysicsCastRequirementsProcessor castRequirementsProcessor =
+                new PhysicsCastRequirementsProcessor(physicsCastRequirements);
+
+            IPhysicsCaster physicsCaster =
+                new PhysicsRayCaster(castComputer, groundProbingConfig, castRequirementsProcessor);
+            
+            
+            return new SafeGroundPhysicsChecker(trackingTransform, physicsCaster, checkFrequency, 1.0f);
+        }
+
+        private void CreatePlayerAbilitiesToUnlock(
+            IEventSystemService eventSystemService,
+            IAnchorVerticalThrower dashAttackVerticalThrower,
+            IAnchorVerticalThrower dashDropVerticalThrower,
+            out PlayerAnchorMovesetInputsController movesetInputsController,
+            out PlayerAbilitiesToUnlockHolder abilitiesToUnlockHolder,
+            out IGateValueReader<IAnchorVerticalThrower> dashDroppingAnchorThrowerGate
+        )
+        {
+            PlayerAnchorInputControls playerAnchorInputControls = 
+                new PlayerAnchorInputControls();
+            
+            PlayerAbilityGatesCreator abilityGatesCreator =
+                new PlayerAbilityGatesCreator(
+                    playerAnchorInputControls, _generalGameStateData.PlayerUnlockableAbilitiesConfig,
+                    dashAttackVerticalThrower, dashDropVerticalThrower);
+            
+            
+            abilityGatesCreator.CreateGates(_playerMovesetInputsConfig);
+            abilityGatesCreator.GetReadInputs(
+                out IGateValueReader<InputPressedBuffer> pullInput,
+                out IGateValueReader<InputPressedBuffer> dashTowardsAnchorInput,
+                out IGateValueReader<InputAction> dashDroppingAnchorInput,
+                out IGateValueReader<InputAction> specialAttackInput
+            );
+            abilityGatesCreator.GetReadDashDroppingAnchorThrow(
+                out dashDroppingAnchorThrowerGate
+            );
+
+            
+            abilitiesToUnlockHolder = new PlayerAbilitiesToUnlockHolder(abilityGatesCreator.GetAbilitiesToUnlock());
+
+            movesetInputsController = new PlayerAnchorMovesetInputsController(
+                eventSystemService,
+                playerAnchorInputControls,
+                _playerMovesetInputsConfig,
+                pullInput,
+                dashTowardsAnchorInput,
+                dashDroppingAnchorInput,
+                specialAttackInput
+            );
+
+        }
+        
     }
 }

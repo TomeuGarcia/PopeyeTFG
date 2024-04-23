@@ -55,7 +55,7 @@ public class PositioningHelper : MonoBehaviour
 
         if (Physics.Raycast(startPosition, Vector3.down, out RaycastHit hit, _characterFloorProbeDistance, _floorLayerMask, QueryTriggerInteraction.Ignore))
         {
-            forward = Vector3.ProjectOnPlane(forward, hit.normal);
+            forward = Vector3.ProjectOnPlane(forward, hit.normal).normalized;
         }
 
         return forward;

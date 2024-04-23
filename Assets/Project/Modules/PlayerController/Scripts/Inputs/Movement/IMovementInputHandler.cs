@@ -6,8 +6,11 @@ namespace Popeye.Modules.PlayerController.Inputs
 {
     public interface IMovementInputHandler
     {
-        public Vector3 GetMovementInput();
-        public Vector3 GetLookInput();
+        Vector3 ForwardAxis { get;  }
+        Vector3 RightAxis { get; }
+        
+        Vector3 GetMovementInput();
+        Vector3 GetLookInput();
     }
 }
 

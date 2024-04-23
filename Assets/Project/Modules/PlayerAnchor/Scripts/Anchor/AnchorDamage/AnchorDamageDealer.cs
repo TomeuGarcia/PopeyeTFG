@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
+using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Player;
-using Project.Modules.CombatSystem;
+using Popeye.Modules.CombatSystem;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Project.Modules.PlayerAnchor.Anchor
+namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class AnchorDamageDealer : MonoBehaviour
     {
@@ -23,12 +21,12 @@ namespace Project.Modules.PlayerAnchor.Anchor
         [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
 
         private bool _sidewaysKnockbackIsRight;
-        
-        private DamageHit _throwDamageHit;
-        private DamageHit _pullDamageHit;
-        private DamageHit _kickDamageHit;
-        private DamageHit _spinDamageHit;
-        private DamageHit _verticalLandDamageHit;
+
+        private DamageHit ThrowDamageHit => _config.ThrowDamageHit;
+        private DamageHit PullDamageHit => _config.PullDamageHit;
+        private DamageHit KickDamageHit => _config.KickDamageHit;
+        private DamageHit SpinDamageHit => _config.SpinDamageHit;
+        private DamageHit VerticalLandDamageHit => _config.VerticalLandDamageHit;
 
         public void Configure(IAnchorMediator anchor,
             AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
@@ -37,22 +35,19 @@ namespace Project.Modules.PlayerAnchor.Anchor
             _anchor = anchor;
             
             _config = anchorDamageConfig;
+            _config.Init();
+            
             _damageStartTransform = damageStartTransform;
 
-            _throwDamageHit = new DamageHit(_config.AnchorThrowDamageHit); 
-            _pullDamageHit = new DamageHit(_config.AnchorPullDamageHit); 
-            _kickDamageHit = new DamageHit(_config.AnchorKickDamageHit); 
-            _verticalLandDamageHit = new DamageHit(_config.AnchorVerticalLandDamageHit); 
-            _spinDamageHit = new DamageHit(_config.AnchorSpinDamageHit); 
-            
-            _anchorThrowDamageTrigger.Configure(combatManager, _throwDamageHit);
+
+            _anchorThrowDamageTrigger.Configure(combatManager);
             _anchorThrowDamageTrigger.Deactivate();
 
-            _anchorSpinDamageTrigger.Configure(combatManager, _spinDamageHit);
+            _anchorSpinDamageTrigger.Configure(combatManager);
             _anchorSpinDamageTrigger.Deactivate();
             
             
-            _anchorVerticalLandDamageTrigger.Configure(combatManager, _verticalLandDamageHit);
+            _anchorVerticalLandDamageTrigger.Configure(combatManager);
             _anchorVerticalLandDamageTrigger.Deactivate();
             
 
@@ -89,17 +84,19 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         public void DealThrowDamage(AnchorThrowResult anchorThrowResult)
         {
-            DealForwardThrowDamage(anchorThrowResult, _throwDamageHit, _config.ThrowDamageExtraDuration);
+            DealForwardThrowDamage(anchorThrowResult, ThrowDamageHit, _config.ThrowDamageExtraDuration);
         }
 
-        public void DealPullDamage(AnchorThrowResult anchorPullResult)
+        public async UniTaskVoid DealPullDamage(AnchorThrowResult anchorPullResult)
         {
-            DealBackwardThrowDamage(anchorPullResult, _pullDamageHit, _config.PullDamageExtraDuration);
+            _anchorThrowDamageTrigger.OnBeforeDamageDealt += SetPullAttackKnockbackEndPosition;
+            await DealBackwardThrowDamage(anchorPullResult, PullDamageHit, _config.PullDamageExtraDuration);
+            _anchorThrowDamageTrigger.OnBeforeDamageDealt -= SetPullAttackKnockbackEndPosition;
         }
         
         public void DealKickDamage(AnchorThrowResult anchorKickResult)
         {
-            DealForwardThrowDamage(anchorKickResult, _kickDamageHit, _config.KickDamageExtraDuration);
+            DealForwardThrowDamage(anchorKickResult, KickDamageHit, _config.KickDamageExtraDuration);
         }
 
         
@@ -120,21 +117,20 @@ namespace Project.Modules.PlayerAnchor.Anchor
                 .Forget();
         }
 
-        private void DealBackwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit,
+        private async UniTask DealBackwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit,
             float extraDurationBeforeDeactivate)
         {
             _anchorThrowDamageTrigger.SetDamageHit(damageHit);
-            _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
-            
-            DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
-                    anchorThrowResult.Duration, extraDurationBeforeDeactivate,
-                    anchorThrowResult.MoveEaseCurve, 0.1f)
-                .Forget();
+            _anchorThrowDamageTrigger.UpdateKnockbackEndPosition(anchorThrowResult.Direction);
+
+            await DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints,
+                anchorThrowResult.Duration, extraDurationBeforeDeactivate,
+                anchorThrowResult.MoveEaseCurve, 0.1f);
         }
         
         
         
-        private async UniTaskVoid DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
+        private async UniTask DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
             AnimationCurve ease, float easeThreshold)
         {
             _throwDamageTriggerMotion.SetPosition(trajectoryPoints[0]);
@@ -143,7 +139,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             var wait = await WaitUntilEase(ease, duration, easeThreshold);
             _anchorThrowDamageTrigger.Activate();
-            await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(duration * (1f-wait), 0.1f)));
             await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));
             _anchorThrowDamageTrigger.Deactivate();
         }
@@ -167,25 +163,22 @@ namespace Project.Modules.PlayerAnchor.Anchor
         
         public void DealVerticalLandDamage(AnchorThrowResult anchorThrowResult)
         {
-            _anchorVerticalLandDamageTrigger.SetDamageHit(_verticalLandDamageHit);
+            _anchorVerticalLandDamageTrigger.SetDamageHit(VerticalLandDamageHit);
             _anchorVerticalLandDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
             
             DealLandHitDamage(anchorThrowResult.TrajectoryPathPoints, 
-                    anchorThrowResult.Duration, _config.VerticalLandDamageExtraDuration,
-                    anchorThrowResult.MoveEaseCurve, 0.6f)
+                    anchorThrowResult.Duration, _config.VerticalLandDamageDuration)
                 .Forget();
         }
         
-        private async UniTaskVoid DealLandHitDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
-            AnimationCurve ease, float easeThreshold)
+        private async UniTaskVoid DealLandHitDamage(Vector3[] trajectoryPoints, float waitDuration, float damageDuration)
         {
-            var wait = await WaitUntilEase(ease, duration, easeThreshold);
+            await UniTask.Delay(TimeSpan.FromSeconds(waitDuration));
             
             _anchorVerticalLandDamageTrigger.transform.position = trajectoryPoints[^1];
-            
             _anchorVerticalLandDamageTrigger.Activate();
-            await UniTask.Delay(TimeSpan.FromSeconds(duration * (1f-wait)));
-            await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(damageDuration));
             _anchorVerticalLandDamageTrigger.Deactivate();
         }
 
@@ -199,6 +192,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
             damageTrigger.UpdateDamageKnockbackDirection(pushDirection);
         }
         
+        
         private void SetPushSidewaysKnockback(DamageTrigger damageTrigger, GameObject tryHitObject)
         {
             Vector3 pushDirection = _sidewaysKnockbackIsRight
@@ -209,7 +203,18 @@ namespace Project.Modules.PlayerAnchor.Anchor
             
             damageTrigger.UpdateDamageKnockbackDirection(pushDirection);
         }
+        
+        private void SetPullAttackKnockbackEndPosition(DamageTrigger damageTrigger, GameObject tryHitObject)
+        {
+            Vector3 originPosition = _damageStartTransform.position;
+            Vector3 originToEndDirection = (tryHitObject.transform.position - originPosition).normalized;
+            Vector3 endPosition = originPosition + (originToEndDirection * _config.PullKnockbackDistanceFromPlayer);
+            
+            damageTrigger.UpdateKnockbackEndPosition(endPosition);
+        }
 
+        
+        
         
         public void StartDealingSpinDamage(bool spinningToTheRight)
         {
@@ -233,7 +238,7 @@ namespace Project.Modules.PlayerAnchor.Anchor
 
         private void OnDamageDealt(DamageHitResult damageHitResult)
         {
-            _anchor.OnDamageDealt();
+            _anchor.OnDamageDealt(damageHitResult);
         }
         
     }

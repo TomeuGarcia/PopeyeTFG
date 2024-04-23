@@ -1,4 +1,4 @@
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorStates
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates
 {
     public enum AnchorStates
     {

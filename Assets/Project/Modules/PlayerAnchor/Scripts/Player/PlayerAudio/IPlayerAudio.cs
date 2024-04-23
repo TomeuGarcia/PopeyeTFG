@@ -2,10 +2,12 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
-    public interface IPlayerAudio
+    public interface IPlayerAudio : IPlayerFootstepsListener
     {
-        void Configure(GameObject playerGameObject);
         void StartPlayingStepsSounds();
         void StopPlayingStepsSounds();
+        void PlayDashTowardsAnchorSound();
+        void PlayDashDroppingAnchorSound();
+        void PlayTakeDamageSound();
     }
 }

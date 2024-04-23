@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Chain
+namespace Popeye.Modules.PlayerAnchor.Chain
 {
     public class SingleSpringChainPhysics : MonoBehaviour, IChainPhysics
     {

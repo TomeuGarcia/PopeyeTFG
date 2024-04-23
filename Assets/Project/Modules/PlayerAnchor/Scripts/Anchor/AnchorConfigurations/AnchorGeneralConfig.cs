@@ -1,8 +1,10 @@
-using Project.Modules.PlayerAnchor.Chain;
-using Project.Scripts.ProjectHelpers;
+using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
+using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
-namespace Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations
+namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations
 {
     [CreateAssetMenu(fileName = "AnchorGeneralConfig", 
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorGeneralConfig")]
@@ -13,7 +15,8 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         [SerializeField] private AnchorDamageConfig _anchorDamageConfig;
         [SerializeField] private AnchorMotionConfig _anchorMotionConfig;
         [SerializeField] private AnchorThrowConfig _anchorThrowConfig;
-        [SerializeField] private AnchorThrowConfig _anchorVerticalThrowConfig;
+        [SerializeField] private AnchorThrowConfig _anchorVerticalDropThrowConfig;
+        [SerializeField] private AnchorThrowConfig _anchorVerticalAttackThrowConfig;
         [SerializeField] private AnchorPullConfig _anchorPullConfig;
         [SerializeField] private AnchorKickConfig _anchorKickConfig;
         [SerializeField] private AnchorSpinConfig _anchorSpinConfig;
@@ -22,9 +25,26 @@ namespace Project.Modules.PlayerAnchor.Anchor.AnchorConfigurations
         public AnchorDamageConfig DamageConfig => _anchorDamageConfig;
         public AnchorMotionConfig MotionConfig => _anchorMotionConfig;
         public AnchorThrowConfig ThrowConfig => _anchorThrowConfig;
-        public AnchorThrowConfig VerticalThrowConfig => _anchorVerticalThrowConfig;
+        public AnchorThrowConfig VerticalDropThrowConfig => _anchorVerticalDropThrowConfig;
+        public AnchorThrowConfig VerticalAttackThrowConfig => _anchorVerticalAttackThrowConfig;
         public AnchorPullConfig PullConfig => _anchorPullConfig;
         public AnchorKickConfig KickConfig => _anchorKickConfig;
         public AnchorSpinConfig SpinConfig => _anchorSpinConfig;
+
+        
+        [Header("TRAJECTORY")] 
+        [SerializeField] private AnchorTrajectoryConfig _trajectoryConfig;
+        public AnchorTrajectoryConfig TrajectoryConfig => _trajectoryConfig;
+        
+        
+        [Header("GROUND / VOID checking")] 
+        [SerializeField] private CollisionProbingConfig _onVoidProbingConfig;
+        
+        public CollisionProbingConfig OnVoidProbingConfig => _onVoidProbingConfig;
+
+
+        [Header("VIEW")] 
+        [SerializeField] private GeneralAnchorViewConfig _generalViewConfig;
+        public GeneralAnchorViewConfig GeneralViewConfig => _generalViewConfig;
     }
 }
