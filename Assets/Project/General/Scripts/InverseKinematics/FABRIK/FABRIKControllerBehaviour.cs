@@ -5,6 +5,8 @@ namespace Popeye.InverseKinematics.FABRIK
 {
     public class FABRIKControllerBehaviour : MonoBehaviour
     {
+        [SerializeField] private FABRIKControllerConfig _config;
+        
         private FABRIKController _controller;
         private BoneChain _boneChain;
         private Transform _target;
@@ -19,7 +21,7 @@ namespace Popeye.InverseKinematics.FABRIK
         {
             _boneChain = boneChain;
             _target = target;
-            _controller = new FABRIKController();
+            _controller = new FABRIKController(_config);
             ResetController();
 
             _boneChain.OnGenerationUpdate += ResetController;

@@ -9,6 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly IFMODAudioManager _fmodAudioManager;
         private readonly PlayerAudioFMODConfig _config;
 
+        private LastingFMODSound.SoundId _footstepsSoundId;
 
         public PlayerAudioFMOD(GameObject playerGameObject,
             IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config)
@@ -25,12 +26,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public void StartPlayingStepsSounds()
         {
-            _fmodAudioManager.PlayLastingSound(_config.FootstepsSound, _playerGameObject);
+            _footstepsSoundId = _fmodAudioManager.PlayLastingSound(_config.FootstepsSound, _playerGameObject);
         }
 
         public void StopPlayingStepsSounds()
         {
-            _fmodAudioManager.StopLastingSound(_config.FootstepsSound);
+            if (_footstepsSoundId != null)
+            {
+                _fmodAudioManager.StopLastingSound(_footstepsSoundId);
+            }
         }
 
         public void PlayDashTowardsAnchorSound()

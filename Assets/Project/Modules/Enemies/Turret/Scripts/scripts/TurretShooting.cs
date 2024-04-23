@@ -37,7 +37,7 @@ namespace Popeye.Modules.Enemies.Components
        private float _squaredPlayerDistanceThresholdToAppear;
        private bool _playerInSight = false;
 
-
+       private bool _hiding =false;
        [SerializeField] private int _numberOfShots = 3;
        public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
@@ -75,12 +75,14 @@ namespace Popeye.Modules.Enemies.Components
                 else if(!_playerInSight)
                 {
                     _mediator.AppearAnimation();
+                    _hiding = false;
                     _mediator.PlayerSeen();
                     _playerInSight = true;
                 }
             }
-            if(!IsPlayerAtCloseDistance())
+            if(!IsPlayerAtCloseDistance() && !_hiding)
             {
+                _hiding = true;
                 _playerInSight = false;
                 _mediator.HideAnimation();
                 _timer = 0;

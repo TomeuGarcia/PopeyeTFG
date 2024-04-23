@@ -15,6 +15,9 @@ namespace Popeye.Modules.AudioSystem.Testing
         private LastingFMODSound _sound;
         private GameObject _attachedGameObject;
 
+        private LastingFMODSound.SoundId _soundId;
+        
+
         public void Init(IFMODAudioManager audioManager, LastingFMODSound sound, GameObject attachedGameObject)
         {
             _audioManager = audioManager;
@@ -39,11 +42,16 @@ namespace Popeye.Modules.AudioSystem.Testing
         
         private void PlaySound()
         {
-            _audioManager.PlayLastingSound(_sound, _attachedGameObject);
+            if (_soundId != null) return;
+            
+            _soundId = _audioManager.PlayLastingSound(_sound, _attachedGameObject);
         }
         private void StopSound()
         {
-            _audioManager.StopLastingSound(_sound);
+            if (_soundId == null) return;
+        
+            _audioManager.StopLastingSound(_soundId);
+            _soundId = null;
         }
     }
 }

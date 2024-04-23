@@ -39,7 +39,6 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private CollisionProbingConfig _floorCollisionProbingConfig;
 
         [SerializeField] private SlimeSoundsConfig _slimeSounds;
-        private IFMODAudioManager _audioManager;
         
         [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
         private IPowerBoostDropFactory _powerBoostDropFactory;
@@ -70,10 +69,6 @@ namespace Popeye.Modules.Enemies
         public void SetSlimeFactory(SlimeFactory slimeFactory)
         {
             _slimeFactory = slimeFactory;
-        }
-        public void SetAudioManager(IFMODAudioManager audioManager)
-        {
-            _audioManager = audioManager;
         }
         public void SetBoostDropFactory(IPowerBoostDropFactory powerBoostDropFactory)
         {
@@ -141,11 +136,11 @@ namespace Popeye.Modules.Enemies
             if (_slimeFactory.CanSpawnNextSize(SlimeSizeID))
             {
                 _slimeFactory.CreateFromParent(slimeMindEnemy,this, ComputeChildSlimesSpawnPosition(), Quaternion.identity);
-                _slimeSounds.PlayDivideSound(_audioManager, _slimeTransform.gameObject, SlimeSizeID);
+                _slimeSounds.PlayDivideSound(_slimeTransform.gameObject, SlimeSizeID);
             }
             else
             {
-                _slimeSounds.PlayDeathSound(_audioManager, _slimeTransform.gameObject, SlimeSizeID);
+                _slimeSounds.PlayDeathSound(_slimeTransform.gameObject, SlimeSizeID);
             }
             
             slimeMindEnemy.RemoveSlimeFromList(this);

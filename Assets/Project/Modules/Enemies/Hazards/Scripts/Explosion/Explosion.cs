@@ -8,22 +8,33 @@ namespace Popeye.Modules.Enemies.Hazards
 {
     public class Explosion : RecyclableObject
     {
+        [SerializeField] private ExplosionHazardConfig _explosionHazardConfig;
+        [SerializeField] private DamageTrigger _playerDamageTrigger;
+        [SerializeField] private DamageTrigger _otherDamageTrigger;
+        
         private ICombatManager _combatManager;
         private IParticleFactory _particleFactory;
-        private ExplosionSize _size;
-        [SerializeField] private ExplosionHazardConfig _explosionHazardConfig;
-        [SerializeField] private float _lifeTime=1;
-        [SerializeField] private Collider _collider;
-        private DamageHitConfig _damageHitConfig;
         
+        private ExplosionSize _size;
+
+        private DamageHit PlayerDamage => _explosionHazardConfig.GetPlayerDamageHitBySize(_size);
+        private DamageHit OtherDamage => _explosionHazardConfig.GetOtherDamageHitBySize(_size);
+        
+
+        private void Awake()
+        {
+            _playerDamageTrigger.Deactivate();
+            _otherDamageTrigger.Deactivate();
+        }
+
         internal override void Init()
         {
-            _collider.enabled = false;
         }
 
         internal override void Release()
         {
-            _collider.enabled = false;
+            _playerDamageTrigger.Deactivate();
+            _otherDamageTrigger.Deactivate();
         }
 
 
@@ -32,20 +43,28 @@ namespace Popeye.Modules.Enemies.Hazards
             _combatManager = combatManager;
             _particleFactory = particleFactory;
             _size = size;
+            
+            _playerDamageTrigger.Configure(_combatManager, PlayerDamage);
+            _otherDamageTrigger.Configure(_combatManager, OtherDamage);
         }
 
         public void StartExplosion()
         {
+            _playerDamageTrigger.Activate();
+            _otherDamageTrigger.Activate();
+
             float size = _explosionHazardConfig.GetScaleBySize(_size);
-            transform.localScale = new Vector3(size, size, size);
-            _collider.enabled = true;
-            Invoke("Recycle",_lifeTime);
+            transform.localScale = Vector3.one * size;
+            
+            _explosionHazardConfig.ExplosionAudio.PlayExplosionSound(gameObject);
+            
+            Invoke("FinishExplosion", _explosionHazardConfig.LifeTime);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void FinishExplosion()
         {
-            _combatManager.TryDealDamage(other.gameObject, _explosionHazardConfig.GetDamageHitBySize(_size), out DamageHitResult damageHitResult);
-
+            Recycle();
         }
+        
     }
 }

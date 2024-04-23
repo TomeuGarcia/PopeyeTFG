@@ -10,8 +10,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         public Vector3 anchorPosition;
         public Quaternion anchorRotation;
 
-        public bool startCarryingAnchor;
+        public bool isNewPlayerRespawn;
         
+        public bool startCarryingAnchor;
+
         public EnvironmentFollowData environmentFollowData;
     }
 

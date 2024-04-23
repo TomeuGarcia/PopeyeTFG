@@ -9,7 +9,7 @@ namespace Popeye.Modules.AudioSystem
     {
         private readonly Transform _lastingSoundEmittersParent;
         private readonly ObjectPool _lastingSoundEmittersPool;
-        private readonly Dictionary<Guid, LastingFMODSoundEmitter> _activeLastingSoundEmitters;
+        private readonly Dictionary<LastingFMODSound.SoundId, LastingFMODSoundEmitter> _activeLastingSoundEmitters;
 
         
         public LastingSoundsController(Transform lastingSoundEmittersParent, LastingSoundsControllerConfig config)
@@ -18,27 +18,26 @@ namespace Popeye.Modules.AudioSystem
             _lastingSoundEmittersPool = new ObjectPool(config.LastingSoundEmitterPrefab, _lastingSoundEmittersParent);
             _lastingSoundEmittersPool.Init(config.StartNumberOfLastingSounds);
 
-            _activeLastingSoundEmitters = new Dictionary<Guid, LastingFMODSoundEmitter>(10);
+            _activeLastingSoundEmitters = new Dictionary<LastingFMODSound.SoundId, LastingFMODSoundEmitter>(10);
         }
             
-        public void Play(LastingFMODSound lastingSound, Transform attachedGameObject)
+        public LastingFMODSound.SoundId Play(LastingFMODSound lastingSound, Transform attachedGameObject)
         {
-            if (_activeLastingSoundEmitters.ContainsKey(lastingSound.Id))
-            {
-                return;
-            }
-
+            LastingFMODSound.SoundId soundId = new LastingFMODSound.SoundId();
+            
             LastingFMODSoundEmitter soundEmitter =
                 _lastingSoundEmittersPool.Spawn<LastingFMODSoundEmitter>(attachedGameObject.position, Quaternion.identity);
             soundEmitter.transform.parent = attachedGameObject;
             
             soundEmitter.Play(lastingSound);
-            _activeLastingSoundEmitters.Add(lastingSound.Id, soundEmitter);
+            _activeLastingSoundEmitters.Add(soundId, soundEmitter);
+
+            return soundId;
         }
         
-        public void Stop(LastingFMODSound lastingSound)
+        public void Stop(LastingFMODSound.SoundId lastingSoundId)
         {
-            if (_activeLastingSoundEmitters.Remove(lastingSound.Id, out LastingFMODSoundEmitter soundEmitter))
+            if (_activeLastingSoundEmitters.Remove(lastingSoundId, out LastingFMODSoundEmitter soundEmitter))
             {
                 soundEmitter.Stop();
                 ResetSoundEmitter(soundEmitter);
@@ -47,7 +46,7 @@ namespace Popeye.Modules.AudioSystem
 
         public void StopAll()
         {
-            foreach (KeyValuePair<Guid,LastingFMODSoundEmitter> idToSoundEmitter in _activeLastingSoundEmitters)
+            foreach (KeyValuePair<LastingFMODSound.SoundId, LastingFMODSoundEmitter> idToSoundEmitter in _activeLastingSoundEmitters)
             {
                 idToSoundEmitter.Value.Stop();
                 ResetSoundEmitter(idToSoundEmitter.Value);

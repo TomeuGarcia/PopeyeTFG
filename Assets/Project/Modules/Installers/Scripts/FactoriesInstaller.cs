@@ -29,7 +29,7 @@ namespace Popeye.Modules.Installers
         
     
         public void Install(ServiceLocator serviceLocator, 
-            IFMODAudioManager audioManager, IEventSystemService eventSystemService, ICombatManager combatManager,
+            IEventSystemService eventSystemService, ICombatManager combatManager,
             ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
         {
             _createdParticlesRecycler = new SceneObjectsTracker(eventSystemService, currentlyPlayedSceneProvider); 
@@ -42,7 +42,7 @@ namespace Popeye.Modules.Installers
             serviceLocator.RegisterService<IParticleFactory>(particleFactory);
             serviceLocator.RegisterService<IHazardFactory>(hazardsFactory);
             
-            _enemyFactoryInstaller.Install(serviceLocator, audioManager, _createdEnemiesRecycler);
+            _enemyFactoryInstaller.Install(serviceLocator, _createdEnemiesRecycler);
             
             _createdParticlesRecycler.StartListeningToSceneUpdates();
             _createdEnemiesRecycler.StartListeningToSceneUpdates();

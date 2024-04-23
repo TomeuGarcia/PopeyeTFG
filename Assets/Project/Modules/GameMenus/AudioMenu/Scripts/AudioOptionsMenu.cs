@@ -11,6 +11,10 @@ namespace Popeye.Modules.GameMenus.AudioMenu
 {
     public class AudioOptionsMenu : AMenuController
     {
+        [Header("AUDIO MANAGER")] 
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
+        [Header("SLIDERS")]
         [SerializeField] private SmartSliderAndConfig _masterVolumeSliderAndConfig;
         [SerializeField] private SmartSliderAndConfig _musicVolumeSliderAndConfig;
         [SerializeField] private SmartSliderAndConfig _ambientVolumeSliderAndConfig;
@@ -24,9 +28,8 @@ namespace Popeye.Modules.GameMenus.AudioMenu
             float startVolumeAmbient = 0.5f;
             float startVolumeSFX = 0.8f;
 
-
             SoundVolumeControllersGroup soundVolumeControllersGroup
-                = ServiceLocator.Instance.GetService<IFMODAudioManager>().SoundVolumeControllersGroup;
+                = _audioManager.SoundVolumeControllersGroup;
 
 
             InitVolumeSlider(_masterVolumeSliderAndConfig, soundVolumeControllersGroup.MasterVolumeController, 

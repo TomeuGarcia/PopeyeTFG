@@ -25,7 +25,6 @@ namespace Popeye.Modules.Enemies.Hazards
         private void Start()
         {
             View.Configure(_config.ViewConfig);
-            _config.HazardDispenserAudio.Configure();
         }
 
         public bool CanDispense()

@@ -46,7 +46,6 @@ namespace Popeye.Modules.Enemies.Hazards
             _physicsMovement.MovementSpeed = _config.MovementSpeed;
             _physicsMovement.MovementDirection = transform.forward;
             
-            Audio.Configure();
             Audio.PlayMovingSound(gameObject);
         }
 

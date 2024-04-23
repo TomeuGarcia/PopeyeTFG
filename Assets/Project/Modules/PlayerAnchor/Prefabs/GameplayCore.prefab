@@ -11257,18 +11257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd5730a6cdf34ac1afe7cf58e70a5d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1145678076955597282 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1284062035509204109, guid: 4c926eca4bc34f2419ddf931b08c4baf,
-    type: 3}
-  m_PrefabInstance: {fileID: 2177388964853534063}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee94b8af6e1244219ee1f8b718a66ce3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2072014435378709473 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 213610492903132814, guid: 4c926eca4bc34f2419ddf931b08c4baf,
@@ -11333,6 +11321,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1896813746f7437fb41f9fb96135c76e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3647650685258767436 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3218012436837454115, guid: 4c926eca4bc34f2419ddf931b08c4baf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2177388964853534063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06ea99601c154ba495b0caa28604592a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4028204052046435817 stripped
@@ -11945,11 +11945,6 @@ PrefabInstance:
       objectReference: {fileID: 5630546514496348566}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
-      propertyPath: _anchorCollisions
-      value: 
-      objectReference: {fileID: 1145678076955597282}
-    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
-        type: 3}
       propertyPath: _anchorDropShadow
       value: 
       objectReference: {fileID: 2072014435378709473}
@@ -12023,6 +12018,11 @@ PrefabInstance:
       propertyPath: _chainPhysics._underlyingValue
       value: 
       objectReference: {fileID: 6405983057515278388}
+    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
+      propertyPath: _playerCheckpointTriggerChecker
+      value: 
+      objectReference: {fileID: 3647650685258767436}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: _playerRenderersMaterialAssigner

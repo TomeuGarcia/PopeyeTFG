@@ -79,12 +79,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8e24605ebc23644a82170ccdc1b843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _triggeredMoveBy: {fileID: 11400000, guid: 91a22b49b51477c489f83ba5c19e6508, type: 2}
   _triggeredMaterial: {fileID: 2100000, guid: 3a4cfb8fea563f2438e02434097e9b68, type: 2}
   _notTriggeredMaterial: {fileID: 2100000, guid: 0b9f88c0d57e2eb46bc501fda0dab22c,
     type: 2}
   _buttonMesh: {fileID: 9135270983080061235}
   _buttonTransform: {fileID: 9135270983080061234}
-  _collider: {fileID: 9135270983014444385}
+  _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
+  _activatedSound: {fileID: 0}
   _worldInteractors:
   - {fileID: 0}
 --- !u!65 &9135270983014444385
