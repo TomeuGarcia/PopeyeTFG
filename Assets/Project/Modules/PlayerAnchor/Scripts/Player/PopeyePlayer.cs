@@ -79,7 +79,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private IPlayerFocusController _focusController;
         private IPlayerSpecialAttackController[] _specialAttackControllers;
-        private int _currentSpecialAttackIndex = 3;
+        private int _currentSpecialAttackIndex = 2;
         public static bool debugIsSpinning = true;
         private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[_currentSpecialAttackIndex];
         
