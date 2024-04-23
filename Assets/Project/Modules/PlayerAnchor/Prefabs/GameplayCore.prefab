@@ -11377,6 +11377,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a2ae2f150a4fcf9619a07abb6ca2c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5128784403439178330 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6420648212461068085, guid: 4c926eca4bc34f2419ddf931b08c4baf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2177388964853534063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28eb168cb15a42459625ce6ba422a93e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!120 &5170877326926555913 stripped
 LineRenderer:
   m_CorrespondingSourceObject: {fileID: 6482094052155549286, guid: 4c926eca4bc34f2419ddf931b08c4baf,
@@ -12035,6 +12047,11 @@ PrefabInstance:
       propertyPath: _cameraShaker._underlyingValue
       value: 
       objectReference: {fileID: 6549223224258503855}
+    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
+      propertyPath: _chainFollowerAttackController
+      value: 
+      objectReference: {fileID: 5128784403439178330}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: _chainPhysics._underlyingValue

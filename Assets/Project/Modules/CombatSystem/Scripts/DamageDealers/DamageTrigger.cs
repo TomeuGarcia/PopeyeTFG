@@ -35,6 +35,13 @@ namespace Popeye.Modules.CombatSystem
             if (!_damageOnStay) return;
             CheckApplyDamage(other);
         }
+        private void OnTriggerExit(Collider other)
+        {
+            if (!_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
+            {
+                _hitTargetsHistory.Remove(other.gameObject);
+            }
+        }
 
         private bool CheckApplyDamage(Collider other)
         {

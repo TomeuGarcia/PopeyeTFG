@@ -26,6 +26,7 @@ using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
@@ -90,6 +91,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
         [SerializeField] private ChainSpikesSpecialAttackController _spikesSpecialAttack;
+        [SerializeField] private ChainFollowerAttackController _chainFollowerAttackController;
 
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -281,6 +283,7 @@ namespace Popeye.Modules.PlayerAnchor
                     specialAttackToggleables);
 
             _spikesSpecialAttack.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
+            _chainFollowerAttackController.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
             AnchorSpinSpecialAttackController anchorSpinSpecialAttackController = 
                 new AnchorSpinSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
                     _anchor, anchorMotion, _player,
@@ -289,7 +292,8 @@ namespace Popeye.Modules.PlayerAnchor
             {
                 playerSpecialAttackController,
                 anchorSpinSpecialAttackController,
-                _spikesSpecialAttack
+                _spikesSpecialAttack,
+                _chainFollowerAttackController
             };
 
             IPlayerHealing playerHealing = 
