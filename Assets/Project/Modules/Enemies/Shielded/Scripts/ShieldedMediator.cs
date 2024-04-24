@@ -27,6 +27,7 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private Material _invulnerableMaterial;
         [SerializeField] private MeshRenderer _body;
         [SerializeField] private EnemyHealthPassInvulnerableAttacks _shieldedHealth;
+        [SerializeField] private ShieldedAnimationController _shieldedAnimationController;
         
         
         [SerializeField] private PowerBoostDropConfig _powerBoostDrop;
@@ -90,7 +91,7 @@ namespace Popeye.Modules.Enemies
         }
         public void StartDashing()
         {
-            
+            _shieldedAnimationController.PlayAttack();
             _chasing = false;
             _shieldedMovement.StopChasing();
         }
@@ -122,6 +123,7 @@ namespace Popeye.Modules.Enemies
         }
         public virtual void ActivateNavigation()
         {
+            _shieldedAnimationController.PlayMove();
             _navMeshAgent.enabled = true;
         }
         public override void OnPlayerFar()
@@ -148,6 +150,7 @@ namespace Popeye.Modules.Enemies
 
         public void Stun()
         {
+            _shieldedAnimationController.PlayStun();
             _rigidbody.velocity = Vector3.zero;
             _shieldedStun.Stun();
         }
