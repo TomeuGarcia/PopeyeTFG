@@ -29,6 +29,7 @@ namespace Popeye.Modules.VFX.Generic
         EnemyBloodHitSplash,
         EnemyBloodDeathDrip,
         Explosion,
-        ExplosionDecal
+        ExplosionDecal,
+        TurretAttackPreview
     }
 }

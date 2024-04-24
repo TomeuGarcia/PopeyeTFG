@@ -43089,14 +43089,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 2064964025}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 710810999}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 2051589706}
   _collider: {fileID: 2051589701}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &301816210
 Transform:
   m_ObjectHideFlags: 0
@@ -44820,14 +44881,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1724776265}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 751667848}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 1292418896}
   _collider: {fileID: 1292418891}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &313800399
 Transform:
   m_ObjectHideFlags: 0
@@ -61679,62 +61801,6 @@ Transform:
   m_Father: {fileID: 758598732}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &453773838
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 453773839}
-  - component: {fileID: 453773840}
-  m_Layer: 0
-  m_Name: TurretAttackPreview_Decal
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &453773839
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 453773838}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.89, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 805545144}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &453773840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 453773838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: a31b690928f30fc41929ecc625fbcfdf, type: 2}
-  m_DrawDistance: 1000
-  m_FadeScale: 0.9
-  m_StartAngleFade: 180
-  m_EndAngleFade: 180
-  m_UVScale: {x: 1, y: 1}
-  m_UVBias: {x: 0, y: 0}
-  m_DecalLayerMask: 1
-  m_ScaleMode: 0
-  m_Offset: {x: 0, y: 0, z: 0.5}
-  m_Size: {x: 2.5, y: 2.5, z: 1}
-  m_FadeFactor: 1
 --- !u!1 &454064740
 GameObject:
   m_ObjectHideFlags: 0
@@ -106680,68 +106746,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 804058897}
   m_Mesh: {fileID: 2150185967261428755, guid: d3dc6ecae8ccfba4a84ba25219a28b78, type: 3}
---- !u!1 &805545143
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 805545144}
-  - component: {fileID: 805545145}
-  m_Layer: 0
-  m_Name: TurretAttackPreview
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &805545144
+--- !u!4 &805545144 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+    type: 3}
+  m_PrefabInstance: {fileID: 4243454769692112502}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805545143}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 453773839}
-  m_Father: {fileID: 1318592277}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &805545145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805545143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7bc4a544214a72a963011d1c80d70a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolateOnInit: 1
-  _interpolations:
-  - _floatSetupDatas:
-    - {fileID: 11400000, guid: 68f25a60adb963d4fb3b7ccec11c2e1f, type: 2}
-    - {fileID: 11400000, guid: b85563048250a7346836e47b94f01686, type: 2}
-    _floatInterpolationDatas:
-    - {fileID: 11400000, guid: 938423ac9e362dd4b867b2dc8bf4fa56, type: 2}
-    - {fileID: 11400000, guid: 83a6c1dc44482c9489e188c435475428, type: 2}
-    - {fileID: 11400000, guid: 56ba496a4648a5c4d8f2e5a4f822b87b, type: 2}
-    - {fileID: 11400000, guid: 137af1af9a882144cb0d40ae06114330, type: 2}
-    - {fileID: 11400000, guid: 56ba496a4648a5c4d8f2e5a4f822b87b, type: 2}
-    - {fileID: 11400000, guid: fb810e47a9bc8e142906db1aefe40491, type: 2}
-    _meshSources:
-    - {fileID: 453773838}
-  _light: {fileID: 0}
-  _duration: 0
-  _intensityGoal: 0
 --- !u!1 &805857237
 GameObject:
   m_ObjectHideFlags: 0
@@ -107302,14 +107312,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 166422288}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 1532286406}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 229465379}
   _collider: {fileID: 229465377}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &818379181
 Transform:
   m_ObjectHideFlags: 0
@@ -111137,14 +111208,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 541655551}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 1815679766}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 749415034}
   _collider: {fileID: 749415035}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!1 &843898793
 GameObject:
   m_ObjectHideFlags: 0
@@ -116076,14 +116208,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1489665}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 54939108}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 625927269}
   _collider: {fileID: 625927270}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!1 &899950650
 GameObject:
   m_ObjectHideFlags: 0
@@ -135462,14 +135655,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1574197568}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 1096297650}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 937457285}
   _collider: {fileID: 937457280}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &1086709810
 Transform:
   m_ObjectHideFlags: 0
@@ -167514,7 +167768,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1318592277
 Transform:
   m_ObjectHideFlags: 0
@@ -189489,14 +189743,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 803807933}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 1524904828}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 1168011330}
   _collider: {fileID: 1168011331}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!1 &1487446539
 GameObject:
   m_ObjectHideFlags: 0
@@ -218627,14 +218942,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1195983070}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 1920623762}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 97969406}
   _collider: {fileID: 97969407}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!1 &1691218210
 GameObject:
   m_ObjectHideFlags: 0
@@ -223094,14 +223470,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 3
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1840986624}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 1855357480}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 1985872430}
   _collider: {fileID: 1985872425}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &1724966591
 Transform:
   m_ObjectHideFlags: 0
@@ -229034,14 +229471,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 18858787}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 1494482616}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 694923695}
   _collider: {fileID: 694923690}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &1754374724
 Transform:
   m_ObjectHideFlags: 0
@@ -248394,14 +248892,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1633745204}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 532964339}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 572060312}
   _collider: {fileID: 572060307}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &1916900220
 Transform:
   m_ObjectHideFlags: 0
@@ -255225,14 +255784,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1584729198}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 554487230}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 1739354559}
   _collider: {fileID: 1739354554}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!4 &1963838547
 Transform:
   m_ObjectHideFlags: 0
@@ -273624,14 +274244,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activationInputsCount: 2
+  _activatedColliderEnabledState: 1
   _activatedStateSpot: {fileID: 1821663555}
-  _activateDuration: 0.5
+  _activatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
+  _deactivatedColliderEnabledState: 0
   _deactivatedStateSpot: {fileID: 217505216}
-  _deactivateDuration: 0.5
+  _deactivatedEase:
+    _useAsset: 0
+    _config:
+      _duration: 0.5
+      _useCurve: 0
+      _ease: 4
+      _easeCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    _configAsset: {fileID: 0}
   _barrierTransform: {fileID: 1172536284}
   _collider: {fileID: 1172536285}
   _startActivated: 0
-  _colliderIsAlwaysEnabled: 1
 --- !u!1001 &2118093082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -280705,6 +281386,79 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eee1357ccf9168247817f1d8f8194b9d, type: 3}
+--- !u!1001 &4243454769692112502
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1318592277}
+    m_Modifications:
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 850954944880613338, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7373958870398902513, guid: dd143bbfbdf309a4b99d760bfff4ef48,
+        type: 3}
+      propertyPath: m_Name
+      value: TurretAttackPreview
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dd143bbfbdf309a4b99d760bfff4ef48, type: 3}
 --- !u!1001 &7466123752986015030
 PrefabInstance:
   m_ObjectHideFlags: 0
