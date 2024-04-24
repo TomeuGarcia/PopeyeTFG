@@ -57,13 +57,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _cameraZoomer.ZoomInOutToDefault(_viewConfig.HealingZoomInOut);
             */
             
-            _viewConfig.HealingZoomIn.SetDuration(durationToComplete);
+            _viewConfig.HealingZoomIn.SetDuration(durationToComplete * 3);
             _cameraZoomer.ZoomIn(_viewConfig.HealingZoomIn);
         }
         public void PlayHealingInterruptedAnimation()
         {
             _cameraZoomer.KillCurrentZoom();
-            _cameraZoomer.ZoomToDefault(_viewConfig.HealingInterrupted);
+            _cameraZoomer.ZoomToDefault(_viewConfig.InterruptedToZoomOut);
         }
 
         public void PlaySpecialAttackAnimation()
@@ -77,16 +77,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
         {
-            // I temporarily copy-pasted this for it was easier - Tomeu
-            _viewConfig.HealingZoomInOut.ZoomInConfig.SetDuration(durationToComplete);
-            _cameraZoomer.ZoomInOutToDefault(_viewConfig.HealingZoomInOut);
+            _viewConfig.SpecialAttackZoomInOut.ZoomInConfig.SetDuration(durationToComplete);
+            _cameraZoomer.ZoomInOutToDefault(_viewConfig.SpecialAttackZoomInOut);
         }
 
         public void PlaySpecialAttackInterruptedAnimation()
         {
-            // I temporarily copy-pasted this for it was easier - Tomeu
             _cameraZoomer.KillCurrentZoom();
-            _cameraZoomer.ZoomToDefault(_viewConfig.HealingInterrupted);
+            _cameraZoomer.ZoomToDefault(_viewConfig.InterruptedToZoomOut);
         }
 
         public void PlayDashAnimation(float duration, Vector3 dashDirection)

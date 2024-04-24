@@ -8,17 +8,24 @@ namespace Popeye.Modules.PlayerAnchor.Player
     [System.Serializable]
     public class PlayerGameFeelEffectsViewConfig
     {
+        [Header("TAKE DAMAGE")]
         [SerializeField] private HitStopConfig _takeDamageHitStop;
         [SerializeField] private CameraShakeConfig _takeDamageCameraShake;
-        [SerializeField] private CameraZoomInOutConfig _healingZoomInOut;
+        
+        [Header("HEALING")]
         [SerializeField] private CameraZoomConfig _healingZoomIn;
-        [SerializeField] private CameraZoomConfig _healingInterrupted;
+        
+        [Header("SPECIAL ATTACK")]
+        [SerializeField] private CameraZoomInOutConfig _specialAttackZoomInOut;
+        
+        [Header("INTERRUPT")]
+        [SerializeField] private CameraZoomConfig _interruptedZoom;
         
         public HitStopConfig TakeDamageHitStop => _takeDamageHitStop;
         public CameraShakeConfig TakeDamageCameraShake => _takeDamageCameraShake;
-        public CameraZoomInOutConfig HealingZoomInOut => _healingZoomInOut;
         public CameraZoomConfig HealingZoomIn => _healingZoomIn;
-        public CameraZoomConfig HealingInterrupted => _healingInterrupted;
+        public CameraZoomInOutConfig SpecialAttackZoomInOut => _specialAttackZoomInOut;
+        public CameraZoomConfig InterruptedToZoomOut => _interruptedZoom;
 
     }
 }

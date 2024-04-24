@@ -309,7 +309,8 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
-                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerCheckpointTriggerChecker);
+                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerCheckpointTriggerChecker,
+                _abilitiesToUnlockHolder);
             _popeyePlayerPlacer.StartListening();
             
             _playerController.AwakeConfigure();

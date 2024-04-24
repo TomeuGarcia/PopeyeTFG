@@ -79,7 +79,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private IPlayerFocusController _focusController;
         private IPlayerSpecialAttackController[] _specialAttackControllers;
-        private int _currentSpecialAttackIndex = 2;
+        private int _currentSpecialAttackIndex = 1;
         public static bool debugIsSpinning = true;
         private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[_currentSpecialAttackIndex];
         
@@ -151,6 +151,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
             OnStopMoving();
+            
+            debugIsSpinning = _currentSpecialAttackIndex == 1;
         }
         
         private void OnDestroy()
@@ -561,6 +563,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _playerHealth.HealToMax();
             PlayerHealing.ResetHeals();
+            _focusController.LoseAllFocus();
+
             ResetAnchor();
             
             _playerController.DisableForDuration(0.3f).Forget();
