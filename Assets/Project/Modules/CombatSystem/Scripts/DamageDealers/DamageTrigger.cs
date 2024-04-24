@@ -13,6 +13,7 @@ namespace Popeye.Modules.CombatSystem
         [SerializeField] private bool _isKnockbackPushOrigin = false;
         [SerializeField] private Collider _collider;
 
+        [SerializeField] private bool _damageOnStay = true;
         [SerializeField] private bool _trackActivations = false;
         private int _activationsCount = 0;
         
@@ -31,7 +32,15 @@ namespace Popeye.Modules.CombatSystem
         }
         private void OnTriggerStay(Collider other)
         {
+            if (!_damageOnStay) return;
             CheckApplyDamage(other);
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (!_damageTargetsOncePerActivation && _hitTargetsHistory.Contains(other.gameObject))
+            {
+                _hitTargetsHistory.Remove(other.gameObject);
+            }
         }
 
         private bool CheckApplyDamage(Collider other)
@@ -111,15 +120,15 @@ namespace Popeye.Modules.CombatSystem
             
             OnBeforeDamageDealt?.Invoke(this, collider.gameObject);
 
-            bool canDealDamage = _damageDealer.TryDealDamage(collider.gameObject, out DamageHitResult damageHitResult);
-            if (canDealDamage)
+            bool couldDealDamage = _damageDealer.TryDealDamage(collider.gameObject, out DamageHitResult damageHitResult);
+            if (couldDealDamage)
             {
                 OnDamageDealt?.Invoke(damageHitResult);
             }
             
             _hitTargetsHistory.Add(collider.gameObject);
 
-            return canDealDamage;
+            return couldDealDamage;
         }
         
     }

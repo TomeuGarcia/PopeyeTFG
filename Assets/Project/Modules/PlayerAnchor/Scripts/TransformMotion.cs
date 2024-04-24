@@ -137,6 +137,11 @@ namespace Popeye.Modules.PlayerAnchor
                 .SetEase(ease);
         }
 
+        public void SetLocalScale(Vector3 localScale)
+        {
+            _moveTransform.localScale = localScale;
+            _rotateTransform.localScale = localScale;
+        }
         public void ResetScale()
         {
             _moveTransform.localScale = Vector3.one;

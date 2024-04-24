@@ -117,7 +117,6 @@ MonoBehaviour:
     _healAppearEase: 1
     _healDisappearTime: 0.2
     _healDisappearEase: 20
-    _flashSequence: []
     _isTiredProperty: _IsTired
     _tiredTransitionTime: 0.25
     _dashingProperty: _isDashing
@@ -129,10 +128,10 @@ MonoBehaviour:
       type: 2}
     _takeDamageCameraShake: {fileID: 11400000, guid: a576c12731b5da64a902718d8fda3c0c,
       type: 2}
-    _healingZoomInOut: {fileID: 11400000, guid: d03fd682296d2a643b1e2eaba569540d,
+    _healingZoomIn: {fileID: 11400000, guid: 68adcaac273ed2c44ba0f07f5a459ae4, type: 2}
+    _specialAttackZoomInOut: {fileID: 11400000, guid: d03fd682296d2a643b1e2eaba569540d,
       type: 2}
-    _healingInterrupted: {fileID: 11400000, guid: 524ce40b9247c644e82e5bb38d5a4222,
-      type: 2}
+    _interruptedZoom: {fileID: 11400000, guid: 524ce40b9247c644e82e5bb38d5a4222, type: 2}
   _animatorViewConfig:
     _idleParameter: b_idle
     _movingWithAnchorParameter: b_movingWithAnchor

@@ -78,7 +78,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private bool _pullingAnchorFromTheVoid;
 
         private IPlayerFocusController _focusController;
-        private IPlayerSpecialAttackController _specialAttackController;
+        private IPlayerSpecialAttackController[] _specialAttackControllers;
+        private int _currentSpecialAttackIndex = 1;
+        public static bool debugIsSpinning = true;
+        private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[_currentSpecialAttackIndex];
+        
         
         private IPlayerGlobalEventsListener _globalEventsListener;
         private IPlayerEventsDispatcher _eventsDispatcher;
@@ -105,7 +109,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorSpinner anchorSpinner,
             ISafeGroundChecker  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
             IOnVoidChecker onVoidChecker,
-            IPlayerFocusController focusController, IPlayerSpecialAttackController specialAttackController,
+            IPlayerFocusController focusController, IPlayerSpecialAttackController[] specialAttackControllers,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _playerInputsUpdater = playerInputsUpdater;
@@ -141,12 +145,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _focusController = focusController;
             _focusDropCollector.Init(_focusController);
             
-            _specialAttackController = specialAttackController;
+            _specialAttackControllers = specialAttackControllers;
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
             OnStopMoving();
+            
+            debugIsSpinning = _currentSpecialAttackIndex == 1;
         }
         
         private void OnDestroy()
@@ -162,6 +168,31 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
+
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                Debug.Log("Special Attack: RAGE");
+                _currentSpecialAttackIndex = 0;
+                debugIsSpinning = false;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                Debug.Log("Special Attack: SPIN");
+                _currentSpecialAttackIndex = 1;
+                debugIsSpinning = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                Debug.Log("Special Attack: SPIKES");
+                _currentSpecialAttackIndex = 2;
+                debugIsSpinning = false;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                Debug.Log("Special Attack: CHAINSAW");
+                _currentSpecialAttackIndex = 3;
+                debugIsSpinning = false;
+            }
         }
 
         private void FixedUpdate()
@@ -532,6 +563,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _playerHealth.HealToMax();
             PlayerHealing.ResetHeals();
+            _focusController.LoseAllFocus();
+
             ResetAnchor();
             
             _playerController.DisableForDuration(0.3f).Forget();
@@ -645,9 +678,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayHealAnimation();
         }
 
-        public void OnHealStart(float durationToComplete)
+        public void OnHealStart(float durationToComplete, int consecutiveHeals)
         {
-            PlayerView.PlayStartHealingAnimation(durationToComplete);
+            PlayerView.PlayStartHealingAnimation(durationToComplete, consecutiveHeals);
         }
         
         public void OnHealInterrupted()
@@ -659,7 +692,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         public bool CanDoSpecialAttack()
         {
-            return _specialAttackController.CanDoSpecialAttack();
+            return SpecialAttackController.CanDoSpecialAttack();
         }
 
         public void OnSpecialAttackPreparationStart(float durationToComplete)
@@ -675,15 +708,25 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnSpecialAttackPerformed()
         {
             PlayerView.PlaySpecialAttackAnimation();
-            _specialAttackController.StartSpecialAttack();
+            SpecialAttackController.StartSpecialAttack();
             WaitForSpecialAttackFinished().Forget();
             
             _eventsDispatcher.DispatchSpecialAttackPerformed();
             _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
         }
+        public bool OnSpecialAttackFinished()
+        {
+            return SpecialAttackController.SpecialAttackHasFinished();
+        }
+
+        public void ForceStopSpecialAttack()
+        {
+            SpecialAttackController.ForceStopSpecialAttack();
+        }
+
         private async UniTaskVoid WaitForSpecialAttackFinished()
         {
-            await UniTask.WaitUntil(() => !_specialAttackController.SpecialAttackIsBeingPerformed());
+            await UniTask.WaitUntil(() => !SpecialAttackController.SpecialAttackIsBeingPerformed());
             PlayerView.PlaySpecialAttackFinishAnimation();
         }
         

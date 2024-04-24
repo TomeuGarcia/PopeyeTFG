@@ -14,6 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         Transform PositionTransform { get; }
         Transform MeshHolder { get; }
         Vector3 Position { get; }
+        Quaternion Rotation { get; }
         IAnchorTrajectorySnapTarget CurrentTrajectorySnapTarget { get; }
         DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
         
@@ -31,8 +32,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         bool IsGrabbedBySnapper();
 
 
+        void OnStartSpinning();
         void SetSpinning(bool spinningToTheRight);
-        void OnKeepSpinning();
+        void OnKeepSpinning(Vector3 position, Quaternion rotation, float spinRadius);
         void OnStopSpinning();
         
         void OnDashedAt(float duration, Ease dashEase);

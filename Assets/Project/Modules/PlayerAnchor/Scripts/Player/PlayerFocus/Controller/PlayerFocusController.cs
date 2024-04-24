@@ -39,6 +39,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
             _focusUI.OnFocusSpent();
         }
 
+        public void LoseAllFocus()
+        {
+            SpendFocus(MaxFocusAmount);
+        }
+
         private void SetCurrentFocusAmount(int focusAmount)
         {
             CurrentFocusAmount = Mathf.Clamp(focusAmount, 0, MaxFocusAmount);

@@ -63,11 +63,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
         }
 
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
             foreach (IPlayerView playerView in _subPlayerViews)
             {
-                playerView.PlayStartHealingAnimation(durationToComplete);
+                playerView.PlayStartHealingAnimation(durationToComplete, consecutiveHeals);
             }
         }
 

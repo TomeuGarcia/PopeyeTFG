@@ -11,7 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void PlayRespawnAnimation();
         void PlayDeathAnimation();
         void PlayHealAnimation();
-        void PlayStartHealingAnimation(float durationToComplete);
+        void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals);
         void PlayHealingInterruptedAnimation();
         
         void PlaySpecialAttackAnimation();
