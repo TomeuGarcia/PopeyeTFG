@@ -127,7 +127,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             await DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints,
                 anchorThrowResult.Duration, extraDurationBeforeDeactivate,
-                anchorThrowResult.MoveEaseCurve, 0.1f);
+                anchorThrowResult.MoveEaseCurve, -1.0f);
         }
         
         
