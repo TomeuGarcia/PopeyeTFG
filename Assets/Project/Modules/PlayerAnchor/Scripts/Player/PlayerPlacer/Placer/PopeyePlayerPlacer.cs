@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.PlayerAnchor.AbilityUnlock;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
@@ -18,6 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         private readonly PlayerFSM _playerStateMachine;
         private readonly EnvironmentFollower _environmentFollower;
         private readonly ISafeGroundOnDemand _playerRespawnSafeGround;
+        private readonly PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
 
 
         public PopeyePlayerPlacer(
@@ -25,7 +27,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             IPlayerInstantTranslation playerInstantTranslation,
             PlayerFSM playerStateMachine,
             EnvironmentFollower environmentFollower,
-            ISafeGroundOnDemand playerRespawnSafeGround
+            ISafeGroundOnDemand playerRespawnSafeGround,
+            PlayerAbilitiesToUnlockHolder abilitiesToUnlockHolder
         )
         {
             _placeEventChannelListenEntry = placeEventChannelListenEntry;
@@ -33,6 +36,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             _playerStateMachine = playerStateMachine;
             _environmentFollower = environmentFollower;
             _playerRespawnSafeGround = playerRespawnSafeGround;
+            _abilitiesToUnlockHolder = abilitiesToUnlockHolder;
         }
 
         public void StartListening()
@@ -62,6 +66,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             if (placingData.isNewPlayerRespawn)
             {
                 _playerRespawnSafeGround.SetCurrentStateAsSafeGround();
+            }
+
+            if (placingData.debugUnlockAllAbilities)
+            {
+                _abilitiesToUnlockHolder.DebugUnlockAll();
             }
 
             _environmentFollower.Configure(placingData.environmentFollowData);

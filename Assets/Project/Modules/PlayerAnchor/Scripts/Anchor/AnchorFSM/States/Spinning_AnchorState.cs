@@ -11,12 +11,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 
         public void Enter()
         {
-            _blackboard.TransformMotion.Unparent();
+            // old
+            //_blackboard.TransformMotion.Unparent();
+            
+            _blackboard.AnchorChain.SetSpinningView();
         }
 
         public void Exit()
         {
-            _blackboard.AnchorPhysics.EnableCollision();
+            // old
+            //_blackboard.AnchorPhysics.EnableCollision();
         }
     }
 }

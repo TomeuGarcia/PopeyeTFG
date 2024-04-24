@@ -48,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             AnchorVerticalThrowResult.Reset(throwTrajectory, Vector3.up, 
                 _verticalThrowStartRotation, _verticalThrowEndRotation, duration, false);
 
-            AnchorThrowUtilities.CorrectEndRotationForVisibility(AnchorVerticalThrowResult, _verticalThrowConfig);
+            AnchorThrowUtilities.CorrectEndRotationForVisibility(AnchorVerticalThrowResult, _verticalThrowConfig.EndRotationCorrection);
             
             _anchor.SetThrownVertically(AnchorVerticalThrowResult, floorHit).Forget();
             

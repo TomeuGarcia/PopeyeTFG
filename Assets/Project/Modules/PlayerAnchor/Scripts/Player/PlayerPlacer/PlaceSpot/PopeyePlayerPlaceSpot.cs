@@ -26,6 +26,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         [Header("ENVIRONMENT SPECIFICS")]
         [SerializeField] private EnvironmentFollowData _environmentFollowData;
 
+                
+        [Header("DEBUG")]
+        [HorizontalLine(1f, EColor.Red)]
+        [SerializeField] private bool _debugUnlocksAllAbilities = false;
+        
         
         private IPlacePopeyePlayerEventChannelDispatcher _placeEventChannelDispatcher;
         private PopeyePlayerPlacingData _popeyePlayerPlacingData;
@@ -47,6 +52,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
                 isNewPlayerRespawn = _isNewPlayerRespawn,
                 
                 startCarryingAnchor = _startsCarryingAnchor,
+                
+                debugUnlockAllAbilities = _debugUnlocksAllAbilities,
                 
                 environmentFollowData = _environmentFollowData
             };

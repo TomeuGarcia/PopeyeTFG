@@ -40,6 +40,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         [SerializeField, Range(0.0f, 20.0f)] private float _fallingOnVoidMoveSpeed = 0.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _dashingMoveSpeed = 12.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _enteringSpecialAttackMoveSpeed = 0.5f;
+        [SerializeField, Range(0.0f, 20.0f)] private float _performingSpecialAttackMoveSpeed = 10.0f;
 
         public float WithoutAnchorMoveSpeed => _withoutAnchorMoveSpeed + _extraSpeed;
         public float WithAnchorMoveSpeed => _withAnchorMoveSpeed + _extraSpeed;
@@ -52,6 +53,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
         public float FallingOnVoidMoveSpeed => _fallingOnVoidMoveSpeed;
         public float DashingMoveSpeed => _dashingMoveSpeed;
         public float EnteringSpecialAttackMoveSpeed => _enteringSpecialAttackMoveSpeed;
+        public float PerformingSpecialAttackMoveSpeed => _performingSpecialAttackMoveSpeed;
         
         
         [Header("ANCHOR THROW")]

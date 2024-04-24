@@ -67,12 +67,22 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public AnimationCurve HeightDisplacementCurve => _heightDisplacementCurve;
 
 
+        [System.Serializable]
+        public class RotationCorrection
+        {
+            [SerializeField] private AnimationCurve _weightCurve;
+            [SerializeField, Range(0f, 1f)] private float _correctionAmount = 0.8f;
+            [SerializeField, Range(0f, 5f)] private float _frontToCameraWeight =  2.0f;
+            [SerializeField, Range(0f, 5f)] private float _backToCameraWeight =  0.8f;
+            public AnimationCurve WeightCurve => _weightCurve;
+            public float CorrectionAmount => _correctionAmount;
+            public float FrontToCameraWeight => _frontToCameraWeight;
+            public float BackToCameraWeight => _backToCameraWeight;
+        }
+        
         [Header("END ROTATION CORRECTION")]
-
-        [SerializeField] private AnimationCurve _endRotationWeightCurve;
-        [SerializeField, Range(0f, 1f)] private float _correctionAmount = 0.8f;
-        public AnimationCurve EndRotationWeightCurve => _endRotationWeightCurve;
-        public float CorrectionAmount => _correctionAmount;
+        [SerializeField] private RotationCorrection _endRotationCorrection;
+        public RotationCorrection EndRotationCorrection => _endRotationCorrection;
         
         
 

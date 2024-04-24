@@ -24,6 +24,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         Healing,
         EnteringSpecialAttack,
+        PerformingSpecialAttack,
+        
         FallingOnVoid
     }
 }

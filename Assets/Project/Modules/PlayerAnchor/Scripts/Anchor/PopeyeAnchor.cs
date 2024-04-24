@@ -72,7 +72,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             _anchorAudio = anchorAudio;
             
-            
             _cameraFunctionalities = cameraFunctionalities;
 
             OnVoidChecker = onVoidChecker;
@@ -240,6 +239,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorViewExtras.OnRestingOnFloor();
             
             _anchorChain.SetRestingOnFloorView();
+            _anchorMotion.ResetScale();
             
             _cameraFunctionalities.CameraShaker.PlayShake(_restOnFloor_CameraShake);
         }
@@ -258,6 +258,12 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.GrabbedBySnapper);
         }
 
+        public void OnStartSpinning()
+        {
+            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);
+            _anchorDamageDealer.StartDealingSpinDamage(false);
+        }
+
         public void SetSpinning(bool spinningToTheRight)
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Spinning);
@@ -266,21 +272,16 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorView.PlaySpinningAnimation();
         }
 
-        public void OnKeepSpinning()
+        public void OnKeepSpinning(Vector3 spinCenter, Quaternion rotation, float spinRadius)
         {
-            _anchorDamageDealer.UpdateSpinningDamage(Position, Rotation);
+            _anchorDamageDealer.UpdateSpinningDamage(spinCenter, rotation, spinRadius);
         }
 
         public void OnStopSpinning()
         {
             _anchorDamageDealer.StopDealingSpinDamage();
         }
-
-        public UniTaskVoid SnapToFloor()
-        {
-            throw new NotImplementedException();
-        }
-
+        
 
         public bool IsBeingThrown()
         {

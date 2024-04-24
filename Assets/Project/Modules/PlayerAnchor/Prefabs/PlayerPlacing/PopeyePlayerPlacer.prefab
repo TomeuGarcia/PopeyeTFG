@@ -117,7 +117,7 @@ Transform:
   - {fileID: 8431436181710557697}
   - {fileID: 6947830949993634871}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3999558571259426305
 MonoBehaviour:
@@ -155,7 +155,9 @@ MonoBehaviour:
     _viewGameObject: {fileID: 3498011689815947788}
     _meshFilter: {fileID: 399580199574819201}
     _meshRenderer: {fileID: 8972295791369392117}
+  _isNewPlayerRespawn: 1
   _startsCarryingAnchor: 1
+  _debugUnlocksAllAbilities: 0
   _environmentFollowData:
     waterConfig:
       desiredWorldHeight: 0
