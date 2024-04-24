@@ -52,13 +52,19 @@ public class ParabolicProjectile : RecyclableObject
                 if (_shoot)
                 {
                     Vector3 playerMoveDir = (_playerTransform.position - _lastFrameTargetPosition).normalized;
-                    Vector3 direction = (_playerTransform.position + playerMoveDir * _predictMagnitude) - _firePoint.position;
+                    Vector3 predictPos = _playerTransform.position + playerMoveDir * _predictMagnitude;
+                    Vector3 direction = predictPos - _firePoint.position;
                     Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
                     Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
                     float angle;
                     float v0;
                     float time;
-                    
+                    RaycastHit hit;
+                    if (Physics.Raycast(predictPos + Vector3.up, Vector3.down, out hit,5f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
+                    {
+                        var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
+                        _particleFactory.Create(_projectileArea, hit.point, startRot);
+                    }
                     CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
                     _shoot = false;
                     _bulletBody.enabled = true;
