@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Popeye.Core.Pool;
 using Popeye.Modules.VFX.Generic.MaterialInterpolationConfiguration;
 using UnityEngine;
@@ -12,6 +13,12 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         [SerializeField] internal bool _interpolateOnInit;
         [SerializeField] internal InterpolatorRecycleParticleData[] _interpolations;
         
+        [Header("LIGHT")]
+        [SerializeField] private Light _light;
+        [SerializeField] private float _duration;
+        [SerializeField] private float _intensityGoal;
+        private float _initialIntensity;
+        
         internal List<TrailRenderer> _trailRenderers = new();
         
         private int _completedInterpolations;
@@ -19,6 +26,11 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 
         private void Awake()
         {
+            if (_light != null)
+            {
+                _initialIntensity = _light.intensity;
+            }
+            
             foreach (var interpolation in _interpolations)
             {
                 interpolation.Awake();
@@ -89,6 +101,11 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         
         private async UniTaskVoid ApplyInterpolations(Material material, MaterialFloatInterpolationConfig[] interpolationConfigs)
         {
+            if (_light != null)
+            {
+                _light.DOIntensity(_intensityGoal, _duration);
+            }
+            
             await MaterialInterpolator.ApplyInterpolations(material, interpolationConfigs);
             _completedInterpolations++;
             
@@ -100,6 +117,11 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 
         internal virtual void Reset()
         {
+            if (_light != null)
+            {
+                _light.intensity = _initialIntensity;
+            }
+            
             TrailEmission(false);
             Recycle();
         }
