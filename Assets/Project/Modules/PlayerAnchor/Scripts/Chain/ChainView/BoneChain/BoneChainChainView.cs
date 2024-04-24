@@ -10,11 +10,14 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private readonly BoneChainChainViewFSM _stateMachine;
         private readonly BoneChain _boneChain;
         private readonly Vector3[] _updatedPositions;
+        private readonly float _positionsExtraDistance;
         
         public BoneChainChainView(BoneChain boneChain, int numberOfBones, float chainDistance, float boneLength,
-            Bone bonePrefab, Bone boneEndEffectorPrefab, Material chainBonesMaterial)
+            Bone bonePrefab, Bone boneEndEffectorPrefab, Material chainBonesMaterial,
+            float positionsExtraDistance)
         {
             _boneChain = boneChain;
+            _positionsExtraDistance = positionsExtraDistance;
             _boneChain.AwakeConfigure(numberOfBones, true, boneLength, bonePrefab, boneEndEffectorPrefab);
             _boneChain.StartInit();
             _boneChain.SetMaterialToBones(chainBonesMaterial);
@@ -42,7 +45,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         private float ComputePositionsDistance(Vector3[] positions)
         {
-            float positionsDistance = 0f;
+            float positionsDistance = _positionsExtraDistance;
             for (int i = 1; i < positions.Length; ++i)
             {
                 positionsDistance += Vector3.Distance(positions[i - 1], positions[i]);

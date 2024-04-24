@@ -13,6 +13,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         public bool isNewPlayerRespawn;
         
         public bool startCarryingAnchor;
+        
+        public bool debugUnlockAllAbilities;
 
         public EnvironmentFollowData environmentFollowData;
     }

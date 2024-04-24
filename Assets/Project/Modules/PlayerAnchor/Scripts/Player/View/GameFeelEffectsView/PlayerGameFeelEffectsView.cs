@@ -48,16 +48,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayHealAnimation()
         {
         }
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
+            if (consecutiveHeals >= 1) return;
+            
+            /*
             _viewConfig.HealingZoomInOut.ZoomInConfig.SetDuration(durationToComplete);
             _cameraZoomer.ZoomInOutToDefault(_viewConfig.HealingZoomInOut);
+            */
             
+            _viewConfig.HealingZoomIn.SetDuration(durationToComplete * 3);
+            _cameraZoomer.ZoomIn(_viewConfig.HealingZoomIn);
         }
         public void PlayHealingInterruptedAnimation()
         {
             _cameraZoomer.KillCurrentZoom();
-            _cameraZoomer.ZoomToDefault(_viewConfig.HealingInterrupted);
+            _cameraZoomer.ZoomToDefault(_viewConfig.InterruptedToZoomOut);
         }
 
         public void PlaySpecialAttackAnimation()
@@ -71,12 +77,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
         {
-            
+            _viewConfig.SpecialAttackZoomInOut.ZoomInConfig.SetDuration(durationToComplete);
+            _cameraZoomer.ZoomInOutToDefault(_viewConfig.SpecialAttackZoomInOut);
         }
 
         public void PlaySpecialAttackInterruptedAnimation()
         {
-            
+            _cameraZoomer.KillCurrentZoom();
+            _cameraZoomer.ZoomToDefault(_viewConfig.InterruptedToZoomOut);
         }
 
         public void PlayDashAnimation(float duration, Vector3 dashDirection)

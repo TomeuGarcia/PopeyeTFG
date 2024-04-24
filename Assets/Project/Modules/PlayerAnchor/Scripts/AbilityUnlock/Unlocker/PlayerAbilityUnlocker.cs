@@ -50,9 +50,9 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         private async UniTaskVoid UnlockAbility()
         {
+            DisablePlayerCollider();
             await _view.PlayUnlockAbilityAnimation();            
             _abilityToUnlockEventChannel.RaiseEvent();
-            DisablePlayerCollider();
             ActivateWorldInteractors();
         }
 

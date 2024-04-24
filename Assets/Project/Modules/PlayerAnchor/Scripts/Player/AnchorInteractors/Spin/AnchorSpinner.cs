@@ -168,7 +168,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             UpdateSpinPosition(deltaTime);
             
-            _anchor.OnKeepSpinning();
+            _anchor.OnKeepSpinning(_anchor.Position, _anchor.Rotation, 5);
         }
 
 

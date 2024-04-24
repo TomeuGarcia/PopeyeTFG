@@ -52,7 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             ClearTweens();
             PunchScale(_config.HealScalePunch);
         }
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
             PunchScale(_config.StartHealingScalePunch);
         }
@@ -156,6 +156,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void ClearTweens()
         {
             _meshHolderTransform.DOComplete();
+            _meshHolderTransform.localScale = Vector3.one;
         }
         private void KillTweens()
         {

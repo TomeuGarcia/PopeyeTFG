@@ -4,5 +4,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
     {
         bool HasEnoughFocus(int focusAmount);
         void SpendFocus(int focusAmount);
+        void LoseAllFocus();
     }
 }

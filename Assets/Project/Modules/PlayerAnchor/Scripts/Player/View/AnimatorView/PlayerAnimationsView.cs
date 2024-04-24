@@ -160,7 +160,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
         }
 
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
         }
 

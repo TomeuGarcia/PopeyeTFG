@@ -14,13 +14,13 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         [Header("ACTIVATED")]
         [SerializeField] private bool _activatedColliderEnabledState = true;
         [SerializeField] private Transform _activatedStateSpot;
-        [SerializeField] private TweenEaseReference _activatedEase;
+        [SerializeField] private TweenEaseReference _activatedEase = new TweenEaseReference();
 
         [Space(10)]
         [Header("DEACTIVATED")]
         [SerializeField] private bool _deactivatedColliderEnabledState = false;
         [SerializeField] private Transform _deactivatedStateSpot;
-        [SerializeField] private TweenEaseReference _deactivatedEase;
+        [SerializeField] private TweenEaseReference _deactivatedEase = new TweenEaseReference();
         
         [Space(30)]
         [Header("REFERENCES")]

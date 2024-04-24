@@ -44,9 +44,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
             Healing_PlayerState healing
                 = new Healing_PlayerState(blackboard);
-            
+
+            PerformingSpecialAttack_PlayerState.TransitionExitData specialAttackTransitionExitData =
+                new PerformingSpecialAttack_PlayerState.TransitionExitData();
             EnteringSpecialAttack_PlayerState enteringSpecialAttack
-                = new EnteringSpecialAttack_PlayerState(blackboard);
+                = new EnteringSpecialAttack_PlayerState(blackboard, specialAttackTransitionExitData);
+            PerformingSpecialAttack_PlayerState performingSpecialAttack
+                = new PerformingSpecialAttack_PlayerState(blackboard, specialAttackTransitionExitData);
 
             FallingOnVoid_PlayerState fallingOnVoid
                 = new FallingOnVoid_PlayerState(blackboard);
@@ -76,6 +80,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 
                 { PlayerStates.Healing , healing },
                 { PlayerStates.EnteringSpecialAttack , enteringSpecialAttack },
+                { PlayerStates.PerformingSpecialAttack , performingSpecialAttack },
+                
                 { PlayerStates.FallingOnVoid , fallingOnVoid },
             };
 

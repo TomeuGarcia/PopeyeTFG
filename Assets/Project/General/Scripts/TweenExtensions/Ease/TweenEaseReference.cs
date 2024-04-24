@@ -9,7 +9,7 @@ namespace Project.Scripts.TweenExtensions
         [SerializeField] private bool _useAsset = false;
 
         [HideIf("_useAsset")] [AllowNesting]
-        [SerializeField] private TweenEaseConfig _config;
+        [SerializeField] private TweenEaseConfig _config = new TweenEaseConfig();
         
         [ShowIf("_useAsset")] [AllowNesting]
         [Expandable] [SerializeField] private TweenEaseConfigAsset _configAsset;
