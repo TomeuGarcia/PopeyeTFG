@@ -718,6 +718,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             return SpecialAttackController.SpecialAttackHasFinished();
         }
+
+        public void ForceStopSpecialAttack()
+        {
+            SpecialAttackController.ForceStopSpecialAttack();
+        }
+
         private async UniTaskVoid WaitForSpecialAttackFinished()
         {
             await UniTask.WaitUntil(() => !SpecialAttackController.SpecialAttackIsBeingPerformed());

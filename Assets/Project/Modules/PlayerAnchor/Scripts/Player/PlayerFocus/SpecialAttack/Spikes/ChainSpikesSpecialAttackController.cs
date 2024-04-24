@@ -65,7 +65,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         public void StartSpecialAttack()
         {
-            //_focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
+            _focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
         
             for (int i = 0; i < _numberOfPoints; ++i)
             {
@@ -80,6 +80,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         public bool SpecialAttackHasFinished()
         {
             return !_isBeingPerformed;
+        }
+        
+        public void ForceStopSpecialAttack()
+        {
+            // Not sure how I should stop the spikes [Tomeu]
         }
 
         private async UniTaskVoid Activate()

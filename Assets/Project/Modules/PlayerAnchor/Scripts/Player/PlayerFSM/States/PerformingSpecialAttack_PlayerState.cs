@@ -24,7 +24,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
-            
+            if (!_blackboard.PlayerMediator.OnSpecialAttackFinished())
+            {
+                _blackboard.PlayerMediator.ForceStopSpecialAttack();
+            }
         }
 
         public override bool Update(float deltaTime)

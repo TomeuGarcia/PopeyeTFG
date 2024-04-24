@@ -80,7 +80,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws
 
         public void StartSpecialAttack()
         {
-            //_focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
+            _focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
         
             DoSpecialAttack().Forget();
         }
@@ -89,8 +89,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws
         {
             return !_isBeingPerformed;
         }
-        
-        
+
+        public void ForceStopSpecialAttack()
+        {
+            _isBeingPerformed = false;
+        }
+
+
         private async UniTaskVoid DoSpecialAttack()
         {
             _isBeingPerformed = true;
@@ -104,7 +109,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws
             
 
             Timer translationTimer = new Timer(_duration);
-            while (!translationTimer.HasFinished())
+            while (!translationTimer.HasFinished() && _isBeingPerformed)
             {                
                 translationTimer.Update(Time.deltaTime);
 

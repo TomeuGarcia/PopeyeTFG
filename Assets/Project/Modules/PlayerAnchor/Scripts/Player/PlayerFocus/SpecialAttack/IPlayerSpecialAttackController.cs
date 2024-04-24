@@ -6,5 +6,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         bool SpecialAttackIsBeingPerformed();
         void StartSpecialAttack();
         bool SpecialAttackHasFinished();
+
+        void ForceStopSpecialAttack();
     }
 }

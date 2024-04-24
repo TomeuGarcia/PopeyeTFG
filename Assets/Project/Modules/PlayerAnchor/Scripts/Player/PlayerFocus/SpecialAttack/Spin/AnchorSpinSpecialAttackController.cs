@@ -66,7 +66,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         
         public void StartSpecialAttack()
         {
-            //_focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
+            _focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
 
 
             _anchorMediator.OnStartSpinning();
@@ -108,7 +108,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             
             _anchorMediator.OnStartSpinning();
             
-            while (_loopTime < _fullLoopTime)
+            while (_loopTime < _fullLoopTime && _isBeingPerformed)
             {
                 UpdateSpin();
                 await UniTask.Yield();
@@ -219,6 +219,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         public bool SpecialAttackHasFinished()
         {
             return !_isBeingPerformed;
+        }
+
+        public void ForceStopSpecialAttack()
+        {
+            _isBeingPerformed = false;
         }
     }
 }

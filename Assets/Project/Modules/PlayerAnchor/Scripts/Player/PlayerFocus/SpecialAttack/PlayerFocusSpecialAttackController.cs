@@ -50,6 +50,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
             return true;
         }
 
+        public void ForceStopSpecialAttack()
+        {
+            // No need to cancel anything here
+        }
+
         private async UniTaskVoid DoSpecialAttack()
         {
             foreach (ISpecialAttackToggleable specialAttackToggleable in _specialAttackToggleables)
