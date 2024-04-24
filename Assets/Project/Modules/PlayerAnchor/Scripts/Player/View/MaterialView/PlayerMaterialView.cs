@@ -87,7 +87,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             await UniTask.Delay(TimeSpan.FromSeconds(_config.HealAppearTime));
             _material.DOFloat(0.0f, _config.HealProperty, _config.HealDisappearTime).SetEase(_config.HealDisappearEase);
         }
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
         }
         public void PlayHealingInterruptedAnimation()

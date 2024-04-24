@@ -52,7 +52,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             ClearTweens();
             PunchScale(_config.HealScalePunch);
         }
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
             PunchScale(_config.StartHealingScalePunch);
         }

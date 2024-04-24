@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Anchor;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
@@ -29,12 +30,18 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         [SerializeField] private TweenConfig _postScaleDownTween;
 
         private SpikePositioning _spikePositioning;
+        private IAnchorMediator _anchorMediator;
 
         private void Awake()
         {
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
             _damageTrigger.Configure(combatManager, new DamageHit(_damageHitConfig));
             _damageTrigger.Deactivate();
+        }
+        
+        private void OnDestroy()
+        {
+            _damageTrigger.OnDamageDealt -= _anchorMediator.OnDamageDealt;
         }
 
         private void LateUpdate()
@@ -45,10 +52,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             transform.forward = _spikePositioning.normal;
         }
 
-        public void Init(SpikePositioning spikePositioning)
+        public void Init(SpikePositioning spikePositioning, IAnchorMediator anchorMediator)
         {
             _spikePositioning = spikePositioning;
+            _anchorMediator = anchorMediator;
             _meshHolder.localScale = Vector3.zero;
+            
+            _damageTrigger.OnDamageDealt += _anchorMediator.OnDamageDealt;
         }
 
         public async UniTaskVoid PlaySpawnAnimation()

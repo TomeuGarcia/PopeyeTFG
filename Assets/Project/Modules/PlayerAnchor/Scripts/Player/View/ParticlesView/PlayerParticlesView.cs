@@ -50,7 +50,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _particleFactory.Create(_config.HealCompletedParticleType, Vector3.zero, quaternion.identity, _transformHolder);
         }
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
             _healingParticlesToInterrupt = _particleFactory.Create(_config.HealProcessParticleType, Vector3.zero,
                     quaternion.identity, _transformHolder).gameObject.GetComponent<InterpolatorRecycleParticle>();

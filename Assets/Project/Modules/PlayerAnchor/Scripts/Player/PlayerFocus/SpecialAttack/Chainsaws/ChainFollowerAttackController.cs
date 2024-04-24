@@ -35,7 +35,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws
         {
             _translationTransform.localScale = Vector3.zero;
         }
+        
+        private void OnDestroy()
+        {
+            foreach (DamageTrigger damageTrigger in _damageTriggers)
+            {
+                damageTrigger.OnDamageDealt -= _anchorMediator.OnDamageDealt;
+            }
+        }
 
+        
         public void Configure(IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,
             IAnchorMediator anchorMediator)
@@ -50,6 +59,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws
             {
                 damageTrigger.Configure(combatManager, new DamageHit(_damageHitConfig));
                 damageTrigger.Deactivate();
+                
+                damageTrigger.OnDamageDealt += _anchorMediator.OnDamageDealt;
+
             }
         }
         

@@ -48,11 +48,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayHealAnimation()
         {
         }
-        public void PlayStartHealingAnimation(float durationToComplete)
+        public void PlayStartHealingAnimation(float durationToComplete, int consecutiveHeals)
         {
+            if (consecutiveHeals >= 1) return;
+            
+            /*
             _viewConfig.HealingZoomInOut.ZoomInConfig.SetDuration(durationToComplete);
             _cameraZoomer.ZoomInOutToDefault(_viewConfig.HealingZoomInOut);
+            */
             
+            _viewConfig.HealingZoomIn.SetDuration(durationToComplete);
+            _cameraZoomer.ZoomIn(_viewConfig.HealingZoomIn);
         }
         public void PlayHealingInterruptedAnimation()
         {

@@ -674,9 +674,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayHealAnimation();
         }
 
-        public void OnHealStart(float durationToComplete)
+        public void OnHealStart(float durationToComplete, int consecutiveHeals)
         {
-            PlayerView.PlayStartHealingAnimation(durationToComplete);
+            PlayerView.PlayStartHealingAnimation(durationToComplete, consecutiveHeals);
         }
         
         public void OnHealInterrupted()

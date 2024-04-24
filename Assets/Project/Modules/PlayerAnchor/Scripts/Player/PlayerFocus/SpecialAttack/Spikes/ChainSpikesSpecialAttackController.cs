@@ -70,7 +70,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             for (int i = 0; i < _numberOfPoints; ++i)
             {
                 ChainSpike chainSpike = Instantiate(_chainSpikePrefab, transform);
-                chainSpike.Init(_spikesPositioning[i]);
+                chainSpike.Init(_spikesPositioning[i], _anchorMediator);
                 _spikes[i] = chainSpike;
             }
 
