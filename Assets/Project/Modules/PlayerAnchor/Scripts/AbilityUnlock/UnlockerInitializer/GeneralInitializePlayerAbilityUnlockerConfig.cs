@@ -22,7 +22,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             DashTowardsAnchor,
             SpecialAttack,
             
-            HealthUpgrade
+            MaxHealthUpgrade,
+            MaxFocusUpgrade
         }
         
         

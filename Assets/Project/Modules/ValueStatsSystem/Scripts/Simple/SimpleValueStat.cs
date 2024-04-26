@@ -27,15 +27,7 @@ namespace Popeye.Modules.ValueStatSystem
         protected override void DoResetMaxValue(int maxValue, bool setValueToMax)
         {
             _maxValue = maxValue;
-
-            if (setValueToMax)
-            {
-                _currentValue = _maxValue;
-            }
-            else
-            {
-                _currentValue = Mathf.Min(_currentValue, _maxValue);
-            }
+            SetCurrentValue(setValueToMax ? _maxValue : _currentValue);
         }
 
         public void SetCurrentValue(int currentValue)

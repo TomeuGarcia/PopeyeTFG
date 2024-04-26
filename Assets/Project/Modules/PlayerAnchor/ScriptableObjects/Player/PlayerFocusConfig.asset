@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxFocusAmount: 100
   _startFocusAmount: 0
+  _maxFocusIncreaseAmount: 33
   _healingConfig:
     _requiredFocusToPerform: 33
     _healAmount: 1
@@ -21,4 +22,6 @@ MonoBehaviour:
     _requiredFocusToPerform: 33
     _attackDuration: 10
   _healthBoostEventChannel: {fileID: 11400000, guid: 4df52ccae716d9c429bbafacb6c234de,
+    type: 2}
+  _focusBoostEventChannel: {fileID: 11400000, guid: 49654a8aacf56da4faf2c084d2f76f9d,
     type: 2}

@@ -303,7 +303,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             PlayerGlobalEventsListener playerGlobalEventsListener = 
                 new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue, 
-                    _playerGeneralConfig.FocusConfig.HealthBoostEventChannel, playerHealth);
+                    _playerGeneralConfig.FocusConfig.HealthBoostEventChannel, playerHealth,
+                    _playerGeneralConfig.FocusConfig.FocusBoostEventChannel, playerFocusController);
             PlayerEventsDispatcher playerEventsDispatcher =
                 new PlayerEventsDispatcher(eventSystemService, 
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
