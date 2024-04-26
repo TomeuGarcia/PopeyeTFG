@@ -193,6 +193,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 _currentSpecialAttackIndex = 3;
                 debugIsSpinning = false;
             }
+            
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                _playerHealth.IncreaseMaxHealth();
+            }
         }
 
         private void FixedUpdate()

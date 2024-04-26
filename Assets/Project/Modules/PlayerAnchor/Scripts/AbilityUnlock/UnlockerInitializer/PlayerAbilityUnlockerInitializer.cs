@@ -44,9 +44,26 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _christalView.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);            
             
             _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, _christalView);
+
             
-            _tutorialInformationDisplay.Configure(configureReferences.TutorialInfoToDisplay,
-                configureReferences.TutorialHideChannel, configureReferences.TimesToStopShowing);
+            ITutorialDisplayCondition tutorialStopDisplayCondition = null;
+            if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformed)
+            {
+                tutorialStopDisplayCondition = new PerformedAmountDisplayCondition(
+                    configureReferences.TutorialHideChannel,
+                    configureReferences.TimesToStopShowing
+                );
+            }
+            else if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.Duration)
+            {
+                tutorialStopDisplayCondition = new DurationDisplayCondition(
+                    configureReferences.DurationToStopShowing
+                );
+            }
+            
+            _tutorialInformationDisplay.Configure(
+                configureReferences.TutorialInfoToDisplay,
+                tutorialStopDisplayCondition);
         }
         
     }

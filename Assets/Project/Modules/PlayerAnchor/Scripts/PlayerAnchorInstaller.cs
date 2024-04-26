@@ -296,13 +296,14 @@ namespace Popeye.Modules.PlayerAnchor
                 _chainFollowerAttackController
             };
 
-            IPlayerHealing playerHealing = 
+            FocusPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
             PlayerAutoActionsQueue playerAutoActionsQueue = new PlayerAutoActionsQueue(_player, _anchor);
             
             PlayerGlobalEventsListener playerGlobalEventsListener = 
-                new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue);
+                new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue, 
+                    _playerGeneralConfig.FocusConfig.HealthBoostEventChannel, playerHealth);
             PlayerEventsDispatcher playerEventsDispatcher =
                 new PlayerEventsDispatcher(eventSystemService, 
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
@@ -317,7 +318,7 @@ namespace Popeye.Modules.PlayerAnchor
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor, playerMovementChecker);
             playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
-            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
+            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.HealthData,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
                 _obstacleProbingConfig, _dashFloorProbingConfig);
