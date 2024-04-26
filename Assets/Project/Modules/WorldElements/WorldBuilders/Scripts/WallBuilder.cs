@@ -179,8 +179,10 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         [SerializeField] private Transform _cornerWallsParent;
         [SerializeField] private Transform _fillWallsParent;
         [SerializeField] private GameObject _collidersParent;
-        
-        [Header("CONFIG")]
+        [SerializeField] private GameObject _collidersParent_45;
+
+        [Header("CONFIG")] 
+        [SerializeField] private bool _drawOnlyWhenSelected = true;
         [Expandable] [SerializeField] private WallBuilderConfig _config;
         
         [Header("POINTS")]
@@ -212,6 +214,9 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             if (!_cornerWallsParent) _cornerWallsParent = transform;
             if (!_fillWallsParent) _fillWallsParent = transform;
             if (!_collidersParent) _collidersParent = gameObject;
+            if (!_collidersParent_45) _collidersParent_45 = gameObject;
+            
+            _collidersParent_45.transform.localRotation = Quaternion.Euler(new Vector3(0,45,0));
         }
         
 
@@ -223,11 +228,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                 return;
             }
 
-
-            while (_collidersParent.TryGetComponent<Collider>(out Collider collider))
-            {
-                DestroyImmediate(collider);
-            }
+            ClearColliders();
 
             _cornersObjectBuffer.SetupBeforeUse();
             _fillsObjectBuffer.SetupBeforeUse();
@@ -304,8 +305,8 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             CreateFillWalls(previousPoint, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
                 fillLength);
             
-            CreateColliderPreviousToCurrent(previousPointLocal, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
-                fillLength);
+            CreateColliderPreviousToCurrent(previousPointLocal, previousToCurrentDirection, previousToCurrentDistance, 
+                offsetRotation, fillLength);
         }
 
 
@@ -379,22 +380,41 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
         
 
-        private void CreateColliderPreviousToCurrent(Vector3 previousPointLocal, Vector3 previousToCurrentDirection, float previousToCurrentDistance,  
-            Quaternion rotation, float fillLength)
+        private void CreateColliderPreviousToCurrent(Vector3 previousPointLocal, Vector3 previousToCurrentDirection, 
+            float previousToCurrentDistance, Quaternion rotation, float fillLength)
         {
-            Quaternion offsetRotation = transform.rotation;
-            Quaternion revertRotation =  Quaternion.Inverse(offsetRotation);
+            Quaternion parentOffsetRotation = transform.rotation;
             
-            Vector3 startPoint = offsetRotation * previousPointLocal;
+            Quaternion axisAlignedOffset = 
+                (Quaternion.LookRotation(Vector3.forward, Vector3.up) * parentOffsetRotation) * 
+                Quaternion.Inverse(rotation);
             
-            Vector3 colliderPosition =  startPoint + (previousToCurrentDirection * ((fillLength / 2) + CornerBlock.Length));
-            Vector3 colliderSize = rotation * 
+            float axisAlignedOffsetEulerY = axisAlignedOffset.eulerAngles.y % 90.0f;
+            Debug.Log(axisAlignedOffsetEulerY);
+
+
+            GameObject collidersParent = _collidersParent;
+            if (axisAlignedOffsetEulerY > 43f)
+            {
+                collidersParent = _collidersParent_45;
+            }
+            
+            Quaternion revertParentRotation = Quaternion.Inverse(parentOffsetRotation);
+            
+            Vector3 startPoint = parentOffsetRotation * previousPointLocal;
+
+            Vector3 colliderPosition = startPoint + (previousToCurrentDirection * ((fillLength / 2) + CornerBlock.Length));
+            Vector3 colliderSize = rotation *
                                    (new Vector3(_config.ColliderWidth, _config.ColliderHeight, previousToCurrentDistance));
 
-            colliderPosition = revertRotation * colliderPosition;
-            colliderSize = revertRotation * colliderSize;
             
-            DoCreateCollider(colliderPosition, colliderSize);
+            parentOffsetRotation *= collidersParent.transform.localRotation;
+            revertParentRotation = Quaternion.Inverse(parentOffsetRotation);
+            
+            colliderPosition = revertParentRotation * colliderPosition;
+            
+            colliderSize = revertParentRotation * colliderSize;
+            DoCreateCollider(colliderPosition, colliderSize, collidersParent);
         }
         
         private void CreateColliderForFirst()
@@ -440,11 +460,17 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         
         private void DoCreateCollider(Vector3 colliderPosition, Vector3 colliderSize)
         {
+            DoCreateCollider(colliderPosition, colliderSize, _collidersParent);
+        }
+        private void DoCreateCollider(Vector3 colliderPosition, Vector3 colliderSize, GameObject collidersParent)
+        {
+            //colliderPosition = Quaternion.Inverse(collidersParent.transform.localRotation) * colliderPosition;
+            
             colliderSize.x = Mathf.Abs(colliderSize.x);
             colliderSize.y = Mathf.Abs(colliderSize.y);
             colliderSize.z = Mathf.Abs(colliderSize.z);
             
-            BoxCollider boxCollider = _collidersParent.AddComponent<BoxCollider>();
+            BoxCollider boxCollider = collidersParent.AddComponent<BoxCollider>();
             boxCollider.center = colliderPosition + (Vector3.up * _config.HalfColliderHeight);
             boxCollider.size = colliderSize;
         }
@@ -453,14 +479,19 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
 
         private void CreateFakeMesh()
         {
-            if (!_collidersParent.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
+            DoCreateFakeMesh(_collidersParent);
+            DoCreateFakeMesh(_collidersParent_45);
+        }
+        private void DoCreateFakeMesh(GameObject collidersParent)
+        {
+            if (!collidersParent.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
             {
-                _collidersParent.AddComponent<MeshFilter>();
+                collidersParent.AddComponent<MeshFilter>();
             }
 
-            if (!_collidersParent.TryGetComponent<MeshRenderer>(out MeshRenderer meshRenderer))
+            if (!collidersParent.TryGetComponent<MeshRenderer>(out MeshRenderer meshRenderer))
             {
-                meshRenderer = _collidersParent.AddComponent<MeshRenderer>();
+                meshRenderer = collidersParent.AddComponent<MeshRenderer>();
             }
             
             meshRenderer.material = _config.FakeMeshMaterial;
@@ -521,7 +552,17 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             _cornersObjectBuffer.DestroyObjectsAndClearBuffer();
             _fillsObjectBuffer.DestroyObjectsAndClearBuffer();
 
-            while (_collidersParent.TryGetComponent<Collider>(out Collider collider))
+            ClearColliders();
+        }
+
+        private void ClearColliders()
+        {
+            DoClearColliders(_collidersParent);
+            DoClearColliders(_collidersParent_45);
+        }
+        private void DoClearColliders(GameObject collidersParent)
+        {
+            while (collidersParent.TryGetComponent<Collider>(out Collider collider))
             {
                 DestroyImmediate(collider);
             }
@@ -536,13 +577,24 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         
         private void OnDrawGizmos()
         {
-            if (!IsReadyForEditor()) return;
+            if (!IsReadyForEditor() || _drawOnlyWhenSelected) return;
             
+            DoDrawGizmos();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (!IsReadyForEditor() || !_drawOnlyWhenSelected) return;
+            
+            DoDrawGizmos();
+        }
+
+        private void DoDrawGizmos()
+        {
             int baseDepth = _baseCornerPointsGroup.GetDepth();
             DrawCorners(_baseCornerPointsGroup, 0, baseDepth);
             DrawFills(_baseCornerPointsGroup, _baseCornerPointsGroup.CornerPoints[0], 0, baseDepth);
         }
-        
         
         private void DrawCorners(CornerPointsGroup pointsGroup, int depth, int baseDepth)
         {
