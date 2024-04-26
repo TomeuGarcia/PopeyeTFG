@@ -1,4 +1,5 @@
 using System;
+using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.ValueStatSystem;
@@ -14,12 +15,15 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
     {
         [Header("COMPONENTS")]
         [SerializeField] private Rigidbody _rigidbody;
-        
+        [SerializeField] private Collider _collider;
+        [SerializeField] private InterfaceReference<IDestructiblePropView, MonoBehaviour> _view;
+
         [Header("CONFIGURATION")]
         [SerializeField] private DestructiblePropConfig _config;
         [SerializeField] private AutoAimTargetDataConfig _autoAimTargetDataConfig;
 
         public HealthSystem HealthSystem { get; private set; }
+        private IDestructiblePropView View => _view.Value;
         private TransformMotion _transformMotion;
 
         private Vector3 _spawnPosition;
@@ -47,6 +51,8 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             _transformMotion = new TransformMotion();
             _transformMotion.Configure(transform);
 
+            View.Configure(_config.ViewConfig, Transform);
+
             _spawnPosition = Transform.position;
             _spawnRotation = Transform.rotation;
         }
@@ -62,6 +68,8 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             {
                 _rigidbody.velocity = Vector3.zero;
             }
+
+            _collider.enabled = true;
         }
         
 
@@ -76,11 +84,11 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             
             if (HealthSystem.IsDead())
             {
-                PlayDieAnimation().Forget();
+                OnKilledByDamage().Forget();
             }
             else
-            {
-                PlayTakeDamageAnimation(damageHit);
+            { 
+                OnDamageTaken();
             }
 
             return new DamageHitResult(this, gameObject, damageHit, receivedDamage, Position);
@@ -96,19 +104,18 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             return HealthSystem.IsDead();
         }
 
-        private async UniTaskVoid PlayDieAnimation()
+
+        private void OnDamageTaken()
         {
-            Transform.PunchScale(_config.DeathPunchScale);
-            await Transform.RotateBy(_config.DeathRotation)
-                .AsyncWaitForCompletion();
-            
+            View.PlayTakeDamageAnimation();
+        }
+        private async UniTaskVoid OnKilledByDamage()
+        {
+            _collider.enabled = false;
+            await View.PlayDestroyedAnimation();
             gameObject.SetActive(false);
         }
-        private void PlayTakeDamageAnimation(DamageHit damageHit)
-        {
-            Transform.PunchScale(_config.TakeDamagePunchScale);
-        }
-
+        
         
         public Rigidbody GetRigidbodyToKnockback()
         {

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 53558717448528710}
   - component: {fileID: 3728112857281340458}
+  - component: {fileID: 431949202127894502}
   - component: {fileID: 6610894519893494393}
   - component: {fileID: 1231644724727105655}
   - component: {fileID: 1376652800486948319}
@@ -36,7 +37,7 @@ Transform:
   m_Children:
   - {fileID: 1176333136032064432}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3728112857281340458
 MonoBehaviour:
@@ -51,9 +52,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 4200632155115348346}
-  _config: {fileID: 11400000, guid: e0b7ffd9cfc150840833669c4560b161, type: 2}
+  _collider: {fileID: 7399465656931064326}
+  _view:
+    _underlyingValue: {fileID: 431949202127894502}
+  _config: {fileID: 11400000, guid: cae66fa2fe39156428b6f1fa41322fff, type: 2}
   _autoAimTargetDataConfig: {fileID: 11400000, guid: a47bfb9ef5ab8d14c9f2fc6c4d434917,
     type: 2}
+--- !u!114 &431949202127894502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170056248722184048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b231ea53cb3a4a37881c29141754cbe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6610894519893494393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c31730084f4c14b8d01aed8e2cf81d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _delay: 0.15
   _healthUser:
     _underlyingValue: {fileID: 3728112857281340458}
   _hazardSpawner: {fileID: 1231644724727105655}

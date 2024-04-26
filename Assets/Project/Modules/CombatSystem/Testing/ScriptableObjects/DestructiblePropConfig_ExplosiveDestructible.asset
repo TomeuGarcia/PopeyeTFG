@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 688574fc43d64e7fa45e03c29196795c, type: 3}
-  m_Name: DestructiblePropConfig_WeakDestructible
+  m_Name: DestructiblePropConfig_ExplosiveDestructible
   m_EditorClassIdentifier: 
   _maxHealth: 1
-  _knockbackResistance: 0
+  _knockbackResistance: 1
   _viewConfig:
     _deathPunchScale:
-      _value: {x: -0.5, y: -0.5, z: -0.5}
+      _value: {x: 1.5, y: -0.5, z: 1.5}
       _duration: 0.4
-      _vibrato: 10
+      _vibrato: 0
       _elasticity: 1
       _ease: 4
     _deathRotation:
-      _value: {x: -90, y: 500, z: 0}
-      _duration: 0.5
+      _value: {x: 0, y: 0, z: 0}
+      _duration: 0.01
       _ease: 4
     _takeDamagePunchScale:
       _value: {x: -0.5, y: -0.5, z: -0.5}
