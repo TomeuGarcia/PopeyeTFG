@@ -31,8 +31,6 @@ Transform:
   m_Children:
   - {fileID: 7488789280177115068}
   - {fileID: 3161938450611371407}
-  - {fileID: 4653013836675311063}
-  - {fileID: 3172334480258825864}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -50,8 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cornerWallsParent: {fileID: 7488789280177115068}
   _fillWallsParent: {fileID: 3161938450611371407}
-  _collidersParent: {fileID: 9051799137085001309}
-  _collidersParent_45: {fileID: 1501168846750862816}
+  _collidersContainers: []
   _drawOnlyWhenSelected: 1
   _config: {fileID: 11400000, guid: c079101b9a754a247a327667886e070d, type: 2}
   _baseCornerPointsGroup:
@@ -144,37 +141,6 @@ MonoBehaviour:
     _spawnedObjectsBuffer: []
   _fillsObjectBuffer:
     _spawnedObjectsBuffer: []
---- !u!1 &1501168846750862816
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3172334480258825864}
-  m_Layer: 0
-  m_Name: Colliders_45Angles
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3172334480258825864
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1501168846750862816}
-  m_LocalRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8407372321338070502}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6296338534507832279
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,37 +195,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7892614329976918525}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8407372321338070502}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &9051799137085001309
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4653013836675311063}
-  m_Layer: 0
-  m_Name: Colliders_RightAngles
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4653013836675311063
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9051799137085001309}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
