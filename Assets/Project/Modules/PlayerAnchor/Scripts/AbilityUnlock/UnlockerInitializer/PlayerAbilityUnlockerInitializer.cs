@@ -43,7 +43,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 out GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences);
             
             _christalView?.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);
-            _orbView?.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);
+            _orbView?.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio, _abilityToUnlock);
 
             IPlayerAbilityUnlockerView view = _christalView != null ? _christalView : _orbView;
             _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, view);

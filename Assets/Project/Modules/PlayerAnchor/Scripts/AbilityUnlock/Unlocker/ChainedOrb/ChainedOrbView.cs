@@ -10,20 +10,26 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 {
     public class ChainedOrbView : MonoBehaviour
     {
-        [SerializeField] private Material _normalBoneMaterial;
-        [SerializeField] private Material _specialBoneMaterial;
-        [SerializeField] private MeshRenderer[] _circleChainMeshes;
-        [SerializeField] private float _disappearDuration = 0.1f;
-        [SerializeField] private float _punchAmount = 2.0f;
-        [SerializeField] private float _punchDuration = 1.0f;
-
-        [SerializeField] private MovePunchBehaviour[] _movePunchBehaviours;
-        [SerializeField] private AbilityUnlockerChristalViewConfig _viewConfig;
+        [Header("ORB")]
+        [SerializeField] private MeshRenderer _orbMesh;
         
-        [SerializeField] private GameObject _pointLight;
+        [Header("CHAINS")]
+        [SerializeField] private Light _pointLight;
+        [SerializeField] private MeshRenderer[] _circleChainMeshes;
 
-        public void Init()
+        [Header("MOVEMENT")]
+        [SerializeField] private MovePunchBehaviour[] _movePunchBehaviours;
+        
+        private ChainedOrbViewConfig _viewConfig;
+        private ChainedOrbViewConfig.UpgradeTypeToViewData _typeViewData;
+
+        public void Init(ChainedOrbViewConfig viewConfig, ChainedOrbViewConfig.UpgradeTypeToViewData typeViewData)
         {
+            _viewConfig = viewConfig;
+            _typeViewData = typeViewData;
+
+            _orbMesh.material = _typeViewData.OrbMaterial;
+            _pointLight.color = _typeViewData.LightColor;
         }
 
         public void ResetState()
@@ -33,7 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             
             foreach (MeshRenderer meshRenderer in _circleChainMeshes)
             {
-                meshRenderer.material = _normalBoneMaterial;
+                meshRenderer.material = _viewConfig.NormalChainMaterial;
                 meshRenderer.gameObject.SetActive(true);
             }
             
@@ -42,7 +48,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 movePunchBehaviour.Resume();
             }
             
-            _pointLight.SetActive(true);
+            _pointLight.gameObject.SetActive(true);
         }
 
 
@@ -55,17 +61,18 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             Vector3 direction = Vector3.ProjectOnPlane(transform.position - hitOrigin, Vector3.up).normalized;
             transform.DOPunchPosition(
-                direction * _punchAmount,
-                _punchDuration,
+                direction * _viewConfig.OrbHitMovePunch,
+                _viewConfig.OrbHitDuration,
                 vibrato: 1
             );
-            await UniTask.Delay(TimeSpan.FromSeconds(_punchDuration / 2));
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbHitDuration / 2));
         
             foreach (MeshRenderer meshRenderer in _circleChainMeshes)
             {
-                meshRenderer.material = _specialBoneMaterial;
+                meshRenderer.material = _typeViewData.BreakingChainMaterial;
             }
-            await UniTask.Delay(TimeSpan.FromSeconds(_disappearDuration));
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbChainsDisappearDelay));
             foreach (MeshRenderer meshRenderer in _circleChainMeshes)
             {
                 meshRenderer.gameObject.SetActive(false);
@@ -74,15 +81,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         public async UniTask MoveToTarget(Transform target)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.CoreMoveDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbMoveToTarget.StartDelay));
             
             Vector3 startPosition = transform.position;
             ScaleDown().Forget();
             
-            Timer moveToTargetTimer = new Timer(_viewConfig.CoreMoveDuration);
+            Timer moveToTargetTimer = new Timer(_viewConfig.OrbMoveToTarget.MoveDuration);
             while (!moveToTargetTimer.HasFinished())
             {
-                float t = _viewConfig.CoreMoveEase.Evaluate(moveToTargetTimer.GetCounterRatio01());
+                float t = _viewConfig.OrbMoveToTarget.MoveEase.Evaluate(moveToTargetTimer.GetCounterRatio01());
                 Vector3 endPosition = target.position;
 
                 Vector3 currentPosition = Vector3.LerpUnclamped(startPosition, endPosition, t);
@@ -99,13 +106,13 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 await UniTask.Yield();
             }
             
-            _pointLight.SetActive(false);
+            _pointLight.gameObject.SetActive(false);
         }
 
         private async UniTaskVoid ScaleDown()
         {
-            await transform.Scale(_viewConfig.CoreMoveScale).AsyncWaitForCompletion();
-            transform.Scale(_viewConfig.CoreFinalScale);
+            await transform.Scale(_viewConfig.OrbMoveToTarget.StartScale).AsyncWaitForCompletion();
+            transform.Scale(_viewConfig.OrbMoveToTarget.EndScale);
         }
         
     }

@@ -9,21 +9,30 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 {
     public class ChainedOrbChainView : MonoBehaviour
     {
-        private Vector3 _originalLocalPosition;
+        [Header("CHAIN TARGET")]
         [SerializeField] private Transform _chainTarget;
+        
+        [Header("TO END")]
         [SerializeField] private Transform _chainTargetEndSpot;
         [SerializeField] private TweenEaseConfig _toEndSpotEase;
+        
+        [Header("BONE CHAIN")]
         [SerializeField] private BoneChain _boneChain;
+        
+        [Header("VIEW RENDERERS")]
         [SerializeField] private MeshRenderer _boneChainTarget;
-        [SerializeField] private Material _normalBoneMaterial;
-        [SerializeField] private Material _specialBoneMaterial;
-        [SerializeField] private TrailRenderer _trail;
-        [SerializeField] private Vector2 _disappearStepDuration = new Vector2(0.1f, 0.2f);
-        [SerializeField] private Vector3 _disappearPunch = Vector3.one * 0.5f;
         [SerializeField] private MeshRenderer _plateMesh;
+        [SerializeField] private TrailRenderer _trail;
 
-        public void Init()
+        private ChainedOrbViewConfig _viewConfig;
+        private ChainedOrbViewConfig.UpgradeTypeToViewData _typeViewData;
+        private Vector3 _originalLocalPosition;
+        
+        
+        public void Init(ChainedOrbViewConfig viewConfig, ChainedOrbViewConfig.UpgradeTypeToViewData typeViewData)
         {
+            _viewConfig = viewConfig;
+            _typeViewData = typeViewData;
             _originalLocalPosition = _chainTarget.localPosition;            
         }
 
@@ -33,12 +42,12 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _chainTarget.localPosition = _originalLocalPosition;
 
             
-            _boneChainTarget.material = _normalBoneMaterial;
+            _boneChainTarget.material = _viewConfig.NormalChainMaterial;
             _boneChainTarget.gameObject.SetActive(true);
-            _boneChain.SetMaterialToBones(_normalBoneMaterial);
+            _boneChain.SetMaterialToBones(_viewConfig.NormalChainMaterial);
             _boneChain.Show();
 
-            _plateMesh.material = _normalBoneMaterial;
+            _plateMesh.material = _viewConfig.NormalChainMaterial;
             _plateMesh.gameObject.SetActive(true);
             
             _trail.emitting = true;
@@ -56,25 +65,26 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _trail.emitting = false;
 
             
-            _boneChainTarget.material = _specialBoneMaterial;
-            await UniTask.Delay(TimeSpan.FromSeconds(_disappearStepDuration.x));
+            _boneChainTarget.material = _typeViewData.BreakingChainMaterial;
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.BreakStepDuration.x));
             _boneChainTarget.gameObject.SetActive(false);
 
             for (int i = _boneChain.NumberOfBones - 1; i >= 0; --i)
             {
                 Bone bone = _boneChain.Bones[i];
-                bone.SetMaterial(_specialBoneMaterial);
+                bone.SetMaterial(_typeViewData.BreakingChainMaterial);
 
-                float duration = Mathf.Lerp(_disappearStepDuration.x, _disappearStepDuration.y,
-                    1 - ((float)i / _boneChain.NumberOfBones));
-                bone.transform.DOPunchScale(_disappearPunch, duration);
+                float t = 1 - ((float)i / _boneChain.NumberOfBones);
+                float duration = Mathf.Lerp(_viewConfig.BreakStepDuration.x, _viewConfig.BreakStepDuration.y, t);
+                
+                bone.transform.DOPunchScale(_viewConfig.BreakPunch, duration);
                 await UniTask.Delay(TimeSpan.FromSeconds(duration));
                 bone.Hide();
             }
 
-            _plateMesh.material = _specialBoneMaterial;
-            _plateMesh.transform.DOPunchScale(_disappearPunch, _disappearStepDuration.x);
-            await UniTask.Delay(TimeSpan.FromSeconds(_disappearStepDuration.x));
+            _plateMesh.material = _typeViewData.BreakingChainMaterial;
+            _plateMesh.transform.DOPunchScale(_viewConfig.BreakPunch, _viewConfig.BreakStepDuration.x);
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.BreakStepDuration.x));
             _plateMesh.gameObject.SetActive(false);
         }
         
