@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
         [Header("VIEW")] 
         [SerializeField] private AbilityUnlockerChristalView _christalView;
+        [SerializeField] private AbilityUnlockerChainedOrbView _orbView;
         
         [Header("SOUNDS")]
         [SerializeField] private AbilityUnlockerChristalAudio _christalAudio;
@@ -41,9 +42,11 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _initializeConfig.GetReferences(_abilityToUnlock,
                 out GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences);
             
-            _christalView.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);            
-            
-            _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, _christalView);
+            _christalView?.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);
+            _orbView?.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);
+
+            IPlayerAbilityUnlockerView view = _christalView != null ? _christalView : _orbView;
+            _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, view);
 
             
             ITutorialDisplayCondition tutorialStopDisplayCondition = null;

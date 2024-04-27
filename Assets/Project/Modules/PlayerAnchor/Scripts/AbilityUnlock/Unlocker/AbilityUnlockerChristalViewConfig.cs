@@ -45,11 +45,13 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [SerializeField, Range(0f, 5.0f)] private float _coreMoveDelay = 0.2f;
         [SerializeField, Range(0f, 5.0f)] private float _coreMoveDuration = 1.0f;
         [SerializeField] private AnimationCurve _coreMoveEase = AnimationCurve.EaseInOut(0,0,1,1);
-        [SerializeField] private TweenPunchConfig _coreScalePunch;
+        [SerializeField] private TweenConfig _coreMoveScale;
+        [SerializeField] private TweenConfig _coreFinalScale;
         public float CoreMoveDelay => _coreMoveDelay;
         public float CoreMoveDuration => _coreMoveDuration;
         public AnimationCurve CoreMoveEase => _coreMoveEase;
-        public TweenPunchConfig CoreScalePunch => _coreScalePunch;
+        public TweenConfig CoreMoveScale => _coreMoveScale;
+        public TweenConfig CoreFinalScale => _coreFinalScale;
 
 
         
