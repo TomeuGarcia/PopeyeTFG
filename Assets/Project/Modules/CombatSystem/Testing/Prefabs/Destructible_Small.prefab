@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1432315747711807404}
   - component: {fileID: 3452790659243180350}
+  - component: {fileID: 2881680800641346874}
+  - component: {fileID: 955846554286350927}
   - component: {fileID: 1159515006644225161}
   - component: {fileID: 2438514977606243121}
   - component: {fileID: 2780376006812653132}
@@ -34,7 +36,7 @@ Transform:
   m_Children:
   - {fileID: 1020867168731075544}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3452790659243180350
 MonoBehaviour:
@@ -49,9 +51,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 2780376006812653132}
+  _collider: {fileID: 2438514977606243121}
+  _view:
+    _underlyingValue: {fileID: 2881680800641346874}
   _config: {fileID: 11400000, guid: e0b7ffd9cfc150840833669c4560b161, type: 2}
   _autoAimTargetDataConfig: {fileID: 11400000, guid: a47bfb9ef5ab8d14c9f2fc6c4d434917,
     type: 2}
+--- !u!114 &2881680800641346874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864979812862194037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b231ea53cb3a4a37881c29141754cbe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &955846554286350927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864979812862194037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f27f855774fd49ef94a398ab6474ba39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthUser:
+    _underlyingValue: {fileID: 3452790659243180350}
+  _powerBoostDrop: {fileID: 11400000, guid: d51aa3f822d696544abe926068503658, type: 2}
 --- !u!208 &1159515006644225161
 NavMeshObstacle:
   m_ObjectHideFlags: 0

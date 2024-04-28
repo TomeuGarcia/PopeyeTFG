@@ -9,7 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         private readonly PlayerFocusConfig _config;
         private readonly IPlayerFocusUI _focusUI;
 
-        public int MaxFocusAmount => _config.MaxFocusAmount;
+        public int MaxFocusAmount { get; private set; }
         public int CurrentFocusAmount { get; private set; }
 
         private bool _couldSpendStamina = false;
@@ -18,6 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         {
             _config = config;
             _focusUI = focusUI;
+            MaxFocusAmount = _config.MaxFocusAmount;
             SetCurrentFocusAmount(_config.StartFocusAmount);
         }
         
@@ -64,6 +65,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
 
             _couldSpendStamina = canSpendStamina;
         }
-        
+
+        public void IncreaseMaxFocus()
+        {
+            MaxFocusAmount += _config.MaxFocusIncreaseAmount;
+            _focusUI.OnMaxFocusAmountChanged();
+        }
     }
 }
