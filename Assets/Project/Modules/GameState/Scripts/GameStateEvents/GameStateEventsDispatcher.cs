@@ -34,6 +34,11 @@ namespace Popeye.Modules.GameState
             _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnStartLoadingAdditiveScene(sceneReference));
         }
 
+        public void InvokeOnStartLoadingAnyScene(ISceneReference sceneReference)
+        {
+            _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnStartLoadingAnyScene(sceneReference));
+        }
+
         public void InvokeOnFinishLoadingScenes()
         {
             _eventSystemService.Dispatch(new IGameStateEventsDispatcher.OnFinishLoadingScenes());

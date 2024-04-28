@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AYellowpaper;
 using Popeye.Core.Services.EventSystem;
 using UnityEngine;
@@ -8,29 +9,41 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
     {
         [Header("SUB MANAGERS")]
         [SerializeField] private InterfaceReference<IGameAudiosManager, MonoBehaviour>[] _subGameAudiosManagers;
+        private List<IGameAudiosManager> _subGameAudiosManagersList;
 
 
-        public void Init(AFMODAudioManagerReference audioManager, IEventSystemService eventSystemService)
+        public void ConfigureBeforeInit(IGameAudiosManager[] extraSubGameAudiosManagersList)
         {
+            _subGameAudiosManagersList = new List<IGameAudiosManager>(extraSubGameAudiosManagersList);
+            
             foreach (InterfaceReference<IGameAudiosManager, MonoBehaviour> subGameAudiosManager in _subGameAudiosManagers)
             {
-                subGameAudiosManager.Value.Init(audioManager, eventSystemService);
+                _subGameAudiosManagersList.Add(subGameAudiosManager.Value);
+            }
+
+        }
+        
+        public void Init(AFMODAudioManagerReference audioManager, IEventSystemService eventSystemService)
+        {
+            foreach (IGameAudiosManager subGameAudiosManager in _subGameAudiosManagersList)
+            {
+                subGameAudiosManager.Init(audioManager, eventSystemService);
             }
         }
 
         public void StartListeningToGameEvents()
         {
-            foreach (InterfaceReference<IGameAudiosManager, MonoBehaviour> subGameAudiosManager in _subGameAudiosManagers)
+            foreach (IGameAudiosManager subGameAudiosManager in _subGameAudiosManagersList)
             {
-                subGameAudiosManager.Value.StartListeningToGameEvents();
+                subGameAudiosManager.StartListeningToGameEvents();
             }
         }
 
         public void StopListeningToGameEvents()
         {
-            foreach (InterfaceReference<IGameAudiosManager, MonoBehaviour> subGameAudiosManager in _subGameAudiosManagers)
+            foreach (IGameAudiosManager subGameAudiosManager in _subGameAudiosManagersList)
             {
-                subGameAudiosManager.Value.StopListeningToGameEvents();
+                subGameAudiosManager.StopListeningToGameEvents();
             }
         }
     }

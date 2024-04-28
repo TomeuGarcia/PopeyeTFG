@@ -270,7 +270,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
-            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, _audioManagerReference, _playerAudioConfig);
+            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject,
+                _audioManagerReference, _playerAudioConfig, playerMovementChecker);
             _playerAnimatorEvents.AddFootstepsListener(playerAudio);
 
             PlayerFocusController playerFocusController =
@@ -345,7 +346,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerFocusController);
-            
+            playerFocusController.Init();
             
             PowerBoostDropFactory powerBoostDropFactory =
                 new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);
