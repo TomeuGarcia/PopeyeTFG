@@ -36,6 +36,7 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] float _distanceToTargetThreshold;
     [SerializeField] ParticleTypes _projectileExplosion;
     [SerializeField] ParticleTypes _projectileArea;
+    [SerializeField] ParticleTypes _attackPreview;
     
     private IParticleFactory _particleFactory;
     private float _minDistance;
@@ -63,7 +64,7 @@ public class ParabolicProjectile : RecyclableObject
                     if (Physics.Raycast(predictPos + Vector3.up, Vector3.down, out hit,5f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                     {
                         var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
-                        _particleFactory.Create(_projectileArea, hit.point, startRot);
+                        _particleFactory.Create(_attackPreview, hit.point, startRot);
                     }
                     CalculatePathWithHeight(targetPos, _height, out v0, out angle, out time);
                     _shoot = false;

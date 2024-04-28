@@ -62,37 +62,6 @@ Transform:
   m_Father: {fileID: 6867913294935404974}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5005507023543493120
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6375847548627294714}
-  m_Layer: 0
-  m_Name: Colliders
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6375847548627294714
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5005507023543493120}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6867913294935404974}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7977730841983463017
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +93,6 @@ Transform:
   m_Children:
   - {fileID: 8004674343995719912}
   - {fileID: 750514109255877400}
-  - {fileID: 6375847548627294714}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -142,52 +110,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cornerWallsParent: {fileID: 8004674343995719912}
   _fillWallsParent: {fileID: 750514109255877400}
-  _collidersParent: {fileID: 5005507023543493120}
+  _collidersContainers: []
+  _drawOnlyWhenSelected: 1
   _config: {fileID: 11400000, guid: c079101b9a754a247a327667886e070d, type: 2}
-  _points:
-  - {x: 0.625, y: 0, z: -0.5}
-  - {x: 0.625, y: 0, z: 2.25}
-  - {x: 0.625, y: 0, z: -5.25}
-  - {x: -6.125, y: 0, z: -5.25}
-  - {x: -11.125, y: 0, z: -5.25}
-  - {x: -11.125, y: 0, z: -8.25}
-  - {x: -6.375, y: 0, z: -8.25}
-  - {x: -1.625, y: 0, z: -8.25}
-  - {x: 5.125, y: 0, z: -8.25}
-  - {x: 11.125, y: 0, z: -1.5}
-  - {x: 11.125, y: 0, z: -1.5}
   _baseCornerPointsGroup:
     _cornerPoints:
-    - _position: {x: 0.625, y: 0, z: -0.5}
+    - isSelectedValue: 0
+      _position: {x: 0.625, y: 0, z: -0.5}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: 0.625, y: 0, z: 2.25}
+    - isSelectedValue: 0
+      _position: {x: 0.625, y: 0, z: 2.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: 0.625, y: 0, z: -5.25}
+    - isSelectedValue: 0
+      _position: {x: 0.625, y: 0, z: -5.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: -6.125, y: 0, z: -5.25}
+    - isSelectedValue: 0
+      _position: {x: -6.125, y: 0, z: -5.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: -11.125, y: 0, z: -5.25}
+    - isSelectedValue: 0
+      _position: {x: -11.125, y: 0, z: -5.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: -11.125, y: 0, z: -8.25}
+    - isSelectedValue: 0
+      _position: {x: -11.125, y: 0, z: -8.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: -6.375, y: 0, z: -8.25}
+    - isSelectedValue: 0
+      _position: {x: -6.375, y: 0, z: -8.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: -1.625, y: 0, z: -8.25}
+    - isSelectedValue: 0
+      _position: {x: -1.625, y: 0, z: -8.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: 5.125, y: 0, z: -8.25}
+    - isSelectedValue: 0
+      _position: {x: 5.125, y: 0, z: -8.25}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-    - _position: {x: 11.125, y: 0, z: -1.5}
+    - isSelectedValue: 0
+      _position: {x: 11.125, y: 0, z: -1.5}
+      _extrude:
+        _positiveTimes: 0
+        _negativeTimes: 0
       _subPointsGroup:
         _cornerPoints: []
-  _subPointsList: []
-  moveBy: {x: 0, y: 0}
-  selectedPointsRange: {x: 0, y: 0}
+  _cornersObjectBuffer:
+    _spawnedObjectsBuffer: []
+  _fillsObjectBuffer:
+    _spawnedObjectsBuffer: []

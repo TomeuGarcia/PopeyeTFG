@@ -1,7 +1,9 @@
 using System;
 using Popeye.Core.Pool;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Hazards
@@ -55,9 +57,17 @@ namespace Popeye.Modules.Enemies.Hazards
 
             float size = _explosionHazardConfig.GetScaleBySize(_size);
             transform.localScale = Vector3.one * size;
+
+            _particleFactory.Create(ParticleTypes.Explosion, transform.position, quaternion.identity);
+            Transform decal = _particleFactory.Create(ParticleTypes.ExplosionDecal, transform.position, quaternion.identity);
+            
+            RaycastHit raycastHit;
+            Physics.Raycast(transform.position, Vector3.down, out raycastHit, 1.0f);
+            decal.up = raycastHit.normal;
+            float randomRotation = UnityEngine.Random.Range(0.0f, 360.0f);
+            decal.RotateAround(decal.up, randomRotation);
             
             _explosionHazardConfig.ExplosionAudio.PlayExplosionSound(gameObject);
-            
             Invoke("FinishExplosion", _explosionHazardConfig.LifeTime);
         }
 
