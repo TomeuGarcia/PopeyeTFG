@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9417e661aba34fe3886793abd94c1fc8, type: 3}
+  m_Name: ChainedOrbViewConfig
+  m_EditorClassIdentifier: 
+  _normalChainMaterial: {fileID: 2100000, guid: c63286ec57f9eb941a227be86c5e7d91,
+    type: 2}
+  _defaultUpgradeTypeToViewData:
+    _upgradeType: 0
+    _orbMaterial: {fileID: 2100000, guid: e740425e959c783468080dd9f1bbfb05, type: 2}
+    _breakingChainMaterial: {fileID: 2100000, guid: 6b453603144098249bee551ed9eada86,
+      type: 2}
+    _lightColor: {r: 1, g: 0.7680342, b: 0.1372549, a: 0}
+    _orbHitParticlesPrefab: {fileID: 6153317017535634169, guid: 6aac59770115f8240b56af9454e15995,
+      type: 3}
+    _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 46f89f478275dcd4d91b04d63be3a689,
+      type: 3}
+  _upgradeTypeToViewDatas:
+  - _upgradeType: 6
+    _orbMaterial: {fileID: 2100000, guid: 0025587afeffb04439a0646d69a73e0f, type: 2}
+    _breakingChainMaterial: {fileID: 2100000, guid: ca67383d52668af49871f18376cd17ff,
+      type: 2}
+    _lightColor: {r: 1, g: 0.1372549, b: 0.41442737, a: 0}
+    _orbHitParticlesPrefab: {fileID: 6153317017535634169, guid: 09bda8f06b7384f449db48b34dfc6b5d,
+      type: 3}
+    _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 46f89f478275dcd4d91b04d63be3a689,
+      type: 3}
+  - _upgradeType: 7
+    _orbMaterial: {fileID: 2100000, guid: d61811cb36c05ae479c9a294e8d9dabb, type: 2}
+    _breakingChainMaterial: {fileID: 2100000, guid: d910b2bf0d9d8dd4c82dad0052a8c7ab,
+      type: 2}
+    _lightColor: {r: 0.13725491, g: 1, b: 0.6627451, a: 0}
+    _orbHitParticlesPrefab: {fileID: 6153317017535634169, guid: 6f79b18de19e07d47a455eaa267b15ed,
+      type: 3}
+    _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 46f89f478275dcd4d91b04d63be3a689,
+      type: 3}
+  _breakStepDuration: {x: 0.24, y: 0.1}
+  _breakPunch: {x: 0.5, y: 0.5, z: 0.5}
+  _orbHitMovePunch: 3
+  _orbHitDuration: 1
+  _orbChainsDisappearDelay: 0.1
+  _orbMoveToTarget:
+    _startDelay: 0.5
+    _moveDuration: 0.8
+    _moveEase:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.13282606
+        value: 0.19469671
+        inSlope: 2.7217383
+        outSlope: 2.7217383
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.04736353
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0.009107847
+        outSlope: 0.009107847
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.24454153
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _startScale:
+      _value: {x: 0, y: 0, z: 1}
+      _duration: 0.7
+      _ease: 8
+    _endScale:
+      _value: {x: 0, y: 0, z: 0}
+      _duration: 0.1
+      _ease: 9

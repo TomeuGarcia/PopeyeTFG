@@ -138,8 +138,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _throwDamageTriggerMotion.SetPosition(trajectoryPoints[0]);
             _throwDamageTriggerMotion.SetRotation(_damageStartTransform.rotation);
             _throwDamageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
+
+            float wait = 0f;
+            if (easeThreshold > 0)
+            {
+                wait = await WaitUntilEase(ease, duration, easeThreshold);    
+            }
             
-            var wait = await WaitUntilEase(ease, duration, easeThreshold);
             _anchorThrowDamageTrigger.Activate();
             await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(duration * (1f-wait), 0.1f)));
             await UniTask.Delay(TimeSpan.FromSeconds(extraDurationBeforeDeactivate));

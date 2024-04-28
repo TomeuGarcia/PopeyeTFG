@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using Popeye.Core.Services.InformationDisplay;
+using Popeye.Modules.WorldElements.WorldInteractors;
 using Popeye.ProjectHelpers;
 using Popeye.Scripts.EventChannels;
 using UnityEngine;
@@ -18,7 +20,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             DashDroppingAnchor,
             DashDroppingAnchorAttack,
             DashTowardsAnchor,
-            SpecialAttack
+            SpecialAttack,
+            
+            MaxHealthUpgrade,
+            MaxFocusUpgrade
         }
         
         
@@ -38,15 +43,25 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             [Header("ABILITY")]
             [SerializeField] private EmptyEventChannelAsset _abilityToUnlockChannel;
             
-            [Header("TUTORIAL")]
-            [SerializeField] private EmptyEventChannelAsset _tutorialHideChannel;
+            [Header("INFO TO DISPLAY")]
             [SerializeField] private TextDisplayConfig _tutorialInfoToDisplay;
+
+            [Header("STOP SHOWING CONDITION")] 
+            [SerializeField] private ITutorialDisplayCondition.Type _stopShowingCondition = ITutorialDisplayCondition.Type.TimesPerformed;
+            [AllowNesting] [ShowIf("_stopShowingCondition", ITutorialDisplayCondition.Type.TimesPerformed)]
             [SerializeField, Range(1, 10)] private int _timesToStopShowing = 1;
+            [AllowNesting] [ShowIf("_stopShowingCondition", ITutorialDisplayCondition.Type.TimesPerformed)]
+            [SerializeField] private EmptyEventChannelAsset _tutorialHideChannel;
+            
+            [AllowNesting] [ShowIf("_stopShowingCondition", ITutorialDisplayCondition.Type.Duration)]
+            [SerializeField, Range(0f, 10)] private float _durationToStopShowing = 5f;
             
             public EmptyEventChannelAsset AbilityChannel => _abilityToUnlockChannel;
             public EmptyEventChannelAsset TutorialHideChannel => _tutorialHideChannel;
             public TextDisplayConfig TutorialInfoToDisplay => _tutorialInfoToDisplay;
+            public ITutorialDisplayCondition.Type StopShowingCondition => _stopShowingCondition;
             public int TimesToStopShowing => _timesToStopShowing;
+            public float DurationToStopShowing => _durationToStopShowing;
         }
         
         

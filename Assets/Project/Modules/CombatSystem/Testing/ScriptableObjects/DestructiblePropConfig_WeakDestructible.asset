@@ -14,19 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 1
   _knockbackResistance: 0
-  _deathPunchScale:
-    _value: {x: -0.5, y: -0.5, z: -0.5}
-    _duration: 0.4
-    _vibrato: 10
-    _elasticity: 1
-    _ease: 4
-  _deathRotation:
-    _value: {x: -90, y: 500, z: 0}
-    _duration: 0.5
-    _ease: 4
-  _takeDamagePunchScale:
-    _value: {x: -0.5, y: -0.5, z: -0.5}
-    _duration: 0.4
-    _vibrato: 10
-    _elasticity: 1
-    _ease: 30
+  _viewConfig:
+    _deathPunchScale:
+      _value: {x: -0.5, y: -0.5, z: -0.5}
+      _duration: 0.4
+      _vibrato: 10
+      _elasticity: 1
+      _ease: 4
+    _deathRotation:
+      _value: {x: -90, y: 500, z: 0}
+      _duration: 0.5
+      _ease: 4
+    _takeDamagePunchScale:
+      _value: {x: -0.5, y: -0.5, z: -0.5}
+      _duration: 0.4
+      _vibrato: 10
+      _elasticity: 1
+      _ease: 30
