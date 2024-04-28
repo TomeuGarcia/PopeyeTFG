@@ -85,7 +85,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.CoreMoveDelay));
 
-            _coreSphere.transform.PunchScale(_viewConfig.CoreScalePunch);
+            ScaleDown().Forget();
             Vector3 startPosition = _coreHolderTransform.position;
             
             Timer moveToTargetTimer = new Timer(_viewConfig.CoreMoveDuration);
@@ -115,6 +115,11 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             await UniTask.WaitUntil(() => !_coreContactPS.isEmitting);
         }
 
+        private async UniTaskVoid ScaleDown()
+        {
+            await _coreHolderTransform.Scale(_viewConfig.CoreMoveScale).AsyncWaitForCompletion();
+            _coreHolderTransform.Scale(_viewConfig.CoreFinalScale);
+        }
 
         private async UniTaskVoid ResetViewState(float delay)
         {

@@ -21,7 +21,7 @@ namespace Popeye.Modules.CombatSystem
             _listener = listener;
             HealthSystem = new HealthSystem(maxHealth);
             _damageHitTargetType = damageHitTargetType;
-
+            
             _knockbackRigidbody = knockbackRigidbody;
         }
         
@@ -75,6 +75,11 @@ namespace Popeye.Modules.CombatSystem
         {
             HealthSystem.HealToMax();
             _listener.OnHealed();
+        }
+        
+        public void ResetMaxHealth(int maxHealth, bool setValueToMax)
+        {
+            HealthSystem.ResetMaxValue(maxHealth, setValueToMax);
         }
 
         public Rigidbody GetRigidbodyToKnockback()

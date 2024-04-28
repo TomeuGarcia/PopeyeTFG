@@ -79,7 +79,7 @@ namespace Popeye.Modules.ValueStatSystem
 
             InvokeOnValueUpdate();
         }
-    
+
         public bool IsDead()
         {
             return _currentHealth == 0;
