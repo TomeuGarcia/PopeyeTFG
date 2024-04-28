@@ -13,15 +13,35 @@ namespace Popeye.Modules.Utilities.Scripts
         [MinMaxSlider(0f, 10f)][SerializeField] private Vector2 _randomDelayInterval = new Vector2(0f, 0.5f);
 
         [SerializeField] private TweenPunchConfig _positionPunch;
+        private bool _keepPlaying;
 
-        private IEnumerator Start()
+        private void Start()
         {
-            while (true)
+            Resume();
+        }
+
+
+        private IEnumerator Move()
+        {
+            while (_keepPlaying)
             {
-                yield return new WaitForSeconds(Random.Range(_randomDelayInterval.x, _randomDelayInterval.y));
                 yield return transform.PunchPosition(_positionPunch).WaitForCompletion();
+                yield return new WaitForSeconds(Random.Range(_randomDelayInterval.x, _randomDelayInterval.y));
             }
         }
+
+        public void Stop()
+        {
+            _keepPlaying = false;
+        }
+        public void Resume()
+        {
+            if (_keepPlaying) return;
+            
+            _keepPlaying = true;
+            StartCoroutine(Move());
+        }
+        
     }
 
 }

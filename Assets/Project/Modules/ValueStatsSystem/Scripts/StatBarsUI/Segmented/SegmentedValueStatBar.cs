@@ -22,11 +22,15 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         protected override void DoSubscribeToEvents()
         {
             _valueStat.OnValueUpdate += UpdateSegments;
+            
+            _valueStat.OnMaxValueUpdate += OnMaxValueUpdated;
         }
 
         protected override void DoUnsubscribeToEvents()
         {
             _valueStat.OnValueUpdate -= UpdateSegments;
+            
+            _valueStat.OnMaxValueUpdate -= OnMaxValueUpdated;
         }
     }
 }
