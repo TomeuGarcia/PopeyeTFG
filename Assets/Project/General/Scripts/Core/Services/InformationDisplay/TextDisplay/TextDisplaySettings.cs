@@ -13,12 +13,14 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private Color _descriptionColor = Color.white;
 
         [Header("SOUND")]
-        [SerializeField] private OneShotFMODSound _sound;
+        [SerializeField] private OneShotFMODSound _showSound;
+        [SerializeField] private OneShotFMODSound _hideSound;
         
         
         public Color HeaderColor => _headerColor;
         public Color DescriptionColor => _descriptionColor;
-        public OneShotFMODSound Sound => _sound;
+        public OneShotFMODSound ShowSound => _showSound;
+        public OneShotFMODSound HideSound => _hideSound;
         
         
     }

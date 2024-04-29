@@ -449,6 +449,8 @@ MonoBehaviour:
     type: 2}
   _powerBoostDropFactoryConfig: {fileID: 11400000, guid: c1acdb7662fefee4099c6bed11ebc1e3,
     type: 2}
+  _spikesSpecialAttack: {fileID: 0}
+  _chainFollowerAttackController: {fileID: 0}
   _autoAimCreator: {fileID: 752198695613597362}
   _placePopeyePlayerEventChannel: {fileID: 11400000, guid: 78858b44672000849a30fc75b70340eb,
     type: 2}
@@ -687,6 +689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasTextDisplayer: {fileID: 4418389590485823407}
+  _canvasVideoDisplayer: {fileID: 3239026835864832855}
 --- !u!1 &9215925339323569655
 GameObject:
   m_ObjectHideFlags: 0
@@ -932,6 +935,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 472b1dab714bb7e44aa54d44fbc420c5, type: 3}
+--- !u!114 &3239026835864832855 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2533961907533421812, guid: 472b1dab714bb7e44aa54d44fbc420c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1141985018613651363}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390378d222594a659c2d4d01b51ff89b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3806307965721973678 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4254667718656115725, guid: 472b1dab714bb7e44aa54d44fbc420c5,
