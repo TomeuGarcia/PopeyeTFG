@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Popeye.Core.Services.InformationDisplay
 {
-    public class CanvasTextDisplayer : MonoBehaviour, ITextDisplayer
+    public class CanvasTextDisplayer : MonoBehaviour, ITextDisplayer, IDisplayQueueDelegate
     {
         [Header("AUDIO")]
         [SerializeField] private AFMODAudioManagerReference _audioManager;
@@ -22,26 +22,14 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private TextMeshProUGUI _headerText;
         [SerializeField] private TextMeshProUGUI _contentText;
 
-        private TextDisplayConfig _currentDisplay;
-        
-        private Queue<TextDisplayConfig> _queuedDisplays;
-        private bool _processingQueuedDisplays;
+        DisplayQueue<TextDisplayConfig> _displayQueue;
 
-        private bool _isShowing;
-        private bool _isHiding;
-        
         private void Awake()
         {
             _backgroundFadeGroup.alpha = 0;
             _contentFadeGroup.alpha = 0;
-            
-            _currentDisplay = null;
-            
-            _queuedDisplays = new Queue<TextDisplayConfig>(2);
-            _processingQueuedDisplays = false;
-            
-            _isShowing = false;
-            _isHiding = false;
+
+            _displayQueue = new DisplayQueue<TextDisplayConfig>(this);
         }
 
         private void OnDestroy()
@@ -52,78 +40,37 @@ namespace Popeye.Core.Services.InformationDisplay
 
         public void StartShowing(TextDisplayConfig textDisplayConfig)
         {
-            _queuedDisplays.Enqueue(textDisplayConfig);
-            if (_processingQueuedDisplays)
-            {
-                return;
-            }
-
-            TransitionToNext().Forget();
+            _displayQueue.StartShowing(textDisplayConfig);
         }
 
-        private async UniTask TransitionToNext()
+        public async UniTask DoStartShowing()
         {
-            _processingQueuedDisplays = true;
-
+            TextDisplayConfig currentDisplay = _displayQueue.CurrentDisplay;
+            SetTextContents(currentDisplay);
             
-            if (_queuedDisplays.Count == 1)
-            {
-                _currentDisplay = _queuedDisplays.Peek();
-                await StartShowingCurrent();
-                _queuedDisplays.Dequeue();
-            }
-            
-            
-            while (_queuedDisplays.Count > 0)
-            {
-                await StopShowingCurrent();
-                _currentDisplay = _queuedDisplays.Peek();
-                await StartShowingCurrent();
-                _queuedDisplays.Dequeue();
-            }
-            
-            _processingQueuedDisplays = false;
-        } 
-        
-        private async UniTask StartShowingCurrent()
-        {
-            await UniTask.WaitUntil(() => !_isHiding);
-            
-            _isShowing = true;
-
-            SetTextContents(_currentDisplay);
-            
-            await _backgroundFadeGroup.Fade(_currentDisplay.BackgroundViewExtras.ShowFade)
-                    .AsyncWaitForCompletion();
-            await _contentFadeGroup.Fade(_currentDisplay.ContentViewExtras.ShowFade)
+            await _backgroundFadeGroup.Fade(currentDisplay.BackgroundViewExtras.ShowFade)
                 .AsyncWaitForCompletion();
-
-            _isShowing = false;
+            await _contentFadeGroup.Fade(currentDisplay.ContentViewExtras.ShowFade)
+                .AsyncWaitForCompletion();
         }
+
 
         public void StopShowing(TextDisplayConfig textDisplayConfig)
         {
-            if (_currentDisplay != textDisplayConfig) return;
-
-            StopShowingCurrent().Forget();
+            _displayQueue.StopShowing(textDisplayConfig);
         }
         
-        private async UniTask StopShowingCurrent()
+        public async UniTask DoStopShowing()
         {
-            await UniTask.WaitUntil(() => !_isShowing);
-
-            _isHiding = true;
+            TextDisplayConfig currentDisplay = _displayQueue.CurrentDisplay;
             
-            await _contentFadeGroup.Fade(_currentDisplay.ContentViewExtras.HideFade)
+            await _contentFadeGroup.Fade(currentDisplay.ContentViewExtras.HideFade)
                 .AsyncWaitForCompletion();
-            await _backgroundFadeGroup.Fade(_currentDisplay.BackgroundViewExtras.HideFade)
+            await _backgroundFadeGroup.Fade(currentDisplay.BackgroundViewExtras.HideFade)
                 .AsyncWaitForCompletion();
-            
-            _currentDisplay = null;
-            _isHiding = false;
         }
-
-
+        
+        
         private void SetTextContents(TextDisplayConfig displayConfig)
         {
             _headerText.SetContent(displayConfig.Header);
@@ -136,6 +83,7 @@ namespace Popeye.Core.Services.InformationDisplay
             
             _displayViewEffects.Value.UpdateView(displayConfig.TextDisplaySettings);
         }
-        
+
+
     }
 }
