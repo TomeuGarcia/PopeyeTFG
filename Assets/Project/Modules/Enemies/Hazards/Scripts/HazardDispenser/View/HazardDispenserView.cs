@@ -12,8 +12,8 @@ namespace Popeye.Modules.Enemies.Hazards
     public class HazardDispenserView : MonoBehaviour, IHazardDispenserView
     {
         [Header("COMPONENTS")]
-        [SerializeField] private Transform _spitterHolder;
         [SerializeField] private Transform _chargePosition;
+        [SerializeField] private Transform _meshHolder;
         [SerializeField] private SkinnedMeshRenderer _meshRenderer;
         private Material _material;
         private HazardDispenserViewConfig _config;
@@ -29,36 +29,18 @@ namespace Popeye.Modules.Enemies.Hazards
         public void PlayPrepareDispensingAnimation(float duration)
         {
             _particleFactory.Create(_config.ChargeParticleType, Vector3.zero, quaternion.identity, _chargePosition);
-            
-            /*
-            _spitterHolder.DOComplete();
-            _spitterHolder.DOBlendableLocalRotateBy(_config.PrepareRotation.Value, duration)
-                .SetEase(_config.PrepareRotation.Ease);
-            _spitterHolder.DOScale(_config.PrepareScale.Value, duration)
-                .SetEase(_config.PrepareScale.Ease);
-            */
         }
 
         public void PlayDispenseAnimation()
         {
             MaterialInterpolator.ApplyInterpolations(_material, _config.ReadyActivate).Forget();
-            
-            /*
-            _spitterHolder.DOComplete();
-            _spitterHolder.DOLocalRotateQuaternion(Quaternion.identity, _config.DispenseScalePunch.Duration)
-                .SetEase(Ease.InOutSine);
-            _spitterHolder.PunchScale(_config.DispenseScalePunch);
-            */
+            //_meshHolder.DOPunchPosition(new Vector3(0.0f, 0.0f, -0.1f), 0.25f, 1, 0);
+            //_meshHolder.DOPunchScale(Vector3.one * -0.25f, 0.25f, 1, 0);
         }
 
         public async UniTask PlayReadyToDispenseAnimation()
         {
-            /*
-            _spitterHolder.PunchRotation(_config.ReadyRotationPunch);
-            await _spitterHolder.DOScale(Vector3.one, _config.ReadyRotationPunch.Duration)
-                .SetEase(Ease.InOutSine)
-                .AsyncWaitForCompletion();
-            */
+            
         }
     }
 }
