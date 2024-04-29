@@ -58,7 +58,7 @@ namespace Popeye.Modules.Enemies.Hazards
             float size = _explosionHazardConfig.GetScaleBySize(_size);
             transform.localScale = Vector3.one * size;
 
-            _particleFactory.Create(ParticleTypes.Explosion, transform.position, quaternion.identity);
+            Transform effect = _particleFactory.Create(ParticleTypes.Explosion, transform.position, quaternion.identity);
             Transform decal = _particleFactory.Create(ParticleTypes.ExplosionDecal, transform.position, quaternion.identity);
             
             RaycastHit raycastHit;
@@ -66,6 +66,9 @@ namespace Popeye.Modules.Enemies.Hazards
             decal.up = raycastHit.normal;
             float randomRotation = UnityEngine.Random.Range(0.0f, 360.0f);
             decal.RotateAround(decal.up, randomRotation);
+
+            effect.localScale = transform.localScale;
+            decal.localScale = transform.localScale;
             
             _explosionHazardConfig.ExplosionAudio.PlayExplosionSound(gameObject);
             Invoke("FinishExplosion", _explosionHazardConfig.LifeTime);
