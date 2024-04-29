@@ -9,7 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
     public class AbilityUnlockerChainedOrbView : MonoBehaviour, IPlayerAbilityUnlockerView
     {
         [Header("VIEW CONFIG")]
-        [SerializeField] private ChainedOrbViewConfig _viewConfig;
+        [Expandable] [SerializeField] private ChainedOrbViewConfig _viewConfig;
         
         [Header("HOLDERS")]
         [SerializeField] private Transform _originalChainTargetHolder;
@@ -30,6 +30,11 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private LastingFMODSound.SoundId _movingChainsSoundId;
 
         
+        private void OnDestroy()
+        {
+            _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);            
+        }
+
         
         public void Configure(IGameReferences gameReferences, IAbilityUnlockerChristalAudio audio, 
             GeneralInitializePlayerAbilityUnlockerConfig.Ability upgradeType)
