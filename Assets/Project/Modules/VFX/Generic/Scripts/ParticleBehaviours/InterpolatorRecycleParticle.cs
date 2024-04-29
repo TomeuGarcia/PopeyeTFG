@@ -17,6 +17,7 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         [SerializeField] private Light _light;
         [SerializeField] private float _duration;
         [SerializeField] private float _intensityGoal;
+        [SerializeField] private Ease _lightEase = Ease.Linear;
         private float _initialIntensity;
         
         internal List<TrailRenderer> _trailRenderers = new();
@@ -24,11 +25,18 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         private int _completedInterpolations;
         private int _totalInterpolations;
 
+        private bool _waitingForLight;
+
         private void Awake()
         {
             if (_light != null)
             {
                 _initialIntensity = _light.intensity;
+                _waitingForLight = true;
+            }
+            else
+            {
+                _waitingForLight = false;
             }
             
             foreach (var interpolation in _interpolations)
@@ -103,13 +111,26 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         {
             if (_light != null)
             {
-                _light.DOIntensity(_intensityGoal, _duration);
+                Debug.Log("A");
+                _light.DOIntensity(_intensityGoal, _duration).SetEase(_lightEase).OnComplete(LightCompleted);
             }
             
             await MaterialInterpolator.ApplyInterpolations(material, interpolationConfigs);
             _completedInterpolations++;
             
-            if (_completedInterpolations >= _interpolations.Length)
+            if (_completedInterpolations >= _interpolations.Length + 1)
+            {
+                Reset();
+            }
+        }
+
+        private void LightCompleted()
+        {
+            Debug.Log("A");
+            _light.intensity = 0.0f;
+            _completedInterpolations++;
+            
+            if (_completedInterpolations >= _interpolations.Length + 1)
             {
                 Reset();
             }
