@@ -9,7 +9,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
     public class AbilityUnlockerChainedOrbView : MonoBehaviour, IPlayerAbilityUnlockerView
     {
         [Header("VIEW CONFIG")]
-        [SerializeField] private ChainedOrbViewConfig _viewConfig;
+        [Expandable] [SerializeField] private ChainedOrbViewConfig _viewConfig;
         
         [Header("HOLDERS")]
         [SerializeField] private Transform _originalChainTargetHolder;

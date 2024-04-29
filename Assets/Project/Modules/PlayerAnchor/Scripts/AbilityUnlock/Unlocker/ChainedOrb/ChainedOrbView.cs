@@ -65,7 +65,12 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 _viewConfig.OrbHitDuration,
                 vibrato: 1
             );
-            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbHitDuration / 2));
+            transform.DOBlendableLocalRotateBy(
+                Vector3.up * _viewConfig.OrbHitRotateAmount, 
+                _viewConfig.OrbHitDuration)
+                .SetEase(Ease.OutBounce);
+                
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbChainsStartBreakingDelay));
         
             foreach (MeshRenderer meshRenderer in _circleChainMeshes)
             {
