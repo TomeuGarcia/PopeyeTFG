@@ -30,6 +30,11 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private LastingFMODSound.SoundId _movingChainsSoundId;
 
         
+        private void OnDestroy()
+        {
+            _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);            
+        }
+
         
         public void Configure(IGameReferences gameReferences, IAbilityUnlockerChristalAudio audio, 
             GeneralInitializePlayerAbilityUnlockerConfig.Ability upgradeType)
