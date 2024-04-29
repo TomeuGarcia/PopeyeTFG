@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using NaughtyAttributes;
 using Popeye.Core.Services.InformationDisplay;
 using Popeye.Modules.WorldElements.WorldInteractors;
@@ -44,7 +42,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             [SerializeField] private EmptyEventChannelAsset _abilityToUnlockChannel;
             
             [Header("INFO TO DISPLAY")]
-            [SerializeField] private TextDisplayConfig _tutorialInfoToDisplay;
+            [SerializeField] private TextDisplayConfig _textInfoToDisplay;
+            [SerializeField] private VideoDisplayConfig _videoInfoToDisplay;
 
             [Header("STOP SHOWING CONDITION")] 
             [SerializeField] private ITutorialDisplayCondition.Type _stopShowingCondition = ITutorialDisplayCondition.Type.TimesPerformed;
@@ -58,7 +57,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             
             public EmptyEventChannelAsset AbilityChannel => _abilityToUnlockChannel;
             public EmptyEventChannelAsset TutorialHideChannel => _tutorialHideChannel;
-            public TextDisplayConfig TutorialInfoToDisplay => _tutorialInfoToDisplay;
+            public TextDisplayConfig TextInfoToDisplay => _textInfoToDisplay;
+            public VideoDisplayConfig VideoInfoToDisplay => _videoInfoToDisplay;
             public ITutorialDisplayCondition.Type StopShowingCondition => _stopShowingCondition;
             public int TimesToStopShowing => _timesToStopShowing;
             public float DurationToStopShowing => _durationToStopShowing;

@@ -65,7 +65,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             }
             
             _tutorialInformationDisplay.Configure(
-                configureReferences.TutorialInfoToDisplay,
+                configureReferences.TextInfoToDisplay,
+                configureReferences.VideoInfoToDisplay,
                 tutorialStopDisplayCondition);
         }
         
