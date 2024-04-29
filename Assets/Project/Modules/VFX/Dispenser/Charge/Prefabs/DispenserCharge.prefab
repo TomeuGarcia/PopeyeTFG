@@ -47,11 +47,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolateOnInit: 1
+  _despawnDelay: 1
   _interpolations: []
   _light: {fileID: 6785323404508824748}
   _duration: 0.5
-  _intensityGoal: 1
-  _lightEase: 6
+  _intensityGoal: 2
+  _lightEase: 1
 --- !u!1 &2048587929941617079
 GameObject:
   m_ObjectHideFlags: 0
@@ -4983,7 +4984,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.08962262, b: 0.85247964, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -14781,7 +14782,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
-  - {fileID: 2100000, guid: 0876aafab1c8d7943b4807a5f6ec6613, type: 2}
+  - {fileID: 2100000, guid: aa26a6311bdaca54a90c9bb037d8c25c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

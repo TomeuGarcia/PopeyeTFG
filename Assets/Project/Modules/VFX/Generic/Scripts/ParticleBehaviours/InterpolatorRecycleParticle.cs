@@ -11,8 +11,9 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
     public class InterpolatorRecycleParticle : RecyclableObject
     {
         [SerializeField] internal bool _interpolateOnInit;
+        [SerializeField] private float _despawnDelay = 0.0f;
         [SerializeField] internal InterpolatorRecycleParticleData[] _interpolations;
-        
+
         [Header("LIGHT")]
         [SerializeField] private Light _light;
         [SerializeField] private float _duration;
@@ -60,14 +61,14 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
                 foreach (var material in interpolation.Materials)
                 {
                     Setup(material, interpolation.FloatSetupDatas);
-                
-                    if (_interpolateOnInit)
-                    {
-                        ApplyInterpolations(material, interpolation.FloatInterpolationDatas).Forget();
-                    }
                 }
             }
-
+            
+            if (_interpolateOnInit)
+            {
+                Play();
+            }
+            
             TrailInit().Forget();
         }
 
@@ -93,6 +94,11 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
 
         public void Play()
         {
+            if (_light != null)
+            {
+                _light.DOIntensity(_intensityGoal, _duration).SetEase(_lightEase).OnComplete(LightCompleted);
+            }
+            
             foreach (var interpolation in _interpolations)
             {
                 foreach (var material in interpolation.Materials)
@@ -109,29 +115,29 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         
         private async UniTaskVoid ApplyInterpolations(Material material, MaterialFloatInterpolationConfig[] interpolationConfigs)
         {
-            if (_light != null)
-            {
-                Debug.Log("A");
-                _light.DOIntensity(_intensityGoal, _duration).SetEase(_lightEase).OnComplete(LightCompleted);
-            }
-            
             await MaterialInterpolator.ApplyInterpolations(material, interpolationConfigs);
             _completedInterpolations++;
             
             if (_completedInterpolations >= _interpolations.Length + 1)
             {
+                await UniTask.Delay(TimeSpan.FromSeconds(_despawnDelay));
                 Reset();
             }
         }
 
         private void LightCompleted()
         {
-            Debug.Log("A");
+            DoLightCompleted().Forget();
+        }
+        
+        private async UniTaskVoid DoLightCompleted()
+        {
             _light.intensity = 0.0f;
             _completedInterpolations++;
             
             if (_completedInterpolations >= _interpolations.Length + 1)
             {
+                await UniTask.Delay(TimeSpan.FromSeconds(_despawnDelay));
                 Reset();
             }
         }
