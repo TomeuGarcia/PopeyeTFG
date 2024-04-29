@@ -21,6 +21,8 @@ namespace Popeye.Core.Services.InformationDisplay
         private bool _isShowing;
         private bool _isHiding;
         
+        public int CurrentDisplaysInQueue => _queuedDisplays.Count;
+
         
         public DisplayQueue(IDisplayQueueDelegate displayQueueDelegate)
         {
@@ -60,7 +62,7 @@ namespace Popeye.Core.Services.InformationDisplay
             }
             
             
-            while (_queuedDisplays.Count > 0)
+            while (CurrentDisplaysInQueue > 0)
             {
                 await StopShowingCurrent();
                 CurrentDisplay = _queuedDisplays.Peek();

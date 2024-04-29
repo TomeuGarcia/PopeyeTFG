@@ -10,7 +10,9 @@ namespace Popeye.Core.Services.InformationDisplay
     public class VideoDisplayConfig : ScriptableObject
     {
         [SerializeField] private VideoClip _videoClip;
+        [SerializeField, Range(0, 10)] private int _minimumNumberOfPlays = 1;
         public VideoClip VideoClip => _videoClip;
+        public int MinimumNumberOfPlays => _minimumNumberOfPlays;
         
         
         [Header("VIEW")]
