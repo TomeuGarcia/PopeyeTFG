@@ -7,16 +7,23 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
 {
     public class TutorialInformationDisplay : AWorldInteractor
     {
+        private TextDisplayConfig _textToDisplay;
+        private VideoDisplayConfig _videoToDisplay;
         private ITutorialDisplayCondition _stopDisplayingCondition;
-        private TextDisplayConfig _informationToDisplay;
         
         private IInformationDisplayService _informationDisplayService;
 
+        private bool HasVideoToDisplay => _videoToDisplay != null;
+
         protected override void DoAwake() { }
 
-        public void Configure(TextDisplayConfig informationToDisplay, ITutorialDisplayCondition stopDisplayingCondition)
+        public void Configure(
+            TextDisplayConfig textToDisplay, 
+            VideoDisplayConfig videoToDisplay, 
+            ITutorialDisplayCondition stopDisplayingCondition)
         {
-            _informationToDisplay = informationToDisplay;
+            _textToDisplay = textToDisplay;
+            _videoToDisplay = videoToDisplay;
             _stopDisplayingCondition = stopDisplayingCondition;
             
             _informationDisplayService = ServiceLocator.Instance.GetService<IInformationDisplayService>();            
@@ -39,12 +46,21 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
 
         private void StartShowing()
         {
-            _informationDisplayService.TextDisplayer.StartShowing(_informationToDisplay);            
+            _informationDisplayService.TextDisplayer.StartShowing(_textToDisplay);
+            if (HasVideoToDisplay)
+            {
+                _informationDisplayService.VideoDisplayer.StartShowing(_videoToDisplay); 
+            }
+
             _stopDisplayingCondition.StartChecking(StopShowing);
         }
         private void StopShowing()
         {
-            _informationDisplayService.TextDisplayer.StopShowing(_informationToDisplay);
+            _informationDisplayService.TextDisplayer.StopShowing(_textToDisplay);
+            if (HasVideoToDisplay)
+            {
+                _informationDisplayService.VideoDisplayer.StopShowing(_videoToDisplay); 
+            }
         }
 
     }

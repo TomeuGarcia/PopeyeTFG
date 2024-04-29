@@ -22,7 +22,7 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private TextMeshProUGUI _headerText;
         [SerializeField] private TextMeshProUGUI _contentText;
 
-        DisplayQueue<TextDisplayConfig> _displayQueue;
+        private DisplayQueue<TextDisplayConfig> _displayQueue;
 
         private void Awake()
         {
@@ -46,8 +46,10 @@ namespace Popeye.Core.Services.InformationDisplay
         public async UniTask DoStartShowing()
         {
             TextDisplayConfig currentDisplay = _displayQueue.CurrentDisplay;
-            SetTextContents(currentDisplay);
             
+            SetTextContents(currentDisplay);
+            _audioManager.PlayOneShot(currentDisplay.TextDisplaySettings.ShowSound);
+
             await _backgroundFadeGroup.Fade(currentDisplay.BackgroundViewExtras.ShowFade)
                 .AsyncWaitForCompletion();
             await _contentFadeGroup.Fade(currentDisplay.ContentViewExtras.ShowFade)
@@ -64,6 +66,8 @@ namespace Popeye.Core.Services.InformationDisplay
         {
             TextDisplayConfig currentDisplay = _displayQueue.CurrentDisplay;
             
+            _audioManager.PlayOneShot(currentDisplay.TextDisplaySettings.HideSound);
+            
             await _contentFadeGroup.Fade(currentDisplay.ContentViewExtras.HideFade)
                 .AsyncWaitForCompletion();
             await _backgroundFadeGroup.Fade(currentDisplay.BackgroundViewExtras.HideFade)
@@ -78,8 +82,6 @@ namespace Popeye.Core.Services.InformationDisplay
             
             _contentText.SetContent(displayConfig.Description);
             _contentText.color = displayConfig.TextDisplaySettings.DescriptionColor;
-            
-            _audioManager.PlayOneShot(displayConfig.TextDisplaySettings.Sound);
             
             _displayViewEffects.Value.UpdateView(displayConfig.TextDisplaySettings);
         }
