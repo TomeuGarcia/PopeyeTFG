@@ -82,11 +82,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         [Header("ORB HIT")]
         [SerializeField] private float _orbHitMovePunch = 2.0f;
+        [SerializeField] private float _orbHitRotateAmount = 180.0f;
         [SerializeField] private float _orbHitDuration = 1.0f;
+        [SerializeField] private float _orbChainsStartBreakingDelay = 0.3f;
         [SerializeField] private float _orbChainsDisappearDelay = 0.1f;
         
         public float OrbHitMovePunch => _orbHitMovePunch;
+        public float OrbHitRotateAmount => _orbHitRotateAmount;
         public float OrbHitDuration => _orbHitDuration;
+        public float OrbChainsStartBreakingDelay => _orbChainsStartBreakingDelay;
         public float OrbChainsDisappearDelay => _orbChainsDisappearDelay;
         
         

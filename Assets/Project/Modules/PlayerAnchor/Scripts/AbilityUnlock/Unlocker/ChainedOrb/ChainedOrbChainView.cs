@@ -63,29 +63,6 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             
             _trail.emitting = false;
-
-            
-            _boneChainTarget.material = _typeViewData.BreakingChainMaterial;
-            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.BreakStepDuration.x));
-            _boneChainTarget.gameObject.SetActive(false);
-
-            for (int i = _boneChain.NumberOfBones - 1; i >= 0; --i)
-            {
-                Bone bone = _boneChain.Bones[i];
-                bone.SetMaterial(_typeViewData.BreakingChainMaterial);
-
-                float t = 1 - ((float)i / _boneChain.NumberOfBones);
-                float duration = Mathf.Lerp(_viewConfig.BreakStepDuration.x, _viewConfig.BreakStepDuration.y, t);
-                
-                bone.transform.DOPunchScale(_viewConfig.BreakPunch, duration);
-                await UniTask.Delay(TimeSpan.FromSeconds(duration));
-                bone.Hide();
-            }
-
-            _plateMesh.material = _typeViewData.BreakingChainMaterial;
-            _plateMesh.transform.DOPunchScale(_viewConfig.BreakPunch, _viewConfig.BreakStepDuration.x);
-            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.BreakStepDuration.x));
-            _plateMesh.gameObject.SetActive(false);
         }
         
         
