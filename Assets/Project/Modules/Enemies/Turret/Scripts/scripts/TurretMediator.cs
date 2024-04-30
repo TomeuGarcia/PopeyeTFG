@@ -94,12 +94,12 @@ namespace Popeye.Modules.Enemies
             
             _turretAnimatorController.StopShootingAnimation();
         }
-        public void AppearAnimation(bool playerWasTooFar)
+        public void AppearAnimation(bool playerWasTooClose)
         {
             _turretSounds.PlayTurretDigUp(gameObject);
             _turretAnimatorController.AppearAnimation();
 
-            if (playerWasTooFar)
+            if (!playerWasTooClose)
             {
                 PlayerSeen();
             }            

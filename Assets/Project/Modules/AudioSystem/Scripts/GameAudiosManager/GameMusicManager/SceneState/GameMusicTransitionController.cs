@@ -57,13 +57,12 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         }
         private void StartPlayingCurrentSounds()
         {
-            _activeSounds.Add(
-                _audioManager.PlayLastingSound(_currentMusicSoundsGroup.MusicSound, _soundSource)
-            );
-            
-            _activeSounds.Add(
-                _audioManager.PlayLastingSound(_currentMusicSoundsGroup.AmbientSound, _soundSource)
-            );
+            foreach (LastingFMODSound lastingSound in _currentMusicSoundsGroup.Sounds)
+            {
+                _activeSounds.Add(
+                    _audioManager.PlayLastingSound(lastingSound, _soundSource)
+                );
+            }
         }
 
         

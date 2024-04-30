@@ -9,11 +9,9 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         [System.Serializable]
          public class MusicSoundsGroup
          {
-             [SerializeField] private LastingFMODSound _ambientSound;
-             [SerializeField] private LastingFMODSound _musicSound;
+             [SerializeField] private LastingFMODSound[] _sounds;
              
-             public LastingFMODSound AmbientSound => _ambientSound;
-             public LastingFMODSound MusicSound => _musicSound;
+             public LastingFMODSound[] Sounds => _sounds;
          }
 
          
@@ -37,18 +35,18 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
          [Header("SCENES")]
          [SerializeField] private MusicSoundsByScene[] _soundsByScene;
 
-         public bool GetSoundForScene(ISceneReference sceneReference, out MusicSoundsGroup musicSoundsGroup)
+         public bool GetSoundForScene(ISceneReference sceneReference, out MusicSoundsGroup musicSoundsGroups)
          {
             foreach (MusicSoundsByScene musicSoundsByScene in _soundsByScene)
             {
                 if (musicSoundsByScene.IsScene(sceneReference))
                 {
-                    musicSoundsGroup = musicSoundsByScene.MusicSoundsGroup;
+                    musicSoundsGroups = musicSoundsByScene.MusicSoundsGroup;
                     return true;
                 }
             }
             
-            musicSoundsGroup = null;
+            musicSoundsGroups = null;
             return false;
          }
          
