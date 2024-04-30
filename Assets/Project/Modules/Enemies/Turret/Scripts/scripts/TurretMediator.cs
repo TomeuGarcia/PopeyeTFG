@@ -21,7 +21,8 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private TurretShooting _turretShooting;
 
         public Transform PlayerTransform { get; private set; }
-        
+        public override Vector3 Position { get; }
+
         private TurretMindEnemy _turretMind;
         [SerializeField] private ParabolicProjectile _parabolicProjectile;
         [SerializeField] private AreaDamageOverTime _damageableArea;
@@ -93,17 +94,26 @@ namespace Popeye.Modules.Enemies
             
             _turretAnimatorController.StopShootingAnimation();
         }
-        public void AppearAnimation()
+        public void AppearAnimation(bool playerWasTooFar)
         {
             _turretSounds.PlayTurretDigUp(gameObject);
             _turretAnimatorController.AppearAnimation();
+
+            if (playerWasTooFar)
+            {
+                PlayerSeen();
+            }
         }
-        public void HideAnimation()
+        public void HideAnimation(bool playerIsTooClose, bool playerIsTooFar)
         {
             _turretSounds.PlayTurretDigDown(gameObject);
             _turretAnimatorController.HideAnimation();
+
+            if (playerIsTooFar)
+            {
+                InvokeEnemyStopsFightingPlayer();
+            }
         }
-        public override Vector3 Position { get; }
         
         public override void OnDeath(DamageHitResult damageHitResult)
         {
@@ -111,6 +121,7 @@ namespace Popeye.Modules.Enemies
             _turretMind.Die();
             _turretSounds.PlayTurretDeath(gameObject);
             _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
+            InvokeEnemyStopsFightingPlayer();
         }
 
         public void LookAtPlayer(float delta)

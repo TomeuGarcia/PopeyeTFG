@@ -18,6 +18,10 @@ namespace Popeye.Modules.Enemies
         protected IEventSystemService _eventSystem;
         [SerializeField] private EnemyID _enemyID;
         public abstract Vector3 Position { get; }
+
+        public struct EnemyStartsFightingPlayer { }
+        public struct EnemyStopsFightingPlayer { }
+        
         
         public virtual void OnHit(DamageHitResult damageHitResult)
         {
@@ -28,12 +32,13 @@ namespace Popeye.Modules.Enemies
         public virtual void OnSeePlayer()
         {
             _eventSystem.Dispatch(new OnEnemySeesPlayerEvent(_enemyID));
-
+            InvokeEnemyStartsFightingPlayer();
         }
 
         public virtual void OnDeath(DamageHitResult damageHitResult)
         {
             _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
+            InvokeEnemyStopsFightingPlayer();
             Recycle();
         }
 
@@ -53,9 +58,19 @@ namespace Popeye.Modules.Enemies
         }
         public virtual void OnPlayerFar()
         {
-            
+            InvokeEnemyStopsFightingPlayer();
         }
 
         public abstract void DieFromOrder();
+
+
+        protected void InvokeEnemyStartsFightingPlayer()
+        {
+            _eventSystem.Dispatch(new EnemyStartsFightingPlayer());
+        }
+        protected void InvokeEnemyStopsFightingPlayer()
+        {
+            _eventSystem.Dispatch(new EnemyStopsFightingPlayer());
+        }
     }
 }

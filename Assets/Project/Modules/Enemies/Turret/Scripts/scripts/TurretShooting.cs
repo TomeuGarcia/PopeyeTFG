@@ -21,12 +21,6 @@ namespace Popeye.Modules.Enemies.Components
         private ParabolicProjectile _currentProjectile;
         private bool _outOfGround = true;
         
-       [SerializeField] private float _squashAmountY = 2.6f;
-       [SerializeField] private float _squashAmountXZ = 2.6f;
-       [SerializeField] private float _stretchAmountY = 2.6f;
-       [SerializeField] private float _stretchAmountXZ = 2.8f;
-       [SerializeField] private float _squashAndStretchTime = 0.5f;
-
        
        private bool _animationOn = false;
        [SerializeField] private float _playerDistanceThreshold;
@@ -36,6 +30,7 @@ namespace Popeye.Modules.Enemies.Components
        private float _squaredPlayerDistanceThresholdToHide;
        private float _squaredPlayerDistanceThresholdToAppear;
        private bool _playerInSight = false;
+       private bool _playerWasTooFar = false;
 
        private bool _hiding =false;
        [SerializeField] private int _numberOfShots = 3;
@@ -48,14 +43,18 @@ namespace Popeye.Modules.Enemies.Components
             _squaredPlayerDistanceThresholdToHide = _playerDistanceThresholdToHide * _playerDistanceThresholdToHide;
             _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
             _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
-           
+            
+            DoHide(false, false);
         }
 
+       private void OnEnable()
+       {
+           _playerWasTooFar = true;
+       }
 
-
-        private void Update()
+       private void Update()
         {
-            if (IsPlayerFarEnoughToAppear())
+            if (IsPlayerAtValidDistance())
             {
                 
                 if (_outOfGround)
@@ -72,42 +71,53 @@ namespace Popeye.Modules.Enemies.Components
 
                     _timer += Time.deltaTime;
                 }
-                else if(!_playerInSight)
+                else if (!_playerInSight)
                 {
-                    _mediator.AppearAnimation();
+                    _mediator.AppearAnimation(_playerWasTooFar);
                     _hiding = false;
-                    _mediator.PlayerSeen();
                     _playerInSight = true;
                 }
             }
-            if(!IsPlayerAtCloseDistance() && !_hiding)
+            
+            if(IsPlayerAtNotValidDistance(out bool playerIsTooClose, out bool playerIsTooFar) && !_hiding)
             {
-                _hiding = true;
-                _playerInSight = false;
-                _mediator.HideAnimation();
-                _timer = 0;
+                DoHide(playerIsTooClose, playerIsTooFar);
             }
+
+            _playerWasTooFar = playerIsTooFar;
         }
+
+       private void DoHide(bool playerIsTooClose, bool playerIsTooFar)
+       {
+           _hiding = true;
+           _playerInSight = false;
+           _mediator.HideAnimation(playerIsTooClose, playerIsTooFar);
+           _timer = 0;
+       }
+       
         
         private float GetPlayerSqrMagnitude()
         {
             return (_playerTransform.position - transform.position).sqrMagnitude;
         }
         
-        private bool IsPlayerAtCloseDistance()
+        private bool IsPlayerAtNotValidDistance(out bool playerIsTooClose, out bool playerIsTooFar)
         {
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold && GetPlayerSqrMagnitude() > _squaredPlayerDistanceThresholdToHide;
+            float playerDistanceSqr = GetPlayerSqrMagnitude();
+
+            playerIsTooFar = playerDistanceSqr > _squaredPlayerDistanceThreshold;
+            playerIsTooClose = playerDistanceSqr < _squaredPlayerDistanceThresholdToHide;
+            return playerIsTooFar || playerIsTooClose;
         }
         
-        private bool IsPlayerFarEnoughToAppear()
+        private bool IsPlayerAtValidDistance()
         {
+            float playerDistanceSqr = GetPlayerSqrMagnitude();
             
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold && GetPlayerSqrMagnitude() > _squaredPlayerDistanceThresholdToAppear;
-        }
-
-        private bool IsPlayerTooClose()
-        {
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
+            bool playerIsCloseEnough = playerDistanceSqr < _squaredPlayerDistanceThreshold;
+            bool playerIsFarEnough = playerDistanceSqr > _squaredPlayerDistanceThresholdToAppear;
+            
+            return playerIsCloseEnough && playerIsFarEnough;
         }
 
         public void SetOutOfGround()

@@ -128,6 +128,7 @@ namespace Popeye.Modules.Enemies
         }
         public override void OnPlayerFar()
         {
+            base.OnPlayerFar();
             StartPatrolling();
         }
         
