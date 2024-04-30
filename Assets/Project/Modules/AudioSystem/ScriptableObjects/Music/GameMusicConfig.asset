@@ -38,96 +38,166 @@ MonoBehaviour:
         _ambientSound: {fileID: 11400000, guid: ef993eb5ad3131c4086299c7952af13d,
           type: 2}
         _musicSound: {fileID: 11400000, guid: 9da4f2ae452f73245a01bb74a2c8490f, type: 2}
+    - _sceneReference: {fileID: 11400000, guid: 71d65a40243b8ea4db51e23ab94d693d,
+        type: 2}
+      _musicSoundsGroup:
+        _ambientSound: {fileID: 11400000, guid: ef993eb5ad3131c4086299c7952af13d,
+          type: 2}
+        _musicSound: {fileID: 11400000, guid: 9da4f2ae452f73245a01bb74a2c8490f, type: 2}
   _playerStateMusicConfig:
-    _playerGameStatusParameter: {fileID: 11400000, guid: abfea5e42d682ca4a8f06145cc29df57,
-      type: 2}
-    _toExploration:
-      _parameterValue: 0
-      _transitionConfig:
-        _duration: 0.5
-        _useCurve: 1
-        _ease: 4
-        _easeCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-    _toBattle:
-      _parameterValue: 1
-      _transitionConfig:
-        _duration: 0.5
-        _useCurve: 1
-        _ease: 4
-        _easeCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-    _toDeath:
-      _parameterValue: 2
-      _transitionConfig:
-        _duration: 0.5
-        _useCurve: 1
-        _ease: 4
-        _easeCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
+    _gameState:
+      _playerGameStatusParameter: {fileID: 11400000, guid: abfea5e42d682ca4a8f06145cc29df57,
+        type: 2}
+      _toExploration:
+        _parameterValue: 0
+        _transitionConfig:
+          _duration: -1
+          _useCurve: 1
+          _ease: 4
+          _easeCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+      _toBattle:
+        _parameterValue: 1
+        _transitionConfig:
+          _duration: -1
+          _useCurve: 1
+          _ease: 4
+          _easeCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+      _toDeath:
+        _parameterValue: 2
+        _transitionConfig:
+          _duration: -1
+          _useCurve: 1
+          _ease: 4
+          _easeCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+    _takeDamage:
+      _playerTakeDamageParameter: {fileID: 11400000, guid: 950ba433fb6c74c4b834226f7d3a3984,
+        type: 2}
+      _startTakingDamage:
+        _parameterValue: 0.5
+        _transitionConfig:
+          _duration: 0.1
+          _useCurve: 1
+          _ease: 4
+          _easeCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+      _finishTakingDamage:
+        _parameterValue: 0
+        _transitionConfig:
+          _duration: 0.3
+          _useCurve: 1
+          _ease: 4
+          _easeCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4

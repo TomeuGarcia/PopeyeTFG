@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AllowFallLedge_Bottom_Mat
+  m_Name: AllowFallLedge_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 90c50ba2d62a170488e776bc1466909d,
     type: 3}
   m_Parent: {fileID: 0}
@@ -38,13 +38,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _CenterFlattening: 2
     - _DecalMeshBiasType: 0
     - _DecalMeshDepthBias: 0
     - _DecalMeshViewBias: 0
     - _DrawOrder: 0
-    - _IsTop: 0
+    - _IsTop: 1
     m_Colors:
     - _BaseColor: {r: 0.34905657, g: 0.21489477, b: 0.11360798, a: 0}
+    - _Color2: {r: 1, g: 0.8312369, b: 0.7028302, a: 0}
+    - _ColorIn: {r: 0.9622642, g: 0.74626917, b: 0.5855287, a: 0}
+    - _ColorOut: {r: 0.9607844, g: 0.79215693, b: 0.6666667, a: 0}
+    - _ColorOutline: {r: 0.43396226, g: 0.15352437, b: 0.15352437, a: 0}
+    - _OutlineNoise: {r: 1.28, g: 1.82, b: 0, a: 0}
+    - _Vector4: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector4_1: {r: 0, g: 1, b: 0, a: 1}
+    - _WidthDisplacement: {r: 0, g: 1, b: 0.86, a: 2.4}
+    - _WidthPresence: {r: -0.38, g: -3.2, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &5985130501258439031
 MonoBehaviour:

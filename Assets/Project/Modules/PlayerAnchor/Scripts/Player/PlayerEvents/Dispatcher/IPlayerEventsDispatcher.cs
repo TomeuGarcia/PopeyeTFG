@@ -7,6 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
     {
         public struct OnEnterBattle { }
         public struct OnExitBattle { }
+        public struct OnTakeDamageEvent { }
         public struct OnDieEvent { }
         public struct OnRespawnFromDeathEvent { }
 

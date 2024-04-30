@@ -11,7 +11,7 @@ namespace Popeye.Modules.AudioSystem
         [SerializeField] private float _parameterValue = 0;
         [SerializeField] private TweenEaseConfig _transitionConfig;
 
-        public async UniTaskVoid Transition(SoundParameter soundParameter)
+        public async UniTask Transition(SoundParameter soundParameter)
         {
             float startValue = soundParameter.Value;
                 
@@ -31,6 +31,8 @@ namespace Popeye.Modules.AudioSystem
                             
                 await UniTask.Yield();
             }
+            
+            soundParameter.SetValue(_parameterValue);
         }
     }
 }

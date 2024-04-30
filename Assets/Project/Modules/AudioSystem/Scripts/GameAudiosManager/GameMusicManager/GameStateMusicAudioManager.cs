@@ -1,6 +1,7 @@
 using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
+using UnityEngine;
 
 
 namespace Popeye.Modules.AudioSystem.GameAudiosManager
@@ -33,7 +34,7 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
             _eventSystemService.Subscribe<IPlayerEventsDispatcher.OnRespawnFromDeathEvent>(OnPlayerRespawnedFromDeathEvent);
             _eventSystemService.Subscribe<IPlayerEventsDispatcher.OnDieEvent>(OnPlayerDiedEvent);
             _eventSystemService.Subscribe<IPlayerEventsDispatcher.OnEnterBattle>(OnPlayerEnterBattleEvent);
-            _eventSystemService.Subscribe<IPlayerEventsDispatcher.OnExitBattle>(OnPlayerExitBattleEvent);
+            _eventSystemService.Subscribe<IPlayerEventsDispatcher.OnTakeDamageEvent>(OnTakeDamageEvent);
         }
 
         public void StopListeningToGameEvents()
@@ -44,6 +45,7 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
             _eventSystemService.Unsubscribe<IPlayerEventsDispatcher.OnDieEvent>(OnPlayerDiedEvent);
             _eventSystemService.Unsubscribe<IPlayerEventsDispatcher.OnEnterBattle>(OnPlayerEnterBattleEvent);
             _eventSystemService.Unsubscribe<IPlayerEventsDispatcher.OnExitBattle>(OnPlayerExitBattleEvent);
+            _eventSystemService.Unsubscribe<IPlayerEventsDispatcher.OnTakeDamageEvent>(OnTakeDamageEvent);
         }
 
 
@@ -67,6 +69,11 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         private void OnPlayerExitBattleEvent(IPlayerEventsDispatcher.OnExitBattle eventData)
         {
             _playerStateMusicTransitionController.TransitionOutOfBattle();
+        }
+        
+        private void OnTakeDamageEvent(IPlayerEventsDispatcher.OnTakeDamageEvent eventData)
+        {
+            _playerStateMusicTransitionController.TransitionToTakingDamage();
         }
         
     }

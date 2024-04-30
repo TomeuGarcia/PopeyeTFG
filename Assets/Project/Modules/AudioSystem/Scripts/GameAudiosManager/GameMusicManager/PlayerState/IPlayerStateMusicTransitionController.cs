@@ -6,5 +6,6 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         void TransitionToDeath();
         void TransitionToBattle();
         void TransitionOutOfBattle();
+        void TransitionToTakingDamage();
     }
 }

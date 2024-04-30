@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Popeye.Modules.AudioSystem.GameAudiosManager
 {
     public class PlayerStateMusicTransitionController : IPlayerStateMusicTransitionController
@@ -30,6 +32,11 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         public void TransitionOutOfBattle()
         {
             _playerStateMusicConfig.TransitionToExploration();
+        }
+        
+        public void TransitionToTakingDamage()
+        {
+            _playerStateMusicConfig.TransitionToTakeDamage();
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         [SerializeField] private GameScenesMusicConfig _gameScenesMusicConfig;
         public GameScenesMusicConfig GameScenesMusicConfig => _gameScenesMusicConfig;
         
+        [Space(20)]
         [Header("PLAYER STATE")]
         [SerializeField] private PlayerStateMusicConfig _playerStateMusicConfig;
         public PlayerStateMusicConfig PlayerStateMusicConfig => _playerStateMusicConfig;
