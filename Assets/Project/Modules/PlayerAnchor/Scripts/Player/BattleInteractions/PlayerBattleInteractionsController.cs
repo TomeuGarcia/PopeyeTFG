@@ -97,12 +97,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.BattleInteractions
         
         private void DoStartFighting()
         {
-            Debug.Log("START " + _activeEnemyFightsCounter);
             _eventSystemService.Dispatch(new IPlayerBattleInteractionsController.OnBattleStarted());
         }
         private void DoFinishFighting()
         {
-            Debug.Log("FINISH " + _activeEnemyFightsCounter);
             _eventSystemService.Dispatch(new IPlayerBattleInteractionsController.OnBattleFinished());
         }
         
