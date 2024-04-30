@@ -2248,9 +2248,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2348634658881912033}
   - component: {fileID: 4728304115999458812}
+  - component: {fileID: 4470119511833466439}
   - component: {fileID: 9023894693143302225}
   m_Layer: 15
-  m_Name: ClawAnchorSnapTarget
+  m_Name: ClawAnchorSnapTarget_OLD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2297,6 +2298,27 @@ MonoBehaviour:
   - {fileID: 3184626813005781600}
   - {fileID: 2938197314482896633}
   - {fileID: 1772178680710703075}
+  _viewReference:
+    _underlyingValue: {fileID: 4470119511833466439}
+--- !u!114 &4470119511833466439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5590213769767701165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2880bbbc87a47c9be467ed31dc98064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clawsTransform: {fileID: 3606680010233596122}
+  _claws:
+  - {fileID: 935199790078015436}
+  - {fileID: 3184626813005781600}
+  - {fileID: 2938197314482896633}
+  - {fileID: 1772178680710703075}
+  _viewConfig: {fileID: 11400000, guid: 3fc6fa2fc09d84d42a62232664e32fc8, type: 2}
 --- !u!136 &9023894693143302225
 CapsuleCollider:
   m_ObjectHideFlags: 0
