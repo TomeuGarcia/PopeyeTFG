@@ -116,13 +116,8 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         private async UniTaskVoid ApplyInterpolations(Material material, MaterialFloatInterpolationConfig[] interpolationConfigs)
         {
             await MaterialInterpolator.ApplyInterpolations(material, interpolationConfigs);
-            _completedInterpolations++;
             
-            if (_completedInterpolations >= _interpolations.Length + 1)
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(_despawnDelay));
-                Reset();
-            }
+            FinishedInterpolation().Forget();
         }
 
         private void LightCompleted()
@@ -133,6 +128,12 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         private async UniTaskVoid DoLightCompleted()
         {
             _light.intensity = 0.0f;
+            
+            FinishedInterpolation().Forget();
+        }
+
+        private async UniTaskVoid FinishedInterpolation()
+        {
             _completedInterpolations++;
             
             if (_completedInterpolations >= _interpolations.Length + 1)

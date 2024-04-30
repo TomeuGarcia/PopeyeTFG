@@ -13,7 +13,6 @@ namespace Popeye.Modules.Enemies.Hazards
     {
         [Header("COMPONENTS")]
         [SerializeField] private Transform _chargePosition;
-        [SerializeField] private Transform _meshHolder;
         [SerializeField] private SkinnedMeshRenderer _meshRenderer;
         private Material _material;
         private HazardDispenserViewConfig _config;
@@ -34,8 +33,6 @@ namespace Popeye.Modules.Enemies.Hazards
         public void PlayDispenseAnimation()
         {
             MaterialInterpolator.ApplyInterpolations(_material, _config.ReadyActivate).Forget();
-            //_meshHolder.DOPunchPosition(new Vector3(0.0f, 0.0f, -0.1f), 0.25f, 1, 0);
-            //_meshHolder.DOPunchScale(Vector3.one * -0.25f, 0.25f, 1, 0);
         }
 
         public async UniTask PlayReadyToDispenseAnimation()
