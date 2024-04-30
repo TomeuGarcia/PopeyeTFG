@@ -6,27 +6,49 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
-    public class ClawAnchorSnapTargetView
+    public class TweensClawAnchorSnapTargetView : MonoBehaviour, IClawAnchorSnapTargetView
     {
-        private readonly Transform _clawsTransform;
-        private readonly Transform[] _claws;
-        private readonly ClawAnchorSnapTargetViewConfig _viewConfig;
+        [SerializeField] private Transform _clawsTransform;
+        [SerializeField] private Transform[] _claws;
+        [SerializeField] private ClawAnchorSnapTargetViewConfig _viewConfig;
 
         private bool _isOpen;
         private bool _isPlayingHint;
         
-        public ClawAnchorSnapTargetView(Transform clawsTransform, Transform[] claws, 
-            ClawAnchorSnapTargetViewConfig viewConfig)
+        private void Awake()
         {
-            _clawsTransform = clawsTransform;
-            _claws = claws;
-            _viewConfig = viewConfig;
             _isOpen = false;
             _isPlayingHint = false;
         }
         
         
-        public async UniTaskVoid PlaySnapAnimation(float delay)
+        public void PlayAimedAnimation()
+        {
+            PlayOpenAnimation();
+        }
+
+        public void StopAimedAnimation()
+        {
+            PlayCloseAnimation();
+        }
+
+        public void PlayGrabAnimation(float delay)
+        {
+            PlaySnapAnimation(delay).Forget();
+        }
+
+        public void PlayUsedAnimation()
+        {
+            PlayUsedForDashAnimation().Forget();
+        }
+
+        public void PlayPulledAnimation()
+        {
+            
+        }
+
+
+        private async UniTaskVoid PlaySnapAnimation(float delay)
         {
             float delay1 = delay * 0.7f;
             float delay2 = delay * 0.2f;
@@ -41,7 +63,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _clawsTransform.PunchScale(_viewConfig.ScalePunchSnapClawParent);
         }
 
-        public void PlayOpenAnimation()
+        private void PlayOpenAnimation()
         {
             foreach (var claw in _claws)
             {
@@ -55,7 +77,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             }
         }
         
-        public void PlayCloseAnimation()
+        private void PlayCloseAnimation()
         {
             _clawsTransform.DOComplete();
             foreach (var claw in _claws)
@@ -88,7 +110,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         }
 
 
-        public async UniTaskVoid PlayUsedForDashAnimation()
+        private async UniTaskVoid PlayUsedForDashAnimation()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.UsedForDashDelay));
             
@@ -100,5 +122,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
                 claw.PunchRotation(_viewConfig.RotatePunchUsedClaws, true);
             }
         }
+
+
     }
 }
