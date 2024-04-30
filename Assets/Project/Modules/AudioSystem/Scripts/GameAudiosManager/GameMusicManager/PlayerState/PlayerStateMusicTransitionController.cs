@@ -13,6 +13,11 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
             TransitionToDefault();
         }
 
+        ~PlayerStateMusicTransitionController()
+        {
+            TransitionToDefault();
+        }
+
 
         public void TransitionToDefault()
         {

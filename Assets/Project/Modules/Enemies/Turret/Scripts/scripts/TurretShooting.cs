@@ -74,9 +74,9 @@ namespace Popeye.Modules.Enemies.Components
                 else if (!_playerInSight)
                 {
                     _mediator.AppearAnimation(_playerWasTooFar);
-                    _hiding = false;
                     _playerInSight = true;
                 }
+                _hiding = false;
             }
             
             if(IsPlayerAtNotValidDistance(out bool playerIsTooClose, out bool playerIsTooFar) && !_hiding)

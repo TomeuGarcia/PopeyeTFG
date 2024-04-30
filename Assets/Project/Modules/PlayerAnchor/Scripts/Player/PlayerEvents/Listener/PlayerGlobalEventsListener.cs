@@ -1,7 +1,9 @@
 using Popeye.Core.Services.EventSystem;
+using Popeye.Modules.Enemies;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
+using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Scripts.EventChannels;
 using UnityEngine;
@@ -18,13 +20,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         
         private readonly IEmptyEventChannelListenEntry _playerFocusBoostEvent;
         private readonly IPlayerFocusUpgrader _playerFocusUpgrader;
+        private readonly IPlayerBattleInteractionsController _battleInteractionsController;
 
 
         public PlayerGlobalEventsListener(
             IEventSystemService eventSystemService, 
             IPlayerAutoActionsQueue playerAutoActionsQueue,
             IEmptyEventChannelListenEntry playerHealthBoostEvent, IPlayerHealthUpgrader playerHealthUpgrader,
-            IEmptyEventChannelListenEntry playerFocusBoostEvent, IPlayerFocusUpgrader playerFocusUpgrader)
+            IEmptyEventChannelListenEntry playerFocusBoostEvent, IPlayerFocusUpgrader playerFocusUpgrader,
+            IPlayerBattleInteractionsController battleInteractionsController)
         {
             _eventSystemService = eventSystemService;
             _playerAutoActionsQueue = playerAutoActionsQueue;
@@ -34,6 +38,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             
             _playerFocusBoostEvent = playerFocusBoostEvent;
             _playerFocusUpgrader = playerFocusUpgrader;
+            
+            _battleInteractionsController = battleInteractionsController;
         }
         
         public void StartListening()
@@ -43,6 +49,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             
             _playerHealthBoostEvent.Subscribe(OnPlayerHealthBoostCollected);
             _playerFocusBoostEvent.Subscribe(OnPlayerFocusBoostCollected);
+            
+            _battleInteractionsController.StartListening();
         }
 
         public void StopListening()
@@ -52,6 +60,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             
             _playerHealthBoostEvent.Unsubscribe(OnPlayerHealthBoostCollected);
             _playerFocusBoostEvent.Unsubscribe(OnPlayerFocusBoostCollected);
+            
+            _battleInteractionsController.StopListening();
         }
         
         
@@ -75,6 +85,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         {
             _playerFocusUpgrader.IncreaseMaxFocus();
         }
+
+
+
         
     }
 }

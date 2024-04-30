@@ -102,7 +102,7 @@ namespace Popeye.Modules.Enemies
             if (playerWasTooFar)
             {
                 PlayerSeen();
-            }
+            }            
         }
         public void HideAnimation(bool playerIsTooClose, bool playerIsTooFar)
         {
@@ -112,7 +112,7 @@ namespace Popeye.Modules.Enemies
             if (playerIsTooFar)
             {
                 InvokeEnemyStopsFightingPlayer();
-            }
+            }            
         }
         
         public override void OnDeath(DamageHitResult damageHitResult)
