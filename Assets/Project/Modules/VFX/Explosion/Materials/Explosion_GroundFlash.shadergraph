@@ -67,9 +67,6 @@
             "m_Id": "829c67260e2644ce817aa7e4c165d4e6"
         },
         {
-            "m_Id": "e37a5749fa394acc93463dc61216cfe5"
-        },
-        {
             "m_Id": "d4c9f4c5bb5440e589bd9855c169e66d"
         },
         {
@@ -122,6 +119,9 @@
         },
         {
             "m_Id": "42a327cf6d2245db88780e749cdebfc7"
+        },
+        {
+            "m_Id": "e4c2a648bf1b43ea90280411c02c52ab"
         }
     ],
     "m_GroupDatas": [],
@@ -450,7 +450,7 @@
                 "m_Id": "829c67260e2644ce817aa7e4c165d4e6"
             },
             {
-                "m_Id": "e37a5749fa394acc93463dc61216cfe5"
+                "m_Id": "e4c2a648bf1b43ea90280411c02c52ab"
             }
         ]
     },
@@ -496,21 +496,6 @@
     },
     "m_Labels": [],
     "m_Space": 0
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "03c2a617b7fe49f2af56ba1ac6505f7c",
-    "m_Id": 0,
-    "m_DisplayName": "Metallic",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Metallic",
-    "m_StageCapability": 2,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
 }
 
 {
@@ -1325,6 +1310,21 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "476827d6badf478d8f5a2e28807eae66",
+    "m_Id": 0,
+    "m_DisplayName": "Metallic",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Metallic",
+    "m_StageCapability": 2,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Texture2DInputMaterialSlot",
     "m_ObjectId": "48664bb51aa6408da1f9cd081789618b",
     "m_Id": 1,
@@ -1448,7 +1448,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Occlusion",
     "m_StageCapability": 2,
-    "m_Value": 1.0,
+    "m_Value": 0.0,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }
@@ -2533,8 +2533,8 @@
     "m_AlphaMode": 0,
     "m_RenderFace": 2,
     "m_AlphaClip": false,
-    "m_CastShadows": true,
-    "m_ReceiveShadows": true,
+    "m_CastShadows": false,
+    "m_ReceiveShadows": false,
     "m_SupportsLODCrossFade": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
@@ -3393,7 +3393,7 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
-    "m_ObjectId": "e37a5749fa394acc93463dc61216cfe5",
+    "m_ObjectId": "e4c2a648bf1b43ea90280411c02c52ab",
     "m_Group": {
         "m_Id": ""
     },
@@ -3410,7 +3410,7 @@
     },
     "m_Slots": [
         {
-            "m_Id": "03c2a617b7fe49f2af56ba1ac6505f7c"
+            "m_Id": "476827d6badf478d8f5a2e28807eae66"
         }
     ],
     "synonyms": [],

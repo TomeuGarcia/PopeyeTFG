@@ -52,5 +52,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         {
             _valueStat.SetCurrentValue(_playerFocusState.CurrentFocusAmount);
         }
+        
+        
+        
     }
 }

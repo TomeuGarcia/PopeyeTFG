@@ -24,6 +24,30 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Aux_NormalMap_1:
+        m_Texture: {fileID: 2800000, guid: 204cee55d9aba0b4eae72f5d80cf82d6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Aux_NormalMap_2:
+        m_Texture: {fileID: 2800000, guid: 82b0b5d00b24eb14b9c43cc895a06060, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Aux_NormalMap_3:
+        m_Texture: {fileID: 2800000, guid: 85e047d84ebd4e44cbf8bbef9f92297c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Aux_Texture_1:
+        m_Texture: {fileID: 2800000, guid: e871e34885acb9849ae32ef5b5f7f4a3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Aux_Texture_2:
+        m_Texture: {fileID: 2800000, guid: f855b2a19acb33242bd2450312b7d70a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Aux_Texture_3:
+        m_Texture: {fileID: 2800000, guid: 8ce9b717b1bc7564cbe35664f2f178a7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SideTexNormalMap:
         m_Texture: {fileID: 2800000, guid: a8ef71351a4181948ab74a93ea41b3a7, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -32,11 +56,31 @@ Material:
         m_Texture: {fileID: 2800000, guid: 395270a5c913ba247944e75c5d66c591, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Side_NormalMap:
+        m_Texture: {fileID: 2800000, guid: a8ef71351a4181948ab74a93ea41b3a7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Side_Texture:
+        m_Texture: {fileID: 2800000, guid: 395270a5c913ba247944e75c5d66c591, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TestTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TopTexNormalMap:
         m_Texture: {fileID: 2800000, guid: a8ef71351a4181948ab74a93ea41b3a7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TopTexture:
+        m_Texture: {fileID: 2800000, guid: f3b3294be2e20214a9237d20fda3460c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Top_NormalMap:
+        m_Texture: {fileID: 2800000, guid: a8ef71351a4181948ab74a93ea41b3a7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Top_Texture:
         m_Texture: {fileID: 2800000, guid: f3b3294be2e20214a9237d20fda3460c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -55,13 +99,24 @@ Material:
     m_Ints: []
     m_Floats:
     - _AmbientOcclusion: 1
+    - _Aux_Texture_1_Blend: 1
+    - _Aux_Texture_1_Tile: 0.075
+    - _Aux_Texture_2_Blend: 1
+    - _Aux_Texture_2_Tile: 0.075
+    - _Aux_Texture_3_Blend: 1
+    - _Aux_Texture_3_Tile: 0.075
     - _Blend: 1
     - _Metallic: 0
     - _NormalStrength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 0
+    - _SideSubtraction: 0.25
+    - _Side_Texture_Blend: 1
+    - _Side_Texture_Tile: 0.075
+    - _Smoothness: 0.5
     - _Tiling: 0.075
+    - _Top_Texture_Blend: 1.3
+    - _Top_Texture_Tile: 0.075
     - _WallColorSubtraction: 0
     - _WallSubtraction: 0.1
     m_Colors: []

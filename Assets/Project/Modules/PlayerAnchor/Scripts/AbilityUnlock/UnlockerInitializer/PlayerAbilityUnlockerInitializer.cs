@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
         [Header("VIEW")] 
         [SerializeField] private AbilityUnlockerChristalView _christalView;
+        [SerializeField] private AbilityUnlockerChainedOrbView _orbView;
         
         [Header("SOUNDS")]
         [SerializeField] private AbilityUnlockerChristalAudio _christalAudio;
@@ -41,12 +42,32 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _initializeConfig.GetReferences(_abilityToUnlock,
                 out GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences);
             
-            _christalView.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);            
+            _christalView?.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio);
+            _orbView?.Configure(ServiceLocator.Instance.GetService<IGameReferences>(), _christalAudio, _abilityToUnlock);
+
+            IPlayerAbilityUnlockerView view = _christalView != null ? _christalView : _orbView;
+            _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, view);
+
             
-            _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, _christalView);
+            ITutorialDisplayCondition tutorialStopDisplayCondition = null;
+            if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformed)
+            {
+                tutorialStopDisplayCondition = new PerformedAmountDisplayCondition(
+                    configureReferences.TutorialHideChannel,
+                    configureReferences.TimesToStopShowing
+                );
+            }
+            else if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.Duration)
+            {
+                tutorialStopDisplayCondition = new DurationDisplayCondition(
+                    configureReferences.DurationToStopShowing
+                );
+            }
             
-            _tutorialInformationDisplay.Configure(configureReferences.TutorialInfoToDisplay,
-                configureReferences.TutorialHideChannel, configureReferences.TimesToStopShowing);
+            _tutorialInformationDisplay.Configure(
+                configureReferences.TextInfoToDisplay,
+                configureReferences.VideoInfoToDisplay,
+                tutorialStopDisplayCondition);
         }
         
     }
