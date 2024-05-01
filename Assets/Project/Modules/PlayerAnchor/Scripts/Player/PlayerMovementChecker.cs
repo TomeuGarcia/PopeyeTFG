@@ -7,10 +7,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         private IPlayerMediator _player;
         private PlayerController.PlayerController _playerController;
-        private bool _isMoving;
         private float _maxMovementSpeed;
         private const float MOVEMENT_SPEED_THRESHOLD = 0.1f;
 
+        public bool IsMoving { get; private set; }
         public float MovementSpeedRatio { get; private set; }
         public float MaxMovementSpeed
         {
@@ -23,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _player = player;
             _playerController = playerController;
-            _isMoving = false;
+            IsMoving = false;
             MaxMovementSpeed = 0.0f;
         }
 
@@ -34,11 +34,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void UpdateCheckMovingState(float currentMoveSpeed)
         {
-            if (!_isMoving && currentMoveSpeed > MOVEMENT_SPEED_THRESHOLD)
+            if (!IsMoving && currentMoveSpeed > MOVEMENT_SPEED_THRESHOLD)
             {
                 DoStartMoving();
             }
-            else if (_isMoving && currentMoveSpeed < MOVEMENT_SPEED_THRESHOLD)
+            else if (IsMoving && currentMoveSpeed < MOVEMENT_SPEED_THRESHOLD)
             {
                 DoStopMoving();
             }
@@ -49,12 +49,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private void DoStartMoving()
         {
             _player.OnStartMoving();
-            _isMoving = true;
+            IsMoving = true;
         }
         private void DoStopMoving()
         {
             _player.OnStopMoving();
-            _isMoving = false;
+            IsMoving = false;
         }
         
         

@@ -16,6 +16,9 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
     public class TimerPlayerPressurePlate : MonoBehaviour
     {
+        [Header("AUDIO")]
+        [SerializeField] private TimerButtonInteractorAudio _audio;
+        
         [Header("REFERENCES")] 
         [SerializeField] private Transform _buttonTransform;
         [SerializeField] private MeshRenderer _buttonMesh;
@@ -89,6 +92,8 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
                 
                 SetFillValue(1);
+                _audio.PlayActivatedSound(gameObject);
+                
                 if (CountdownCoroutineIsActive)
                 {
                     StopCoroutine(_countdownCoroutine);

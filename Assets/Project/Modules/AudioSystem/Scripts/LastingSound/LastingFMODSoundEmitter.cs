@@ -69,7 +69,7 @@ namespace Popeye.Modules.AudioSystem
         
         private void UpdateEmitterParameter(SoundParameter parameter)
         {
-            _eventEmitter.SetParameter(parameter.Name, parameter.Value);
+            _eventEmitter.SetParameter(parameter.Id, parameter.Value);
         }
         
 
