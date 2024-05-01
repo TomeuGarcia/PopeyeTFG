@@ -288,6 +288,9 @@ MonoBehaviour:
   _viewConfig: {fileID: 11400000, guid: 62d181c8c3086494886019654b90f0c8, type: 2}
   _originalChainTargetHolder: {fileID: 5828793674285273287}
   _finishChainTargetHolder: {fileID: 7771046046529856318}
+  _orbitalChains0: {fileID: 0}
+  _orbitalChains1: {fileID: 0}
+  _orbitalChains2: {fileID: 0}
   _chainedOrb: {fileID: 3022076060904486499}
   _chains:
   - {fileID: 581126782331138607}
@@ -1899,6 +1902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _orbMesh: {fileID: 6118674320589153486}
+  _outterOrb: {fileID: 0}
   _pointLight: {fileID: 7255208134857612873}
   _circleChainMeshes:
   - {fileID: 4490395875758460507}
@@ -4114,7 +4118,7 @@ Transform:
   - {fileID: 6524748530696714974}
   - {fileID: 5633788064573747905}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5576173837906872723
 MonoBehaviour:

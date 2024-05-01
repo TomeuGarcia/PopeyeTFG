@@ -1,3 +1,4 @@
+using Popeye.Modules.VFX.Generic;
 using Popeye.ProjectHelpers;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
@@ -14,16 +15,19 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         {
             [SerializeField] private GeneralInitializePlayerAbilityUnlockerConfig.Ability _upgradeType;
             [SerializeField] private Material _orbMaterial;
+            [SerializeField] private Material _outterOrbMaterial;
             [SerializeField] private Material _breakingChainMaterial;
             [SerializeField] private Color _lightColor;
             [SerializeField] private ParticleSystem _orbHitParticlesPrefab;
             [SerializeField] private ParticleSystem _pickAbilityParticlesPrefab;
+            //TODO FUCK material particules
 
             public bool IsOfType(GeneralInitializePlayerAbilityUnlockerConfig.Ability upgradeType)
             {
                 return _upgradeType == upgradeType;
             }
             public Material OrbMaterial => _orbMaterial;
+            public Material OutterOrbMaterial => _outterOrbMaterial;
             public Material BreakingChainMaterial => _breakingChainMaterial;
             public Color LightColor => _lightColor;
             public ParticleSystem OrbHitParticlesPrefab => _orbHitParticlesPrefab;
@@ -53,6 +57,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [SerializeField] private Material _normalChainMaterial;
         public Material NormalChainMaterial => _normalChainMaterial;
 
+        [Header("ONHIT")]
+        [SerializeField] private ParticleTypes _onHitSparklesParticleType;
+        public ParticleTypes OnHitSparklesParticleType => _onHitSparklesParticleType;
+        
         [Header("TYPES")]
         [SerializeField] private UpgradeTypeToViewData _defaultUpgradeTypeToViewData;
         [SerializeField] private UpgradeTypeToViewData[] _upgradeTypeToViewDatas;
