@@ -24,6 +24,16 @@ namespace Popeye.Modules.GameState
                 _sceneReference = sceneReference;
             }
         }
+        public readonly struct OnStartLoadingAnyScene
+        {
+            private readonly ISceneReference _sceneReference;
+            public ISceneReference SceneReference => _sceneReference;
+
+            public OnStartLoadingAnyScene(ISceneReference sceneReference)
+            {
+                _sceneReference = sceneReference;
+            }
+        }
 
         public readonly struct OnFinishLoadingScenes { }
 
@@ -39,6 +49,7 @@ namespace Popeye.Modules.GameState
         }
 
         void InvokeOnStartLoadingAdditiveScene(ISceneReference sceneReference);
+        void InvokeOnStartLoadingAnyScene(ISceneReference sceneReference);
         void InvokeOnFinishLoadingScenes();
         void InvokeOnStartUnloadingScene(ISceneReference sceneReference);
      

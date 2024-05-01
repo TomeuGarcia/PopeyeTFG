@@ -20,7 +20,7 @@ namespace Popeye.Modules.AudioSystem
 
             _activeLastingSoundEmitters = new Dictionary<LastingFMODSound.SoundId, LastingFMODSoundEmitter>(10);
         }
-            
+        
         public LastingFMODSound.SoundId Play(LastingFMODSound lastingSound, Transform attachedGameObject)
         {
             LastingFMODSound.SoundId soundId = new LastingFMODSound.SoundId();

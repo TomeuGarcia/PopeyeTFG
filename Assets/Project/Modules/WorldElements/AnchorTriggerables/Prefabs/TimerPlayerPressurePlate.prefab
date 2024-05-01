@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 799839161237928283}
   - component: {fileID: 799839161237928281}
   - component: {fileID: 799839161237928260}
-  - component: {fileID: -3837399543572429281}
   m_Layer: 13
   m_Name: TimerPlayerPressurePlate
   m_TagString: Untagged
@@ -47,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9493a5247c1ed543a136dbcaca0edfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _audio: {fileID: 11400000, guid: a23b4d98704bceb49a1345f9c2c073dc, type: 2}
   _buttonTransform: {fileID: 8267881460022913311}
   _buttonMesh: {fileID: 3071601743082832382}
   _collider: {fileID: 799839161237928260}
@@ -79,37 +79,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2, y: 0.5, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-3837399543572429281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 799839161237928282}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1478979636
-      Data2: 1313036927
-      Data3: 497414800
-      Data4: 172673932
-    Path: event:/SFX/Interactions/SFX_Press_Button
-  Event: 
-  PlayEvent: 3
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  AllowNonRigidbodyDoppler: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &799839162377749809
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,7 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _updateTimer = new Timer(1.0f);
         }
 
-
+        
 
         public void DispatchOnDiedEvent()
         {
@@ -56,6 +56,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         
         public void DispatchOnTakeDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition, int currentHealth)
         {
+            _eventSystemService.Dispatch(new IPlayerEventsDispatcher.OnTakeDamageEvent());
             _eventSystemService.Dispatch(new OnPlayerTakeDamageEvent(playerPosition, damageHitResult, currentHealth));
         }
 

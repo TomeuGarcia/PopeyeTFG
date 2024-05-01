@@ -12,6 +12,9 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 {
     public class AnchorPressurePlate : MonoBehaviour, IDamageHitTarget
     {
+        [Header("AUDIO")]
+        [SerializeField] private ButtonInteractorAudio _audio;
+        
         [Header("MOVE")] 
         [SerializeField] private TweenConfigAsset _triggeredMoveBy;
 
@@ -20,10 +23,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         [SerializeField] private Material _notTriggeredMaterial;
         [SerializeField] private MeshRenderer _buttonMesh;
         [SerializeField] private Transform _buttonTransform;
-        
-        [Header("AUDIO")]
-        [SerializeField] private AFMODAudioManagerReference _audioManager;
-        [SerializeField] private OneShotFMODSound _activatedSound;
+
     
         [Header("WORLD INTERACTORS")]
         [SerializeField] private AWorldInteractor[] _worldInteractors;
@@ -81,7 +81,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
             _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config);
             
-            _audioManager.PlayOneShotAttached(_activatedSound, gameObject);
+            _audio.PlayActivatedSound(gameObject);
         }
         protected void PlayUntriggerAnimation()
         {

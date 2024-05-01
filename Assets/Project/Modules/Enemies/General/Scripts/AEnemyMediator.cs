@@ -1,3 +1,4 @@
+using System;
 using Popeye.Core.Pool;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.CombatSystem;
@@ -18,7 +19,16 @@ namespace Popeye.Modules.Enemies
         protected IEventSystemService _eventSystem;
         [SerializeField] private EnemyID _enemyID;
         public abstract Vector3 Position { get; }
-        
+
+        public struct EnemyStartsFightingPlayer { }
+        public struct EnemyStopsFightingPlayer { }
+
+        private void OnEnable()
+        {
+            _fightsStarted = 0;
+            _fightsStopped = 0;
+        }
+
         public virtual void OnHit(DamageHitResult damageHitResult)
         {
             _enemyVisuals.PlayHitEffects(_enemyHealth.GetValuePer1Ratio(), damageHitResult.DamageHit);
@@ -28,12 +38,13 @@ namespace Popeye.Modules.Enemies
         public virtual void OnSeePlayer()
         {
             _eventSystem.Dispatch(new OnEnemySeesPlayerEvent(_enemyID));
-
+            InvokeEnemyStartsFightingPlayer();
         }
 
         public virtual void OnDeath(DamageHitResult damageHitResult)
         {
             _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
+            InvokeEnemyStopsFightingPlayer();
             Recycle();
         }
 
@@ -53,9 +64,37 @@ namespace Popeye.Modules.Enemies
         }
         public virtual void OnPlayerFar()
         {
-            
+            InvokeEnemyStopsFightingPlayer();
         }
 
         public abstract void DieFromOrder();
+
+
+        private int _fightsStarted = 0;
+        private int _fightsStopped = 0;
+        protected void InvokeEnemyStartsFightingPlayer()
+        {
+            ++_fightsStarted;
+            if (_fightsStarted - _fightsStopped != 1)
+            {
+                --_fightsStarted;
+                // THS COMMENT IS HERE TO STAY TO SHAME THIS CODE
+                // Debug.Log("AQUI L'HAURIA PUTO CAGAT - 1 : " + name);
+                return;
+            }
+            _eventSystem.Dispatch(new EnemyStartsFightingPlayer());
+        }
+        protected void InvokeEnemyStopsFightingPlayer()
+        {
+            ++_fightsStopped;
+            if (_fightsStarted - _fightsStopped != 0)
+            {
+                --_fightsStopped;
+                // THS COMMENT IS HERE TO STAY TO SHAME THIS CODE
+                // Debug.Log("AQUI L'HAURIA PUTO CAGAT - 2 : " + name);
+                return;
+            }
+            _eventSystem.Dispatch(new EnemyStopsFightingPlayer());
+        }
     }
 }

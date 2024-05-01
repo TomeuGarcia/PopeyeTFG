@@ -58,6 +58,10 @@ namespace Popeye.Modules.Enemies.General
         {
             public GameObject spawnerGameObject;
         }
+        public struct OnFinishedEvent
+        {
+            public GameObject spawnerGameObject;
+        }
         public struct OnCompletedEvent
         {
             public GameObject spawnerGameObject;
@@ -112,6 +116,7 @@ namespace Popeye.Modules.Enemies.General
 
         private void FinishWaves()
         {
+            _eventSystemService.Dispatch(new OnFinishedEvent{spawnerGameObject = gameObject});
             _eventSystemService.Unsubscribe<IPlayerEventsDispatcher.OnRespawnFromDeathEvent>(OnPlayerRespawnFromDeath);
 
             if (_playerDiedDuringWaves)
