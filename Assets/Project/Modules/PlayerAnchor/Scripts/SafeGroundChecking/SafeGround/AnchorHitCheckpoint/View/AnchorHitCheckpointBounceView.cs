@@ -1,46 +1,27 @@
-using System;
 using System.Collections;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using NaughtyAttributes;
-using Popeye.Scripts.ObjectTypes;
-using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
 {
-    public class AnchorHitCheckpointView : MonoBehaviour
+    public class AnchorHitCheckpointBounceView : MonoBehaviour
     {
+        [Header("BOUNCE ANIMATION")]
         [SerializeField] private Transform _directionComputeOrigin;
-
-        [Header("ANCHOR")]
         [SerializeField] private Transform _anchorPointTransform;
-        [SerializeField] private Ease _startEase = Ease.OutQuint;
-        [SerializeField] private Ease _middleEase = Ease.InOutQuint;
-        [SerializeField] private Ease _endEase = Ease.InQuint;
-        [SerializeField] private AnimationCurve _anglesCurve = AnimationCurve.Linear(1,100,0,0);
-        [SerializeField] private AnimationCurve _durationCurve = AnimationCurve.Linear(1,1,0,0);
-        [SerializeField] private int _numberOfBounces = 7;
-
-        [Header("TEETH")]
         [SerializeField] private Transform _clapperTransform;
-        [SerializeField, Range(-2.0f, 2.0f)] private float _clapperAngleMultiplier = 0.2f;
-        [SerializeField, Range(0.0f, 2.0f)] private float _clapperDurationMultiplier = 0.3f;
-        
         
         private Coroutine _animationCoroutine;
         private Coroutine _bounceCoroutine;
         private Vector3 _bounceRotationAxis = Vector3.forward;
+
+        private AnchorHitCheckpointViewConfig.BouncesViewConfig _bouncesConfig;
         
-        
-        
-        private void OnValidate()
+        public void Configure(AnchorHitCheckpointViewConfig.BouncesViewConfig bouncesConfig)
         {
-            _numberOfBounces = Mathf.Max(2, _numberOfBounces);
+            _bouncesConfig = bouncesConfig;
         }
         
-
         
         public void ComputeBounceAxis(Vector3 hitOrigin)
         {
@@ -48,7 +29,6 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
             _bounceRotationAxis = Vector3.Cross(forward, Vector3.up).normalized;
         }
         
-        [Button()]
         public void PlayBounceAnimation()
         {
             ResetAnimation();
@@ -59,34 +39,40 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             int direction = 1;
             
-            float totalBounces = _numberOfBounces - 1;
+            float totalBounces = _bouncesConfig.NumberOfBounces - 1;
 
-            _bounceCoroutine = StartCoroutine(
-                this.DoBounce(_anglesCurve.Evaluate(0), _durationCurve.Evaluate(0), _startEase));
+            _bounceCoroutine = StartCoroutine(DoBounce(
+                    _bouncesConfig.AnglesCurve.Evaluate(0), 
+                    _bouncesConfig.DurationCurve.Evaluate(0), 
+                    _bouncesConfig.StartEase));
             yield return _bounceCoroutine;
 
 
             float t = 0f;
             float goalAngles;
             direction *= -1;
-            for (int i = 1; i < _numberOfBounces - 1; ++i)
+            for (int i = 1; i < _bouncesConfig.NumberOfBounces - 1; ++i)
             {
                 t = i / totalBounces;
 
-                goalAngles = _anglesCurve.Evaluate(t);
+                goalAngles = _bouncesConfig.AnglesCurve.Evaluate(t);
                 goalAngles *= direction;
                 direction *= -1;
 
-                _bounceCoroutine = StartCoroutine(
-                    this.DoBounce(goalAngles, _durationCurve.Evaluate(t), _middleEase));
+                _bounceCoroutine = StartCoroutine(DoBounce(
+                    goalAngles, 
+                    _bouncesConfig.DurationCurve.Evaluate(t), 
+                    _bouncesConfig.MiddleEase));
                 yield return _bounceCoroutine;
             }
             
             
-            goalAngles = _anglesCurve.Evaluate(1) * direction;
+            goalAngles = _bouncesConfig.AnglesCurve.Evaluate(1) * direction;
 
-            _bounceCoroutine = StartCoroutine(
-                DoBounce(goalAngles, _durationCurve.Evaluate(1), _endEase));
+            _bounceCoroutine = StartCoroutine(DoBounce(
+                goalAngles, 
+                _bouncesConfig.DurationCurve.Evaluate(1), 
+                _bouncesConfig.EndEase));
             yield return _bounceCoroutine;
 
             _animationCoroutine = _bounceCoroutine = null;
@@ -98,8 +84,8 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
                 .SetEase(ease);
             
             _clapperTransform.DOLocalRotate(
-                    _bounceRotationAxis * (goalAngles * _clapperAngleMultiplier), 
-                    duration * _clapperDurationMultiplier)
+                    _bounceRotationAxis * (goalAngles * _bouncesConfig.ClapperAngleMultiplier), 
+                    duration * _bouncesConfig.ClapperDurationMultiplier)
                 .SetEase(ease);
 
             yield return new WaitForSeconds(duration);

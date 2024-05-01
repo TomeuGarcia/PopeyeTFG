@@ -1,4 +1,7 @@
 using System;
+using NaughtyAttributes;
+using Popeye.Core.Services.EventSystem;
+using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
 using UnityEngine;
 
@@ -8,21 +11,32 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
     {
         [Header("CHECKPOINT CONFIG")]
         [SerializeField] private CheckpointStorer _checkpointStorer;
-        [SerializeField] private CheckpointDataAsset _checkpointData;
+        [Required()] [SerializeField] private CheckpointDataAsset _checkpointData;
         [SerializeField] private Transform _respawnSpot;
 
-        [Header("COMPONENTS")]
+        [Header("LOGIC")]
         [SerializeField] private AnchorHitCheckpointDamageLogic _damageLogic;
+        
+        [Header("VIEW")]
         [SerializeField] private AnchorHitCheckpointView _view;
-
-        [SerializeField] private GameObject _isActiveCheckpointGameObject;
+        
+        private IEventSystemService _eventSystemService;
+        public struct OnCheckpointSet { }
+        
+        
 
         private void Awake()
         {
+            bool startsAsActiveCheckpoint = false;
+            
             _checkpointData.Configure(_respawnSpot.position);
             _damageLogic.Configure(this);
+            _view.Configure(startsAsActiveCheckpoint, _checkpointData.TimesUsed > 0);
+        }
 
-            RemoveAsActiveCheckpoint();
+        private void Start()
+        {
+            _eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
         }
 
         private void OnEnable()
@@ -39,7 +53,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             if (!ReferenceEquals(_checkpointStorer.LastSafeCheckpoint, _checkpointData))
             {
-                RemoveAsActiveCheckpoint();
+                _view.PlayStopBeingCurrentlyActiveCheckpoint();
             }
         }
 
@@ -48,11 +62,21 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
             _view.ComputeBounceAxis(damageSourcePosition);
             _view.PlayBounceAnimation();
 
+            if (_checkpointData.TimesUsed == 0)
+            {
+                _view.PlayFirstTimeUsedAnimation();
+            }
+            else
+            {
+                _view.PlayUsedAnimation();
+            }
+         
             if (!ReferenceEquals(_checkpointStorer.LastSafeCheckpoint, _checkpointData))
             {
                 SetAsNewCheckpoint();
-            }           
-            
+            }
+
+            _eventSystemService.Dispatch(new OnCheckpointSet());
         }
 
 
@@ -60,13 +84,9 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             _checkpointStorer.SetLastSafeCheckpoint(_checkpointData);
 
-            _isActiveCheckpointGameObject.SetActive(true);
+            _view.PlayStartBeingCurrentlyActiveCheckpoint().Forget();
         }
-        
-        private void RemoveAsActiveCheckpoint()
-        {
-            _isActiveCheckpointGameObject.SetActive(false);
-        }
+
         
     }
 }

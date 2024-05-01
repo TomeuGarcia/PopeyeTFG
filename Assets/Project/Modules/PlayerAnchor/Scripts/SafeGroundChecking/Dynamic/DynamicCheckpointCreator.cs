@@ -15,7 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.Dynamic
     
         public void SetCurrentStateAsCheckpoint()
         {
-            _checkpointData.Configure(_objectToTrack.position);
+            _checkpointData.Configure(_objectToTrack.position, true);
             _checkpointStorer.Value.SetLastSafeCheckpoint(_checkpointData);
         }
     }

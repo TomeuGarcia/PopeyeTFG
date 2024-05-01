@@ -1,3 +1,4 @@
+using System;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -8,10 +9,31 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint
     public class CheckpointDataAsset : ScriptableObject, ICheckpointData
     {
         public Vector3 Position { get; private set; }
+        public int TimesUsed { get; private set; }
 
-        public void Configure(Vector3 position)
+        private void OnEnable()
+        {
+            ResetTimesUsed();
+        }
+
+        public void Configure(Vector3 position, bool resetTimesUsed = false)
         {
             Position = position;
+
+            if (resetTimesUsed)
+            {
+                ResetTimesUsed();
+            }
+        }
+        
+        public void IncrementTimesUsed()
+        {
+            ++TimesUsed;
+        }
+
+        private void ResetTimesUsed()
+        {
+            TimesUsed = 0;
         }
     }
 }

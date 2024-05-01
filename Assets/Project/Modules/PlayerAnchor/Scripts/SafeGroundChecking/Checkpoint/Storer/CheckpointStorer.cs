@@ -15,7 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint
         public void SetLastSafeCheckpoint(ICheckpointData checkpointData)
         {
             LastSafeCheckpoint = checkpointData;
-            
+            LastSafeCheckpoint.IncrementTimesUsed();
             OnLastSafeCheckpointChanged?.Invoke();
         }
 
