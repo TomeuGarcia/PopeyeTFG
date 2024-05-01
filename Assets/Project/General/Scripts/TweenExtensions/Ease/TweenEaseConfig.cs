@@ -10,7 +10,7 @@ namespace Project.Scripts.TweenExtensions
     public class TweenEaseConfig
     {
         [Header("DURATION")]
-        [SerializeField, Range(0.01f, 5.0f)] private float _duration = 0.5f;
+        [SerializeField, Range(-1.0f, 5.0f)] private float _duration = 0.5f;
 
         [Header("EASE")] 
         [SerializeField] private bool _useCurve = false;

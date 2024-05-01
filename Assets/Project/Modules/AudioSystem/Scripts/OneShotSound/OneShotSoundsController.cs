@@ -28,7 +28,7 @@ namespace Popeye.Modules.AudioSystem
         {
             foreach (SoundParameter parameter in oneShotSound.Parameters)
             {
-                eventInstance.setParameterByName(parameter.Name, parameter.Value);
+                eventInstance.setParameterByID(parameter.Id, parameter.Value);
             }
             
             eventInstance.start();

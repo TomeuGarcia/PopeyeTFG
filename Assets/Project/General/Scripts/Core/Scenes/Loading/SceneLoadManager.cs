@@ -62,7 +62,8 @@ namespace Popeye.Scripts.Core.Scenes
             SceneLoadOptions loadOptions = sceneLoadGroup.LoadOptions;
             
             LoadSceneCommand loadSceneCommand = 
-                new LoadSceneCommand(sceneReference, loadOptions.DelayBeforeLoading);
+                new LoadSceneCommand(sceneReference, loadOptions.DelayBeforeLoading,
+                    OnStartLoadingAnyScene);
             
             
             DoLoadScene(sceneReference, loadOptions, loadSceneCommand);
@@ -177,6 +178,11 @@ namespace Popeye.Scripts.Core.Scenes
         private void OnStartLoadingSceneAdditively(ISceneReference sceneReference)
         {
             _gameStateEventsDispatcher.InvokeOnStartLoadingAdditiveScene(sceneReference);
+            OnStartLoadingAnyScene(sceneReference);
+        }
+        private void OnStartLoadingAnyScene(ISceneReference sceneReference)
+        {
+            _gameStateEventsDispatcher.InvokeOnStartLoadingAnyScene(sceneReference);
         }
         private void OnFinishLoadingSceneAdditively(ISceneReference sceneReference)
         {

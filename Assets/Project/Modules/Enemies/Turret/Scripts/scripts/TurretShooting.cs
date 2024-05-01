@@ -12,52 +12,49 @@ namespace Popeye.Modules.Enemies.Components
 {
     public class TurretShooting : MonoBehaviour
     {
+        [Header("SHOOTING")]
+        [SerializeField] private float timeBetweenShots;
+        [SerializeField] private Transform _firePoint;
+        [SerializeField] private int _numberOfShots = 3;
+        
+        [Header("THRESHOLD DISTANCES")]
+        [SerializeField] private float _playerDistanceThreshold;
+        [SerializeField] private float _playerDistanceThresholdToHide;
+        [SerializeField] private float _playerDistanceThresholdToAppear;
+
         private TurretMediator _mediator;
         private Transform _playerTransform;
         private IHazardFactory _hazardsFactory;
-        [SerializeField] private float timeBetweenShots;
-        [SerializeField] private Transform _firePoint;
         private float _timer = 0;
         private ParabolicProjectile _currentProjectile;
         private bool _outOfGround = true;
-        
-       [SerializeField] private float _squashAmountY = 2.6f;
-       [SerializeField] private float _squashAmountXZ = 2.6f;
-       [SerializeField] private float _stretchAmountY = 2.6f;
-       [SerializeField] private float _stretchAmountXZ = 2.8f;
-       [SerializeField] private float _squashAndStretchTime = 0.5f;
 
-       
-       private bool _animationOn = false;
-       [SerializeField] private float _playerDistanceThreshold;
-       [SerializeField] private float _playerDistanceThresholdToHide;
-       [SerializeField] private float _playerDistanceThresholdToAppear;
-       private float _squaredPlayerDistanceThreshold;
-       private float _squaredPlayerDistanceThresholdToHide;
-       private float _squaredPlayerDistanceThresholdToAppear;
-       private bool _playerInSight = false;
+        private bool _animationOn = false;
 
-       private bool _hiding =false;
-       [SerializeField] private int _numberOfShots = 3;
-       public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
+        private bool _isHidden = false;
+
+        public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
             _mediator = turetMediator;
             _playerTransform = playerTransform;
             _hazardsFactory = hazardFactory;
-            _squaredPlayerDistanceThresholdToAppear = _playerDistanceThresholdToAppear * _playerDistanceThresholdToAppear;
-            _squaredPlayerDistanceThresholdToHide = _playerDistanceThresholdToHide * _playerDistanceThresholdToHide;
-            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint,_playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
-            _squaredPlayerDistanceThreshold = _playerDistanceThreshold * _playerDistanceThreshold;
-           
+            
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(
+                _firePoint,_playerTransform,
+                _playerDistanceThreshold,_playerDistanceThresholdToHide);
+
+            PlayerIsTooClose = false;
+            PlayerIsTooFar = false;
+            DoHide();
         }
-
-
+       
 
         private void Update()
         {
-            if (IsPlayerFarEnoughToAppear())
+            UpdateDistances();
+           
+            if (PlayerIsAtValidDistance)
             {
-                
                 if (_outOfGround)
                 {
                     _mediator.LookAtPlayer(Time.deltaTime);
@@ -72,43 +69,54 @@ namespace Popeye.Modules.Enemies.Components
 
                     _timer += Time.deltaTime;
                 }
-                else if(!_playerInSight)
+                else if (_isHidden)
                 {
-                    _mediator.AppearAnimation();
-                    _hiding = false;
-                    _mediator.PlayerSeen();
-                    _playerInSight = true;
+                    DoAppear();
                 }
             }
-            if(!IsPlayerAtCloseDistance() && !_hiding)
+            else if ((PlayerIsTooClose || PlayerIsTooFar) && !_isHidden)
             {
-                _hiding = true;
-                _playerInSight = false;
-                _mediator.HideAnimation();
-                _timer = 0;
+                DoHide();
             }
         }
-        
-        private float GetPlayerSqrMagnitude()
+
+        private void DoAppear()
         {
-            return (_playerTransform.position - transform.position).sqrMagnitude;
+           _isHidden = false;
+           _mediator.AppearAnimation(PlayerIsAtValidDistanceFromClose);
         }
-        
-        private bool IsPlayerAtCloseDistance()
+        private void DoHide()
         {
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold && GetPlayerSqrMagnitude() > _squaredPlayerDistanceThresholdToHide;
+           _isHidden = true;
+           _mediator.HideAnimation(PlayerIsTooClose, PlayerIsTooFar);
+           _timer = 0;
         }
+       
         
-        private bool IsPlayerFarEnoughToAppear()
+        private float GetPlayerDistance()
         {
-            
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold && GetPlayerSqrMagnitude() > _squaredPlayerDistanceThresholdToAppear;
+            return Vector3.Distance(_playerTransform.position, transform.position);
         }
 
-        private bool IsPlayerTooClose()
+
+        public bool PlayerIsTooClose { get; private set; }
+        public bool PlayerIsTooFar { get; private set; }
+        public bool PlayerIsAtValidDistance { get; private set; }
+        public bool PlayerIsAtValidDistanceFromClose { get; private set; }
+        private void UpdateDistances()
         {
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThreshold;
+            float playerDistance = GetPlayerDistance();
+            
+            PlayerIsAtValidDistance = playerDistance < _playerDistanceThreshold &&
+                                      playerDistance > _playerDistanceThresholdToAppear;
+
+            PlayerIsAtValidDistanceFromClose = PlayerIsAtValidDistance && 
+                                               playerDistance < (_playerDistanceThresholdToAppear + 1);
+            
+            PlayerIsTooFar = playerDistance > _playerDistanceThreshold;
+            PlayerIsTooClose = playerDistance < _playerDistanceThresholdToHide;
         }
+        
 
         public void SetOutOfGround()
         {
