@@ -18,10 +18,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         {
             _config = config;
             _focusUI = focusUI;
-            MaxFocusAmount = _config.MaxFocusAmount;
-            SetCurrentFocusAmount(_config.StartFocusAmount);
+            MaxFocusAmount = _config.MaxFocusAmount;            
         }
-        
+
+        public void Init()
+        {
+            SetCurrentFocusAmount(_config.StartFocusAmount);
+            _focusUI.OnFocusSet();
+        }
         
         public bool HasEnoughFocus(int focusAmount)
         {

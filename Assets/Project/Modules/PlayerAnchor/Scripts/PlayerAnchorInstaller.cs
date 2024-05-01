@@ -23,6 +23,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
+using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
@@ -270,7 +271,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
-            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, _audioManagerReference, _playerAudioConfig);
+            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject,
+                _audioManagerReference, _playerAudioConfig, playerMovementChecker);
             _playerAnimatorEvents.AddFootstepsListener(playerAudio);
 
             PlayerFocusController playerFocusController =
@@ -300,11 +302,15 @@ namespace Popeye.Modules.PlayerAnchor
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
             PlayerAutoActionsQueue playerAutoActionsQueue = new PlayerAutoActionsQueue(_player, _anchor);
+
+            PlayerBattleInteractionsController battleInteractionsController =
+                new PlayerBattleInteractionsController(eventSystemService);
             
             PlayerGlobalEventsListener playerGlobalEventsListener = 
                 new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue, 
                     _playerGeneralConfig.FocusConfig.HealthBoostEventChannel, playerHealth,
-                    _playerGeneralConfig.FocusConfig.FocusBoostEventChannel, playerFocusController);
+                    _playerGeneralConfig.FocusConfig.FocusBoostEventChannel, playerFocusController,
+                    battleInteractionsController);
             PlayerEventsDispatcher playerEventsDispatcher =
                 new PlayerEventsDispatcher(eventSystemService, 
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
@@ -345,7 +351,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerFocusController);
-            
+            playerFocusController.Init();
             
             PowerBoostDropFactory powerBoostDropFactory =
                 new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);

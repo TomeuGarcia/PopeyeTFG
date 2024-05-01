@@ -25,7 +25,10 @@ namespace Popeye.Modules.ValueStatSystem
 
         private async void StartDeathwish()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_delay));
+            if (_delay > 0.001f)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(_delay));    
+            }            
             DoDeathwish();
         }
         protected abstract void DoDeathwish();
