@@ -34,6 +34,8 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Dynamic;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
@@ -99,7 +101,8 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Placing")]
         [SerializeField] private PlacePopeyePlayerEventChannelAsset _placePopeyePlayerEventChannel;
-        [SerializeField] private CheckpointTriggerChecker _playerCheckpointTriggerChecker;
+        [SerializeField] private CheckpointStorer _playerCheckpointStorer;
+        [SerializeField] private DynamicCheckpointCreator _playerPlacerCheckpointCreator;
 
         [Space(20)] 
         [Header("ANCHOR")] 
@@ -317,7 +320,7 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
-                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerCheckpointTriggerChecker,
+                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerPlacerCheckpointCreator,
                 _abilitiesToUnlockHolder);
             _popeyePlayerPlacer.StartListening();
             
@@ -341,7 +344,7 @@ namespace Popeye.Modules.PlayerAnchor
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
-                _playerCheckpointTriggerChecker, playerSafeGroundChecker, 
+                _playerCheckpointStorer, playerSafeGroundChecker, 
                 playerOnVoidChecker, playerFocusController, playerSpecialAttacks,
                 playerGlobalEventsListener, playerEventsDispatcher);
 

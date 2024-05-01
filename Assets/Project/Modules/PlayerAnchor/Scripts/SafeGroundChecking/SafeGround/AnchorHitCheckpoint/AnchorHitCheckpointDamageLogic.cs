@@ -1,23 +1,19 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
-using Popeye.Scripts.ObjectTypes;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
 {
-    public class AnchorHitCheckpointLogic : MonoBehaviour, IDamageHitTarget
+    public class AnchorHitCheckpointDamageLogic : MonoBehaviour, IDamageHitTarget
     {
-        [SerializeField] private AnchorHitCheckpointView _view;
-        
+        private IAnchorHitCheckpointMediator _mediator;
 
-        
-        private void OnGameObjectEnters(GameObject other)
+        public void Configure(IAnchorHitCheckpointMediator mediator)
         {
-            
+            _mediator = mediator;
         }
-
-
+        
 
         public DamageHitTargetType GetDamageHitTargetType()
         {
@@ -26,9 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
 
         public DamageHitResult TakeHitDamage(DamageHit damageHit)
         {
-            _view.ComputeBounceAxis(damageHit.DamageSourcePosition);
-            _view.PlayBounceAnimation();
-            
+            _mediator.OnWasHitByAnchor(damageHit.DamageSourcePosition);
             return new DamageHitResult(this, gameObject, damageHit, 0, transform.position);
         }
 

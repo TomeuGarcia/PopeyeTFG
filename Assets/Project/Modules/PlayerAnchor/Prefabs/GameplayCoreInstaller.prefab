@@ -208,7 +208,7 @@ Transform:
   - {fileID: 5001171340976732915}
   - {fileID: 6993181967057281109}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1386922943215149762
 MonoBehaviour:
@@ -454,7 +454,9 @@ MonoBehaviour:
   _autoAimCreator: {fileID: 752198695613597362}
   _placePopeyePlayerEventChannel: {fileID: 11400000, guid: 78858b44672000849a30fc75b70340eb,
     type: 2}
-  _playerCheckpointTriggerChecker: {fileID: 0}
+  _playerCheckpointStorer: {fileID: 11400000, guid: 646df88244edf7140943b24eb197a6bf,
+    type: 2}
+  _playerPlacerCheckpointCreator: {fileID: 0}
   _anchor: {fileID: 0}
   _anchorPhysics: {fileID: 0}
   _vfxAnchorView: {fileID: 0}
