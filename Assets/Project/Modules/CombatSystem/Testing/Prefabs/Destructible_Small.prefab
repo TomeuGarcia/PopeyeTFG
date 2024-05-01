@@ -36,7 +36,7 @@ Transform:
   m_Children:
   - {fileID: 1020867168731075544}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3452790659243180350
 MonoBehaviour:
@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f27f855774fd49ef94a398ab6474ba39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _delay: 0
   _healthUser:
     _underlyingValue: {fileID: 3452790659243180350}
   _powerBoostDrop: {fileID: 11400000, guid: d51aa3f822d696544abe926068503658, type: 2}
@@ -245,14 +246,20 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6a27d28ba00a9454cbeec85256ec4617, type: 2}
+      objectReference: {fileID: 2100000, guid: 58095ff225e0fb942a0c91dc35d6f309, type: 2}
     - target: {fileID: 4730731105826729613, guid: 1ddd15fed40ee4a46aac1a12c1950ff6,
         type: 3}
       propertyPath: m_Name
       value: Destructible_Box
       objectReference: {fileID: 0}
+    - target: {fileID: 7445543885752544137, guid: 1ddd15fed40ee4a46aac1a12c1950ff6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2436613018293867773, guid: 1ddd15fed40ee4a46aac1a12c1950ff6, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ddd15fed40ee4a46aac1a12c1950ff6, type: 3}
