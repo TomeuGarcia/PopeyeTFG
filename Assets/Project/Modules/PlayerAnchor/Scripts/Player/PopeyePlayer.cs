@@ -654,7 +654,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             PlayerView.PlayTakeDamageAnimation();
             _playerAudio.PlayTakeDamageSound();
-
+            
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
             
             _eventsDispatcher.DispatchOnTakeDamageEvent(damageHitResult, Position, _playerHealth.GetCurrentHealth());
