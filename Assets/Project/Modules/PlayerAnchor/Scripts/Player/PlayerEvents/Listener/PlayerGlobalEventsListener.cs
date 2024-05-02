@@ -5,6 +5,7 @@ using Popeye.Modules.GameState;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint;
 using Popeye.Scripts.EventChannels;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         private readonly IEmptyEventChannelListenEntry _playerFocusBoostEvent;
         private readonly IPlayerFocusUpgrader _playerFocusUpgrader;
         private readonly IPlayerBattleInteractionsController _battleInteractionsController;
+        private readonly PlayerHealth _playerHealth;
 
 
         public PlayerGlobalEventsListener(
@@ -28,7 +30,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             IPlayerAutoActionsQueue playerAutoActionsQueue,
             IEmptyEventChannelListenEntry playerHealthBoostEvent, IPlayerHealthUpgrader playerHealthUpgrader,
             IEmptyEventChannelListenEntry playerFocusBoostEvent, IPlayerFocusUpgrader playerFocusUpgrader,
-            IPlayerBattleInteractionsController battleInteractionsController)
+            IPlayerBattleInteractionsController battleInteractionsController,
+            PlayerHealth playerHealth)
         {
             _eventSystemService = eventSystemService;
             _playerAutoActionsQueue = playerAutoActionsQueue;
@@ -40,10 +43,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _playerFocusUpgrader = playerFocusUpgrader;
             
             _battleInteractionsController = battleInteractionsController;
+            _playerHealth = playerHealth;
         }
         
         public void StartListening()
         {
+            _eventSystemService.Subscribe<AnchorHitCheckpoint.OnCheckpointSet>(OnCheckpointSetEvent);
+            
             _eventSystemService.Subscribe<EnemySpawner.OnActivatedEvent>(OnEnemySpawnerActivated);
             _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnStartUnloadingScene>(OnSceneStartsUnloading);
             
@@ -55,6 +61,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
 
         public void StopListening()
         {
+            _eventSystemService.Unsubscribe<AnchorHitCheckpoint.OnCheckpointSet>(OnCheckpointSetEvent);
+            
             _eventSystemService.Unsubscribe<EnemySpawner.OnActivatedEvent>(OnEnemySpawnerActivated);
             _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnStartUnloadingScene>(OnSceneStartsUnloading);
             
@@ -63,9 +71,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             
             _battleInteractionsController.StopListening();
         }
-        
-        
-        
+
+
+        private void OnCheckpointSetEvent(AnchorHitCheckpoint.OnCheckpointSet eventData)
+        {
+            if (!_playerHealth.IsMaxHealth())
+            {
+                _playerHealth.HealToMax();    
+            }            
+        }
+
         private void OnEnemySpawnerActivated(EnemySpawner.OnActivatedEvent eventData)
         {
             _playerAutoActionsQueue.TryQueueAnchorPull();

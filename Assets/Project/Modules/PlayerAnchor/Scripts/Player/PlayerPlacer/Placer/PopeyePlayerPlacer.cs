@@ -1,14 +1,9 @@
-using System;
-using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor.AbilityUnlock;
-using Popeye.Modules.PlayerAnchor.Anchor;
-using Popeye.Modules.PlayerAnchor.Chain;
-using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
-using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Dynamic;
 using Popeye.Modules.VFX.Generic;
-using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
 {
@@ -18,7 +13,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
         private readonly IPlayerInstantTranslation _playerInstantTranslation;
         private readonly PlayerFSM _playerStateMachine;
         private readonly EnvironmentFollower _environmentFollower;
-        private readonly ISafeGroundOnDemand _playerRespawnSafeGround;
+        private readonly IDynamicCheckpointCreator _dynamicCheckpointCreator;
+        private readonly ICheckpointStorerWrite _playerCheckpointStorerWrite;
         private readonly PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
 
 
@@ -27,7 +23,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             IPlayerInstantTranslation playerInstantTranslation,
             PlayerFSM playerStateMachine,
             EnvironmentFollower environmentFollower,
-            ISafeGroundOnDemand playerRespawnSafeGround,
+            IDynamicCheckpointCreator dynamicCheckpointCreator,
             PlayerAbilitiesToUnlockHolder abilitiesToUnlockHolder
         )
         {
@@ -35,7 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
             _playerInstantTranslation = playerInstantTranslation;
             _playerStateMachine = playerStateMachine;
             _environmentFollower = environmentFollower;
-            _playerRespawnSafeGround = playerRespawnSafeGround;
+            _dynamicCheckpointCreator = dynamicCheckpointCreator;
             _abilitiesToUnlockHolder = abilitiesToUnlockHolder;
         }
 
@@ -65,7 +61,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
 
             if (placingData.isNewPlayerRespawn)
             {
-                _playerRespawnSafeGround.SetCurrentStateAsSafeGround();
+                _dynamicCheckpointCreator.SetCurrentStateAsCheckpoint();
             }
 
             if (placingData.debugUnlockAllAbilities)
