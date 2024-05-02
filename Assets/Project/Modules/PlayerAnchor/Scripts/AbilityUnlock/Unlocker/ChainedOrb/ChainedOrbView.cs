@@ -12,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
     {
         [Header("ORB")]
         [SerializeField] private MeshRenderer _orbMesh;
+        [SerializeField] private MeshRenderer _outterOrb;
         
         [Header("CHAINS")]
         [SerializeField] private Light _pointLight;
@@ -29,6 +30,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _typeViewData = typeViewData;
 
             _orbMesh.material = _typeViewData.OrbMaterial;
+            _outterOrb.material = _typeViewData.OutterOrbMaterial;
             _pointLight.color = _typeViewData.LightColor;
         }
 
@@ -60,15 +62,14 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             }
 
             Vector3 direction = Vector3.ProjectOnPlane(transform.position - hitOrigin, Vector3.up).normalized;
-            transform.DOPunchPosition(
+            transform.DOLocalMove(
                 direction * _viewConfig.OrbHitMovePunch,
-                _viewConfig.OrbHitDuration,
-                vibrato: 1
-            );
+                _viewConfig.OrbHitDuration
+            ).SetEase(Ease.OutCirc);
             transform.DOBlendableLocalRotateBy(
                 Vector3.up * _viewConfig.OrbHitRotateAmount, 
                 _viewConfig.OrbHitDuration)
-                .SetEase(Ease.OutBounce);
+                .SetEase(Ease.OutCirc);
                 
             await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbChainsStartBreakingDelay));
         
@@ -76,8 +77,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             {
                 meshRenderer.material = _typeViewData.BreakingChainMaterial;
             }
-            
             await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbChainsDisappearDelay));
+            
             foreach (MeshRenderer meshRenderer in _circleChainMeshes)
             {
                 meshRenderer.gameObject.SetActive(false);
