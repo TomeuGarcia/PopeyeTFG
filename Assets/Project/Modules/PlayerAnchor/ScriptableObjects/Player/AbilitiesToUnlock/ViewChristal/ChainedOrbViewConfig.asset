@@ -14,28 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _normalChainMaterial: {fileID: 2100000, guid: c63286ec57f9eb941a227be86c5e7d91,
     type: 2}
+  _onHitSparklesParticleType: 30
   _defaultUpgradeTypeToViewData:
     _upgradeType: 0
     _orbMaterial: {fileID: 2100000, guid: e740425e959c783468080dd9f1bbfb05, type: 2}
+    _outterOrbMaterial: {fileID: 2100000, guid: ca15505595013404d818d3ff09491754,
+      type: 2}
     _breakingChainMaterial: {fileID: 2100000, guid: 6b453603144098249bee551ed9eada86,
       type: 2}
     _lightColor: {r: 1, g: 0.7680342, b: 0.1372549, a: 0}
     _orbHitParticlesPrefab: {fileID: 6153317017535634169, guid: 6aac59770115f8240b56af9454e15995,
       type: 3}
-    _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 46f89f478275dcd4d91b04d63be3a689,
+    _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 98e918031033e1f4fafb6057548cfb94,
       type: 3}
   _upgradeTypeToViewDatas:
   - _upgradeType: 6
     _orbMaterial: {fileID: 2100000, guid: 0025587afeffb04439a0646d69a73e0f, type: 2}
+    _outterOrbMaterial: {fileID: 2100000, guid: 021a651a782523c44a4dff5ff17cc9d4,
+      type: 2}
     _breakingChainMaterial: {fileID: 2100000, guid: ca67383d52668af49871f18376cd17ff,
       type: 2}
     _lightColor: {r: 1, g: 0.1372549, b: 0.41442737, a: 0}
     _orbHitParticlesPrefab: {fileID: 6153317017535634169, guid: 09bda8f06b7384f449db48b34dfc6b5d,
       type: 3}
-    _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 46f89f478275dcd4d91b04d63be3a689,
+    _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 8af6d82ffffab5d4c9aa5471ad452bf7,
       type: 3}
   - _upgradeType: 7
     _orbMaterial: {fileID: 2100000, guid: d61811cb36c05ae479c9a294e8d9dabb, type: 2}
+    _outterOrbMaterial: {fileID: 2100000, guid: 3164f1daca4f1a94e9cbd15bb206ca32,
+      type: 2}
     _breakingChainMaterial: {fileID: 2100000, guid: d910b2bf0d9d8dd4c82dad0052a8c7ab,
       type: 2}
     _lightColor: {r: 0.13725491, g: 1, b: 0.6627451, a: 0}
@@ -45,11 +52,16 @@ MonoBehaviour:
       type: 3}
   _breakStepDuration: {x: 0.24, y: 0.1}
   _breakPunch: {x: 0.5, y: 0.5, z: 0.5}
-  _orbHitMovePunch: 5
+  _orbHitMovePunch: 4
   _orbHitRotateAmount: 180
-  _orbHitDuration: 1
+  _orbHitDuration: 0.5
   _orbChainsStartBreakingDelay: 0.5
-  _orbChainsDisappearDelay: 0.1
+  _orbChainsDisappearDelay: 0.3
+  _sparkOffset: {x: 0, y: 0.3, z: 0.1}
+  _orbitalChainRotationSpeeds:
+  - 180
+  - 60
+  - 120
   _orbMoveToTarget:
     _startDelay: 0.5
     _moveDuration: 0.8

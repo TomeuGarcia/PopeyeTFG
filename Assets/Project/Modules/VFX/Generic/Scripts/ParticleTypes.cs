@@ -31,6 +31,7 @@ namespace Popeye.Modules.VFX.Generic
         Explosion,
         ExplosionDecal,
         TurretAttackPreview,
-        DispenserCharge
+        DispenserCharge,
+        CollisionSparks
     }
 }
