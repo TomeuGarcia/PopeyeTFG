@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Popeye.Modules.VFX.Generic;
 using Popeye.ProjectHelpers;
 using Project.Scripts.TweenExtensions;
@@ -20,7 +21,6 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             [SerializeField] private Color _lightColor;
             [SerializeField] private ParticleSystem _orbHitParticlesPrefab;
             [SerializeField] private ParticleSystem _pickAbilityParticlesPrefab;
-            //TODO FUCK material particules
 
             public bool IsOfType(GeneralInitializePlayerAbilityUnlockerConfig.Ability upgradeType)
             {
@@ -101,6 +101,16 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         public float OrbChainsStartBreakingDelay => _orbChainsStartBreakingDelay;
         public float OrbChainsDisappearDelay => _orbChainsDisappearDelay;
         
+        
+        [Header("ORBITAL CHAINS")]
+        [SerializeField] private float _sparkForwardCoef;
+        [SerializeField] private float _sparkUpwardsCoef;
+        public float SparkForwardCoef => _sparkForwardCoef;
+        public float SparkUpwardsCoef => _sparkUpwardsCoef;
+        
+        [Header("ORBITAL CHAINS")]
+        [SerializeField] private List<float> _orbitalChainRotationSpeeds = new();
+        public List<float> OrbitalChainRotationSpeeds => _orbitalChainRotationSpeeds;
         
         [Header("ORB MOVE")]
         [SerializeField] private OrbMoveToTargetData _orbMoveToTarget;
