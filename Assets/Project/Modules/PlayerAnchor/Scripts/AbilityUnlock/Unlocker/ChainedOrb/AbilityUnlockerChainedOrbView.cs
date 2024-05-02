@@ -5,6 +5,7 @@ using NaughtyAttributes;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
 using UnityEngine;
@@ -84,8 +85,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _audio.PlayHitSound(gameObject);
             Transform sparks = _particleFactory.Create(_viewConfig.OnHitSparklesParticleType, Vector3.zero, quaternion.identity, transform);
             sparks.LookAt(_orbTargetTransform.position);
-            sparks.transform.position += Vector3.forward * _viewConfig.SparkForwardCoef;
-            sparks.transform.position += Vector3.up * _viewConfig.SparkUpwardsCoef;
+            sparks.transform.position += _viewConfig.SparkOffset;
             
             foreach (ChainedOrbChainView chainGroup in _chains)
             {

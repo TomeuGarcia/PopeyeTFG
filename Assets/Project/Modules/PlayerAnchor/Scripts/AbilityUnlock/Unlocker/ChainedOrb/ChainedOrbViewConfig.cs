@@ -103,10 +103,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         
         [Header("ORBITAL CHAINS")]
-        [SerializeField] private float _sparkForwardCoef;
-        [SerializeField] private float _sparkUpwardsCoef;
-        public float SparkForwardCoef => _sparkForwardCoef;
-        public float SparkUpwardsCoef => _sparkUpwardsCoef;
+        [SerializeField] private Vector3 _sparkOffset;
+        public Vector3 SparkOffset => _sparkOffset;
         
         [Header("ORBITAL CHAINS")]
         [SerializeField] private List<float> _orbitalChainRotationSpeeds = new();
