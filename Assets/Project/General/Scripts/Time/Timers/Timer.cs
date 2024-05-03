@@ -11,6 +11,7 @@ namespace Popeye.Timers
 
         public float Time => _counter;
         public float Duration => _duration;
+        public float RemainingTime => _duration - _counter;
         
         public Timer(float duration)
         {
