@@ -23,7 +23,7 @@ public class AreaDamageOverTime : RecyclableObject
     [SerializeField] private ObjectTypeAsset _playerType;
     private float burnTimer = 0;
 
-    
+    [SerializeField] private ParabolicProjectileAudio _projectileAudio;
     
     private void Start()
     {
@@ -77,6 +77,7 @@ public class AreaDamageOverTime : RecyclableObject
 
     internal override void Init()
     {
+        _projectileAudio.PlayAreaDamage(gameObject);
         Invoke("Despawn",_lifeTime);
     }
 
