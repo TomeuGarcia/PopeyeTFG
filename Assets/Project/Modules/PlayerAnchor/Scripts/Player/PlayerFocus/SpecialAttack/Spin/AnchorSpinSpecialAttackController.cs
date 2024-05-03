@@ -27,7 +27,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
         private Quaternion _endRotation;
         
-        
+        public float PreparationDuration => _config.PreparationDuration;
+
         public AnchorSpinSpecialAttackController(
             AnchorSpinAttackConfig config,
             IPlayerFocusSpender focusSpender, 
@@ -45,7 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _playerMediator = playerMediator;
             _spinEndFloorRotationCorrection = spinEndFloorRotationCorrection;
         }
-        
+
         
         public bool CanDoSpecialAttack()
         {
@@ -54,7 +55,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                    !_anchorMediator.IsBeingCarried();*/
         }
 
-        public bool SpecialAttackIsBeingPerformed()
+        private bool SpecialAttackIsBeingPerformed()
         {
             return _isBeingPerformed;
         }

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
@@ -98,10 +99,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         UniTaskVoid DisableSafeGroundCheckingForDuration(float duration);
 
 
-        bool CanDoSpecialAttack();
-        void OnSpecialAttackPreparationStart(float durationToComplete);
+        void OnSpecialAttackPreparationStart(IPlayerSpecialAttackController specialAttackController, float durationToComplete);
         void OnSpecialAttackPreparationInterrupted();
         void OnSpecialAttackPerformed();
+        void OnSpecialAttackPerformFinished();
         bool SpecialAttackHasFinished();
         void ForceStopSpecialAttack();
 

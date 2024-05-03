@@ -1,3 +1,4 @@
+using System;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using UnityEngine;
 
@@ -16,8 +17,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
             if (other.TryGetComponent(out IPowerBoostDrop powerBoostDrop) &&  powerBoostDrop.CanBeUsed())
             {
                 _focusGainer.GainFocus(powerBoostDrop.GetExperienceAndSetUsed());
+            }            
+        }
+
+        public void Update()
+        {
+            // Debug Only
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _focusGainer.GainFocus(50);
             }
-            
         }
     }
 }

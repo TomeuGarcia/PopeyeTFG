@@ -27,14 +27,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
                 specialAttackToggleable.SetDefaultMode();
             }
         }
-        
+
+        public float PreparationDuration => 0;
+
         public bool CanDoSpecialAttack()
         {
             return _focusSpender.HasEnoughFocus(_focusAttackConfig.RequiredFocusToPerform) && 
                    !SpecialAttackIsBeingPerformed();
         }
 
-        public bool SpecialAttackIsBeingPerformed()
+        private bool SpecialAttackIsBeingPerformed()
         {
             return _isBeingPerformed;
         }

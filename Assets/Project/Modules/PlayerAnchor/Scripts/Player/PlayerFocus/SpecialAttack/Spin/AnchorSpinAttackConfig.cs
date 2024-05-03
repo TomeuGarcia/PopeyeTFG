@@ -12,6 +12,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         [SerializeField] private int _numberOfLoops = 2;
         
         [Header("DURATIONS")]
+        [SerializeField] private float _preparationDuration = 0.5f;
         [SerializeField] private float _totalDuration = 1.0f;
         [SerializeField] private float _startPositioningDuration = 0.2f;
         [SerializeField] private float _endPositioningDuration = 0.15f;
@@ -21,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         [SerializeField] private float _endSpinDistance = 7.0f;
         
         public int NumberOfLoops => _numberOfLoops;
+        public float PreparationDuration => _preparationDuration;
         public float TotalDuration => _totalDuration;
         public float StartPositioningDuration => _startPositioningDuration;
         public float EndPositioningDuration => _endPositioningDuration;

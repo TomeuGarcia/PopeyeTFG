@@ -28,7 +28,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
 
             foreach (Light light in _lights)
             {
-                light.color = _vfxConfig.LockedColor;
+                light.color = hasBeenUnlocked ? _vfxConfig.UnlockedColor : _vfxConfig.LockedColor;
             }
 
             _transformParticles.Stop();

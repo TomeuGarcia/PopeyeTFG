@@ -17,7 +17,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private ValueGate<InputPressedBuffer> _pullInputGate;
         private ValueGate<InputPressedBuffer> _dashTowardsAnchorInputGate;
         private ValueGate<InputAction> _dashDroppingAnchorInputGate;
-        private ValueGate<InputAction> _specialAttackInputGate;
+        private ValueGate<InputAction> _spinAttackInputGate;
+        private ValueGate<InputAction> _spikesAttackInputGate;
         private ValueGate<IAnchorVerticalThrower> _dashDroppingAnchorThrowerGate;
 
         private readonly List<PlayerAbilityUnlockGroup> _abilitiesToUnlock;
@@ -61,9 +62,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             );
             
             CreateInputGate(
-                out _specialAttackInputGate,
-                _playerAnchorInputControls.Land.SpecialAttack,
-                _unlockableAbilitiesConfig.SpecialAttack
+                out _spinAttackInputGate,
+                _playerAnchorInputControls.Land.SpecialAttack_AnchorSpin,
+                _unlockableAbilitiesConfig.AnchorSpinAttack
+            );
+            
+            CreateInputGate(
+                out _spikesAttackInputGate,
+                _playerAnchorInputControls.Land.SpecialAttack_ChainSpikes,
+                _unlockableAbilitiesConfig.ChainSpikesAttack
             );
 
             CreateAnchorVerticalThrowerGate(
@@ -125,13 +132,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             out IGateValueReader<InputPressedBuffer> pullInputGate,
             out IGateValueReader<InputPressedBuffer> dashTowardsAnchorInputGate,
             out IGateValueReader<InputAction> dashDroppingAnchorInputGate,
-            out IGateValueReader<InputAction> specialAttackInputGate
+            out IGateValueReader<InputAction> spinAttackInputGate,
+            out IGateValueReader<InputAction> spikesAttackInput
         )
         {
             pullInputGate = _pullInputGate;
             dashTowardsAnchorInputGate = _dashTowardsAnchorInputGate;
             dashDroppingAnchorInputGate = _dashDroppingAnchorInputGate;
-            specialAttackInputGate = _specialAttackInputGate;
+            spinAttackInputGate = _spinAttackInputGate;
+            spikesAttackInput = _spikesAttackInputGate;
         }
 
         public void GetReadDashDroppingAnchorThrow(

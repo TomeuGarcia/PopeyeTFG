@@ -22,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         private int NumberOfPoints => _config.NumberOfSpikePoints;
 
+        public float PreparationDuration => 0;
         
         public void Configure(
             ChainSpikesAttackConfig config,
@@ -37,14 +38,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             _anchorMediator = anchorMediator;
 
             OnValuesChanged();
-        }
-
-        private void OnEnable()
-        {
             _config.OnValuesChanged += OnValuesChanged;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             _config.OnValuesChanged -= OnValuesChanged;
         }
@@ -68,7 +65,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
                    !_anchorMediator.IsBeingCarried();
         }
 
-        public bool SpecialAttackIsBeingPerformed()
+        private bool SpecialAttackIsBeingPerformed()
         {
             return _isBeingPerformed;
         }

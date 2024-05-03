@@ -2,6 +2,7 @@ using System;
 using Popeye.ProjectHelpers;
 using Popeye.Scripts.EventChannels;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 {
@@ -63,13 +64,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [SerializeField] private ChannelAndState _dashDroppingAnchor;
         [SerializeField] private ChannelAndState _dashDroppingAnchorAttack;
         [SerializeField] private ChannelAndState _dashTowardsAnchor;
-        [SerializeField] private ChannelAndState _specialAttack;
+        [SerializeField] private ChannelAndState _anchorSpinAttack;
+        [SerializeField] private ChannelAndState _chainSpikesAttack;
         
         
         public IChannelAndState AnchorPull => _anchorPull;
         public IChannelAndState DashTowardsAnchor => _dashTowardsAnchor;
         public IChannelAndState DashDroppingAnchor => _dashDroppingAnchor;
-        public IChannelAndState SpecialAttack => _specialAttack;
+        public IChannelAndState AnchorSpinAttack => _anchorSpinAttack;
+        public IChannelAndState ChainSpikesAttack => _chainSpikesAttack;
         public IChannelAndState DashDroppingAnchorAttack => _dashDroppingAnchorAttack;
 
 
@@ -79,7 +82,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _dashDroppingAnchor.StartListeningToChannelUpdates();
             _dashDroppingAnchorAttack.StartListeningToChannelUpdates();
             _dashTowardsAnchor.StartListeningToChannelUpdates();
-            _specialAttack.StartListeningToChannelUpdates();
+            _anchorSpinAttack.StartListeningToChannelUpdates();
+            _chainSpikesAttack.StartListeningToChannelUpdates();
         }
         public void StopChannelListening()
         {
@@ -87,7 +91,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _dashDroppingAnchor.StopListeningToChannelUpdates();
             _dashDroppingAnchorAttack.StopListeningToChannelUpdates();
             _dashTowardsAnchor.StopListeningToChannelUpdates();
-            _specialAttack.StopListeningToChannelUpdates();
+            _anchorSpinAttack.StopListeningToChannelUpdates();
+            _chainSpikesAttack.StopListeningToChannelUpdates();
         }
         
         
@@ -124,7 +129,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             SetIsUnlockedToStartValue(_dashDroppingAnchor);
             SetIsUnlockedToStartValue(_dashDroppingAnchorAttack);
             SetIsUnlockedToStartValue(_dashTowardsAnchor);
-            SetIsUnlockedToStartValue(_specialAttack);
+            SetIsUnlockedToStartValue(_anchorSpinAttack);
+            SetIsUnlockedToStartValue(_chainSpikesAttack);
         }
         
         private void SetIsUnlockedToStartValue(ChannelAndState channelAndState)
@@ -139,7 +145,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             SetState(_dashDroppingAnchor, isUnlocked);
             SetState(_dashDroppingAnchorAttack, isUnlocked);
             SetState(_dashTowardsAnchor, isUnlocked);
-            SetState(_specialAttack, isUnlocked);
+            SetState(_anchorSpinAttack, isUnlocked);
+            SetState(_chainSpikesAttack, isUnlocked);
         }
 
         private void SetState(ChannelAndState channelAndState, bool isUnlocked)
