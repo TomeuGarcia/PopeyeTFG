@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Popeye.Modules.Enemies.Components
 {
@@ -14,12 +16,16 @@ namespace Popeye.Modules.Enemies.Components
         [SerializeField] private float _playerDistanceThreshold;
         [SerializeField] private float _playerDistanceThresholdToStartFollowing;
         [SerializeField] private float _wayPointDistanceThreshold;
+        [SerializeField] private float _navMeshDistanceThreshold = 40f;
+        [SerializeField] private float _navMeshDistanceThresholdToStartFollowing = 20f;
         private float _squaredWayPointDistanceThreshold;
         private float _squaredPlayerDistanceThreshold;
         private float _squaredPlayerDistanceThresholdToStartFollowing;
         private AEnemyMediator _mediator;
         private Vector3 _target;
         private bool _patrolling;
+        
+        
         
         public enum PatrolType
         {
@@ -120,11 +126,25 @@ namespace Popeye.Modules.Enemies.Components
         
         private bool IsPlayerAtCloseDistance()
         {
-            return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThresholdToStartFollowing;
+            if (GetPath(_navMeshAgent.path,_navMeshAgent.transform.position,_playerTransform.position,NavMesh.AllAreas))
+            {
+                Debug.Log("path found (isPlayerAtCloseDistance)"+ transform.name);
+                return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThresholdToStartFollowing;
+            }
+            Debug.Log("path couldnt be found (isPlayerAtCloseDistance)");
+            return false;
+            
         }
         private bool IsPlayerAtFarDistance()
         {
-            return GetPlayerSqrMagnitude() > _squaredPlayerDistanceThreshold;
+            if (GetPath(_navMeshAgent.path,_navMeshAgent.transform.position,_playerTransform.position,NavMesh.AllAreas))
+            {
+                Debug.Log("path found (isPlayerAtFarDistance)" + transform.name);
+
+                return GetPlayerSqrMagnitude() > _squaredPlayerDistanceThreshold;
+            }
+            Debug.Log("path couldnt be found (isPlayerAtFarDistance)");
+            return true;
         }
         
         private float GetWayPointSqrMagnitude()
@@ -135,6 +155,34 @@ namespace Popeye.Modules.Enemies.Components
         private bool IsCloseToWayPoint()
         {
             return GetWayPointSqrMagnitude() < _squaredWayPointDistanceThreshold;
+        }
+        
+        public static bool GetPath( NavMeshPath path, Vector3 fromPos, Vector3 toPos, int passableMask )
+        {
+            path.ClearCorners();
+
+            if (NavMesh.CalculatePath(fromPos, toPos, passableMask, path))
+            {
+                return path.status == NavMeshPathStatus.PathComplete;
+            }
+               
+       
+            return false;
+        }
+       
+        public static float GetPathLength( NavMeshPath path )
+        {
+            float lng = 0.0f;
+       
+            if (( path.status != NavMeshPathStatus.PathInvalid ) /*&& ( path.corners.SafeLength() > 1 )*/)
+            {
+                for ( int i = 1; i < path.corners.Length; ++i )
+                {
+                    lng += Vector3.Distance( path.corners[i-1], path.corners[i] );
+                }
+            }
+       
+            return lng;
         }
     }
 }
