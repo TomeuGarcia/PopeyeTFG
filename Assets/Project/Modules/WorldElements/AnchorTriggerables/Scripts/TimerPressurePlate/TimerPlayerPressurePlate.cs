@@ -4,6 +4,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using AYellowpaper;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using Popeye.Scripts.ObjectTypes;
 using Project.Scripts.TweenExtensions;
@@ -17,18 +18,21 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
     public class TimerPlayerPressurePlate : MonoBehaviour
     {
         [Header("AUDIO")]
-        [SerializeField] private TimerButtonInteractorAudio _audio;
+        [SerializeField] private TimerButtonAudioPlayer _audio;
+        
+        [Header("VIEW")]
+        [SerializeField] private InterfaceReference<ITimerPressurePlateView, MonoBehaviour> _view;
+        public ITimerPressurePlateView View => _view.Value;
         
         [Header("REFERENCES")] 
         [SerializeField] private Transform _buttonTransform;
-        [SerializeField] private MeshRenderer _buttonMesh;
         [SerializeField] private Collider _collider;
-        private Material _timerMaterial;
 
         [SerializeField] private TweenConfigAsset _triggeredMoveBy;
         
         [Header("TIMER")] 
         [SerializeField, Range(0.0f, 30.0f)] private float _pressedDuration = 3.0f;
+        [SerializeField, Range(0.0f, 5.0f)] private float _finalPressedDuration = 0.5f;
 
         [SerializeField] private bool _triggerAllOnce = false;
         private bool _triggeredAllOnceAlready;
@@ -54,7 +58,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
             {
                 foreach (AWorldInteractor worldInteractor in _worldInteractors)
                 {
-                    worldInteractor.OnEnterActivated += CancelTimerAndButton;
+                    worldInteractor.OnEnterActivated += CancelAndLockTimerAndButton;
                 }
             }
         }
@@ -65,20 +69,20 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
             {
                 foreach (AWorldInteractor worldInteractor in _worldInteractors)
                 {
-                    worldInteractor.OnEnterActivated -= CancelTimerAndButton;
+                    worldInteractor.OnEnterActivated -= CancelAndLockTimerAndButton;
                 }
             }
         }
 
+        private void OnValidate()
+        {
+            _finalPressedDuration = Mathf.Min(_finalPressedDuration, _pressedDuration);
+        }
 
         private void Awake()
         {
             _triggeredCount = 0;
-
-            _timerMaterial = _buttonMesh.material;
-
             _triggeredAllOnceAlready = false;
-            SetFillValue(0);
         }
 
 
@@ -91,18 +95,21 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
                 if (++_triggeredCount > 1) return;
 
                 
-                SetFillValue(1);
-                _audio.PlayActivatedSound(gameObject);
+                _audio.PlayActivatedSound();
                 
                 if (CountdownCoroutineIsActive)
                 {
                     StopCoroutine(_countdownCoroutine);
+                    View.CancelTimerCountdown();
+                    _audio.StopPlayingTickDown();
                 }
                 else
                 {
                     PlayTriggerAnimation();
                     ActivateWorldInteractors();
                 }
+                
+                View.SetTimerStart();
             }
         }
 
@@ -152,14 +159,10 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
         private IEnumerator StartCountdownTimer()
         {
-            Timer pressedTimer = new Timer(_pressedDuration);
-            while (!pressedTimer.HasFinished())
-            {
-                pressedTimer.Update(Time.deltaTime);
-                SetFillValue(1-pressedTimer.GetCounterRatio01());
-                
-                yield return null;
-            }
+            View.StartTimerCountdown(_pressedDuration, _finalPressedDuration);
+            _audio.StartPlayingTickDown(_pressedDuration, _finalPressedDuration);
+            
+            yield return new WaitForSeconds(_pressedDuration);
             
             
             if (!_triggeredAllOnceAlready)
@@ -172,10 +175,7 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
             RefreshCollider().Forget();
         }
 
-        private void SetFillValue(float fillValue)
-        {
-            _timerMaterial.SetFloat("_FillT", fillValue);
-        }
+
 
 
         private void DeactivateWorldInteractors()
@@ -195,15 +195,18 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         }
 
 
-        private void CancelTimerAndButton()
+        private void CancelAndLockTimerAndButton()
         {
             _triggeredAllOnceAlready = true;
             
             if (CountdownCoroutineIsActive)
             {
-                SetFillValue(1);
                 StopCoroutine(_countdownCoroutine);
+                _countdownCoroutine = null;
             }
+            
+            View.CancelAndLockTimerCountdown();
+            _audio.StopPlayingTickDown();
         }
 
         private async UniTaskVoid RefreshCollider()

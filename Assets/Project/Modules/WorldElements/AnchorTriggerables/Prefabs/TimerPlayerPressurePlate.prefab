@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 799839161237928283}
   - component: {fileID: 799839161237928281}
+  - component: {fileID: 7346162240886671240}
+  - component: {fileID: 5758444528538094348}
   - component: {fileID: 799839161237928260}
   m_Layer: 13
   m_Name: TimerPlayerPressurePlate
@@ -32,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 799839162377749810}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &799839161237928281
 MonoBehaviour:
@@ -46,18 +48,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9493a5247c1ed543a136dbcaca0edfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audio: {fileID: 11400000, guid: a23b4d98704bceb49a1345f9c2c073dc, type: 2}
+  _audio: {fileID: 7346162240886671240}
+  _view:
+    _underlyingValue: {fileID: 5758444528538094348}
   _buttonTransform: {fileID: 8267881460022913311}
-  _buttonMesh: {fileID: 3071601743082832382}
   _collider: {fileID: 799839161237928260}
   _triggeredMoveBy: {fileID: 11400000, guid: 42ff23def7f1c7d44887b620a32b690b, type: 2}
   _pressedDuration: 3
+  _finalPressedDuration: 1
   _triggerAllOnce: 1
   _worldInteractors:
   - {fileID: 0}
   _acceptTypes:
   - {fileID: 11400000, guid: e8862fbc0afcb3942b3995e425c2c4a2, type: 2}
   - {fileID: 11400000, guid: d917dcf72f074a544b82d1ccae9c0332, type: 2}
+--- !u!114 &7346162240886671240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799839161237928282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513b01ca26fd4113bf7f81438bbc1823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: a23b4d98704bceb49a1345f9c2c073dc, type: 2}
+  _pulseConfig: {fileID: 11400000, guid: 5502ab057a0fb0547b0037ee242cc064, type: 2}
+--- !u!114 &5758444528538094348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799839161237928282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a1a1cfab4546eb893e92b18cac254c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pulseConfig: {fileID: 11400000, guid: 5502ab057a0fb0547b0037ee242cc064, type: 2}
+  _buttonMesh: {fileID: 3071601743082832382}
 --- !u!65 &799839161237928260
 BoxCollider:
   m_ObjectHideFlags: 0
