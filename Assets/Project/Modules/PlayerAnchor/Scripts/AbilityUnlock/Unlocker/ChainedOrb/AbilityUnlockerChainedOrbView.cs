@@ -1,7 +1,13 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using NaughtyAttributes;
 using Popeye.Core.Services.GameReferences;
+using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.ValueStatSystem;
+using Popeye.Modules.VFX.ParticleFactories;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
@@ -14,6 +20,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [Header("HOLDERS")]
         [SerializeField] private Transform _originalChainTargetHolder;
         [SerializeField] private Transform _finishChainTargetHolder;
+        [SerializeField] private List<Transform> _orbitalChains = new();
+        [SerializeField] private Transform _orbitalChains0;
+        [SerializeField] private Transform _orbitalChains1;
+        [SerializeField] private Transform _orbitalChains2;
         
         [Header("SUB-VIEWS")]
         [SerializeField] private ChainedOrbView _chainedOrb;
@@ -28,6 +38,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         private Transform _orbTargetTransform;
         private IAbilityUnlockerChristalAudio _audio;
         private LastingFMODSound.SoundId _movingChainsSoundId;
+
+        private IParticleFactory _particleFactory;
 
         
         private void OnDestroy()
@@ -53,25 +65,36 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             _orbHitPS = Instantiate(typeViewData.OrbHitParticlesPrefab, _orbHitParticlesHolder);
             _pickAbilityPS = Instantiate(typeViewData.PickAbilityParticlesPrefab, _pickAbilityParticlesHolder);
+
+            _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
         }
 
 
         public async UniTaskVoid PlayIdleAnimation()
         {
             _movingChainsSoundId = _audio.StartPlayingMovingChainsSound(gameObject);
+
+            for (int i = 0; i < _orbitalChains.Count; i++)
+            {
+                _orbitalChains[i].DOBlendableLocalRotateBy(Vector3.up, _viewConfig.OrbitalChainRotationSpeeds[i]).SetLoops(-1);
+            }
         }
         
         public async UniTask PlayUnlockAbilityAnimation()
         {
             _audio.PlayHitSound(gameObject);
-            await _chainedOrb.PlayDisappearAnimation(_orbTargetTransform.position);
+            Transform sparks = _particleFactory.Create(_viewConfig.OnHitSparklesParticleType, Vector3.zero, quaternion.identity, transform);
+            sparks.LookAt(_orbTargetTransform.position);
+            sparks.transform.position += _viewConfig.SparkOffset;
             
-            _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);
-            _audio.PlayBreakSound(gameObject);
             foreach (ChainedOrbChainView chainGroup in _chains)
             {
                 chainGroup.PlayDisappearAnimation(_finishChainTargetHolder).Forget();
             }
+            await _chainedOrb.PlayDisappearAnimation(_orbTargetTransform.position);
+            
+            _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);
+            _audio.PlayBreakSound(gameObject);
             
             _orbHitPS.Play();
 
