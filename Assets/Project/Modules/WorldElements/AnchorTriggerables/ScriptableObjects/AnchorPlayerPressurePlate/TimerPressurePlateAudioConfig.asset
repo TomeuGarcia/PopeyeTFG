@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c607e780364a4c3b94d1b87ca3dbd09d, type: 3}
-  m_Name: TimerButtonInteractorAudio
+  m_Name: TimerPressurePlateAudioConfig
   m_EditorClassIdentifier: 
   _audioManagerReference: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335,
     type: 2}
   _activatedSound: {fileID: 11400000, guid: 301d42af4cd46d14bb08f68753e43707, type: 2}
-  _tickDownSound: {fileID: 0}
+  _tickDownSound: {fileID: 11400000, guid: 30c7199dc064ebe45b9f301e33566798, type: 2}
+  _fastTickDownSound: {fileID: 11400000, guid: 6c926da0b8b97ad4cbb92d3ec54766d4, type: 2}
