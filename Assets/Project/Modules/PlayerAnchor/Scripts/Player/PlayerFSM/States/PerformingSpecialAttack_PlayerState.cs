@@ -24,7 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
-            if (!_blackboard.PlayerMediator.OnSpecialAttackFinished())
+            if (!_blackboard.PlayerMediator.SpecialAttackHasFinished())
             {
                 _blackboard.PlayerMediator.ForceStopSpecialAttack();
             }
@@ -32,7 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.PlayerMediator.OnSpecialAttackFinished())
+            if (_blackboard.PlayerMediator.SpecialAttackHasFinished())
             {
                 if (PopeyePlayer.debugIsSpinning)
                 {

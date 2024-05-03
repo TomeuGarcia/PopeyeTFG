@@ -1,6 +1,6 @@
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
 {
-    public interface ISpecialAttackToggleable
+    public interface IRageSpecialAttackToggleable
     {
         void SetDefaultMode();
         void SetSpecialAttackMode();

@@ -102,7 +102,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void OnSpecialAttackPreparationStart(float durationToComplete);
         void OnSpecialAttackPreparationInterrupted();
         void OnSpecialAttackPerformed();
-        bool OnSpecialAttackFinished();
+        bool SpecialAttackHasFinished();
         void ForceStopSpecialAttack();
 
     }

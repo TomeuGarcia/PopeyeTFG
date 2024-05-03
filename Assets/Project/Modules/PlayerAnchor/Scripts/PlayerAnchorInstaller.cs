@@ -27,7 +27,6 @@ using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
-using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
@@ -94,8 +93,8 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
         [SerializeField] private ChainSpikesSpecialAttackController _spikesSpecialAttack;
-        [SerializeField] private ChainFollowerAttackController _chainFollowerAttackController;
 
+        
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
 
@@ -280,25 +279,25 @@ namespace Popeye.Modules.PlayerAnchor
 
             PlayerFocusController playerFocusController =
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
-            ISpecialAttackToggleable[] specialAttackToggleables = 
+            IRageSpecialAttackToggleable[] specialAttackToggleables = 
                 { _anchorGeneralConfig.DamageConfig, _playerGeneralConfig.StatesConfig };
             
-            PlayerFocusSpecialAttackController playerSpecialAttackController
-                = new PlayerFocusSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig,
+            PlayerRageSpecialAttackController playerSpecialAttackController
+                = new PlayerRageSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig,
                     specialAttackToggleables);
 
-            _spikesSpecialAttack.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
-            _chainFollowerAttackController.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
+            _spikesSpecialAttack.Configure(_playerGeneralConfig.SpecialAttacksConfig.ChainSpikesAttackConfig,
+                _anchorChain, playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
             AnchorSpinSpecialAttackController anchorSpinSpecialAttackController = 
-                new AnchorSpinSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
+                new AnchorSpinSpecialAttackController(_playerGeneralConfig.SpecialAttacksConfig.AnchorSpinAttackConfig,
+                    playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
                     _anchor, anchorMotion, _player,
                     _anchorGeneralConfig.ThrowConfig.EndRotationCorrection);
             IPlayerSpecialAttackController[] playerSpecialAttacks =
             {
                 playerSpecialAttackController,
                 anchorSpinSpecialAttackController,
-                _spikesSpecialAttack,
-                _chainFollowerAttackController
+                _spikesSpecialAttack
             };
 
             FocusPlayerHealing playerHealing = 

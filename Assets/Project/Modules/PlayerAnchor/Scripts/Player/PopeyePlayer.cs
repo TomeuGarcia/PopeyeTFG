@@ -188,12 +188,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 _currentSpecialAttackIndex = 2;
                 debugIsSpinning = false;
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                Debug.Log("Special Attack: CHAINSAW");
-                _currentSpecialAttackIndex = 3;
-                debugIsSpinning = false;
-            }
         }
 
         private void FixedUpdate()
@@ -715,7 +709,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _eventsDispatcher.DispatchSpecialAttackPerformed();
             _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
         }
-        public bool OnSpecialAttackFinished()
+        public bool SpecialAttackHasFinished()
         {
             return SpecialAttackController.SpecialAttackHasFinished();
         }

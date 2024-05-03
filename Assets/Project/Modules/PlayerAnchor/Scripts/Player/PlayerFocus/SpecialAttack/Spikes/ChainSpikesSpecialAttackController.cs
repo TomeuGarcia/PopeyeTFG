@@ -8,48 +8,58 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 {
     public class ChainSpikesSpecialAttackController : MonoBehaviour, IPlayerSpecialAttackController
     {
-        [SerializeField] private AnchorChain _anchorChain;
-        [SerializeField, Range(0f, 1f)] private float _startRatio = 0.2f;
-        [SerializeField, Range(0f, 1f)] private float _endRatio = 0.8f;
-        [SerializeField, Range(0, 20)] private int _numberOfPoints = 6;
+        private ChainSpikesAttackConfig _config;
+        private AnchorChain _anchorChain;
 
-        [SerializeField] private ChainSpike _chainSpikePrefab;
+        private IPlayerFocusSpender _focusSpender;
+        private PlayerFocusAttackConfig _focusAttackConfig;
+        private IAnchorMediator _anchorMediator;
 
-        [SerializeField] private float _duration = 1.2f;
-        [SerializeField] private float _delay = 0.1f;
         private bool _isBeingPerformed = false;
 
         private ChainSpike.SpikePositioning[] _spikesPositioning;
         private ChainSpike[] _spikes;
 
-        private IPlayerFocusSpender _focusSpender;
-        private PlayerFocusAttackConfig _focusAttackConfig;
-        private IAnchorMediator _anchorMediator;
+        private int NumberOfPoints => _config.NumberOfSpikePoints;
+
         
-        public void Configure(IPlayerFocusSpender focusSpender, 
+        public void Configure(
+            ChainSpikesAttackConfig config,
+            AnchorChain anchorChain,
+            IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,
             IAnchorMediator anchorMediator)
         {
+            _config = config;
+            _anchorChain = anchorChain;
             _focusSpender = focusSpender;
             _focusAttackConfig = focusAttackConfig;
             _anchorMediator = anchorMediator;
+
+            OnValuesChanged();
         }
 
-        private void OnValidate()
+        private void OnEnable()
         {
-            _spikesPositioning = new ChainSpike.SpikePositioning[_numberOfPoints];
-            _spikes = new ChainSpike[_numberOfPoints];
+            _config.OnValuesChanged += OnValuesChanged;
+        }
+
+        private void OnDisable()
+        {
+            _config.OnValuesChanged -= OnValuesChanged;
+        }
+
+        private void OnValuesChanged()
+        {
+            _spikesPositioning = new ChainSpike.SpikePositioning[NumberOfPoints];
+            _spikes = new ChainSpike[_config.NumberOfSpikePoints];
             
-            for (int i = 0; i < _numberOfPoints; ++i)
+            for (int i = 0; i < NumberOfPoints; ++i)
             {
                 _spikesPositioning[i] = new ChainSpike.SpikePositioning();
             }
         }
-
-        private void Awake()
-        {
-            OnValidate();
-        }
+        
 
         public bool CanDoSpecialAttack()
         {
@@ -67,9 +77,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         {
             _focusSpender.SpendFocus(_focusAttackConfig.RequiredFocusToPerform);
         
-            for (int i = 0; i < _numberOfPoints; ++i)
+            for (int i = 0; i < NumberOfPoints; ++i)
             {
-                ChainSpike chainSpike = Instantiate(_chainSpikePrefab, transform);
+                ChainSpike chainSpike = Instantiate(_config.ChainSpikePrefab , transform);
                 chainSpike.Init(_spikesPositioning[i], _anchorMediator);
                 _spikes[i] = chainSpike;
             }
@@ -94,10 +104,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             for (int i = 0; i < _spikes.Length; ++i)
             {
                 _spikes[i].PlaySpawnAnimation().Forget();
-                await UniTask.Delay(TimeSpan.FromSeconds(_delay));
+                await UniTask.Delay(TimeSpan.FromSeconds(_config.Delay));
             }
             
-            await UniTask.Delay(TimeSpan.FromSeconds(_duration));
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.TotalDuration));
             _isBeingPerformed = false;
         }
 
@@ -121,16 +131,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             Vector3[] chainPositions = _anchorChain.GetChainPositions();
             int numberOfChains = chainPositions.Length;
             
-            int startIndex = (int)(numberOfChains * _startRatio);
-            int endIndex = (int)(numberOfChains * _endRatio);
+            int startIndex = (int)(numberOfChains * _config.FirstSpikePositionRatio);
+            int endIndex = (int)(numberOfChains * _config.LastSpikePositionRatio);
             
             float indexAmount = endIndex - startIndex;
 
-            float indexStep = indexAmount / _numberOfPoints;
+            float indexStep = indexAmount / NumberOfPoints;
             
             
             int count = 0;
-            for (float f = startIndex; f < endIndex && count < _numberOfPoints; f += indexStep)
+            for (float f = startIndex; f < endIndex && count < NumberOfPoints; f += indexStep)
             {
                 float t = f % 1f;
                 int currentIndex = (int)f;
@@ -154,16 +164,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             Vector3[] chainPositions = _anchorChain.GetChainPositions();
             int numberOfChains = chainPositions.Length;
             
-            int startIndex = (int)(numberOfChains * _startRatio);
-            int endIndex = (int)(numberOfChains * _endRatio);
+            int startIndex = (int)(numberOfChains * _config.FirstSpikePositionRatio);
+            int endIndex = (int)(numberOfChains * _config.LastSpikePositionRatio);
             
             float indexAmount = endIndex - startIndex;
 
-            float indexStep = indexAmount / _numberOfPoints;
+            float indexStep = indexAmount / NumberOfPoints;
             
             
             int count = 0;
-            for (float f = startIndex; f < endIndex && count < _numberOfPoints; f += indexStep * 2)
+            for (float f = startIndex; f < endIndex && count < NumberOfPoints; f += indexStep * 2)
             {
                 float t = f % 1f;
                 int currentIndex = (int)f;

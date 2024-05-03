@@ -8,6 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 {
     public class AnchorSpinSpecialAttackController : IPlayerSpecialAttackController
     {
+        private readonly AnchorSpinAttackConfig _config;
         private readonly IPlayerFocusSpender _focusSpender;
         private readonly PlayerFocusAttackConfig _focusAttackConfig;
         private readonly IAnchorMediator _anchorMediator;
@@ -16,16 +17,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         private readonly AnchorThrowConfig.RotationCorrection _spinEndFloorRotationCorrection;
 
         private bool _isBeingPerformed;
-        private int _numberOfLoops = 2;
-        private float _totalDuration = 1.0f;
-        
-        private float _startSpinDistance = 4.0f;
-        private float _endSpinDistance = 7.0f;
-        
-        private float _startPositioningDuration = 0.2f;
+
         private float _startPositioningT;
-        
-        private float _endPositioningDuration = 0.15f;
         private float _endPositioningT;
 
         private float _loopTime;
@@ -36,6 +29,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         
         
         public AnchorSpinSpecialAttackController(
+            AnchorSpinAttackConfig config,
             IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,
             IAnchorMediator anchorMediator,
@@ -43,6 +37,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             IPlayerMediator playerMediator,
             AnchorThrowConfig.RotationCorrection spinEndFloorRotationCorrection)
         {
+            _config = config;
             _focusSpender = focusSpender;
             _focusAttackConfig = focusAttackConfig;
             _anchorMediator = anchorMediator;
@@ -93,7 +88,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             }
 
             _loopTime = _startOffset;
-            _fullLoopTime = (Mathf.PI * 2 * _numberOfLoops) + _startOffset;
+            _fullLoopTime = (Mathf.PI * 2 * _config.NumberOfLoops) + _startOffset;
             
             ComputeFinishRotation();
             UpdateLoopTimeAsync().Forget();
@@ -132,7 +127,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                     () => _loopTime,
                     (loopTime) => _loopTime = loopTime,
                     _fullLoopTime,
-                    _totalDuration
+                    _config.TotalDuration
                 )
                 .SetEase(Ease.InOutQuad);
             
@@ -141,17 +136,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                     () => _startPositioningT,
                     (t) => _startPositioningT = t,
                     1f,
-                    _startPositioningDuration
+                    _config.StartPositioningDuration
                 )
                 .SetEase(Ease.InQuad);
 
 
-            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0, _totalDuration - _endPositioningDuration)));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0, _config.TotalDuration - _config.EndPositioningDuration)));
             DOTween.To(
                     () => _endPositioningT,
                     (t) => _endPositioningT = t,
                     1f,
-                    _endPositioningDuration
+                    _config.EndPositioningDuration
                 )
                 .SetEase(Ease.OutSine);
         }
@@ -168,7 +163,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         
             Vector3 spinOffset = new Vector3(cos, 0,sin);
 
-            float spinRadius = Mathf.Lerp(_startSpinDistance, _endSpinDistance, spinT);
+            float spinRadius = Mathf.Lerp(_config.StartSpinDistance, _config.EndSpinDistance, spinT);
             spinOffset *= spinRadius;
 
             Vector3 spinCenter = _playerMediator.Position;
