@@ -5,6 +5,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
 {
     public interface IPlayerEventsDispatcher
     {
+        public struct OnTakeDamageEvent { }
         public struct OnDieEvent { }
         public struct OnRespawnFromDeathEvent { }
 

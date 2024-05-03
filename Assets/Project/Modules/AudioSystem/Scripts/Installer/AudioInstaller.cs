@@ -22,7 +22,10 @@ namespace Popeye.Modules.AudioSystem
         [SerializeField] private GlobalParametersConfig _globalParametersConfig;
 
         [Header("GAME AUDIO MANAGERS")] 
-        [SerializeField] private InterfaceReference<IGameAudiosManager, MonoBehaviour> _gameAudiosManager;
+        [SerializeField] private GeneralGameAudiosManager _gameAudiosManager;
+
+        [Header("MUSIC")] 
+        [SerializeField] private GameMusicConfig _gameMusicConfig;
 
         [Header("SOUND VOLUME CONTROLLER")] 
         [SerializeField] private FMODSoundSoundVolumeController _masterSoundVolumeController;
@@ -54,8 +57,10 @@ namespace Popeye.Modules.AudioSystem
             
             _audioManagerReference.GlobalParametersController.StartListeningToParameters();
             
-            _gameAudiosManager.Value.Init(_audioManagerReference, serviceLocator.GetService<IEventSystemService>());
-            _gameAudiosManager.Value.StartListeningToGameEvents();
+            
+            _gameAudiosManager.ConfigureBeforeInit(CreateSubGameAudioManagers(_audioManagerReference));
+            _gameAudiosManager.Init(_audioManagerReference, serviceLocator.GetService<IEventSystemService>());
+            _gameAudiosManager.StartListeningToGameEvents();
         }
 
         public void Uninstall(ServiceLocator serviceLocator)
@@ -66,7 +71,26 @@ namespace Popeye.Modules.AudioSystem
         
         private void OnDestroy()
         {
-            _gameAudiosManager.Value.StopListeningToGameEvents();
+            _gameAudiosManager.StopListeningToGameEvents();
         }
+
+
+        private IGameAudiosManager[] CreateSubGameAudioManagers(IFMODAudioManager audioManager)
+        {
+            GameMusicTransitionController gameMusicTransitionController =
+                new GameMusicTransitionController(audioManager, gameObject, _gameMusicConfig.GameScenesMusicConfig);
+
+            PlayerStateMusicTransitionController playerStateMusicTransitionController =
+                new PlayerStateMusicTransitionController(_gameMusicConfig.PlayerStateMusicConfig);
+
+            GameStateMusicAudioManager gameStateMusicAudioManager =
+                new GameStateMusicAudioManager(gameMusicTransitionController, playerStateMusicTransitionController);
+
+            return new[]
+            {
+                gameStateMusicAudioManager
+            };
+        }
+        
     }
 }

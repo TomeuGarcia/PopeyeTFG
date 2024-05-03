@@ -71,7 +71,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
 
         private void InstantiateDefaultSegments()
         {
-            int numberOfSegments = _config.NumberOfSegments(ValueStat.MaxValue, out int reminder);
+            int numberOfSegments = ComputeNumberOfSegments(out int reminder);
 
             _imageFillBars = new ImageFillBar[numberOfSegments];
             for (int i = 0; i < numberOfSegments; ++i)
@@ -86,6 +86,10 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             _currentBarIndex = CurrentValueToBarIndex();
         }
 
+        private int ComputeNumberOfSegments(out int reminder)
+        {
+            return _config.NumberOfSegments(ValueStat.MaxValue, out reminder);
+        }
 
         protected abstract bool HasSubscriptionReferences();
         protected abstract void DoSubscribeToEvents();
@@ -177,13 +181,17 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
 
         protected void OnMaxValueUpdated()
         {
+            DestroyCurrentSegments();
+            InstantiateDefaultSegments();
+            InstantUpdateSegments();
+        }
+
+        private void DestroyCurrentSegments()
+        {
             foreach (ImageFillBar imageFillBar in _imageFillBars)
             {
                 Destroy(imageFillBar.gameObject);
             }
-
-            InstantiateDefaultSegments();
-            InstantUpdateSegments();
         }
         
     }

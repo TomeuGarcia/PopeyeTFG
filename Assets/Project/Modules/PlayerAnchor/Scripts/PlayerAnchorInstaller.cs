@@ -23,6 +23,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
+using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
@@ -33,6 +34,8 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Dynamic;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics;
 using Popeye.Modules.PlayerController.AutoAim;
@@ -98,7 +101,8 @@ namespace Popeye.Modules.PlayerAnchor
 
         [Header("Player - Placing")]
         [SerializeField] private PlacePopeyePlayerEventChannelAsset _placePopeyePlayerEventChannel;
-        [SerializeField] private CheckpointTriggerChecker _playerCheckpointTriggerChecker;
+        [SerializeField] private CheckpointStorer _playerCheckpointStorer;
+        [SerializeField] private DynamicCheckpointCreator _playerPlacerCheckpointCreator;
 
         [Space(20)] 
         [Header("ANCHOR")] 
@@ -270,7 +274,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
-            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject, _audioManagerReference, _playerAudioConfig);
+            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject,
+                _audioManagerReference, _playerAudioConfig, playerMovementChecker);
             _playerAnimatorEvents.AddFootstepsListener(playerAudio);
 
             PlayerFocusController playerFocusController =
@@ -296,20 +301,26 @@ namespace Popeye.Modules.PlayerAnchor
                 _chainFollowerAttackController
             };
 
-            IPlayerHealing playerHealing = 
+            FocusPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
 
             PlayerAutoActionsQueue playerAutoActionsQueue = new PlayerAutoActionsQueue(_player, _anchor);
+
+            PlayerBattleInteractionsController battleInteractionsController =
+                new PlayerBattleInteractionsController(eventSystemService);
             
             PlayerGlobalEventsListener playerGlobalEventsListener = 
-                new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue);
+                new PlayerGlobalEventsListener(eventSystemService, playerAutoActionsQueue, 
+                    _playerGeneralConfig.FocusConfig.HealthBoostEventChannel, playerHealth,
+                    _playerGeneralConfig.FocusConfig.FocusBoostEventChannel, playerFocusController,
+                    battleInteractionsController, playerHealth);
             PlayerEventsDispatcher playerEventsDispatcher =
                 new PlayerEventsDispatcher(eventSystemService, 
                     _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
                     _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
-                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerCheckpointTriggerChecker,
+                playerInstantTranslation, playerStateMachine, _environmentFollower, _playerPlacerCheckpointCreator,
                 _abilitiesToUnlockHolder);
             _popeyePlayerPlacer.StartListening();
             
@@ -317,7 +328,7 @@ namespace Popeye.Modules.PlayerAnchor
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor, playerMovementChecker);
             playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
-            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.MaxHealth,
+            playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.HealthData,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 
                 _obstacleProbingConfig, _dashFloorProbingConfig);
@@ -333,7 +344,7 @@ namespace Popeye.Modules.PlayerAnchor
                 playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
-                _playerCheckpointTriggerChecker, playerSafeGroundChecker, 
+                _playerCheckpointStorer, playerSafeGroundChecker, 
                 playerOnVoidChecker, playerFocusController, playerSpecialAttacks,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
@@ -343,7 +354,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             // HUD
             _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerFocusController);
-            
+            playerFocusController.Init();
             
             PowerBoostDropFactory powerBoostDropFactory =
                 new PowerBoostDropFactory(_powerBoostDropFactoryConfig, transform, _playerController.Transform);

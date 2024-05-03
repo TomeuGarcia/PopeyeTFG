@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [SerializeField] private OneShotFMODSound _hit;
         [SerializeField] private OneShotFMODSound _break;
         [SerializeField] private OneShotFMODSound _collected;
+        [SerializeField] private LastingFMODSound _movingChains;
 
         
         
@@ -33,8 +34,16 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         {
             _audioManager.PlayOneShotAttached(_collected, source);
         }
-        
-        
-        
+
+
+        public LastingFMODSound.SoundId StartPlayingMovingChainsSound(GameObject source)
+        {
+            return _audioManager.PlayLastingSound(_movingChains, source);
+        }
+
+        public void StopPlayingMovingChainsSound(LastingFMODSound.SoundId soundId)
+        {
+            _audioManager.StopLastingSound(soundId);
+        }
     }
 }

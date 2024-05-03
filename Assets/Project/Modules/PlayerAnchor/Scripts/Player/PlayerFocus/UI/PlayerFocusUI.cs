@@ -20,8 +20,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
             _valueStat = new SimpleValueStat(_playerFocusState.MaxFocusAmount, _playerFocusState.CurrentFocusAmount);
             _tankBar.Init(_valueStat);
         }
-        
-        
+
+
+        public void OnFocusSet()
+        {
+            UpdateValueStat();
+        }
+
         public void OnFocusGained()
         {
             UpdateValueStat();
@@ -52,5 +57,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         {
             _valueStat.SetCurrentValue(_playerFocusState.CurrentFocusAmount);
         }
+        
+        
+        
     }
 }

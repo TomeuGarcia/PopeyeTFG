@@ -11,6 +11,7 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Scripts.ValueGating;
@@ -70,7 +71,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IAnchorKicker _anchorKicker;
         private IAnchorSpinner _anchorSpinner;
 
-        private ISafeGroundChecker _deathRespawnCheckpointChecker;
+        private ICheckpointStorerRead _deathRespawnCheckpointChecker;
         private ISafeGroundChecker _safeGroundChecker;
         private IOnVoidChecker _onVoidChecker;
         private bool _safeGroundCheckingIsDisabled = false;
@@ -107,7 +108,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorPuller anchorPuller, 
             IAnchorKicker anchorKicker,
             IAnchorSpinner anchorSpinner,
-            ISafeGroundChecker  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
+            ICheckpointStorerRead  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
             IOnVoidChecker onVoidChecker,
             IPlayerFocusController focusController, IPlayerSpecialAttackController[] specialAttackControllers,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
@@ -557,7 +558,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         public void RespawnFromDeath()
         {
-            Vector3 respawnPosition = _deathRespawnCheckpointChecker.BestSafePosition;
+            Vector3 respawnPosition = _deathRespawnCheckpointChecker.LastSafeCheckpoint.Position;
             Quaternion respawnRotation = Quaternion.identity;
             _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
             
@@ -654,7 +655,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             PlayerView.PlayTakeDamageAnimation();
             _playerAudio.PlayTakeDamageSound();
-
+            
             SetInvulnerableForDuration(_playerGeneralConfig.PlayerHealthConfig.InvulnerableDurationAfterTakingDamage);
             
             _eventsDispatcher.DispatchOnTakeDamageEvent(damageHitResult, Position, _playerHealth.GetCurrentHealth());

@@ -28,7 +28,7 @@ namespace Popeye.Modules.AudioSystem
         
         private void UpdateParameter(SoundParameter parameter)
         {
-            FMODUnity.RuntimeManager.StudioSystem.setParameterByName(parameter.Name, parameter.Value);
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByID(parameter.Id, parameter.Value);            
         }
         
     }

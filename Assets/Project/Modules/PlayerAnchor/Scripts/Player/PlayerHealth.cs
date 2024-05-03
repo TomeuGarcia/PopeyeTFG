@@ -1,23 +1,33 @@
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
-    public class PlayerHealth : IHealthBehaviourListener
+    public class PlayerHealth : IHealthBehaviourListener, IPlayerHealthUpgrader
     {
         private IPlayerMediator _playerMediator;
         private HealthBehaviour _playerHealthBehaviour;
         private DamageHit _voidDamageHit;
+
+        private PlayerHealthConfig.HealthConfigData _healthConfigData;
         
         
-        
-        public void Configure(IPlayerMediator playerMediator, HealthBehaviour playerHealthBehaviour, int maxHealth,
-            Rigidbody knockbackRigidbody, DamageHitConfig voidDamageHitConfig)
+        public void Configure(
+            IPlayerMediator playerMediator, 
+            HealthBehaviour playerHealthBehaviour, 
+            PlayerHealthConfig.HealthConfigData healthConfigData,
+            Rigidbody knockbackRigidbody, 
+            DamageHitConfig voidDamageHitConfig)
         {
             _playerMediator = playerMediator;
 
+            _healthConfigData = healthConfigData;
+            
             _playerHealthBehaviour = playerHealthBehaviour;
-            _playerHealthBehaviour.Configure(this, maxHealth, DamageHitTargetType.Player, knockbackRigidbody);
+            _playerHealthBehaviour.Configure(
+                this, _healthConfigData.StartingMaxHealth, 
+                DamageHitTargetType.Player, knockbackRigidbody);
 
             _voidDamageHit = new DamageHit(voidDamageHitConfig);
         }
@@ -81,6 +91,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void TakeVoidFallDamage()
         {
             _playerHealthBehaviour.TakeHitDamage(_voidDamageHit);
+        }
+
+        public void IncreaseMaxHealth()
+        {
+            int newMaxHealth = _playerHealthBehaviour.HealthSystem.MaxHealth + _healthConfigData.HealthIncreaseAmount;
+            _playerHealthBehaviour.ResetMaxHealth(newMaxHealth, true);
         }
     }
 }

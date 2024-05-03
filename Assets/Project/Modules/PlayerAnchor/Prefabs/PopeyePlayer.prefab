@@ -864,6 +864,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06ea99601c154ba495b0caa28604592a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _checkpointDataStorer:
+    _underlyingValue: {fileID: 11400000, guid: 646df88244edf7140943b24eb197a6bf, type: 2}
 --- !u!114 &1096503930182643087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1824,6 +1826,7 @@ GameObject:
   - component: {fileID: 5661473675443739433}
   - component: {fileID: 3863730451507063996}
   - component: {fileID: 5713232600979843912}
+  - component: {fileID: 4873479805987823068}
   m_Layer: 0
   m_Name: PopeyePlayer
   m_TagString: Untagged
@@ -1892,6 +1895,22 @@ MonoBehaviour:
     type: 3}
   _duration: 0.5
   _delay: 0.05
+--- !u!114 &4873479805987823068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9136561622102621228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 107d0234249848ecb89f03092a2b12ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _checkpointStorer:
+    _underlyingValue: {fileID: 11400000, guid: 646df88244edf7140943b24eb197a6bf, type: 2}
+  _checkpointData: {fileID: 11400000, guid: 578fcb7363cf89846839e0624ff750c7, type: 2}
+  _objectToTrack: {fileID: 5186106189778176743}
 --- !u!1001 &1190752105491818490
 PrefabInstance:
   m_ObjectHideFlags: 0

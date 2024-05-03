@@ -1,4 +1,5 @@
 using System;
+using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
@@ -19,10 +20,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private Transform _snapSpot;
         
         [Header("VIEW Reference")]
-        [SerializeField] private Transform _clawsTransform;
-        [SerializeField] private Transform[] _claws;
-
-        ClawAnchorSnapTargetView _view;
+        [SerializeField] private InterfaceReference<IClawAnchorSnapTargetView, MonoBehaviour> _viewReference;
+        private IClawAnchorSnapTargetView View => _viewReference.Value;
 
         private Transform _user;
         
@@ -33,8 +32,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public Vector3 Position => GetAimLockPosition();
         public GameObject GameObject => gameObject;
         
-        private Vector3 LookDirection => transform.up;
-        private Vector3 UpDirection => -transform.right;
+        private Vector3 LookDirection => -transform.forward;
+        private Vector3 UpDirection => transform.up;
 
         private float FloorProbeDistance => _config.FloorCollisionProbingConfig.ProbeDistance;
         private LayerMask FloorCollisionLayerMask => _config.FloorCollisionProbingConfig.CollisionLayerMask;
@@ -52,12 +51,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         public UsedEvents OnStartBeingUsedEvent;
         public UsedEvents OnStopBeingUsedEvent;
         public UsedEvents OnQuickPullUsedEvent;
-
-        private void Awake()
-        {
-            _view = new ClawAnchorSnapTargetView(_clawsTransform, _claws, _config.ViewConfig);
-        }
-
+        
 
         public Transform GetParentTransformForTargeter()
         {
@@ -103,11 +97,17 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             {
                 origin += (LookDirection * ForwardDistanceFromClaw);
             }
+            Debug.Log(origin);
             
             if (Physics.Raycast(origin, Vector3.down, out RaycastHit floorHit, FloorProbeDistance,
                     FloorCollisionLayerMask, FloorCollisionQueryTriggerInteraction))
             {
+                Debug.Log(floorHit.collider.gameObject.name);
                 _dashEndSpot.position = floorHit.point + (Vector3.up * HeightDistanceFromFloor);
+            }
+            else
+            {
+                _dashEndSpot.position = Position;
             }
 
         }
@@ -135,23 +135,23 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public Quaternion GetRotationForAimedTargeter()
         {
-            return Quaternion.AngleAxis(45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
+            return Quaternion.AngleAxis(-45.0f, LookDirection) * Quaternion.LookRotation(-LookDirection, UpDirection);
         }
         
         
         public void OnAddedAsAimTarget()
         {
-            _view.PlayOpenAnimation();
+            View.PlayAimedAnimation();
         }
 
         public void OnRemovedFromAimTarget()
         {
-            _view.PlayCloseAnimation();
+            View.StopAimedAnimation();
         }
 
         public void OnUsedAsAimTarget(float delay)
         {
-            _view.PlaySnapAnimation(delay).Forget();
+            View.PlayGrabAnimation(delay);
         }
 
         public void OnStartBeingUsed(Transform user)
@@ -167,12 +167,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void OnUsedForPulling()
         {
+            View.PlayPulledAnimation();
             OnQuickPullUsedEvent?.Invoke();
         }
 
         public void OnUsedForDash()
         {
-            _view.PlayUsedForDashAnimation().Forget();
+            View.PlayUsedAnimation();
         }
     }
 }

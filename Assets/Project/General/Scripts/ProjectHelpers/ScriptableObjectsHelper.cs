@@ -14,6 +14,7 @@ namespace Popeye.ProjectHelpers
         public const string PLAYERINPUTS_ASSETS_PATH = PLAYER_ASSETS_PATH + "Inputs/";
         public const string PLAYERUI_ASSETS_PATH = PLAYER_ASSETS_PATH + "UI/";
         
+        public const string PLAYERCHECKPOINTS_ASSETS_PATH = PLAYER_ASSETS_PATH + "Checkpoints/";
         public const string PLAYERPOWERBOOSTERS_ASSETS_PATH = PLAYER_ASSETS_PATH + "PowerBoosters/";
         public const string PLAYERPOWERBOOSTDROPS_ASSETS_PATH = PLAYERPOWERBOOSTERS_ASSETS_PATH + "Drops/";
                    
@@ -36,7 +37,7 @@ namespace Popeye.ProjectHelpers
         public const string WORLDELEMENTS_ASSETS_PATH = ROOT + "WorldElements/";
         public const string WALLBUILDER_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "WallBuilder/";
         public const string GRIDMOVEMENT_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "GridMovement/";
-        public const string INFORMATIONDISPLAY_ASSETS_PATH = WORLDELEMENTS_ASSETS_PATH + "InformationDisplay/";
+        public const string INFORMATIONDISPLAY_ASSETS_PATH = ROOT + "InformationDisplay/";
   
         
         public const string TIME_ASSETS_PATH = ROOT + "Time/";

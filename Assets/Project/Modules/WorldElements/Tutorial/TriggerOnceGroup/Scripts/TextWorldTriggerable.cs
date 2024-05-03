@@ -18,23 +18,33 @@ namespace Popeye.Modules.WorldElements.Tutorial
         
         [Header("TEXT")]
         [SerializeField] private TextDisplayConfig _textDisplayConfig;
-        private ITextDisplayer _textDisplayer;
+        [SerializeField] private VideoDisplayConfig _videoDisplayConfig;
+        private IInformationDisplayService _informationDisplayService;
+
+        private bool HasVideoToDisplay => _videoDisplayConfig != null;
         
         private void Start()
         {
             _triggerOnceGroup.Init(this);
-
-            _textDisplayer = ServiceLocator.Instance.GetService<IInformationDisplayService>().TextDisplayer;
+            _informationDisplayService = ServiceLocator.Instance.GetService<IInformationDisplayService>();
         }
 
         public void Activate()
         {
-            _textDisplayer.StartShowing(_textDisplayConfig);
+            _informationDisplayService.TextDisplayer.StartShowing(_textDisplayConfig);
+            if (HasVideoToDisplay)
+            {
+                _informationDisplayService.VideoDisplayer.StartShowing(_videoDisplayConfig);
+            }            
         }
 
         public void Deactivate()
         {
-            _textDisplayer.StopShowing(_textDisplayConfig);
+            _informationDisplayService.TextDisplayer.StopShowing(_textDisplayConfig);
+            if (HasVideoToDisplay)
+            {
+                _informationDisplayService.VideoDisplayer.StopShowing(_videoDisplayConfig);
+            }
         }
 
     }
