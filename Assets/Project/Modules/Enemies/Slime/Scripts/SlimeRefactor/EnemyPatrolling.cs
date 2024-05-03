@@ -128,10 +128,8 @@ namespace Popeye.Modules.Enemies.Components
         {
             if (GetPath(_navMeshAgent.path,_navMeshAgent.transform.position,_playerTransform.position,NavMesh.AllAreas))
             {
-                Debug.Log("path found (isPlayerAtCloseDistance)"+ transform.name);
                 return GetPlayerSqrMagnitude() < _squaredPlayerDistanceThresholdToStartFollowing;
             }
-            Debug.Log("path couldnt be found (isPlayerAtCloseDistance)");
             return false;
             
         }
@@ -139,11 +137,8 @@ namespace Popeye.Modules.Enemies.Components
         {
             if (GetPath(_navMeshAgent.path,_navMeshAgent.transform.position,_playerTransform.position,NavMesh.AllAreas))
             {
-                Debug.Log("path found (isPlayerAtFarDistance)" + transform.name);
-
                 return GetPlayerSqrMagnitude() > _squaredPlayerDistanceThreshold;
             }
-            Debug.Log("path couldnt be found (isPlayerAtFarDistance)");
             return true;
         }
         
