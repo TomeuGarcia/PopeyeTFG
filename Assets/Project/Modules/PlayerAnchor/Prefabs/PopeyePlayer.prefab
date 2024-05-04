@@ -5105,7 +5105,7 @@ GameObject:
   - component: {fileID: 3664767705072167008}
   - component: {fileID: 3608344067594403253}
   m_Layer: 0
-  m_Name: BrghtTrail_PS
+  m_Name: BrightTrail_PS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5209,7 +5209,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.3
+      scalar: 0.2
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -5314,8 +5314,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startColor:
       serializedVersion: 2
-      minMaxState: 0
-      minColor: {r: 1, g: 1, b: 1, a: 1}
+      minMaxState: 2
+      minColor: {r: 0, g: 0.8867924, b: 0.77222204, a: 0.6039216}
       maxColor: {r: 0, g: 0.990566, b: 0.48858786, a: 0.39215687}
       maxGradient:
         serializedVersion: 2
@@ -5380,8 +5380,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2
-      minScalar: 1
+      scalar: 1
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -9033,7 +9033,7 @@ ParticleSystem:
     lifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9163,7 +9163,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     widthOverTrail:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 1
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -9176,17 +9176,17 @@ ParticleSystem:
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 1
+          value: 0
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -14899,6 +14899,7 @@ MonoBehaviour:
   _anchorSpinTrailHolder: {fileID: 6221477047919522981}
   _anchorSpinTrail: {fileID: 2410751680996643939}
   _centerChargeHolder: {fileID: 5524913173661528519}
+  _trailParticles: {fileID: 3664767705072167008}
   _centerChargePreparationParticles: {fileID: 4246019770204602001}
   _centerChargeParticles: {fileID: 3084054195116140396}
   _frictionSparksParticles: {fileID: 743409378043728638}
@@ -14906,17 +14907,17 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.00234586
-      value: 3.501905
-      inSlope: -16.901718
-      outSlope: -16.901718
+      time: 0.0014134231
+      value: 3.999919
+      inSlope: -10.305985
+      outSlope: -10.305985
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.20550069
-      value: -0.011058945
+      time: 0.39515832
+      value: -0.05801021
       inSlope: -0.020221056
       outSlope: -0.020221056
       tangentMode: 0
@@ -14933,10 +14934,10 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.3096542
     - serializedVersion: 3
-      time: 0.99765414
-      value: 3.501905
-      inSlope: 11.628115
-      outSlope: 11.628115
+      time: 0.9999641
+      value: 7.0048
+      inSlope: 23.010729
+      outSlope: 23.010729
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

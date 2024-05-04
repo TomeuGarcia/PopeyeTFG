@@ -24,6 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         [Header("VIEW")]
         [SerializeField] private Transform _meshHolder;
+        [SerializeField] private Transform _meshRotateHolder;
         [SerializeField] private ParticleSystem _spawnParticles;
 
         [Header("CONFIG")]
@@ -33,6 +34,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         private SpikePositioning _spikePositioning;
         private IAnchorMediator _anchorMediator;
+
 
         private void Awake()
         {
@@ -75,7 +77,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
             _damageTrigger.Activate();            
 
-            await _meshHolder.LocalRotateBy(SpawnAnimation.ScaledUpRotation)
+            await _meshRotateHolder.LocalRotateBy(SpawnAnimation.ScaledUpRotation)
                 .AsyncWaitForCompletion();
             await _meshHolder.Scale(SpawnAnimation.ScaleDown)
                 .AsyncWaitForCompletion();

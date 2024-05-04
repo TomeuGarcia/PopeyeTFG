@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
@@ -10,11 +11,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         
         [Header("PARTICLES")]
         [SerializeField] private Transform _centerChargeHolder;
+        [SerializeField] private ParticleSystem _trailParticles;
         [SerializeField] private ParticleSystem _centerChargePreparationParticles;
         [SerializeField] private ParticleSystem _centerChargeParticles;
         [SerializeField] private ParticleSystem _frictionSparksParticles;
         [SerializeField] private AnimationCurve _sparksAmount;
         private ParticleSystem.EmissionModule _sparksEmission;
+
+        private Coroutine _delayedEmissionStop;
         
 
         public void Configure(Transform spinOrigin)
@@ -29,9 +33,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             holder.localPosition = Vector3.zero;
         }
         
-        public void StartPreparationAnimation()
+        public void StartPreparationAnimation(Vector3 spinCenter)
         {
             _centerChargePreparationParticles.Play();
+            _anchorSpinTrailHolder.position = spinCenter;
         }
         public void InterruptPreparationAnimation()
         {
@@ -39,20 +44,24 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         }
         public void StartAnimation()
         {
+            if (_delayedEmissionStop != null)
+            {
+                StopCoroutine(_delayedEmissionStop);
+            }
+
             _anchorSpinTrail.Clear();
             _anchorSpinTrail.emitting = true;
             
             _centerChargePreparationParticles.Stop();
             _centerChargeParticles.Play();
             _frictionSparksParticles.Play();
+            _trailParticles.Play();
         }
         public void FinishAnimation()
         {
-            //_anchorSpinTrail.Clear();
-            _anchorSpinTrail.emitting = false;
+            _delayedEmissionStop = StartCoroutine(DelayedEmissionStop());
             
             _centerChargeParticles.Stop();
-            _frictionSparksParticles.Stop();
         }
         public void UpdateAnimation(Vector3 spinCenter, Quaternion spinRotation, float spinRadius, float spinT)
         {
@@ -63,7 +72,19 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             
             _sparksEmission.rateOverDistance = _sparksAmount.Evaluate(spinT);
         }
-        
+
+        private IEnumerator DelayedEmissionStop()
+        {
+            yield return new WaitForSeconds(0.75f);
+            
+            _frictionSparksParticles.Stop();
+            _trailParticles.Stop();
+            
+            _anchorSpinTrail.emitting = false;
+            _anchorSpinTrail.Clear();
+
+            _delayedEmissionStop = null;
+        }
         
     }
 }

@@ -63,7 +63,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
         public void OnPreparationStart(float durationToComplete)
         {
-            _view.StartPreparationAnimation();
+            _view.StartPreparationAnimation(_playerMediator.Position);
         }
 
         public void OnPreparationInterrupted()

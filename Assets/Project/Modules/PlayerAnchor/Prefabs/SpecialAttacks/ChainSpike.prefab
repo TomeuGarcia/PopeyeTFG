@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6483304747296058326}
+  - {fileID: 5574195773416488455}
   m_Father: {fileID: 2445820973593072195}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -64,7 +64,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3521249385198461485}
+  m_Father: {fileID: 5574195773416488455}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &5344480308640713782
@@ -553,6 +553,7 @@ MonoBehaviour:
   _damageTrigger: {fileID: 8049533980262301043}
   _damageHitConfig: {fileID: 11400000, guid: df5a7a5d9e60db3439e39c2266c3e6b2, type: 2}
   _meshHolder: {fileID: 3521249385198461485}
+  _meshRotateHolder: {fileID: 5574195773416488455}
   _spawnParticles: {fileID: 1268464997938514029}
   _config: {fileID: 11400000, guid: 86461f260e247ef4985d63cdd0c6cdb7, type: 2}
 --- !u!114 &8049533980262301043
@@ -570,7 +571,7 @@ MonoBehaviour:
   _damageTargetsOncePerActivation: 1
   _isKnockbackPushOrigin: 1
   _collider: {fileID: 1178057254074958334}
-  _damageOnStay: 1
+  _damageOnStay: 0
   _trackActivations: 1
 --- !u!65 &1178057254074958334
 BoxCollider:
@@ -5596,3 +5597,35 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &6812641985038780265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5574195773416488455}
+  m_Layer: 0
+  m_Name: RotateHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5574195773416488455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812641985038780265}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6483304747296058326}
+  m_Father: {fileID: 3521249385198461485}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
