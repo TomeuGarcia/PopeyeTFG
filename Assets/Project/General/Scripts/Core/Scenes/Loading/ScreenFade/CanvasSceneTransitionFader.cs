@@ -26,6 +26,7 @@ namespace Popeye.Scripts.Core.Scenes
         private void Awake()
         {
             _fadeGroup.alpha = 0;
+            _textFadeGroup.alpha = 0;
             _isFading = false;
 
             _sceneFinishedLoadingAwaits = new List<Func<bool>>(2);
