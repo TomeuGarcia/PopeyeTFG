@@ -679,8 +679,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlaySpecialAttackAnimation();
             _currentSpecialAttackController.StartSpecialAttack();
             
-            _eventsDispatcher.DispatchAnchorSpinAttackPerformed();
-            _eventsDispatcher.DispatchOnStartActionEvent("Spin Attack", Position);
+            _eventsDispatcher.DispatchOnStartActionEvent(_currentSpecialAttackController.Name, Position);
         }
 
         public void OnSpecialAttackPerformFinished()

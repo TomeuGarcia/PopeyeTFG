@@ -12,20 +12,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
     {
         private readonly IEventSystemService _eventSystemService;
         private readonly IEmptyEventChannelDispatcher _dashTowardsAnchorDispatcher;
-        private readonly IEmptyEventChannelDispatcher _anchorSpinAttackEventDispatcher;
-        private readonly IEmptyEventChannelDispatcher _chainSpikesAttackEventDispatcher;
         private readonly Timer _updateTimer;
 
         public PlayerEventsDispatcher(
             IEventSystemService eventSystemService, 
-            IEmptyEventChannelDispatcher dashTowardsAnchorDispatcher,
-            IEmptyEventChannelDispatcher anchorSpinAttackEventDispatcher,
-            IEmptyEventChannelDispatcher chainSpikesAttackEventDispatcher)
+            IEmptyEventChannelDispatcher dashTowardsAnchorDispatcher)
         {
             _eventSystemService = eventSystemService;
             _dashTowardsAnchorDispatcher = dashTowardsAnchorDispatcher;
-            _anchorSpinAttackEventDispatcher = anchorSpinAttackEventDispatcher;
-            _chainSpikesAttackEventDispatcher = chainSpikesAttackEventDispatcher;
             _updateTimer = new Timer(1.0f);
         }
 
@@ -46,16 +40,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _dashTowardsAnchorDispatcher.RaiseEvent();
         }
 
-        public void DispatchAnchorSpinAttackPerformed()
-        {
-            _anchorSpinAttackEventDispatcher.RaiseEvent();
-        }
-
-        public void DispatchChainSpikesAttackPerformed()
-        {
-            _chainSpikesAttackEventDispatcher.RaiseEvent();
-        }
-        
         public void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition)
         {
             _eventSystemService.Dispatch(new OnPlayerActionEvent(playerPosition, actionName));

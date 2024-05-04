@@ -282,17 +282,19 @@ namespace Popeye.Modules.PlayerAnchor
             IRageSpecialAttackToggleable[] specialAttackToggleables = 
                 { _anchorGeneralConfig.DamageConfig, _playerGeneralConfig.StatesConfig };
             
-            PlayerRageSpecialAttackController playerSpecialAttackController
-                = new PlayerRageSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig,
-                    specialAttackToggleables);
 
-            _spikesSpecialAttack.Configure(_playerGeneralConfig.SpecialAttacksConfig.ChainSpikesAttackConfig,
-                _anchorChain, playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
+            _spikesSpecialAttack.Configure(
+                _playerGeneralConfig.SpecialAttacksConfig.ChainSpikesAttackConfig,
+                _anchorChain, playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor,
+                _playerGeneralConfig.AbilityActionChannels.ChainSpikesAttackDispatcher);
+            
             AnchorSpinSpecialAttackController anchorSpinSpecialAttackController = 
-                new AnchorSpinSpecialAttackController(_playerGeneralConfig.SpecialAttacksConfig.AnchorSpinAttackConfig,
+                new AnchorSpinSpecialAttackController(
+                    _playerGeneralConfig.SpecialAttacksConfig.AnchorSpinAttackConfig,
                     playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
                     _anchor, anchorMotion, _player,
-                    _anchorGeneralConfig.ThrowConfig.EndRotationCorrection);
+                    _anchorGeneralConfig.ThrowConfig.EndRotationCorrection,
+                    _playerGeneralConfig.AbilityActionChannels.AnchorSpinAttackDispatcher);
 
             FocusPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
@@ -308,10 +310,7 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.FocusConfig.FocusBoostEventChannel, playerFocusController,
                     battleInteractionsController, playerHealth);
             PlayerEventsDispatcher playerEventsDispatcher =
-                new PlayerEventsDispatcher(eventSystemService, 
-                    _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
-                    _playerGeneralConfig.AbilityActionChannels.AnchorSpinAttackDispatcher, 
-                    _playerGeneralConfig.AbilityActionChannels.ChainSpikesAttackDispatcher);
+                new PlayerEventsDispatcher(eventSystemService, _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
                 playerInstantTranslation, playerStateMachine, _environmentFollower, _playerPlacerCheckpointCreator,

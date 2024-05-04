@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Scripts.EventChannels;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
@@ -16,6 +17,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         private readonly IPlayerMediator _playerMediator;
         private readonly AnchorThrowConfig.RotationCorrection _spinEndFloorRotationCorrection;
 
+        private IEmptyEventChannelDispatcher _attackPerformedEventDispatcher;
+        
         private bool _isBeingPerformed;
 
         private float _startPositioningT;
@@ -28,6 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         private Quaternion _endRotation;
         
         public float PreparationDuration => _config.PreparationDuration;
+        public string Name => "Anchor Spin";
 
         public AnchorSpinSpecialAttackController(
             AnchorSpinAttackConfig config,
@@ -36,7 +40,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             IAnchorMediator anchorMediator,
             TransformMotion anchorMotion,
             IPlayerMediator playerMediator,
-            AnchorThrowConfig.RotationCorrection spinEndFloorRotationCorrection)
+            AnchorThrowConfig.RotationCorrection spinEndFloorRotationCorrection,
+            IEmptyEventChannelDispatcher attackPerformedEventDispatcher)
         {
             _config = config;
             _focusSpender = focusSpender;
@@ -45,6 +50,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _anchorMotion = anchorMotion;
             _playerMediator = playerMediator;
             _spinEndFloorRotationCorrection = spinEndFloorRotationCorrection;
+            _attackPerformedEventDispatcher = attackPerformedEventDispatcher;
         }
 
         
@@ -94,6 +100,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             ComputeFinishRotation();
             UpdateLoopTimeAsync().Forget();
             DoStartSpecialAttack().Forget();
+            
+            _attackPerformedEventDispatcher.RaiseEvent();
         }
 
         

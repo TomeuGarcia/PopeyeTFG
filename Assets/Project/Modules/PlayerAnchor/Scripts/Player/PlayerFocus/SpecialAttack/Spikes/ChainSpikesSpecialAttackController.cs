@@ -1,7 +1,9 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Popeye.Core.Pool;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Chain;
+using Popeye.Scripts.EventChannels;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
@@ -15,27 +17,37 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         private PlayerFocusAttackConfig _focusAttackConfig;
         private IAnchorMediator _anchorMediator;
 
+        private IEmptyEventChannelDispatcher _attackPerformedEventDispatcher;
+        
         private bool _isBeingPerformed = false;
+        
 
         private ChainSpike.SpikePositioning[] _spikesPositioning;
-        private ChainSpike[] _spikes;
+        private ChainSpike[] _activeSpikes;
+        private ObjectPool _spikesPool;
 
         private int NumberOfPoints => _config.NumberOfSpikePoints;
 
         public float PreparationDuration => 0;
+        public string Name => "Chain Spikes";
         
         public void Configure(
             ChainSpikesAttackConfig config,
             AnchorChain anchorChain,
             IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,
-            IAnchorMediator anchorMediator)
+            IAnchorMediator anchorMediator,
+            IEmptyEventChannelDispatcher attackPerformedEventDispatcher)
         {
             _config = config;
             _anchorChain = anchorChain;
             _focusSpender = focusSpender;
             _focusAttackConfig = focusAttackConfig;
             _anchorMediator = anchorMediator;
+            _attackPerformedEventDispatcher = attackPerformedEventDispatcher;
+
+            _spikesPool = _config.ChainSpikePoolData.ToObjectPool(transform);
+            _spikesPool.Init(_config.NumberOfSpikePoints);
 
             OnValuesChanged();
             _config.OnValuesChanged += OnValuesChanged;
@@ -49,7 +61,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         private void OnValuesChanged()
         {
             _spikesPositioning = new ChainSpike.SpikePositioning[NumberOfPoints];
-            _spikes = new ChainSpike[_config.NumberOfSpikePoints];
+            _activeSpikes = new ChainSpike[_config.NumberOfSpikePoints];
             
             for (int i = 0; i < NumberOfPoints; ++i)
             {
@@ -76,12 +88,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         
             for (int i = 0; i < NumberOfPoints; ++i)
             {
-                ChainSpike chainSpike = Instantiate(_config.ChainSpikePrefab , transform);
-                chainSpike.Init(_spikesPositioning[i], _anchorMediator);
-                _spikes[i] = chainSpike;
+                ChainSpike chainSpike = _spikesPool.Spawn<ChainSpike>(Vector3.zero, Quaternion.identity);
+                //chainSpike.Init(_spikesPositioning[i], _anchorMediator);
+                _activeSpikes[i] = chainSpike;
             }
 
             Activate().Forget();
+            
+            _attackPerformedEventDispatcher.RaiseEvent();
         }
 
         public bool SpecialAttackHasFinished()
@@ -98,9 +112,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         {
             _isBeingPerformed = true;
 
-            for (int i = 0; i < _spikes.Length; ++i)
+            for (int i = 0; i < _activeSpikes.Length; ++i)
             {
-                _spikes[i].PlaySpawnAnimation().Forget();
+                _activeSpikes[i].InitBeforeAttack(_spikesPositioning[i], _anchorMediator);
+                _activeSpikes[i].PlaySpawnAnimation().Forget();
                 await UniTask.Delay(TimeSpan.FromSeconds(_config.Delay));
             }
             

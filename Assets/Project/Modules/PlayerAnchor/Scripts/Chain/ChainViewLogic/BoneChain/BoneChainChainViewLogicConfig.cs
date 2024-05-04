@@ -41,6 +41,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         [SerializeField, Range(0f, 30f)] private float _subtractAnglePerWave = 10f;
         
         
+        [Header("CHAIN DISTANCE")] 
+        [SerializeField, Range(-10.0f, 10.0f)] private float _extraChainDistance = 0.0f;
         
         
         public CollisionProbingConfig FloorCollisionProbingConfig => _floorCollisionProbingConfig;
@@ -65,6 +67,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public float MinHalfWaveAngle => _minHalfWaveAngle;
         public float SubtractAnglePerWave => _subtractAnglePerWave;
         
+        public float ExtraChainDistance => _extraChainDistance;
         
         private void OnValidate()
         {
