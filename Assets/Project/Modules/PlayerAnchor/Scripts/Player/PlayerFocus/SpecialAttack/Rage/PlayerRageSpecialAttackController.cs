@@ -14,7 +14,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         
         public float PreparationDuration => 0;
         public string Name => "Rage";
-        
+        public void OnPreparationStart(float durationToComplete)
+        {
+        }
+
+        public void OnPreparationInterrupted()
+        {
+        }
+
         public PlayerRageSpecialAttackController(
             IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,

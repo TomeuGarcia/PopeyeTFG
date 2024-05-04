@@ -7,15 +7,17 @@ using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 {
-    public class AnchorSpinSpecialAttackController : IPlayerSpecialAttackController
+    public class AnchorSpinSpecialAttackController : MonoBehaviour, IPlayerSpecialAttackController
     {
-        private readonly AnchorSpinAttackConfig _config;
-        private readonly IPlayerFocusSpender _focusSpender;
-        private readonly PlayerFocusAttackConfig _focusAttackConfig;
-        private readonly IAnchorMediator _anchorMediator;
-        private readonly TransformMotion _anchorMotion;
-        private readonly IPlayerMediator _playerMediator;
-        private readonly AnchorThrowConfig.RotationCorrection _spinEndFloorRotationCorrection;
+        [SerializeField] private AnchorSpinView _view;
+        
+        private AnchorSpinAttackConfig _config;
+        private IPlayerFocusSpender _focusSpender;
+        private PlayerFocusAttackConfig _focusAttackConfig;
+        private IAnchorMediator _anchorMediator;
+        private TransformMotion _anchorMotion;
+        private IPlayerMediator _playerMediator;
+        private AnchorThrowConfig.RotationCorrection _spinEndFloorRotationCorrection;
 
         private IEmptyEventChannelDispatcher _attackPerformedEventDispatcher;
         
@@ -33,7 +35,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         public float PreparationDuration => _config.PreparationDuration;
         public string Name => "Anchor Spin";
 
-        public AnchorSpinSpecialAttackController(
+
+        public void Configure(
             AnchorSpinAttackConfig config,
             IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,
@@ -53,6 +56,20 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _attackPerformedEventDispatcher = attackPerformedEventDispatcher;
         }
 
+        private void Start()
+        {
+            _view.Configure(_playerMediator.PositionTransform);
+        }
+
+        public void OnPreparationStart(float durationToComplete)
+        {
+            _view.StartPreparationAnimation();
+        }
+
+        public void OnPreparationInterrupted()
+        {
+            _view.InterruptPreparationAnimation();
+        }
         
         public bool CanDoSpecialAttack()
         {
@@ -111,6 +128,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _playerMediator.SetCanRotate(false);
             
             _anchorMediator.OnStartSpinning();
+            _view.StartAnimation();
             
             while (_loopTime < _fullLoopTime && _isBeingPerformed)
             {
@@ -119,6 +137,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             }
             
             _anchorMediator.OnStopSpinning();
+            _view.FinishAnimation();
 
             _anchorMediator.SnapToFloor(_playerMediator.Position);
             
@@ -163,8 +182,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
         private void UpdateSpin()
         {
-            float spinT = (_loopTime - _startOffset) / (_fullLoopTime - _startOffset);
-            spinT = Mathf.Sin(spinT * (Mathf.PI / 2));
+            float totalSpinT = (_loopTime - _startOffset) / (_fullLoopTime - _startOffset);
+            float spinT = Mathf.Sin(totalSpinT * (Mathf.PI / 2));
             
         
             float cos = Mathf.Cos(_loopTime);
@@ -206,6 +225,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
             Quaternion damageRotation = Quaternion.LookRotation(anchorLookDirectionStraight, Vector3.up);
             _anchorMediator.OnKeepSpinning(spinCenter, damageRotation, spinRadius);
+            _view.UpdateAnimation(spinCenter, damageRotation, spinRadius, totalSpinT);
         }
 
 

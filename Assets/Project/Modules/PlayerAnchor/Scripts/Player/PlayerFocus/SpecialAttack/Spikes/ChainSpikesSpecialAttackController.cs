@@ -69,6 +69,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             }
         }
         
+        public void OnPreparationStart(float durationToComplete)
+        {
+            
+        }
+
+        public void OnPreparationInterrupted()
+        {
+            
+        }
+
 
         public bool CanDoSpecialAttack()
         {

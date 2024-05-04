@@ -666,11 +666,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnSpecialAttackPreparationStart(IPlayerSpecialAttackController specialAttackController, float durationToComplete)
         {
             _currentSpecialAttackController = specialAttackController;
+            _currentSpecialAttackController.OnPreparationStart(durationToComplete);
             PlayerView.PlayStartEnteringSpecialAttackAnimation(durationToComplete);
         }
 
         public void OnSpecialAttackPreparationInterrupted()
         {
+            _currentSpecialAttackController.OnPreparationInterrupted();
             PlayerView.PlaySpecialAttackInterruptedAnimation();
         }
 

@@ -5,6 +5,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         float PreparationDuration { get; }
         string Name { get; }
         
+        void OnPreparationStart(float durationToComplete);
+        void OnPreparationInterrupted();
         bool CanDoSpecialAttack();
         void StartSpecialAttack();
         bool SpecialAttackHasFinished();

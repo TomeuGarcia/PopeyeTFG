@@ -93,6 +93,7 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
         [SerializeField] private ChainSpikesSpecialAttackController _spikesSpecialAttack;
+        [SerializeField] private AnchorSpinSpecialAttackController _anchorSpinAttack;
 
         
         [Header("Player - AutoAim")] 
@@ -279,17 +280,13 @@ namespace Popeye.Modules.PlayerAnchor
 
             PlayerFocusController playerFocusController =
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
-            IRageSpecialAttackToggleable[] specialAttackToggleables = 
-                { _anchorGeneralConfig.DamageConfig, _playerGeneralConfig.StatesConfig };
-            
 
             _spikesSpecialAttack.Configure(
                 _playerGeneralConfig.SpecialAttacksConfig.ChainSpikesAttackConfig,
                 _anchorChain, playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor,
                 _playerGeneralConfig.AbilityActionChannels.ChainSpikesAttackDispatcher);
             
-            AnchorSpinSpecialAttackController anchorSpinSpecialAttackController = 
-                new AnchorSpinSpecialAttackController(
+            _anchorSpinAttack.Configure(
                     _playerGeneralConfig.SpecialAttacksConfig.AnchorSpinAttackConfig,
                     playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
                     _anchor, anchorMotion, _player,
@@ -319,7 +316,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
-                movesetInputsController, _anchor, playerMovementChecker, anchorSpinSpecialAttackController, _spikesSpecialAttack);
+                movesetInputsController, _anchor, playerMovementChecker, _anchorSpinAttack, _spikesSpecialAttack);
             playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.HealthData,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
