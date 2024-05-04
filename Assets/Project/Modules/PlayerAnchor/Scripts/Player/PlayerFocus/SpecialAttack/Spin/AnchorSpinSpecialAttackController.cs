@@ -74,8 +74,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         public bool CanDoSpecialAttack()
         {
             return _focusSpender.HasEnoughFocus(_focusAttackConfig.RequiredFocusToPerform) && 
-                   !SpecialAttackIsBeingPerformed();/* &&
-                   !_anchorMediator.IsBeingCarried();*/
+                   !SpecialAttackIsBeingPerformed();
         }
 
         private bool SpecialAttackIsBeingPerformed()
@@ -139,8 +138,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _anchorMediator.OnStopSpinning();
             _view.FinishAnimation();
 
-            _anchorMediator.SnapToFloor(_playerMediator.Position);
-            
+            CorrectAnchorEndPosition();
+                        
             _playerMediator.SetCanRotate(true);
             _isBeingPerformed = false;
         }
@@ -248,6 +247,24 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         public void ForceStopSpecialAttack()
         {
             _isBeingPerformed = false;
+        }
+        
+        private void CorrectAnchorEndPosition()
+        {
+            Vector3 playerPosition = _playerMediator.Position;
+            Vector3 playerToAnchor = _anchorMediator.Position - playerPosition;
+            float playerToAnchorDistance = playerToAnchor.magnitude;
+            Vector3 playerToAnchorDirection = playerToAnchor / playerToAnchorDistance;
+
+            if (Physics.Raycast(playerPosition, playerToAnchorDirection,
+                    out RaycastHit obstacleHit, playerToAnchorDistance,
+                    _config.ObstacleCollisionProbing.CollisionLayerMask,
+                    _config.ObstacleCollisionProbing.QueryTriggerInteraction))
+            {
+                _anchorMotion.SetPosition(obstacleHit.point);
+            }
+
+            _anchorMediator.SnapToFloor(_playerMediator.Position);
         }
     }
 }

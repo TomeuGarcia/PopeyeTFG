@@ -477,12 +477,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _onVoidChecker.ClearState();
         }
 
-        public bool TakeFellOnVoidDamage()
-        {
-            _playerHealth.TakeVoidFallDamage();
-            return _playerHealth.IsDead();
-        }
-
         public void OnTryUsingObstructedAnchor()
         {
             LookTowardsAnchor();
