@@ -31,7 +31,10 @@ namespace Popeye.Modules.Enemies.Components
 
         private bool _animationOn = false;
 
-        private bool _isHidden = false;
+       [SerializeField] private float _randomDistance = 3;
+
+       private bool _hiding =false;
+       private bool _isHidden = false;
 
         public void Configure(TurretMediator turetMediator, IHazardFactory hazardFactory,Transform playerTransform)
         {
@@ -45,7 +48,7 @@ namespace Popeye.Modules.Enemies.Components
 
             PlayerIsTooClose = false;
             PlayerIsTooFar = false;
-            DoHide();
+            DoAppear();
         }
        
 
@@ -87,7 +90,11 @@ namespace Popeye.Modules.Enemies.Components
         }
         private void DoHide()
         {
-           _isHidden = true;
+            if (PlayerIsTooClose)
+            {
+                _isHidden = true;
+            }
+           
            _mediator.HideAnimation(PlayerIsTooClose, PlayerIsTooFar);
            _timer = 0;
         }
@@ -133,16 +140,17 @@ namespace Popeye.Modules.Enemies.Components
         public void Shoot()
         {
             _currentProjectile.Shoot();
-            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_playerDistanceThreshold,
-                _playerDistanceThresholdToHide);
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_randomDistance,
+                _randomDistance);
         }
 
         public void MultipleShoot()
         {
-            for (int i = 0; i < _numberOfShots; i++)
+            Shoot();
+            for (int i = 0; i < _numberOfShots-1; i++)
             {
                 _currentProjectile.ShootRandom();
-                _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
+                _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_randomDistance,0);
             }
         }
         private void OnDestroy()
