@@ -16,7 +16,7 @@ public class WaterShoreCapturer : MonoBehaviour
 
     public async UniTask DeactvateCamera()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(0.01f));
+        await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
         
         _camera.gameObject.SetActive(false);
         _shoreMeshes.gameObject.SetActive(false);
