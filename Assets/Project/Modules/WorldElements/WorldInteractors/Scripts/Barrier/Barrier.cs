@@ -5,12 +5,17 @@ using DG.Tweening;
 using NaughtyAttributes;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.WorldInteractors
 {
         
     public class Barrier : AWorldInteractor
     {
+        [Header("AUDIO")]        
+        [SerializeField] private BarrierAudio _audio;
+        [FormerlySerializedAs("_audioSource")] [SerializeField] private GameObject _soundsSource;
+        
         [Header("ACTIVATED")]
         [SerializeField] private bool _activatedColliderEnabledState = true;
         [SerializeField] private Transform _activatedStateSpot;
@@ -27,6 +32,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         [SerializeField] private Transform _barrierTransform;
         [SerializeField] private Collider _collider;
         [SerializeField] private bool _startActivated = false;
+
 
         private bool _isActivated = false;
 
@@ -52,6 +58,11 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             }
 
             SetCollisionEnabled(_startActivated);
+
+            if (_soundsSource == null)
+            {
+                _soundsSource = gameObject;
+            }
         }
 
         protected override void DoEnterActivatedState()
@@ -59,6 +70,8 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             SetState(_activatedStateSpot, _activatedEase.Value);
             SetCollisionEnabled(true);
             _isActivated = true;
+            
+            _audio.PlayActivatedSound(_soundsSource);
         }
 
         protected override void DoEnterDeactivatedState()
@@ -66,6 +79,8 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             SetState(_deactivatedStateSpot, _deactivatedEase.Value);
             SetCollisionEnabledDelayed(false, DeactivateDuration).Forget();
             _isActivated = false;
+            
+            _audio.PlayDeactivatedSound(_soundsSource);
         }
 
         public override async UniTask EnterActivatedStateAwait()

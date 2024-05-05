@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Popeye.Modules.AudioSystem;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -60,11 +61,30 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
             } 
         }
 
+        [System.Serializable]
+        public class AudioConfig
+        {
+            [SerializeField] private AFMODAudioManagerReference _audioManager;
+            [SerializeField] private OneShotFMODSound _checkpointSetSound;
+            [SerializeField] private OneShotFMODSound _hitSound;
+
+            public void PlayCheckpointSetSound()
+            {
+                _audioManager.PlayOneShot(_checkpointSetSound);
+            }
+            public void PlayHitSound(GameObject source)
+            {
+                _audioManager.PlayOneShotAttached(_hitSound, source);
+            }
+        }
+
 
         [SerializeField] private BouncesViewConfig _bouncesView;
         [SerializeField] private VFXViewConfig _vfxView;
+        [SerializeField] private AudioConfig _audio;
         public BouncesViewConfig BouncesView => _bouncesView;
         public VFXViewConfig VFXView => _vfxView;
+        public AudioConfig Audio => _audio;
 
 
 

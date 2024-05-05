@@ -105,6 +105,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
             Activate().Forget();
             
+            _config.PlayPerformSound();
+            
             _attackPerformedEventDispatcher.RaiseEvent();
         }
 

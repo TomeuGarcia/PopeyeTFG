@@ -117,6 +117,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             UpdateLoopTimeAsync().Forget();
             DoStartSpecialAttack().Forget();
             
+            _config.PlayPerformSound();
+            
             _attackPerformedEventDispatcher.RaiseEvent();
         }
 

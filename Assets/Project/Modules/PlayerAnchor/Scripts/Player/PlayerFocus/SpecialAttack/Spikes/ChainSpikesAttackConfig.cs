@@ -1,5 +1,6 @@
 using System;
 using Popeye.Core.Pool;
+using Popeye.Modules.AudioSystem;
 using Popeye.Modules.Enemies.Hazards;
 using Popeye.ProjectHelpers;
 using UnityEngine;
@@ -38,6 +39,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         private void OnValidate()
         {
             OnValuesChanged?.Invoke();
+        }
+        
+        
+        [Header("AUDIO")] 
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        [SerializeField] private OneShotFMODSound _performSound;
+
+        public void PlayPerformSound()
+        {
+            _audioManager.PlayOneShot(_performSound);
         }
     }
 }

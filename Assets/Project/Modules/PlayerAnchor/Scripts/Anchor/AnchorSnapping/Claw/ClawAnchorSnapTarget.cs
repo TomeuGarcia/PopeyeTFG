@@ -25,7 +25,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private Transform _user;
         
-        
 
         
         public AutoAimTargetDataConfig DataConfig => _autoAimTargetDataConfig;
@@ -97,12 +96,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             {
                 origin += (LookDirection * ForwardDistanceFromClaw);
             }
-            Debug.Log(origin);
             
             if (Physics.Raycast(origin, Vector3.down, out RaycastHit floorHit, FloorProbeDistance,
                     FloorCollisionLayerMask, FloorCollisionQueryTriggerInteraction))
             {
-                Debug.Log(floorHit.collider.gameObject.name);
                 _dashEndSpot.position = floorHit.point + (Vector3.up * HeightDistanceFromFloor);
             }
             else
