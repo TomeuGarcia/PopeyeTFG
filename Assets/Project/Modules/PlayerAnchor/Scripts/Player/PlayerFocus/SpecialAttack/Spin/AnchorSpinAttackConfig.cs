@@ -1,5 +1,6 @@
 using System;
 using Popeye.ProjectHelpers;
+using Popeye.Scripts.Collisions;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
@@ -20,6 +21,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         [Header("DISTANCES")]
         [SerializeField] private float _startSpinDistance = 4.0f;
         [SerializeField] private float _endSpinDistance = 7.0f;
+
+        [Header("COLLISIONS")] 
+        [SerializeField] private CollisionProbingConfig _obstacleCollisionProbing;
         
         public int NumberOfLoops => _numberOfLoops;
         public float PreparationDuration => _preparationDuration;
@@ -29,5 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         
         public float StartSpinDistance => _startSpinDistance;
         public float EndSpinDistance => _endSpinDistance;
+        
+        public CollisionProbingConfig ObstacleCollisionProbing => _obstacleCollisionProbing;
     }
 }

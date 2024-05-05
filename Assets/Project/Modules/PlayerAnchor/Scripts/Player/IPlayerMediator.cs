@@ -48,20 +48,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         UniTask DashForward();
         void KickAnchor();
         
-        bool CanSpinAnchor();
-        bool IsLockedIntoSpinningAnchor();
-        void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight);
-        void SpinAnchor(float deltaTime);
-        void StopSpinningAnchor();
-        void InterruptSpinningAnchor();
-        bool SpinningAnchorFinished();
-
-
         void OnAnchorEndedInVoid();
         void OnPlayerFellOnVoid();
-        bool TakeFellOnVoidDamage();
         void RespawnToLastSafeGround();
-        void OnTryUsingObstructedAnchor();
 
 
         void LookTowardsPosition(Vector3 position);
