@@ -16,10 +16,12 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         private float CircleRadius => Mathf.Lerp(_startCircleRadius, _endCircleRadius, _viewTimer.GetCounterRatio01());
 
+        public float PositionsExtraDistance { get; }
 
         public SemicircleChainViewLogic(int chainBoneCount, Vector3 centerAxis, 
-            float startCircleRadius, float endCircleRadius, float duration)
+            float startCircleRadius, float endCircleRadius, float duration, float positionsExtraDistance)
         {
+            PositionsExtraDistance = positionsExtraDistance;
             _chainBoneCount = chainBoneCount;
             _centerAxis = centerAxis;
             _startCircleRadius = startCircleRadius;
@@ -31,9 +33,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _viewTimer = new Timer(duration);
         }
 
-        
-        
-        
+
+
         public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
             _viewTimer.Clear();

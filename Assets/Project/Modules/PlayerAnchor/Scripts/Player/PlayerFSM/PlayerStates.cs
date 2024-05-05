@@ -18,13 +18,16 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         DashingTowardsAnchor,
         KickingAnchor,
         PullingAnchor,
-        SpinningAnchor,
         Tired,
         TiredPickingUpAnchor,
         
         Healing,
-        EnteringSpecialAttack,
-        PerformingSpecialAttack,
+        
+        EnteringAnchorSpinAttack,
+        PerformingAnchorSpinAttack,
+        
+        EnteringChainSpikesAttack,
+        PerformingChainSpikesAttack,
         
         FallingOnVoid
     }

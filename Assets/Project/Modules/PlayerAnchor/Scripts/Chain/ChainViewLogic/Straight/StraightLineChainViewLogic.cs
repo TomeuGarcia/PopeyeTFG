@@ -8,14 +8,17 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private readonly int _chainBoneCountMinusOne;
 
         private readonly Vector3[] _chainPositions;
+        public float PositionsExtraDistance { get; }
 
-        public StraightLineChainViewLogic(int chainBoneCount)
+        public StraightLineChainViewLogic(int chainBoneCount, float positionsExtraDistance)
         {
+            PositionsExtraDistance = positionsExtraDistance;
             _chainBoneCount = chainBoneCount;
             _chainBoneCountMinusOne = _chainBoneCount - 1;
 
             _chainPositions = new Vector3[_chainBoneCount];
         }
+
 
         public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {

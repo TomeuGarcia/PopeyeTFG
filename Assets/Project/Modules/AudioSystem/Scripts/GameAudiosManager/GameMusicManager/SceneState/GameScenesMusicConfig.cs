@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Popeye.Scripts.Core.Scenes;
 using UnityEngine;
 
@@ -33,10 +35,18 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
 
 
          [Header("SCENES")]
+         [SerializeField] private SceneReferenceAsset[] _scenesToIgnore;
+         [SerializeField] private MusicSoundsGroup _defaultSounds;
          [SerializeField] private MusicSoundsByScene[] _soundsByScene;
 
          public bool GetSoundForScene(ISceneReference sceneReference, out MusicSoundsGroup musicSoundsGroups)
          {
+             if (_scenesToIgnore.Contains(sceneReference))
+             {
+                 musicSoundsGroups = null;
+                 return false;
+             }
+             
             foreach (MusicSoundsByScene musicSoundsByScene in _soundsByScene)
             {
                 if (musicSoundsByScene.IsScene(sceneReference))
@@ -46,8 +56,8 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
                 }
             }
             
-            musicSoundsGroups = null;
-            return false;
+            musicSoundsGroups = _defaultSounds;
+            return true;
          }
          
          

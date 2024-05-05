@@ -79,10 +79,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private bool _pullingAnchorFromTheVoid;
 
         private IPlayerFocusController _focusController;
-        private IPlayerSpecialAttackController[] _specialAttackControllers;
-        private int _currentSpecialAttackIndex = 1;
-        public static bool debugIsSpinning = true;
-        private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[_currentSpecialAttackIndex];
+        private IPlayerSpecialAttackController _currentSpecialAttackController;
         
         
         private IPlayerGlobalEventsListener _globalEventsListener;
@@ -110,7 +107,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorSpinner anchorSpinner,
             ICheckpointStorerRead  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
             IOnVoidChecker onVoidChecker,
-            IPlayerFocusController focusController, IPlayerSpecialAttackController[] specialAttackControllers,
+            IPlayerFocusController focusController,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _playerInputsUpdater = playerInputsUpdater;
@@ -145,15 +142,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _focusController = focusController;
             _focusDropCollector.Init(_focusController);
-            
-            _specialAttackControllers = specialAttackControllers;
+
+            _currentSpecialAttackController = null;
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
             OnStopMoving();
-            
-            debugIsSpinning = _currentSpecialAttackIndex == 1;
         }
         
         private void OnDestroy()
@@ -169,31 +164,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
-
-            if (Input.GetKeyDown(KeyCode.Alpha0))
-            {
-                Debug.Log("Special Attack: RAGE");
-                _currentSpecialAttackIndex = 0;
-                debugIsSpinning = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                Debug.Log("Special Attack: SPIN");
-                _currentSpecialAttackIndex = 1;
-                debugIsSpinning = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                Debug.Log("Special Attack: SPIKES");
-                _currentSpecialAttackIndex = 2;
-                debugIsSpinning = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                Debug.Log("Special Attack: CHAINSAW");
-                _currentSpecialAttackIndex = 3;
-                debugIsSpinning = false;
-            }
         }
 
         private void FixedUpdate()
@@ -507,12 +477,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _onVoidChecker.ClearState();
         }
 
-        public bool TakeFellOnVoidDamage()
-        {
-            _playerHealth.TakeVoidFallDamage();
-            return _playerHealth.IsDead();
-        }
-
         public void OnTryUsingObstructedAnchor()
         {
             LookTowardsAnchor();
@@ -691,48 +655,45 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         
         
-        public bool CanDoSpecialAttack()
-        {
-            return SpecialAttackController.CanDoSpecialAttack();
-        }
+        
 
-        public void OnSpecialAttackPreparationStart(float durationToComplete)
+        public void OnSpecialAttackPreparationStart(IPlayerSpecialAttackController specialAttackController, float durationToComplete)
         {
+            _currentSpecialAttackController = specialAttackController;
+            _currentSpecialAttackController.OnPreparationStart(durationToComplete);
             PlayerView.PlayStartEnteringSpecialAttackAnimation(durationToComplete);
         }
 
         public void OnSpecialAttackPreparationInterrupted()
         {
+            _currentSpecialAttackController.OnPreparationInterrupted();
             PlayerView.PlaySpecialAttackInterruptedAnimation();
         }
 
         public void OnSpecialAttackPerformed()
         {
             PlayerView.PlaySpecialAttackAnimation();
-            SpecialAttackController.StartSpecialAttack();
-            WaitForSpecialAttackFinished().Forget();
+            _currentSpecialAttackController.StartSpecialAttack();
             
-            _eventsDispatcher.DispatchSpecialAttackPerformed();
-            _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
+            _eventsDispatcher.DispatchOnStartActionEvent(_currentSpecialAttackController.Name, Position);
         }
-        public bool OnSpecialAttackFinished()
+
+        public void OnSpecialAttackPerformFinished()
         {
-            return SpecialAttackController.SpecialAttackHasFinished();
+            PlayerView.PlaySpecialAttackFinishAnimation();
+        }
+
+        public bool SpecialAttackHasFinished()
+        {
+            return _currentSpecialAttackController.SpecialAttackHasFinished();
         }
 
         public void ForceStopSpecialAttack()
         {
-            SpecialAttackController.ForceStopSpecialAttack();
+            _currentSpecialAttackController.ForceStopSpecialAttack();
         }
 
-        private async UniTaskVoid WaitForSpecialAttackFinished()
-        {
-            await UniTask.WaitUntil(() => !SpecialAttackController.SpecialAttackIsBeingPerformed());
-            PlayerView.PlaySpecialAttackFinishAnimation();
-        }
-        
-        
-        
+
 
         private void SpendStamina(int spendAmount)
         {

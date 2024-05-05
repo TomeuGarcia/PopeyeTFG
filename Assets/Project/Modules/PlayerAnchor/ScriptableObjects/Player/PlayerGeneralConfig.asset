@@ -19,11 +19,18 @@ MonoBehaviour:
   _playerStaminaConfig: {fileID: 11400000, guid: ad4c22d5b60dd644cb7023efc05742c0,
     type: 2}
   _playerHealthConfig:
-    _maxHealth: 4
+    _healthData:
+      _startingMaxHealth: 4
+      _healthIncreaseAmount: 1
     _invulnerableDurationAfterTakingDamage: 1
   _potionsHealingConfig: {fileID: 11400000, guid: ad17eeccfd3e5e94b8feeef13a85e0d9,
     type: 2}
   _focusConfig: {fileID: 11400000, guid: a8b3fa52e4aa191499388f3f771e1057, type: 2}
+  _specialAttacksConfig:
+    _anchorSpinAttackConfig: {fileID: 11400000, guid: ecfe2c49d982cac41a90f4b24e2644bd,
+      type: 2}
+    _chainSpikesAttackConfig: {fileID: 11400000, guid: 6ecfd63238c84b44a970ce8bfb1f1690,
+      type: 2}
   _safeGroundProbingConfig: {fileID: 11400000, guid: fe781d398af7571499f4602c4acaeaf8,
     type: 2}
   _onVoidProbingConfig: {fileID: 11400000, guid: 262a972c72a790743a028568c17665a8,
@@ -42,5 +49,7 @@ MonoBehaviour:
       type: 2}
     _dashTowardsAnchorChannel: {fileID: 11400000, guid: 60e475a1416337049bb58555287bfb38,
       type: 2}
-    _specialAttackChannel: {fileID: 11400000, guid: e8a9879a57a5d8d43a6656109d23f2cd,
+    _anchorSpinAttackChannel: {fileID: 11400000, guid: e8a9879a57a5d8d43a6656109d23f2cd,
+      type: 2}
+    _chainSpikesAttackChannel: {fileID: 11400000, guid: 03ae201bce7be6146a1b32a6db158152,
       type: 2}

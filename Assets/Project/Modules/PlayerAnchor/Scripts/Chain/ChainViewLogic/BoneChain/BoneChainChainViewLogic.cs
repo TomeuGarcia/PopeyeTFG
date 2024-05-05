@@ -22,6 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private Vector3[] _previousStateChainPositions;
         private float _transitionT;
 
+
         private float FloorProbeDistance => _config.FloorCollisionProbingConfig.ProbeDistance;
         private LayerMask FloorLayerMask => _config.FloorCollisionProbingConfig.CollisionLayerMask;
         private QueryTriggerInteraction FloorQueryTriggerInteraction => _config.FloorCollisionProbingConfig.QueryTriggerInteraction;
@@ -57,6 +58,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _controllerIK.enabled = false;
         }
 
+        public float PositionsExtraDistance => _config.ExtraChainDistance;
 
 
         public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)

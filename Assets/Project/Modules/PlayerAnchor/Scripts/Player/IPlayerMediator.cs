@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
@@ -47,20 +48,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         UniTask DashForward();
         void KickAnchor();
         
-        bool CanSpinAnchor();
-        bool IsLockedIntoSpinningAnchor();
-        void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight);
-        void SpinAnchor(float deltaTime);
-        void StopSpinningAnchor();
-        void InterruptSpinningAnchor();
-        bool SpinningAnchorFinished();
-
-
         void OnAnchorEndedInVoid();
         void OnPlayerFellOnVoid();
-        bool TakeFellOnVoidDamage();
         void RespawnToLastSafeGround();
-        void OnTryUsingObstructedAnchor();
 
 
         void LookTowardsPosition(Vector3 position);
@@ -98,11 +88,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         UniTaskVoid DisableSafeGroundCheckingForDuration(float duration);
 
 
-        bool CanDoSpecialAttack();
-        void OnSpecialAttackPreparationStart(float durationToComplete);
+        void OnSpecialAttackPreparationStart(IPlayerSpecialAttackController specialAttackController, float durationToComplete);
         void OnSpecialAttackPreparationInterrupted();
         void OnSpecialAttackPerformed();
-        bool OnSpecialAttackFinished();
+        void OnSpecialAttackPerformFinished();
+        bool SpecialAttackHasFinished();
         void ForceStopSpecialAttack();
 
     }

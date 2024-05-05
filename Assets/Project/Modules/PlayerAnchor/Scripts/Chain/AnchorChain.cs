@@ -27,7 +27,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private BoneChainChainViewLogic _restingOnFloorChainViewLogic;
         private FoldingChainViewLogic _dashingTowardsChainViewLogic;
         private SpiralThrowChainViewLogic _dashingAwayChainViewLogic;
-        private FoldingChainViewLogic _carriedChainViewLogic;
+        private FoldedCompletelyChainViewLogic _carriedChainViewLogic;
         private SemicircleChainViewLogic _spinningChainViewLogic;
 
 
@@ -50,8 +50,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             
             _chainView = new BoneChainChainView(_boneChain, generalConfig.ChainBoneCount,
                 generalConfig.MaxChainLength, boneLength,
-                generalConfig.BonePrefab, generalConfig.BoneEndEffectorPrefab,
-                chainBonesMaterial, 1f);
+                generalConfig.BonePrefab, generalConfig.BoneEndEffectorPrefab, chainBonesMaterial);
             
             _thrownChainViewLogic = 
                 new SpiralThrowChainViewLogic(generalConfig.ThrowViewLogicConfig, 
@@ -70,11 +69,11 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                     generalConfig.ChainBoneCount);
 
             _carriedChainViewLogic =
-                new FoldingChainViewLogic(generalConfig.PickedUpTowardsViewLogicConfig,
-                    generalConfig.ChainBoneCount);
+                new FoldedCompletelyChainViewLogic(generalConfig.ChainBoneCount);
 
             _spinningChainViewLogic =
-                new SemicircleChainViewLogic(generalConfig.ChainBoneCount, Vector3.down, 2f, 0.5f, 0.5f);
+                new SemicircleChainViewLogic(generalConfig.ChainBoneCount, Vector3.down, 
+                    2f, 0.5f, 0.5f, 0.0f);
 
             _dashingAwayChainViewLogic = 
                 new SpiralThrowChainViewLogic(generalConfig.DashingAwayViewLogicConfig, 
@@ -91,7 +90,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _currentChainViewLogic.UpdateChainPositions(Time.deltaTime, PlayerBindPosition, AnchorBindPosition);
 
             Vector3[] newChainPositions = GetChainPositions();
-            _chainView.Update(newChainPositions);
+            _chainView.Update(newChainPositions, _currentChainViewLogic.PositionsExtraDistance);
             
             newChainPositions = _chainView.GetUpdatedPositions();
             _vfxChainView.Update(newChainPositions);
@@ -122,7 +121,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
         public void SetCarriedView()
         {
-            _carriedChainViewLogic.EnterSetup(0.15f, Ease.InOutSine);
             TransitionViewLogic(_carriedChainViewLogic);
         }
         public void SetDashingTowardsView(float dashDuration, Ease dashEase)
