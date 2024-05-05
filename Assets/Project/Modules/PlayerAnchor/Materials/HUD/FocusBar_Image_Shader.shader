@@ -124,24 +124,25 @@ Shader "UI/FocusBar_Image_Shader"
 
             fixed4 frag(v2f IN) : SV_Target
             {
-                float2 uv = IN.texcoord.yx;
+                float2 uv = IN.texcoord.xy;                
+
                 float noise = tex2D(_NoiseTex, uv * 0.5f  + _Time.y * -0.2f);
 
                 float roundFade = 1- pow(length((uv - 0.5f) * 2.0f), 8);
 
-                uv += noise * 0.3f;
+                uv += noise * length(uv) * -0.3f;
 
-                half4 color = (tex2D(_MainTex, uv) + _TextureSampleAdd) * IN.color  * roundFade;
-
-                color.a = color.x ;   
+                half4 color = (tex2D(_MainTex, uv) + _TextureSampleAdd) * IN.color ;// * roundFade;
+/*
+                color.a = color.z;   
                 color.a = saturate(color.a);
 
                 float steps = 2;
-                color.x = pow(color.x, 0.5f);
-                color.x = floor(color.x * steps) / steps;
+                color.z = pow(color.z, 0.5f);
+                color.z = floor(color.z * steps) / steps;
 
-                color.xyz = lerp(_ColorExterior, _ColorInterior, color.x);
-
+                color.xyz = lerp(_ColorExterior, _ColorInterior, color.z);
+*/
                 #ifdef UNITY_UI_CLIP_RECT                
                 color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
                 #endif
