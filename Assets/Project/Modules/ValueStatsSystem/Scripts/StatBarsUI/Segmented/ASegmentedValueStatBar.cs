@@ -21,6 +21,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         
         protected ImageFillBar[] _imageFillBars;
         protected int _currentBarIndex;
+        protected int _currentBarValue;
 
         private bool _isSubscribed;
         
@@ -84,6 +85,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             SetupBarsHolder();
             
             _currentBarIndex = CurrentValueToBarIndex();
+            _currentBarValue = ValueStat.GetValue();
         }
 
         private int ComputeNumberOfSegments(out int reminder)
@@ -114,6 +116,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         private void InstantUpdateSegments()
         {
             _currentBarIndex = CurrentValueToBarIndex();
+            _currentBarValue = ValueStat.GetValue();
             
             for (int i = 0; i <= _currentBarIndex; ++i)
             {
@@ -127,17 +130,26 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     
         protected void UpdateSegments()
         {
+
+            
             int newBarIndex = CurrentValueToBarIndex();
             
             DoUpdateSegments(_currentBarIndex, newBarIndex).Forget();
             
             _currentBarIndex = newBarIndex;
+            _currentBarValue = ValueStat.GetValue();
         }
         
         private async UniTaskVoid DoUpdateSegments(int currentBarIndex, int newBarIndex)
         {
-            bool isSubtracting = newBarIndex < _currentBarIndex;
-
+            float currentLocalValue = (currentBarIndex + 1) + _imageFillBars[currentBarIndex].Value;
+            float newLocalValue = ValueStat.GetValuePer1Ratio() * NumberOfSegments;
+            int newValue = ValueStat.GetValue();
+            int currentValue = _currentBarValue;
+            
+            
+            /*
+            bool isSubtracting = newBarIndex < currentBarIndex;
             if (isSubtracting)
             {
                 for (int i = currentBarIndex; i > newBarIndex; --i)
@@ -152,6 +164,83 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
                     await _imageFillBars[i].UpdateFill(1);
                 }
             }
+            */
+            
+            
+            
+            
+            bool isSubtracting = newValue < currentValue;
+            /*
+            Debug.Log("newLocalValue: " + newLocalValue);
+            Debug.Log("currentLocalValue: " + currentLocalValue);
+            if (isSubtracting)
+            {
+                int i = currentBarIndex;
+                float f = newLocalValue - currentLocalValue;
+                for (; f < 0f; f += 1f, --i)
+                {
+                    Debug.Log("dec: " + i + " " + f);
+                    await _imageFillBars[i].UpdateFill(0);
+                }
+                if (f > 0)
+                {
+                    Debug.Log("dec n: " + i + " " + f);
+                    await _imageFillBars[i].UpdateFill(f);
+                }
+            }
+            else
+            {
+                int i = currentBarIndex + 1;
+                float f = newLocalValue - currentLocalValue;
+                
+                for (; f > 1f; f -= 1f, ++i)
+                {
+                    Debug.Log("inc: " + i + " " + f);
+                    await _imageFillBars[i].UpdateFill(1);
+                }
+                if (f > 0)
+                {
+                    Debug.Log("inc n: " + i + " " + f);
+                    await _imageFillBars[i].UpdateFill(f);
+                }
+            }
+            */
+
+            int i = Mathf.Max(0,currentValue-1) / _config.StatValueAmountPerUnit;
+            if (!isSubtracting)
+            {
+                int v = newValue - currentValue;
+                Debug.Log(v);
+                if (v % _config.StatValueAmountPerUnit == 0)
+                {
+                    ++i; // no acaba d'anar bé
+                }
+
+                for (; v >= _config.StatValueAmountPerUnit; v -= _config.StatValueAmountPerUnit, ++i)
+                {
+                    await _imageFillBars[i].UpdateFill(1);
+                }
+
+                if (v > 0)
+                {
+                    await _imageFillBars[i].UpdateFill((float)v/_config.StatValueAmountPerUnit);
+                }
+            }
+            else
+            {
+                int v = currentValue - newValue;
+                for (; v >= _config.StatValueAmountPerUnit; v -= _config.StatValueAmountPerUnit, --i)
+                {
+                    await _imageFillBars[i].UpdateFill(0);
+                }
+
+                if (v > 0)
+                {
+                    v = _config.StatValueAmountPerUnit - v;
+                    await _imageFillBars[i].UpdateFill((float)v/_config.StatValueAmountPerUnit);
+                }
+            }
+            
         } 
         
         

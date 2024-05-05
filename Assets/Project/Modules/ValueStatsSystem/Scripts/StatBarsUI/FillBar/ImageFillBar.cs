@@ -17,6 +17,7 @@ namespace Popeye.Modules.ValueStatSystem
         
         private ImageFillBarConfig _viewConfig;
         
+        public float Value { get; private set; }
 
 
         public void Init(ImageFillBarConfig viewConfig)
@@ -76,6 +77,8 @@ namespace Popeye.Modules.ValueStatSystem
         private void DoUpdateFill(float newFillValue, float fillDuration, float lazyFillDuration,
             bool isSubtracting)
         {
+            Value = newFillValue;
+            
             _fillImage.ToFillValue(newFillValue, fillDuration, _viewConfig.FillEase);
             _lazyBarFillImage.ToFillValue(newFillValue, lazyFillDuration, _viewConfig.LazyFillEase);
 

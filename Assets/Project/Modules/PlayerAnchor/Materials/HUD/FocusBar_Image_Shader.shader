@@ -18,15 +18,11 @@ Shader "UI/FocusBar_Image_Shader"
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
 
-        _WaveOffsetMin ("Wave Offset Min", Range(0, 1)) = 0.1
-        _WaveOffsetMax ("Wave Offset Max", Range(0, 1)) = 0.2
-        _WaveScrollSpeed ("Wave Scroll Speed", Range(0, 10)) = 1
-        _WaveFrequency ("Wave Frequency", Range(0, 30)) = 16
-        _CenterSharpness ("Center Sharpness", Range(0, 30)) = 8
-        _FadeSharpness ("Fade Sharpness", Range(0, 30)) = 16
+        _FillValue ("Fill Value", Range(0, 1)) = 0.4
 
-        _ColorInterior ("Color Interior", Color) = (1,1,1,1)
-        _ColorExterior ("Color Exterior", Color) = (1,0,1,1)
+        _Stage1Tex ("Stage 1 Texture", 2D) = "white" {}     
+        _Stage2Tex ("Stage 2 Texture", 2D) = "white" {}     
+        _Stage3Tex ("Stage 3 Texture", 2D) = "white" {}     
     }
 
     SubShader
@@ -93,10 +89,9 @@ Shader "UI/FocusBar_Image_Shader"
             float4 _ClipRect;
             float4 _MainTex_ST;
 
-            float _WaveOffsetMin, _WaveOffsetMax;
-            float _WaveScrollSpeed, _WaveFrequency;
-            float _CenterSharpness;
-            float _FadeSharpness;
+            float _FillValue;
+            sampler2D _Stage1Tex, _Stage2Tex, _Stage3Tex;
+
 
             fixed4 _ColorInterior, _ColorExterior;
 
@@ -126,23 +121,24 @@ Shader "UI/FocusBar_Image_Shader"
             {
                 float2 uv = IN.texcoord.xy;                
 
-                float noise = tex2D(_NoiseTex, uv * 0.5f  + _Time.y * -0.2f);
-
-                float roundFade = 1- pow(length((uv - 0.5f) * 2.0f), 8);
+                float uvPositionOffset = IN.vertex.x * 0.001f;
+                float noise = tex2D(_NoiseTex, (uv * 0.5f)  + (_Time.y * -0.2f) + uvPositionOffset);
 
                 uv += noise * length(uv) * -0.3f;
 
-                half4 color = (tex2D(_MainTex, uv) + _TextureSampleAdd) * IN.color ;// * roundFade;
-/*
-                color.a = color.z;   
-                color.a = saturate(color.a);
+                half4 colorStage1 = tex2D(_Stage1Tex, uv);
+                half4 colorStage2 = tex2D(_Stage2Tex, uv);
+                half4 colorStage3 = tex2D(_Stage3Tex, uv);
 
-                float steps = 2;
-                color.z = pow(color.z, 0.5f);
-                color.z = floor(color.z * steps) / steps;
+                half4 color = half4(0,0,0,0);
+                color = lerp(color, colorStage1, step(0.01f, _FillValue));
+                color = lerp(color, colorStage2, step(0.5f, _FillValue));
+                color = lerp(color, colorStage3, step(0.99f, _FillValue));
 
-                color.xyz = lerp(_ColorExterior, _ColorInterior, color.z);
-*/
+                color = (color + _TextureSampleAdd) * IN.color;
+
+
+
                 #ifdef UNITY_UI_CLIP_RECT                
                 color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
                 #endif

@@ -12,6 +12,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     {
         [Header("NUMBER OF CELLS")]
         [SerializeField, Range(1, 100)] private int _statValueAmountPerUnit = 1;
+        public int StatValueAmountPerUnit => _statValueAmountPerUnit;
 
         
         
@@ -53,11 +54,11 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         }
         
         public int IndexOfSegment(int statValue)
-        {
-            
+        {            
             int numberOfSegments = statValue / _statValueAmountPerUnit;
             int reminder = statValue % _statValueAmountPerUnit;
 
+            if (numberOfSegments == 0) return 0;
             int indexOfSegments = numberOfSegments - (reminder == 0 ? 1 : 0);
             
             return indexOfSegments;
