@@ -2,8 +2,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
 {
     public interface IPlayerSpecialAttackController
     {
+        float PreparationDuration { get; }
+        string Name { get; }
+        
+        void OnPreparationStart(float durationToComplete);
+        void OnPreparationInterrupted();
         bool CanDoSpecialAttack();
-        bool SpecialAttackIsBeingPerformed();
         void StartSpecialAttack();
         bool SpecialAttackHasFinished();
 

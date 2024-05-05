@@ -28,6 +28,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainPositions = new Vector3[_chainBoneCount];
         }
 
+        public float PositionsExtraDistance => _config.ExtraChainDistance;
 
         public void EnterSetup(float foldDuration, Ease dashEase)
         {
@@ -41,7 +42,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
                 _duration * (1-DurationMultiplier)
             ).SetEase(dashEase);
         }
-        
+
+
         public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {
             _previousStateChainPositions = previousStateChainPositions;

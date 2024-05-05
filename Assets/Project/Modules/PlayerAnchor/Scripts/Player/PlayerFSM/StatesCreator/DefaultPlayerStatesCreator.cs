@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Popeye.Modules.PlayerController.Inputs;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -34,9 +35,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 = new KickingAnchor_PlayerState(blackboard);
             PullingAnchor_PlayerState pullingAnchor 
                 = new PullingAnchor_PlayerState(blackboard);
-            SpinningAnchor_PlayerState spinningAnchor 
-                = new SpinningAnchor_PlayerState(blackboard);
-            
+
             Tired_PlayerState tired
                 = new Tired_PlayerState(blackboard);
             TiredPickingUpAnchor_PlayerState tiredPickingUpAnchor
@@ -45,13 +44,34 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             Healing_PlayerState healing
                 = new Healing_PlayerState(blackboard);
 
-            PerformingSpecialAttack_PlayerState.TransitionExitData specialAttackTransitionExitData =
-                new PerformingSpecialAttack_PlayerState.TransitionExitData();
-            EnteringSpecialAttack_PlayerState enteringSpecialAttack
-                = new EnteringSpecialAttack_PlayerState(blackboard, specialAttackTransitionExitData);
-            PerformingSpecialAttack_PlayerState performingSpecialAttack
-                = new PerformingSpecialAttack_PlayerState(blackboard, specialAttackTransitionExitData);
 
+            SpecialAttackInput anchorSpinAttackInput = new SpecialAttackInput(
+                blackboard.MovesetInputsController.SpinAttack_Pressed,
+                blackboard.MovesetInputsController.SpinAttack_HeldPressed,
+                blackboard.MovesetInputsController.SpinAttack_Released
+            );
+            EnteringSpecialAttack_PlayerState enteringAnchorSpinAttack
+                = new EnteringSpecialAttack_PlayerState(blackboard, blackboard.AnchorSpinAttackController,
+                    anchorSpinAttackInput, PlayerStates.PerformingAnchorSpinAttack);
+            PerformingSpecialAttack_PlayerState performingAnchorSpinAttack
+                = new PerformingSpecialAttack_PlayerState(blackboard);
+            
+            
+            SpecialAttackInput chainSpikesAttackInput = new SpecialAttackInput(
+                blackboard.MovesetInputsController.SpikesAttack_Pressed,
+                blackboard.MovesetInputsController.SpikesAttack_HeldPressed,
+                blackboard.MovesetInputsController.SpikesAttack_Released
+            );
+            EnteringSpecialAttack_PlayerState enteringChainSpikesAttack
+                = new EnteringSpecialAttack_PlayerState(blackboard, blackboard.ChainSpikesAttackController,
+                    chainSpikesAttackInput, PlayerStates.PerformingChainSpikesAttack);
+            PerformingSpecialAttack_PlayerState performingChainSpikesAttack
+                = new PerformingSpecialAttack_PlayerState(blackboard);
+
+            
+            
+            
+            
             FallingOnVoid_PlayerState fallingOnVoid
                 = new FallingOnVoid_PlayerState(blackboard);
             
@@ -73,14 +93,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 { PlayerStates.DashingTowardsAnchor , dashingTowardsAnchor },
                 { PlayerStates.KickingAnchor , kickingAnchor },
                 { PlayerStates.PullingAnchor , pullingAnchor },
-                { PlayerStates.SpinningAnchor , spinningAnchor },
                 
                 { PlayerStates.Tired , tired },
                 { PlayerStates.TiredPickingUpAnchor , tiredPickingUpAnchor },
                 
                 { PlayerStates.Healing , healing },
-                { PlayerStates.EnteringSpecialAttack , enteringSpecialAttack },
-                { PlayerStates.PerformingSpecialAttack , performingSpecialAttack },
+                
+                { PlayerStates.EnteringAnchorSpinAttack , enteringAnchorSpinAttack },
+                { PlayerStates.PerformingAnchorSpinAttack , performingAnchorSpinAttack },
+                
+                { PlayerStates.EnteringChainSpikesAttack , enteringChainSpikesAttack },
+                { PlayerStates.PerformingChainSpikesAttack , performingChainSpikesAttack },
                 
                 { PlayerStates.FallingOnVoid , fallingOnVoid },
             };

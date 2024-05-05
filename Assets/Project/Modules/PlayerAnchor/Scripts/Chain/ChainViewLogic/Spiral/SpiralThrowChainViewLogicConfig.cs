@@ -29,7 +29,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
         [Header("DURATION")] 
         [SerializeField, Range(0.01f, 5.0f)] private float _durationMultiplier = 1.0f;
-
+        
+        [Header("CHAIN DISTANCE")] 
+        [SerializeField, Range(-10.0f, 10.0f)] private float _extraChainDistance = -1.0f;
         
         public float StateTransitionDuration => _stateTransitionDuration;
         public Ease StateTransitionEase => _stateTransitionEase;
@@ -44,5 +46,6 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         public AnimationCurve AmplitudeBoneWeightCurve => _amplitudeBoneWeightCurve;
 
         public float DurationMultiplier => _durationMultiplier;
+        public float ExtraChainDistance => _extraChainDistance;
     }
 }

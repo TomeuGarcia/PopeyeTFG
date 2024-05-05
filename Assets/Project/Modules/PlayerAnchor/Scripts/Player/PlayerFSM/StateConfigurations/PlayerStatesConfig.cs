@@ -8,7 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations
 {
     [CreateAssetMenu(fileName = "PlayerStatesConfig", 
         menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerStatesConfig")]
-    public class PlayerStatesConfig : ScriptableObject, ISpecialAttackToggleable
+    public class PlayerStatesConfig : ScriptableObject, IRageSpecialAttackToggleable
     {
         [Header("SPAWNING")]
         [SerializeField, Range(0.01f, 10.0f)] private float _spawnDuration = 0.5f;

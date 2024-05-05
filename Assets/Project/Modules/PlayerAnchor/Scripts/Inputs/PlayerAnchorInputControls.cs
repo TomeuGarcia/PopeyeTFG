@@ -120,7 +120,7 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SpecialAttack"",
+                    ""name"": ""SpecialAttack_AnchorSpin"",
                     ""type"": ""Button"",
                     ""id"": ""4925b897-cadd-41d6-8352-231177a78d8d"",
                     ""expectedControlType"": ""Button"",
@@ -129,22 +129,13 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SpinAttack_Left"",
+                    ""name"": ""SpecialAttack_ChainSpikes"",
                     ""type"": ""Button"",
-                    ""id"": ""17d85603-1a90-47d9-917e-cc356eb35805"",
+                    ""id"": ""32a26b19-085b-4773-8789-376a57e5547c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SpinAttack_Right"",
-                    ""type"": ""Button"",
-                    ""id"": ""05aeea65-99ae-4f92-bd62-18303f77ade2"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""NullAction"",
@@ -511,56 +502,12 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""23820e23-7581-4a5d-a0d0-0b94ccac9ea5"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""SpinAttack_Left"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a3e4affc-fba9-4224-91f2-ef03d5e6f495"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""SpinAttack_Left"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d5782112-eac4-4f93-9297-e0b4a4527aa0"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""SpinAttack_Right"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9ce53902-398d-487e-a284-4cc2c0ffc1a0"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""SpinAttack_Right"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""f1b3f6e2-de5f-4252-b981-f7e4bc154fc8"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SpecialAttack"",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpecialAttack_AnchorSpin"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -570,8 +517,8 @@ namespace InputSystem
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SpecialAttack"",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpecialAttack_AnchorSpin"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -583,6 +530,28 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": ""Desktop"",
                     ""action"": ""NullAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3db7ed1-5f94-440f-bcb3-314c362da013"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpecialAttack_ChainSpikes"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b2b473c8-51be-4ae4-b508-45bce3e89cf0"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""SpecialAttack_ChainSpikes"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -700,9 +669,8 @@ namespace InputSystem
             m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
             m_Land_Kick = m_Land.FindAction("Kick", throwIfNotFound: true);
             m_Land_Heal = m_Land.FindAction("Heal", throwIfNotFound: true);
-            m_Land_SpecialAttack = m_Land.FindAction("SpecialAttack", throwIfNotFound: true);
-            m_Land_SpinAttack_Left = m_Land.FindAction("SpinAttack_Left", throwIfNotFound: true);
-            m_Land_SpinAttack_Right = m_Land.FindAction("SpinAttack_Right", throwIfNotFound: true);
+            m_Land_SpecialAttack_AnchorSpin = m_Land.FindAction("SpecialAttack_AnchorSpin", throwIfNotFound: true);
+            m_Land_SpecialAttack_ChainSpikes = m_Land.FindAction("SpecialAttack_ChainSpikes", throwIfNotFound: true);
             m_Land_NullAction = m_Land.FindAction("NullAction", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -779,9 +747,8 @@ namespace InputSystem
         private readonly InputAction m_Land_Dash;
         private readonly InputAction m_Land_Kick;
         private readonly InputAction m_Land_Heal;
-        private readonly InputAction m_Land_SpecialAttack;
-        private readonly InputAction m_Land_SpinAttack_Left;
-        private readonly InputAction m_Land_SpinAttack_Right;
+        private readonly InputAction m_Land_SpecialAttack_AnchorSpin;
+        private readonly InputAction m_Land_SpecialAttack_ChainSpikes;
         private readonly InputAction m_Land_NullAction;
         public struct LandActions
         {
@@ -797,9 +764,8 @@ namespace InputSystem
             public InputAction @Dash => m_Wrapper.m_Land_Dash;
             public InputAction @Kick => m_Wrapper.m_Land_Kick;
             public InputAction @Heal => m_Wrapper.m_Land_Heal;
-            public InputAction @SpecialAttack => m_Wrapper.m_Land_SpecialAttack;
-            public InputAction @SpinAttack_Left => m_Wrapper.m_Land_SpinAttack_Left;
-            public InputAction @SpinAttack_Right => m_Wrapper.m_Land_SpinAttack_Right;
+            public InputAction @SpecialAttack_AnchorSpin => m_Wrapper.m_Land_SpecialAttack_AnchorSpin;
+            public InputAction @SpecialAttack_ChainSpikes => m_Wrapper.m_Land_SpecialAttack_ChainSpikes;
             public InputAction @NullAction => m_Wrapper.m_Land_NullAction;
             public InputActionMap Get() { return m_Wrapper.m_Land; }
             public void Enable() { Get().Enable(); }
@@ -840,15 +806,12 @@ namespace InputSystem
                 @Heal.started += instance.OnHeal;
                 @Heal.performed += instance.OnHeal;
                 @Heal.canceled += instance.OnHeal;
-                @SpecialAttack.started += instance.OnSpecialAttack;
-                @SpecialAttack.performed += instance.OnSpecialAttack;
-                @SpecialAttack.canceled += instance.OnSpecialAttack;
-                @SpinAttack_Left.started += instance.OnSpinAttack_Left;
-                @SpinAttack_Left.performed += instance.OnSpinAttack_Left;
-                @SpinAttack_Left.canceled += instance.OnSpinAttack_Left;
-                @SpinAttack_Right.started += instance.OnSpinAttack_Right;
-                @SpinAttack_Right.performed += instance.OnSpinAttack_Right;
-                @SpinAttack_Right.canceled += instance.OnSpinAttack_Right;
+                @SpecialAttack_AnchorSpin.started += instance.OnSpecialAttack_AnchorSpin;
+                @SpecialAttack_AnchorSpin.performed += instance.OnSpecialAttack_AnchorSpin;
+                @SpecialAttack_AnchorSpin.canceled += instance.OnSpecialAttack_AnchorSpin;
+                @SpecialAttack_ChainSpikes.started += instance.OnSpecialAttack_ChainSpikes;
+                @SpecialAttack_ChainSpikes.performed += instance.OnSpecialAttack_ChainSpikes;
+                @SpecialAttack_ChainSpikes.canceled += instance.OnSpecialAttack_ChainSpikes;
                 @NullAction.started += instance.OnNullAction;
                 @NullAction.performed += instance.OnNullAction;
                 @NullAction.canceled += instance.OnNullAction;
@@ -886,15 +849,12 @@ namespace InputSystem
                 @Heal.started -= instance.OnHeal;
                 @Heal.performed -= instance.OnHeal;
                 @Heal.canceled -= instance.OnHeal;
-                @SpecialAttack.started -= instance.OnSpecialAttack;
-                @SpecialAttack.performed -= instance.OnSpecialAttack;
-                @SpecialAttack.canceled -= instance.OnSpecialAttack;
-                @SpinAttack_Left.started -= instance.OnSpinAttack_Left;
-                @SpinAttack_Left.performed -= instance.OnSpinAttack_Left;
-                @SpinAttack_Left.canceled -= instance.OnSpinAttack_Left;
-                @SpinAttack_Right.started -= instance.OnSpinAttack_Right;
-                @SpinAttack_Right.performed -= instance.OnSpinAttack_Right;
-                @SpinAttack_Right.canceled -= instance.OnSpinAttack_Right;
+                @SpecialAttack_AnchorSpin.started -= instance.OnSpecialAttack_AnchorSpin;
+                @SpecialAttack_AnchorSpin.performed -= instance.OnSpecialAttack_AnchorSpin;
+                @SpecialAttack_AnchorSpin.canceled -= instance.OnSpecialAttack_AnchorSpin;
+                @SpecialAttack_ChainSpikes.started -= instance.OnSpecialAttack_ChainSpikes;
+                @SpecialAttack_ChainSpikes.performed -= instance.OnSpecialAttack_ChainSpikes;
+                @SpecialAttack_ChainSpikes.canceled -= instance.OnSpecialAttack_ChainSpikes;
                 @NullAction.started -= instance.OnNullAction;
                 @NullAction.performed -= instance.OnNullAction;
                 @NullAction.canceled -= instance.OnNullAction;
@@ -990,9 +950,8 @@ namespace InputSystem
             void OnDash(InputAction.CallbackContext context);
             void OnKick(InputAction.CallbackContext context);
             void OnHeal(InputAction.CallbackContext context);
-            void OnSpecialAttack(InputAction.CallbackContext context);
-            void OnSpinAttack_Left(InputAction.CallbackContext context);
-            void OnSpinAttack_Right(InputAction.CallbackContext context);
+            void OnSpecialAttack_AnchorSpin(InputAction.CallbackContext context);
+            void OnSpecialAttack_ChainSpikes(InputAction.CallbackContext context);
             void OnNullAction(InputAction.CallbackContext context);
         }
         public interface IUIActions

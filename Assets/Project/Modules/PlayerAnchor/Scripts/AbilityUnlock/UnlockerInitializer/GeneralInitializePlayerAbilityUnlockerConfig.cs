@@ -18,7 +18,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             DashDroppingAnchor,
             DashDroppingAnchorAttack,
             DashTowardsAnchor,
-            SpecialAttack,
+            AnchorSpinAttack,
+            ChainSpikesAttack,
             
             MaxHealthUpgrade,
             MaxFocusUpgrade
