@@ -61,6 +61,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             _view.ComputeBounceAxis(damageSourcePosition);
             _view.PlayBounceAnimation();
+            
 
             if (_checkpointData.TimesUsed == 0)
             {

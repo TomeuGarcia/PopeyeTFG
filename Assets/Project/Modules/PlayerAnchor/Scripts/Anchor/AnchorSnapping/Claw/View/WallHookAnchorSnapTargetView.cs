@@ -7,10 +7,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class WallHookAnchorSnapTargetView : MonoBehaviour, IClawAnchorSnapTargetView
     {
+        [Header("ANIMATION")]
         [SerializeField] private HookAnimatorViewConfig _animatorConfig;
         [SerializeField] private Animator _animator;
 
         [SerializeField] private Transform _punchingTransform;
+        
+        [Header("AUDIO")] 
+        [SerializeField] private HookAnchorSnapTargetAudio _audio;
         
         private void Awake()
         {
@@ -43,6 +47,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         {
             await UniTask.Delay(TimeSpan.FromSeconds(delay));
             _punchingTransform.PunchScale(_animatorConfig.StartGrabbingScalePunch, true);
+            _audio.PlayGrabSound(gameObject);
         }
         
 
@@ -51,6 +56,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _animator.SetTrigger(_animatorConfig.PulledParameter);
             
             _animator.SetBool(_animatorConfig.GrabbedParameter, false);
+            _audio.PlayJumpSound(gameObject);
         }
 
         public void PlayPulledAnimation()
@@ -58,6 +64,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _animator.SetBool(_animatorConfig.GrabbedParameter, false);
             
             _punchingTransform.PunchScale(_animatorConfig.StopGrabbingScalePunch, true);
+            _audio.PlayReleaseSound(gameObject);
         }
     }
 }

@@ -42,6 +42,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         public void PlayBounceAnimation()
         {
             _bounceView.PlayBounceAnimation();
+            _viewConfig.Audio.PlayHitSound(gameObject);
         }
         
         [Button()]
@@ -58,6 +59,8 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
 
         public async UniTaskVoid PlayStartBeingCurrentlyActiveCheckpoint()
         {
+            _viewConfig.Audio.PlayCheckpointSetSound();
+            
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
             _currentActiveCheckpointView.SetActive(true);
         }
