@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7540635896084308434}
   - component: {fileID: 4255967819668394822}
   - component: {fileID: 2782133598061304259}
+  - component: {fileID: 2868086544686451694}
   m_Layer: 0
   m_Name: ValueStatBar_Focus
   m_TagString: Untagged
@@ -69,6 +70,19 @@ MonoBehaviour:
   _backgroundImage: {fileID: 8036939377529721076}
   _lazyBarFillImage: {fileID: 8036939377529721076}
   _fillImage: {fileID: 8615920577746562431}
+--- !u!114 &2868086544686451694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3339652595247816677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5090fdbaeda148db942693bb2499d738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _valueStatBar: {fileID: 2782133598061304259}
 --- !u!1 &3719709839207399155
 GameObject:
   m_ObjectHideFlags: 0

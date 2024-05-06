@@ -18,6 +18,7 @@ namespace Popeye.Modules.ValueStatSystem
         private ImageFillBarConfig _viewConfig;
         
         public float Value { get; private set; }
+        public Action OnFilledToMax;
 
 
         public void Init(ImageFillBarConfig viewConfig)
@@ -78,6 +79,10 @@ namespace Popeye.Modules.ValueStatSystem
             bool isSubtracting)
         {
             Value = newFillValue;
+            if (Value > 0.99f)
+            {
+                OnFilledToMax?.Invoke();
+            }
             
             _fillImage.ToFillValue(newFillValue, fillDuration, _viewConfig.FillEase);
             _lazyBarFillImage.ToFillValue(newFillValue, lazyFillDuration, _viewConfig.LazyFillEase);
