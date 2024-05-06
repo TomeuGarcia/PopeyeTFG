@@ -37,7 +37,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
 
         private void SetLastSafePosition(ICheckpointData checkpointData)
         {
-            //LastSafePosition = position + Vector3.up;
+            //LastSafePosition = position + Vector3.up;            
             _checkpointDataStorer.Value.SetLastSafeCheckpoint(checkpointData);
         }
 

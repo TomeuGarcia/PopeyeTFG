@@ -8,6 +8,9 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint
         menuName = ScriptableObjectsHelper.PLAYERCHECKPOINTS_ASSETS_PATH + "CheckpointDataAsset")]
     public class CheckpointDataAsset : ScriptableObject, ICheckpointData
     {
+        [SerializeField] private bool _notify = true;
+
+        public bool Notify => _notify;
         public Vector3 Position { get; private set; }
         public int TimesUsed { get; private set; }
 
