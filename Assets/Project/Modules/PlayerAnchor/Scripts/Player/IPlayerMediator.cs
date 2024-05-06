@@ -13,7 +13,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         Transform PositionTransform { get; }
         IPlayerView PlayerView { get; }
         IPlayerHealing PlayerHealing { get; }
-        IPlayerStaminaPower PlayerStaminaPower { get; }
         DestructiblePlatformBreaker DestructiblePlatformBreaker { get; }
 
         void SetMaxMovementSpeed(float maxMovementSpeed);
@@ -61,10 +60,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void DropTargetForCamera();
         void ResetTargetForCamera();
         
-
-        bool HasStaminaLeft();
-        bool HasMaxStamina();
-
+        
 
         void SetInvulnerable(bool isInvulnerable);
         void SetInvulnerableForDuration(float duration);

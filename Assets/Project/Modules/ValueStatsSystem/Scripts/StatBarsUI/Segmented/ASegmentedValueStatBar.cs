@@ -9,6 +9,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     public abstract class ASegmentedValueStatBar : MonoBehaviour
     {
         [Header("COMPONENTS")] 
+        [Required] [SerializeField] private RectTransform _generalHolder;
         [Required] [SerializeField] private RectTransform _barsHolder;
         [Required] [SerializeField] private GridLayoutGroup _barsGridLayoutGroup;
 
@@ -211,10 +212,11 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         private void SetupBarsHolder()
         {
             Rect barsHolderRect = _barsHolder.rect;
-            
+
             _barsGridLayoutGroup.cellSize = _config.ComputeCellSize(NumberOfSegments, barsHolderRect, _barsGridLayoutGroup);
             _barsGridLayoutGroup.spacing = _config.ComputeSpacingBetweenCells(NumberOfSegments, barsHolderRect, _barsGridLayoutGroup);
             _barsGridLayoutGroup.padding = _config.ComputePaddingCells(barsHolderRect, _barsGridLayoutGroup);
+            _generalHolder.sizeDelta = _config.ComputeGeneralHolderSize(NumberOfSegments, _barsGridLayoutGroup, _generalHolder);
         }
 
 

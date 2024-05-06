@@ -25,7 +25,6 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         [ShowIf("_adaptSize")]
         [SerializeField] private RectOffset _paddingCells = new RectOffset();
 
-
         
         private ICellComputer _cellComputer;
         
@@ -80,5 +79,9 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             return _cellComputer.ComputePaddingCells(holderRect, gridLayoutGroup);
         }
         
+        public Vector2 ComputeGeneralHolderSize(int numberOfSegments, GridLayoutGroup gridLayoutGroup, RectTransform holder)
+        {
+            return _cellComputer.ComputeGeneralHolderSize(numberOfSegments, gridLayoutGroup, holder);
+        }
     }
 }

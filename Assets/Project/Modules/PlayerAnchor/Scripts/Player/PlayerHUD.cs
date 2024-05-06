@@ -1,10 +1,8 @@
-using AYellowpaper;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.ValueStatSystem.Segmented;
 using Popeye.Modules.ValueStatSystem.StatBarsUI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
@@ -13,7 +11,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [Header("BARS")]
         [SerializeField] private SegmentedValueStatBar _healthBar;
         [SerializeField] private ValueStatSlider _currentHealthSlider; 
-        [SerializeField] private TimeStepSegmentedValueStatBar _staminaBar;
         
         [Header("SPECIAL UIs")]
         [SerializeField] private PlayerFocusUI _playerFocusUI;
@@ -21,12 +18,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
         
         
-        public void Configure(AValueStat healthSystem, ATimeStepValueStat baseStaminaStat, 
-            IPlayerFocusState playerFocusState)
+        public void Configure(AValueStat healthSystem, IPlayerFocusState playerFocusState)
         {
             _healthBar.Init(healthSystem);
             _currentHealthSlider.Init(healthSystem);
-            _staminaBar.Init(baseStaminaStat);            
 
             _playerFocusUI.Init(playerFocusState);
         }
