@@ -16,6 +16,7 @@ namespace Popeye.Modules.GameMenus.Generic
         private SmartButtonEvent _onButtonClickedCallback;
 
         [SerializeField] private bool _selectOnEnable = false;
+        [SerializeField] private bool _clickOnSelected = false;
         
         
         public void Init(SmartButtonConfig config, SmartButtonEvent onButtonPressedCallback)
@@ -61,6 +62,14 @@ namespace Popeye.Modules.GameMenus.Generic
 
         public void SimulateOnButtonClicked()
         {
+            InvokeOnButtonClicked();
+        }
+
+        
+        public void OnSelected()
+        {
+            if (!_clickOnSelected) return;
+        
             InvokeOnButtonClicked();
         }
     }
