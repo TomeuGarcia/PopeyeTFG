@@ -629,16 +629,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnHealed()
         {
             PlayerView.PlayHealAnimation();
+            _playerAudio.PlayHealingPerformedSound();
         }
 
         public void OnHealStart(float durationToComplete, int consecutiveHeals)
         {
             PlayerView.PlayStartHealingAnimation(durationToComplete, consecutiveHeals);
+            _playerAudio.StartPlayingHealingPreparationSound();
         }
         
         public void OnHealInterrupted()
         {
             PlayerView.PlayHealingInterruptedAnimation();
+            _playerAudio.StopPlayingHealingPreparationSound();
         }
 
         
