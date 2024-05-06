@@ -20,7 +20,6 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private void Awake()
         {
             _pulsingMaterial = _buttonMesh.material;
-            UpdatePulse(0.5f);
             SetPulseOff();
         }
     
@@ -37,6 +36,8 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         
         private IEnumerator DoStartTimerCountdown(float totalDuration, float durationBeforeFinish)
         {
+            UpdateIsPulsing(true);
+        
             float slowCountdownDuration = totalDuration - durationBeforeFinish;
             
             Timer pressedTimer = new Timer(slowCountdownDuration);
@@ -64,6 +65,8 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
 
             SetPulseOff();
             _countdownAnimation = null;
+            
+            UpdateIsPulsing(false);
         }
         
         
@@ -105,10 +108,15 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         private void SetPulseOff()
         {
             UpdatePulse(0.5f);
+            UpdateIsPulsing(false);
         }
         private void UpdatePulse(float t)
         {
             _pulsingMaterial.SetFloat("_PulsingT", t);
+        }
+        private void UpdateIsPulsing(bool isPulsing)
+        {
+            _pulsingMaterial.SetFloat("_IsPulsing", isPulsing ? 1 : 0);
         }
         private void SetLockedState(bool isLocked)
         {

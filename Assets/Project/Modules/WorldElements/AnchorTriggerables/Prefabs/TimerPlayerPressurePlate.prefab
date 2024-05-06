@@ -51,7 +51,7 @@ MonoBehaviour:
   _audio: {fileID: 7346162240886671240}
   _view:
     _underlyingValue: {fileID: 5758444528538094348}
-  _buttonTransform: {fileID: 7979213119579337217}
+  _buttonTransform: {fileID: 0}
   _collider: {fileID: 799839161237928260}
   _triggeredMoveBy: {fileID: 11400000, guid: 42ff23def7f1c7d44887b620a32b690b, type: 2}
   _pressedDuration: 3
@@ -158,6 +158,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7569414352343208607, guid: d78d38553532e9e4fa291f873001ad1f,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7569414352343208607, guid: d78d38553532e9e4fa291f873001ad1f,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7569414352343208607, guid: d78d38553532e9e4fa291f873001ad1f,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7569414352343208607, guid: d78d38553532e9e4fa291f873001ad1f,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -204,6 +219,11 @@ PrefabInstance:
     - target: {fileID: 7569414352343208607, guid: d78d38553532e9e4fa291f873001ad1f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7569414352343208607, guid: d78d38553532e9e4fa291f873001ad1f,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7908810634105751852, guid: d78d38553532e9e4fa291f873001ad1f,
