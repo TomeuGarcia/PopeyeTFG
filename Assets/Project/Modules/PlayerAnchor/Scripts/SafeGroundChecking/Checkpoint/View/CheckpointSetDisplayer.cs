@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.InformationDisplay;
@@ -21,6 +22,15 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint.View
         private ITextDisplayer TextDisplayer => _textDisplayer.Value;
         private IEmptyEventChannelListenEntry CheckpointSetChannel => _checkpointSetChannel.Value;
 
+        private Coroutine _displayingCheckpointCoroutine;
+
+        private void OnDestroy()
+        {
+            if (_displayingCheckpointCoroutine != null)
+            {
+                StopCoroutine(_displayingCheckpointCoroutine);
+            }
+        }
 
         private void OnEnable()
         {
@@ -33,18 +43,18 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint.View
 
         private void OnCheckpointSetEvent()
         {
-            DisplayCheckpointSet().Forget();
+            _displayingCheckpointCoroutine = StartCoroutine(DisplayCheckpointSet());
         }
 
-        private async UniTaskVoid DisplayCheckpointSet()
+        private IEnumerator DisplayCheckpointSet()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_config.DisplayDelay));
-            
+            yield return new WaitForSeconds(_config.DisplayDelay);
             TextDisplayer.StartShowing(_config.CheckpointSetTextDisplay);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(_config.DisplayDuration));
-            
+            yield return new WaitForSeconds(_config.DisplayDuration);
             TextDisplayer.StopShowing(_config.CheckpointSetTextDisplay);
+
+            _displayingCheckpointCoroutine = null;
         }
         
         
