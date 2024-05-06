@@ -116,19 +116,22 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     
         private void InstantUpdateSegments()
         {
-            _currentBarIndex = CurrentValueToBarIndex();
             _currentBarValue = ValueStat.GetValue();
+            _currentBarIndex = _currentBarValue / _config.StatValueAmountPerUnit; 
 
-            for (int i = 0; i <= _currentBarIndex; ++i)
+            int current = _currentBarValue;
+            for (int i = 0; i < _currentBarIndex; ++i)
             {
                 _imageFillBars[i].InstantUpdateFill(1);
+                current -= _config.StatValueAmountPerUnit;
             }
-            for (int i = _currentBarIndex+1; i < _imageFillBars.Length; ++i)
+
+            if (_currentBarIndex < NumberOfSegments)
             {
-                int v = (i * _config.StatValueAmountPerUnit) % _config.StatValueAmountPerUnit;
-                _imageFillBars[i].InstantUpdateFill((float)v / _config.StatValueAmountPerUnit);
+                _imageFillBars[_currentBarIndex].InstantUpdateFill((float)current / _config.StatValueAmountPerUnit);
             }
-            for (int i = _currentBarIndex+2; i < _imageFillBars.Length; ++i)
+            
+            for (int i = _currentBarIndex+1; i < _imageFillBars.Length; ++i)
             {
                 _imageFillBars[i].InstantUpdateFill(0);
             }
