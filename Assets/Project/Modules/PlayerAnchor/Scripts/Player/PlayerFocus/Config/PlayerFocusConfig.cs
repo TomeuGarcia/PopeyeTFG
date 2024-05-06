@@ -1,3 +1,4 @@
+using Popeye.Modules.AudioSystem;
 using Popeye.ProjectHelpers;
 using Popeye.Scripts.EventChannels;
 using UnityEngine;

@@ -16,7 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts
         
         public void Init(IPlayerMediator playerMediator)
         {
-            _playerStaminaPower = playerMediator.PlayerStaminaPower;
+            _playerStaminaPower = null; //playerMediator.PlayerStaminaPower;
         }
 
         public void Apply()

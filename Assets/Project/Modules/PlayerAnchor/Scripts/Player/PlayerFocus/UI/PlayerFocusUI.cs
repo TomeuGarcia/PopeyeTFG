@@ -1,13 +1,14 @@
 using Popeye.Modules.ValueStatSystem;
+using Popeye.Modules.ValueStatSystem.Segmented;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
 {
     public class PlayerFocusUI : MonoBehaviour, IPlayerFocusUI
     {
-        [SerializeField] private ValueStatBar _tankBar;
         [SerializeField] private PlayerFocusUIEffects _uiEffects;
-        
+        [SerializeField] private SegmentedValueStatBar _focusBar;
+
         private IPlayerFocusState _playerFocusState;
         private SimpleValueStat _valueStat;
         
@@ -18,7 +19,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
             _playerFocusState = playerFocusState;
             
             _valueStat = new SimpleValueStat(_playerFocusState.MaxFocusAmount, _playerFocusState.CurrentFocusAmount);
-            _tankBar.Init(_valueStat);
+            
+            _focusBar.Init(_valueStat);
         }
 
 

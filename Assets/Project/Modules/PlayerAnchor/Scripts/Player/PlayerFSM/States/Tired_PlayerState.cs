@@ -36,7 +36,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.PlayerMediator.HasMaxStamina())
+            //if (_blackboard.PlayerMediator.HasMaxStamina())
+            if (true)
             {
                 _blackboard.PlayerView.EndTired();
 

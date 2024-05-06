@@ -20,18 +20,20 @@ namespace Popeye.Modules.PlayerAnchor.Player.BattleInteractions
         
         public void StartListening()
         {
+            /*
             _eventSystemService.Subscribe<AEnemyMediator.EnemyStartsFightingPlayer>(OnEnemyStartsFightingPlayerEvent);
             _eventSystemService.Subscribe<AEnemyMediator.EnemyStopsFightingPlayer>(OnEnemyStopsFightingPlayer);
-            
+            */
             _eventSystemService.Subscribe<EnemySpawner.OnActivatedEvent>(OnEnemySpawnerActivatedEvent);
             _eventSystemService.Subscribe<EnemySpawner.OnFinishedEvent>(OnEnemySpawnerFinishedEvent);
         }
 
         public void StopListening()
         {
+            /*
             _eventSystemService.Unsubscribe<AEnemyMediator.EnemyStartsFightingPlayer>(OnEnemyStartsFightingPlayerEvent);
             _eventSystemService.Unsubscribe<AEnemyMediator.EnemyStopsFightingPlayer>(OnEnemyStopsFightingPlayer);
-            
+            */
             _eventSystemService.Unsubscribe<EnemySpawner.OnActivatedEvent>(OnEnemySpawnerActivatedEvent);
             _eventSystemService.Unsubscribe<EnemySpawner.OnFinishedEvent>(OnEnemySpawnerFinishedEvent);
         }
