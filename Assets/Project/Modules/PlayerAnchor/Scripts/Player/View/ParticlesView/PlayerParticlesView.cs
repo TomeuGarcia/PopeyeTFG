@@ -16,7 +16,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly IParticleFactory _particleFactory;
 
         private InterpolatorRecycleParticle _healingParticlesToInterrupt;
-        private CallbackRecycleParticle _enragedParticlesToInterrupt;
 
         public PlayerParticlesView(PlayerParticlesViewConfig config, Transform transformHolder, IParticleFactory particleFactory)
         {
@@ -62,19 +61,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlaySpecialAttackAnimation()
         {
-            _particleFactory.Create(_config.EnragedStartParticleTypes, Vector3.zero, quaternion.identity, _transformHolder);
         }
 
         public void PlaySpecialAttackFinishAnimation()
         {
-            _particleFactory.Create(_config.EnragedStartParticleTypes, Vector3.zero, quaternion.identity, _transformHolder);
-            _enragedParticlesToInterrupt.ForceStop();
         }
 
         public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
         {
-            _enragedParticlesToInterrupt = _particleFactory.Create(_config.EnragedParticleTypes, Vector3.zero, quaternion.identity, _transformHolder)
-                .gameObject.GetComponent<CallbackRecycleParticle>();
         }
 
         public void PlaySpecialAttackInterruptedAnimation()
