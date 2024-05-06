@@ -111,6 +111,8 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         }
         private async UniTaskVoid OnKilledByDamage()
         {
+            _config.PlayDestroyedSound(gameObject);
+            
             _collider.enabled = false;
             await View.PlayDestroyedAnimation();
             gameObject.SetActive(false);

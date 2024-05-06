@@ -1,4 +1,5 @@
 using System;
+using Popeye.Modules.AudioSystem;
 using Popeye.ProjectHelpers;
 using Popeye.Scripts.Collisions;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
         [Header("COLLISIONS")] 
         [SerializeField] private CollisionProbingConfig _obstacleCollisionProbing;
+
         
         public int NumberOfLoops => _numberOfLoops;
         public float PreparationDuration => _preparationDuration;
@@ -35,5 +37,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         public float EndSpinDistance => _endSpinDistance;
         
         public CollisionProbingConfig ObstacleCollisionProbing => _obstacleCollisionProbing;
+        
+        
+        [Header("AUDIO")] 
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        [SerializeField] private OneShotFMODSound _performSound;
+
+        public void PlayPerformSound()
+        {
+            _audioManager.PlayOneShot(_performSound);
+        }
     }
 }

@@ -3,6 +3,7 @@ using NaughtyAttributes;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
+using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
@@ -17,9 +18,12 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         [Header("LOGIC")]
         [SerializeField] private AnchorHitCheckpointDamageLogic _damageLogic;
         
+        [Header("WORLD INTERACTORS")] 
+        [SerializeField] private AWorldInteractor[] _worldInteractors;
+
         [Header("VIEW")]
         [SerializeField] private AnchorHitCheckpointView _view;
-        
+
         private IEventSystemService _eventSystemService;
         public struct OnCheckpointSet { }
         
@@ -61,10 +65,15 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             _view.ComputeBounceAxis(damageSourcePosition);
             _view.PlayBounceAnimation();
+            
 
             if (_checkpointData.TimesUsed == 0)
             {
                 _view.PlayFirstTimeUsedAnimation();
+                foreach (AWorldInteractor worldInteractor in _worldInteractors)
+                {
+                    worldInteractor.AddActivationInput();
+                }
             }
             else
             {

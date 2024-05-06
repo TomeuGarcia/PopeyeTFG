@@ -9,6 +9,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     public abstract class ASegmentedValueStatBar : MonoBehaviour
     {
         [Header("COMPONENTS")] 
+        [Required] [SerializeField] private RectTransform _generalHolder;
         [Required] [SerializeField] private RectTransform _barsHolder;
         [Required] [SerializeField] private GridLayoutGroup _barsGridLayoutGroup;
 
@@ -21,6 +22,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         
         protected ImageFillBar[] _imageFillBars;
         protected int _currentBarIndex;
+        protected int _currentBarValue;
 
         private bool _isSubscribed;
         
@@ -84,6 +86,7 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             SetupBarsHolder();
             
             _currentBarIndex = CurrentValueToBarIndex();
+            _currentBarValue = ValueStat.GetValue();
         }
 
         private int ComputeNumberOfSegments(out int reminder)
@@ -113,12 +116,21 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     
         private void InstantUpdateSegments()
         {
-            _currentBarIndex = CurrentValueToBarIndex();
-            
-            for (int i = 0; i <= _currentBarIndex; ++i)
+            _currentBarValue = ValueStat.GetValue();
+            _currentBarIndex = _currentBarValue / _config.StatValueAmountPerUnit; 
+
+            int current = _currentBarValue;
+            for (int i = 0; i < _currentBarIndex; ++i)
             {
                 _imageFillBars[i].InstantUpdateFill(1);
+                current -= _config.StatValueAmountPerUnit;
             }
+
+            if (_currentBarIndex < NumberOfSegments)
+            {
+                _imageFillBars[_currentBarIndex].InstantUpdateFill((float)current / _config.StatValueAmountPerUnit);
+            }
+            
             for (int i = _currentBarIndex+1; i < _imageFillBars.Length; ++i)
             {
                 _imageFillBars[i].InstantUpdateFill(0);
@@ -127,31 +139,62 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     
         protected void UpdateSegments()
         {
+
+            
             int newBarIndex = CurrentValueToBarIndex();
             
-            DoUpdateSegments(_currentBarIndex, newBarIndex).Forget();
+            DoUpdateSegments().Forget();
             
             _currentBarIndex = newBarIndex;
+            _currentBarValue = ValueStat.GetValue();
         }
         
-        private async UniTaskVoid DoUpdateSegments(int currentBarIndex, int newBarIndex)
+        private async UniTaskVoid DoUpdateSegments()
         {
-            bool isSubtracting = newBarIndex < _currentBarIndex;
+            int newValue = ValueStat.GetValue();
+            int currentValue = _currentBarValue;
+            
+            int difference = newValue - currentValue;            
+            if (difference == 0) return;
+            
+            bool isAdding = difference > 0;
+            
 
-            if (isSubtracting)
+            if (isAdding)
             {
-                for (int i = currentBarIndex; i > newBarIndex; --i)
+                int i = currentValue / _config.StatValueAmountPerUnit;                 
+                while ((i+1) * _config.StatValueAmountPerUnit <= newValue)
                 {
-                    await _imageFillBars[i].UpdateFill(0);
+                    await _imageFillBars[i].UpdateFill(1);
+
+                    currentValue = (i+1) * _config.StatValueAmountPerUnit;
+                    ++i;
+                }
+                if (newValue - currentValue > 0)
+                {
+                    currentValue = newValue - (i * _config.StatValueAmountPerUnit); 
+                    await _imageFillBars[i].UpdateFill((float)currentValue/_config.StatValueAmountPerUnit);
                 }
             }
             else
             {
-                for (int i = currentBarIndex + 1; i <= newBarIndex; ++i)
+                int i = Mathf.Max(0,currentValue-1) / _config.StatValueAmountPerUnit;
+
+                while ((i * _config.StatValueAmountPerUnit) >= newValue)
                 {
-                    await _imageFillBars[i].UpdateFill(1);
+                    await _imageFillBars[i].UpdateFill(0);
+                    
+                    currentValue = i * _config.StatValueAmountPerUnit;
+                    --i;
+                }
+
+                if (newValue - currentValue < 0)
+                {
+                    currentValue = newValue % _config.StatValueAmountPerUnit;
+                    await _imageFillBars[i].UpdateFill((float)currentValue/_config.StatValueAmountPerUnit);
                 }
             }
+            
         } 
         
         
@@ -172,10 +215,11 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         private void SetupBarsHolder()
         {
             Rect barsHolderRect = _barsHolder.rect;
-            
+
             _barsGridLayoutGroup.cellSize = _config.ComputeCellSize(NumberOfSegments, barsHolderRect, _barsGridLayoutGroup);
             _barsGridLayoutGroup.spacing = _config.ComputeSpacingBetweenCells(NumberOfSegments, barsHolderRect, _barsGridLayoutGroup);
             _barsGridLayoutGroup.padding = _config.ComputePaddingCells(barsHolderRect, _barsGridLayoutGroup);
+            _generalHolder.sizeDelta = _config.ComputeGeneralHolderSize(NumberOfSegments, _barsGridLayoutGroup, _generalHolder);
         }
 
 

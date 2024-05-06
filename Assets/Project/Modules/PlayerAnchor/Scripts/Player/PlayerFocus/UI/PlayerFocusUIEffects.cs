@@ -17,11 +17,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
 
         public void SetCanBeUsed()
         {
+            return;
             _focusImage.ImageMaterial.SetFloat(_canBeUsedProperty, 1.0f);
         }
         
         public void SetCanNotBeUsed()
         {
+            return;
             _focusImage.ImageMaterial.SetFloat(_canBeUsedProperty, 0.0f);
         }
         

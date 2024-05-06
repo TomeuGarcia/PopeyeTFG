@@ -9,5 +9,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         void PlayDashTowardsAnchorSound();
         void PlayDashDroppingAnchorSound();
         void PlayTakeDamageSound();
+        
+        void StartPlayingHealingPreparationSound();
+        void StopPlayingHealingPreparationSound();
+        void PlayHealingPerformedSound();
     }
 }

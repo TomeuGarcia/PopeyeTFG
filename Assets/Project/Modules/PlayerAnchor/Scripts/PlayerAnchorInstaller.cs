@@ -261,7 +261,6 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
-            PlayerStaminaSystem playerStamina = new PlayerStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
             PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
@@ -331,7 +330,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             _player.Configure(movesetInputsController, 
                 playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
+                playerView, playerAudio, playerHealing, playerHealth, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
                 _playerCheckpointStorer, playerSafeGroundChecker, 
@@ -343,7 +342,7 @@ namespace Popeye.Modules.PlayerAnchor
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
-            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerFocusController);
+            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerFocusController);
             playerFocusController.Init();
             
             PowerBoostDropFactory powerBoostDropFactory =

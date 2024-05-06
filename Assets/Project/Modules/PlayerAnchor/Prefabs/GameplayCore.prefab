@@ -10424,7 +10424,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1048535
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -10452,7 +10452,8 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
-  m_Cameras: []
+  m_Cameras:
+  - {fileID: 7627995560172832513}
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
@@ -10580,6 +10581,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1151401866870032477}
     m_Modifications:
+    - target: {fileID: 944223608692030176, guid: 8f496fdadb5a3f84eb60b6507f5492fb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1003791900036334974, guid: 8f496fdadb5a3f84eb60b6507f5492fb,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -11088,6 +11094,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d7979c0e2d5499d9844d1a5633cba7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &7627995560172832513 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7709746662133197897, guid: 8f496fdadb5a3f84eb60b6507f5492fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 225901474954619720}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2177388964853534063
 PrefabInstance:
   m_ObjectHideFlags: 0

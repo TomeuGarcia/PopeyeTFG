@@ -21,6 +21,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [Header("TAKE DAMAGE")]
         [Expandable] [SerializeField] private OneShotFMODSound _takeDamage;
         
+        [Header("HEAL")]
+        [Expandable] [SerializeField] private LastingFMODSound _healingPreparation;
+        [Expandable] [SerializeField] private OneShotFMODSound _healingPerformed;
+        
         
         
         public LastingFMODSound FootstepsSound => _footstepsSound;
@@ -31,5 +35,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public OneShotFMODSound DashDroppingAnchor => _dashDroppingAnchor;
         
         public OneShotFMODSound TakeDamage => _takeDamage;
+        
+        public LastingFMODSound HealingPreparation => _healingPreparation;
+        public OneShotFMODSound HealingPerformed => _healingPerformed;
     }
 }
