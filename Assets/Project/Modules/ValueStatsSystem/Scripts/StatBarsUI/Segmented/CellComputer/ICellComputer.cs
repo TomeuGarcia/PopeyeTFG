@@ -8,5 +8,6 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         Vector2 ComputeCellSize(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup);
         Vector2 ComputeSpacingBetweenCells(int numberOfSegments, Rect holderRect, GridLayoutGroup gridLayoutGroup);
         RectOffset ComputePaddingCells(Rect holderRect, GridLayoutGroup gridLayoutGroup);
+        Vector2 ComputeGeneralHolderSize(int numberOfSegments, GridLayoutGroup gridLayoutGroup, RectTransform holder);
     }
 }

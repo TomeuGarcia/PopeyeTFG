@@ -55,9 +55,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public IPlayerView PlayerView { get; private set; }
         public IPlayerHealing PlayerHealing { get; private set; }
-        public IPlayerStaminaPower PlayerStaminaPower => _staminaSystem;
         private PlayerHealth _playerHealth;
-        private PlayerStaminaSystem _staminaSystem;
         
         private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
@@ -95,7 +93,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
-            IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
+            IPlayerHealing playerHealing, PlayerHealth playerHealth,
             PlayerMovementChecker playerMovementChecker, 
             TransformMotion playerMotion, IPlayerInstantTranslation playerInstantTranslation,
             PlayerDasher playerDasher,
@@ -118,7 +116,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView = playerView;
             PlayerHealing = playerHealing;
             _playerHealth = playerHealth;
-            _staminaSystem = staminaSystem;
             _playerMovementChecker = playerMovementChecker;
             _playerMotion = playerMotion;
             _playerInstantTranslation = playerInstantTranslation;
@@ -606,15 +603,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerHealth.SetInvulnerableForDuration(duration);
         }
         
-        public bool HasStaminaLeft()
-        {
-            return _staminaSystem.HasStaminaLeft();
-        }
-        public bool HasMaxStamina()
-        {
-            return _staminaSystem.HasMaxStamina();
-        }
-        
         public void OnDamageTaken(DamageHitResult damageHitResult)
         {
             PlayerView.PlayTakeDamageAnimation();
@@ -641,16 +629,19 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnHealed()
         {
             PlayerView.PlayHealAnimation();
+            _playerAudio.PlayHealingPerformedSound();
         }
 
         public void OnHealStart(float durationToComplete, int consecutiveHeals)
         {
             PlayerView.PlayStartHealingAnimation(durationToComplete, consecutiveHeals);
+            _playerAudio.StartPlayingHealingPreparationSound();
         }
         
         public void OnHealInterrupted()
         {
             PlayerView.PlayHealingInterruptedAnimation();
+            _playerAudio.StopPlayingHealingPreparationSound();
         }
 
         
@@ -697,24 +688,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         private void SpendStamina(int spendAmount)
         {
-            if (spendAmount == 0) return;
             
-            _staminaSystem.Spend(spendAmount);
-            if (!_staminaSystem.HasStaminaLeft())
-            {
-                OnStaminaExhausted();
-            }
         }
 
-        private void OnStaminaExhausted()
-        {
-            EnterTiredState();
-        }
-
-        private void EnterTiredState()
-        {
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.Tired);
-        }
 
     }
 }
