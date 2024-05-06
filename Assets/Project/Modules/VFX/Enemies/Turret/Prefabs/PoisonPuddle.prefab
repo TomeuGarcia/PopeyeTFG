@@ -41,8 +41,8 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1045120816763403}
   serializedVersion: 8
-  lengthInSec: 5
-  simulationSpeed: 1
+  lengthInSec: 1
+  simulationSpeed: 3
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -4876,6 +4876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolateOnInit: 1
+  _despawnDelay: 0
   _interpolations:
   - _floatSetupDatas:
     - {fileID: 11400000, guid: b85563048250a7346836e47b94f01686, type: 2}
@@ -4885,6 +4886,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c3bad5246534e524cbf0cda9d960f73c, type: 2}
     _meshSources:
     - {fileID: 909538729525508309}
+  _light: {fileID: 0}
+  _duration: 0
+  _intensityGoal: 0
+  _lightEase: 1
 --- !u!1 &909538729525508309
 GameObject:
   m_ObjectHideFlags: 0
@@ -4982,8 +4987,8 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8347577791666904642}
   serializedVersion: 8
-  lengthInSec: 5
-  simulationSpeed: 1
+  lengthInSec: 1
+  simulationSpeed: 3
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
