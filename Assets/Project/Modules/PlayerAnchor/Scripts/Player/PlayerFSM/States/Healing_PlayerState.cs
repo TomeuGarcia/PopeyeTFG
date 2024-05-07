@@ -48,6 +48,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             {                
                 _blackboard.PlayerMediator.OnHealInterrupted();
             }
+            else
+            {
+                _blackboard.PlayerMediator.OnHealPerformed();
+            }
         }
 
         public override bool Update(float deltaTime)

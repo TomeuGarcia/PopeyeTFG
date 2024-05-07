@@ -10815,7 +10815,8 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
-  m_Cameras: []
+  m_Cameras:
+  - {fileID: 7627995560172832513}
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
@@ -11457,6 +11458,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d7979c0e2d5499d9844d1a5633cba7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &7627995560172832513 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7709746662133197897, guid: 8f496fdadb5a3f84eb60b6507f5492fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 225901474954619720}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2177388964853534063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11728,6 +11735,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b43c4ce15d5466a9c8e2602b3297c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5703321994903927729 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5841703737052690142, guid: 4c926eca4bc34f2419ddf931b08c4baf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2177388964853534063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ed74c990fc4b83abcb8a0f1e5353d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &5811398296010217030 stripped
@@ -12587,6 +12606,11 @@ PrefabInstance:
       propertyPath: _chainPhysics._underlyingValue
       value: 
       objectReference: {fileID: 6405983057515278388}
+    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
+      propertyPath: _playerDeathAnimationSequencer
+      value: 
+      objectReference: {fileID: 5703321994903927729}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: _playerPlacerCheckpointCreator

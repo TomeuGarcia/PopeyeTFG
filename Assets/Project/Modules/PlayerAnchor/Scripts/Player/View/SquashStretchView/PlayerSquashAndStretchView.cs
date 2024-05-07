@@ -43,8 +43,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayDeathAnimation()
         {            
+            /*
             _meshHolderTransform.Rotate(_config.DeathRotation);
             _meshHolderTransform.BlendableLocalMoveBy(_config.DeathMoveBy);
+            */
+        }
+
+        public void PlayDeathFinishAnimation(float duration)
+        {
+            
         }
 
         public void PlayHealAnimation()
