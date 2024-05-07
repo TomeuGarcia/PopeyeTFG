@@ -37,10 +37,11 @@ namespace Popeye.Modules.AudioSystem
         
         public void Stop(LastingFMODSound.SoundId lastingSoundId)
         {
-            if (_activeLastingSoundEmitters.Remove(lastingSoundId, out LastingFMODSoundEmitter soundEmitter))
+            if (_activeLastingSoundEmitters.TryGetValue(lastingSoundId, out LastingFMODSoundEmitter soundEmitter))
             {
                 soundEmitter.Stop();
                 ResetSoundEmitter(soundEmitter);
+                _activeLastingSoundEmitters.Remove(lastingSoundId);
             }
         }
 

@@ -9,15 +9,12 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
     public class AnchorHitCheckpointView : MonoBehaviour
     {
         [Header("CONFIG")]
-        [SerializeField] private AnchorHitCheckpointViewConfig _viewConfig;
+        [Expandable] [SerializeField] private AnchorHitCheckpointViewConfig _viewConfig;
         
         [Header("BOUNCE ANIMATION")]
         [SerializeField] private AnchorHitCheckpointBounceView _bounceView;
         [SerializeField] private AnchorHitCheckpointVFXView _vfxView;
-
-        [Header("TEMPORARILY")] 
-        [SerializeField] private GameObject _currentActiveCheckpointView;
-
+        
         public void Configure(bool startAsActiveCheckpoint, bool hasBeenUnlocked)
         {
             _bounceView.Configure(_viewConfig.BouncesView);
@@ -59,14 +56,12 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
 
         public async UniTaskVoid PlayStartBeingCurrentlyActiveCheckpoint()
         {
-            _viewConfig.Audio.PlayCheckpointSetSound();
-            
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
-            _currentActiveCheckpointView.SetActive(true);
+            _viewConfig.Audio.PlayCheckpointSetSound();            
+            _vfxView.SetCurrentCheckpointView();
         }
         public void PlayStopBeingCurrentlyActiveCheckpoint()
         {
-            _currentActiveCheckpointView.SetActive(false);
+            _vfxView.StopCurrentCheckpointView();
         }
     }
 }
