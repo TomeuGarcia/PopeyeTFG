@@ -14,7 +14,7 @@ namespace Popeye.Modules.Enemies.Hazards
         [Header("LOGIC")]
         [SerializeField, Range(0.0f, 10.0f)] private float _maximumLifetime = 8.0f; 
         [SerializeField, Range(0.0f, 10.0f)] private float _disappearDuration = 0.3f; 
-        [SerializeField, Range(0.0f, 10.0f)] private float _movementSpeed = 8.0f;
+        [SerializeField, Range(0.0f, 50.0f)] private float _movementSpeed = 8.0f;
 
         [Header("VIEW")] 
         [SerializeField] private FlatStraightProjectileViewConfig _viewConfig;
