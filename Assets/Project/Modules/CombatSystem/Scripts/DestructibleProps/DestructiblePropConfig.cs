@@ -15,6 +15,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         
         [Header("VIEW")] 
         [SerializeField] private ViewConfigData _viewConfig;
+        [SerializeField] private float _fragmentForce;
         
         [Header("AUDIO")] 
         [SerializeField] private AFMODAudioManagerReference _audioManager;
