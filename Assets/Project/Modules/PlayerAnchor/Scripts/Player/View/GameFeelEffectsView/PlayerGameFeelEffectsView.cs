@@ -45,6 +45,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
         }
 
+        public void PlayDeathFinishAnimation(float duration)
+        {
+            
+        }
+
         public void PlayHealAnimation()
         {
         }

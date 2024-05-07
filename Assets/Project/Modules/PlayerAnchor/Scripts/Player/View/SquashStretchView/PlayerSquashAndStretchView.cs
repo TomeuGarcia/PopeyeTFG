@@ -47,6 +47,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _meshHolderTransform.BlendableLocalMoveBy(_config.DeathMoveBy);
         }
 
+        public void PlayDeathFinishAnimation(float duration)
+        {
+            
+        }
+
         public void PlayHealAnimation()
         {
             ClearTweens();

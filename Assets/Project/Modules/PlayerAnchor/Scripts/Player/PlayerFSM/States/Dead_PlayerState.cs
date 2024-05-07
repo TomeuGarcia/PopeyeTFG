@@ -46,6 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid WaitForSpawnToFinish()
         {
             _finishedDying = false;
+            _blackboard.PlayerMediator.PlayerView.PlayDeathFinishAnimation(_blackboard.PlayerStatesConfig.BeforeRespawnDuration);
             await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.BeforeRespawnDuration));
             _finishedDying = true;
         }

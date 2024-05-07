@@ -52,19 +52,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
             //TODO
             //Not here, but: muffle sound, vignete...
             
-            DoDamaged().Forget();
+            DoFlick(_config.DamagedPropertyId, 0.1f, 2).Forget();
         }
 
-        private async UniTaskVoid DoDamaged()
+        private async UniTaskVoid DoFlick(int propertyId, float flickDuration, int numberOfFlicks)
         {
-            _material.DOFloat(1f, "_IsDamaged", 0.0f);
-            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
-            _material.DOFloat(0f, "_IsDamaged", 0.0f);
-            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
-            _material.DOFloat(1f, "_IsDamaged", 0.0f);
-            await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
-            _material.DOFloat(0f, "_IsDamaged", 0.0f);
+            flickDuration /= 2;
+            for (int i = 0; i < numberOfFlicks; ++i)
+            {
+                _material.SetFloat(propertyId, 1f);
+                await UniTask.Delay(TimeSpan.FromSeconds(flickDuration));
+                _material.SetFloat(propertyId, 0f);
+                await UniTask.Delay(TimeSpan.FromSeconds(flickDuration));
+            }
         }
+        
+        
 
         public void PlayRespawnAnimation()
         {
@@ -74,6 +77,22 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void PlayDeathAnimation()
         {
             //TODO
+        }
+
+        public void PlayDeathFinishAnimation(float duration)
+        {
+            DoPlayDeathFinishAnimation(duration).Forget();
+        }
+        private async UniTaskVoid DoPlayDeathFinishAnimation(float duration)
+        {
+            _material.SetFloat(_config.DamagedPropertyId, 1.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            
+            _rendererTransform.gameObject.SetActive(false);
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+            
+            _material.SetFloat(_config.DamagedPropertyId, 0.0f);
+            _rendererTransform.gameObject.SetActive(true);
         }
 
         public void PlayHealAnimation()

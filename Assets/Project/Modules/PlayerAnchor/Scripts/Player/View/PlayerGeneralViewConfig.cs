@@ -1,3 +1,4 @@
+using System;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -31,5 +32,15 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private PlayerAnimatorViewConfig _animatorViewConfig;
         public PlayerAnimatorViewConfig AnimatorViewConfig => _animatorViewConfig;
 
+
+        private void OnValidate()
+        {
+            _materialViewConfig.Validate();
+        }
+
+        private void Awake()
+        {
+            OnValidate();
+        }
     }
 }
