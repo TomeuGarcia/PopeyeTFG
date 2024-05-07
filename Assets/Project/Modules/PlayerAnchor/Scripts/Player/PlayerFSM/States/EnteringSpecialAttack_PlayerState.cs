@@ -1,3 +1,5 @@
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
+using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Timers;
 using UnityEngine;
 
@@ -6,32 +8,34 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class EnteringSpecialAttack_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly PerformingSpecialAttack_PlayerState.TransitionExitData _exitData;
+        private readonly IPlayerSpecialAttackController _specialAttackController;
+        private readonly SpecialAttackInput _specialAttackInput;
+        private readonly PlayerStates _performState;
         private Timer _specialAttackTimer;
         private bool _wasInterrupted;
         
         public EnteringSpecialAttack_PlayerState(PlayerStatesBlackboard blackboard, 
-            PerformingSpecialAttack_PlayerState.TransitionExitData exitData)
+            IPlayerSpecialAttackController specialAttackController,
+            SpecialAttackInput specialAttackInput,
+            PlayerStates performState)
         {
             _blackboard = blackboard;
-            _exitData = exitData;
-            _exitData.enterState = PlayerStates.None;
+            _specialAttackController = specialAttackController;
+            _specialAttackInput = specialAttackInput;
+            _performState = performState;
         }
         
         
         protected override void DoEnter()
         {
-            _exitData.enterState = _blackboard.CameFromState;
             _wasInterrupted = false;
 
-            float durationToComplete = PopeyePlayer.debugIsSpinning 
-                ? 0.5f
-                : _blackboard.PlayerStatesConfig.EnteringSpecialAttackDuration;
+            float durationToComplete = _specialAttackController.PreparationDuration;
             
             _specialAttackTimer = new Timer(durationToComplete);
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.EnteringSpecialAttackMoveSpeed);
-            _blackboard.PlayerMediator.OnSpecialAttackPreparationStart(durationToComplete);
+            _blackboard.PlayerMediator.OnSpecialAttackPreparationStart(_specialAttackController, durationToComplete);
         }
 
         public override void Exit()
@@ -44,23 +48,21 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.MovesetInputsController.SpecialAttack_HeldPressed())
+            if (_specialAttackInput.IsBeingHeldPressed())
             {
                 _specialAttackTimer.Update(deltaTime);
                 if (_specialAttackTimer.HasFinished())
                 {
                     _blackboard.PlayerMediator.OnSpecialAttackPerformed();
-                    //NextState = _endNextState;
-                    //return true;
-                    
-                    NextState = PlayerStates.PerformingSpecialAttack;
+
+                    NextState = _performState;
                     return true;
                 }
             }
-            else if (_blackboard.MovesetInputsController.SpecialAttack_Released())
+            else if (_specialAttackInput.WasReleased())
             {
                 _wasInterrupted = true;
-                NextState = _exitData.enterState;
+                NextState = _blackboard.CameFromState;
                 return true;
             }
 

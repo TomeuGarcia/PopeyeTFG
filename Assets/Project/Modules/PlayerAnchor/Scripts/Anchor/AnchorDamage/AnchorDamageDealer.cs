@@ -20,7 +20,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
         [SerializeField] private DamageTrigger _anchorSpinDamageTrigger;
         [SerializeField] private BoxCollider _anchorSpinCollider;
-        [SerializeField] private Transform _anchorSpinTrail;
 
         private bool _sidewaysKnockbackIsRight;
 
@@ -234,7 +233,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _spinDamageTriggerMotion.SetPosition(spinCenter);
             _spinDamageTriggerMotion.SetRotation(rotation);
 
-            _anchorSpinTrail.localPosition = (Vector3.forward * spinRadius) + (Vector3.left * 0.5f);
             spinRadius += 1.5f; // Add extra collider size
             _anchorSpinCollider.size = new Vector3(2, 2, spinRadius);
             _anchorSpinCollider.center = Vector3.forward * (spinRadius / 2);

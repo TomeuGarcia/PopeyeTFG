@@ -17,6 +17,11 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         [SerializeField] private SmartButtonAndConfig _optionsButtonAndConfig;
         [SerializeField] private InterfaceReference<AMenuController, MonoBehaviour> _optionsMenu;
         private AMenuController OptionsMenu => _optionsMenu.Value;
+        
+        [Header("CONTROLS")]
+        [SerializeField] private SmartButtonAndConfig _controlsButtonAndConfig;
+        [SerializeField] private InterfaceReference<AMenuController, MonoBehaviour> _controlsMenu;
+        private AMenuController ControlsMenu => _controlsMenu.Value;
 
         [Header("QUIT")]
         [SerializeField] private SmartButtonAndConfig _quitButtonAndConfig;
@@ -27,10 +32,12 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         protected override void DoInit(InputAction goBackInput)
         {
             OptionsMenu.Init(CloseOptionsMenu, goBackInput);
-            
             _optionsButtonAndConfig.SmartButton.Init(
                 _optionsButtonAndConfig.Config, OpenOptionsMenu);
-
+            
+            ControlsMenu.Init(CloseControlsMenu, goBackInput);
+            _controlsButtonAndConfig.SmartButton.Init(
+                _controlsButtonAndConfig.Config, OpenControlsMenu);
             
             _quitButtonAndConfig.SmartButton.Init(
                 _quitButtonAndConfig.Config, QuitToMainMenu);
@@ -52,10 +59,23 @@ namespace Popeye.Modules.GameMenus.PauseMenu
             OptionsMenu.Hide();
             Show();
         }
+        
+        private void OpenControlsMenu()
+        {
+            ControlsMenu.Show();
+            Hide();
+        }
+        
+        private void CloseControlsMenu()
+        {
+            ControlsMenu.Hide();
+            Show();
+        }
 
 
         private void QuitToMainMenu()
         {
+            CloseMenu();
             _gameStateEventsDispatcher.InvokeOnExitToMainMenu();
             ServiceLocator.Instance.GetService<ISceneLoadManager>().LoadScene(_mainMenuSceneLoadGroup);
         }

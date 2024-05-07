@@ -11,8 +11,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private readonly int _chainBoneCountMinusOne;
 
         private readonly Vector3[] _chainPositions;
-        
-        
+        private IChainViewLogic _chainViewLogicImplementation;
+
+
         private LayerMask CollisionLayerMask => _logicConfig.CollisionProbingConfig.CollisionLayerMask;
         private float ProbingDistance => _logicConfig.CollisionProbingConfig.ProbeDistance;
         private QueryTriggerInteraction QueryTriggerInteraction => _logicConfig.CollisionProbingConfig.QueryTriggerInteraction;
@@ -30,6 +31,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _chainBoneCountMinusOne = _chainBoneCount - 1;
             _chainPositions = new Vector3[_chainBoneCount];
         }
+
+        public float PositionsExtraDistance => _logicConfig.ExtraChainDistance;
+
 
         public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)
         {

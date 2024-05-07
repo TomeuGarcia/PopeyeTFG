@@ -10,14 +10,11 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private readonly BoneChainChainViewFSM _stateMachine;
         private readonly BoneChain _boneChain;
         private readonly Vector3[] _updatedPositions;
-        private readonly float _positionsExtraDistance;
         
         public BoneChainChainView(BoneChain boneChain, int numberOfBones, float chainDistance, float boneLength,
-            Bone bonePrefab, Bone boneEndEffectorPrefab, Material chainBonesMaterial,
-            float positionsExtraDistance)
+            Bone bonePrefab, Bone boneEndEffectorPrefab, Material chainBonesMaterial)
         {
             _boneChain = boneChain;
-            _positionsExtraDistance = positionsExtraDistance;
             _boneChain.AwakeConfigure(numberOfBones, true, boneLength, bonePrefab, boneEndEffectorPrefab);
             _boneChain.StartInit();
             _boneChain.SetMaterialToBones(chainBonesMaterial);
@@ -28,9 +25,9 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             _updatedPositions = new Vector3[numberOfBones];
         }
         
-        public void Update(Vector3[] positions)
+        public void Update(Vector3[] positions, float extraChainDistance)
         {
-            _stateMachine.Update(positions, ComputePositionsDistance(positions));
+            _stateMachine.Update(positions, ComputePositionsDistance(positions, extraChainDistance));
 
             for (int i = 0; i < _boneChain.NumberOfBones; ++i)
             {
@@ -43,15 +40,15 @@ namespace Popeye.Modules.PlayerAnchor.Chain
             return _updatedPositions;
         }
 
-        private float ComputePositionsDistance(Vector3[] positions)
+        private float ComputePositionsDistance(Vector3[] positions, float extraChainDistance)
         {
-            float positionsDistance = _positionsExtraDistance;
+            float positionsDistance = extraChainDistance;
             for (int i = 1; i < positions.Length; ++i)
             {
                 positionsDistance += Vector3.Distance(positions[i - 1], positions[i]);
             }
 
-            return positionsDistance;
+            return Mathf.Max(0, positionsDistance);
         }
     }
 }

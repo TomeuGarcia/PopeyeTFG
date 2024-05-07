@@ -22,7 +22,7 @@ namespace Popeye.Modules.ValueStatSystem
         protected abstract AValueStat ValueStat { get; }
 
 
-        
+
         [Button("Validate")]
         private void OnValidate()
         {
@@ -88,7 +88,8 @@ namespace Popeye.Modules.ValueStatSystem
     
         protected void UpdateFillImage()
         {
-            _imageFillBar.UpdateFill(ValueStat.GetValuePer1Ratio()).Forget();
+            float newValue01 = ValueStat.GetValuePer1Ratio();
+            _imageFillBar.UpdateFill(newValue01).Forget();
         }
         
         protected void KillAllUpdates()

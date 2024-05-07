@@ -37,12 +37,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
                 _blackboard.PlayerMediator.SetInvulnerable(false);
 
-                bool diedAfterFall = _blackboard.PlayerMediator.TakeFellOnVoidDamage();
-
-                if (diedAfterFall)
-                {
-                    return false;
-                }
                 
                 _blackboard.PlayerMediator.ResetTargetForCamera();
                 _blackboard.PlayerMediator.RespawnToLastSafeGround();

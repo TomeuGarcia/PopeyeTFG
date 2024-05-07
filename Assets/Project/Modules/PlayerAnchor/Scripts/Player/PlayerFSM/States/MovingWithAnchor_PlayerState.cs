@@ -94,12 +94,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 NextState = PlayerStates.Healing;
                 return true;
             }
-            if (PlayerCanDoSpecialAttack())
+            if (PlayerCanDoAnchorSpinAttack())
             {
-                NextState = PlayerStates.EnteringSpecialAttack;
+                NextState = PlayerStates.EnteringAnchorSpinAttack;
                 return true;
             }
-            
+
             return false;
         }
 
@@ -125,24 +125,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             return _blackboard.MovesetInputsController.DashDroppingAnchor_Pressed();
         }
-
-        private bool LateAnchorThrow(float deltaTime)
-        {
-            if (_lateAnchorThrowTimer.HasFinished())
-            {
-                return false;
-            }
-            _lateAnchorThrowTimer.Update(deltaTime);
-            
-            return _blackboard.MovesetInputsController.Throw_Pressed();
-        }
         
-        private bool PlayerTriesToSpinAnchor()
-        {
-            return _blackboard.MovesetInputsController.SpinAttack_Pressed(out _blackboard.spinAttackTowardsRight) && 
-                   _blackboard.PlayerMediator.CanSpinAnchor();
-        }
-
         private bool PlayerCanHeal(out bool hasHealsLeft)
         {
             hasHealsLeft = false;
@@ -150,10 +133,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             return _blackboard.MovesetInputsController.Heal_Pressed() && 
                    _blackboard.PlayerMediator.PlayerHealing.CanHeal(out hasHealsLeft);
         }
-        private bool PlayerCanDoSpecialAttack()
+        private bool PlayerCanDoAnchorSpinAttack()
         {
-            return _blackboard.MovesetInputsController.SpecialAttack_Pressed() && 
-                   _blackboard.PlayerMediator.CanDoSpecialAttack();
+            return _blackboard.MovesetInputsController.SpinAttack_Pressed() && 
+                   _blackboard.AnchorSpinAttackController.CanDoSpecialAttack();
         }
 
         private void UpdateMovementSpeed()

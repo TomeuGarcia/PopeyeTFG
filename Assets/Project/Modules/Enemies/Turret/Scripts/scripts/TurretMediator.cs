@@ -106,10 +106,13 @@ namespace Popeye.Modules.Enemies
         }
         public void HideAnimation(bool playerIsTooClose, bool playerIsTooFar)
         {
-            _turretSounds.PlayTurretDigDown(gameObject);
-            _turretAnimatorController.HideAnimation();
-
-            if (playerIsTooFar)
+            if (!playerIsTooFar)
+            {
+                _turretSounds.PlayTurretDigDown(gameObject);
+                _turretAnimatorController.HideAnimation();
+                Debug.Log("player is too close");
+            }
+            else
             {
                 InvokeEnemyStopsFightingPlayer();
             }            

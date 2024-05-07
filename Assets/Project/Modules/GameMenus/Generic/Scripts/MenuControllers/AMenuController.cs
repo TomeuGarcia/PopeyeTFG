@@ -45,8 +45,13 @@ namespace Popeye.Modules.GameMenus.Generic
         {
             if (_goBackInput.WasPressedThisFrame() && IsBeingShown)
             {
-                _backButtonAndConfig.SmartButton.SimulateOnButtonClicked();
+                CloseMenu();
             }
+        }
+
+        protected void CloseMenu()
+        {
+            _backButtonAndConfig.SmartButton.SimulateOnButtonClicked();
         }
 
         private void OnDisable()

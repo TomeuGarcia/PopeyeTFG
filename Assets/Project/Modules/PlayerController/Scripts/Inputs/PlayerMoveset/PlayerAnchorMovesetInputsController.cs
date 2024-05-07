@@ -18,14 +18,11 @@ namespace Popeye.Modules.PlayerController.Inputs
         private readonly IGateValueReader<InputPressedBuffer> _pullGateValue;
         private readonly IGateValueReader<InputPressedBuffer> _dashTowardsAnchorGateValue;
         private readonly IGateValueReader<InputAction> _dashDroppingAnchorGateValue;
-        private readonly IGateValueReader<InputAction> _specialAttackGateValue;
+        private readonly IGateValueReader<InputAction> _spinAttackGateValue;
+        private readonly IGateValueReader<InputAction> _spikesAttackGateValue;
         private readonly InputAction _kick;
         
         private readonly InputAction _heal;
-        
-        private readonly InputAction _spinAttack_Left;
-        private readonly InputAction _spinAttack_Right;
-
 
         private readonly IEventSystemService _eventSystemService;
         
@@ -36,7 +33,8 @@ namespace Popeye.Modules.PlayerController.Inputs
             IGateValueReader<InputPressedBuffer> pullGateValue,
             IGateValueReader<InputPressedBuffer> dashTowardsAnchorGateValue,
             IGateValueReader<InputAction> dashDroppingAnchorGateValue,
-            IGateValueReader<InputAction> specialAttackGateValue
+            IGateValueReader<InputAction> spinAttackGateValue,
+            IGateValueReader<InputAction> spikesAttackGateValue
             )
         {
             _eventSystemService = eventSystemService;
@@ -56,16 +54,12 @@ namespace Popeye.Modules.PlayerController.Inputs
             _pullGateValue = pullGateValue;
             _dashTowardsAnchorGateValue = dashTowardsAnchorGateValue;
             _dashDroppingAnchorGateValue = dashDroppingAnchorGateValue;
-            _specialAttackGateValue = specialAttackGateValue;
+            _spinAttackGateValue = spinAttackGateValue;
+            _spikesAttackGateValue = spikesAttackGateValue;
             
             _kick = _playerInputControls.Land.Kick;
 
             _heal = _playerInputControls.Land.Heal;
-            
-            _spinAttack_Left = _playerInputControls.Land.SpinAttack_Left;
-            _spinAttack_Right = _playerInputControls.Land.SpinAttack_Right;
-            
-
         }
 
         ~PlayerAnchorMovesetInputsController()
@@ -193,32 +187,33 @@ namespace Popeye.Modules.PlayerController.Inputs
             return _heal.WasReleasedThisFrame();
         }
         
-        public bool SpecialAttack_Pressed()
-        {
-            return _specialAttackGateValue.GetValue().WasPressedThisFrame();
-        }
-        public bool SpecialAttack_HeldPressed()
-        {
-            return _specialAttackGateValue.GetValue().IsPressed();
-        }
-        public bool SpecialAttack_Released()
-        {
-            return _specialAttackGateValue.GetValue().WasReleasedThisFrame();
-        }
         
-        
-        public bool SpinAttack_Pressed(out bool spinRight)
+        public bool SpinAttack_Pressed()
         {
-            spinRight = _spinAttack_Right.WasPressedThisFrame();
-            return spinRight || _spinAttack_Left.WasPressedThisFrame();
+            return _spinAttackGateValue.GetValue().WasPressedThisFrame();
         }
         public bool SpinAttack_HeldPressed()
         {
-            return _spinAttack_Left.IsPressed() || _spinAttack_Right.IsPressed();
+            return _spinAttackGateValue.GetValue().IsPressed();
         }
         public bool SpinAttack_Released()
         {
-            return !_spinAttack_Left.IsPressed() && !_spinAttack_Right.IsPressed();
+            return _spinAttackGateValue.GetValue().WasReleasedThisFrame();
         }
+        
+        
+        public bool SpikesAttack_Pressed()
+        {
+            return _spikesAttackGateValue.GetValue().WasPressedThisFrame();
+        }
+        public bool SpikesAttack_HeldPressed()
+        {
+            return _spikesAttackGateValue.GetValue().IsPressed();
+        }
+        public bool SpikesAttack_Released()
+        {
+            return _spikesAttackGateValue.GetValue().WasReleasedThisFrame();
+        }
+        
     }
 }

@@ -1,9 +1,13 @@
+using AYellowpaper;
+using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
 {
-    public class CheckpointTriggerChecker : MonoBehaviour, ISafeGroundChecker, ISafeGroundOnDemand
+    public class CheckpointTriggerChecker : MonoBehaviour
     {
+        [SerializeField] private InterfaceReference<ICheckpointStorerWrite, ScriptableObject> _checkpointDataStorer;
+
         public Vector3 LastSafePosition { get; private set; }
         public Vector3 BestSafePosition => LastSafePosition;
 
@@ -20,26 +24,27 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
 
         private void Awake()
         {
-            SetLastSafePosition(transform.position);
+            //SetLastSafePosition(transform.position);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent(out ICheckpointTrigger checkpointTrigger))
             {
-                SetLastSafePosition(checkpointTrigger.RespawnPosition);
+                SetLastSafePosition(checkpointTrigger.CheckpointData);
             }
         }
 
-        private void SetLastSafePosition(Vector3 position)
+        private void SetLastSafePosition(ICheckpointData checkpointData)
         {
-            LastSafePosition = position + Vector3.up;
+            //LastSafePosition = position + Vector3.up;            
+            _checkpointDataStorer.Value.SetLastSafeCheckpoint(checkpointData);
         }
 
 
         public void SetCurrentStateAsSafeGround()
         {
-            SetLastSafePosition(transform.position);
+            //SetLastSafePosition(transform.position);
         }
     }
 }

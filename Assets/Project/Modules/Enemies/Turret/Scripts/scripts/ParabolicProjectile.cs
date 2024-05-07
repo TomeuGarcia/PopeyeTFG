@@ -9,6 +9,7 @@ using Popeye.Modules.Enemies.Hazards;
 using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
+using Project.Modules.Enemies.Turret;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -38,6 +39,9 @@ public class ParabolicProjectile : RecyclableObject
     [SerializeField] ParticleTypes _projectileArea;
     [SerializeField] ParticleTypes _attackPreview;
     
+    [SerializeField] private ParabolicProjectileAudio _projectileAudio;
+
+    
     private IParticleFactory _particleFactory;
     private float _minDistance;
     private float _maxDistance;
@@ -61,7 +65,7 @@ public class ParabolicProjectile : RecyclableObject
                     float v0;
                     float time;
                     RaycastHit hit;
-                    if (Physics.Raycast(predictPos + Vector3.up, Vector3.down, out hit,5f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
+                    if (Physics.Raycast(predictPos + Vector3.up, Vector3.down, out hit,10f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
                     {
                         var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
                         _particleFactory.Create(_attackPreview, hit.point, startRot);
@@ -127,10 +131,16 @@ public class ParabolicProjectile : RecyclableObject
     {
         float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         float distance = UnityEngine.Random.Range(_minDistance, _maxDistance);
-        float x = transform.position.x + Mathf.Cos(angle) * distance;
-        float z = transform.position.z + Mathf.Sin(angle) * distance;
-        float y = transform.position.y;
+        float x = _playerTransform.position.x + Mathf.Cos(angle) * distance;
+        float z = _playerTransform.position.z + Mathf.Sin(angle) * distance;
+        float y = _playerTransform.position.y;
         _randomTarget = new Vector3(x, y, z);
+        RaycastHit hit;
+        if (Physics.Raycast(_randomTarget + Vector3.up, Vector3.down, out hit,10f,_defaultProbingConfig.CollisionLayerMask,_defaultProbingConfig.QueryTriggerInteraction))
+        {
+            var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
+            _particleFactory.Create(_attackPreview, hit.point, startRot);
+        }
         _shootRandom = true;
     }
 
@@ -157,6 +167,7 @@ public class ParabolicProjectile : RecyclableObject
                 {
 
                     var startRot = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(new Vector3(0,90,90f));
+                    //_projectileAudio.PlayProjectileCollision(gameObject);
                     _hazardFactory.CreateDamageArea(hit.point, startRot);
                     _particleFactory.Create(_projectileExplosion, hit.point, startRot);
                     _particleFactory.Create(_projectileArea, hit.point, startRot);

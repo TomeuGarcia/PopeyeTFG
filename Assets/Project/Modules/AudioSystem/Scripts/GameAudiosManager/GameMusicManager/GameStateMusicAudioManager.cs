@@ -37,6 +37,8 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
             
             _eventSystemService.Subscribe<IPlayerBattleInteractionsController.OnBattleStarted>(OnBattleStartedEvent);
             _eventSystemService.Subscribe<IPlayerBattleInteractionsController.OnBattleFinished>(OnBattleFinishedEvent);
+            
+            _eventSystemService.Subscribe<IGameStateEventsDispatcher.OnExitToMainMenu>(OnExitToMainMenuEvent);
         }
 
         public void StopListeningToGameEvents()
@@ -49,6 +51,8 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
             
             _eventSystemService.Unsubscribe<IPlayerBattleInteractionsController.OnBattleStarted>(OnBattleStartedEvent);
             _eventSystemService.Unsubscribe<IPlayerBattleInteractionsController.OnBattleFinished>(OnBattleFinishedEvent);
+            
+            _eventSystemService.Unsubscribe<IGameStateEventsDispatcher.OnExitToMainMenu>(OnExitToMainMenuEvent);
         }
 
 
@@ -83,5 +87,10 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
             _playerStateMusicTransitionController.TransitionOutOfBattle();
         }
         
+        
+        private void OnExitToMainMenuEvent(IGameStateEventsDispatcher.OnExitToMainMenu eventData)
+        {
+            _playerStateMusicTransitionController.TransitionToDefault();
+        }
     }
 }

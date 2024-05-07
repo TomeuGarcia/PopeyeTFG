@@ -22,8 +22,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates.States
 
 
             _blackboard.TransformMotion.ParentAndUpdate(_blackboard.AnchorCarryHolder,
-                Vector3.zero, Quaternion.identity,
-                duration, Ease.InOutSine);
+                Vector3.zero, Quaternion.identity, duration, Ease.InOutSine);
             _blackboard.TransformMotion.ResetScale();
                 
             

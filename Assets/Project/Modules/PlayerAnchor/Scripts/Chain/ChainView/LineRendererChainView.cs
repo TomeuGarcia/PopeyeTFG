@@ -13,7 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         }
         
         
-        public void Update(Vector3[] positions)
+        public void Update(Vector3[] positions, float extraChainDistance)
         {
             _lineRenderer.positionCount = positions.Length;
             _lineRenderer.SetPositions(positions);

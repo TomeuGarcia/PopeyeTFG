@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
 using UnityEngine;
@@ -18,6 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [Header("HOLDERS")]
         [SerializeField] private Transform _originalChainTargetHolder;
         [SerializeField] private Transform _finishChainTargetHolder;
+        [SerializeField] private List<Transform> _orbitalChains = new();
         [SerializeField] private Transform _orbitalChains0;
         [SerializeField] private Transform _orbitalChains1;
         [SerializeField] private Transform _orbitalChains2;
@@ -71,9 +74,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         {
             _movingChainsSoundId = _audio.StartPlayingMovingChainsSound(gameObject);
 
-            _orbitalChains0.DOBlendableLocalRotateBy(Vector3.up, 180).SetLoops(-1);
-            _orbitalChains0.DOBlendableLocalRotateBy(Vector3.up, 60).SetLoops(-1);
-            _orbitalChains0.DOBlendableLocalRotateBy(Vector3.up, 120).SetLoops(-1);
+            for (int i = 0; i < _orbitalChains.Count; i++)
+            {
+                _orbitalChains[i].DOBlendableLocalRotateBy(Vector3.up, _viewConfig.OrbitalChainRotationSpeeds[i]).SetLoops(-1);
+            }
         }
         
         public async UniTask PlayUnlockAbilityAnimation()
@@ -81,8 +85,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _audio.PlayHitSound(gameObject);
             Transform sparks = _particleFactory.Create(_viewConfig.OnHitSparklesParticleType, Vector3.zero, quaternion.identity, transform);
             sparks.LookAt(_orbTargetTransform.position);
-            sparks.transform.position += Vector3.forward * 0.3f;
-            sparks.transform.position += Vector3.up * 0.1f;
+            sparks.transform.position += _viewConfig.SparkOffset;
             
             foreach (ChainedOrbChainView chainGroup in _chains)
             {

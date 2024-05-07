@@ -2,30 +2,28 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Scripts.EventChannels;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 {
-    public class AnchorSpinSpecialAttackController : IPlayerSpecialAttackController
+    public class AnchorSpinSpecialAttackController : MonoBehaviour, IPlayerSpecialAttackController
     {
-        private readonly IPlayerFocusSpender _focusSpender;
-        private readonly PlayerFocusAttackConfig _focusAttackConfig;
-        private readonly IAnchorMediator _anchorMediator;
-        private readonly TransformMotion _anchorMotion;
-        private readonly IPlayerMediator _playerMediator;
-        private readonly AnchorThrowConfig.RotationCorrection _spinEndFloorRotationCorrection;
+        [SerializeField] private AnchorSpinView _view;
+        
+        private AnchorSpinAttackConfig _config;
+        private IPlayerFocusSpender _focusSpender;
+        private PlayerFocusAttackConfig _focusAttackConfig;
+        private IAnchorMediator _anchorMediator;
+        private TransformMotion _anchorMotion;
+        private IPlayerMediator _playerMediator;
+        private AnchorThrowConfig.RotationCorrection _spinEndFloorRotationCorrection;
 
+        private IEmptyEventChannelDispatcher _attackPerformedEventDispatcher;
+        
         private bool _isBeingPerformed;
-        private int _numberOfLoops = 2;
-        private float _totalDuration = 1.0f;
-        
-        private float _startSpinDistance = 4.0f;
-        private float _endSpinDistance = 7.0f;
-        
-        private float _startPositioningDuration = 0.2f;
+
         private float _startPositioningT;
-        
-        private float _endPositioningDuration = 0.15f;
         private float _endPositioningT;
 
         private float _loopTime;
@@ -34,32 +32,52 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
         private Quaternion _endRotation;
         
-        
-        public AnchorSpinSpecialAttackController(
+        public float PreparationDuration => _config.PreparationDuration;
+        public string Name => "Anchor Spin";
+
+
+        public void Configure(
+            AnchorSpinAttackConfig config,
             IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,
             IAnchorMediator anchorMediator,
             TransformMotion anchorMotion,
             IPlayerMediator playerMediator,
-            AnchorThrowConfig.RotationCorrection spinEndFloorRotationCorrection)
+            AnchorThrowConfig.RotationCorrection spinEndFloorRotationCorrection,
+            IEmptyEventChannelDispatcher attackPerformedEventDispatcher)
         {
+            _config = config;
             _focusSpender = focusSpender;
             _focusAttackConfig = focusAttackConfig;
             _anchorMediator = anchorMediator;
             _anchorMotion = anchorMotion;
             _playerMediator = playerMediator;
             _spinEndFloorRotationCorrection = spinEndFloorRotationCorrection;
+            _attackPerformedEventDispatcher = attackPerformedEventDispatcher;
         }
-        
+
+        private void Start()
+        {
+            _view.Configure(_playerMediator.PositionTransform);
+        }
+
+        public void OnPreparationStart(float durationToComplete)
+        {
+            _view.StartPreparationAnimation(_playerMediator.Position);
+        }
+
+        public void OnPreparationInterrupted()
+        {
+            _view.InterruptPreparationAnimation();
+        }
         
         public bool CanDoSpecialAttack()
         {
             return _focusSpender.HasEnoughFocus(_focusAttackConfig.RequiredFocusToPerform) && 
-                   !SpecialAttackIsBeingPerformed();/* &&
-                   !_anchorMediator.IsBeingCarried();*/
+                   !SpecialAttackIsBeingPerformed();
         }
 
-        public bool SpecialAttackIsBeingPerformed()
+        private bool SpecialAttackIsBeingPerformed()
         {
             return _isBeingPerformed;
         }
@@ -93,11 +111,15 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             }
 
             _loopTime = _startOffset;
-            _fullLoopTime = (Mathf.PI * 2 * _numberOfLoops) + _startOffset;
+            _fullLoopTime = (Mathf.PI * 2 * _config.NumberOfLoops) + _startOffset;
             
             ComputeFinishRotation();
             UpdateLoopTimeAsync().Forget();
             DoStartSpecialAttack().Forget();
+            
+            _config.PlayPerformSound();
+            
+            _attackPerformedEventDispatcher.RaiseEvent();
         }
 
         
@@ -107,6 +129,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             _playerMediator.SetCanRotate(false);
             
             _anchorMediator.OnStartSpinning();
+            _view.StartAnimation();
             
             while (_loopTime < _fullLoopTime && _isBeingPerformed)
             {
@@ -115,9 +138,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             }
             
             _anchorMediator.OnStopSpinning();
+            _view.FinishAnimation();
 
-            _anchorMediator.SnapToFloor(_playerMediator.Position);
-            
+            CorrectAnchorEndPosition();
+                        
             _playerMediator.SetCanRotate(true);
             _isBeingPerformed = false;
         }
@@ -132,7 +156,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                     () => _loopTime,
                     (loopTime) => _loopTime = loopTime,
                     _fullLoopTime,
-                    _totalDuration
+                    _config.TotalDuration
                 )
                 .SetEase(Ease.InOutQuad);
             
@@ -141,17 +165,17 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                     () => _startPositioningT,
                     (t) => _startPositioningT = t,
                     1f,
-                    _startPositioningDuration
+                    _config.StartPositioningDuration
                 )
                 .SetEase(Ease.InQuad);
 
 
-            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0, _totalDuration - _endPositioningDuration)));
+            await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0, _config.TotalDuration - _config.EndPositioningDuration)));
             DOTween.To(
                     () => _endPositioningT,
                     (t) => _endPositioningT = t,
                     1f,
-                    _endPositioningDuration
+                    _config.EndPositioningDuration
                 )
                 .SetEase(Ease.OutSine);
         }
@@ -159,8 +183,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
         private void UpdateSpin()
         {
-            float spinT = (_loopTime - _startOffset) / (_fullLoopTime - _startOffset);
-            spinT = Mathf.Sin(spinT * (Mathf.PI / 2));
+            float totalSpinT = (_loopTime - _startOffset) / (_fullLoopTime - _startOffset);
+            float spinT = Mathf.Sin(totalSpinT * (Mathf.PI / 2));
             
         
             float cos = Mathf.Cos(_loopTime);
@@ -168,7 +192,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         
             Vector3 spinOffset = new Vector3(cos, 0,sin);
 
-            float spinRadius = Mathf.Lerp(_startSpinDistance, _endSpinDistance, spinT);
+            float spinRadius = Mathf.Lerp(_config.StartSpinDistance, _config.EndSpinDistance, spinT);
             spinOffset *= spinRadius;
 
             Vector3 spinCenter = _playerMediator.Position;
@@ -202,6 +226,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
 
             Quaternion damageRotation = Quaternion.LookRotation(anchorLookDirectionStraight, Vector3.up);
             _anchorMediator.OnKeepSpinning(spinCenter, damageRotation, spinRadius);
+            _view.UpdateAnimation(spinCenter, damageRotation, spinRadius, totalSpinT);
         }
 
 
@@ -224,6 +249,24 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         public void ForceStopSpecialAttack()
         {
             _isBeingPerformed = false;
+        }
+        
+        private void CorrectAnchorEndPosition()
+        {
+            Vector3 playerPosition = _playerMediator.Position;
+            Vector3 playerToAnchor = _anchorMediator.Position - playerPosition;
+            float playerToAnchorDistance = playerToAnchor.magnitude;
+            Vector3 playerToAnchorDirection = playerToAnchor / playerToAnchorDistance;
+
+            if (Physics.Raycast(playerPosition, playerToAnchorDirection,
+                    out RaycastHit obstacleHit, playerToAnchorDistance,
+                    _config.ObstacleCollisionProbing.CollisionLayerMask,
+                    _config.ObstacleCollisionProbing.QueryTriggerInteraction))
+            {
+                _anchorMotion.SetPosition(obstacleHit.point);
+            }
+
+            _anchorMediator.SnapToFloor(_playerMediator.Position);
         }
     }
 }

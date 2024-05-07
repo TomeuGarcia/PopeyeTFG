@@ -28,7 +28,7 @@ MonoBehaviour:
     _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 98e918031033e1f4fafb6057548cfb94,
       type: 3}
   _upgradeTypeToViewDatas:
-  - _upgradeType: 6
+  - _upgradeType: 7
     _orbMaterial: {fileID: 2100000, guid: 0025587afeffb04439a0646d69a73e0f, type: 2}
     _outterOrbMaterial: {fileID: 2100000, guid: 021a651a782523c44a4dff5ff17cc9d4,
       type: 2}
@@ -39,7 +39,7 @@ MonoBehaviour:
       type: 3}
     _pickAbilityParticlesPrefab: {fileID: 7433314595817877746, guid: 8af6d82ffffab5d4c9aa5471ad452bf7,
       type: 3}
-  - _upgradeType: 7
+  - _upgradeType: 8
     _orbMaterial: {fileID: 2100000, guid: d61811cb36c05ae479c9a294e8d9dabb, type: 2}
     _outterOrbMaterial: {fileID: 2100000, guid: 3164f1daca4f1a94e9cbd15bb206ca32,
       type: 2}
@@ -57,6 +57,11 @@ MonoBehaviour:
   _orbHitDuration: 0.5
   _orbChainsStartBreakingDelay: 0.5
   _orbChainsDisappearDelay: 0.3
+  _sparkOffset: {x: 0, y: 0.3, z: 0.1}
+  _orbitalChainRotationSpeeds:
+  - 180
+  - 60
+  - 120
   _orbMoveToTarget:
     _startDelay: 0.5
     _moveDuration: 0.8

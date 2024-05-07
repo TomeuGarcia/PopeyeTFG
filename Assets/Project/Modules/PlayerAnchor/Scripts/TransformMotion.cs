@@ -124,6 +124,12 @@ namespace Popeye.Modules.PlayerAnchor
         {
             ParentAndUpdate(parent, Vector3.zero, Quaternion.identity, duration, ease);
         }
+        public void ParentAndResetInstantly(Transform parent)
+        {
+            Parent(parent);
+            _moveTransform.localPosition = Vector3.zero;
+            _rotateTransform.localRotation = Quaternion.identity;
+        }
 
         public void ParentAndUpdate(Transform parent, Vector3 localPosition, Quaternion localRotation,
             float duration, Ease ease = Ease.Linear)

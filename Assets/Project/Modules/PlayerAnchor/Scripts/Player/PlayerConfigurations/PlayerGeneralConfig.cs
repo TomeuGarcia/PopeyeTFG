@@ -26,11 +26,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         public PlayerStatesConfig StatesConfig => _playerStatesConfig;
         
         
-        [Header("STAMINA")]
-        [Expandable] [SerializeField] private PlayerStaminaSystemConfig _playerStaminaConfig;
-        public PlayerStaminaSystemConfig StaminaConfig => _playerStaminaConfig;
-
-        
         [Header("HEALTH")]
         [SerializeField] private PlayerHealthConfig _playerHealthConfig;
         [SerializeField] private PotionsPlayerHealingConfig _potionsHealingConfig;
@@ -41,6 +36,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         [Header("FOCUS")]
         [Expandable] [SerializeField] private PlayerFocusConfig _focusConfig;
         public PlayerFocusConfig FocusConfig => _focusConfig;
+
+        [Header("SPECIAL ATTACKS")] 
+        [SerializeField] private PlayerSpecialAttacksConfig _specialAttacksConfig;
+        public PlayerSpecialAttacksConfig SpecialAttacksConfig => _specialAttacksConfig;
 
         
         [Header("GROUND / VOID checking")] 
