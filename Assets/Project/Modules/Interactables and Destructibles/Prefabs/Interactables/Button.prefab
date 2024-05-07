@@ -30,7 +30,7 @@ Transform:
   m_Children:
   - {fileID: 5883789515500659839}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6209850468079289236
 PrefabInstance:
@@ -99,12 +99,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: de00c63b61e80514093df67d15952a30, type: 2}
+      objectReference: {fileID: 2100000, guid: 7f9cbab69ae3c2a40b2ea3546d7eb9d2, type: 2}
     - target: {fileID: -6279479985475813546, guid: e440678d34e1adc488ba2855566c06ef,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: de00c63b61e80514093df67d15952a30, type: 2}
+      objectReference: {fileID: 2100000, guid: 7f9cbab69ae3c2a40b2ea3546d7eb9d2, type: 2}
     - target: {fileID: 919132149155446097, guid: e440678d34e1adc488ba2855566c06ef,
         type: 3}
       propertyPath: m_Name
@@ -113,39 +113,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1501275745960795370, guid: e440678d34e1adc488ba2855566c06ef,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3690097792511857979}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e440678d34e1adc488ba2855566c06ef, type: 3}
---- !u!1 &4825686505971244926 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1501275745960795370, guid: e440678d34e1adc488ba2855566c06ef,
-    type: 3}
-  m_PrefabInstance: {fileID: 6209850468079289236}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &3690097792511857979
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825686505971244926}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.75, y: 0.99999994, z: 0.75000024}
-  m_Center: {x: 0, y: 0.5, z: 0.000000014901163}
 --- !u!4 &5883789515500659839 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e440678d34e1adc488ba2855566c06ef,
