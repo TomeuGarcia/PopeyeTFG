@@ -1,12 +1,7 @@
-using System;
-using DG.Tweening;
-using Popeye.Core.Services.ServiceLocator;
-using Popeye.Modules.AudioSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.AnchorTriggerables
 {
@@ -15,15 +10,8 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         [Header("AUDIO")]
         [SerializeField] private ButtonInteractorAudio _audio;
         
-        [Header("MOVE")] 
-        [SerializeField] private TweenConfigAsset _triggeredMoveBy;
-
         [Header("REFERENCES")]
-        [SerializeField] private Material _triggeredMaterial;
-        [SerializeField] private Material _notTriggeredMaterial;
-        [SerializeField] private MeshRenderer _buttonMesh;
-        [SerializeField] private Transform _buttonTransform;
-
+        [SerializeField] private AnchorButtonView _view;
     
         [Header("WORLD INTERACTORS")]
         [SerializeField] private AWorldInteractor[] _worldInteractors;
@@ -31,11 +19,11 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
         protected bool _isTriggered;
 
         private Vector3 Position => transform.position;
+
     
     
         private void Awake()
         {
-            _buttonMesh.material = _notTriggeredMaterial;
             _isTriggered = false;
         }
         
@@ -68,8 +56,8 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
     
         protected virtual void OnTakeAnchorHit()
         {
-            PlayTriggerAnimation();
             _isTriggered = true;
+            PlayTriggerAnimation();
     
             ActivateWorldInteractors();
         }
@@ -77,19 +65,15 @@ namespace Popeye.Modules.WorldElements.AnchorTriggerables
     
         protected void PlayTriggerAnimation()
         {
-            _buttonMesh.material = _triggeredMaterial;
-
-            _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config);
-            
+            _view.PlayTriggeredAnimation();
             _audio.PlayActivatedSound(gameObject);
         }
         protected void PlayUntriggerAnimation()
         {
-            _buttonMesh.material = _notTriggeredMaterial;
-            _buttonTransform.BlendableLocalMoveBy(_triggeredMoveBy.Config.Undo());
+            _view.PlayNotTriggeredAnimation();
         }
-    
-    
+
+
         protected void DeactivateWorldInteractors()
         {
             foreach (AWorldInteractor worldInteractor in _worldInteractors)

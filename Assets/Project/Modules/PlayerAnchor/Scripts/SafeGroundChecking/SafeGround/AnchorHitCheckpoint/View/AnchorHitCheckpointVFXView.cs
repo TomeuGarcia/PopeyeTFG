@@ -9,7 +9,9 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
     public class AnchorHitCheckpointVFXView : MonoBehaviour
     {
         [SerializeField] private MeshRenderer _bellRenderer;
+        [SerializeField] private MeshRenderer _archRenderer;
         private Material _bellMaterial;
+        private Material _archMaterial;
 
         [SerializeField] private Light[] _lights;
         
@@ -24,7 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             _vfxConfig = vfxConfig;
             _bellMaterial = _bellRenderer.material;
-            _bellRenderer.material = _bellMaterial;
+            _archMaterial = _archRenderer.material;
 
             foreach (Light light in _lights)
             {
@@ -79,6 +81,30 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             _bellMaterial.SetFloat(_vfxConfig.AnimationTPropertyID, t);
         }
+
+
+        public void SetCurrentCheckpointView()
+        {
+            float t = 0f;
+            DOTween.To(
+                () => t,
+                (newt) =>
+                {
+                    t = newt;
+                    UpdateCurrentCheckpointView(t);
+                },
+                1f,
+                _vfxConfig.SetCurrentCheckpointDuration
+            ).SetEase(Ease.InOutSine);            
+        }
+        public void StopCurrentCheckpointView()
+        {
+            UpdateCurrentCheckpointView(0);
+        }
         
+        private void UpdateCurrentCheckpointView(float t)
+        {
+            _archMaterial.SetFloat(_vfxConfig.CurrentCheckpointProperty, t);
+        }
     }
 }

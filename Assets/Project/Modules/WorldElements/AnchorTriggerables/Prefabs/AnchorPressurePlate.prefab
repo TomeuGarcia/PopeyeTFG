@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6729858696906676879}
   - component: {fileID: 6729858696906676872}
+  - component: {fileID: 7767928266989922154}
   - component: {fileID: 6729858696906676873}
   m_Layer: 13
   m_Name: AnchorPressurePlate
@@ -32,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 6729858697334464063}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6729858696906676872
 MonoBehaviour:
@@ -47,16 +48,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audio: {fileID: 11400000, guid: 136c1660aba08c84e88d9893a7adf4d8, type: 2}
-  _triggeredMoveBy: {fileID: 11400000, guid: 0d53041f6d20a1a4cad8361cecdb9116, type: 2}
-  _triggeredMaterial: {fileID: 2100000, guid: 7f9cbab69ae3c2a40b2ea3546d7eb9d2, type: 2}
-  _notTriggeredMaterial: {fileID: 2100000, guid: 7f9cbab69ae3c2a40b2ea3546d7eb9d2,
-    type: 2}
-  _buttonMesh: {fileID: 7184967292497152000}
-  _buttonTransform: {fileID: 6244377313239423366}
+  _view: {fileID: 7767928266989922154}
   _worldInteractors:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &7767928266989922154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6729858696906676878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a986c7cc9d60432aa5632222bf4bdb6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: be321a61d446ee84ba2b09e182389470, type: 2}
+  _buttonTransform: {fileID: 6244377313239423366}
+  _buttonMeshes:
+  - {fileID: 4774210961499264354}
+  - {fileID: 7184967292497152000}
 --- !u!65 &6729858696906676873
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76,7 +89,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.5, z: 1}
+  m_Size: {x: 1.5, y: 3, z: 1.5}
   m_Center: {x: 0, y: 0.7, z: 0}
 --- !u!1 &6729858697334464062
 GameObject:
@@ -193,6 +206,16 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3690097792511857979, guid: b00357ae1f428014a8faae1746d4eb53,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3690097792511857979, guid: b00357ae1f428014a8faae1746d4eb53,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8768850000746100394, guid: b00357ae1f428014a8faae1746d4eb53,
         type: 3}
       propertyPath: m_Name
@@ -206,6 +229,12 @@ PrefabInstance:
 --- !u!4 &1174623872967677902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 940170125340336908, guid: b00357ae1f428014a8faae1746d4eb53,
+    type: 3}
+  m_PrefabInstance: {fileID: 2108033785138705602}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4774210961499264354 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6845570510232117664, guid: b00357ae1f428014a8faae1746d4eb53,
     type: 3}
   m_PrefabInstance: {fileID: 2108033785138705602}
   m_PrefabAsset: {fileID: 0}
