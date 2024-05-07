@@ -27,16 +27,20 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         private int _totalInterpolations;
 
         private bool _waitingForLight;
+        
 
         private void Awake()
         {
             if (_light != null)
             {
+                _totalInterpolations = _interpolations.Length + 1;
+                
                 _initialIntensity = _light.intensity;
                 _waitingForLight = true;
             }
             else
             {
+                _totalInterpolations = _interpolations.Length;
                 _waitingForLight = false;
             }
             
@@ -136,7 +140,7 @@ namespace Popeye.Modules.VFX.Generic.ParticleBehaviours
         {
             _completedInterpolations++;
             
-            if (_completedInterpolations >= _interpolations.Length + 1)
+            if (_completedInterpolations >= _totalInterpolations)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(_despawnDelay));
                 Reset();
