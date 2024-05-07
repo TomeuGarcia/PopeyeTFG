@@ -14753,23 +14753,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ed74c990fc4b83abcb8a0f1e5353d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: 9fd016df651feea4a971f4b47ea07cc8, type: 2}
   _chainsGoalTarget: {fileID: 0}
-  _positionOffset: {x: 0, y: 2, z: 0}
   _chainsHolder: {fileID: 5496643440955660985}
   _playerDeathChains:
   - {fileID: 9140730478435978234}
   - {fileID: 7273405026777081744}
   - {fileID: 9130044659380093755}
   _deathEndParticlesHolder: {fileID: 4486525084302196225}
-  _deathEndDelay: 1
   _deathStartParticles: {fileID: 5898059134926603701}
   _deathEndParticles: {fileID: 5583617638110469028}
-  _deathMaterials:
-  - {fileID: 2100000, guid: 435c1d4a42161cd4f8137e397937a5c3, type: 2}
-  - {fileID: 2100000, guid: 072ef024d2f3abf46ab9d221dd4d1a72, type: 2}
-  _chainAppearZoom: {fileID: 11400000, guid: bd638f78fd35e734898f3941b55a419d, type: 2}
-  _deathEndZoom: {fileID: 11400000, guid: 2cad90560252a304bbb353e808ce7c6c, type: 2}
-  _deathEndShake: {fileID: 11400000, guid: e8a86e5b069afad41adeb86611b86519, type: 2}
 --- !u!1 &7306260067537769846
 GameObject:
   m_ObjectHideFlags: 0
@@ -14876,7 +14869,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0

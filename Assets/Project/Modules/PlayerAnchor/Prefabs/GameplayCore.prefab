@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1151401866870032477}
+  - component: {fileID: 1293015316337684621}
+  - component: {fileID: 6961017000287558275}
   m_Layer: 0
   m_Name: PopeyePlayerAnchor
   m_TagString: Untagged
@@ -37,37 +39,6 @@ Transform:
   m_Father: {fileID: 9056815993147974026}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6961017000287558275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 624403690303281660}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1103760496
-      Data2: 1114518131
-      Data3: -802694235
-      Data4: -972190526
-    Path: event:/AMBIENT/AMBIENT_Zone1
-  Event: 
-  PlayEvent: 1
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  AllowNonRigidbodyDoppler: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!114 &1293015316337684621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +59,37 @@ MonoBehaviour:
       Data3: 427693751
       Data4: 76038318
     Path: event:/MUSIC/MUSIC_Zone_1
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &6961017000287558275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624403690303281660}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1103760496
+      Data2: 1114518131
+      Data3: -802694235
+      Data4: -972190526
+    Path: event:/AMBIENT/AMBIENT_Zone1
   Event: 
   PlayEvent: 1
   StopEvent: 2
@@ -11735,6 +11737,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b43c4ce15d5466a9c8e2602b3297c0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5703321994903927729 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5841703737052690142, guid: 4c926eca4bc34f2419ddf931b08c4baf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2177388964853534063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ed74c990fc4b83abcb8a0f1e5353d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5811398296010217030 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5661473675443739433, guid: 4c926eca4bc34f2419ddf931b08c4baf,
@@ -12317,10 +12331,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9056815993147974026}
     m_Modifications:
+    - target: {fileID: 1489135784187168485, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3004245582994357057, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: m_fontSize
-      value: 28
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3149065713191854684, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
@@ -12537,6 +12556,11 @@ PrefabInstance:
       propertyPath: _chainPhysics._underlyingValue
       value: 
       objectReference: {fileID: 6405983057515278388}
+    - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
+        type: 3}
+      propertyPath: _playerDeathAnimationSequencer
+      value: 
+      objectReference: {fileID: 5703321994903927729}
     - target: {fileID: 7050149481166678006, guid: bde7a17d9751c6d4fbc2b63b24308cf1,
         type: 3}
       propertyPath: _playerPlacerCheckpointCreator

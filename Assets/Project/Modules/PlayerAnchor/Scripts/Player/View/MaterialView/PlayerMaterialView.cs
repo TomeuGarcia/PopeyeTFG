@@ -76,7 +76,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayDeathAnimation()
         {
-            //TODO
+            DoFlick(_config.DamagedPropertyId, 0.1f, 20).Forget();
         }
 
         public void PlayDeathFinishAnimation(float duration)
@@ -85,13 +85,8 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         private async UniTaskVoid DoPlayDeathFinishAnimation(float duration)
         {
-            _material.SetFloat(_config.DamagedPropertyId, 1.0f);
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
-            
             _rendererTransform.gameObject.SetActive(false);
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
-            
-            _material.SetFloat(_config.DamagedPropertyId, 0.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));            
             _rendererTransform.gameObject.SetActive(true);
         }
 

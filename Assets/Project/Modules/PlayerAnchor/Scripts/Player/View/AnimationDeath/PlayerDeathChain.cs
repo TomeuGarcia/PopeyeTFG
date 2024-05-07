@@ -27,6 +27,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.AnimationDeath
         [SerializeField] private CameraShakeConfig _appearEndShake;
         private ICameraFunctionalities _cameraFunctionalities;
 
+
         public float Delay => _delay;
 
         public void Init(ICameraFunctionalities cameraFunctionalities)
@@ -81,11 +82,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.AnimationDeath
 
             _cameraFunctionalities.CameraShaker.PlayShake(_appearEndShake);
         }
-
-        public void ChangeToDeath()
-        {
-            
-        }
+        
         
     }
 }
