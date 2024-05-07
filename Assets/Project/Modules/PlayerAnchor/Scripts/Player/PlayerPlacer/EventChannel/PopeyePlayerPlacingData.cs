@@ -24,5 +24,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
     {
         public EnvironmentFollower.EnvironmentElementConfig waterConfig;
         public EnvironmentFollower.EnvironmentElementConfig rainConfig;
+        public EnvironmentFollower.EnvironmentElementConfig windConfig;
     }
 }
