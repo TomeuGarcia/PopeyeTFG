@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -41,7 +42,11 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
         private IParticleFactory _particleFactory;
 
-        
+        private void Start()
+        {
+            _movingChainsSoundId = _audio.StartPlayingMovingChainsSound(gameObject);
+        }
+
         private void OnDestroy()
         {
             _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);            
@@ -72,8 +77,6 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
         public async UniTaskVoid PlayIdleAnimation()
         {
-            _movingChainsSoundId = _audio.StartPlayingMovingChainsSound(gameObject);
-
             for (int i = 0; i < _orbitalChains.Count; i++)
             {
                 _orbitalChains[i].DOBlendableLocalRotateBy(Vector3.up, _viewConfig.OrbitalChainRotationSpeeds[i]).SetLoops(-1);
