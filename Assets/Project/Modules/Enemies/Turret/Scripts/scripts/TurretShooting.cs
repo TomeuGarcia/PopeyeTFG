@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.Enemies.Hazards;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -132,6 +133,19 @@ namespace Popeye.Modules.Enemies.Components
             _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
             _outOfGround = true;
         }
+
+        public void StartFighting()
+        {
+            _timer = 0;
+            _currentProjectile = _hazardsFactory.CreateParabolicProjectile(_firePoint, _playerTransform,_playerDistanceThreshold,_playerDistanceThresholdToHide);
+
+        }
+
+        public void StopFighting()
+        {
+            _currentProjectile.Recycle();
+
+        }
         public void InsideGround()
         {
             _outOfGround = false;
@@ -157,5 +171,7 @@ namespace Popeye.Modules.Enemies.Components
         {
             transform.DOComplete();
         }
+        
+        
     }
 }

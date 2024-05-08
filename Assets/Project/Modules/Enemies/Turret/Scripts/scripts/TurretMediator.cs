@@ -77,6 +77,7 @@ namespace Popeye.Modules.Enemies
 
         public void StartShootingAnimation()
         {
+            _turretShooting.StartFighting();
             _turretAnimatorController.PlayShootingAnimation();
         }
 
@@ -106,6 +107,7 @@ namespace Popeye.Modules.Enemies
         }
         public void HideAnimation(bool playerIsTooClose, bool playerIsTooFar)
         {
+            //_turretShooting.StopFighting();
             if (!playerIsTooFar)
             {
                 _turretSounds.PlayTurretDigDown(gameObject);
