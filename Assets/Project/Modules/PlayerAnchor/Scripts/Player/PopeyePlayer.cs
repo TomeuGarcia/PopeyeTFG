@@ -408,58 +408,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayKickAnimation();
         }
 
-        public bool CanSpinAnchor()
-        {
-            return _anchorSpinner.CanSpinningAnchor();
-        }
-
-        public bool IsLockedIntoSpinningAnchor()
-        {
-            return _anchorSpinner.IsLockedIntoSpinningAnchor();
-        }
-
-
-        public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight)
-        {
-            _anchorSpinner.StartSpinningAnchor(startsCarryingAnchor, spinToTheRight);
-            
-            /*
-            _staminaSystem.SetProgressiveSpendPerSecond(_playerGeneralConfig.MovesetConfig.AnchorSpinPerSecondStaminaCost);
-            _staminaSystem.SpendProgressively().Forget();
-
-            _staminaSystem.OnValueExhausted += StopSpinningAnchor;
-            */
-        }
-
-        public void SpinAnchor(float deltaTime)
-        {
-            _anchorSpinner.SpinAnchor(deltaTime);
-        }
-
-        public void StopSpinningAnchor()
-        {
-            _anchorSpinner.StopSpinningAnchor();
-            
-            /*
-            _staminaSystem.StopSpendingProgressively();
-            _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
-            */
-        }
-
-        public void InterruptSpinningAnchor()
-        {
-            _anchorSpinner.InterruptSpinningAnchor();
-            
-            /*
-            _staminaSystem.StopSpendingProgressively();
-            _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
-            */
-        }
-
-        public bool SpinningAnchorFinished()
-        {
-            return _anchorSpinner.SpinningAnchorFinished();
-        }
 
 
         public void OnAnchorEndedInVoid()
@@ -498,9 +446,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             _playerController.CanRotate = true;
         }
-
-
-
 
         public Transform GetTargetForEnemies()
         {
@@ -629,13 +574,17 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnHealed()
         {
             PlayerView.PlayHealAnimation();
-            _playerAudio.PlayHealingPerformedSound();
         }
 
         public void OnHealStart(float durationToComplete, int consecutiveHeals)
         {
             PlayerView.PlayStartHealingAnimation(durationToComplete, consecutiveHeals);
             _playerAudio.StartPlayingHealingPreparationSound();
+        }
+        
+        public void OnHealPerformed()
+        {            
+            _playerAudio.PlayHealingPerformedSound();
         }
         
         public void OnHealInterrupted()

@@ -42,9 +42,10 @@ namespace Popeye.Modules.Enemies.Hazards
         {
             _isPreparingDispense = true;
             
-            Audio.PlayPrepareSound(gameObject);
-            View.PlayPrepareDispensingAnimation(_config.DelayBeforeDispensing);
             await UniTask.Delay(TimeSpan.FromSeconds(_config.DelayBeforeDispensing));
+            Audio.PlayPrepareSound(gameObject);
+            View.PlayPrepareDispensingAnimation(_config.TelegraphBeforeDispensing);
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.TelegraphBeforeDispensing));
             
             
             _isPreparingDispense = false;

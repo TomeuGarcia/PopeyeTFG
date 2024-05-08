@@ -1,6 +1,8 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.Camera.CameraShake;
 using Popeye.Modules.Camera.CameraZoom;
+using Project.General.Scripts.Core.Services.ScreenFade;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
 
@@ -12,7 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly IHitStopManager _hitStopManager;
         private readonly ICameraShaker _cameraShaker;
         private readonly ICameraZoomer _cameraZoomer;
-        
+
         public PlayerGameFeelEffectsView(PlayerGameFeelEffectsViewConfig viewConfig,
             IHitStopManager hitStopManager, ICameraShaker cameraShaker, ICameraZoomer cameraZoomer)
         {
@@ -42,6 +44,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
 
         public void PlayDeathAnimation()
+        {
+        }
+
+        public void PlayDeathFinishAnimation(float duration)
         {
         }
 
