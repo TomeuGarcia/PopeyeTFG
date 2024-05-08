@@ -18,8 +18,13 @@ namespace Popeye.Modules.CombatSystem
         public void Configure(IHealthBehaviourListener listener, int maxHealth, DamageHitTargetType damageHitTargetType,
             Rigidbody knockbackRigidbody)
         {
+            Configure(listener, maxHealth, maxHealth, damageHitTargetType, knockbackRigidbody);
+        }
+        public void Configure(IHealthBehaviourListener listener, int maxHealth, int startingHealth, DamageHitTargetType damageHitTargetType,
+            Rigidbody knockbackRigidbody)
+        {
             _listener = listener;
-            HealthSystem = new HealthSystem(maxHealth);
+            HealthSystem = new HealthSystem(maxHealth, startingHealth);
             _damageHitTargetType = damageHitTargetType;
             
             _knockbackRigidbody = knockbackRigidbody;
