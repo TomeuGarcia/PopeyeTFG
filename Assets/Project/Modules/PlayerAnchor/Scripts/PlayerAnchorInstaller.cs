@@ -22,6 +22,7 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.AnimationDeath;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
@@ -44,6 +45,7 @@ using Popeye.Scripts.Collisions;
 using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
 using Popeye.Scripts.ValueGating;
+using Project.General.Scripts.Core.Services.ScreenFade;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
@@ -95,6 +97,8 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private ChainSpikesSpecialAttackController _spikesSpecialAttack;
         [SerializeField] private AnchorSpinSpecialAttackController _anchorSpinAttack;
 
+        [Header("Player - Death")] 
+        [SerializeField] private PlayerDeathAnimationSequencer _playerDeathAnimationSequencer;
         
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
@@ -315,7 +319,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
-                movesetInputsController, _anchor, playerMovementChecker, _anchorSpinAttack, _spikesSpecialAttack);
+                movesetInputsController, _anchor, playerMovementChecker, _anchorSpinAttack, _spikesSpecialAttack,
+                _playerDeathAnimationSequencer);
             playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.HealthData,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);

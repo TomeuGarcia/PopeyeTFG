@@ -1,6 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
+
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
@@ -18,11 +18,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         
         protected override void DoEnter()
         {
-            WaitForSpawnToFinish().Forget();
             _blackboard.PlayerMediator.SetMaxMovementSpeed(0);
             _blackboard.PlayerMediator.SetCanRotate(false);
             _blackboard.PlayerMediator.PlayerView.PlayDeathAnimation();
 
+            _blackboard.PlayerDeathAnimationSequencer.PlayDeathAnimation();
+            
+            WaitForDeathToFinish().Forget();
         }
 
         public override void Exit()
@@ -43,10 +45,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         }
         
         
-        private async UniTaskVoid WaitForSpawnToFinish()
+        private async UniTaskVoid WaitForDeathToFinish()
         {
             _finishedDying = false;
-            await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.BeforeRespawnDuration));
+
+            await UniTask.WaitUntil(() => !_blackboard.PlayerDeathAnimationSequencer.IsPlayingDeathAnimation);
+            
+            await _blackboard.PlayerDeathAnimationSequencer.FinishAnimation(_blackboard.PlayerView);
+            
             _finishedDying = true;
         }
         
