@@ -121,6 +121,12 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             
             _collider.enabled = false;
             View.PlayDestroyedAnimation();
+
+            if (_fragmentParent == null)
+            {
+                return;
+            }
+            
             _fragmentParent.SetActive(true);
 
             foreach (Rigidbody fragment in _fragmentRigidBodies)
