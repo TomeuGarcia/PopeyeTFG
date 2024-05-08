@@ -10,6 +10,7 @@ using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
 using Project.Modules.Enemies.Turret;
+using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -47,7 +48,7 @@ public class ParabolicProjectile : RecyclableObject
     private float _maxDistance;
 
     private Vector3 _randomTarget;
-
+    private bool _shootWithoutPredict;
 
     private void Update()
     {
@@ -56,7 +57,15 @@ public class ParabolicProjectile : RecyclableObject
 
                 if (_shoot)
                 {
-                    Vector3 playerMoveDir = (_playerTransform.position - _lastFrameTargetPosition).normalized;
+                    Vector3 playerMoveDir;
+                    if (!_shootWithoutPredict)
+                    {
+                        playerMoveDir = (_playerTransform.position - _lastFrameTargetPosition).normalized;
+                    }
+                    else
+                    {
+                        playerMoveDir = Vector3.zero;
+                    }
                     Vector3 predictPos = _playerTransform.position + playerMoveDir * _predictMagnitude;
                     Vector3 direction = predictPos - _firePoint.position;
                     Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
@@ -126,6 +135,11 @@ public class ParabolicProjectile : RecyclableObject
     {
         _shoot = true;
     }
+    public void ShootWithoutPredict()
+    {
+        _shoot = true;
+        _shootWithoutPredict = true;
+    }
 
     public void ShootRandom()
     {
@@ -172,6 +186,7 @@ public class ParabolicProjectile : RecyclableObject
                     _particleFactory.Create(_projectileExplosion, hit.point, startRot);
                     _particleFactory.Create(_projectileArea, hit.point, startRot);
                     Recycle();
+                    TryBreakDestructiblePlatform(hit.collider);
                     t = time * 2;
                 }
                 t += Time.deltaTime * _speed;
@@ -215,5 +230,13 @@ public class ParabolicProjectile : RecyclableObject
     {
         _shoot = false;
         _bulletBody.enabled = false;
+    }
+    
+    private void TryBreakDestructiblePlatform(Collider other)
+    {
+        if (other.TryGetComponent(out DestructiblePlatform destructiblePlatform))
+        {
+            destructiblePlatform.StartBreaking(DestructiblePlatform.BreakMode.BreakOverTime);
+        }
     }
 }
