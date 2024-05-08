@@ -14,16 +14,21 @@ namespace Popeye.Scripts.TextUtilities
         {
             if (_text && _textContent)
             {
-                _text.SetContent(_textContent);    
+                UpdateText();    
             }            
         }
 
         private void Start()
         {
-            _text.SetContent(_textContent);
+            UpdateText();
             Destroy(this);
         }
 
+        [Button()]
+        private void UpdateText()
+        {
+            _text.SetContent(_textContent);
+        }
         
     }
 }
