@@ -2,18 +2,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class PerformingSpecialAttack_PlayerState : APlayerState
     {
-        public class TransitionExitData
-        {
-            public PlayerStates enterState;
-        }
-    
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly TransitionExitData _exitData;
 
-        public PerformingSpecialAttack_PlayerState(PlayerStatesBlackboard blackboard, TransitionExitData exitData)
+        public PerformingSpecialAttack_PlayerState(PlayerStatesBlackboard blackboard)
         {
             _blackboard = blackboard;
-            _exitData = exitData;
         }
 
         
@@ -24,24 +17,19 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
-            if (!_blackboard.PlayerMediator.OnSpecialAttackFinished())
+            if (!_blackboard.PlayerMediator.SpecialAttackHasFinished())
             {
                 _blackboard.PlayerMediator.ForceStopSpecialAttack();
             }
+
+            _blackboard.PlayerMediator.OnSpecialAttackPerformFinished();
         }
 
         public override bool Update(float deltaTime)
         {
-            if (_blackboard.PlayerMediator.OnSpecialAttackFinished())
+            if (_blackboard.PlayerMediator.SpecialAttackHasFinished())
             {
-                if (PopeyePlayer.debugIsSpinning)
-                {
-                    NextState = PlayerStates.MovingWithoutAnchor;
-                }
-                else
-                {
-                    NextState = _exitData.enterState;
-                }
+                NextState = PlayerStates.MovingWithoutAnchor;
                 
                 return true;
             }

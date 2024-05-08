@@ -41,11 +41,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Aux_Texture_2:
-        m_Texture: {fileID: 2800000, guid: f855b2a19acb33242bd2450312b7d70a, type: 3}
+        m_Texture: {fileID: 2800000, guid: f94df5b786d914947a0324c77b5270c7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Aux_Texture_3:
-        m_Texture: {fileID: 2800000, guid: 8ce9b717b1bc7564cbe35664f2f178a7, type: 3}
+        m_Texture: {fileID: 2800000, guid: 28359a541abe6b14192b911202f53acd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SideTexNormalMap:
@@ -113,13 +113,20 @@ Material:
     - _SideSubtraction: 0.25
     - _Side_Texture_Blend: 1
     - _Side_Texture_Tile: 0.075
-    - _Smoothness: 0.5
+    - _Smoothness: 0
     - _Tiling: 0.075
     - _Top_Texture_Blend: 1.3
     - _Top_Texture_Tile: 0.075
     - _WallColorSubtraction: 0
     - _WallSubtraction: 0.1
-    m_Colors: []
+    - _WetColorMultiplier: 0.35
+    - _WetMultiplier: 0.8
+    - _WetNoiseScale: 0
+    - _WetSpreadMultiplier: 1
+    - _WetStrength: 0
+    - _WetWorldHeight: 0.25
+    m_Colors:
+    - _WetColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8426829696783460495
 MonoBehaviour:

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b03dbc39460b4aa38149ed785a8ab2e7, type: 3}
+  m_Name: PlayerDeathAnimationSequenceConfig
+  m_EditorClassIdentifier: 
+  _chainsPositionOffset: {x: 0, y: 2, z: 0}
+  _deathEndDelay: 1
+  _deathMaterials:
+  - {fileID: 2100000, guid: 435c1d4a42161cd4f8137e397937a5c3, type: 2}
+  - {fileID: 2100000, guid: 072ef024d2f3abf46ab9d221dd4d1a72, type: 2}
+  _chainAppearZoom: {fileID: 11400000, guid: bd638f78fd35e734898f3941b55a419d, type: 2}
+  _deathEndZoom: {fileID: 11400000, guid: 2cad90560252a304bbb353e808ce7c6c, type: 2}
+  _deathEndShake: {fileID: 11400000, guid: e8a86e5b069afad41adeb86611b86519, type: 2}
+  _ballGrowDuration: 0.5
+  _delayFadeInDuration: 0.8
+  _fadedOutHalfDuration: 0.5

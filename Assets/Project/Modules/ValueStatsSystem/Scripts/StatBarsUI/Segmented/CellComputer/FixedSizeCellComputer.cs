@@ -24,5 +24,13 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
         {
             return gridLayoutGroup.padding;
         }
+
+        public Vector2 ComputeGeneralHolderSize(int numberOfSegments, GridLayoutGroup gridLayoutGroup, RectTransform holder)
+        {
+            float width = gridLayoutGroup.padding.horizontal + (gridLayoutGroup.cellSize.x * numberOfSegments);
+            float height = gridLayoutGroup.padding.vertical + gridLayoutGroup.cellSize.y;
+                
+            return new Vector2(width, height);     
+        }
     }
 }

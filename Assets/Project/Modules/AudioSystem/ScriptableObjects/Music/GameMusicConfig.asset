@@ -13,6 +13,14 @@ MonoBehaviour:
   m_Name: GameMusicConfig
   m_EditorClassIdentifier: 
   _gameScenesMusicConfig:
+    _scenesToIgnore:
+    - {fileID: 11400000, guid: 5847ee01661c2084c9b895274e367ba3, type: 2}
+    - {fileID: 11400000, guid: c10687e028a4e7842ada002df1654bb2, type: 2}
+    - {fileID: 11400000, guid: 93f4cdf482836554bb22399e22315137, type: 2}
+    _defaultSounds:
+      _sounds:
+      - {fileID: 11400000, guid: ef993eb5ad3131c4086299c7952af13d, type: 2}
+      - {fileID: 11400000, guid: 9da4f2ae452f73245a01bb74a2c8490f, type: 2}
     _soundsByScene:
     - _sceneReference: {fileID: 11400000, guid: 637289a1117ac4c41ba1d851981961d4,
         type: 2}
@@ -23,32 +31,14 @@ MonoBehaviour:
         type: 2}
       _musicSoundsGroup:
         _sounds:
-        - {fileID: 11400000, guid: 3c6a97adc548f5141b1f5a9bfc91db2e, type: 2}
         - {fileID: 11400000, guid: 0358d4b0de4c3934d91faef772b6a88b, type: 2}
+        - {fileID: 11400000, guid: 3c6a97adc548f5141b1f5a9bfc91db2e, type: 2}
     - _sceneReference: {fileID: 11400000, guid: 5c4e58614bc316749a077637545596e8,
         type: 2}
       _musicSoundsGroup:
         _sounds:
-        - {fileID: 11400000, guid: 9da4f2ae452f73245a01bb74a2c8490f, type: 2}
         - {fileID: 11400000, guid: ef993eb5ad3131c4086299c7952af13d, type: 2}
-    - _sceneReference: {fileID: 11400000, guid: a48cd39da5492874c807b966be806b88,
-        type: 2}
-      _musicSoundsGroup:
-        _sounds:
         - {fileID: 11400000, guid: 9da4f2ae452f73245a01bb74a2c8490f, type: 2}
-        - {fileID: 11400000, guid: ef993eb5ad3131c4086299c7952af13d, type: 2}
-    - _sceneReference: {fileID: 11400000, guid: 71d65a40243b8ea4db51e23ab94d693d,
-        type: 2}
-      _musicSoundsGroup:
-        _sounds:
-        - {fileID: 11400000, guid: 9da4f2ae452f73245a01bb74a2c8490f, type: 2}
-        - {fileID: 11400000, guid: ef993eb5ad3131c4086299c7952af13d, type: 2}
-    - _sceneReference: {fileID: 11400000, guid: de782d132dda8294f910d8db5132f435,
-        type: 2}
-      _musicSoundsGroup:
-        _sounds:
-        - {fileID: 11400000, guid: 9da4f2ae452f73245a01bb74a2c8490f, type: 2}
-        - {fileID: 11400000, guid: ef993eb5ad3131c4086299c7952af13d, type: 2}
   _playerStateMusicConfig:
     _gameState:
       _playerGameStatusParameter: {fileID: 11400000, guid: abfea5e42d682ca4a8f06145cc29df57,

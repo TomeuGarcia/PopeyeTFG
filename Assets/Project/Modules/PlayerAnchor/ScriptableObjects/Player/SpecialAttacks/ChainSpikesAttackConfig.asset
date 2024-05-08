@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e56220c96e4d9890118ac692a4117c, type: 3}
+  m_Name: ChainSpikesAttackConfig
+  m_EditorClassIdentifier: 
+  _totalDuration: 0.5
+  _delay: 0.05
+  _chainSpikePoolData:
+    _prefab: {fileID: 7835690730635414577, guid: 34271bec77e35df408823663ee0c3f9d,
+      type: 3}
+    _initialInstances: 10
+  _numberOfSpikePoints: 10
+  _firstSpikePositionRatio: 0.2
+  _lastSpikePositionRatio: 1
+  _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
+  _performSound: {fileID: 11400000, guid: 89dcc2f8c06c90348824571f4f734e3b, type: 2}

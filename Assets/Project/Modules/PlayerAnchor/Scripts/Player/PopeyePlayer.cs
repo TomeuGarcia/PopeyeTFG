@@ -55,9 +55,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public IPlayerView PlayerView { get; private set; }
         public IPlayerHealing PlayerHealing { get; private set; }
-        public IPlayerStaminaPower PlayerStaminaPower => _staminaSystem;
         private PlayerHealth _playerHealth;
-        private PlayerStaminaSystem _staminaSystem;
         
         private PlayerMovementChecker _playerMovementChecker;
         private TransformMotion _playerMotion;
@@ -79,10 +77,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private bool _pullingAnchorFromTheVoid;
 
         private IPlayerFocusController _focusController;
-        private IPlayerSpecialAttackController[] _specialAttackControllers;
-        private int _currentSpecialAttackIndex = 1;
-        public static bool debugIsSpinning = true;
-        private IPlayerSpecialAttackController SpecialAttackController => _specialAttackControllers[_currentSpecialAttackIndex];
+        private IPlayerSpecialAttackController _currentSpecialAttackController;
         
         
         private IPlayerGlobalEventsListener _globalEventsListener;
@@ -98,7 +93,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerFSM stateMachine, PlayerController.PlayerController playerController,
             PlayerGeneralConfig playerGeneralConfig, AnchorGeneralConfig anchorGeneralConfig,
             IPlayerView playerView, IPlayerAudio playerAudio, 
-            IPlayerHealing playerHealing, PlayerHealth playerHealth, PlayerStaminaSystem staminaSystem, 
+            IPlayerHealing playerHealing, PlayerHealth playerHealth,
             PlayerMovementChecker playerMovementChecker, 
             TransformMotion playerMotion, IPlayerInstantTranslation playerInstantTranslation,
             PlayerDasher playerDasher,
@@ -110,7 +105,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IAnchorSpinner anchorSpinner,
             ICheckpointStorerRead  deathRespawnCheckpointChecker, ISafeGroundChecker safeGroundChecker, 
             IOnVoidChecker onVoidChecker,
-            IPlayerFocusController focusController, IPlayerSpecialAttackController[] specialAttackControllers,
+            IPlayerFocusController focusController,
             IPlayerGlobalEventsListener globalEventsListener, IPlayerEventsDispatcher eventsDispatcher)
         {
             _playerInputsUpdater = playerInputsUpdater;
@@ -121,7 +116,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView = playerView;
             PlayerHealing = playerHealing;
             _playerHealth = playerHealth;
-            _staminaSystem = staminaSystem;
             _playerMovementChecker = playerMovementChecker;
             _playerMotion = playerMotion;
             _playerInstantTranslation = playerInstantTranslation;
@@ -145,15 +139,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
             _focusController = focusController;
             _focusDropCollector.Init(_focusController);
-            
-            _specialAttackControllers = specialAttackControllers;
+
+            _currentSpecialAttackController = null;
             
             SetCanUseRotateInput(false);
             SetCanFallOffLedges(false);
             SetInstantRotation(false);
             OnStopMoving();
-            
-            debugIsSpinning = _currentSpecialAttackIndex == 1;
         }
         
         private void OnDestroy()
@@ -169,31 +161,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
-
-            if (Input.GetKeyDown(KeyCode.Alpha0))
-            {
-                Debug.Log("Special Attack: RAGE");
-                _currentSpecialAttackIndex = 0;
-                debugIsSpinning = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                Debug.Log("Special Attack: SPIN");
-                _currentSpecialAttackIndex = 1;
-                debugIsSpinning = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                Debug.Log("Special Attack: SPIKES");
-                _currentSpecialAttackIndex = 2;
-                debugIsSpinning = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                Debug.Log("Special Attack: CHAINSAW");
-                _currentSpecialAttackIndex = 3;
-                debugIsSpinning = false;
-            }
         }
 
         private void FixedUpdate()
@@ -441,58 +408,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayKickAnimation();
         }
 
-        public bool CanSpinAnchor()
-        {
-            return _anchorSpinner.CanSpinningAnchor();
-        }
-
-        public bool IsLockedIntoSpinningAnchor()
-        {
-            return _anchorSpinner.IsLockedIntoSpinningAnchor();
-        }
-
-
-        public void StartSpinningAnchor(bool startsCarryingAnchor, bool spinToTheRight)
-        {
-            _anchorSpinner.StartSpinningAnchor(startsCarryingAnchor, spinToTheRight);
-            
-            /*
-            _staminaSystem.SetProgressiveSpendPerSecond(_playerGeneralConfig.MovesetConfig.AnchorSpinPerSecondStaminaCost);
-            _staminaSystem.SpendProgressively().Forget();
-
-            _staminaSystem.OnValueExhausted += StopSpinningAnchor;
-            */
-        }
-
-        public void SpinAnchor(float deltaTime)
-        {
-            _anchorSpinner.SpinAnchor(deltaTime);
-        }
-
-        public void StopSpinningAnchor()
-        {
-            _anchorSpinner.StopSpinningAnchor();
-            
-            /*
-            _staminaSystem.StopSpendingProgressively();
-            _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
-            */
-        }
-
-        public void InterruptSpinningAnchor()
-        {
-            _anchorSpinner.InterruptSpinningAnchor();
-            
-            /*
-            _staminaSystem.StopSpendingProgressively();
-            _staminaSystem.OnValueExhausted -= StopSpinningAnchor;
-            */
-        }
-
-        public bool SpinningAnchorFinished()
-        {
-            return _anchorSpinner.SpinningAnchorFinished();
-        }
 
 
         public void OnAnchorEndedInVoid()
@@ -505,12 +420,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnPlayerFellOnVoid()
         {
             _onVoidChecker.ClearState();
-        }
-
-        public bool TakeFellOnVoidDamage()
-        {
-            _playerHealth.TakeVoidFallDamage();
-            return _playerHealth.IsDead();
         }
 
         public void OnTryUsingObstructedAnchor()
@@ -537,9 +446,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             _playerController.CanRotate = true;
         }
-
-
-
 
         public Transform GetTargetForEnemies()
         {
@@ -642,15 +548,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerHealth.SetInvulnerableForDuration(duration);
         }
         
-        public bool HasStaminaLeft()
-        {
-            return _staminaSystem.HasStaminaLeft();
-        }
-        public bool HasMaxStamina()
-        {
-            return _staminaSystem.HasMaxStamina();
-        }
-        
         public void OnDamageTaken(DamageHitResult damageHitResult)
         {
             PlayerView.PlayTakeDamageAnimation();
@@ -682,78 +579,67 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnHealStart(float durationToComplete, int consecutiveHeals)
         {
             PlayerView.PlayStartHealingAnimation(durationToComplete, consecutiveHeals);
+            _playerAudio.StartPlayingHealingPreparationSound();
+        }
+        
+        public void OnHealPerformed()
+        {            
+            _playerAudio.PlayHealingPerformedSound();
         }
         
         public void OnHealInterrupted()
         {
             PlayerView.PlayHealingInterruptedAnimation();
+            _playerAudio.StopPlayingHealingPreparationSound();
         }
 
         
         
-        public bool CanDoSpecialAttack()
-        {
-            return SpecialAttackController.CanDoSpecialAttack();
-        }
+        
 
-        public void OnSpecialAttackPreparationStart(float durationToComplete)
+        public void OnSpecialAttackPreparationStart(IPlayerSpecialAttackController specialAttackController, float durationToComplete)
         {
+            _currentSpecialAttackController = specialAttackController;
+            _currentSpecialAttackController.OnPreparationStart(durationToComplete);
             PlayerView.PlayStartEnteringSpecialAttackAnimation(durationToComplete);
         }
 
         public void OnSpecialAttackPreparationInterrupted()
         {
+            _currentSpecialAttackController.OnPreparationInterrupted();
             PlayerView.PlaySpecialAttackInterruptedAnimation();
         }
 
         public void OnSpecialAttackPerformed()
         {
             PlayerView.PlaySpecialAttackAnimation();
-            SpecialAttackController.StartSpecialAttack();
-            WaitForSpecialAttackFinished().Forget();
+            _currentSpecialAttackController.StartSpecialAttack();
             
-            _eventsDispatcher.DispatchSpecialAttackPerformed();
-            _eventsDispatcher.DispatchOnStartActionEvent("Enter Rage", Position);
+            _eventsDispatcher.DispatchOnStartActionEvent(_currentSpecialAttackController.Name, Position);
         }
-        public bool OnSpecialAttackFinished()
+
+        public void OnSpecialAttackPerformFinished()
         {
-            return SpecialAttackController.SpecialAttackHasFinished();
+            PlayerView.PlaySpecialAttackFinishAnimation();
+        }
+
+        public bool SpecialAttackHasFinished()
+        {
+            return _currentSpecialAttackController.SpecialAttackHasFinished();
         }
 
         public void ForceStopSpecialAttack()
         {
-            SpecialAttackController.ForceStopSpecialAttack();
+            _currentSpecialAttackController.ForceStopSpecialAttack();
         }
 
-        private async UniTaskVoid WaitForSpecialAttackFinished()
-        {
-            await UniTask.WaitUntil(() => !SpecialAttackController.SpecialAttackIsBeingPerformed());
-            PlayerView.PlaySpecialAttackFinishAnimation();
-        }
-        
-        
-        
+
 
         private void SpendStamina(int spendAmount)
         {
-            if (spendAmount == 0) return;
             
-            _staminaSystem.Spend(spendAmount);
-            if (!_staminaSystem.HasStaminaLeft())
-            {
-                OnStaminaExhausted();
-            }
         }
 
-        private void OnStaminaExhausted()
-        {
-            EnterTiredState();
-        }
-
-        private void EnterTiredState()
-        {
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.Tired);
-        }
 
     }
 }

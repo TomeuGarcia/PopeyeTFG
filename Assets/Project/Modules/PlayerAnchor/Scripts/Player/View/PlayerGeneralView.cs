@@ -55,6 +55,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
             }
         }
 
+        public void PlayDeathFinishAnimation(float duration)
+        {
+            foreach (IPlayerView playerView in _subPlayerViews)
+            {
+                playerView.PlayDeathFinishAnimation(duration);
+            }
+        }
+
         public void PlayHealAnimation()
         {
             foreach (IPlayerView playerView in _subPlayerViews)

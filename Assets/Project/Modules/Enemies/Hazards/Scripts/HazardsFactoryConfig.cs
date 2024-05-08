@@ -8,34 +8,19 @@ namespace Popeye.Modules.Enemies.Hazards
         menuName = ScriptableObjectsHelper.HAZARDS_ASSET_PATH + "HazardsFactoryConfig")]
     public class HazardsFactoryConfig : ScriptableObject
     {
-        [System.Serializable]
-        public class PoolData<T> where T : RecyclableObject
-        {
-            [SerializeField] private T _prefab;
-            [SerializeField] private int _initialInstances = 15;
-            
-            public ObjectPool ToObjectPool(Transform parent)
-            {
-                ObjectPool objectPool = new ObjectPool(_prefab, parent);
-                objectPool.Init(_initialInstances);
-                return objectPool;
-            }
-        }
-
-        
-        [SerializeField] private PoolData<AreaDamageOverTime> _areaDamagePoolData;
+        [SerializeField] private ObjectPoolData<AreaDamageOverTime> _areaDamagePoolData;
         [Space(10)]
-        [SerializeField] private PoolData<ParabolicProjectile> _parabolicProjectilePoolData;
+        [SerializeField] private ObjectPoolData<ParabolicProjectile> _parabolicProjectilePoolData;
         [Space(10)]
-        [SerializeField] private PoolData<FlatStraightProjectile> _flatStraightProjectilePoolData;
+        [SerializeField] private ObjectPoolData<FlatStraightProjectile> _flatStraightProjectilePoolData;
         [Space(10)]
-        [SerializeField] private PoolData<Explosion> _explosionProjectilePoolData;
+        [SerializeField] private ObjectPoolData<Explosion> _explosionProjectilePoolData;
         
         
-        public PoolData<AreaDamageOverTime> AreaDamagePoolData => _areaDamagePoolData;
-        public PoolData<ParabolicProjectile> ParabolicProjectilePoolData => _parabolicProjectilePoolData;
-        public PoolData<FlatStraightProjectile> FlatStraightProjectilePoolData => _flatStraightProjectilePoolData;
-        public PoolData<Explosion> ExplosionProjectilePoolData => _explosionProjectilePoolData;
+        public ObjectPoolData<AreaDamageOverTime> AreaDamagePoolData => _areaDamagePoolData;
+        public ObjectPoolData<ParabolicProjectile> ParabolicProjectilePoolData => _parabolicProjectilePoolData;
+        public ObjectPoolData<FlatStraightProjectile> FlatStraightProjectilePoolData => _flatStraightProjectilePoolData;
+        public ObjectPoolData<Explosion> ExplosionProjectilePoolData => _explosionProjectilePoolData;
         
 
     }

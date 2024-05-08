@@ -20,6 +20,8 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         [SerializeField] private AnimationCurve _bendingWeightCurve;
 
+        [Header("CHAIN DISTANCE")] 
+        [SerializeField, Range(-10.0f, 10.0f)] private float _extraChainDistance = 0.0f;
         
         public CollisionProbingConfig CollisionProbingConfig => _collisionProbingConfig;
         
@@ -28,5 +30,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         
         
         public AnimationCurve BendingWeightCurve => _bendingWeightCurve;
+        
+        public float ExtraChainDistance => _extraChainDistance;
     }
 }

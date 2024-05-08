@@ -96,7 +96,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SpecialAttack",
+                    "name": "SpecialAttack_AnchorSpin",
                     "type": "Button",
                     "id": "4925b897-cadd-41d6-8352-231177a78d8d",
                     "expectedControlType": "Button",
@@ -105,22 +105,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SpinAttack_Left",
+                    "name": "SpecialAttack_ChainSpikes",
                     "type": "Button",
-                    "id": "17d85603-1a90-47d9-917e-cc356eb35805",
+                    "id": "32a26b19-085b-4773-8789-376a57e5547c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "SpinAttack_Right",
-                    "type": "Button",
-                    "id": "05aeea65-99ae-4f92-bd62-18303f77ade2",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 },
                 {
                     "name": "NullAction",
@@ -487,56 +478,12 @@
                 },
                 {
                     "name": "",
-                    "id": "23820e23-7581-4a5d-a0d0-0b94ccac9ea5",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Desktop",
-                    "action": "SpinAttack_Left",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a3e4affc-fba9-4224-91f2-ef03d5e6f495",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Desktop",
-                    "action": "SpinAttack_Left",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d5782112-eac4-4f93-9297-e0b4a4527aa0",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Desktop",
-                    "action": "SpinAttack_Right",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9ce53902-398d-487e-a284-4cc2c0ffc1a0",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Desktop",
-                    "action": "SpinAttack_Right",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f1b3f6e2-de5f-4252-b981-f7e4bc154fc8",
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "SpecialAttack",
+                    "groups": "Desktop",
+                    "action": "SpecialAttack_AnchorSpin",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -546,8 +493,8 @@
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "SpecialAttack",
+                    "groups": "Desktop",
+                    "action": "SpecialAttack_AnchorSpin",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -559,6 +506,28 @@
                     "processors": "",
                     "groups": "Desktop",
                     "action": "NullAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3db7ed1-5f94-440f-bcb3-314c362da013",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "SpecialAttack_ChainSpikes",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b2b473c8-51be-4ae4-b508-45bce3e89cf0",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "SpecialAttack_ChainSpikes",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

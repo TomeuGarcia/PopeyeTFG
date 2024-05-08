@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
+using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using NaughtyAttributes;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
@@ -11,6 +11,14 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         
     public class Barrier : AWorldInteractor
     {
+        [Header("AUDIO")]        
+        [SerializeField] private BarrierAudio _audio;
+        [SerializeField] private GameObject _soundsSource;
+
+        [Header("VIEW")] 
+        [SerializeField] private InterfaceReference<IBarrierView, MonoBehaviour> _viewReference;
+        private IBarrierView _view;
+
         [Header("ACTIVATED")]
         [SerializeField] private bool _activatedColliderEnabledState = true;
         [SerializeField] private Transform _activatedStateSpot;
@@ -27,6 +35,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         [SerializeField] private Transform _barrierTransform;
         [SerializeField] private Collider _collider;
         [SerializeField] private bool _startActivated = false;
+
 
         private bool _isActivated = false;
 
@@ -52,25 +61,35 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             }
 
             SetCollisionEnabled(_startActivated);
+
+            if (_soundsSource == null)
+            {
+                _soundsSource = gameObject;
+            }
+
+            _view = _viewReference.Value ?? new NullBarrierView();
         }
 
         protected override void DoEnterActivatedState()
         {
-            SetState(_activatedStateSpot, _activatedEase.Value);
-            SetCollisionEnabled(true);
+            SetActivatedState(_activatedStateSpot, _activatedEase.Value).Forget();
             _isActivated = true;
+            
+            _audio.PlayActivatedSound(_soundsSource);
         }
 
         protected override void DoEnterDeactivatedState()
         {
-            SetState(_deactivatedStateSpot, _deactivatedEase.Value);
+            SetDeactivatedState(_deactivatedStateSpot, _deactivatedEase.Value).Forget();
             SetCollisionEnabledDelayed(false, DeactivateDuration).Forget();
             _isActivated = false;
+            
+            _audio.PlayDeactivatedSound(_soundsSource);
         }
 
         public override async UniTask EnterActivatedStateAwait()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(ActivateDuration), ignoreTimeScale: true);
+            await UniTask.Delay(TimeSpan.FromSeconds(ActivateDuration + _view.ActivateDuration), ignoreTimeScale: true);
         }
 
         private void SetStateInstantly(Transform goalStateSpot)
@@ -79,14 +98,26 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             _barrierTransform.rotation = goalStateSpot.rotation;
         }
         
-        private void SetState(Transform goalStateSpot, TweenEaseConfig easeConfig)
+        private async UniTaskVoid SetActivatedState(Transform goalStateSpot, TweenEaseConfig easeConfig)
+        {
+            await _view.PlayActivateAnimation();        
+            DoSetState(goalStateSpot, easeConfig).Forget();
+            SetCollisionEnabled(true);
+        }
+        private async UniTaskVoid SetDeactivatedState(Transform goalStateSpot, TweenEaseConfig easeConfig)
+        {
+            await DoSetState(goalStateSpot, easeConfig);
+            await _view.PlayDeactivateAnimation();        
+        }
+        private async UniTask DoSetState(Transform goalStateSpot, TweenEaseConfig easeConfig)
         {
             _barrierTransform.DOMove(goalStateSpot.position, easeConfig.Duration)
                 .SetUpdate(true)
                 .SetEase(easeConfig);
-            _barrierTransform.DORotateQuaternion(goalStateSpot.rotation, easeConfig.Duration)
+            await _barrierTransform.DORotateQuaternion(goalStateSpot.rotation, easeConfig.Duration)
                 .SetUpdate(true)
-                .SetEase(easeConfig);
+                .SetEase(easeConfig)
+                .AsyncWaitForCompletion();
         }
 
 

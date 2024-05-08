@@ -31,6 +31,7 @@ namespace Popeye.Modules.VFX.Generic
         [Header("ELEMENTS")]
         [SerializeField] private EnvironmentElement _water;
         [SerializeField] private EnvironmentElement _rain;
+        [SerializeField] private EnvironmentElement _wind;
         
         private EnvironmentElement[] _environmentElements;
 
@@ -44,8 +45,9 @@ namespace Popeye.Modules.VFX.Generic
         {
             _water.config = environmentFollowData.waterConfig;
             _rain.config = environmentFollowData.rainConfig;
+            _wind.config = environmentFollowData.windConfig;
             
-            _environmentElements = new[] { _water, _rain };
+            _environmentElements = new[] { _water, _rain, _wind };
         }
         
         

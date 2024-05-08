@@ -15,7 +15,7 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
 
         ~PlayerStateMusicTransitionController()
         {
-            TransitionToDefault();
+            //TransitionToDefault();
         }
 
 

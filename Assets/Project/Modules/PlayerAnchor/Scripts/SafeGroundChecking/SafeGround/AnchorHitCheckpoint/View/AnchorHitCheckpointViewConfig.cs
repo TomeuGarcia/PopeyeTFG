@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Popeye.Modules.AudioSystem;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -46,25 +47,51 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
         {
             [SerializeField, Range(0.01f, 10.0f)] private float _firstTimeUsedDuration = 3.0f;
             [SerializeField] private string _animationTProperty = "_AnimationT";
+            [SerializeField, Range(0.01f, 10.0f)] private float _setCurrentCheckpointDuration = 0.5f;
+            [SerializeField] private string _currentCheckpointProperty = "_IsCurrentCheckpoint";
             [SerializeField] private Color _lockedColor = Color.green;
             [SerializeField] private Color _unlockedColor = Color.yellow;
             
             public float FirstTimeUsedDuration => _firstTimeUsedDuration;
             public int AnimationTPropertyID { get; private set; }
+            public float SetCurrentCheckpointDuration => _setCurrentCheckpointDuration;
+            public int CurrentCheckpointProperty { get; private set; }
             public Color LockedColor => _lockedColor;
             public Color UnlockedColor => _unlockedColor;
 
             public void PrepareForUser()
             {
                 AnimationTPropertyID = Shader.PropertyToID(_animationTProperty);
+                CurrentCheckpointProperty = Shader.PropertyToID(_currentCheckpointProperty);
             } 
+        }
+
+        [System.Serializable]
+        public class AudioConfig
+        {
+            [SerializeField] private AFMODAudioManagerReference _audioManager;
+            [SerializeField] private OneShotFMODSound _checkpointSetSound;
+            [SerializeField] private OneShotFMODSound _hitSound;
+
+            public void PlayCheckpointSetSound()
+            {
+                _audioManager.PlayOneShot(_checkpointSetSound);
+            }
+            public void PlayHitSound(GameObject source)
+            {
+                _audioManager.PlayOneShotAttached(_hitSound, source);
+            }
         }
 
 
         [SerializeField] private BouncesViewConfig _bouncesView;
+        [Space(15)]
         [SerializeField] private VFXViewConfig _vfxView;
+        [Space(15)]
+        [SerializeField] private AudioConfig _audio;
         public BouncesViewConfig BouncesView => _bouncesView;
         public VFXViewConfig VFXView => _vfxView;
+        public AudioConfig Audio => _audio;
 
 
 

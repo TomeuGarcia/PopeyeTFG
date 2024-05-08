@@ -8,7 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     [CreateAssetMenu(fileName = "AnchorDamageConfig", 
         menuName = ScriptableObjectsHelper.ANCHOR_ASSETS_PATH + "AnchorDamageConfig")]
-    public class AnchorDamageConfig : ScriptableObject, ISpecialAttackToggleable
+    public class AnchorDamageConfig : ScriptableObject, IRageSpecialAttackToggleable
     {
         [Header("THROW")]
         [Expandable] [SerializeField] private DamageHitConfig _throwDamageHit;

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb0498a4f6f46abac53cee45ca459c2, type: 3}
+  m_Name: AnchorSpinAttackConfig
+  m_EditorClassIdentifier: 
+  _numberOfLoops: 2
+  _preparationDuration: 0.5
+  _totalDuration: 1
+  _startPositioningDuration: 0.2
+  _endPositioningDuration: 0.15
+  _startSpinDistance: 4
+  _endSpinDistance: 7
+  _obstacleCollisionProbing: {fileID: 11400000, guid: fe781d398af7571499f4602c4acaeaf8,
+    type: 2}
+  _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
+  _performSound: {fileID: 11400000, guid: d63edbbdd2d5d1f4383de70c0d8f76f1, type: 2}

@@ -21,19 +21,20 @@ namespace Popeye.Modules.Enemies.Hazards
 
         public void ResetView()
         {
-            _testTweenTransform.localScale = Vector3.one;
+            _testTweenTransform.localScale = new Vector3(0.2f, 1.0f, 1.0f);
         }
 
         public void PlayStartShootAnimation()
         {
-            _testTweenTransform.PunchScale(_config.StartShootScalePunch);
+            //_testTweenTransform.PunchScale(_config.StartShootScalePunch);
+            _testTweenTransform.DOScale(Vector3.one, 0.1f);
         }
 
         public async UniTask PlayObjectContactAnimation()
         {
-            _testTweenTransform.DOComplete();
-            await _testTweenTransform.PunchScale(_config.ObjectContactScalePunch)
-                .AsyncWaitForCompletion();
+            //_testTweenTransform.DOComplete();
+            //await _testTweenTransform.PunchScale(_config.ObjectContactScalePunch)
+            //    .AsyncWaitForCompletion();
         }
 
         public void PlayDisappearAnimation(float duration)

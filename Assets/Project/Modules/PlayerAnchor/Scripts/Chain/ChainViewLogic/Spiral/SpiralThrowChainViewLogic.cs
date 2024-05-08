@@ -20,7 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Chain
         private float _duration;
         private float _time;
 
-        
+
 
         private float StateTransitionDuration => _logicConfig.StateTransitionDuration;
         private Ease StateTransitionEase => _logicConfig.StateTransitionEase;
@@ -42,11 +42,15 @@ namespace Popeye.Modules.PlayerAnchor.Chain
 
             _chainPositions = new Vector3[_chainBoneCount];
         }
+
+        public float PositionsExtraDistance => _logicConfig.ExtraChainDistance;
+
         
         public void EnterSetup(float duration)
         {
             _duration = duration * DurationMultiplier;
         }
+
 
 
         public void OnViewEnter(Vector3[] previousStateChainPositions, Vector3 playerBindPosition, Vector3 anchorBindPosition)

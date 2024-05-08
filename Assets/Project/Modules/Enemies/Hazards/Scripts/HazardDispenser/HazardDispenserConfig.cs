@@ -8,10 +8,12 @@ namespace Popeye.Modules.Enemies.Hazards
     public class HazardDispenserConfig : ScriptableObject
     {
         [Header("LOGIC")]
-        [SerializeField, Range(0f, 10.0f)] private float _delayBeforeDispensing = 0.5f;
+        [SerializeField, Range(0f, 10.0f)] private float _delayBeforeDispensing = 0.0f;
+        [SerializeField, Range(0f, 10.0f)] private float _telegraphBeforeDispensing = 0.5f;
         [SerializeField, Range(0f, 10.0f)] private float _cooldownAfterDispensing = 2.0f;
 
         public float DelayBeforeDispensing => _delayBeforeDispensing;
+        public float TelegraphBeforeDispensing => _telegraphBeforeDispensing;
         public float CooldownAfterDispensing => _cooldownAfterDispensing;
 
 

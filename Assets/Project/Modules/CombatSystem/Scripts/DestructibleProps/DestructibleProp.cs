@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -7,6 +8,7 @@ using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerController.AutoAim;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using Project.Scripts.TweenExtensions;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem.Testing.Scripts
@@ -17,10 +19,14 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private Collider _collider;
         [SerializeField] private InterfaceReference<IDestructiblePropView, MonoBehaviour> _view;
+        
+        [SerializeField] private GameObject _fragmentParent;
+        [SerializeField] private List<Rigidbody> _fragmentRigidBodies = new();
 
         [Header("CONFIGURATION")]
         [SerializeField] private DestructiblePropConfig _config;
         [SerializeField] private AutoAimTargetDataConfig _autoAimTargetDataConfig;
+        [SerializeField] private float _hitForce;
 
         public HealthSystem HealthSystem { get; private set; }
         private IDestructiblePropView View => _view.Value;
@@ -84,7 +90,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             
             if (HealthSystem.IsDead())
             {
-                OnKilledByDamage().Forget();
+                OnKilledByDamage(damageHit).Forget();
             }
             else
             { 
@@ -109,11 +115,18 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         {
             View.PlayTakeDamageAnimation();
         }
-        private async UniTaskVoid OnKilledByDamage()
+        private async UniTaskVoid OnKilledByDamage(DamageHit damageHit)
         {
+            _config.PlayDestroyedSound(gameObject);
+            
             _collider.enabled = false;
-            await View.PlayDestroyedAnimation();
-            gameObject.SetActive(false);
+            View.PlayDestroyedAnimation();
+            _fragmentParent.SetActive(true);
+
+            foreach (Rigidbody fragment in _fragmentRigidBodies)
+            {
+                fragment.AddForce((fragment.transform.position - damageHit.DamageSourcePosition).normalized * _hitForce, ForceMode.Impulse);
+            }
         }
         
         

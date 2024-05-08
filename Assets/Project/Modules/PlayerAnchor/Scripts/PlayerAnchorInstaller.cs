@@ -22,12 +22,12 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.DropShadow;
+using Popeye.Modules.PlayerAnchor.Player.AnimationDeath;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
-using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Chainsaws;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
@@ -45,6 +45,7 @@ using Popeye.Scripts.Collisions;
 using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
 using Popeye.Scripts.ValueGating;
+using Project.General.Scripts.Core.Services.ScreenFade;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
@@ -94,8 +95,11 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PowerBoostDropFactoryConfig _powerBoostDropFactoryConfig;
         private PlayerAbilitiesToUnlockHolder _abilitiesToUnlockHolder;
         [SerializeField] private ChainSpikesSpecialAttackController _spikesSpecialAttack;
-        [SerializeField] private ChainFollowerAttackController _chainFollowerAttackController;
+        [SerializeField] private AnchorSpinSpecialAttackController _anchorSpinAttack;
 
+        [Header("Player - Death")] 
+        [SerializeField] private PlayerDeathAnimationSequencer _playerDeathAnimationSequencer;
+        
         [Header("Player - AutoAim")] 
         [SerializeField] private AutoAimCreator _autoAimCreator;
 
@@ -261,7 +265,6 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
             TransformMotion playerMotion = new TransformMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
-            PlayerStaminaSystem playerStamina = new PlayerStaminaSystem(_playerGeneralConfig.StaminaConfig);
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
             PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
@@ -280,26 +283,18 @@ namespace Popeye.Modules.PlayerAnchor
 
             PlayerFocusController playerFocusController =
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
-            ISpecialAttackToggleable[] specialAttackToggleables = 
-                { _anchorGeneralConfig.DamageConfig, _playerGeneralConfig.StatesConfig };
-            
-            PlayerFocusSpecialAttackController playerSpecialAttackController
-                = new PlayerFocusSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig,
-                    specialAttackToggleables);
 
-            _spikesSpecialAttack.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
-            _chainFollowerAttackController.Configure(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor);
-            AnchorSpinSpecialAttackController anchorSpinSpecialAttackController = 
-                new AnchorSpinSpecialAttackController(playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
+            _spikesSpecialAttack.Configure(
+                _playerGeneralConfig.SpecialAttacksConfig.ChainSpikesAttackConfig,
+                _anchorChain, playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor,
+                _playerGeneralConfig.AbilityActionChannels.ChainSpikesAttackDispatcher);
+            
+            _anchorSpinAttack.Configure(
+                    _playerGeneralConfig.SpecialAttacksConfig.AnchorSpinAttackConfig,
+                    playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, 
                     _anchor, anchorMotion, _player,
-                    _anchorGeneralConfig.ThrowConfig.EndRotationCorrection);
-            IPlayerSpecialAttackController[] playerSpecialAttacks =
-            {
-                playerSpecialAttackController,
-                anchorSpinSpecialAttackController,
-                _spikesSpecialAttack,
-                _chainFollowerAttackController
-            };
+                    _anchorGeneralConfig.ThrowConfig.EndRotationCorrection,
+                    _playerGeneralConfig.AbilityActionChannels.AnchorSpinAttackDispatcher);
 
             FocusPlayerHealing playerHealing = 
                 new FocusPlayerHealing(playerHealth, _playerGeneralConfig.FocusConfig.HealingConfig, playerFocusController);
@@ -315,9 +310,7 @@ namespace Popeye.Modules.PlayerAnchor
                     _playerGeneralConfig.FocusConfig.FocusBoostEventChannel, playerFocusController,
                     battleInteractionsController, playerHealth);
             PlayerEventsDispatcher playerEventsDispatcher =
-                new PlayerEventsDispatcher(eventSystemService, 
-                    _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher,
-                    _playerGeneralConfig.AbilityActionChannels.SpecialAttackDispatcher);
+                new PlayerEventsDispatcher(eventSystemService, _playerGeneralConfig.AbilityActionChannels.DashTowardsAnchorDispatcher);
             
             _popeyePlayerPlacer = new PopeyePlayerPlacer(_placePopeyePlayerEventChannel, 
                 playerInstantTranslation, playerStateMachine, _environmentFollower, _playerPlacerCheckpointCreator,
@@ -326,7 +319,8 @@ namespace Popeye.Modules.PlayerAnchor
             
             _playerController.AwakeConfigure();
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
-                movesetInputsController, _anchor, playerMovementChecker);
+                movesetInputsController, _anchor, playerMovementChecker, _anchorSpinAttack, _spikesSpecialAttack,
+                _playerDeathAnimationSequencer);
             playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.HealthData,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
@@ -341,11 +335,11 @@ namespace Popeye.Modules.PlayerAnchor
             
             _player.Configure(movesetInputsController, 
                 playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                playerView, playerAudio, playerHealing, playerHealth, playerStamina, playerMovementChecker, 
+                playerView, playerAudio, playerHealing, playerHealth, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
                 _playerCheckpointStorer, playerSafeGroundChecker, 
-                playerOnVoidChecker, playerFocusController, playerSpecialAttacks,
+                playerOnVoidChecker, playerFocusController,
                 playerGlobalEventsListener, playerEventsDispatcher);
 
 
@@ -353,7 +347,7 @@ namespace Popeye.Modules.PlayerAnchor
             playerStateMachine.Configure(playerStatesBlackboard, playerStatesCreator);
             
             // HUD
-            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerStamina.BaseStamina, playerFocusController);
+            _playerHUD.Configure(_playerHealthBehaviour.HealthSystem, playerFocusController);
             playerFocusController.Init();
             
             PowerBoostDropFactory powerBoostDropFactory =
@@ -507,7 +501,8 @@ namespace Popeye.Modules.PlayerAnchor
                 out IGateValueReader<InputPressedBuffer> pullInput,
                 out IGateValueReader<InputPressedBuffer> dashTowardsAnchorInput,
                 out IGateValueReader<InputAction> dashDroppingAnchorInput,
-                out IGateValueReader<InputAction> specialAttackInput
+                out IGateValueReader<InputAction> spinAttackInput,
+                out IGateValueReader<InputAction> spikesAttackInput
             );
             abilityGatesCreator.GetReadDashDroppingAnchorThrow(
                 out dashDroppingAnchorThrowerGate
@@ -523,7 +518,8 @@ namespace Popeye.Modules.PlayerAnchor
                 pullInput,
                 dashTowardsAnchorInput,
                 dashDroppingAnchorInput,
-                specialAttackInput
+                spinAttackInput,
+                spikesAttackInput
             );
 
         }

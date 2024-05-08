@@ -1,3 +1,4 @@
+using Popeye.Modules.AudioSystem;
 using Popeye.ProjectHelpers;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
@@ -14,6 +15,11 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         
         [Header("VIEW")] 
         [SerializeField] private ViewConfigData _viewConfig;
+        [SerializeField] private float _fragmentForce;
+        
+        [Header("AUDIO")] 
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        [SerializeField] private OneShotFMODSound _destroyedSound;
         
 
         [System.Serializable]
@@ -35,6 +41,12 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         public int MaxHealth => _maxHealth;
         public float KnockbackResistance => _knockbackResistance;
         public ViewConfigData ViewConfig => _viewConfig;
+
+
+        public void PlayDestroyedSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_destroyedSound, source);
+        }
 
     }
 }

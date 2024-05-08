@@ -1,21 +1,26 @@
 using Popeye.Modules.PlayerAnchor.Player.PlayerStateConfigurations;
 using Popeye.Modules.PlayerController.Inputs;
 using Popeye.Modules.PlayerAnchor.Anchor;
+using Popeye.Modules.PlayerAnchor.Player.AnimationDeath;
+using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 {
     public class PlayerStatesBlackboard
     {
         public PlayerStatesConfig PlayerStatesConfig { get; private set; }
-        public IPlayerMediator PlayerMediator { get; private set;  }
+        public IPlayerMediator PlayerMediator { get; private set; }
         public IPlayerView PlayerView { get; private set; }
-        public PlayerAnchorMovesetInputsController MovesetInputsController { get; private set;  }
-        public IAnchorMediator AnchorMediator { get; private set;  }
-        public PlayerMovementChecker PlayerMovementChecker { get; private set;  }
+        public PlayerAnchorMovesetInputsController MovesetInputsController { get; private set; }
+        public IAnchorMediator AnchorMediator { get; private set; }
+        public PlayerMovementChecker PlayerMovementChecker { get; private set; }
+        
+        
+        public IPlayerSpecialAttackController AnchorSpinAttackController { get; private set; }
+        public IPlayerSpecialAttackController ChainSpikesAttackController { get; private set; }
 
-        // Queues
-        public bool spinAttackTowardsRight;
 
+        public PlayerDeathAnimationSequencer PlayerDeathAnimationSequencer { get; private set; }
 
         public PlayerStates CameFromState { get; set; }
         
@@ -26,7 +31,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             IPlayerMediator playerMediator, IPlayerView playerView,
             PlayerAnchorMovesetInputsController movesetInputsController,
             IAnchorMediator anchorMediator,
-            PlayerMovementChecker playerMovementChecker)
+            PlayerMovementChecker playerMovementChecker,
+            IPlayerSpecialAttackController anchorSpinAttackController,
+            IPlayerSpecialAttackController chainSpikesAttackController,
+            PlayerDeathAnimationSequencer playerDeathAnimationSequencer)
         {
             PlayerStatesConfig = playerStatesConfig;
             PlayerMediator = playerMediator;
@@ -34,6 +42,9 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             MovesetInputsController = movesetInputsController;
             AnchorMediator = anchorMediator;
             PlayerMovementChecker = playerMovementChecker;
+            AnchorSpinAttackController = anchorSpinAttackController;
+            ChainSpikesAttackController = chainSpikesAttackController;
+            PlayerDeathAnimationSequencer = playerDeathAnimationSequencer;
         }
         
         
