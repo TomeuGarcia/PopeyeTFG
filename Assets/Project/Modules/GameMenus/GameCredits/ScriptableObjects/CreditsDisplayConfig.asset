@@ -16,4 +16,50 @@ MonoBehaviour:
   _settings: {fileID: 11400000, guid: 969c4a1f3bfbb444290079864a27e731, type: 2}
   _textPrefab: {fileID: 2397750294585136022, guid: 6de31a0926e43624eacf8484b09602f4,
     type: 3}
-  _normalScrollSpeed: 80
+  _imagePrefab: {fileID: 1373887002851792709, guid: 4afd3c4d5d8a7144d8055cf674cfeaf4,
+    type: 3}
+  _startScrollOffset: 500
+  _normalScrollSpeed: 100
+  _fastScrollSpeed: 300
+  _delayBeforeShowingInput: 3
+  _showInputFade:
+    _value: 1
+    _duration: 0.5
+    _ease: 4
+  _stopScrollingDuration: 0.25
+  _stopScrollingEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.49962
+      value: 0.49943
+      inSlope: 3.2347808
+      outSlope: 3.2347808
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.061582785
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _delayBeforeFinishing: 0.5
+  _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
+  _finishSound: {fileID: 11400000, guid: a53cc0ec5559b7b42b20ca1c2f7b7ce3, type: 2}

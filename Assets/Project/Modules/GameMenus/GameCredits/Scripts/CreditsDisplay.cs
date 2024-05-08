@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Project.Modules.GameMenus.GameCredits
 {
@@ -6,11 +7,11 @@ namespace Project.Modules.GameMenus.GameCredits
     public class CreditsBlock
     {
         [SerializeField] private string _title = "Team";
-        [SerializeField] private float _heightGap = 5f;
+        [SerializeField] private float _extraHeightGap = 0f;
         [SerializeField] private CreditsBlockElement[] _elements;
         
         public string Title => _title;
-        public float HeightGap => _heightGap;
+        public float ExtraHeightGap => _extraHeightGap;
         public CreditsBlockElement[] Elements => _elements;
     }
     
@@ -19,11 +20,11 @@ namespace Project.Modules.GameMenus.GameCredits
     public class CreditsBlockElement
     {
         [SerializeField] private string _title = "Programming";
-        [SerializeField] private float _heightGap = 5f;
+        [SerializeField] private float _extraHeightGap = 0f;
         [SerializeField] private string[] _items;
         
         public string Title => _title;
-        public float HeightGap => _heightGap;
+        public float ExtraHeightGap => _extraHeightGap;
         public string[] Items => _items;
     }
 
@@ -41,6 +42,17 @@ namespace Project.Modules.GameMenus.GameCredits
         public Color Color => _color;
         public TMPro.TMP_FontAsset Font => _font;
         public int FontSize => _fontSize;
+        public float HeightGap => _heightGap;
+    }
+    
+    
+    [System.Serializable]
+    public class ImageSettings
+    {
+        [SerializeField, Min(0)] private float _scale;
+        [SerializeField, Min(0)] private float _heightGap;
+
+        public float Scale => _scale;
         public float HeightGap => _heightGap;
     }
     

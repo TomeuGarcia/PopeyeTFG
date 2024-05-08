@@ -12,48 +12,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3649b5dd2d81412f80e0427a8bbf56fb, type: 3}
   m_Name: CreditsContent
   m_EditorClassIdentifier: 
-  _title: Credits
-  _heightGap: 0
+  _gameLogo: {fileID: 21300000, guid: f4f670d6fc29e7a4ebd3fcdbebab63be, type: 3}
+  _teamLogo: {fileID: 21300000, guid: 53c5a234ccc4b7c4c9b88c91d54ba5ab, type: 3}
+  _closing: {fileID: 11400000, guid: f8b80a29dde23a440b02dbd95603ad0f, type: 2}
+  _title: 'A game by:'
+  _extraHeightGap: 300
   _blocks:
   - _title: Team
-    _heightGap: 0
+    _extraHeightGap: 0
     _elements:
-    - _title: Programming
-      _heightGap: 0
+    - _title: Gamepaly Programming
+      _extraHeightGap: 0
       _items:
-      - Tomeu
-      - Roger
-    - _title: Design
-      _heightGap: 0
+      - Tomeu Garcia
+    - _title: Enemy Design & Programming
+      _extraHeightGap: 0
       _items:
-      - Tomeu
-      - Roger
-    - _title: Art
-      _heightGap: 0
+      - Roger Aguilar
+    - _title: Level Design & Production
+      _extraHeightGap: 0
       _items:
-      - Tomeu
-      - Roger
+      - Isaac Medina
+    - _title: Game Design & Tech Art
+      _extraHeightGap: 0
+      _items:
+      - Eric Ruiz
+    - _title: Environment Art
+      _extraHeightGap: 0
+      _items:
+      - Ziyin Pan
+    - _title: 'Character & UI Art '
+      _extraHeightGap: 0
+      _items:
+      - Maria Andres
     - _title: Music & SFX
-      _heightGap: 0
+      _extraHeightGap: 0
       _items:
-      - Tomeu
-      - Roger
+      - Oriol Rovira
   - _title: Playtesters
-    _heightGap: 0
+    _extraHeightGap: 0
     _elements:
     - _title: 
-      _heightGap: -100
+      _extraHeightGap: -80
       _items:
-      - Tomeu
-      - Roger
+      - Arnau Aguilar
+      - Aniol Barnada
+      - Adria Campos
+      - Fran Ruiz
+      - Genis Garcia
+      - Ian Dorado
+      - Pol Valverde
+      - Uri Tartarin
   - _title: Special Thanks
-    _heightGap: 0
+    _extraHeightGap: 0
     _elements:
     - _title: 
-      _heightGap: -100
+      _extraHeightGap: -80
       _items:
-      - Tomeu
-      - Roger
-  - _title: Thank you for Playing!
-    _heightGap: 0
-    _elements: []
+      - Hector Fuster
