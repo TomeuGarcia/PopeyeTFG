@@ -75,7 +75,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             SetActivatedState(_activatedStateSpot, _activatedEase.Value).Forget();
             _isActivated = true;
             
-            _audio.PlayActivatedSound(_soundsSource);
+            _audio?.PlayActivatedSound(_soundsSource);
         }
 
         protected override void DoEnterDeactivatedState()
@@ -84,7 +84,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             SetCollisionEnabledDelayed(false, DeactivateDuration).Forget();
             _isActivated = false;
             
-            _audio.PlayDeactivatedSound(_soundsSource);
+            _audio?.PlayDeactivatedSound(_soundsSource);
         }
 
         public override async UniTask EnterActivatedStateAwait()
