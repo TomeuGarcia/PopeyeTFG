@@ -86,6 +86,7 @@ namespace Popeye.Modules.Enemies
         }
         protected void InvokeEnemyStopsFightingPlayer()
         {
+            
             ++_fightsStopped;
             if (_fightsStarted - _fightsStopped != 0)
             {
