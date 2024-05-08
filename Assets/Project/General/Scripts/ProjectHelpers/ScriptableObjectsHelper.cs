@@ -31,6 +31,8 @@ namespace Popeye.ProjectHelpers
         public const string AUTOAIM_ASSETS_PATH = ROOT + "AutoAim/";
 
         
+        public const string GAMEMENU_ASSETS_PATH = ROOT + "GameMenu/";
+        
         public const string GAMESTATE_ASSETS_PATH = ROOT + "GameState/";
         
         
