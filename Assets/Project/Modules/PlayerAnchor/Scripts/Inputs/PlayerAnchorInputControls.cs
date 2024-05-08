@@ -376,6 +376,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Debug_UnlockMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""54e2f6f9-f6c5-4682-9a23-ef06e6c5e87c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -422,6 +431,39 @@ namespace InputSystem
                     ""action"": ""Quit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""99c562ce-5567-4413-ab78-594ac06cffa4"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug_UnlockMenu"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""9806b4a8-bded-4b7f-a590-743bd560047e"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Debug_UnlockMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""d6defb04-de52-4439-84fa-31c3558a8a8e"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Debug_UnlockMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -476,6 +518,7 @@ namespace InputSystem
             m_UI_OpenMenu = m_UI.FindAction("OpenMenu", throwIfNotFound: true);
             m_UI_Accept = m_UI.FindAction("Accept", throwIfNotFound: true);
             m_UI_Quit = m_UI.FindAction("Quit", throwIfNotFound: true);
+            m_UI_Debug_UnlockMenu = m_UI.FindAction("Debug_UnlockMenu", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -683,6 +726,7 @@ namespace InputSystem
         private readonly InputAction m_UI_OpenMenu;
         private readonly InputAction m_UI_Accept;
         private readonly InputAction m_UI_Quit;
+        private readonly InputAction m_UI_Debug_UnlockMenu;
         public struct UIActions
         {
             private @PlayerAnchorInputControls m_Wrapper;
@@ -691,6 +735,7 @@ namespace InputSystem
             public InputAction @OpenMenu => m_Wrapper.m_UI_OpenMenu;
             public InputAction @Accept => m_Wrapper.m_UI_Accept;
             public InputAction @Quit => m_Wrapper.m_UI_Quit;
+            public InputAction @Debug_UnlockMenu => m_Wrapper.m_UI_Debug_UnlockMenu;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -712,6 +757,9 @@ namespace InputSystem
                 @Quit.started += instance.OnQuit;
                 @Quit.performed += instance.OnQuit;
                 @Quit.canceled += instance.OnQuit;
+                @Debug_UnlockMenu.started += instance.OnDebug_UnlockMenu;
+                @Debug_UnlockMenu.performed += instance.OnDebug_UnlockMenu;
+                @Debug_UnlockMenu.canceled += instance.OnDebug_UnlockMenu;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -728,6 +776,9 @@ namespace InputSystem
                 @Quit.started -= instance.OnQuit;
                 @Quit.performed -= instance.OnQuit;
                 @Quit.canceled -= instance.OnQuit;
+                @Debug_UnlockMenu.started -= instance.OnDebug_UnlockMenu;
+                @Debug_UnlockMenu.performed -= instance.OnDebug_UnlockMenu;
+                @Debug_UnlockMenu.canceled -= instance.OnDebug_UnlockMenu;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -776,6 +827,7 @@ namespace InputSystem
             void OnOpenMenu(InputAction.CallbackContext context);
             void OnAccept(InputAction.CallbackContext context);
             void OnQuit(InputAction.CallbackContext context);
+            void OnDebug_UnlockMenu(InputAction.CallbackContext context);
         }
     }
 }
