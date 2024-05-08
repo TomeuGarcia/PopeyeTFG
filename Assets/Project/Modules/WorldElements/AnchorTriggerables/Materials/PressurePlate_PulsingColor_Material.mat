@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PulsingColor_Material
+  m_Name: PressurePlate_PulsingColor_Material
   m_Shader: {fileID: -6465566751694194690, guid: f259fe984798a394d9dc17964df12dea,
     type: 3}
   m_Parent: {fileID: 0}
@@ -37,6 +37,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _EmissionMap:
+        m_Texture: {fileID: 2800000, guid: 0d431548f071bc7449759c3188fe178e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 8add8a1c9b0f3884db6881266144a9d3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,6 +59,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _IsPulsing: 0
     - _PulseSharpness: 3
     - _PulsingIsActive: 0
     - _PulsingIsAlwaysOn: 0
@@ -58,6 +67,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _PulsingOffColor: {r: 0.6784314, g: 0.1137255, b: 0.20000002, a: 0}
-    - _PulsingOnColor: {r: 0.31764707, g: 0.75294125, b: 0.53333336, a: 0}
+    - _PulsingOffColor: {r: 1.4291003, g: 0.5777856, b: 0.22245431, a: 0}
+    - _PulsingOnColor: {r: 0.08873496, g: 1.0592736, b: 0.3937614, a: 0}
+    - _PulsingOnColor2: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 0}
   m_BuildTextureStacks: []
