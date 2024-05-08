@@ -42,11 +42,6 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
         private IParticleFactory _particleFactory;
 
-        private void Start()
-        {
-            _movingChainsSoundId = _audio.StartPlayingMovingChainsSound(gameObject);
-        }
-
         private void OnDestroy()
         {
             _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);            
@@ -72,6 +67,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _pickAbilityPS = Instantiate(typeViewData.PickAbilityParticlesPrefab, _pickAbilityParticlesHolder);
 
             _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
+            _movingChainsSoundId = _audio.StartPlayingMovingChainsSound(gameObject);
         }
 
 
