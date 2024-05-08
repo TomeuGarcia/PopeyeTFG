@@ -46,7 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
         internal override void Release()
         {
-            _damageTrigger.OnDamageDealt -= _anchorMediator.OnDamageDealt;
+            
         }
 
         public void InitBeforeAttack(SpikePositioning spikePositioning, IAnchorMediator anchorMediator)
@@ -55,7 +55,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             _anchorMediator = anchorMediator;
             _meshHolder.localScale = Vector3.zero;
             
-            _damageTrigger.OnDamageDealt += _anchorMediator.OnDamageDealt;
             _damageTrigger.Deactivate();
         }
 
@@ -75,6 +74,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             await _meshHolder.Scale(SpawnAnimation.ScaleUp)
                 .AsyncWaitForCompletion();
 
+            _damageTrigger.OnDamageDealt += _anchorMediator.OnDamageDealt;
             _damageTrigger.Activate();            
 
             await _meshRotateHolder.LocalRotateBy(SpawnAnimation.ScaledUpRotation)
@@ -83,6 +83,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
                 .AsyncWaitForCompletion();
             await _meshHolder.Scale(SpawnAnimation.PostScaleDown)
                 .AsyncWaitForCompletion();
+            
+            _damageTrigger.OnDamageDealt -= _anchorMediator.OnDamageDealt;
             
             Recycle();
         }
