@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: DamageHitConfig_KillTrigger
   m_EditorClassIdentifier: 
   _damageHitPreset: {fileID: 11400000, guid: c8ba92e2821e8ae4b81f9d0a3b17be30, type: 2}
-  _damage: 200
-  _knockbackMagnitude: 0
+  _damage: 10
   _stunDuration: 0
+  _knockbackHitConfig:
+    _knockbackType: 1
+    _duration: 0.2
+    _pushDistance: 3
