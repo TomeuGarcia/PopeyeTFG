@@ -29,19 +29,7 @@ namespace Popeye.Modules.Enemies.Hazards.Telegraph
             await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Max(0.0f, duration - _telegraphDuration)));
 
             Transform particle = _particleFactory.Create(_dispenserProjectileTelegraph, Vector3.zero, quaternion.identity, _telegraphHolder);
-
-            RaycastHit hit;
-            if (Physics.Raycast(_telegraphHolder.position, _telegraphHolder.forward, out hit,
-                    _raycastConfig.ProbeDistance, _raycastConfig.CollisionLayerMask,
-                    _raycastConfig.QueryTriggerInteraction))
-            {
-                float distance = (_telegraphHolder.position - hit.point).magnitude;
-                particle.localScale = Vector3.one + Vector3.forward * (distance - 1.0f);
-            }
-            else
-            {
-                particle.localScale = Vector3.forward * _raycastConfig.ProbeDistance;
-            }
+            particle.localScale = Vector3.one + Vector3.forward * (_raycastConfig.ProbeDistance - 1.0f);
             
         }
     }
