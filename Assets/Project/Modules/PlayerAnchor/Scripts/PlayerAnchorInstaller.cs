@@ -195,7 +195,8 @@ namespace Popeye.Modules.PlayerAnchor
             AnchorStatesBlackboard anchorStatesBlackboard = new AnchorStatesBlackboard();
             AnchorFSM anchorStateMachine = new AnchorFSM();
             IChainPhysics chainPhysics = _chainPhysics.Value;
-            IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchor.PositionTransform, _anchorGeneralConfig.OnVoidProbingConfig);
+            IOnVoidChecker anchorOnVoidChecker = CreateOnVoidChecker(_anchor.PositionTransform, 
+                _anchorGeneralConfig.OnVoidProbingConfig, _playerGeneralConfig.VoidGroundType);
             IAnchorTrajectoryView anchorTrajectoryView = new BezierAnchorTrajectoryView(
                 _anchorTrajectoryLine1, _anchorTrajectoryLine2, 
                 _anchorGeneralConfig.TrajectoryConfig.ViewConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
@@ -270,7 +271,8 @@ namespace Popeye.Modules.PlayerAnchor
             PlayerMovementChecker playerMovementChecker = new PlayerMovementChecker();
             ISafeGroundChecker playerSafeGroundChecker = CreateSafeGroundChecker(_playerController.Transform, 
                 _playerGeneralConfig.SafeGroundProbingConfig, _playerGeneralConfig.NotSafeGroundType);
-            IOnVoidChecker playerOnVoidChecker = CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig);
+            IOnVoidChecker playerOnVoidChecker = 
+                CreateOnVoidChecker(_playerController.Transform, _playerGeneralConfig.OnVoidProbingConfig, _playerGeneralConfig.VoidGroundType);
 
             PopeyePlayerInstantTranslation playerInstantTranslation =
                 new PopeyePlayerInstantTranslation(_playerController, playerMotion, _anchor, anchorMotion);
@@ -445,7 +447,7 @@ namespace Popeye.Modules.PlayerAnchor
         
 
         private IOnVoidChecker CreateOnVoidChecker(Transform castOriginTransform, CollisionProbingConfig voidProbingConfig,
-            float checkFrequency = 0.15f)
+            ObjectTypeAsset voidGroundType, float checkFrequency = 0.15f)
         {
             ICastComputer castComputer = new CastComputerGlobal(castOriginTransform, Vector3.up * 1, Vector3.down);
             PhysicsCastRequirementsProcessor castRequirementsProcessor = new PhysicsCastRequirementsProcessor();
@@ -453,7 +455,7 @@ namespace Popeye.Modules.PlayerAnchor
             IPhysicsCaster physicsCaster = 
                 new PhysicsSphereCaster(castComputer, voidProbingConfig, castRequirementsProcessor, 0.5f);
 
-            IOnVoidChecker onVoidChecker = new OnVoidPhysicsChecker(physicsCaster, checkFrequency); 
+            IOnVoidChecker onVoidChecker = new OnVoidPhysicsChecker(physicsCaster, checkFrequency, voidGroundType); 
             
             return onVoidChecker;
         }

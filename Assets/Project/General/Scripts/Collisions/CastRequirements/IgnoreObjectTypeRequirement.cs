@@ -16,7 +16,8 @@ namespace Popeye.Scripts.Collisions
         {
             if (hit.collider.TryGetComponent(out IObjectType objectType))
             {
-                return !objectType.IsOfType(_safeGroundIgnoreType);
+                bool notValidHit = !objectType.IsOfType(_safeGroundIgnoreType);
+                return notValidHit;
             }
 
             return true;

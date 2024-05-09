@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Popeye.Scripts.EventChannels;
 using Popeye.Scripts.ValueGating;
 
@@ -5,7 +6,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 {
     public class PlayerAbilityUnlockGroup
     {
-        private readonly IGateToggle _abilityGateToggle;
+        private readonly List<IGateToggle> _abilityGateToggles;
         private readonly IEmptyEventChannelListenEntry _unlockAbilityChannel;
         private bool _isSubscribed;
 
@@ -14,13 +15,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             IEmptyEventChannelListenEntry unlockAbilityChannel
             )
         {
-            _abilityGateToggle = abilityGateToggle;
+            _abilityGateToggles = new List<IGateToggle>(new []{ abilityGateToggle });
             _unlockAbilityChannel = unlockAbilityChannel;
             _isSubscribed = false;
-            
-            
         }
 
+        public void AddGateToggle(IGateToggle abilityGateToggle)
+        {
+            _abilityGateToggles.Add(abilityGateToggle);
+        }
         
         public void StartListeningToUnlock()
         {
@@ -58,7 +61,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         }
         private void UnlockAbility()
         {
-            _abilityGateToggle.Open();
+            foreach (IGateToggle abilityGateToggle in _abilityGateToggles)
+            {
+                abilityGateToggle.Open();
+            }
         }
         
     }

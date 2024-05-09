@@ -224,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5633788064573747905}
   - component: {fileID: 4188100503325769107}
+  - component: {fileID: 4238579028724422751}
   m_Layer: 0
   m_Name: SoulFragment
   m_TagString: Untagged
@@ -268,6 +269,22 @@ MonoBehaviour:
   _hitTargetType: 8
   _worldInteractors:
   - {fileID: 4423952118070053608}
+--- !u!114 &4238579028724422751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881843613736971437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f27f855774fd49ef94a398ab6474ba39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delay: 0
+  _healthUser:
+    _underlyingValue: {fileID: 6594846000889053562}
+  _powerBoostDrop: {fileID: 11400000, guid: 2634c5e8eccc5df4ebc4fb5517ee7488, type: 2}
 --- !u!1 &903070559664114128
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,6 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7771046046529856318}
   - component: {fileID: 5303163459029981683}
+  - component: {fileID: 4185775781029664806}
   m_Layer: 0
   m_Name: SouldFragment_View
   m_TagString: Untagged
@@ -334,6 +352,38 @@ MonoBehaviour:
   - {fileID: 5241728925221298266}
   _orbHitParticlesHolder: {fileID: 5828793674285273287}
   _pickAbilityParticlesHolder: {fileID: 3378268879647387471}
+  _movingSoundEmitter: {fileID: 4185775781029664806}
+--- !u!114 &4185775781029664806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903070559664114128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 918889197
+      Data2: 1308324333
+      Data3: -436653167
+      Data4: -1424211381
+    Path: event:/SFX/Interactions/SFX_LOOP_Ability_Orb
+  Event: 
+  PlayEvent: 1
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &927140766838099510
 GameObject:
   m_ObjectHideFlags: 0
