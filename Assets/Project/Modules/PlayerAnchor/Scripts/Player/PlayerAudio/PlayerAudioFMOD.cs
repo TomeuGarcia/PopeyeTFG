@@ -11,7 +11,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private readonly PlayerMovementChecker _playerMovementChecker;
 
         private LastingFMODSound.SoundId _footstepsSoundId;
-        private LastingFMODSound.SoundId _healingPreparationSoundId;
 
 
         public PlayerAudioFMOD(GameObject playerGameObject,
@@ -59,19 +58,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void StartPlayingHealingPreparationSound()
         {
-            _healingPreparationSoundId = 
-                _fmodAudioManager.PlayLastingSound(_config.HealingPreparation, _playerGameObject);
+            _fmodAudioManager.PlayOneShotAttached(_config.HealingPreparation, _playerGameObject);
         }
 
         public void StopPlayingHealingPreparationSound()
         {
-            _fmodAudioManager.StopLastingSound(_healingPreparationSoundId);
         }
 
         public void PlayHealingPerformedSound()
         {
             PlayOneShotAttached(_config.HealingPerformed);
-            _fmodAudioManager.StopLastingSound(_healingPreparationSoundId);
         }
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem
 {
-    public class HealthBehaviour : MonoBehaviour, IDamageHitTarget, IHealthTarget, IKnockbackHitTarget
+    public class HealthBehaviour : MonoBehaviour, IDamageHitTarget, IHealthTarget, IKnockbackHitTarget, IHealthUserBehaviour
     {
         private IHealthBehaviourListener _listener;
         private DamageHitTargetType _damageHitTargetType;

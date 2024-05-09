@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using FMODUnity;
 using NaughtyAttributes;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
@@ -38,15 +39,10 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         
         private Transform _orbTargetTransform;
         private IAbilityUnlockerChristalAudio _audio;
-        private LastingFMODSound.SoundId _movingChainsSoundId;
+        [SerializeField] private StudioEventEmitter _movingSoundEmitter;
 
         private IParticleFactory _particleFactory;
-
-        private void OnDestroy()
-        {
-            _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);            
-        }
-
+        
         
         public void Configure(IGameReferences gameReferences, IAbilityUnlockerChristalAudio audio, 
             GeneralInitializePlayerAbilityUnlockerConfig.Ability upgradeType)
@@ -67,9 +63,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _pickAbilityPS = Instantiate(typeViewData.PickAbilityParticlesPrefab, _pickAbilityParticlesHolder);
 
             _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
-            _movingChainsSoundId = _audio.StartPlayingMovingChainsSound(gameObject);
         }
-
 
         public async UniTaskVoid PlayIdleAnimation()
         {
@@ -92,7 +86,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             }
             await _chainedOrb.PlayDisappearAnimation(_orbTargetTransform.position);
             
-            _audio.StopPlayingMovingChainsSound(_movingChainsSoundId);
+            _movingSoundEmitter.Stop();
             _audio.PlayBreakSound(gameObject);
             
             _orbHitPS.Play();
