@@ -47,12 +47,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations
         [SerializeField] private CollisionProbingConfig _onVoidProbingConfig;
         [SerializeField] private DamageHitConfig _voidFallDamageConfig;
         [SerializeField] private ObjectTypeAsset _notSafeGroundType;
+        [SerializeField] private ObjectTypeAsset _voidGroundType;
         [SerializeField] private Vector3 _respawnFromVoidPositionOffset = new Vector3(0,2,0);
         
         public CollisionProbingConfig SafeGroundProbingConfig => _safeGroundProbingConfig;
         public CollisionProbingConfig OnVoidProbingConfig => _onVoidProbingConfig;
         public DamageHitConfig VoidFallDamageConfig => _voidFallDamageConfig;
         public ObjectTypeAsset NotSafeGroundType => _notSafeGroundType;
+        public ObjectTypeAsset VoidGroundType => _voidGroundType;
         public Vector3 RespawnFromVoidPositionOffset => _respawnFromVoidPositionOffset;
 
         

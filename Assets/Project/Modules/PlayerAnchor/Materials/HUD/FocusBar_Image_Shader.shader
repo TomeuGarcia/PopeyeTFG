@@ -22,7 +22,10 @@ Shader "UI/FocusBar_Image_Shader"
 
         _Stage1Tex ("Stage 1 Texture", 2D) = "white" {}     
         _Stage2Tex ("Stage 2 Texture", 2D) = "white" {}     
-        _Stage3Tex ("Stage 3 Texture", 2D) = "white" {}     
+        _Stage3Tex ("Stage 3 Texture", 2D) = "white" {}    
+
+        _NoiseAmount ("Noise Amount", Float) = -0.3 
+        _NoiseSpeed ("Noise Speed", Float) = -0.2
     }
 
     SubShader
@@ -89,7 +92,7 @@ Shader "UI/FocusBar_Image_Shader"
             float4 _ClipRect;
             float4 _MainTex_ST;
 
-            float _FillValue;
+            float _FillValue, _NoiseAmount, _NoiseSpeed;
             sampler2D _Stage1Tex, _Stage2Tex, _Stage3Tex;
 
 
@@ -122,9 +125,9 @@ Shader "UI/FocusBar_Image_Shader"
                 float2 uv = IN.texcoord.xy;                
 
                 float uvPositionOffset = IN.vertex.x * 0.001f;
-                float noise = tex2D(_NoiseTex, (uv * 0.5f)  + (_Time.y * -0.2f) + uvPositionOffset);
+                float noise = tex2D(_NoiseTex, (uv * 0.5f)  + (_Time.y * _NoiseSpeed) + uvPositionOffset);
 
-                uv += noise * length(uv) * -0.3f;
+                uv += noise * length(uv) * _NoiseAmount;
 
                 half4 colorStage1 = tex2D(_Stage1Tex, uv);
                 half4 colorStage2 = tex2D(_Stage2Tex, uv);

@@ -37,7 +37,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             gameObject.name = NAME_PREFIX + nameSuffix;
         }
 
-        private void Start()
+        private void Awake()
         {
             _initializeConfig.GetReferences(_abilityToUnlock,
                 out GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences);
