@@ -1,5 +1,6 @@
 using System;
 using Popeye.Scripts.Collisions;
+using Popeye.Scripts.ObjectTypes;
 using Popeye.Timers;
 using UnityEngine;
 

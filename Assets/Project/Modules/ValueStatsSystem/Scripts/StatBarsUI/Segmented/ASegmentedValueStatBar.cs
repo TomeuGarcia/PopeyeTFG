@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
@@ -139,8 +140,6 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
     
         protected void UpdateSegments()
         {
-
-            
             int newBarIndex = CurrentValueToBarIndex();
             
             DoUpdateSegments().Forget();
@@ -148,9 +147,14 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             _currentBarIndex = newBarIndex;
             _currentBarValue = ValueStat.GetValue();
         }
-        
+
         private async UniTaskVoid DoUpdateSegments()
         {
+            foreach (ImageFillBar imageFillBar in _imageFillBars)
+            {
+                imageFillBar.CancelUpdate();
+            }
+            
             int newValue = ValueStat.GetValue();
             int currentValue = _currentBarValue;
             
@@ -159,7 +163,6 @@ namespace Popeye.Modules.ValueStatSystem.Segmented
             
             bool isAdding = difference > 0;
             
-
             if (isAdding)
             {
                 int i = currentValue / _config.StatValueAmountPerUnit;                 
