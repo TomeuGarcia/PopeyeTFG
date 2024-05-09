@@ -28,7 +28,7 @@ namespace Popeye.Modules.Enemies.Hazards
         {
             _damageTrigger.Deactivate();
             _damageTrigger.OnDamageDealt -= OnDamageDealtEvent;
-            _damageTrigger.OnEnterFinish -= OnTriggerEnterFinishEvent;
+            //_damageTrigger.OnEnterFinish -= OnTriggerEnterFinishEvent;
             
             Audio.StopMovingSound();
         }
@@ -54,7 +54,7 @@ namespace Popeye.Modules.Enemies.Hazards
             _damageTrigger.Configure(combatManager, new DamageHit(_config.DamageHitConfig));
             _damageTrigger.Activate();
             _damageTrigger.OnDamageDealt += OnDamageDealtEvent;
-            _damageTrigger.OnEnterFinish += OnTriggerEnterFinishEvent;
+            //_damageTrigger.OnEnterFinish += OnTriggerEnterFinishEvent;
         }
         
 

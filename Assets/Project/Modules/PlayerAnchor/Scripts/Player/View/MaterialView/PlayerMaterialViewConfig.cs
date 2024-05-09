@@ -10,6 +10,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
     [System.Serializable]
     public class PlayerMaterialViewConfig
     {
+        [Header("DAMAGED")]
+        [SerializeField] private string _damagedProperty = "_IsDamaged";
+        public int DamagedPropertyId { get; private set; }
+        
         [Header("HEAL")]
         [SerializeField] private string _healProperty;
         [SerializeField] private float _healAppearTime;
@@ -34,6 +38,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [SerializeField] private float _dashMaterialTransitionTime;
         public string DashingProperty => _dashingProperty;
         public float DashMaterialTransitionTime => _dashMaterialTransitionTime;
+
+
+        public void Validate()
+        {
+            DamagedPropertyId = Shader.PropertyToID(_damagedProperty);
+        }
         
     }
 }

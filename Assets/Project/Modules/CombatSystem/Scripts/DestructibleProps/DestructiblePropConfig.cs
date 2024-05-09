@@ -15,6 +15,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         
         [Header("VIEW")] 
         [SerializeField] private ViewConfigData _viewConfig;
+        [SerializeField] private float _fragmentForce;
         
         [Header("AUDIO")] 
         [SerializeField] private AFMODAudioManagerReference _audioManager;
@@ -27,12 +28,14 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             [Header("Death")] 
             [SerializeField] private TweenPunchConfig _deathPunchScale;
             [SerializeField] private TweenConfig _deathRotation;
+            [SerializeField, Range(0.0f, 5.0f)] private float _deathDuration = 0.2f;
         
             [Header("Take Damage")] 
             [SerializeField] private TweenPunchConfig _takeDamagePunchScale;
             
             public TweenPunchConfig DeathPunchScale => _deathPunchScale;
             public TweenConfig DeathRotation => _deathRotation;
+            public float DeathDuration => _deathDuration;
             public TweenPunchConfig TakeDamagePunchScale => _takeDamagePunchScale;
         }
         

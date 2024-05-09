@@ -26,7 +26,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             _playerHealthBehaviour = playerHealthBehaviour;
             _playerHealthBehaviour.Configure(
-                this, _healthConfigData.StartingMaxHealth, 
+                this, _healthConfigData.StartingMaxHealth, _healthConfigData.StartingHealth,
                 DamageHitTargetType.Player, knockbackRigidbody);
 
             _voidDamageHit = new DamageHit(voidDamageHitConfig);
