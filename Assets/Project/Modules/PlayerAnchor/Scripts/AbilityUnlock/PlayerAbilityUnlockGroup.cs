@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Popeye.Scripts.EventChannels;
 using Popeye.Scripts.ValueGating;
+using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 {
@@ -54,7 +55,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         {
             UnlockAbilityAndUnsubscribe();
         }
-        private void UnlockAbilityAndUnsubscribe()
+        private void UnlockAbilityAndUnsubscribe()        
         {
             UnlockAbility();
             UnsubscribeToEventChannel();

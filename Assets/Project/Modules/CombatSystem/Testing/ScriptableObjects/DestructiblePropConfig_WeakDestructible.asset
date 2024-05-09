@@ -16,8 +16,8 @@ MonoBehaviour:
   _knockbackResistance: 0
   _viewConfig:
     _deathPunchScale:
-      _value: {x: -0.5, y: -0.5, z: -0.5}
-      _duration: 0.4
+      _value: {x: 0.1, y: 0.1, z: 0.1}
+      _duration: 0.2
       _vibrato: 10
       _elasticity: 1
       _ease: 4
@@ -25,11 +25,13 @@ MonoBehaviour:
       _value: {x: -90, y: 500, z: 0}
       _duration: 0.5
       _ease: 4
+    _deathDuration: 0
     _takeDamagePunchScale:
       _value: {x: -0.5, y: -0.5, z: -0.5}
       _duration: 0.4
       _vibrato: 10
       _elasticity: 1
       _ease: 30
+  _fragmentForce: 0
   _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
   _destroyedSound: {fileID: 11400000, guid: 6df957d301e19384e879291d59f45456, type: 2}
