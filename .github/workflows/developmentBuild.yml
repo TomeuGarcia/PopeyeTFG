@@ -1,4 +1,4 @@
-name: Development Build
+docker: Development Build
 
 on: 
   workflow_dispatch: {}  # To launch builds manually
@@ -41,6 +41,13 @@ jobs:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
           restore-keys: Library-
+      - name: Free Disk Space
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt clean
+          docker rmi $(docker image ls -aq)
+          df -h
       - uses: game-ci/unity-builder@v2
         id: buildStep
         env:
