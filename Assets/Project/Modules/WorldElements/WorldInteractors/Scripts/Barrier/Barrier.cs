@@ -74,8 +74,6 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         {
             SetActivatedState(_activatedStateSpot, _activatedEase.Value).Forget();
             _isActivated = true;
-            
-            _audio?.PlayActivatedSound(_soundsSource);
         }
 
         protected override void DoEnterDeactivatedState()
@@ -100,7 +98,8 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         
         private async UniTaskVoid SetActivatedState(Transform goalStateSpot, TweenEaseConfig easeConfig)
         {
-            await _view.PlayActivateAnimation();        
+            await _view.PlayActivateAnimation();       
+            _audio?.PlayActivatedSound(_soundsSource);
             DoSetState(goalStateSpot, easeConfig).Forget();
             SetCollisionEnabled(true);
         }
