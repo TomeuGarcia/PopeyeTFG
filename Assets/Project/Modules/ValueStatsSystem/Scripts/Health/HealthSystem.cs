@@ -34,6 +34,14 @@ namespace Popeye.Modules.ValueStatSystem
 
             _queuedInvulnerableDurations = new Queue<float>(3);
         }
+        public HealthSystem(int maxHealth, int startingHealth)
+        {
+            _maxHealth = maxHealth;
+            _currentHealth = startingHealth;
+            _isInvulnerable = false;
+
+            _queuedInvulnerableDurations = new Queue<float>(3);
+        }
     
     
         public int TakeDamage(int damageAmount)
