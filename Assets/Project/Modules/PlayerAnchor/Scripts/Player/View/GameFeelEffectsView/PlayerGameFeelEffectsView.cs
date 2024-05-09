@@ -83,6 +83,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayStartEnteringSpecialAttackAnimation(float durationToComplete)
         {
+            if (durationToComplete < 0.1f) return; // To stop zoom in Spikes Attack, sorry (Tomeu)
             _viewConfig.SpecialAttackZoomInOut.ZoomInConfig.SetDuration(durationToComplete);
             _cameraZoomer.ZoomInOutToDefault(_viewConfig.SpecialAttackZoomInOut);
         }
