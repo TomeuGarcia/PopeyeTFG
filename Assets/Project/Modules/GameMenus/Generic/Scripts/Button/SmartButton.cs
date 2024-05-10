@@ -15,6 +15,7 @@ namespace Popeye.Modules.GameMenus.Generic
         public delegate void SmartButtonEvent();
         private SmartButtonEvent _onButtonClickedCallback;
 
+        [SerializeField] private bool _canBeClicked = true;
         [SerializeField] private bool _selectOnEnable = false;
         [SerializeField] private bool _clickOnSelected = false;
         
@@ -42,7 +43,10 @@ namespace Popeye.Modules.GameMenus.Generic
 
         private void OnEnable()
         {
-            _button.onClick.AddListener(InvokeOnButtonClicked);
+            if (_canBeClicked)
+            {
+                _button.onClick.AddListener(InvokeOnButtonClicked);
+            }
 
             if (_selectOnEnable)
             {
@@ -52,7 +56,10 @@ namespace Popeye.Modules.GameMenus.Generic
 
         private void OnDisable()
         {
-            _button.onClick.RemoveAllListeners();
+            if (_canBeClicked)
+            {
+                _button.onClick.RemoveAllListeners();
+            }
         }
         
         private void InvokeOnButtonClicked()
