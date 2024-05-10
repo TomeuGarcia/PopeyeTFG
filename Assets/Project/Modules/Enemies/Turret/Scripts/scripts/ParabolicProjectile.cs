@@ -223,7 +223,7 @@ public class ParabolicProjectile : RecyclableObject
 
     internal override void Init()
     {
-        Invoke(nameof(Recycle),5);
+        Invoke(nameof(Recycle),4);
     }
 
     internal override void Release()
