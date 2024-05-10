@@ -5,6 +5,7 @@ using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.GameMenus.Generic;
 using Popeye.Modules.GameState;
 using Popeye.Scripts.Core.Scenes;
+using Project.Modules.GameMenus.Generic.Scripts.Audio;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -25,7 +26,10 @@ namespace Popeye.Modules.GameMenus.PauseMenu
 
         [Header("QUIT")]
         [SerializeField] private SmartButtonAndConfig _quitButtonAndConfig;
-        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _mainMenuSceneLoadGroup; 
+        [SerializeField] private ISceneLoadManager.SceneAdditiveLoadGroup _mainMenuSceneLoadGroup;
+
+        [Header("AUDIO")] 
+        [SerializeField] private UIAudioInteractionConfig _openMenuAudio;
         
         private IGameStateEventsDispatcher _gameStateEventsDispatcher;
 
@@ -51,7 +55,8 @@ namespace Popeye.Modules.GameMenus.PauseMenu
         private void OpenOptionsMenu()
         {
             OptionsMenu.Show();
-            Hide();
+            Hide();            
+            _openMenuAudio.PlaySound();
         }
         
         private void CloseOptionsMenu()

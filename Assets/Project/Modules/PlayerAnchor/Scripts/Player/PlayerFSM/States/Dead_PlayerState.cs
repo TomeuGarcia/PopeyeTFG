@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
@@ -45,8 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
             return false;
         }
-        
-        
+
         private async UniTaskVoid WaitForDeathToFinish()
         {
             _finishedDying = false;
