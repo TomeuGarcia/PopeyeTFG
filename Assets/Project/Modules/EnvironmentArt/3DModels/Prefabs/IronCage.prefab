@@ -148,8 +148,64 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2fa9e7d944259e649bbcaf6791bbcb35,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8249587483941139886}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2fa9e7d944259e649bbcaf6791bbcb35,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4784926138002683235}
   m_SourcePrefab: {fileID: 100100000, guid: 2fa9e7d944259e649bbcaf6791bbcb35, type: 3}
+--- !u!1 &7387181603229940420 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2fa9e7d944259e649bbcaf6791bbcb35,
+    type: 3}
+  m_PrefabInstance: {fileID: 7657776702400956309}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &8249587483941139886
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7387181603229940420}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.33, y: 9.38, z: 1.3}
+  m_Center: {x: 0.09, y: 3.48, z: -1.21}
+--- !u!65 &4784926138002683235
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7387181603229940420}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.7, y: 0.7, z: 4.57}
+  m_Center: {x: 0.15, y: 6.48, z: -0.05}
 --- !u!4 &7912642215025991806 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2fa9e7d944259e649bbcaf6791bbcb35,
