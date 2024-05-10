@@ -1,19 +1,23 @@
+using System.Collections.Generic;
+using FMODUnity;
 using Popeye.Modules.AudioSystem;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player
 {
-    public class PlayerAudioFMOD : IPlayerAudio
+    public class PlayerAudioFMOD : MonoBehaviour, IPlayerAudio
     {
-        private readonly GameObject _playerGameObject;
-        private readonly IFMODAudioManager _fmodAudioManager;
-        private readonly PlayerAudioFMODConfig _config;
-        private readonly PlayerMovementChecker _playerMovementChecker;
+        private GameObject _playerGameObject;
+        private IFMODAudioManager _fmodAudioManager;
+        private PlayerAudioFMODConfig _config;
+        private PlayerMovementChecker _playerMovementChecker;
 
         private LastingFMODSound.SoundId _footstepsSoundId;
 
+        [SerializeField] private StudioEventEmitter _healingPreparationEmitter;
+        
 
-        public PlayerAudioFMOD(GameObject playerGameObject,
+        public void Configure(GameObject playerGameObject,
             IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config,
             PlayerMovementChecker playerMovementChecker)
         {
@@ -58,11 +62,13 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void StartPlayingHealingPreparationSound()
         {
-            _fmodAudioManager.PlayOneShotAttached(_config.HealingPreparation, _playerGameObject);
+            //_fmodAudioManager.PlayOneShotAttached(_config.HealingPreparation, _playerGameObject);
+            _healingPreparationEmitter.Play();
         }
 
         public void StopPlayingHealingPreparationSound()
         {
+            _healingPreparationEmitter.Stop();
         }
 
         public void PlayHealingPerformedSound()

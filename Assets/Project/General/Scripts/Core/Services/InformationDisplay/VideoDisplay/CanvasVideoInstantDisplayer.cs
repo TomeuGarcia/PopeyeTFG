@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ namespace Popeye.Core.Services.InformationDisplay
         [SerializeField] private RawImage _videoImage;
         [SerializeField] private RenderTexture _videoRenderTexture;
         [SerializeField, Range(0.0f, 3.0f)] private float _videoScale = 1.0f;
+        [SerializeField, Range(0.0f, 5.0f)] private float _videoDelay = 0.5f;
 
         private DisplayQueue<VideoDisplayConfig> _displayQueue;
 
@@ -48,8 +50,9 @@ namespace Popeye.Core.Services.InformationDisplay
         {
             VideoDisplayConfig currentDisplay = _displayQueue.CurrentDisplay;
             SetVideoContents(currentDisplay);
-
             _videoPlayer.Play();
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_videoDelay), ignoreTimeScale: true);   
 
             _backgroundFadeGroup.alpha = 1f;
         }

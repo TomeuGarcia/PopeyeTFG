@@ -32,7 +32,7 @@ namespace Popeye.Modules.AudioSystem
             _currentSound = lastingSound;
 
             SubscribeToParameters();
-
+            
             _eventEmitter.EventReference = _currentSound.EventReference;
             _eventEmitter.Play();
         }
@@ -40,7 +40,6 @@ namespace Popeye.Modules.AudioSystem
         public void Stop()
         {
             UnsubscribeToParameters();
-            
             _eventEmitter.Stop();
             
             Recycle();

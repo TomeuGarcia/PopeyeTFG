@@ -10,9 +10,8 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         private readonly GameObject _soundSource;
         private readonly GameScenesMusicConfig _gameScenesMusicConfig;
 
-        private readonly List<LastingFMODSound.SoundId> _activeSounds;
         private GameScenesMusicConfig.MusicSoundsGroup _currentMusicSoundsGroup;
-
+        private GameMusicEmitter _currentMusicEmitter;
 
         public GameMusicTransitionController(
             IFMODAudioManager audioManager, 
@@ -23,7 +22,6 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
             _audioManager = audioManager;
             _soundSource = soundSource;
             _gameScenesMusicConfig = gameScenesMusicConfig;
-            _activeSounds = new List<LastingFMODSound.SoundId>(2);
             _currentMusicSoundsGroup = null;
         }
 
@@ -52,17 +50,12 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
         
         private void StopPlayingCurrentSounds()
         {
-            _audioManager.StopLastingSounds(_activeSounds.ToArray());
-            _activeSounds.Clear();
+            GameObject.Destroy(_currentMusicEmitter);
         }
         private void StartPlayingCurrentSounds()
         {
-            foreach (LastingFMODSound lastingSound in _currentMusicSoundsGroup.Sounds)
-            {
-                _activeSounds.Add(
-                    _audioManager.PlayLastingSound(lastingSound, _soundSource)
-                );
-            }
+            _currentMusicEmitter = GameObject.Instantiate(_gameScenesMusicConfig.GameMusicEmitterPrefab, _soundSource.transform);
+            _currentMusicEmitter.Init(_currentMusicSoundsGroup.Sounds);
         }
 
         

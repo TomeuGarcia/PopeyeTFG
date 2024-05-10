@@ -40,7 +40,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 
                 _blackboard.PlayerMediator.ResetTargetForCamera();
                 _blackboard.PlayerMediator.RespawnToLastSafeGround();
-                _blackboard.PlayerMediator.SetInvulnerableForDuration(_blackboard.PlayerStatesConfig.InvulnerableTimeAfterVoidFallRespawn);
+                //_blackboard.PlayerMediator.SetInvulnerableForDuration(_blackboard.PlayerStatesConfig.InvulnerableTimeAfterVoidFallRespawn);
                 
                 if (_blackboard.CameFromState == PlayerStates.MovingWithAnchor)
                 {
