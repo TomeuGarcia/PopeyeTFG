@@ -338,6 +338,7 @@ MonoBehaviour:
   _mainMenuSceneLoadGroup:
     _sceneReference: {fileID: 11400000, guid: 637289a1117ac4c41ba1d851981961d4, type: 2}
     _loadOptions: {fileID: 11400000, guid: d14c27fdd7a825d4bac5409551677518, type: 2}
+  _openMenuAudio: {fileID: 11400000, guid: 56f20fbe1fd599048be474bc5c5e5b1a, type: 2}
 --- !u!1 &3311452177562502196
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,6 +915,11 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 3077609122027305435}
+    - target: {fileID: 9169842147793010466, guid: f6b0ab8e7b03b2f4d879f4c4f277f704,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1088,6 +1094,11 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 9000674558646433166}
+    - target: {fileID: 9169842147793010466, guid: f6b0ab8e7b03b2f4d879f4c4f277f704,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1236,6 +1247,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SmartButton_Back
+      objectReference: {fileID: 0}
+    - target: {fileID: 5010243279701889058, guid: 02b3e97fa17eacc42a65136e82ac6a64,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -69,10 +69,7 @@ namespace Popeye.Modules.GameMenus.Generic
         {
             _onButtonClickedCallback.Invoke();
             
-            if (gameObject.activeInHierarchy)
-            {
-                _audioConfig.PlaySound();                
-            }
+            _audioConfig.PlaySound();
         }
 
         public void SimulateOnButtonClicked()
