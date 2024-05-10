@@ -34,7 +34,7 @@ Transform:
   - {fileID: 7001922699755105760}
   - {fileID: 9070209232631751818}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6692841838930290712
 MonoBehaviour:
@@ -271,6 +271,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barriers_Low
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f93db5781ba4c064298b82eadb20e0cf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -279,6 +284,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3067671443265469753}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f93db5781ba4c064298b82eadb20e0cf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2792667117323287891}
   m_SourcePrefab: {fileID: 100100000, guid: f93db5781ba4c064298b82eadb20e0cf, type: 3}
 --- !u!23 &7685318380211040012 stripped
 MeshRenderer:
@@ -311,8 +320,24 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2.7972372, z: 4.29}
-  m_Center: {x: 0, y: 1.101381, z: 0}
+  m_Size: {x: 1, y: 2.7972372, z: 5.1866302}
+  m_Center: {x: 0, y: 1.101381, z: -0.08063269}
+--- !u!208 &2792667117323287891
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8189584992518393561}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1.399, z: 2.1450002}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.1010001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &8857613470357361763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f93db5781ba4c064298b82eadb20e0cf,

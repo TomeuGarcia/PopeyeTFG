@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
 
@@ -22,7 +23,9 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
         }
 
         public async UniTask PlayDestroyedAnimation()
-        {            
+        {
+            _mesh.PunchScale(_config.DeathPunchScale);
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.DeathDuration));
             _mesh.gameObject.SetActive(false);
         }
 
