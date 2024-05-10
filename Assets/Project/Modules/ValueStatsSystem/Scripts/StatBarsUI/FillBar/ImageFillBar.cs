@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
@@ -51,9 +52,19 @@ namespace Popeye.Modules.ValueStatSystem
             _fillImage.SetFillValue(value01);
             _lazyBarFillImage.SetFillValue(value01);
         }
-    
+        
+        private CancellationTokenSource _updateFillCTS;
+
+        public void CancelUpdate()
+        {
+            _updateFillCTS?.Cancel();
+            CompleteAllUpdates();
+        }
+        
         public async UniTask UpdateFill(float value01)
         {
+            _updateFillCTS = new CancellationTokenSource();
+        
             float changeAmount = value01 - _fillImage.FillValue;
 
             bool isSubtracting = changeAmount < 0;
@@ -64,7 +75,9 @@ namespace Popeye.Modules.ValueStatSystem
 
             DoUpdateFill(value01, fillDuration, lazyFillDuration, isSubtracting);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(fillDuration));
+            await UniTask.Delay(TimeSpan.FromSeconds(fillDuration), cancellationToken: _updateFillCTS.Token);
+            
+            _updateFillCTS = null;
         }
         
         public async UniTask UpdateFillToMax(float fillDuration)

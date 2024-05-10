@@ -87,7 +87,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 out inputGate,
                 openValue,
                  new InputPressedBuffer(_playerAnchorInputControls.Land.NullAction, 0f),
-                channelAndState
+                channelAndState,
+                out PlayerAbilityUnlockGroup abilityUnlockGroup
             );
         }
         private void CreateInputGate(out ValueGate<InputAction> inputGate, InputAction openValue, 
@@ -97,7 +98,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 out inputGate,
                 openValue,
                 _playerAnchorInputControls.Land.NullAction,
-                channelAndState
+                channelAndState,
+                out PlayerAbilityUnlockGroup abilityUnlockGroup
             );
         }
         
@@ -108,12 +110,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 out inputGate,
                 _dashAttackVerticalThrower,
                 _dashDropVerticalThrower,
-                channelAndState
+                channelAndState,
+                out PlayerAbilityUnlockGroup abilityUnlockGroup
             );
+            abilityUnlockGroup.AddGateToggle(_dashDroppingAnchorInputGate);
         }
         
         private void CreateGate<T>(out ValueGate<T> valueGateGate, T openValue, T closedValue,
-            PlayerUnlockableAbilitiesConfig.IChannelAndState channelAndState)
+            PlayerUnlockableAbilitiesConfig.IChannelAndState channelAndState, 
+            out PlayerAbilityUnlockGroup abilityUnlockGroup)
         {
             valueGateGate = new ValueGate<T>(
                 openValue,
@@ -123,10 +128,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             if (!channelAndState.IsUnlocked)
             {
-                _abilitiesToUnlock.Add(new PlayerAbilityUnlockGroup(valueGateGate, channelAndState.Channel));
+                abilityUnlockGroup = new PlayerAbilityUnlockGroup(valueGateGate, channelAndState.Channel);
+                _abilitiesToUnlock.Add(abilityUnlockGroup);
+            }
+            else
+            {
+                abilityUnlockGroup = null;
             }
         }
-        
+
 
         public void GetReadInputs(
             out IGateValueReader<InputPressedBuffer> pullInputGate,
