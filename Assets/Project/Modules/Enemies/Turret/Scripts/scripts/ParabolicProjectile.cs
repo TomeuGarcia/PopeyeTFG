@@ -236,7 +236,7 @@ public class ParabolicProjectile : RecyclableObject
     {
         if (other.TryGetComponent(out DestructiblePlatform destructiblePlatform))
         {
-            destructiblePlatform.StartBreaking(DestructiblePlatform.BreakMode.BreakOverTime);
+            destructiblePlatform.StartBreaking(DestructiblePlatform.BreakMode.InstantBreak);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Popeye.Modules.Enemies.General
         public EnemySpawnerEvent OnFirstWaveStarted;
         public EnemySpawnerEvent OnAllWavesFinished;
         public EnemySpawnerEvent OnPlayerDiedDuringWaves;
-
+        public Action<int,bool> OnWaveFinished;
         public struct OnActivatedEvent
         {
             public GameObject spawnerGameObject;
@@ -109,6 +109,7 @@ namespace Popeye.Modules.Enemies.General
             {
                 await SpawnEnemyWave(_enemyWaves[waveI]);
                 await UniTask.WaitUntil(() => AllCurrentWaveEnemiesAreDead || _playerDiedDuringWaves);
+                OnWaveFinished?.Invoke(waveI,_playerDiedDuringWaves);
             }
 
             FinishWaves();
