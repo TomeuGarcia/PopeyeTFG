@@ -4,6 +4,7 @@ using DG.Tweening;
 using InputSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Scripts.Core.Scenes;
+using Project.Modules.GameMenus.Generic.Scripts.Audio;
 using Project.Scripts.TweenExtensions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,10 @@ namespace Project.Modules.GameMenus.ControllerGatekeeping
         [SerializeField] private Image _controllerImage;
         [SerializeField] private TweenPunchConfig _continueScalePunch;
         [SerializeField] private Color _continueColor;
-    
+
+        [Header("AUDIO")] 
+        [SerializeField] private UIAudioInteractionConfig _continueAudio;
+        
         private InputAction _confirmInput;
         private InputAction _quitInput;
         
@@ -55,6 +59,8 @@ namespace Project.Modules.GameMenus.ControllerGatekeeping
         private async UniTaskVoid ContinueToNextScene()
         {
             DisableInputs();
+            
+            _continueAudio.PlaySound();
 
             _controllerImage.DOColor(_continueColor, _continueScalePunch.Duration).SetEase(_continueScalePunch.Ease);
             await _controllerImage.rectTransform.PunchScale(_continueScalePunch)

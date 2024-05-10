@@ -40,7 +40,8 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid.VoidPhysics
         private void UpdateIsOnVoid()
         {
             IsOnVoid = !_physicsCaster.CheckHit(out RaycastHit groundHit);
-            
+
+            if (groundHit.collider == null) return;
             if (groundHit.collider.gameObject.TryGetComponent(out IObjectType objectType))
             {
                 IsOnVoid = objectType.IsOfType(_voidGroundType);

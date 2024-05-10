@@ -48,7 +48,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             {                
                 _blackboard.PlayerMediator.OnHealInterrupted();
             }
-            else
+            
+            if (!_wasInterrupted)
             {
                 _blackboard.PlayerMediator.OnHealPerformed();
             }
