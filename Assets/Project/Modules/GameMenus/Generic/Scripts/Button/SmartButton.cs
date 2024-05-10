@@ -1,4 +1,5 @@
 using Popeye.Scripts.TextUtilities;
+using Project.Modules.GameMenus.Generic.Scripts.Audio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,12 +10,15 @@ namespace Popeye.Modules.GameMenus.Generic
     {
         [SerializeField] private Button _button;
         [SerializeField] private TextMeshProUGUI _text;
+
+        [SerializeField] private UIAudioInteractionConfig _audioConfig;
         
         private SmartButtonConfig _config;
 
         public delegate void SmartButtonEvent();
         private SmartButtonEvent _onButtonClickedCallback;
 
+        [SerializeField] private bool _canBeClicked = true;
         [SerializeField] private bool _selectOnEnable = false;
         [SerializeField] private bool _clickOnSelected = false;
         
@@ -42,7 +46,10 @@ namespace Popeye.Modules.GameMenus.Generic
 
         private void OnEnable()
         {
-            _button.onClick.AddListener(InvokeOnButtonClicked);
+            if (_canBeClicked)
+            {
+                _button.onClick.AddListener(InvokeOnButtonClicked);
+            }
 
             if (_selectOnEnable)
             {
@@ -52,12 +59,20 @@ namespace Popeye.Modules.GameMenus.Generic
 
         private void OnDisable()
         {
-            _button.onClick.RemoveAllListeners();
+            if (_canBeClicked)
+            {
+                _button.onClick.RemoveAllListeners();
+            }
         }
         
         private void InvokeOnButtonClicked()
         {
             _onButtonClickedCallback.Invoke();
+            
+            if (gameObject.activeInHierarchy)
+            {
+                _audioConfig.PlaySound();                
+            }
         }
 
         public void SimulateOnButtonClicked()

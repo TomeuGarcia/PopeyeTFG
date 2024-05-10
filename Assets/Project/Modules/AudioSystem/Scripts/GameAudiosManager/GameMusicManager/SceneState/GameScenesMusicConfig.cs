@@ -38,6 +38,8 @@ namespace Popeye.Modules.AudioSystem.GameAudiosManager
          [SerializeField] private SceneReferenceAsset[] _scenesToIgnore;
          [SerializeField] private MusicSoundsGroup _defaultSounds;
          [SerializeField] private MusicSoundsByScene[] _soundsByScene;
+         [SerializeField] private GameMusicEmitter _gameMusicEmitterPrefab;
+         public GameMusicEmitter GameMusicEmitterPrefab => _gameMusicEmitterPrefab;
 
          public bool GetSoundForScene(ISceneReference sceneReference, out MusicSoundsGroup musicSoundsGroups)
          {
