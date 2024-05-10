@@ -21,7 +21,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             _blackboard.PlayerMediator.SetMaxMovementSpeed(_blackboard.PlayerStatesConfig.FallingOnVoidMoveSpeed);
             _blackboard.PlayerMediator.DropTargetForCamera();
-            _blackboard.PlayerMediator.SetInvulnerable(true);
+            //_blackboard.PlayerMediator.SetInvulnerable(true);
         }
 
         public override void Exit()
@@ -35,8 +35,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (_recoverFromFallTimer.HasFinished())
             {
                 _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
-                _blackboard.PlayerMediator.SetInvulnerable(false);
-
+                //_blackboard.PlayerMediator.SetInvulnerable(false);
+                
                 
                 _blackboard.PlayerMediator.ResetTargetForCamera();
                 _blackboard.PlayerMediator.RespawnToLastSafeGround();
@@ -50,6 +50,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 {
                     NextState = PlayerStates.PickingUpAnchor;
                 }
+                
+                Debug.Log("AY");
 
                 return true;
             }
