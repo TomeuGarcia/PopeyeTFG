@@ -174,7 +174,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 1e588990090fef446b5a3059e2171ded,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1e588990090fef446b5a3059e2171ded,
         type: 3}
@@ -242,8 +242,49 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8901728359769834981}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1e588990090fef446b5a3059e2171ded,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7714579804923713647}
   m_SourcePrefab: {fileID: 100100000, guid: 1e588990090fef446b5a3059e2171ded, type: 3}
+--- !u!1 &1462644247257844498 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1e588990090fef446b5a3059e2171ded,
+    type: 3}
+  m_PrefabInstance: {fileID: 1769126167935170115}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7714579804923713647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462644247257844498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -494664818
+      Data2: 1263532395
+      Data3: 1444690578
+      Data4: 1238925122
+    Path: event:/AMBIENT/AMBIENT_Torch
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!4 &2235909246910910888 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1e588990090fef446b5a3059e2171ded,
