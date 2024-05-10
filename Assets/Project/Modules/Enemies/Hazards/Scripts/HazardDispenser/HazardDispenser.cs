@@ -1,6 +1,7 @@
 using System;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
+using Popeye.Modules.Enemies.Hazards.Telegraph;
 using UnityEngine;
 
 
@@ -12,9 +13,11 @@ namespace Popeye.Modules.Enemies.Hazards
         [SerializeField] private HazardDispenserConfig _config;
         [SerializeField] private AHazardSpawner _hazardSpawner;
         [SerializeField] private Transform _hazardSpawn;
+        [SerializeField] private InterfaceReference<IHazardDispenserTelegraph, MonoBehaviour> _hazardDispenserTelegraph;
         [SerializeField] private InterfaceReference<IHazardDispenserView, MonoBehaviour> _view;
         private IHazardDispenserView View => _view.Value;
         private IHazardDispenserAudio Audio => _config.HazardDispenserAudio;
+        private IHazardDispenserTelegraph HazardDispenserTelegraph => _hazardDispenserTelegraph.Value;
         
         
 
@@ -45,6 +48,7 @@ namespace Popeye.Modules.Enemies.Hazards
             await UniTask.Delay(TimeSpan.FromSeconds(_config.DelayBeforeDispensing));
             Audio.PlayPrepareSound(gameObject);
             View.PlayPrepareDispensingAnimation(_config.TelegraphBeforeDispensing);
+            HazardDispenserTelegraph.TelegraphHazard(_config.DelayBeforeDispensing);
             await UniTask.Delay(TimeSpan.FromSeconds(_config.TelegraphBeforeDispensing));
             
             

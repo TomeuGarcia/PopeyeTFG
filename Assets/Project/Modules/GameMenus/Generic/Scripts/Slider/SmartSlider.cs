@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using Popeye.Scripts.TextUtilities;
+using Project.Modules.GameMenus.Generic.Scripts.Audio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,8 @@ namespace Popeye.Modules.GameMenus.Generic
         [Required()] [SerializeField] private TextMeshProUGUI _text;
         
         private SmartSliderConfig _config;
+
+        [SerializeField] private UIAudioInteractionConfig _audioConfig;
 
         public delegate void SmartSliderValueEvent(float sliderValue);
         private SmartSliderValueEvent _onValueChangedCallback;
@@ -63,6 +66,11 @@ namespace Popeye.Modules.GameMenus.Generic
         private void InvokeOnValueChanged(float sliderValue)
         {
             _onValueChangedCallback.Invoke(SliderValueToValue01(sliderValue));
+
+            if (gameObject.activeInHierarchy)
+            {
+                _audioConfig.PlaySound();                
+            }
         }
 
         private float SliderValueToValue01(float sliderValue)

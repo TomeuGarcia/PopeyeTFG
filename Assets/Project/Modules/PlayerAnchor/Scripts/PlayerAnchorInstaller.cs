@@ -85,6 +85,9 @@ namespace Popeye.Modules.PlayerAnchor
         [SerializeField] private PlayerAudioFMODConfig _playerAudioConfig;
         [SerializeField] private RenderersMaterialAssigner _playerRenderersMaterialAssigner;
         
+        [Header("Player - Audio")] 
+        [SerializeField] private PlayerAudioFMOD _playerAudio;
+        
         [Header("Player - Animator")] 
         [SerializeField] private PlayerAnimatorEvents _playerAnimatorEvents;
 
@@ -279,9 +282,9 @@ namespace Popeye.Modules.PlayerAnchor
             
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
-            IPlayerAudio playerAudio = new PlayerAudioFMOD(_playerController.gameObject,
+            _playerAudio.Configure(_playerController.gameObject,
                 _audioManagerReference, _playerAudioConfig, playerMovementChecker);
-            _playerAnimatorEvents.AddFootstepsListener(playerAudio);
+            _playerAnimatorEvents.AddFootstepsListener(_playerAudio);
 
             PlayerFocusController playerFocusController =
                 new PlayerFocusController(_playerGeneralConfig.FocusConfig, _playerHUD.PlayerFocusUI);
@@ -337,7 +340,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             _player.Configure(movesetInputsController, 
                 playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
-                playerView, playerAudio, playerHealing, playerHealth, playerMovementChecker, 
+                playerView, _playerAudio, playerHealing, playerHealth, playerMovementChecker, 
                 playerMotion, playerInstantTranslation, playerDasher,
                 _anchor, anchorThrower, anchorVerticalThrowerGateValue, anchorPuller, anchorKicker, anchorSpinner,
                 _playerCheckpointStorer, playerSafeGroundChecker, 

@@ -6,6 +6,7 @@ using UnityEngine;
 public class BossActivator : MonoBehaviour
 {
     [SerializeField] private BossShooting _bossShooting;
+    [SerializeField] private BossShooting _bossShooting2;
     [Header("ACCEPT TYPES")] 
     [SerializeField] private ObjectTypeAsset _playerType;
     private void OnTriggerEnter(Collider other)
@@ -13,6 +14,7 @@ public class BossActivator : MonoBehaviour
         if (AcceptsOtherCollider(other))
         {
             _bossShooting.StartShooting();
+            //_bossShooting2.StartShooting();
         }
     }
 
