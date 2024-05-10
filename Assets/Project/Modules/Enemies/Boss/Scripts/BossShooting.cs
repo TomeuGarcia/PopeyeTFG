@@ -84,7 +84,7 @@ public class BossShooting : MonoBehaviour
                 ResetTimer();
             }
 
-        if (id == _finalWaveId)
+        if (id == _finalWaveId && !hasDied)
         {
             Explode();
         }
@@ -95,6 +95,7 @@ public class BossShooting : MonoBehaviour
     public void ResetTimer()
     {
         _timer = _timeBetweenShots;
+        _index = 0;
     }
     public void Update()
     {
