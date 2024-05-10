@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8209231525717962968
+--- !u!114 &-7606283283248455150
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,14 +20,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DestructiblePlatform_Material
-  m_Shader: {fileID: -6465566751694194690, guid: df36375f81b6c1543a410797e1aa6883,
+  m_Name: DispenserProjectileTelegraph_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 7323ad2cf4ff6cc4181abddf31915c1c,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -37,10 +37,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: e0aff04e88b5905489d364cbb5fa465c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -55,25 +51,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AnimationT: 0
-    - _ColorVSTextureEdge: 0
-    - _D_NoiseScale: 10
-    - _D_Width: 0.05
-    - _Edge: 0.1
-    - _FadeEdge: 0.05
-    - _FadeEdgeSize: 0.1
-    - _FadeEdgeSizeMax: 0.1
-    - _FadeEdgeSizeMin: 0.2
-    - _FadingEdge: 0.05
-    - _HalfSize: 0.8
-    - _ProcessT: 0
+    - _Appear: 0
+    - _DisappearCoef: 0.99
+    - _EndColorIntensity: 20
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Size: 1
-    - _Tiling: 0.35
+    - _StartingColorIntensity: 1
     m_Colors:
-    - _ColorFadeEdge: {r: 1, g: 1, b: 1, a: 0}
-    - _EdgeColor: {r: 0.17314073, g: 1.6981132, b: 0, a: 0}
-    - _FadeColor: {r: 1, g: 1, b: 1, a: 0}
-    - _FadingColor: {r: 1, g: 0, b: 0.2579775, a: 0}
+    - _EndColor: {r: 1, g: 0.5707547, b: 0.85691816, a: 0}
+    - _StartingColor: {r: 0.81189644, g: 0.35555357, b: 0.8867924, a: 0}
   m_BuildTextureStacks: []
