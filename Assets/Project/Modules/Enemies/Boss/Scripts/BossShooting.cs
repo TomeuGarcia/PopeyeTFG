@@ -68,6 +68,7 @@ public class BossShooting : MonoBehaviour
         StopShooting();
         if (_moves)
         {
+            if(_secondHead.IsActivated())
             _secondHead.AddDeactivationInput();
         }
     }
