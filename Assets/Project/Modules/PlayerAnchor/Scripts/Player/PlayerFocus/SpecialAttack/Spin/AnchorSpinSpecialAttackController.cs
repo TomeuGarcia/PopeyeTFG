@@ -185,6 +185,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_config.TotalDuration));
             _loopTime = _fullLoopTime + 0.1f;
+            _isBeingPerformed = false;
         }
         
 
