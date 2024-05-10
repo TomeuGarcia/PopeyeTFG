@@ -32,7 +32,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             if (_blackboard.PlayerMediator.SpecialAttackHasFinished())
             {
                 NextState = PlayerStates.MovingWithoutAnchor;
-                Debug.Log("FINISH");
                 
                 return true;
             }
