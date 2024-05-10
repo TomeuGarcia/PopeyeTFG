@@ -464,9 +464,16 @@ namespace Popeye.Modules.PlayerAnchor.Player
         }
         public void RespawnFromDeath()
         {
+            DoRespawnFromDeath().Forget();
+        }
+        private async UniTaskVoid DoRespawnFromDeath()
+        {
+            await UniTask.Yield();
             Vector3 respawnPosition = _deathRespawnCheckpointChecker.LastSafeCheckpoint.Position;
             Quaternion respawnRotation = Quaternion.identity;
             _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
+            
+            Debug.Log("RESPAWN AT: " + respawnPosition);
             
             _playerHealth.HealToMax();
             PlayerHealing.ResetHeals();

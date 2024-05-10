@@ -115,6 +115,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
             
             ComputeFinishRotation();
             UpdateLoopTimeAsync().Forget();
+            SetLoopTimeAsync().Forget();
             DoStartSpecialAttack().Forget();
             
             _config.PlayPerformSound();
@@ -159,8 +160,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                     _config.TotalDuration
                 )
                 .SetEase(Ease.InOutQuad);
-            
-            
+
+
             DOTween.To(
                     () => _startPositioningT,
                     (t) => _startPositioningT = t,
@@ -178,6 +179,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
                     _config.EndPositioningDuration
                 )
                 .SetEase(Ease.OutSine);
+        }
+
+        private async UniTaskVoid SetLoopTimeAsync()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.TotalDuration));
+            _loopTime = _fullLoopTime + 0.1f;
         }
         
 

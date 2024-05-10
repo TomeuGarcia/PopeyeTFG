@@ -211,7 +211,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 120, y: 50}
+  m_SizeDelta: {x: 240, y: 80}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &5321367066365859501
 CanvasRenderer:
@@ -265,7 +265,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _button: {fileID: 5442221317562334926}
   _text: {fileID: 5010243279701889058}
+  _audioConfig: {fileID: 0}
+  _canBeClicked: 1
   _selectOnEnable: 0
+  _clickOnSelected: 0
 --- !u!1 &5649621995591113786
 GameObject:
   m_ObjectHideFlags: 0
