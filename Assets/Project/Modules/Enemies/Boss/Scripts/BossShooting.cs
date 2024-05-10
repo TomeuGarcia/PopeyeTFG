@@ -2,8 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Enemies.General;
 using Popeye.Modules.Enemies.Hazards;
+using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
+using Popeye.Modules.WorldElements.WorldInteractors;
+using Unity.Mathematics;
 using UnityEngine;
 [System.Serializable]
 public class TransformList
@@ -25,16 +30,71 @@ public class BossShooting : MonoBehaviour
     private bool _shootPreview;
     [SerializeField] private InterfaceReference<IHazardDispenserView, MonoBehaviour> _view;
     [SerializeField] private HazardDispenserConfig _config;
+    [SerializeField] private EnemySpawner _enemySpawner;
+    [SerializeField] private int _desiredWaveId = 2;
+    [SerializeField] private int _finalWaveId = 2;
+    [SerializeField] private AWorldInteractor _secondHead;
+    [SerializeField] private bool _moves = false;
+    private IEventSystemService _systemService;
     private IHazardDispenserView View => _view.Value;
 
-    void Start()
+    void Awake()
     {
         _hazardsFactory = ServiceLocator.Instance.GetService<IHazardFactory>();
         View.Configure(_config.ViewConfig);
-        _timer = _timeBetweenShots;
+        ResetTimer();
+        _systemService = ServiceLocator.Instance.GetService<IEventSystemService>();
+        _systemService.Subscribe<IPlayerEventsDispatcher.OnDieEvent>(OnPlayerDie);
+        _enemySpawner.OnWaveFinished += OnWaveFinishedEvent;
     }
 
+    private void OnEnable()
+    {
+            
+            
+        
+    }
 
+    private void OnDestroy()
+    {
+       
+            _enemySpawner.OnWaveFinished -= OnWaveFinishedEvent;
+            _systemService.Unsubscribe<IPlayerEventsDispatcher.OnDieEvent>(OnPlayerDie);
+    }
+
+    void OnPlayerDie(IPlayerEventsDispatcher.OnDieEvent eventData)
+    {
+        ResetTimer();
+        StopShooting();
+        if (_moves)
+        {
+            _secondHead.AddDeactivationInput();
+        }
+    }
+    void OnWaveFinishedEvent(int id,bool hasDied)
+    {
+        if (id == _desiredWaveId)
+            {
+                if (_moves && !hasDied)
+                {
+                    _secondHead.AddActivationInput();
+                    StartShooting();
+                }
+                ResetTimer();
+            }
+
+        if (id == _finalWaveId)
+        {
+            Explode();
+        }
+
+        
+    }
+
+    public void ResetTimer()
+    {
+        _timer = _timeBetweenShots;
+    }
     public void Update()
     {
         if (_startShooting)
@@ -51,7 +111,6 @@ public class BossShooting : MonoBehaviour
                 _shootPreview = false;
                 _index++;
                 _index = _index % _shootPatterns.Count;
-                Debug.Log(_index);
             }
 
             _timer -= Time.deltaTime; 
@@ -60,7 +119,13 @@ public class BossShooting : MonoBehaviour
 
     public void StartShooting()
     {
+        Debug.Log("start shooting " + gameObject.name);
         _startShooting = true;
+    }
+    public void StopShooting()
+    {
+        Debug.Log("stopShooting");
+        _startShooting = false;
     }
     public void StartShootingPattern(List<Transform> shootPattern)
     {
@@ -70,5 +135,11 @@ public class BossShooting : MonoBehaviour
             _currentProjectile.ShootWithoutPredict();
         }
     }
-    
+
+    public void Explode()
+    {
+        StopShooting();
+        gameObject.SetActive(false);
+        _hazardsFactory.CreateExplosion(transform.position, quaternion.identity, ExplosionSize.Big);
+    }
 }
