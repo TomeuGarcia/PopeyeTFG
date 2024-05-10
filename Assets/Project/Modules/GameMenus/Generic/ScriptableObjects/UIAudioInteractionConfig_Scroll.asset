@@ -9,14 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b4e29ebd9054b6f953bb92bfdd1487e, type: 3}
-  m_Name: OneShotSound_UI_Accept
+  m_Script: {fileID: 11500000, guid: edbe0a0667334642bdabc58a05861311, type: 3}
+  m_Name: UIAudioInteractionConfig_Scroll
   m_EditorClassIdentifier: 
-  _eventReference:
-    Guid:
-      Data1: -193345165
-      Data2: 1216540887
-      Data3: -1026343289
-      Data4: -1687560682
-    Path: event:/INTERFACE/UI_Accept
-  _parameters: []
+  _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
+  _interactionSound: {fileID: 11400000, guid: a3f70b58619f64847af8fda31df28a0e, type: 2}

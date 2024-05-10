@@ -1,4 +1,5 @@
 using Popeye.Scripts.TextUtilities;
+using Project.Modules.GameMenus.Generic.Scripts.Audio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,8 @@ namespace Popeye.Modules.GameMenus.Generic
     {
         [SerializeField] private Button _button;
         [SerializeField] private TextMeshProUGUI _text;
+
+        [SerializeField] private UIAudioInteractionConfig _audioConfig;
         
         private SmartButtonConfig _config;
 
@@ -65,6 +68,11 @@ namespace Popeye.Modules.GameMenus.Generic
         private void InvokeOnButtonClicked()
         {
             _onButtonClickedCallback.Invoke();
+            
+            if (gameObject.activeInHierarchy)
+            {
+                _audioConfig.PlaySound();                
+            }
         }
 
         public void SimulateOnButtonClicked()
