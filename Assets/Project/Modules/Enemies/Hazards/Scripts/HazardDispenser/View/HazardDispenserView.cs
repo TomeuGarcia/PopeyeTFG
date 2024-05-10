@@ -27,7 +27,8 @@ namespace Popeye.Modules.Enemies.Hazards
 
         public void PlayPrepareDispensingAnimation(float duration)
         {
-            _particleFactory.Create(_config.ChargeParticleType, Vector3.zero, quaternion.identity, _chargePosition);
+            Transform particle = _particleFactory.Create(_config.ChargeParticleType, Vector3.zero, quaternion.identity, _chargePosition);
+            particle.SetParent(_particleFactory.ParticleParent);
         }
 
         public void PlayDispenseAnimation()
