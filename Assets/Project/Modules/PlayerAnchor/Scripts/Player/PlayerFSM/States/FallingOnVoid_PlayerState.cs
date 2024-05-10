@@ -51,7 +51,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                     NextState = PlayerStates.PickingUpAnchor;
                 }
                 
-                Debug.Log("AY");
 
                 return true;
             }
