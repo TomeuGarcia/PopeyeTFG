@@ -1006,6 +1006,7 @@ GameObject:
   - component: {fileID: 6785251896512069248}
   - component: {fileID: 7894397237829131991}
   - component: {fileID: 4373601225125071374}
+  - component: {fileID: 8320953406125001239}
   m_Layer: 0
   m_Name: HazardDispenser_Arrow_1
   m_TagString: Untagged
@@ -1028,6 +1029,7 @@ Transform:
   - {fileID: 3543020486367431344}
   - {fileID: 4875795495610987661}
   - {fileID: 6361678390011252521}
+  - {fileID: 7523464911559365514}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1046,6 +1048,8 @@ MonoBehaviour:
   _config: {fileID: 11400000, guid: 211374ed968cb974f907dd0fc32a09b6, type: 2}
   _hazardSpawner: {fileID: 7894397237829131991}
   _hazardSpawn: {fileID: 3543020486367431344}
+  _hazardDispenserTelegraph:
+    _underlyingValue: {fileID: 8320953406125001239}
   _view:
     _underlyingValue: {fileID: 4373601225125071374}
 --- !u!114 &7894397237829131991
@@ -1074,6 +1078,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chargePosition: {fileID: 4875795495610987661}
   _meshRenderer: {fileID: 7898615224344630630}
+--- !u!114 &8320953406125001239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4605401546797501168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9067ab87a1914ef6ae7e20b4c333c728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _telegraphDuration: 0.75
+  _telegraphHolder: {fileID: 7523464911559365514}
+  _dispenserProjectileTelegraph: 31
+  _raycastConfig: {fileID: 11400000, guid: 3b8f867c9325dae489a53c96d1763373, type: 2}
 --- !u!1 &4641085768013378637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1959,6 +1979,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2650185332515913728}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8006167979604116599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7523464911559365514}
+  m_Layer: 0
+  m_Name: TelegraphHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7523464911559365514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8006167979604116599}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.05, z: 1.862}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2228070545289087685}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8245920829441026278
