@@ -21,6 +21,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.SetMaxMovementSpeed(0);
             _blackboard.PlayerMediator.SetCanRotate(false);
             _blackboard.PlayerMediator.PlayerView.PlayDeathAnimation();
+            _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
 
             _blackboard.PlayerDeathAnimationSequencer.PlayDeathAnimation();
             
@@ -30,6 +31,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public override void Exit()
         {
             _blackboard.PlayerMediator.SetCanRotate(true);
+            _blackboard.PlayerMediator.SetEnabledFallingPhysics(true);
         }
 
         public override bool Update(float deltaTime)

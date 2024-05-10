@@ -27,16 +27,5 @@ namespace Popeye.Modules.GameMenus.OptionsMenu
             }
         }
         
-        /*
-        protected override void DoInit(InputAction goBackInput)
-        {
-            AudioOptionsMenu.Init(CloseAudioOptionsMenu, goBackInput);
-            
-            _audioOptionsButtonAndConfig.SmartButton.Init(
-                _audioOptionsButtonAndConfig.Config, OpenAudioOptionsMenu);
-
-            CloseAudioOptionsMenu();
-        }
-        */
     }
 }
