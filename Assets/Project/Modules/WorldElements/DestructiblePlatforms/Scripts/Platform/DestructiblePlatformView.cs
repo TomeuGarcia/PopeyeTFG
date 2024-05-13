@@ -25,12 +25,15 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             _originalLocalPosition = _meshTransform.localPosition;
             
             _meshMaterial.SetFloat(_config.AnimationPropertyID, 0.0f);
+            SetIsBreaking(false);
         }
 
         public async UniTaskVoid StartPlayingBreakingOverTimeAnimation(float duration)
         {
             float punchDuration = duration * 0.4f;
             float remainingDuration = duration - punchDuration;
+            
+            SetIsBreaking(true);
             
             _meshTransform.DOPunchPosition(Vector3.down * 0.1f, duration, 8)
                 .SetEase(Ease.InOutSine);
@@ -50,12 +53,14 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         public void PlayBreakAnimation()
         {
             PlayShaderAnimation(0, 1, _config.BreakingDuration, _config.BreakingColor, Ease.InOutSine);
+            SetIsBreaking(true);
         }
 
         public void PlayRegenerateAnimation()
         {
             _meshTransform.localPosition = _originalLocalPosition; 
             PlayShaderAnimation(1, 0, _config.RegeneratingDuration, _config.RegeneratingColor, Ease.InOutCubic);
+            SetIsBreaking(false);
         }
 
 
@@ -75,6 +80,11 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
                     duration
                 )
                 .SetEase(ease);
+        }
+
+        private void SetIsBreaking(bool isBreakingOverTime)
+        {
+            _meshMaterial.SetFloat(_config.IsBreakingOverTimePropertyID, isBreakingOverTime ? 1 : 0);
         }
         
     }
