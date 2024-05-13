@@ -214,6 +214,5 @@ namespace Popeye.Modules.PlayerController.Inputs
         {
             return _spikesAttackGateValue.GetValue().WasReleasedThisFrame();
         }
-        
     }
 }
