@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6221422402595844425}
   - component: {fileID: 4352622371264768993}
   - component: {fileID: 8707974242898324356}
+  - component: {fileID: 1469770281675047541}
   - component: {fileID: 5613914260741269650}
   m_Layer: 0
   m_Name: FlatStraightProjectile
@@ -51,7 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: ca6eb684806f7754e8b9345d0962bce1, type: 2}
-  _damageTrigger: {fileID: 8707974242898324356}
+  _playerDamageTrigger: {fileID: 8707974242898324356}
+  _othersDamageTrigger: {fileID: 1469770281675047541}
   _view:
     _underlyingValue: {fileID: 6221422402595844425}
   _physicsMovement: {fileID: 4352622371264768993}
@@ -82,6 +84,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 5613914260741269650}
 --- !u!114 &8707974242898324356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970133506300216461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce5054a19574d26815f1a5030c2c476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageTargetsOncePerActivation: 1
+  _isKnockbackPushOrigin: 1
+  _collider: {fileID: 4984538971529807323}
+  _damageOnStay: 1
+  _trackActivations: 0
+--- !u!114 &1469770281675047541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
