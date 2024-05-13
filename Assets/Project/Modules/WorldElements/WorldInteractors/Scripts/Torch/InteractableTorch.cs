@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -7,13 +9,14 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
     {
         [SerializeField] private InteractableTorchConfig _config;
     
-        [SerializeField] private ParticleSystem _particles;
+        [SerializeField] private ParticleSystem _fireParticles;
         [SerializeField] private Light _light;
         private float _startLightIntensity;
         
         protected override void DoAwake()
         {
             _startLightIntensity = _light.intensity;
+            
             StopFire();
         }
 
@@ -29,16 +32,22 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
 
         private void StartFire()
         {
-            _particles.Play();
+            _fireParticles.Play();
             _light.DOIntensity(_startLightIntensity, _config.LightOnEase.Duration)
                 .SetEase(_config.LightOnEase.Ease);
         }
 
         private void StopFire()
         {
-            _particles.Stop();
+            _fireParticles.Stop();
             _light.DOIntensity(0f, _config.LightOffEase.Duration)
                 .SetEase(_config.LightOffEase.Ease);
+        }
+        
+        
+        public override async UniTask EnterActivatedStateAwait()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_config.LightOnEase.Duration), ignoreTimeScale: true);
         }
     }
 }

@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3611129068231671042}
   - component: {fileID: 723494483321974053}
+  - component: {fileID: 4681875440378057019}
   m_Layer: 0
-  m_Name: InteractableFire_Green
+  m_Name: InteractableTorch_Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +33,7 @@ Transform:
   - {fileID: 1442619027331514701}
   - {fileID: 1043641910214685559}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &723494483321974053
 MonoBehaviour:
@@ -48,8 +49,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
   _config: {fileID: 11400000, guid: 9158c6b358d6aaf458a20b3b7d78b78c, type: 2}
-  _particles: {fileID: 640811359454564470}
+  _fireParticles: {fileID: 640811359454564470}
   _light: {fileID: 50432570025646982}
+--- !u!114 &4681875440378057019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382424778218738359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bcd8a35b7947c8a2171cf17e329bfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _particles:
+  - {fileID: 640811359454564470}
+  - {fileID: 4329222362079828155}
+  - {fileID: 4560873423919205638}
 --- !u!1001 &1409502583792199334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -272,6 +289,18 @@ ParticleSystem:
 --- !u!4 &1043641910214685559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3254971852380274237, guid: ecdede006e96fdd48aae45fd456b8641,
+    type: 3}
+  m_PrefabInstance: {fileID: 2544596937362574666}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4329222362079828155 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2253002283488450033, guid: ecdede006e96fdd48aae45fd456b8641,
+    type: 3}
+  m_PrefabInstance: {fileID: 2544596937362574666}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4560873423919205638 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2025286503444398156, guid: ecdede006e96fdd48aae45fd456b8641,
     type: 3}
   m_PrefabInstance: {fileID: 2544596937362574666}
   m_PrefabAsset: {fileID: 0}

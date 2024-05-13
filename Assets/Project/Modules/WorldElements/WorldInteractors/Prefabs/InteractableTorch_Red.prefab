@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 66837861745667574}
   - component: {fileID: 3330643080777137755}
+  - component: {fileID: 1463432917586571015}
   m_Layer: 0
-  m_Name: InteractableFire_Red
+  m_Name: InteractableTorch_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +33,7 @@ Transform:
   - {fileID: 8010121988613529051}
   - {fileID: 8337414274058081831}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3330643080777137755
 MonoBehaviour:
@@ -48,8 +49,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _activationInputsCount: 1
   _config: {fileID: 11400000, guid: 9158c6b358d6aaf458a20b3b7d78b78c, type: 2}
-  _particles: {fileID: 8442892895582532902}
+  _fireParticles: {fileID: 8442892895582532902}
   _light: {fileID: 9042274731573886678}
+--- !u!114 &1463432917586571015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2989019806627914389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bcd8a35b7947c8a2171cf17e329bfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _particles:
+  - {fileID: 8442892895582532902}
+  - {fileID: 4745611067776613867}
+  - {fileID: 4793178986441599062}
 --- !u!1001 &6818319804118968346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,6 +75,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 66837861745667574}
     m_Modifications:
+    - target: {fileID: 307693745773493740, guid: d51fc909233a17d4eacc5d7af6abce74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 926373582779271668, guid: d51fc909233a17d4eacc5d7af6abce74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2066778605101518783, guid: d51fc909233a17d4eacc5d7af6abce74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2585934016355374796, guid: d51fc909233a17d4eacc5d7af6abce74,
         type: 3}
       propertyPath: m_Intensity
@@ -123,11 +155,43 @@ PrefabInstance:
       propertyPath: m_Name
       value: FireParticles_Red
       objectReference: {fileID: 0}
+    - target: {fileID: 3389191846449078358, guid: d51fc909233a17d4eacc5d7af6abce74,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8281836039008833331, guid: d51fc909233a17d4eacc5d7af6abce74,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.40606087
+      objectReference: {fileID: 0}
+    - target: {fileID: 8281836039008833331, guid: d51fc909233a17d4eacc5d7af6abce74,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.5655856
+      objectReference: {fileID: 0}
+    - target: {fileID: 8281836039008833331, guid: d51fc909233a17d4eacc5d7af6abce74,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.6886792
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d51fc909233a17d4eacc5d7af6abce74, type: 3}
+--- !u!198 &4745611067776613867 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2253002283488450033, guid: d51fc909233a17d4eacc5d7af6abce74,
+    type: 3}
+  m_PrefabInstance: {fileID: 6818319804118968346}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4793178986441599062 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2025286503444398156, guid: d51fc909233a17d4eacc5d7af6abce74,
+    type: 3}
+  m_PrefabInstance: {fileID: 6818319804118968346}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8337414274058081831 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3254971852380274237, guid: d51fc909233a17d4eacc5d7af6abce74,
