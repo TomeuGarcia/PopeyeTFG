@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
@@ -454,13 +455,12 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void RespawnToLastSafeGround()
         {
-            SetEnabledFallingPhysics(true);
-            
             Vector3 respawnPosition = _safeGroundChecker.BestSafePosition + _playerGeneralConfig.RespawnFromVoidPositionOffset;
             Quaternion respawnRotation = _playerMotion.Rotation;
             _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
 
-            _safeGroundChecker.UpdateChecking();
+            _onVoidChecker.ClearState();
+            _safeGroundChecker.ClearState();
         }
         public void RespawnFromDeath()
         {
