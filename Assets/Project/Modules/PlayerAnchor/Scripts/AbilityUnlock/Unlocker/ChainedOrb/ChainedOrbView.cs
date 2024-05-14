@@ -17,12 +17,13 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [Header("CHAINS")]
         [SerializeField] private Light _pointLight;
         [SerializeField] private MeshRenderer[] _circleChainMeshes;
-
+        
         [Header("MOVEMENT")]
         [SerializeField] private MovePunchBehaviour[] _movePunchBehaviours;
         
         private ChainedOrbViewConfig _viewConfig;
         private ChainedOrbViewConfig.UpgradeTypeToViewData _typeViewData;
+        
 
         public void Init(ChainedOrbViewConfig viewConfig, ChainedOrbViewConfig.UpgradeTypeToViewData typeViewData)
         {

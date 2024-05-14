@@ -252,7 +252,7 @@ namespace Popeye.Modules.Enemies
             _enemyController.CanRotate = canRotate;
         }
 
-        private void EnableMovement()
+        public void EnableMovement()
         {
             --_disabledMovementCount;
 
@@ -262,7 +262,7 @@ namespace Popeye.Modules.Enemies
             }
         }
 
-        private void DisableMovement()
+        public void DisableMovement()
         {
             if (_disabledMovementCount == 0)
             {

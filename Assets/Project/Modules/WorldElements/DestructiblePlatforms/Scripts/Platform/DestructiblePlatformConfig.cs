@@ -35,6 +35,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
 
             [SerializeField] private string _colorProperty = "_FadingColor";
             [SerializeField] private string _animationProperty = "_AnimationT";
+            [SerializeField] private string _isBreakingOverTimeProperty = "_IsBreakingOverTime";
 
 
             public Material SharedMaterial => _sharedMaterial;
@@ -44,16 +45,22 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             public float RegeneratingDuration => _regeneratingDuration;
             public int ColorPropertyID { get; private set; }
             public int AnimationPropertyID { get; private set; }
+            public int IsBreakingOverTimePropertyID { get; private set; }
 
             public void OnValidate()
             {
                 ColorPropertyID = Shader.PropertyToID(_colorProperty);
                 AnimationPropertyID = Shader.PropertyToID(_animationProperty);
+                IsBreakingOverTimePropertyID = Shader.PropertyToID(_isBreakingOverTimeProperty);
             }
         }
 
+        [Space(10)]
         [SerializeField] private AnimationConfigData _animationConfig;
+        [Space(10)]
+        [SerializeField] private DestructiblePlatformAudio _audio;
         public AnimationConfigData AnimationConfig => _animationConfig;
+        public DestructiblePlatformAudio Audio => _audio;
 
 
         private void OnValidate()

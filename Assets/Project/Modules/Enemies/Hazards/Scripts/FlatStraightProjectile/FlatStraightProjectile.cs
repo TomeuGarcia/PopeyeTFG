@@ -14,23 +14,30 @@ namespace Popeye.Modules.Enemies.Hazards
     public class FlatStraightProjectile : RecyclableObject
     {
         [SerializeField] private FlatStraightProjectileConfig _config;
-        [SerializeField] private DamageTrigger _damageTrigger;
+        [SerializeField] private DamageTrigger _playerDamageTrigger;
+        [SerializeField] private DamageTrigger _othersDamageTrigger;
         [SerializeField] private InterfaceReference<IFlatStraightProjectileView, MonoBehaviour> _view;
         [SerializeField] private PhysicsMovementBehaviour _physicsMovement;
         private IFlatStraightProjectileView View => _view.Value;
         private IFlatStraightProjectileAudio Audio => _config.Audio;
 
         private Lifetime _lifetime;
-        
+
+        private void Awake()
+        {
+            _othersDamageTrigger.OnDamageDealt += OnDamageDealtToOther;
+        }
+        private void OnDestroy()
+        {
+            _othersDamageTrigger.OnDamageDealt -= OnDamageDealtToOther;
+        }
+
         internal override void Init() { }
 
         internal override void Release()
         {
-            _damageTrigger.Deactivate();
-            _damageTrigger.OnDamageDealt -= OnDamageDealtEvent;
-            //_damageTrigger.OnEnterFinish -= OnTriggerEnterFinishEvent;
-            
-            Audio.StopMovingSound();
+            _playerDamageTrigger.Deactivate();
+            _othersDamageTrigger.Deactivate();
         }
 
         public void Configure(ICombatManager combatManager, IParticleFactory particleFactory)
@@ -45,37 +52,15 @@ namespace Popeye.Modules.Enemies.Hazards
             _physicsMovement.UseGravity(false);
             _physicsMovement.MovementSpeed = _config.MovementSpeed;
             _physicsMovement.MovementDirection = transform.forward;
-            
-            Audio.PlayMovingSound(gameObject);
         }
 
         private void SetupDamageTrigger(ICombatManager combatManager)
         {
-            _damageTrigger.Configure(combatManager, new DamageHit(_config.DamageHitConfig));
-            _damageTrigger.Activate();
-            _damageTrigger.OnDamageDealt += OnDamageDealtEvent;
-            //_damageTrigger.OnEnterFinish += OnTriggerEnterFinishEvent;
-        }
-        
-
-        private void OnDamageDealtEvent(DamageHitResult damageHitResult)
-        {
+            _playerDamageTrigger.Configure(combatManager, new DamageHit(_config.PlayerDamageHitConfig));
+            _playerDamageTrigger.Activate();
             
-        }
-        
-        private void OnTriggerEnterFinishEvent()
-        {
-            _damageTrigger.Deactivate();
-            _lifetime.Cancel();
-            Audio.PlayObjectContactSound(gameObject);
-            
-            DoHitObjectSequence().Forget();
-        }
-
-        private async UniTaskVoid DoHitObjectSequence()
-        {
-            await View.PlayObjectContactAnimation();
-            StartDisappearing();
+            _othersDamageTrigger.Configure(combatManager, new DamageHit(_config.OthersDamageHitConfig));
+            _othersDamageTrigger.Activate();            
         }
 
         private void OnLifetimeFinish()
@@ -94,7 +79,10 @@ namespace Popeye.Modules.Enemies.Hazards
             await UniTask.Delay(TimeSpan.FromSeconds(_config.DisappearDuration));
             Recycle();
         }
-        
-        
+
+        private void OnDamageDealtToOther(DamageHitResult damageHitResult)
+        {
+            _config.Audio.PlayDealDamageSound(damageHitResult.DamageHitTargetGameObject);
+        }
     }
 }

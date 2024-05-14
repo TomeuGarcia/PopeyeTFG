@@ -9,7 +9,8 @@ namespace Popeye.Modules.Enemies.Hazards
     public class FlatStraightProjectileConfig : ScriptableObject
     {
         [Header("DAMAGE")]
-        [SerializeField] private DamageHitConfig _damageHitConfig;
+        [SerializeField] private DamageHitConfig _playerDamageHitConfig;
+        [SerializeField] private DamageHitConfig _othersDamageHitConfig;
 
         [Header("LOGIC")]
         [SerializeField, Range(0.0f, 10.0f)] private float _maximumLifetime = 8.0f; 
@@ -22,7 +23,8 @@ namespace Popeye.Modules.Enemies.Hazards
         [Header("SOUND")] 
         [SerializeField] private FMODFlatStraightProjectileAudio _audio;
         
-        public DamageHitConfig DamageHitConfig => _damageHitConfig;
+        public DamageHitConfig PlayerDamageHitConfig => _playerDamageHitConfig;
+        public DamageHitConfig OthersDamageHitConfig => _othersDamageHitConfig;
         public float MaximumLifetime => _maximumLifetime;
         public float DisappearDuration => _disappearDuration;
         public float MovementSpeed => _movementSpeed;

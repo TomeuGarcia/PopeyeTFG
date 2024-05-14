@@ -12,22 +12,10 @@ namespace Popeye.Modules.Enemies.Hazards
         [SerializeField] private AFMODAudioManagerReference _audioManager;
         
         [Header("SOUNDS")]
-        [Expandable] [SerializeField] private LastingFMODSound _movingSound; 
         [Expandable] [SerializeField] private OneShotFMODSound _objectContactSound; 
         [Expandable] [SerializeField] private OneShotFMODSound _lifetimeEndSound;
-
-
-        private LastingFMODSound.SoundId _movingSoundId;
+        [Expandable] [SerializeField] private OneShotFMODSound _dealDamageSound;
         
-        public void PlayMovingSound(GameObject source)
-        {
-            _movingSoundId = _audioManager.PlayLastingSound(_movingSound, source);
-        }
-
-        public void StopMovingSound()
-        {
-            _audioManager.StopLastingSound(_movingSoundId);
-        }
 
         public void PlayObjectContactSound(GameObject source)
         {
@@ -37,6 +25,11 @@ namespace Popeye.Modules.Enemies.Hazards
         public void PlayLifetimeEndSound(GameObject source)
         {
             _audioManager.PlayOneShotAttached(_lifetimeEndSound, source);
+        }
+
+        public void PlayDealDamageSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_dealDamageSound, source);
         }
     }
 }
