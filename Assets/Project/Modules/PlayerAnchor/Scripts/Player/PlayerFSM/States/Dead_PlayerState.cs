@@ -24,8 +24,10 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.PlayerView.PlayDeathAnimation();
             _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
 
-            _blackboard.PlayerDeathAnimationSequencer.PlayDeathAnimation();
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
             
+            _blackboard.PlayerDeathAnimationSequencer.PlayDeathAnimation();
+
             WaitForDeathToFinish().Forget();
         }
 

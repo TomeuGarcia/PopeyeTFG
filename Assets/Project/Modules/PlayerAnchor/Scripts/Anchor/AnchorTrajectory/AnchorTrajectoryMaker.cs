@@ -112,7 +112,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             MakeStraightLineTrajectory(_straightLineTrajectoryPoints, startPosition, direction, distance);
             
             if (CheckForAutoAimTarget(_straightLineTrajectoryPoints, out snapTarget))
-            {
+            {                
                 if (snapTarget.CanBeAimedFromPosition(startPosition))
                 {
                     MakeSnapTargetTrajectory(_curvedTrajectoryPoints, startPosition, out trajectoryDistance, snapTarget);
@@ -234,17 +234,20 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private bool CheckForAutoAimTarget(Vector3[] trajectoryPoints, out IAnchorTrajectorySnapTarget snapTarget)
         {
-            if (CheckAtopHitInTrajectoryPoint(trajectoryPoints, 0, 0.5f, out RaycastHit hit,
-                    AutoTargetLayerMask, QueryTriggerInteraction.Collide))
+            if (CheckFirstHitInTrajectory(trajectoryPoints, 0.5f, out int lastIndexBeforeCollision, 
+                    out RaycastHit hit, AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
                 if (CheckHitIsAutoAimTarget(hit, out snapTarget))
                 {
                     return true;
                 }
+                
+                snapTarget = null;
+                return false;
             }
             
-            if (CheckFirstHitInTrajectory(trajectoryPoints, 0.5f, out int lastIndexBeforeCollision, 
-                    out hit, AutoTargetLayerMask, QueryTriggerInteraction.Collide))
+            if (CheckAtopHitInTrajectoryPoint(trajectoryPoints, 0, 0.5f, out hit,
+                         AutoTargetLayerMask, QueryTriggerInteraction.Collide))
             {
                 if (CheckHitIsAutoAimTarget(hit, out snapTarget))
                 {

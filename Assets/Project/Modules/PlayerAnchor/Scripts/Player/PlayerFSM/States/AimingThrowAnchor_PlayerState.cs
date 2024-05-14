@@ -23,7 +23,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.SetCanFallOffLedges(false, false);
             
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
-            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
 
             _blackboard.PlayerMediator.PlayerView.PlayEnterAimingAnimation();
 
@@ -38,8 +37,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _blackboard.PlayerMediator.SetInstantRotation(false);
             _blackboard.PlayerMediator.SetCanUseRotateInput(false);
             _blackboard.PlayerMediator.SetCanFallOffLedges(false, true);
-            
-            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
             
             StopChargingThrow();
         }

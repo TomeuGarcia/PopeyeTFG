@@ -29,6 +29,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         public override void Exit()
         {
             _blackboard.PlayerMediator.SetCanRotate(true);
+            
+            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
         }
 
         public override bool Update(float deltaTime)

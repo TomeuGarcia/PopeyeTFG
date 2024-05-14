@@ -9,6 +9,9 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
 {
     public class WorldInteractorRelayer : AWorldInteractor
     {
+        [Header("DELAYS")] 
+        [SerializeField, Range(0.0f, 10.0f)] private float _activationDelay = 0f;
+        
         [Header("RELAY GROUPS")]
         [SerializeField] private WorldInteractorsAndRelayListener[] _interactorsAndListenerGroups;
 
@@ -31,6 +34,8 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
 
         private async UniTaskVoid RelayEnterActivatedState()
         {
+            await UniTask.Delay(TimeSpan.FromSeconds(_activationDelay));
+
             foreach (WorldInteractorsAndRelayListener group in _interactorsAndListenerGroups)
             {
                 await group.RelayEnterActivatedState();

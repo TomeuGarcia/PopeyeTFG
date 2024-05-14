@@ -28,7 +28,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
 
         private DestructiblePlatformCollider _collider;
         private DestructiblePlatformView _view;
-        private DestructiblePlatformAudio _audio;
+        private DestructiblePlatformAudio Audio => _config.Audio;
 
         private State _currentState;
 
@@ -47,7 +47,6 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             _view = new DestructiblePlatformView(_meshRenderer.transform, _meshRenderer.material,
                 ServiceLocator.Instance.GetService<IParticleFactory>(),
                 _config.AnimationConfig);
-            _audio = new DestructiblePlatformAudio();
 
             _currentState = State.Intact;
         }
@@ -69,7 +68,8 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         
         private async UniTaskVoid StartBreakingOverTime()
         {
-            _currentState = State.BreakingOverTime;
+            _currentState = State.BreakingOverTime;            
+            Audio.PlayStartBreakingOverTimeSound(gameObject);
             
             await UniTask.Delay(TimeSpan.FromSeconds(BreakOverTimeStartDelay));
             
@@ -80,7 +80,6 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             if (_currentState == State.BreakingOverTime)
             {
                 _view.FinishPlayingBreakingOverTimeAnimation();
-                _audio.PlayFinishBreakingOverTimeSound();
                 
                 Break().Forget();
             }
@@ -88,8 +87,6 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
 
         private void StartBreakingInstantly()
         {
-            _audio.PlayBreakInstantlySound();
-            
             Break().Forget();
         }
 
@@ -97,7 +94,8 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         {
             _currentState = State.Broken;
             _view.PlayBreakAnimation();
-            
+            Audio.PlayBreakingSound(gameObject);
+
             await UniTask.Delay(TimeSpan.FromSeconds(EnterBrokenStateDelay));
             
             _collider.DisableCollisions();
@@ -119,7 +117,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             
             _collider.EnableCollisions();
             _view.PlayRegenerateAnimation();
-            _audio.PlayRegeneratedSound();
+            Audio.PlayRegeneratingSound(gameObject);
         }
     }
 }
