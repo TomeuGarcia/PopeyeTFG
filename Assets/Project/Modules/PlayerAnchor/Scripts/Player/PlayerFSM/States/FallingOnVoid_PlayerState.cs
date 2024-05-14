@@ -32,7 +32,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override void Exit()
         {
-            
+            _hasFinishedFalling = true;
         }
 
         public override bool Update(float deltaTime)
@@ -65,6 +65,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             
             if (_hasFinishedFalling)
             {
+                
+                _blackboard.PlayerMediator.SetEnabledFallingPhysics(true);    
                 if (_blackboard.CameFromState == PlayerStates.MovingWithAnchor)
                 {
                     NextState = PlayerStates.MovingWithAnchor;
@@ -73,7 +75,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
                 {
                     NextState = PlayerStates.PickingUpAnchor;
                 }
-                
 
                 return true;
             }
@@ -84,6 +85,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private async UniTaskVoid UpdateFallTimer()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_blackboard.PlayerStatesConfig.FallingOnVoidDuration));
+            if (_hasFinishedFalling) return;
             
             _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
             //_blackboard.PlayerMediator.SetInvulnerable(false);
