@@ -27,6 +27,13 @@ namespace Popeye.Modules.Enemies.Hazards
         {
             _playerDamageTrigger.Deactivate();
             _otherDamageTrigger.Deactivate();
+
+            _otherDamageTrigger.OnDamageDealt += OnDamageDealtToOther;
+        }
+
+        private void OnDestroy()
+        {
+            _otherDamageTrigger.OnDamageDealt -= OnDamageDealtToOther;
         }
 
         internal override void Init()
@@ -78,6 +85,10 @@ namespace Popeye.Modules.Enemies.Hazards
         {
             Recycle();
         }
-        
+
+        private void OnDamageDealtToOther(DamageHitResult hitResult)
+        {
+            _explosionHazardConfig.ExplosionAudio.PlayDealDamageSound(hitResult.DamageHitTargetGameObject);
+        }
     }
 }

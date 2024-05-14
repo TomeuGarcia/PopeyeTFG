@@ -7,8 +7,6 @@ using UnityEngine;
 
 
 
-using UnityEngine.Serialization;
-
 
 namespace Popeye.Modules.PlayerController
 {

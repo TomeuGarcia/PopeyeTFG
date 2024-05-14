@@ -1,6 +1,8 @@
+using System;
 using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
 {
@@ -13,11 +15,16 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
             PlayAllAtOnceButAwaitOnlyFirst
         }
         
-        
+        [Header("CONFIG")]
         [SerializeField] private bool _notifyListenerOnlyOnce = true;
         [SerializeField] private InterfaceReference<IWorldInteractorRelayListener, MonoBehaviour> _listener;
         [SerializeField] private SequenceAwaitMode _awaitMode = SequenceAwaitMode.PlayAllAtOnceButAwaitOnlyFirst;
         [SerializeField] private AWorldInteractor[] _worldInteractors;
+
+        [Header("DELAYS")] 
+        [SerializeField, Range(0.0f, 10.0f)] private float _delayBeforeEachWaitActivation = 0;
+        [SerializeField, Range(0.0f, 10.0f)] private float _delayAfterEachWaitActivation = 0;
+        
         private IWorldInteractorRelayListener Listener => _listener.Value;
         private bool IsFirstTime => _relayedTimesCounter == 0;
         private int _relayedTimesCounter;
@@ -55,8 +62,10 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
         {
             foreach (AWorldInteractor worldInteractor in _worldInteractors)
             {
+                await UniTask.Delay(TimeSpan.FromSeconds(_delayBeforeEachWaitActivation), ignoreTimeScale: true);
                 worldInteractor.EnterActivatedState();
                 await worldInteractor.EnterActivatedStateAwait();
+                await UniTask.Delay(TimeSpan.FromSeconds(_delayAfterEachWaitActivation), ignoreTimeScale: true);
             }
         }
         private async UniTask AwaitOnlyFirstRelayEnterActivatedState()
@@ -68,11 +77,11 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
             {
                 _worldInteractors[i].EnterActivatedState();
             }
-            
+                
+            await UniTask.Delay(TimeSpan.FromSeconds(_delayBeforeEachWaitActivation), ignoreTimeScale: true);
             await firstWorldInteractor.EnterActivatedStateAwait();
+            await UniTask.Delay(TimeSpan.FromSeconds(_delayAfterEachWaitActivation), ignoreTimeScale: true);
         }
-        
-        
 
         public void RelayEnterDeactivatedState()
         {

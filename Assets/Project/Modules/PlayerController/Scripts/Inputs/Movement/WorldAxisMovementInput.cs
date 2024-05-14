@@ -2,12 +2,15 @@ using InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Popeye.Modules.PlayerController.Inputs
 {
     public class WorldAxisMovementInput : IMovementInputHandler
     {
-        private InputSystem.PlayerAnchorInputControls _playerInputControls;
+        private readonly PlayerAnchorInputControls _playerInputControls;
+        private readonly InputAction _movementInputAction;
+        private readonly InputAction _lookInputAction;
 
         public Vector3 ForwardAxis => Vector3.forward;
         public Vector3 RightAxis => Vector3.right;
@@ -16,6 +19,9 @@ namespace Popeye.Modules.PlayerController.Inputs
         {
             _playerInputControls = new InputSystem.PlayerAnchorInputControls();
             _playerInputControls.Enable();
+            
+            _movementInputAction = _playerInputControls.Land.Move;
+            _lookInputAction = _playerInputControls.Land.Look;
         }
 
         ~WorldAxisMovementInput()
@@ -44,6 +50,16 @@ namespace Popeye.Modules.PlayerController.Inputs
             input = Vector2.ClampMagnitude(input, 1.0f);
 
             return new Vector3(input.x, 0.0f, input.y);
+        }
+
+        public void EnableMovement()
+        {
+            _movementInputAction.Enable();
+        }
+
+        public void DisableMovement()
+        {
+            _movementInputAction.Disable();
         }
     }
 }
