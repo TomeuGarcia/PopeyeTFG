@@ -33,7 +33,7 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             float punchDuration = duration * 0.4f;
             float remainingDuration = duration - punchDuration;
             
-            PlayShaderBreakingAnimation(duration);
+            SetIsBreaking(true);
             
             _meshTransform.DOPunchPosition(Vector3.down * 0.1f, duration, 8)
                 .SetEase(Ease.InOutSine);
@@ -52,19 +52,19 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
         
         public void PlayBreakAnimation()
         {
-            PlayShaderDissolveAnimation(0, 1, _config.BreakingDuration, _config.BreakingColor, Ease.InOutSine);
+            PlayShaderAnimation(0, 1, _config.BreakingDuration, _config.BreakingColor, Ease.InOutSine);
             SetIsBreaking(true);
         }
 
         public void PlayRegenerateAnimation()
         {
             _meshTransform.localPosition = _originalLocalPosition; 
-            PlayShaderDissolveAnimation(1, 0, _config.RegeneratingDuration, _config.RegeneratingColor, Ease.InOutCubic);
+            PlayShaderAnimation(1, 0, _config.RegeneratingDuration, _config.RegeneratingColor, Ease.InOutCubic);
             SetIsBreaking(false);
         }
 
 
-        private void PlayShaderDissolveAnimation(float start, float end, float duration, Color color, Ease ease)
+        private void PlayShaderAnimation(float start, float end, float duration, Color color, Ease ease)
         {
             _meshMaterial.SetColor(_config.ColorPropertyID, color);
             
@@ -82,21 +82,6 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
                 .SetEase(ease);
         }
 
-        private void PlayShaderBreakingAnimation(float duration)
-        {
-            float animationT = 0;
-            DOTween.To(
-                    () => animationT,
-                    (value) =>
-                    {
-                        animationT = value;
-                        _meshMaterial.SetFloat(_config.IsBreakingOverTimePropertyID, animationT);
-                    },
-                    1,
-                    duration
-                );
-        }
-        
         private void SetIsBreaking(bool isBreakingOverTime)
         {
             _meshMaterial.SetFloat(_config.IsBreakingOverTimePropertyID, isBreakingOverTime ? 1 : 0);
