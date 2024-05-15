@@ -338,6 +338,8 @@ namespace Popeye.Modules.PlayerAnchor
             _playerController.InputCorrector =
                 new AutoAimInputCorrector(_autoAimCreator.Create(_playerController.LookTransform));
             
+            playerAutoActionsQueue.Configure(_playerController.MovementInputHandler);
+            
             _player.Configure(movesetInputsController, 
                 playerStateMachine, _playerController, _playerGeneralConfig, _anchorGeneralConfig, 
                 playerView, _playerAudio, playerHealing, playerHealth, playerMovementChecker, 

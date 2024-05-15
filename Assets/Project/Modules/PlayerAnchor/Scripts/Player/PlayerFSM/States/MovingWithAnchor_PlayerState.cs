@@ -31,15 +31,12 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _anchorHeldAimTimer.Clear();
             
             _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetBreakOverTimeMode();
-            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(true);
 
             _blackboard.PlayerMediator.PlayerView.PlayEnterMovingWithAnchorAnimation();
         }
 
         public override void Exit()
         {
-            _blackboard.PlayerMediator.DestructiblePlatformBreaker.SetEnabled(false);
-            
             _blackboard.PlayerStatesConfig.OnSpeedValueChanged -= UpdateMovementSpeed;
         }
 
