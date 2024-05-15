@@ -52,22 +52,51 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             ITutorialDisplayCondition tutorialStopDisplayCondition = null;
             if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformed)
             {
-                tutorialStopDisplayCondition = new PerformedAmountDisplayCondition(
-                    configureReferences.TutorialHideChannel,
-                    configureReferences.TimesToStopShowing
-                );
+                tutorialStopDisplayCondition = CreateTimesPerformedCondition(configureReferences);
             }
             else if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.Duration)
             {
-                tutorialStopDisplayCondition = new DurationDisplayCondition(
-                    configureReferences.DurationToStopShowing
-                );
+                tutorialStopDisplayCondition = CreateDurationCondition(configureReferences);
+            }
+            else if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformedAndDuration)
+            {
+                tutorialStopDisplayCondition = CreateTimesPerformedAndDurationCondition(configureReferences);
             }
             
             _tutorialInformationDisplay.Configure(
                 configureReferences.TextInfoToDisplay,
                 configureReferences.VideoInfoToDisplay,
                 tutorialStopDisplayCondition);
+        }
+
+
+        private ITutorialDisplayCondition CreateTimesPerformedCondition(
+            GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences)
+        {
+            return new PerformedAmountDisplayCondition(
+                configureReferences.TutorialHideChannel,
+                configureReferences.TimesToStopShowing
+            );
+        }
+        
+        private ITutorialDisplayCondition CreateDurationCondition(
+            GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences)
+        {
+            return new DurationDisplayCondition(
+                configureReferences.DurationToStopShowing
+            );
+        }
+        
+        private ITutorialDisplayCondition CreateTimesPerformedAndDurationCondition(
+            GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences)
+        {
+            return new ComposedTutorialDisplayCondition(
+                new []
+                {
+                    CreateTimesPerformedCondition(configureReferences), 
+                    CreateDurationCondition(configureReferences)
+                }
+            );
         }
         
     }
