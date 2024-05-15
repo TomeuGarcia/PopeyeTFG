@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.ObjectTypes;
 using Popeye.Timers;
@@ -17,6 +18,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
         public Vector3 LastSafePosition { get; private set; }
         public Vector3 BestSafePosition => ComputeBestSafePosition();
 
+        public List<Vector3> SafePointsHistory = new List<Vector3>(100); 
 
 
         public SafeGroundPhysicsChecker(Transform positionTrackingTransform, IPhysicsCaster physicsCaster,
@@ -39,13 +41,12 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
                 DoUpdateChecking();
             }
         }
-
-        public void UpdateChecking()
-        {
-            _currentTrackedPosition = _positionTrackingTransform.position;
-            DoUpdateChecking();
-        }
         
+        public void ClearState()
+        {
+            _checkGroundTimer.Clear();
+        }
+
         private void DoUpdateChecking()
         {
             _checkGroundTimer.Clear();
@@ -57,6 +58,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking
             if (_physicsCaster.CheckHit(out RaycastHit groundHit))
             {
                 LastSafePosition = _currentTrackedPosition;
+                SafePointsHistory.Add(LastSafePosition);
             }
         }
 

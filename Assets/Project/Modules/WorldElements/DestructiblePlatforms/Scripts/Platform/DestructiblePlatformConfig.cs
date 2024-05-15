@@ -55,8 +55,12 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
             }
         }
 
+        [Space(10)]
         [SerializeField] private AnimationConfigData _animationConfig;
+        [Space(10)]
+        [SerializeField] private DestructiblePlatformAudio _audio;
         public AnimationConfigData AnimationConfig => _animationConfig;
+        public DestructiblePlatformAudio Audio => _audio;
 
 
         private void OnValidate()

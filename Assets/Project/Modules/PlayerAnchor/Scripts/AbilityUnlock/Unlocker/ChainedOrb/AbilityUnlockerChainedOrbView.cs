@@ -69,6 +69,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             _orbHitPS = Instantiate(typeViewData.OrbHitParticlesPrefab, _orbHitParticlesHolder);
             _pickAbilityPS = Instantiate(typeViewData.PickAbilityParticlesPrefab, _pickAbilityParticlesHolder);
+            _pickAbilityPS.Stop();
 
             _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
             _eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
@@ -107,7 +108,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _pickAbilityPS.Play();
             
             _eventSystemService.Dispatch(new PickedUpEvent());
-            await UniTask.WaitUntil(() => !_pickAbilityPS.isEmitting);
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbMoveToTarget.FinalDelay));
         }
 
 
