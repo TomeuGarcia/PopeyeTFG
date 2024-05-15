@@ -58,8 +58,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _playerFocusBoostEvent.Subscribe(OnPlayerFocusBoostCollected);
             
             _battleInteractionsController.StartListening();
-
-            _eventSystemService.Subscribe<AbilityUnlockerChainedOrbView.PickedUpEvent>(OnAbilityOrbPickedUpEvent);
         }
 
         public void StopListening()
@@ -74,7 +72,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             
             _battleInteractionsController.StopListening();
             
-            _eventSystemService.Unsubscribe<AbilityUnlockerChainedOrbView.PickedUpEvent>(OnAbilityOrbPickedUpEvent);
         }
 
 
@@ -104,12 +101,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         private void OnPlayerFocusBoostCollected()
         {
             _playerFocusUpgrader.IncreaseMaxFocus();
-        }
-
-
-        private void OnAbilityOrbPickedUpEvent(AbilityUnlockerChainedOrbView.PickedUpEvent eventData)
-        {
-            _playerAutoActionsQueue.StopPlayerForDuration(2.0f);
         }
         
     }
