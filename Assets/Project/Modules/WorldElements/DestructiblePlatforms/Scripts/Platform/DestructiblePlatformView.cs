@@ -94,7 +94,8 @@ namespace Project.Modules.WorldElements.DestructiblePlatforms
                     },
                     1,
                     duration
-                );
+                )
+                .SetEase(Ease.InOutSine);
         }
         
         private void SetIsBreaking(bool isBreakingOverTime)
