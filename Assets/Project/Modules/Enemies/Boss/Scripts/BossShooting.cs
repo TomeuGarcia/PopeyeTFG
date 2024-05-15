@@ -139,12 +139,10 @@ public class BossShooting : MonoBehaviour
 
     public void Explode()
     {
-        Debug.Log("deactivate snakes");
         StopShooting();
         if (_moves)
         {
             _head.AddActivationInput();
         }
-        Debug.Log("deactivate snakes1");
     }
 }
