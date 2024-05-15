@@ -37,35 +37,8 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
         public override bool Update(float deltaTime)
         {
-            /*
-            _recoverFromFallTimer.Update(deltaTime);
-            if (_recoverFromFallTimer.HasFinished())
-            {
-                _blackboard.PlayerMediator.SetEnabledFallingPhysics(false);
-                //_blackboard.PlayerMediator.SetInvulnerable(false);
-                
-                
-                _blackboard.PlayerMediator.ResetTargetForCamera();
-                _blackboard.PlayerMediator.RespawnToLastSafeGround();
-                //_blackboard.PlayerMediator.SetInvulnerableForDuration(_blackboard.PlayerStatesConfig.InvulnerableTimeAfterVoidFallRespawn);
-                
-                if (_blackboard.CameFromState == PlayerStates.MovingWithAnchor)
-                {
-                    NextState = PlayerStates.MovingWithAnchor;
-                }
-                else
-                {
-                    NextState = PlayerStates.PickingUpAnchor;
-                }
-                
-
-                return true;
-            }
-            */
-            
             if (_hasFinishedFalling)
-            {
-                
+            {                
                 _blackboard.PlayerMediator.SetEnabledFallingPhysics(true);    
                 if (_blackboard.CameFromState == PlayerStates.MovingWithAnchor)
                 {
