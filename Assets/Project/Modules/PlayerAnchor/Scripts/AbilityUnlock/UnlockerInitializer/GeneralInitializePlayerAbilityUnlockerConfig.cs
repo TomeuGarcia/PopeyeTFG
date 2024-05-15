@@ -48,13 +48,21 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             [Header("STOP SHOWING CONDITION")] 
             [SerializeField] private ITutorialDisplayCondition.Type _stopShowingCondition = ITutorialDisplayCondition.Type.TimesPerformed;
-            [AllowNesting] [ShowIf("_stopShowingCondition", ITutorialDisplayCondition.Type.TimesPerformed)]
+            [AllowNesting] [ShowIf("IsTimesPerformedCondition")]
             [SerializeField, Range(1, 10)] private int _timesToStopShowing = 1;
-            [AllowNesting] [ShowIf("_stopShowingCondition", ITutorialDisplayCondition.Type.TimesPerformed)]
+            [AllowNesting] [ShowIf("IsTimesPerformedCondition")]
             [SerializeField] private EmptyEventChannelAsset _tutorialHideChannel;
             
-            [AllowNesting] [ShowIf("_stopShowingCondition", ITutorialDisplayCondition.Type.Duration)]
-            [SerializeField, Range(0f, 10)] private float _durationToStopShowing = 5f;
+            [AllowNesting] [ShowIf("IsDurationCondition")]
+            [SerializeField, Range(0f, 15f)] private float _durationToStopShowing = 5f;
+
+            private bool IsTimesPerformedCondition =>
+                _stopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformed ||
+                _stopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformedAndDuration;
+            
+            private bool IsDurationCondition =>
+                _stopShowingCondition == ITutorialDisplayCondition.Type.Duration ||
+                _stopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformedAndDuration;
             
             public EmptyEventChannelAsset AbilityChannel => _abilityToUnlockChannel;
             public EmptyEventChannelAsset TutorialHideChannel => _tutorialHideChannel;
