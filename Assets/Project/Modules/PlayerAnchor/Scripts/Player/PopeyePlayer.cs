@@ -162,6 +162,11 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.Update(Time.deltaTime);
             _playerMovementChecker.Update();
             PlayerView.UpdateMovingAnimation(_playerMovementChecker.MovementSpeedRatio);
+
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                _playerHealth.HealToMax();
+            }
         }
 
         private void FixedUpdate()

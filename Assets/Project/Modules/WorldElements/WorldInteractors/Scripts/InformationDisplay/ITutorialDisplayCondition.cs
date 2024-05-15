@@ -7,7 +7,8 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
         public enum Type
         {
             TimesPerformed,
-            Duration
+            Duration,
+            TimesPerformedAndDuration
         }
         
         void StartChecking(IEmptyEventChannelListenEntry.ChannelEvent onConditionMetCallback);
