@@ -42,9 +42,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [SerializeField] private StudioEventEmitter _movingSoundEmitter;
 
         private IParticleFactory _particleFactory;
-        private IEventSystemService _eventSystemService;
-
-        public struct PickedUpEvent { }
+        
 
         public void Configure(IGameReferences gameReferences, IAbilityUnlockerChristalAudio audio, 
             GeneralInitializePlayerAbilityUnlockerConfig.Ability upgradeType)
@@ -72,7 +70,6 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _pickAbilityPS.Stop();
 
             _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
-            _eventSystemService = ServiceLocator.Instance.GetService<IEventSystemService>();
         }
 
         public async UniTaskVoid PlayIdleAnimation()
@@ -107,7 +104,6 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             _pickAbilityParticlesHolder.position = _orbTargetTransform.position;
             _pickAbilityPS.Play();
             
-            _eventSystemService.Dispatch(new PickedUpEvent());
             await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbMoveToTarget.FinalDelay));
         }
 
