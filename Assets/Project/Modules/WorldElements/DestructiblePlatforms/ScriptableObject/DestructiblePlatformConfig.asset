@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DestructiblePlatformConfig
   m_EditorClassIdentifier: 
   _breakOverTimeStartDelay: 0.15
-  _breakOverTimeDuration: 1.5
+  _breakOverTimeDuration: 2
   _enterBrokenStateDelay: 0.25
   _brokenStateStateDuration: 3
   _animationConfig:
@@ -24,3 +24,11 @@ MonoBehaviour:
     _regeneratingDuration: 1
     _colorProperty: _ColorFadeEdge
     _animationProperty: _AnimationT
+    _isBreakingOverTimeProperty: _IsBreakingOverTime
+  _audio:
+    _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
+    _startBreakingSound: {fileID: 11400000, guid: 658c6f973e965644f8221d6d9fe61bdd,
+      type: 2}
+    _breakingSound: {fileID: 11400000, guid: 461b8d21519791646aa05509d6f0248b, type: 2}
+    _regeneratingSound: {fileID: 11400000, guid: f13ce796d773b844ca7ee554d1afd96e,
+      type: 2}

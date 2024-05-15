@@ -35,6 +35,7 @@ namespace Popeye.Modules.WorldElements.WorldInteractors
             await _barrierMaterial.DOFloat(endValue, _config.ActivationAnimationProperty, 
                     _config.ActivationEase.Duration)
                 .SetEase(_config.ActivationEase.Ease)
+                .SetUpdate(true)
                 .AsyncWaitForCompletion();
         }
         

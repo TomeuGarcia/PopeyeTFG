@@ -2,6 +2,7 @@ using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.Enemies;
 using Popeye.Modules.Enemies.General;
 using Popeye.Modules.GameState;
+using Popeye.Modules.PlayerAnchor.AbilityUnlock;
 using Popeye.Modules.PlayerAnchor.Player.AutoActionsQueue;
 using Popeye.Modules.PlayerAnchor.Player.BattleInteractions;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
@@ -70,6 +71,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _playerFocusBoostEvent.Unsubscribe(OnPlayerFocusBoostCollected);
             
             _battleInteractionsController.StopListening();
+            
         }
 
 
@@ -100,9 +102,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         {
             _playerFocusUpgrader.IncreaseMaxFocus();
         }
-
-
-
         
     }
 }

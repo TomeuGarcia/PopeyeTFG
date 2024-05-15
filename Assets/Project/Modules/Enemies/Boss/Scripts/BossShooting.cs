@@ -34,6 +34,7 @@ public class BossShooting : MonoBehaviour
     [SerializeField] private int _desiredWaveId = 2;
     [SerializeField] private int _finalWaveId = 2;
     [SerializeField] private AWorldInteractor _secondHead;
+    [SerializeField] private AWorldInteractor _head;
     [SerializeField] private bool _moves = false;
     private IEventSystemService _systemService;
     private IHazardDispenserView View => _view.Value;
@@ -121,12 +122,10 @@ public class BossShooting : MonoBehaviour
 
     public void StartShooting()
     {
-        Debug.Log("start shooting " + gameObject.name);
         _startShooting = true;
     }
     public void StopShooting()
     {
-        Debug.Log("stopShooting");
         _startShooting = false;
     }
     public void StartShootingPattern(List<Transform> shootPattern)
@@ -141,7 +140,9 @@ public class BossShooting : MonoBehaviour
     public void Explode()
     {
         StopShooting();
-        gameObject.SetActive(false);
-        _hazardsFactory.CreateExplosion(transform.position, quaternion.identity, ExplosionSize.Big);
+        if (_moves)
+        {
+            _head.AddActivationInput();
+        }
     }
 }

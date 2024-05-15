@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b488fe7a364784a08f53decfd3bee1, type: 3}
   m_Name: FlatStraightProjectileConfig_Arrow
   m_EditorClassIdentifier: 
-  _damageHitConfig: {fileID: 11400000, guid: 5ae995a32393ada468f311fd695ba63f, type: 2}
+  _playerDamageHitConfig: {fileID: 11400000, guid: 5ae995a32393ada468f311fd695ba63f,
+    type: 2}
+  _othersDamageHitConfig: {fileID: 11400000, guid: 6966e7d3cc5c3264283326d32f9abc3c,
+    type: 2}
   _maximumLifetime: 2
   _disappearDuration: 0.3
   _movementSpeed: 30
@@ -35,8 +38,8 @@ MonoBehaviour:
       _ease: 4
   _audio:
     _audioManager: {fileID: 11400000, guid: 7ab9d2a2777703a44b6400d0ea74b335, type: 2}
-    _movingSound: {fileID: 11400000, guid: cba1df247bef8b942a71d429e9d75bd7, type: 2}
     _objectContactSound: {fileID: 11400000, guid: c60d7753295a8184597fe8fb14d04fc3,
       type: 2}
     _lifetimeEndSound: {fileID: 11400000, guid: 3a582809de2ff74469f0b7d5a646f425,
       type: 2}
+    _dealDamageSound: {fileID: 11400000, guid: 11434491faa3d984d8fa8328697c3427, type: 2}

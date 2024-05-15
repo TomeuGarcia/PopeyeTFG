@@ -4,10 +4,9 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using FMODUnity;
 using NaughtyAttributes;
+using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
-using Popeye.Modules.AudioSystem;
-using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
 using UnityEngine;
@@ -34,6 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
         [Header("PARTICLES")] 
         [SerializeField] private Transform _orbHitParticlesHolder;
         [SerializeField] private Transform _pickAbilityParticlesHolder;
+        [SerializeField] private ParticleSystem[] _colorParticles;
         private ParticleSystem _orbHitPS;
         private ParticleSystem _pickAbilityPS;
         
@@ -43,7 +43,7 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
         private IParticleFactory _particleFactory;
         
-        
+
         public void Configure(IGameReferences gameReferences, IAbilityUnlockerChristalAudio audio, 
             GeneralInitializePlayerAbilityUnlockerConfig.Ability upgradeType)
         {
@@ -59,8 +59,15 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 chainGroup.Init(_viewConfig, typeViewData);
             }
 
+            foreach (ParticleSystem particle in _colorParticles)
+            {
+                ParticleSystem.MainModule mainModule = particle.main;
+                mainModule.startColor = new ParticleSystem.MinMaxGradient(typeViewData.LightColor);
+            }
+
             _orbHitPS = Instantiate(typeViewData.OrbHitParticlesPrefab, _orbHitParticlesHolder);
             _pickAbilityPS = Instantiate(typeViewData.PickAbilityParticlesPrefab, _pickAbilityParticlesHolder);
+            _pickAbilityPS.Stop();
 
             _particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
         }
@@ -93,9 +100,11 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
 
             await _chainedOrb.MoveToTarget(_orbTargetTransform);
             _audio.PlayCollectedSound(gameObject);
-            
+
+            _pickAbilityParticlesHolder.position = _orbTargetTransform.position;
             _pickAbilityPS.Play();
-            await UniTask.WaitUntil(() => !_pickAbilityPS.isEmitting);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbMoveToTarget.FinalDelay));
         }
 
 
