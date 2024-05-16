@@ -478,8 +478,6 @@ namespace Popeye.Modules.PlayerAnchor.Player
             Quaternion respawnRotation = Quaternion.identity;
             _playerInstantTranslation.TranslatePlayer(respawnPosition, respawnRotation);
             
-            Debug.Log("RESPAWN AT: " + respawnPosition);
-            
             _playerHealth.HealToMax();
             PlayerHealing.ResetHeals();
             _focusController.LoseAllFocus();
