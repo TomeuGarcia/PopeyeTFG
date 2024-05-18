@@ -152,11 +152,16 @@ namespace Popeye.Modules.GameDataEvents
             EnemyID[] enemyIds = ServiceLocator.Instance.GetService<IEnemyIDsCollectionService>().EnemyIDs;
 
             string headerContent = "";
-            foreach (EnemyID enemyId in enemyIds)
+            
+            int i = 0;
+            for (; i < enemyIds.Length-1; ++i)
             {
-                headerContent += enemyId.GetEnemyName() + " Quantity" + EventsParseHelper.CONTENT_SEPARATOR;
+                headerContent += enemyIds[i].GetEnemyName() + " Quantity" + EventsParseHelper.CONTENT_SEPARATOR;
             }
-            headerContent.Remove(headerContent.Length-1);
+            if (i < enemyIds.Length)
+            {
+                headerContent += enemyIds[i].GetEnemyName() + " Quantity";
+            }
             
             return headerContent;
         }
@@ -178,11 +183,17 @@ namespace Popeye.Modules.GameDataEvents
             PlayerMovesetActions[] playerMovesetActions = PlayerMovesetActionsHelper.GetAllValuesArray();
 
             string headerContent = "";
-            foreach (PlayerMovesetActions playerMovesetAction in playerMovesetActions)
+            
+            int i = 0;
+            for (; i < playerMovesetActions.Length - 1; ++i)
             {
-                headerContent += playerMovesetAction.ToString() + " Quantity" + EventsParseHelper.CONTENT_SEPARATOR;
+                headerContent += playerMovesetActions[i].ToString() + " Quantity" + EventsParseHelper.CONTENT_SEPARATOR;
             }
-            headerContent.Remove(headerContent.Length-1);
+
+            if (i < playerMovesetActions.Length)
+            {
+                headerContent += playerMovesetActions[i].ToString() + " Quantity";
+            }
             
             return headerContent;
         }
