@@ -20,7 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         {
             _eventSystemService = eventSystemService;
             _dashTowardsAnchorDispatcher = dashTowardsAnchorDispatcher;
-            _updateTimer = new Timer(1.0f);
+            _updateTimer = new Timer(0.25f);
         }
 
         
