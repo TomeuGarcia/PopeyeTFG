@@ -1,3 +1,4 @@
+using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Player.PlayerStates;
 using UnityEngine;
 
@@ -6,9 +7,10 @@ namespace Popeye.Modules.GameDataEvents
     public struct OnPlayerActionEvent
     {
         public Vector3 Position { get; private set; }
-        public string ActionName { get; private set; }
+        public PlayerMovesetActions ActionName { get; private set; }
+        
 
-        public OnPlayerActionEvent(Vector3 position, string actionName)
+        public OnPlayerActionEvent(Vector3 position, PlayerMovesetActions actionName)
         {
             Position = position;
             ActionName = actionName;
@@ -26,7 +28,7 @@ namespace Popeye.Modules.GameDataEvents
         {
             GenericEventData = genericEventData;
             Position = eventInfo.Position;
-            ActionName = eventInfo.ActionName;
+            ActionName = eventInfo.ActionName.ToString();
         }
     }
 }

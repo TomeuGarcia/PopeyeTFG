@@ -2,6 +2,7 @@ using NaughtyAttributes;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.Enemies.General;
+using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 
@@ -63,9 +64,9 @@ namespace Popeye.Modules.GameDataEvents
         [System.Serializable]
         public class PlayerActionParameters
         {
-            [SerializeField] private string _actionName;
+            [SerializeField] private PlayerMovesetActions _actionName;
             [SerializeField] private Vector3 _position;
-            public string ActionName => _actionName;
+            public PlayerMovesetActions ActionName => _actionName;
             public Vector3 Position => _position;
         }
         

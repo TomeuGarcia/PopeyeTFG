@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private Quaternion _verticalThrowStartRotation;
         private Quaternion _verticalThrowEndRotation;
         
+        public PlayerMovesetActions ActionName => PlayerMovesetActions.DashDropAnchor;
         
         public void Configure(
             PopeyeAnchor anchor,

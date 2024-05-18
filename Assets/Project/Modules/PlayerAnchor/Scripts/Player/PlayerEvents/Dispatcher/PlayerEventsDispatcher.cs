@@ -40,7 +40,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _dashTowardsAnchorDispatcher.RaiseEvent();
         }
 
-        public void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition)
+        public void DispatchOnStartActionEvent(PlayerMovesetActions actionName, Vector3 playerPosition)
         {
             _eventSystemService.Dispatch(new OnPlayerActionEvent(playerPosition, actionName));
         }

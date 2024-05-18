@@ -1,4 +1,7 @@
 using Popeye.Core.Services.EventSystem;
+using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.Enemies.General;
+using Popeye.Modules.PlayerAnchor.Player;
 
 namespace Popeye.Modules.GameDataEvents
 {
@@ -7,10 +10,10 @@ namespace Popeye.Modules.GameDataEvents
         private readonly IEventSystemService _eventSystemService;
         private readonly IGameDataEventsConsumer _eventsConsumer;
         private readonly IActiveSceneDataEventsProvider _activeSceneDataEventsProvider;
-
-        private const string CONTENT_SEPARATOR = ";";
         
-
+        private string _emptyEnemiesQuantities;
+        private string _emptyPlayerActionsQuantities;
+        
         public GameDataEventsListener(IEventSystemService eventSystemService, IGameDataEventsConsumer eventsConsumer,
             IActiveSceneDataEventsProvider activeSceneDataEventsProvider)
         {
@@ -19,6 +22,8 @@ namespace Popeye.Modules.GameDataEvents
             _activeSceneDataEventsProvider = activeSceneDataEventsProvider;
             
             MakeContentHeaders();
+            SetupEmptyEnemiesQuantities();
+            SetupEmptyPlayerActionsQuantities();
         }
 
 
@@ -35,9 +40,12 @@ namespace Popeye.Modules.GameDataEvents
             _eventSystemService.Subscribe<OnPuzzleExitEvent>(OnExitPuzzle);
             
             _eventSystemService.Subscribe<OnEnemySeesPlayerEvent>(OnEnemySeesPlayer);
+            _eventSystemService.Subscribe<OnEnemyWavesSpawnerStartEvent>(OnEnemyWavesSpawnerStart);
             _eventSystemService.Subscribe<OnEnemyWaveStartEvent>(OnEnemyWaveStart);
             _eventSystemService.Subscribe<OnAllEnemyWavesCompletedEvent>(OnAllEnemyWavesCompleted);
+            
             _eventSystemService.Subscribe<OnEnemyTakeDamageEvent>(OnEnemyTakeDamage);
+            _eventSystemService.Subscribe<OnEnemyKilledByDamageEvent>(OnEnemyKilledByDamage);
         }
         
         public void StopListening()
@@ -53,9 +61,12 @@ namespace Popeye.Modules.GameDataEvents
             _eventSystemService.Unsubscribe<OnPuzzleExitEvent>(OnExitPuzzle);
             
             _eventSystemService.Unsubscribe<OnEnemySeesPlayerEvent>(OnEnemySeesPlayer);
+            _eventSystemService.Unsubscribe<OnEnemyWavesSpawnerStartEvent>(OnEnemyWavesSpawnerStart);
             _eventSystemService.Unsubscribe<OnEnemyWaveStartEvent>(OnEnemyWaveStart);
             _eventSystemService.Unsubscribe<OnAllEnemyWavesCompletedEvent>(OnAllEnemyWavesCompleted);
+            
             _eventSystemService.Unsubscribe<OnEnemyTakeDamageEvent>(OnEnemyTakeDamage);
+            _eventSystemService.Unsubscribe<OnEnemyKilledByDamageEvent>(OnEnemyKilledByDamage);
         }
 
 
@@ -67,13 +78,12 @@ namespace Popeye.Modules.GameDataEvents
 
 
         private string MakeContentFromEventData(string eventName, string timeStamp, string sceneName, 
-            string position = " ; ; ", string damageCause = " ", string enemyType = " ", 
+            string position = " " + EventsParseHelper.CONTENT_SEPARATOR + " " + EventsParseHelper.CONTENT_SEPARATOR + " ", 
+            string damageCause = " ", string enemyType = " ", 
             string playerActionType = " ", string playerHealthCurrent = " ", string playerHealthBeforeEvent = " ", 
             string wasKilled = " ",
-            string id = " ", string wavesQuantity = " ", string slimesQuantity = " ", string slimeExplosiveQuantity = " ",
-            string turretQuantity = " ", string turretVariationQuantity = " ", string shieldedQuantity = " ",
-            string dashToQuantity = " ", string dashDropQuantity = " ", string slamQuantity = " ",
-            string throwQuantity = " ", string pullQuantity = " ", string spinQuantity = " ", string spikesQuantity = " ")
+            string id = " ", string wavesQuantity = " ", 
+            string enemiesQuantities = null, string playerActionsQuantities = null)
         {
             string content = "";
 
@@ -90,25 +100,25 @@ namespace Popeye.Modules.GameDataEvents
             
             ConcatenateDataToContent(ref content, id);
             ConcatenateDataToContent(ref content, wavesQuantity);
-            ConcatenateDataToContent(ref content, slimesQuantity);
-            ConcatenateDataToContent(ref content, slimeExplosiveQuantity);
-            ConcatenateDataToContent(ref content, turretQuantity);
-            ConcatenateDataToContent(ref content, turretVariationQuantity);
-            ConcatenateDataToContent(ref content, shieldedQuantity);
-            ConcatenateDataToContent(ref content, dashToQuantity);
-            ConcatenateDataToContent(ref content, dashDropQuantity);
-            ConcatenateDataToContent(ref content, slamQuantity);
-            ConcatenateDataToContent(ref content, throwQuantity);
-            ConcatenateDataToContent(ref content, pullQuantity);
-            ConcatenateDataToContent(ref content, spinQuantity);
-            ConcatenateLastDataToContent(ref content, spikesQuantity);
+            
+            if (enemiesQuantities == null)
+            {
+                enemiesQuantities = _emptyEnemiesQuantities;
+            }
+            ConcatenateDataToContent(ref content, enemiesQuantities);
+
+            if (playerActionsQuantities == null)
+            {
+                playerActionsQuantities = _emptyPlayerActionsQuantities;
+            }
+            ConcatenateLastDataToContent(ref content, playerActionsQuantities);
 
             return content;
         }
 
         private void ConcatenateDataToContent(ref string content, string data)
         {
-            content += data + CONTENT_SEPARATOR;
+            content += data + EventsParseHelper.CONTENT_SEPARATOR;
         }
         private void ConcatenateLastDataToContent(ref string content, string data)
         {
@@ -121,7 +131,7 @@ namespace Popeye.Modules.GameDataEvents
                 eventName: "Event Name",
                 timeStamp: "Time Stamp",
                 sceneName: "Scene Name",
-                position: "PosX" + CONTENT_SEPARATOR +"PosY" + CONTENT_SEPARATOR + "PosZ",
+                position: "PosX" + EventsParseHelper.CONTENT_SEPARATOR + "PosY" + EventsParseHelper.CONTENT_SEPARATOR + "PosZ",
                 damageCause: "Damage Cause",
                 enemyType: "Enemy Type",
                 playerActionType: "Player Action Type",
@@ -130,23 +140,62 @@ namespace Popeye.Modules.GameDataEvents
                 wasKilled: "Was Killed",
                 id: "Id",
                 wavesQuantity: "Waves Quantity",
-                slimesQuantity: "Slime Quantity",
-                slimeExplosiveQuantity: "Slime Explosive Quantity",
-                turretQuantity: "Turret Quantity",
-                turretVariationQuantity: "Turret Variation Quantity",
-                shieldedQuantity: "Shielded Quantity",
-                dashToQuantity: "Dash To Quantity",
-                dashDropQuantity: "Dash Drop Quantity",
-                slamQuantity: "Slam Quantity",
-                throwQuantity: "Throw Quantity",
-                pullQuantity: "Pull Quantity",
-                spinQuantity: "Spin Quantity",
-                spikesQuantity: "Spikes Quantity"
+                enemiesQuantities: GetEnemiesQuantitiesHeader(),
+                playerActionsQuantities: GetPlayerActionsQuantitiesHeader()
             );
             
             _eventsConsumer.AddEventContent(content);
         }
+
+        private string GetEnemiesQuantitiesHeader()
+        {
+            EnemyID[] enemyIds = ServiceLocator.Instance.GetService<IEnemyIDsCollectionService>().EnemyIDs;
+
+            string headerContent = "";
+            foreach (EnemyID enemyId in enemyIds)
+            {
+                headerContent += enemyId.GetEnemyName() + " Quantity" + EventsParseHelper.CONTENT_SEPARATOR;
+            }
+            headerContent.Remove(headerContent.Length-1);
+            
+            return headerContent;
+        }
+
         
+        private void SetupEmptyEnemiesQuantities()
+        {
+            EnemyID[] enemyIds = ServiceLocator.Instance.GetService<IEnemyIDsCollectionService>().EnemyIDs;
+
+            for (int i = 1; i < enemyIds.Length; ++i)
+            {
+                _emptyEnemiesQuantities += " " + EventsParseHelper.CONTENT_SEPARATOR;
+            }
+        }
+        
+        
+        private string GetPlayerActionsQuantitiesHeader()
+        {
+            PlayerMovesetActions[] playerMovesetActions = PlayerMovesetActionsHelper.GetAllValuesArray();
+
+            string headerContent = "";
+            foreach (PlayerMovesetActions playerMovesetAction in playerMovesetActions)
+            {
+                headerContent += playerMovesetAction.ToString() + " Quantity" + EventsParseHelper.CONTENT_SEPARATOR;
+            }
+            headerContent.Remove(headerContent.Length-1);
+            
+            return headerContent;
+        }
+        
+        private void SetupEmptyPlayerActionsQuantities()
+        {
+            PlayerMovesetActions[] playerMovesetActions = PlayerMovesetActionsHelper.GetAllValuesArray();
+
+            for (int i = 1; i < playerMovesetActions.Length; ++i)
+            {
+                _emptyPlayerActionsQuantities += " " + EventsParseHelper.CONTENT_SEPARATOR;
+            }
+        }
         
     }
     

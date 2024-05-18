@@ -17,7 +17,7 @@ namespace Popeye.Modules.Enemies.General
     {
 
         [System.Serializable]
-        class EnemyWave
+        public class EnemyWave
         {
             [SerializeField, Range(0.0f, 10.0f)] private float _delayBeforeWaveSpawning = 1.0f;
             [SerializeField] private SpawnSequenceBeat[] _spawnSequence;
@@ -76,6 +76,7 @@ namespace Popeye.Modules.Enemies.General
         private IEventSystemService _eventSystemService;
         private bool _playerDiedDuringWaves;
 
+        private string SpawnerId => gameObject.name;
         
         private void Start()
         {
@@ -104,6 +105,7 @@ namespace Popeye.Modules.Enemies.General
         private async UniTaskVoid DoStartWaves()
         {
             OnFirstWaveStarted?.Invoke();
+            _eventSystemService.Dispatch(new OnEnemyWavesSpawnerStartEvent(SpawnerId, _enemyWaves.Length));
 
             for (int waveI = 0; waveI < _enemyWaves.Length && !_playerDiedDuringWaves; ++waveI)
             {
@@ -129,7 +131,7 @@ namespace Popeye.Modules.Enemies.General
                 OnAllWavesFinished?.Invoke();
                 _eventSystemService.Dispatch(new OnCompletedEvent { spawnerGameObject = gameObject });
                 
-                _eventSystemService.Dispatch(new OnAllEnemyWavesCompletedEvent());
+                _eventSystemService.Dispatch(new OnAllEnemyWavesCompletedEvent(SpawnerId));
             }
         }
 
@@ -137,7 +139,7 @@ namespace Popeye.Modules.Enemies.General
         {
             await UniTask.Delay(TimeSpan.FromSeconds(enemyWave.DelayBeforeWaveSpawning));
             
-            _eventSystemService.Dispatch(new OnEnemyWaveStartEvent());
+            _eventSystemService.Dispatch(new OnEnemyWaveStartEvent(SpawnerId, enemyWave));
             
             
             for (int i = 0; i < enemyWave.SpawnSequence.Length; ++i)

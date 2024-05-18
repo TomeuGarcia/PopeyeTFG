@@ -3,7 +3,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
     public interface IPlayerSpecialAttackController
     {
         float PreparationDuration { get; }
-        string Name { get; }
+        PlayerMovesetActions Name { get; }
         
         void OnPreparationStart(float durationToComplete);
         void OnPreparationInterrupted();

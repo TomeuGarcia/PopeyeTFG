@@ -13,7 +13,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus
         private bool _isBeingPerformed;
         
         public float PreparationDuration => 0;
-        public string Name => "Rage";
+        public PlayerMovesetActions Name => PlayerMovesetActions.Rage;
         public void OnPreparationStart(float durationToComplete)
         {
         }

@@ -1,4 +1,5 @@
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.GameDataEvents;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
@@ -14,7 +15,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         void DispatchOnRespawnFromDeathEvent();
         
         void DispatchDashTowardsAnchorPerformed();
-        void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition);
+        void DispatchOnStartActionEvent(PlayerMovesetActions actionName, Vector3 playerPosition);
         void DispatchOnTakeDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition, int currentHealth);
         void DispatchOnKilledByDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition);
         void DispatchOnHealEvent(Vector3 playerPosition, int currentHealth, int healthBeforeHealing);

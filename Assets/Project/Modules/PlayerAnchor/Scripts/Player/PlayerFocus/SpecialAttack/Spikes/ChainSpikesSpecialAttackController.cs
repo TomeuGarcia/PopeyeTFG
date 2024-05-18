@@ -29,7 +29,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         private int NumberOfPoints => _config.NumberOfSpikePoints;
 
         public float PreparationDuration => 0;
-        public string Name => "Chain Spikes";
+        public PlayerMovesetActions Name => PlayerMovesetActions.ChainSpikes;
         
         public void Configure(
             ChainSpikesAttackConfig config,

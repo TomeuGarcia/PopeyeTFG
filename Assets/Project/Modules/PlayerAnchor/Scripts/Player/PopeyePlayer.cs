@@ -316,7 +316,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             PlayerView.PlayThrowAnimation();
             
-            _eventsDispatcher.DispatchOnStartActionEvent("Anchor Throw", Position);
+            _eventsDispatcher.DispatchOnStartActionEvent(PlayerMovesetActions.AnchorThrow, Position);
         }
 
         public void PullAnchor()
@@ -328,7 +328,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             
             PlayerView.PlayPullAnimation(0.3f).Forget();
             
-            _eventsDispatcher.DispatchOnStartActionEvent("Anchor Pull", Position);
+            _eventsDispatcher.DispatchOnStartActionEvent(PlayerMovesetActions.AnchorPull, Position);
         }
 
         public void OnPullAnchorComplete()
@@ -374,7 +374,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _playerAudio.PlayDashTowardsAnchorSound();
 
             _eventsDispatcher.DispatchDashTowardsAnchorPerformed();
-            _eventsDispatcher.DispatchOnStartActionEvent("Dash", Position);
+            _eventsDispatcher.DispatchOnStartActionEvent(PlayerMovesetActions.DashToAnchor, Position);
             
             await UniTask.Delay(TimeSpan.FromSeconds(duration + 0.1f));
         }
@@ -396,7 +396,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             PlayerView.PlayDashAnimation(duration, GetFloorAlignedLookDirection());
             _playerAudio.PlayDashDroppingAnchorSound();
             
-            _eventsDispatcher.DispatchOnStartActionEvent("Dash Slam", Position);
+            _eventsDispatcher.DispatchOnStartActionEvent(_anchorVerticalThrower.GetValue().ActionName, Position);
             
             _playerController.enabled = false;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
