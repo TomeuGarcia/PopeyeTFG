@@ -58,7 +58,6 @@ namespace Popeye.Modules.Enemies
                 _playerActionEventsListener.TrackedPlayerActions));
             
             InvokeEnemyStopsFightingPlayer();
-            Recycle();
         }
 
         public void SetHazardFactory(IHazardFactory hazardsFactory)
@@ -87,7 +86,6 @@ namespace Popeye.Modules.Enemies
         private int _fightsStopped = 0;
         protected void InvokeEnemyStartsFightingPlayer()
         {
-            Debug.Log("0");
             ++_fightsStarted;
             if (_fightsStarted - _fightsStopped != 1)
             {
@@ -102,7 +100,6 @@ namespace Popeye.Modules.Enemies
         }
         protected void InvokeEnemyStopsFightingPlayer()
         {
-            Debug.Log("1");
             ++_fightsStopped;
             if (_fightsStarted - _fightsStopped != 0)
             {

@@ -39,7 +39,10 @@ namespace Popeye.Modules.Enemies
         {
             _patrolType = EnemyPatrolling.PatrolType.None;
             _slimeMediator = slimeMediator;
-            if(_patrolType == EnemyPatrolling.PatrolType.None){slimeMediator.StartChasing();}
+            if (_patrolType == EnemyPatrolling.PatrolType.None)
+            {
+                slimeMediator.OnPlayerClose();
+            }
 
             AddSlimeToList(slimeMediator);
         }

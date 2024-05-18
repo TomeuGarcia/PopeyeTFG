@@ -34,14 +34,12 @@ namespace Popeye.Modules.GameDataEvents.EventsUtilities
         
         public void StartListeningAndClearState()
         {
-            Debug.Log("START");
             _eventSystemService.Subscribe<OnPlayerActionEvent>(OnPlayerAction);
             ClearTrackedActions();
         }
         
         public void StopListening()
         {
-            Debug.Log("STOP");
             _eventSystemService.Unsubscribe<OnPlayerActionEvent>(OnPlayerAction);
         }
         
@@ -55,7 +53,6 @@ namespace Popeye.Modules.GameDataEvents.EventsUtilities
         
         private void OnPlayerAction(OnPlayerActionEvent eventInfo)
         {
-            Debug.Log(eventInfo.ActionName);
             _trackedPlayerActions[eventInfo.ActionName] += 1;
         }
         
