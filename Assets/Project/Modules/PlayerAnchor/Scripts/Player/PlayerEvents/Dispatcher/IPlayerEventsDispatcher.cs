@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         void DispatchDashTowardsAnchorPerformed();
         void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition);
         void DispatchOnTakeDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition, int currentHealth);
+        void DispatchOnKilledByDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition);
         void DispatchOnHealEvent(Vector3 playerPosition, int currentHealth, int healthBeforeHealing);
         void Update(float deltaTime, Vector3 playerPosition);
 

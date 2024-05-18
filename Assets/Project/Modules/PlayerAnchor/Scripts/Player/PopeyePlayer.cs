@@ -574,7 +574,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
             _eventsDispatcher.DispatchOnDiedEvent();
         
-            _eventsDispatcher.DispatchOnTakeDamageEvent(damageHitResult, Position, _playerHealth.GetCurrentHealth());
+            _eventsDispatcher.DispatchOnKilledByDamageEvent(damageHitResult, Position);
         }
 
         public void OnHealUsed(int healthBeforeHealing, int currentHealth)
