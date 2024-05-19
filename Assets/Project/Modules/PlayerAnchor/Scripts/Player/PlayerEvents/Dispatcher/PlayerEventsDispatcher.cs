@@ -20,7 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         {
             _eventSystemService = eventSystemService;
             _dashTowardsAnchorDispatcher = dashTowardsAnchorDispatcher;
-            _updateTimer = new Timer(1.0f);
+            _updateTimer = new Timer(0.25f);
         }
 
         
@@ -40,7 +40,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
             _dashTowardsAnchorDispatcher.RaiseEvent();
         }
 
-        public void DispatchOnStartActionEvent(string actionName, Vector3 playerPosition)
+        public void DispatchOnStartActionEvent(PlayerMovesetActions actionName, Vector3 playerPosition)
         {
             _eventSystemService.Dispatch(new OnPlayerActionEvent(playerPosition, actionName));
         }
@@ -49,6 +49,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerEvents
         {
             _eventSystemService.Dispatch(new IPlayerEventsDispatcher.OnTakeDamageEvent());
             _eventSystemService.Dispatch(new OnPlayerTakeDamageEvent(playerPosition, damageHitResult, currentHealth));
+        }
+        public void DispatchOnKilledByDamageEvent(DamageHitResult damageHitResult, Vector3 playerPosition)
+        {
+            _eventSystemService.Dispatch(new IPlayerEventsDispatcher.OnTakeDamageEvent());
+            _eventSystemService.Dispatch(new OnPlayerKilledByDamageEvent(playerPosition, damageHitResult));
         }
 
         public void DispatchOnHealEvent(Vector3 playerPosition, int currentHealth, int healthBeforeHealing)

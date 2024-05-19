@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private Quaternion _verticalThrowStartRotation;
         private Quaternion _verticalThrowEndRotation;
 
+        public PlayerMovesetActions ActionName => PlayerMovesetActions.DashDropSlam;
         
         public void Configure(
             PopeyeAnchor anchor,
@@ -36,7 +37,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             _verticalThrowStartRotation = Quaternion.LookRotation(Vector3.up, Vector3.right);
             _verticalThrowEndRotation = Quaternion.LookRotation(Vector3.down, Vector3.left);
         }
-        
+
         public void ThrowAnchorVertically(out float duration)
         {
             float distance = _verticalThrowConfig.MaxThrowDistance;

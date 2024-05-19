@@ -112,7 +112,7 @@ namespace Popeye.Modules.Enemies
             {
                 _turretSounds.PlayTurretDigDown(gameObject);
                 _turretAnimatorController.HideAnimation();
-                Debug.Log("player is too close");
+                //Debug.Log("player is too close");
             }
             else
             {
@@ -125,8 +125,8 @@ namespace Popeye.Modules.Enemies
             _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
             _turretMind.Die();
             _turretSounds.PlayTurretDeath(gameObject);
-            _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
-            InvokeEnemyStopsFightingPlayer();
+            
+            base.OnDeath(damageHitResult);
         }
 
         public void LookAtPlayer(float delta)

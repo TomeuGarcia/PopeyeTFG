@@ -38,8 +38,12 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
             {
                 await Listener.OnActivateRelayStarted();
             }
-            
-            if (_awaitMode == SequenceAwaitMode.PlayAndAwaitAllSequentially)
+
+            if (_worldInteractors.Length < 1)
+            {
+                await OnlyAwait();
+            }
+            else if (_awaitMode == SequenceAwaitMode.PlayAndAwaitAllSequentially)
             {
                 await AwaitAllRelayEnterActivatedState();
             }
@@ -81,6 +85,12 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Relay
             await UniTask.Delay(TimeSpan.FromSeconds(_delayBeforeEachWaitActivation), ignoreTimeScale: true);
             await firstWorldInteractor.EnterActivatedStateAwait();
             await UniTask.Delay(TimeSpan.FromSeconds(_delayAfterEachWaitActivation), ignoreTimeScale: true);
+        }
+
+        private async UniTask OnlyAwait()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(_delayBeforeEachWaitActivation + _delayAfterEachWaitActivation), 
+                ignoreTimeScale: true);
         }
 
         public void RelayEnterDeactivatedState()

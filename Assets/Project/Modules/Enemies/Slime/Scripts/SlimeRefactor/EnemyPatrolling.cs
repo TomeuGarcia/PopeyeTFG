@@ -46,7 +46,7 @@ namespace Popeye.Modules.Enemies.Components
         }
 
         private void Update()
-        {
+        {            
             if (_patrolType == PatrolType.FixedWaypoints)
             {
                 

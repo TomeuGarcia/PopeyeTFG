@@ -33,7 +33,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin
         private Quaternion _endRotation;
         
         public float PreparationDuration => _config.PreparationDuration;
-        public string Name => "Anchor Spin";
+        public PlayerMovesetActions Name => PlayerMovesetActions.AnchorSpin;
 
 
         public void Configure(

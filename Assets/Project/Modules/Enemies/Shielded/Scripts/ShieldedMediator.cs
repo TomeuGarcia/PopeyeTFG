@@ -139,8 +139,9 @@ namespace Popeye.Modules.Enemies
         public override void OnDeath(DamageHitResult damageHitResult)
         {
             _powerBoostDropFactory.Create(transform.position, Quaternion.identity, _powerBoostDrop);
-            _enemyVisuals.PlayDeathEffects(damageHitResult.DamageHit);
             _shieldedMind.Die();
+            
+            base.OnDeath(damageHitResult);
         }
 
         public override void OnHit(DamageHitResult damageHitResult)

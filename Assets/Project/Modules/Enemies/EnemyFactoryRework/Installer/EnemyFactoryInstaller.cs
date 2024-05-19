@@ -63,10 +63,15 @@ namespace Popeye.Modules.Enemies.EnemyFactories
             SpecificCaseEnemyHinterFactory enemyHinterFactory =
                 new SpecificCaseEnemyHinterFactory(_enemyHinterFactoryConfig, transform);
             serviceLocator.RegisterService<IEnemyHinterFactory>(enemyHinterFactory);
+
+            EnemyIDsCollectionService enemyIDsCollectionService =
+                new EnemyIDsCollectionService(_installerConfiguration.GetAllIds());
+            serviceLocator.RegisterService<IEnemyIDsCollectionService>(enemyIDsCollectionService);
         }
 
         public void Uninstall(ServiceLocator serviceLocator)
         {
+            serviceLocator.RemoveService<IEnemyIDsCollectionService>();
             serviceLocator.RemoveService<IEnemyHinterFactory>();
             serviceLocator.RemoveService<IEnemyFactory>();
         }

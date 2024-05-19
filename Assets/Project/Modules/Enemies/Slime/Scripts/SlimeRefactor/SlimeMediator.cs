@@ -123,7 +123,10 @@ namespace Popeye.Modules.Enemies
             //_boxCollider.isTrigger = true;
             _slimeMovement.ActivateNavigation();
             if(type == EnemyPatrolling.PatrolType.FixedWaypoints){SetWayPoints(wayPoints);}
-            else if (type == EnemyPatrolling.PatrolType.None){StartChasing();}
+            else if (type == EnemyPatrolling.PatrolType.None)
+            {
+                OnPlayerClose();
+            }
             PlayMoveAnimation();
             _enemyHealth.SetIsInvulnerable(false);
         }
@@ -163,6 +166,7 @@ namespace Popeye.Modules.Enemies
         {
             Divide();
             base.OnDeath(damageHitResult);
+            Recycle();
         }
 
         public override void OnPlayerClose()

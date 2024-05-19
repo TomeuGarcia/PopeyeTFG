@@ -49,5 +49,32 @@ namespace Popeye.Modules.Enemies.EnemyFactories
 
             return enemyToPrefab;
         }
+
+        public EnemyID[] GetAllIds()
+        {
+            EnemyID[] slimeIds = SlimeFactoryConfiguration.GetSlimeEnemyIDs();
+
+            List<EnemyID> enemyIds = new List<EnemyID>((slimeIds.Length * 2) + _idToPrefabs.Length);
+            
+            
+            for (int i = 0; i < slimeIds.Length; ++i)
+            {
+                enemyIds.Add(slimeIds[i]);
+            }
+            
+            slimeIds = ExplosiveSlimeFactoryConfiguration.GetSlimeEnemyIDs();
+            for (int i = 0; i < slimeIds.Length; ++i)
+            {
+                enemyIds.Add(slimeIds[i]);
+            }
+
+            for (int i = 0; i < _idToPrefabs.Length; ++i)
+            {
+                enemyIds.Add(_idToPrefabs[i].EnemyID);
+            }
+
+
+            return enemyIds.ToArray();
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using NaughtyAttributes;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
+using Popeye.Modules.GameDataEvents;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
@@ -86,6 +87,7 @@ namespace Popeye.Modules.PlayerAnchor.SafeGroundChecking.AnchorHitCheckpoint
             }
 
             _eventSystemService.Dispatch(new OnCheckpointSet());
+            _eventSystemService.Dispatch(new OnPlayerRestEvent(transform.position));
         }
 
 
