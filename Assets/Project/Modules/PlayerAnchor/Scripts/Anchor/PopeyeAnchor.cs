@@ -9,6 +9,7 @@ using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Popeye.Modules.PlayerController;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 

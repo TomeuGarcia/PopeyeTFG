@@ -1,5 +1,6 @@
 using Popeye.Core.Pool;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.Enemies.Components;
 using Popeye.Modules.VFX.ParticleFactories;
 using UnityEngine;
 

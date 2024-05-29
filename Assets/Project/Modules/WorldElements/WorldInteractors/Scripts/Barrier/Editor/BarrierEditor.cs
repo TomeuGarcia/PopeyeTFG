@@ -47,11 +47,11 @@ namespace Popeye.Modules.WorldElements.WorldInteractors.Editor
             GUILayout.Space(40);
             GUILayout.Label("EDITOR");
             _showPreview = GUILayout.Toggle(_showPreview, "Show Preview");
-            _arrowThickness = EditorGUILayout.Slider("Arrow Thickness", _arrowThickness, 0, 5);
-            _defaultColor = EditorGUILayout.ColorField("Deactivated to Activated", _defaultColor);
-            _previewColor = EditorGUILayout.ColorField("Preview", _previewColor);
-            _previewStartStopTime = EditorGUILayout.Slider("Preview Stop Time",_previewStartStopTime, 0, 5);
-            _previewEndStopTime = EditorGUILayout.Slider("Preview Stop Time",_previewEndStopTime, 0, 5);
+            _arrowThickness = EditorGUILayout.Slider("Arrow Thickness", _arrowThickness, 0, 20);
+            _defaultColor = EditorGUILayout.ColorField("Deactivated Color", _defaultColor);
+            _previewColor = EditorGUILayout.ColorField("Activated Color", _previewColor);
+            _previewStartStopTime = EditorGUILayout.Slider("Preview Start Delay",_previewStartStopTime, 0, 5);
+            _previewEndStopTime = EditorGUILayout.Slider("Preview End Delay",_previewEndStopTime, 0, 5);
             
             if (_showPreview && !_showingPreview)
             {

@@ -5,6 +5,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.CombatSystem;
+using Popeye.Modules.PlayerController;
 using Unity.VisualScripting;
 using UnityEngine;
 

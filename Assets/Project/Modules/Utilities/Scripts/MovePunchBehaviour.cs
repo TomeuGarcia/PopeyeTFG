@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Popeye.Modules.Utilities.Scripts
+namespace Popeye.Modules.Utilities
 {
     public class MovePunchBehaviour : MonoBehaviour
     {

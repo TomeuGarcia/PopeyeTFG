@@ -55,10 +55,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             _isOpen = false;
             //PlayOpenAnimation(delay1);
-            await UniTask.Delay(MathUtilities.SecondsToMilliseconds(delay1));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay1));
 
             PlayCloseAnimation();
-            await UniTask.Delay(MathUtilities.SecondsToMilliseconds(delay2));
+            await UniTask.Delay(TimeSpan.FromSeconds(delay2));
             
             _clawsTransform.PunchScale(_viewConfig.ScalePunchSnapClawParent);
         }

@@ -1,4 +1,5 @@
 using Popeye.Core.Pool;
+using Popeye.Modules.Enemies.Components;
 using Popeye.ProjectHelpers;
 using UnityEngine;
 

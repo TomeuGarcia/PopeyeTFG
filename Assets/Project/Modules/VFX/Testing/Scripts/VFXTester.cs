@@ -7,22 +7,27 @@ using Popeye.Modules.VFX.ParticleFactories;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class VFXTester : MonoBehaviour
+namespace Popeye.Modules.VFX.Testing
 {
-    [SerializeField] private ParticleTypes _testParticleType1;
-    [SerializeField] private Transform _particleParent;
-    
-    private void Start()
+    public class VFXTester : MonoBehaviour
     {
-        StartCoroutine(TestVFX());
-    }
+        [SerializeField] private ParticleTypes _testParticleType1;
+        [SerializeField] private Transform _particleParent;
 
-    private IEnumerator TestVFX()
-    {
-        while (true)
+        private void Start()
         {
-            yield return new WaitForSeconds(2.0f);
-            ServiceLocator.Instance.GetService<IParticleFactory>().Create(_testParticleType1, Vector3.zero, quaternion.identity, _particleParent);
+            StartCoroutine(TestVFX());
+        }
+
+        private IEnumerator TestVFX()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(2.0f);
+                ServiceLocator.Instance.GetService<IParticleFactory>().Create(_testParticleType1, Vector3.zero,
+                    quaternion.identity, _particleParent);
+            }
         }
     }
+
 }

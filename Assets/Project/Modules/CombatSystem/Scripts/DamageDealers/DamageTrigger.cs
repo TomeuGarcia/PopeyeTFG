@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Popeye.Modules.PlayerController;
 using UnityEngine;
 
 namespace Popeye.Modules.CombatSystem

@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Popeye.Modules.Utilities;
 using Popeye.Modules.Utilities.Scripts;
 using Popeye.Timers;
 using Project.Scripts.TweenExtensions;

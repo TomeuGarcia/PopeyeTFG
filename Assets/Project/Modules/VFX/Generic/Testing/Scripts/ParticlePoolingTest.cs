@@ -6,22 +6,27 @@ using Popeye.Modules.VFX.Generic;
 using Popeye.Modules.VFX.ParticleFactories;
 using UnityEngine;
 
-public class ParticlePoolingTest : MonoBehaviour
+namespace Popeye.Modules.VFX.Testing
 {
-    [SerializeField] private ParticleTypes particleType;
-    
-    private IParticleFactory particleFactory;
-    
-    private void Start()
-    {
-        particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
-    }
 
-    void Update()
+    public class ParticlePoolingTest : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        [SerializeField] private ParticleTypes particleType;
+
+        private IParticleFactory particleFactory;
+
+        private void Start()
         {
-            particleFactory.Create(particleType, transform.position, transform.rotation);
+            particleFactory = ServiceLocator.Instance.GetService<IParticleFactory>();
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                particleFactory.Create(particleType, transform.position, transform.rotation);
+            }
         }
     }
+
 }
