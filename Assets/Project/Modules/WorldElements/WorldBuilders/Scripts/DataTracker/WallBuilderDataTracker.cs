@@ -47,7 +47,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
         
         [Button()]
-        private void UpdateSavedTime()
+        private void ComputeSavedTime()
         {
             _theoreticalHandPlacedSeconds = 
                 _handPlacedWalls.TheoreticalSecondsForNumberOfWalls(_instantiatedWallsCounter);
