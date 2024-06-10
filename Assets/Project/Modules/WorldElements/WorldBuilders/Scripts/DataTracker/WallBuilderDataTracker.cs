@@ -23,13 +23,16 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
             }
         }
 
+        [Header("COMPUTATION INPUTS")]
         [SerializeField] private WallsAndSeconds _handPlacedWalls; 
         [SerializeField] private WallsAndSeconds _wallBuilderPlacedWalls; 
         
+        [Header("DATA TRACKING")]
         [ShowNonSerializedField] private int _instantiatedWallsCounter;
-        
+
         [ShowNonSerializedField] private float _theoreticalHandPlacedSeconds;
         [ShowNonSerializedField] private float _theoreticalWallBuilderPlacedSeconds;
+        [Header("SAVED TIME")]
         [ShowNonSerializedField] private float _savedSeconds;
         [ShowNonSerializedField] private float _savedMinutes;
         [ShowNonSerializedField] private float _savedHours;

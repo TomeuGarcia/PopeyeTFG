@@ -41,7 +41,7 @@ namespace Popeye.Modules.Installers
         [SerializeField] private CollisionProbingConfig _hitTargetCollisionProbingConfig;
         [SerializeField] private CollisionProbingConfig _floorPlatformsProbingConfig;
         [SerializeField] private PhysicsTweenerBehaviour _physicsTweenerBehaviour;
-        [SerializeField] private CanvasScreenFadeService _canvasScreenFadeService;
+        
         
 
 
@@ -68,9 +68,7 @@ namespace Popeye.Modules.Installers
             IEventSystemService eventSystemService = serviceLocator.GetService<IEventSystemService>();
             ITimeFunctionalities timeFunctionalities = serviceLocator.GetService<ITimeFunctionalities>();
             
-            serviceLocator.RegisterService<IScreenFadeService>(_canvasScreenFadeService);
             
-
             _lastLoadedSceneProvider = new LastLoadedSceneProvider(eventSystemService);
             _lastLoadedSceneProvider.StartListeningToSceneUpdates();
 
@@ -114,8 +112,6 @@ namespace Popeye.Modules.Installers
             _informationDisplayInstaller.Uninstall(serviceLocator);
             
             _lastLoadedSceneProvider.StopListeningToSceneUpdates();
-            
-            serviceLocator.RemoveService<IScreenFadeService>();
         }
     }
 

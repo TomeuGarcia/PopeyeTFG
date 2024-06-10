@@ -4,6 +4,7 @@ using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.GameState;
+using Project.General.Scripts.Core.Services.ScreenFade;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using Project.Scripts.Time.TimeScale;
@@ -22,6 +23,8 @@ namespace Popeye.Modules.Installers
         [Header("SCENES")] 
         [SerializeField] private SceneLoadingInstaller _sceneLoadingInstaller;
         
+        [Header("SCREEN FADE")]
+        [SerializeField] private CanvasScreenFadeService _canvasScreenFadeService;
         
         private void Awake()
         {
@@ -37,6 +40,9 @@ namespace Popeye.Modules.Installers
         private void Install()
         {
             ServiceLocator serviceLocator = ServiceLocator.Instance;
+
+
+            serviceLocator.RegisterService<IScreenFadeService>(_canvasScreenFadeService);
 
             
             EventSystemService eventSystemService = new EventSystemService();
@@ -73,6 +79,7 @@ namespace Popeye.Modules.Installers
             serviceLocator.RemoveService<ICommandQueueService>();
             serviceLocator.RemoveService<ITimeFunctionalities>();
             serviceLocator.RemoveService<IEventSystemService>();
+            serviceLocator.RemoveService<IScreenFadeService>();
         }
     }
 }
