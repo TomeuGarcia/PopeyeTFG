@@ -41,14 +41,14 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _damageStartTransform = damageStartTransform;
 
 
-            _anchorThrowDamageTrigger.Configure(combatManager);
+            _anchorThrowDamageTrigger.Configure(new DamageDealer(combatManager));
             _anchorThrowDamageTrigger.Deactivate();
 
-            _anchorSpinDamageTrigger.Configure(combatManager, SpinDamageHit);
+            _anchorSpinDamageTrigger.Configure(new DamageDealer(combatManager), SpinDamageHit);
             _anchorSpinDamageTrigger.Deactivate();
             
             
-            _anchorVerticalLandDamageTrigger.Configure(combatManager);
+            _anchorVerticalLandDamageTrigger.Configure(new DamageDealer(combatManager));
             _anchorVerticalLandDamageTrigger.Deactivate();
             
 

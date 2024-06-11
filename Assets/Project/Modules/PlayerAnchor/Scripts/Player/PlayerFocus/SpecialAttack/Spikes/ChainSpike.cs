@@ -39,7 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         private void Awake()
         {
             ICombatManager combatManager = ServiceLocator.Instance.GetService<ICombatManager>();
-            _damageTrigger.Configure(combatManager, new DamageHit(_damageHitConfig));
+            _damageTrigger.Configure(new DamageDealer(combatManager), new DamageHit(_damageHitConfig));
         }
         
         internal override void Init() { }

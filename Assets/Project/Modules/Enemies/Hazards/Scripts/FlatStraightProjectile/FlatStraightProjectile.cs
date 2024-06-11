@@ -56,10 +56,10 @@ namespace Popeye.Modules.Enemies.Hazards
 
         private void SetupDamageTrigger(ICombatManager combatManager)
         {
-            _playerDamageTrigger.Configure(combatManager, new DamageHit(_config.PlayerDamageHitConfig));
+            _playerDamageTrigger.Configure(new DamageDealer(combatManager), new DamageHit(_config.PlayerDamageHitConfig));
             _playerDamageTrigger.Activate();
             
-            _othersDamageTrigger.Configure(combatManager, new DamageHit(_config.OthersDamageHitConfig));
+            _othersDamageTrigger.Configure(new DamageDealer(combatManager), new DamageHit(_config.OthersDamageHitConfig));
             _othersDamageTrigger.Activate();            
         }
 

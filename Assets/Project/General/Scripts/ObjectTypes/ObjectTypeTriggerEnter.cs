@@ -40,12 +40,12 @@ namespace Popeye.Scripts.ObjectTypes
 
         private bool AcceptsOther(Collider other)
         {
-            if (!other.TryGetComponent(out ObjectTypeBehaviour objectTypeBehaviour))
+            if (!other.TryGetComponent(out IObjectType objectType))
             {
                 return false;
             }
 
-            return objectTypeBehaviour.IsOfAnyType(_acceptObjectTypes);
+            return objectType.IsOfAnyType(_acceptObjectTypes);
         }
 
         public void Disable()

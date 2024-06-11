@@ -7,13 +7,14 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
     public class KnockbackManager : IKnockbackManager
     {
         private PhysicsTweenerBehaviour _physicsTweener;
-        private PhysicsTweenObjectMakerForKnockback _physicsTweenObjectMakerForKnockback;
+        private KnockbackTweenObjectMaker _knockbackTweenObjectMaker;
 
         
-        public KnockbackManager(PhysicsTweenerBehaviour physicsTweener, CollisionProbingConfig floorPlatformsProbingConfig)
+        public KnockbackManager(PhysicsTweenerBehaviour physicsTweener, 
+            KnockbackTweenObjectMaker knockbackTweenObjectMaker)
         {
             _physicsTweener = physicsTweener;
-            _physicsTweenObjectMakerForKnockback = new PhysicsTweenObjectMakerForKnockback(floorPlatformsProbingConfig);
+            _knockbackTweenObjectMaker = knockbackTweenObjectMaker;
         }
 
 
@@ -36,7 +37,7 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
 
 
             _physicsTweener.AddObject(
-                _physicsTweenObjectMakerForKnockback.CreatePhysicsTweenObject(knockbackHitTarget, knockbackHit)
+                _knockbackTweenObjectMaker.CreatePhysicsTweenObject(knockbackHitTarget, knockbackHit)
             );
             return true;
         }

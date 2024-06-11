@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Project.PhysicsMovement
 {
-    public class PhysicsTweener
+    public class PhysicsTweenUpdater
     {
         private List<PhysicsTweenObject> _tweenObjects;
 
         
-        public PhysicsTweener(int tweenObjectsCapacity)
+        public PhysicsTweenUpdater(int tweenObjectsCapacity)
         {
             _tweenObjects = new List<PhysicsTweenObject>(tweenObjectsCapacity);
         }

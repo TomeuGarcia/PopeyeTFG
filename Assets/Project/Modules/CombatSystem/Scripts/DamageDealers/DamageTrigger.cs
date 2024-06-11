@@ -56,10 +56,10 @@ namespace Popeye.Modules.CombatSystem
         
         
         
-        public void Configure(ICombatManager combatManager, DamageHit damageHit = null)
+        public void Configure(DamageDealer damageDealer, DamageHit damageHit = null)
         {
-            _damageDealer = new DamageDealer();
-            _damageDealer.Configure(combatManager, damageHit);
+            _damageDealer = damageDealer;
+            _damageDealer.SetDamageHit(damageHit);
 
             _hitTargetsHistory = new HashSet<GameObject>();
             _collider.isTrigger = true;

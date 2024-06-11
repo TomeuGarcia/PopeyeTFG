@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Project.Modules.CombatSystem.KnockbackSystem
 {
-    public class PhysicsTweenObjectMakerForKnockback
+    public class KnockbackTweenObjectMaker
     {
         private delegate PhysicsTweenObject CreateFunction(
             IKnockbackHitTarget knockbackHitTarget, KnockbackHit knockbackHit);
@@ -18,7 +18,7 @@ namespace Project.Modules.CombatSystem.KnockbackSystem
         
         
 
-        public PhysicsTweenObjectMakerForKnockback(CollisionProbingConfig floorPlatformsProbingConfig)
+        public KnockbackTweenObjectMaker(CollisionProbingConfig floorPlatformsProbingConfig)
         {
             _knockbackTypeToCreateFunction = new Dictionary<KnockbackHitType, CreateFunction>
             {

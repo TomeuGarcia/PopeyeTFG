@@ -73,8 +73,8 @@ namespace Popeye.Modules.Installers
             _lastLoadedSceneProvider.StartListeningToSceneUpdates();
 
 
-            KnockbackManager knockbackManager =
-                new KnockbackManager(_physicsTweenerBehaviour, _floorPlatformsProbingConfig);
+            KnockbackManager knockbackManager = new KnockbackManager(_physicsTweenerBehaviour, 
+            new KnockbackTweenObjectMaker(_floorPlatformsProbingConfig));
             CombatManagerService combatManagerService =
                 new CombatManagerService(_hitTargetCollisionProbingConfig, knockbackManager);
             serviceLocator.RegisterService<ICombatManager>(combatManagerService);

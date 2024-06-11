@@ -12,7 +12,6 @@ namespace Popeye.Modules.CombatSystem
         public Vector3 DamageSourcePosition  { get; set; }
 
         public DamageHitConfig DamageHitConfig => _config;
-        public float StunDuration => _config.StunDuration;
     
     
         public DamageHitTargetType DamageHitTargetTypeMask => _config.DamageHitTargetTypeMask;
