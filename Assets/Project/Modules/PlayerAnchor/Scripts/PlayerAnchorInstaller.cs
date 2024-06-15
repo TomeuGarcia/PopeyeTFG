@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using AYellowpaper;
 using Cinemachine;
 using InputSystem;
 using Popeye.Core.Services.EventSystem;
-using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
 using Popeye.Modules.PlayerAnchor.Player;
@@ -33,7 +30,6 @@ using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPlacer;
 using Popeye.Modules.PlayerAnchor.Player.PlayerPowerBoosts.Drops;
-using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Dynamic;
@@ -45,8 +41,8 @@ using Popeye.Modules.VFX.ParticleFactories;
 using Popeye.Scripts.Collisions;
 using Popeye.Scripts.MaterialHelpers;
 using Popeye.Scripts.ObjectTypes;
+using Popeye.Scripts.TransformUtilities;
 using Popeye.Scripts.ValueGating;
-using Project.General.Scripts.Core.Services.ScreenFade;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using UnityEngine;
@@ -232,12 +228,10 @@ namespace Popeye.Modules.PlayerAnchor
                 _playerGeneralConfig.AbilityActionChannels.AnchorPullDispatcher);
             anchorKicker.Configure(_player, _anchor, anchorTrajectoryMaker, _anchorGeneralConfig.KickConfig);
             anchorSpinner.Configure(_player, _anchor, _anchorGeneralConfig.SpinConfig);
-            anchorTrajectoryMaker.Configure(_obstacleProbingConfig, 
-                _anchorGeneralConfig.PullConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
+            anchorTrajectoryMaker.Configure(_obstacleProbingConfig, _anchorGeneralConfig.TrajectoryConfig.NumberOfPoints);
             anchorStatesBlackboard.Configure(_anchor, anchorMotion, _anchorGeneralConfig.MotionConfig, _anchorPhysics, 
                 _anchorChain, _player.AnchorCarryHolder, _player.AnchorGrabToThrowHolder, _playerController.Transform);
             chainPhysics.Configure(_anchorGeneralConfig.ChainConfig);
-            anchorTrajectorySnapController.Configure();
 
             _anchorDamageDealer.Configure(_anchor, _anchorGeneralConfig.DamageConfig, combatManager, 
                 _playerController.LookTransform);
@@ -283,8 +277,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             Material playerMaterial = _playerRenderersMaterialAssigner.AssignToRenderersAndGetMaterial();
             IPlayerView playerView = CreatePlayerView(_playerGeneralConfig.GeneralViewConfig, _player, playerMaterial);
-            _playerAudio.Configure(_playerController.gameObject,
-                _audioManagerReference, _playerAudioConfig, playerMovementChecker);
+            _playerAudio.Configure(_playerController.gameObject, _playerAudioConfig, playerMovementChecker);
             _playerAnimatorEvents.AddFootstepsListener(_playerAudio);
 
             PlayerFocusController playerFocusController =
@@ -292,7 +285,7 @@ namespace Popeye.Modules.PlayerAnchor
 
             _spikesSpecialAttack.Configure(
                 _playerGeneralConfig.SpecialAttacksConfig.ChainSpikesAttackConfig,
-                _anchorChain, playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor,
+                _anchorChain, playerFocusController, _playerGeneralConfig.FocusConfig.AttackConfig, _anchor, _anchor,
                 _playerGeneralConfig.AbilityActionChannels.ChainSpikesAttackDispatcher);
             
             _anchorSpinAttack.Configure(

@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using Popeye.Modules.AudioSystem;
 using Popeye.ProjectHelpers;
@@ -9,6 +10,9 @@ namespace Popeye.Modules.PlayerAnchor.Player
         menuName = ScriptableObjectsHelper.PLAYER_ASSETS_PATH + "PlayerAudioFMODConfig")]
     public class PlayerAudioFMODConfig : ScriptableObject
     {
+        [Header("AUDIO MANAGER")] 
+        [SerializeField] private AFMODAudioManagerReference _audioManager;
+        
         [Header("FOOTSTEPS")]
         [Expandable] [SerializeField] private OneShotFMODSound _leftFootstepSound;
         [Expandable] [SerializeField] private OneShotFMODSound _rightFootstepSound;
@@ -22,23 +26,58 @@ namespace Popeye.Modules.PlayerAnchor.Player
         [Expandable] [SerializeField] private OneShotFMODSound _takeDamage;
         
         [Header("HEAL")]
-        [Expandable] [SerializeField] private OneShotFMODSound _healingPreparation;
         [Expandable] [SerializeField] private OneShotFMODSound _healingPerformed;
-        [Expandable] [SerializeField] private LastingFMODSound _healingPreparationL;
+
         
-        
-        
-        public LastingFMODSound FootstepsSound => _footstepsSound;
-        public OneShotFMODSound LeftFootstepSound => _leftFootstepSound;
-        public OneShotFMODSound RightFootstepSound => _rightFootstepSound;
-        
-        public OneShotFMODSound DashTowardsAnchorSound => _dashTowardsAnchorSound;
-        public OneShotFMODSound DashDroppingAnchor => _dashDroppingAnchor;
-        
-        public OneShotFMODSound TakeDamage => _takeDamage;
-        
-        public OneShotFMODSound HealingPreparation => _healingPreparation;
-        public OneShotFMODSound HealingPerformed => _healingPerformed;
-        public LastingFMODSound HealingPreparationL => _healingPreparationL;
+        private LastingFMODSound.SoundId _footstepsSoundId;
+
+        private void OnEnable()
+        {
+            _footstepsSoundId = null;
+        }
+
+        public void StartPlayingStepsSounds(GameObject source)
+        {
+            _footstepsSoundId = _audioManager.PlayLastingSound(_footstepsSound, source);
+        }
+
+        public void StopPlayingStepsSounds()
+        {
+            if (_footstepsSoundId != null)
+            {
+                _audioManager.StopLastingSound(_footstepsSoundId);
+            }
+        }
+
+        public void PlayDashTowardsAnchorSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_dashTowardsAnchorSound, source);
+        }
+
+        public void PlayDashDroppingAnchorSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_dashDroppingAnchor, source);
+        }
+
+        public void PlayTakeDamageSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_takeDamage, source);
+        }
+
+        public void PlayHealingPerformedSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_healingPerformed, source);
+        }
+
+
+        public void PlayLeftFootstepSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_leftFootstepSound, source);
+        }
+
+        public void PlayRightFootstepSound(GameObject source)
+        {
+            _audioManager.PlayOneShotAttached(_rightFootstepSound, source);
+        }
     }
 }

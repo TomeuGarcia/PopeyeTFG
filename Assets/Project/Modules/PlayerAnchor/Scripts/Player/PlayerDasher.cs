@@ -4,6 +4,7 @@ using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.Utilities.Scripts.Collisions;
 using Popeye.Scripts.Collisions;
+using Popeye.Scripts.TransformUtilities;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player

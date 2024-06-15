@@ -6,14 +6,14 @@ using Cysharp.Threading.Tasks;
 
 namespace Popeye.Modules.GameDataEvents
 {
-    public class GameDataEventsCSVSaver : IGameDataEventsConsumer
+    public class GameDataEventsFileSaver : IGameDataEventsConsumer
     {
-        private readonly GameDataEventsCSVSaverConfig _config;
+        private readonly GameDataEventsFileSaverConfig _config;
         private readonly List<string> _dataToSave;
         private StreamWriter _outWriter;
         private bool _savingData;
 
-        public GameDataEventsCSVSaver(GameDataEventsCSVSaverConfig config)
+        public GameDataEventsFileSaver(GameDataEventsFileSaverConfig config)
         {
             _config = config;
             _dataToSave = new List<string>(300);

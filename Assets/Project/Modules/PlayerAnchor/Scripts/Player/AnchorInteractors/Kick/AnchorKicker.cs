@@ -55,7 +55,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 correctedDuration, correctedDurationHitObstacle, !trajectoryEndsOnTheFloor, trajectoryHitsObstacle);
 
             
-            _anchor.SetKicked(AnchorKickResult);
+            //_anchor.SetKicked(AnchorKickResult);
             DoKickAnchor(AnchorKickResult).Forget();
             
         }

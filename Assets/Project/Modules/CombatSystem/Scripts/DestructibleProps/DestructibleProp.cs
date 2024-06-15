@@ -6,6 +6,7 @@ using DG.Tweening;
 using Popeye.Modules.ValueStatSystem;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerController.AutoAim;
+using Popeye.Scripts.TransformUtilities;
 using Project.Modules.CombatSystem.KnockbackSystem;
 using Project.Scripts.TweenExtensions;
 using Unity.VisualScripting;

@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Popeye.Modules.WorldElements.Tutorial
 {
     [RequireComponent(typeof(TriggerOnceGroup))]
-    public class TextWorldTriggerable : MonoBehaviour, IWorldTriggerable
+    public class MessageDisplayWorldTriggerable : MonoBehaviour, IWorldTriggerable
     {
         [Header("TRIGGER")]
         [SerializeField] private TriggerOnceGroup _triggerOnceGroup;

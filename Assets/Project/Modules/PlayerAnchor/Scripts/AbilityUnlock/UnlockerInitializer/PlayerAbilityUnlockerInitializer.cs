@@ -1,7 +1,6 @@
 using System;
 using Popeye.Core.Services.GameReferences;
 using Popeye.Core.Services.ServiceLocator;
-using Popeye.Modules.AudioSystem;
 using Popeye.Modules.WorldElements.WorldInteractors;
 using UnityEngine;
 
@@ -48,20 +47,8 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             IPlayerAbilityUnlockerView view = _christalView != null ? _christalView : _orbView;
             _playerAbilityUnlocker.Configure(configureReferences.AbilityChannel, view);
 
-            
-            ITutorialDisplayCondition tutorialStopDisplayCondition = null;
-            if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformed)
-            {
-                tutorialStopDisplayCondition = CreateTimesPerformedCondition(configureReferences);
-            }
-            else if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.Duration)
-            {
-                tutorialStopDisplayCondition = CreateDurationCondition(configureReferences);
-            }
-            else if (configureReferences.StopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformedAndDuration)
-            {
-                tutorialStopDisplayCondition = CreateTimesPerformedAndDurationCondition(configureReferences);
-            }
+            ITutorialDisplayCondition tutorialStopDisplayCondition = CreateTutorialStopDisplayCondition(
+                configureReferences.StopShowingCondition, configureReferences);
             
             _tutorialInformationDisplay.Configure(
                 configureReferences.TextInfoToDisplay,
@@ -69,6 +56,26 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
                 tutorialStopDisplayCondition);
         }
 
+        private ITutorialDisplayCondition CreateTutorialStopDisplayCondition(
+            ITutorialDisplayCondition.Type stopShowingCondition, 
+            GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences)
+        {
+            ITutorialDisplayCondition tutorialStopDisplayCondition = null;
+            if (stopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformed)
+            {
+                tutorialStopDisplayCondition = CreateTimesPerformedCondition(configureReferences);
+            }
+            else if (stopShowingCondition == ITutorialDisplayCondition.Type.Duration)
+            {
+                tutorialStopDisplayCondition = CreateDurationCondition(configureReferences);
+            }
+            else if (stopShowingCondition == ITutorialDisplayCondition.Type.TimesPerformedAndDuration)
+            {
+                tutorialStopDisplayCondition = CreateTimesPerformedAndDurationCondition(configureReferences);
+            }
+
+            return tutorialStopDisplayCondition;
+        }
 
         private ITutorialDisplayCondition CreateTimesPerformedCondition(
             GeneralInitializePlayerAbilityUnlockerConfig.References configureReferences)

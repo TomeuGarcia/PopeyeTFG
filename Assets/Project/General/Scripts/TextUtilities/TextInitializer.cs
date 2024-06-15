@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Popeye.Scripts.TextUtilities
 {
-    public class TextContentInitializeHelper : MonoBehaviour
+    public class TextInitializer : MonoBehaviour
     {
         [Required()] [SerializeField] private TMP_Text _text;
         [Required()] [Expandable] [SerializeField] private TextContent _textContent;

@@ -16,6 +16,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
         private IPlayerFocusSpender _focusSpender;
         private PlayerFocusAttackConfig _focusAttackConfig;
         private IAnchorMediator _anchorMediator;
+        private IAnchorDamageDealerListener _damageDealerListener;
 
         private IEmptyEventChannelDispatcher _attackPerformedEventDispatcher;
         
@@ -37,6 +38,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             IPlayerFocusSpender focusSpender, 
             PlayerFocusAttackConfig focusAttackConfig,
             IAnchorMediator anchorMediator,
+            IAnchorDamageDealerListener damageDealerListener,
             IEmptyEventChannelDispatcher attackPerformedEventDispatcher)
         {
             _config = config;
@@ -44,6 +46,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
             _focusSpender = focusSpender;
             _focusAttackConfig = focusAttackConfig;
             _anchorMediator = anchorMediator;
+            _damageDealerListener = damageDealerListener;
             _attackPerformedEventDispatcher = attackPerformedEventDispatcher;
 
             _spikesPool = _config.ChainSpikePoolData.ToObjectPool(transform);
@@ -126,7 +129,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spikes
 
             for (int i = 0; i < _activeSpikes.Length; ++i)
             {
-                _activeSpikes[i].InitBeforeAttack(_spikesPositioning[i], _anchorMediator);
+                _activeSpikes[i].InitBeforeAttack(_spikesPositioning[i], _damageDealerListener);
                 _activeSpikes[i].PlaySpawnAnimation().Forget();
                 await UniTask.Delay(TimeSpan.FromSeconds(_config.Delay));
             }

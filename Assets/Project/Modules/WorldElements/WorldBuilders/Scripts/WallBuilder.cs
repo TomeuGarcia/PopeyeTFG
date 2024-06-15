@@ -370,8 +370,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
                                
             
                 
-            CreateFillWalls(previousPoint, previousToCurrentDirection, previousToCurrentDistance, offsetRotation,
-                fillLength);
+            CreateFillWalls(previousPoint, previousToCurrentDirection, offsetRotation, fillLength);
             
             CreateColliderPreviousToCurrent(previousPointLocal, previousToCurrentDirection, previousToCurrentDistance, 
                 offsetRotation, fillLength);
@@ -410,7 +409,7 @@ namespace Popeye.Modules.WorldElements.WorldBuilders
         }
         
 
-        private void CreateFillWalls(Vector3 previousPoint, Vector3 previousToCurrentDirection, float previousToCurrentDistance,
+        private void CreateFillWalls(Vector3 previousPoint, Vector3 previousToCurrentDirection,
             Quaternion rotation, float fillLength)
         {
             float distanceCounter = CornerBlock.HalfLength + FillBlock.HalfLength;

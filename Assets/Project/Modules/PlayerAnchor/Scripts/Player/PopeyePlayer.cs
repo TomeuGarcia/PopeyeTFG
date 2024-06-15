@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
@@ -10,11 +8,11 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
-using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerController.Inputs;
+using Popeye.Scripts.TransformUtilities;
 using Popeye.Scripts.ValueGating;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
@@ -290,7 +288,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void StartChargingThrow()
         {
             _anchorThrower.StartThrow();
-            _anchor.SetGrabbedToThrow();
+            _anchor.SetGrabbedToThrow();    
         }
 
         public void UpdateChargingThrow()

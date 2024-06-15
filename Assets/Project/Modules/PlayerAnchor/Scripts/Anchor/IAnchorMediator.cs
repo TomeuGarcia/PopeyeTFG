@@ -43,9 +43,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         UniTaskVoid SnapToFloor(Vector3 noFloorAlternativePosition);
 
         
-
-        void OnDamageDealt(DamageHitResult damageHitResult);
-
         void ResetCurrentTrajectorySnapTarget();
     }
 }

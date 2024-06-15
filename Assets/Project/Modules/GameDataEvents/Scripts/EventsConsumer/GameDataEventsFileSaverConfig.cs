@@ -9,9 +9,9 @@ using UnityEditor;
 
 namespace Popeye.Modules.GameDataEvents
 {
-    [CreateAssetMenu(fileName = "GameDataEvents_CSVSaverConfig", 
-        menuName = ScriptableObjectsHelper.GAMEDATAEVENTS_ASSETS_PATH + "CSVSaverConfig")]
-    public class GameDataEventsCSVSaverConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "GameDataEvents_EXTENSIONSaverConfig", 
+        menuName = ScriptableObjectsHelper.GAMEDATAEVENTS_ASSETS_PATH + "FileSaverConfig")]
+    public class GameDataEventsFileSaverConfig : ScriptableObject
     {
         [Header("LOGGING")]
         [SerializeField] private bool _logToConsole = false;

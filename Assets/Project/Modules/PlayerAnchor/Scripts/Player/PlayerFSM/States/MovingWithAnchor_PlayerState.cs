@@ -7,7 +7,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     public class MovingWithAnchor_PlayerState : APlayerState
     {
         private readonly PlayerStatesBlackboard _blackboard;
-        private readonly Timer _lateAnchorThrowTimer;
         private readonly Timer _anchorHeldAimTimer;
         
         
@@ -15,7 +14,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             _blackboard = blackboard;
 
-            _lateAnchorThrowTimer = new Timer(_blackboard.PlayerStatesConfig.AnchorLateThrowTime);
             _anchorHeldAimTimer = new Timer(_blackboard.PlayerStatesConfig.AnchorAimHeldWaitTime);
         }
         
@@ -23,10 +21,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         {
             _blackboard.PlayerStatesConfig.OnSpeedValueChanged += UpdateMovementSpeed;
             UpdateMovementSpeed();
-            
-            _lateAnchorThrowTimer.SetDuration(_blackboard.PlayerStatesConfig.AnchorLateThrowTime);
-            _lateAnchorThrowTimer.Clear();
-            
+
             _anchorHeldAimTimer.SetDuration(_blackboard.PlayerStatesConfig.AnchorAimHeldWaitTime);
             _anchorHeldAimTimer.Clear();
             

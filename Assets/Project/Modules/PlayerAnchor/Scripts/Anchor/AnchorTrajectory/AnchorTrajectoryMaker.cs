@@ -22,18 +22,13 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
         private AnchorTrajectoryEndSpot _trajectoryEndSpot;
-        private AnchorPullConfig _anchorPullConfig;
 
         private QuadraticBezierCurve _pointsCurve;
         
         
-        public void Configure(
-            ObstacleProbingConfig obstacleProbingConfig, 
-            AnchorPullConfig anchorPullConfig,
-            int numberOfPoints)
+        public void Configure(ObstacleProbingConfig obstacleProbingConfig, int numberOfPoints)
         {
             _obstacleProbingConfig = obstacleProbingConfig;
-            _anchorPullConfig = anchorPullConfig;
             
             _straightLineTrajectoryPoints = new Vector3[2];
             _curvedTrajectoryPoints = new Vector3[numberOfPoints];
@@ -44,7 +39,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
         public Vector3[] ComputeCurvedTrajectory(Vector3 startPosition, Vector3 goalPosition, int numberOfSteps,
-            out float trajectoryDistance)
+            int trajectoryBendSharpness, out float trajectoryDistance)
         {
             if (numberOfSteps < 1)
             {
@@ -54,9 +49,8 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
             bool goalIsHigher = goalPosition.y > startPosition.y;
             
-            float bendSharpness = goalIsHigher ? 
-                1.0f/_anchorPullConfig.TrajectoryBendSharpness : 
-                _anchorPullConfig.TrajectoryBendSharpness;
+            float bendSharpness = goalIsHigher 
+                ? 1.0f / trajectoryBendSharpness : trajectoryBendSharpness;
             
             return DoComputeCurvedTrajectory(startPosition, goalPosition, numberOfSteps, out trajectoryDistance,
                 bendSharpness);
@@ -128,7 +122,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             }
 
             validSnapTarget = false;
-            return ComputeUpdatedTrajectory(startPosition, direction, floorNormal,
+            return DoComputeUpdatedTrajectory(startPosition, direction, floorNormal,
                 heightOffsetCurve, distance, out trajectoryDistance, out trajectoryEndsOnTheFloor,
                 out obstacleHit, out trajectoryHitsObstacle, out lastIndexBeforeCollision);
         }

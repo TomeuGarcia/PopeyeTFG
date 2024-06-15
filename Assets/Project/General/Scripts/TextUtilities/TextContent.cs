@@ -1,8 +1,4 @@
 using Popeye.ProjectHelpers;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Popeye.Scripts.TextUtilities

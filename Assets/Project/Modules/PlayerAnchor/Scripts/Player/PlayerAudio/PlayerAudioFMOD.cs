@@ -8,61 +8,48 @@ namespace Popeye.Modules.PlayerAnchor.Player
     public class PlayerAudioFMOD : MonoBehaviour, IPlayerAudio
     {
         private GameObject _playerGameObject;
-        private IFMODAudioManager _fmodAudioManager;
         private PlayerAudioFMODConfig _config;
         private PlayerMovementChecker _playerMovementChecker;
-
-        private LastingFMODSound.SoundId _footstepsSoundId;
-
+        
         [SerializeField] private StudioEventEmitter _healingPreparationEmitter;
         
 
         public void Configure(GameObject playerGameObject,
-            IFMODAudioManager fmodAudioManager, PlayerAudioFMODConfig config,
+            PlayerAudioFMODConfig config,
             PlayerMovementChecker playerMovementChecker)
         {
             _playerGameObject = playerGameObject;
-            _fmodAudioManager = fmodAudioManager;
             _config = config;
             _playerMovementChecker = playerMovementChecker;
         }
         
-        private void PlayOneShotAttached(OneShotFMODSound oneShotSound)
-        {
-            _fmodAudioManager.PlayOneShotAttached(oneShotSound, _playerGameObject);
-        }
-        
         public void StartPlayingStepsSounds()
         {
-            _footstepsSoundId = _fmodAudioManager.PlayLastingSound(_config.FootstepsSound, _playerGameObject);
+            _config.StartPlayingStepsSounds(_playerGameObject);
         }
 
         public void StopPlayingStepsSounds()
         {
-            if (_footstepsSoundId != null)
-            {
-                _fmodAudioManager.StopLastingSound(_footstepsSoundId);
-            }
+            _config.StopPlayingStepsSounds();
         }
 
         public void PlayDashTowardsAnchorSound()
         {
-            PlayOneShotAttached(_config.DashTowardsAnchorSound);
+            _config.PlayDashTowardsAnchorSound(_playerGameObject);
         }
 
         public void PlayDashDroppingAnchorSound()
         {
-            PlayOneShotAttached(_config.DashDroppingAnchor);
+            _config.PlayDashDroppingAnchorSound(_playerGameObject);
         }
 
         public void PlayTakeDamageSound()
         {
-            PlayOneShotAttached(_config.TakeDamage);
+            _config.PlayTakeDamageSound(_playerGameObject);
         }
 
         public void StartPlayingHealingPreparationSound()
         {
-            //_fmodAudioManager.PlayOneShotAttached(_config.HealingPreparation, _playerGameObject);
             _healingPreparationEmitter.Play();
         }
 
@@ -73,7 +60,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
 
         public void PlayHealingPerformedSound()
         {
-            PlayOneShotAttached(_config.HealingPerformed);
+            _config.PlayHealingPerformedSound(_playerGameObject);
         }
 
 
@@ -81,14 +68,14 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             if (!_playerMovementChecker.IsMoving) return;
             
-            PlayOneShotAttached(_config.LeftFootstepSound);
+            _config.PlayLeftFootstepSound(_playerGameObject);
         }
 
         public void OnRightFootstep()
         {
             if (!_playerMovementChecker.IsMoving) return;
         
-            PlayOneShotAttached(_config.RightFootstepSound);
+            _config.PlayRightFootstepSound(_playerGameObject);
         }
         
         

@@ -87,7 +87,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             out float trajectoryDistance, Vector3 playerPosition, Vector3 anchorPosition)
         {
             trajectoryPath = _anchorTrajectoryMaker.ComputeCurvedTrajectory(anchorPosition, 
-                playerPosition, 10, out trajectoryDistance);
+                playerPosition, 10,  _pullConfig.TrajectoryBendSharpness, out trajectoryDistance);
 
 
             Vector3[] chainPositions = _anchor.GetChainPositions();
