@@ -11,13 +11,15 @@ namespace Popeye.Scripts.Core.Scenes
     {
         [Expandable] [SerializeField] private TextContent[] _incompleteTextContents;
         [Expandable] [SerializeField] private TextContent[] _allTextContents;
-        
+
+        public TextContent[] AllTextContents => _allTextContents;
         
         public void UpdateTextContents(TextContent[] allTextContents, TextContent[] incompleteTextContents)
         {
             _allTextContents = allTextContents;           
             _incompleteTextContents = incompleteTextContents;           
         }
+        
         
         
     }

@@ -23,6 +23,13 @@ namespace Popeye.Scripts.TextUtilities
         {
             return content != "";
         }
+
+        public void GetContentsByLanguage(out string content_ENG, out string content_CAT, out string content_ESP)
+        {
+            content_ENG = _content_ENG;
+            content_CAT = _content_CAT;
+            content_ESP = _content_ESP;
+        }
     }
 }
 

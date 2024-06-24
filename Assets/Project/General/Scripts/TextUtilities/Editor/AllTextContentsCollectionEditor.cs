@@ -12,7 +12,7 @@ namespace Popeye.Scripts.Core.Scenes.Editor
     {
         private static readonly string[] _excludedProperties = { "m_Script" };
    
-        private AllTextContentsCollection _sceneReferencesInspected;
+        private AllTextContentsCollection _textContentsCollectionInspected;
         
         private int _textContentsTotal = 0;
         private int _incompletedTextContentsCounter;
@@ -22,7 +22,7 @@ namespace Popeye.Scripts.Core.Scenes.Editor
 
         private void OnEnable()
         {
-            _sceneReferencesInspected = target as AllTextContentsCollection;
+            _textContentsCollectionInspected = target as AllTextContentsCollection;
             UpdateCollection();
             InitializeGuiStyles();
         }
@@ -89,8 +89,12 @@ namespace Popeye.Scripts.Core.Scenes.Editor
         
         private void UpdateCollection()
         {
+            Undo.RecordObject(_textContentsCollectionInspected, "Update TextContents Collection");
+            
             TextContent[] textContents = FindAssetsHelper.GetAllAssetsInProject<TextContent>();
-            _sceneReferencesInspected.UpdateTextContents(textContents, FilterIncompleteTextContents(textContents));
+            _textContentsCollectionInspected.UpdateTextContents(textContents, FilterIncompleteTextContents(textContents));
+            
+            EditorUtility.SetDirty(_textContentsCollectionInspected);
         }
 
         private TextContent[] FilterIncompleteTextContents(TextContent[] textContents)
