@@ -52,11 +52,11 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerPlacer
 
             if (placingData.startCarryingAnchor)
             {
-                _playerStateMachine.OverwriteState(PlayerStates.PlayerStates.Spawning);
+                _playerStateMachine.TryOverwriteState(PlayerStates.PlayerStates.Spawning);
             }
             else
             {
-                _playerStateMachine.OverwriteState(PlayerStates.PlayerStates.SpawningWithAnchorOnFloor);
+                _playerStateMachine.TryOverwriteState(PlayerStates.PlayerStates.SpawningWithAnchorOnFloor);
             }
 
             if (placingData.isNewPlayerRespawn)

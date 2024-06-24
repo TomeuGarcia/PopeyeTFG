@@ -110,5 +110,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
 
             return states;
         }
+
+        public HashSet<PlayerStates> CreateNonOverwritableStates()
+        {
+            return new HashSet<PlayerStates>()
+            {
+                PlayerStates.Dead
+            };
+        }
     }
 }

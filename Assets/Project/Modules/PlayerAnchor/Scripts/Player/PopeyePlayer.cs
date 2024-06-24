@@ -417,7 +417,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnAnchorEndedInVoid()
         {
             _anchor.OnVoidChecker.ClearState();
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);
+            _stateMachine.TryOverwriteState(PlayerStates.PlayerStates.PullingAnchor);
             _pullingAnchorFromTheVoid = true;
         }
 
@@ -569,7 +569,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnKilledByDamageTaken(DamageHitResult damageHitResult)
         {
             _playerAudio.PlayTakeDamageSound();
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
+            _stateMachine.TryOverwriteState(PlayerStates.PlayerStates.Dead);
             _eventsDispatcher.DispatchOnDiedEvent();
         
             _eventsDispatcher.DispatchOnKilledByDamageEvent(damageHitResult, Position);

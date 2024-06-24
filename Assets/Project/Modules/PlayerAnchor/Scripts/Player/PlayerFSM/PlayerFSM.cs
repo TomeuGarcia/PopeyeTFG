@@ -10,6 +10,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
         private APlayerState _currentState;
         public PlayerStates CurrentStateType { get; private set; }
         private Dictionary<PlayerStates, APlayerState> _states;
+        private HashSet<PlayerStates> _nonOverwritableStates;
 
         public PlayerStatesBlackboard Blackboard { get; private set; }
 
@@ -18,6 +19,7 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             Blackboard = blackboard;
             
             _states = playerStatesCreator.CreateStatesDictionary(blackboard);
+            _nonOverwritableStates = playerStatesCreator.CreateNonOverwritableStates();
             CurrentStateType = playerStatesCreator.StartState;
             
             _currentState = _states[CurrentStateType];
@@ -42,12 +44,14 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
             _currentState.Enter();
         }
 
-        public void OverwriteState(PlayerStates newState)
+        public void TryOverwriteState(PlayerStates newState)
         {
-            if (_states.ContainsKey(newState))
+            if (_nonOverwritableStates.Contains(CurrentStateType))
             {
-                TransitionToNextState(newState);
+                return;
             }
+        
+            TransitionToNextState(newState);
         }
         
     }
