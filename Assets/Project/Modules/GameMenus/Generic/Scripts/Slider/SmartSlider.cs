@@ -13,7 +13,7 @@ namespace Popeye.Modules.GameMenus.Generic
         [Required()] [SerializeField] private Image _backgroundImage;
         [Required()] [SerializeField] private Image _fillImage;
         [Required()] [SerializeField] private Image _knobImage;
-        [Required()] [SerializeField] private TextMeshProUGUI _text;
+        [Required()] [SerializeField] private TextInitializer _textInitializer;
         
         private SmartSliderConfig _config;
 
@@ -44,7 +44,7 @@ namespace Popeye.Modules.GameMenus.Generic
             _fillImage.color = _config.ViewConfig.FillColor;
             _knobImage.color = _config.ViewConfig.KnobColor;
             
-            _text.SetContent(_config.TextContent);
+            _textInitializer.SetTextContent(_config.TextContent);
         }
 
 

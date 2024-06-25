@@ -54,6 +54,7 @@ namespace Popeye.ProjectHelpers
         public const string UI_ASSETS_PATH = ROOT + "UI/";
         public const string UISLIDER_ASSETS_PATH = UI_ASSETS_PATH + "Slider/";
         public const string UIBUTTON_ASSETS_PATH = UI_ASSETS_PATH + "Button/";
+        public const string UIOPTIONSELECTOR_ASSETS_PATH = UI_ASSETS_PATH + "OptionSelector/";
         
         
         public const string ID_ASSETS_PATH = ROOT + "ID/";

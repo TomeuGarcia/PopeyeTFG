@@ -101,12 +101,23 @@ namespace Popeye.Modules.PlayerAnchor.AbilityUnlock
             await _chainedOrb.MoveToTarget(_orbTargetTransform);
             _audio.PlayCollectedSound(gameObject);
 
-            _pickAbilityParticlesHolder.position = _orbTargetTransform.position;
-            _pickAbilityPS.Play();
-            
-            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbMoveToTarget.FinalDelay));
+            PlayParticleHoldAnimation().Forget();
+
+            await UniTask.Delay(TimeSpan.FromSeconds(_viewConfig.OrbMoveToTarget.FinalDelay));            
         }
 
+        private async UniTaskVoid PlayParticleHoldAnimation()
+        {
+            Transform particlesOriginalParent = _pickAbilityParticlesHolder.parent;
+            _pickAbilityParticlesHolder.position = _orbTargetTransform.position;
+            _pickAbilityParticlesHolder.parent = _orbTargetTransform;
+            _pickAbilityPS.Play();
+
+            await UniTask.WaitUntil(() => !_pickAbilityPS.isPlaying);
+            
+            _pickAbilityParticlesHolder.parent = particlesOriginalParent;
+        }
+        
 
         [Button]
         private void DebugReset()

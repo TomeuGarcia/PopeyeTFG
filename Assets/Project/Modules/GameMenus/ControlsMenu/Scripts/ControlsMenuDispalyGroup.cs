@@ -15,13 +15,13 @@ namespace Popeye.Modules.GameMenus.OptionsMenu
         [SerializeField] private TextContent _descriptionText;
         [SerializeField] private VideoDisplayConfig _video;
 
-        private TMP_Text _text;
+        private TextInitializer _textInitializer;
         private IVideoDisplayer _videoDisplayer;
         
 
-        public void Init(TMP_Text text, IVideoDisplayer videoDisplayer)
+        public void Init(TextInitializer textInitializer, IVideoDisplayer videoDisplayer)
         {
-            _text = text;
+            _textInitializer = textInitializer;
             _videoDisplayer = videoDisplayer;
         
             _showButton.SmartButton.Init(_showButton.Config, ShowControls);
@@ -29,7 +29,7 @@ namespace Popeye.Modules.GameMenus.OptionsMenu
 
         public void ShowControls()
         {
-            _text.SetContent(_descriptionText);
+            _textInitializer.SetTextContent(_descriptionText);
 
             if (_video != null)
             {

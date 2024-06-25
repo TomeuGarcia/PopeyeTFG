@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2156807334860003041}
   - component: {fileID: 6360645115851264057}
+  - component: {fileID: 3955661025969467552}
   - component: {fileID: 5010243279701889058}
   m_Layer: 0
   m_Name: Text
@@ -46,6 +47,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1524362496659749829}
   m_CullTransparentMesh: 1
+--- !u!114 &3955661025969467552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524362496659749829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9192f55f9314297b723edba6e4ec06e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _text: {fileID: 5010243279701889058}
+  _textContent: {fileID: 11400000, guid: 0a80380c05828b043af96b72036ae087, type: 2}
 --- !u!114 &5010243279701889058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,10 +81,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Back <sprite name="PlayStationSeries_Controls_CircleColorFilled">
+  m_text: <sprite name="Controller_East"> Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e3483d45c1a4e444aa1412990a824840, type: 2}
-  m_sharedMaterial: {fileID: -715138192761691411, guid: e3483d45c1a4e444aa1412990a824840,
+  m_fontAsset: {fileID: 11400000, guid: 8a53ade30133a12469de124e667020fd, type: 2}
+  m_sharedMaterial: {fileID: -2341762048060562298, guid: 8a53ade30133a12469de124e667020fd,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -264,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _button: {fileID: 5442221317562334926}
-  _text: {fileID: 5010243279701889058}
+  _textInitializer: {fileID: 3955661025969467552}
   _audioConfig: {fileID: 0}
   _canBeClicked: 1
   _selectOnEnable: 0

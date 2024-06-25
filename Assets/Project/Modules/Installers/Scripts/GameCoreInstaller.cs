@@ -3,6 +3,7 @@ using Popeye.Core.Services.CommandQueue;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.GameMenus.OptionsMenu;
 using Popeye.Modules.GameState;
 using Project.General.Scripts.Core.Services.ScreenFade;
 using Project.Scripts.Time.TimeFunctionalities;
@@ -39,6 +40,8 @@ namespace Popeye.Modules.Installers
 
         private void Install()
         {
+            GameLocalizationState.InitWithSystemLanguage();
+            
             ServiceLocator serviceLocator = ServiceLocator.Instance;
 
 
@@ -61,8 +64,8 @@ namespace Popeye.Modules.Installers
             
             IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
             serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
-            
-            
+
+
             _audioInstaller.Install(serviceLocator);
             _sceneLoadingInstaller.Install(serviceLocator, commandQueueService, gameStateEventsDispatcher);
         }

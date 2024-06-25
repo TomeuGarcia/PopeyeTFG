@@ -9,7 +9,7 @@ namespace Popeye.Modules.GameMenus.Generic
     public class SmartButton : MonoBehaviour
     {
         [SerializeField] private Button _button;
-        [SerializeField] private TextMeshProUGUI _text;
+        [SerializeField] private TextInitializer _textInitializer;
 
         [SerializeField] private UIAudioInteractionConfig _audioConfig;
         
@@ -40,9 +40,8 @@ namespace Popeye.Modules.GameMenus.Generic
             
             _button.colors = colorBlock;
             
-            _text.SetContent(_config.TextContent);
+            _textInitializer.SetTextContent(_config.TextContent);
         }
-
 
         private void OnEnable()
         {
