@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using Popeye.ProjectHelpers;
 using Popeye.Scripts.TextUtilities;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Project.Modules.GameMenus.GameCredits
         [SerializeField] private TextContent _closing;
         
         [Header("TEXTS")]
-        [SerializeField] private string _title = "A game by:";
+        [Expandable] [SerializeField] private TextContent _titleText;
         [SerializeField] private float _extraHeightGap = 300f;
         [SerializeField] private CreditsBlock[] _blocks;
         
@@ -24,7 +25,7 @@ namespace Project.Modules.GameMenus.GameCredits
         public Sprite GameLogo => _gameLogo;
         public Sprite TeamLogo => _teamLogo;
         
-        public string Title => _title;
+        public string Title => _titleText.Content;
         public float ExtraHeightGap => _extraHeightGap;
         public CreditsBlock[] Blocks => _blocks;
         

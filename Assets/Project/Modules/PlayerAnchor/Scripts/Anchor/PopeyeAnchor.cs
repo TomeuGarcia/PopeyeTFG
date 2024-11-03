@@ -9,12 +9,14 @@ using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.PlayerAnchor.Anchor.AnchorStates;
 using Popeye.Modules.PlayerAnchor.Chain;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
+using Popeye.Modules.PlayerController;
+using Popeye.Scripts.TransformUtilities;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
-    public class PopeyeAnchor : MonoBehaviour, IAnchorMediator
+    public class PopeyeAnchor : MonoBehaviour, IAnchorMediator, IAnchorDamageDealerListener
     {
         [SerializeField] private Transform _moveTransform;
         [SerializeField] private Transform _meshHolder;
@@ -193,21 +195,6 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorChain.SetDashingAwayView(duration, dashEase);
         }
 
-        public void SetKicked(AnchorThrowResult anchorKickResult)
-        {
-            _stateMachine.OverwriteState(AnchorStates.AnchorStates.Thrown);
-            _anchorDamageDealer.DealKickDamage(anchorKickResult);
-            
-            _anchorMotion.MoveAlongPath(anchorKickResult.TrajectoryPathPoints, anchorKickResult.Duration, 
-                anchorKickResult.MoveEaseCurve);
-            _anchorMotion.RotateStartToEnd(anchorKickResult.StartLookRotation,anchorKickResult.EndLookRotation, 
-                anchorKickResult.Duration, anchorKickResult.RotateEaseCurve);
-            
-            _anchorChain.SetFailedThrow(anchorKickResult.EndsOnVoid);
-            
-            _anchorView.PlayKickedAnimation(anchorKickResult.Duration);
-        }
-        
         public void SetCarried()
         {
             _stateMachine.OverwriteState(AnchorStates.AnchorStates.Carried);

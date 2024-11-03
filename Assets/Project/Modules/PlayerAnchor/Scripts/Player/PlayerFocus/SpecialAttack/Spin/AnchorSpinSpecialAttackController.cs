@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Popeye.Modules.PlayerAnchor.Anchor;
 using Popeye.Scripts.EventChannels;
+using Popeye.Scripts.TransformUtilities;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Player.PlayerFocus.Spin

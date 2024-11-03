@@ -53,8 +53,8 @@ namespace Popeye.Modules.Enemies.Hazards
             _particleFactory = particleFactory;
             _size = size;
             
-            _playerDamageTrigger.Configure(_combatManager, PlayerDamage);
-            _otherDamageTrigger.Configure(_combatManager, OtherDamage);
+            _playerDamageTrigger.Configure(new DamageDealer(_combatManager), PlayerDamage);
+            _otherDamageTrigger.Configure(new DamageDealer(_combatManager), OtherDamage);
         }
 
         public void StartExplosion()

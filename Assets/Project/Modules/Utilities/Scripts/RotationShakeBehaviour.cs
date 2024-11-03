@@ -6,7 +6,7 @@ using Project.Scripts.TweenExtensions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Popeye.Modules.Utilities.Scripts
+namespace Popeye.Modules.Utilities
 {
     public class RotationShakeBehaviour : MonoBehaviour
     {

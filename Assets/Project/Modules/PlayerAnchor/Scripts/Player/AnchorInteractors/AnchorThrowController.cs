@@ -8,7 +8,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
     {
         private readonly IPlayerMediator _player;
         private readonly PopeyeAnchor _anchor;
-        private readonly AnchorTrajectorySnapController _anchorTrajectorySnapController;
+        private readonly AnchorTrajectorySnapController _trajectorySnapController;
 
         public bool AnchorIsBeingThrown { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         {
             _player = player;
             _anchor = anchor;
-            _anchorTrajectorySnapController = anchorTrajectorySnapController;
+            _trajectorySnapController = anchorTrajectorySnapController;
 
             AnchorIsBeingThrown = false;
         }
@@ -43,10 +43,10 @@ namespace Popeye.Modules.PlayerAnchor.Player
                 return;
             }
             
-            if (_anchorTrajectorySnapController.HasAutoAimTarget)
+            if (_trajectorySnapController.HasAutoAimTarget)
             {
-                _anchor.SetGrabbedBySnapper(_anchorTrajectorySnapController.AnchorSnapTarget);
-                _anchorTrajectorySnapController.ClearState();
+                _anchor.SetGrabbedBySnapper(_trajectorySnapController.AnchorSnapTarget);
+                _trajectorySnapController.ClearState();
                 return;
             }
             

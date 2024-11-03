@@ -2,7 +2,7 @@ using System;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace Project.Scripts.TransformUtilities
+namespace Popeye.Scripts.TransformUtilities
 {
     public class EllipseTransformsPlacer : MonoBehaviour
     {

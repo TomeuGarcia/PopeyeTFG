@@ -4,10 +4,10 @@ namespace Popeye.Modules.CombatSystem
 {
     public class DamageDealer
     {
-        private ICombatManager _combatManager;
+        private readonly ICombatManager _combatManager;
         private DamageHit _damageHit;
 
-        public void Configure(ICombatManager combatManager, DamageHit damageHit)
+        public DamageDealer(ICombatManager combatManager, DamageHit damageHit = null)
         {
             _combatManager = combatManager;
             _damageHit = damageHit;

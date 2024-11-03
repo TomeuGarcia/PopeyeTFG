@@ -3,7 +3,9 @@ using Popeye.Core.Services.CommandQueue;
 using Popeye.Core.Services.EventSystem;
 using Popeye.Core.Services.ServiceLocator;
 using Popeye.Modules.AudioSystem;
+using Popeye.Modules.GameMenus.OptionsMenu;
 using Popeye.Modules.GameState;
+using Project.General.Scripts.Core.Services.ScreenFade;
 using Project.Scripts.Time.TimeFunctionalities;
 using Project.Scripts.Time.TimeHitStop;
 using Project.Scripts.Time.TimeScale;
@@ -22,6 +24,8 @@ namespace Popeye.Modules.Installers
         [Header("SCENES")] 
         [SerializeField] private SceneLoadingInstaller _sceneLoadingInstaller;
         
+        [Header("SCREEN FADE")]
+        [SerializeField] private CanvasScreenFadeService _canvasScreenFadeService;
         
         private void Awake()
         {
@@ -36,7 +40,12 @@ namespace Popeye.Modules.Installers
 
         private void Install()
         {
+            GameLocalizationState.InitWithSystemLanguage();
+            
             ServiceLocator serviceLocator = ServiceLocator.Instance;
+
+
+            serviceLocator.RegisterService<IScreenFadeService>(_canvasScreenFadeService);
 
             
             EventSystemService eventSystemService = new EventSystemService();
@@ -55,8 +64,8 @@ namespace Popeye.Modules.Installers
             
             IGameStateEventsDispatcher gameStateEventsDispatcher = new GameStateEventsDispatcher(eventSystemService);
             serviceLocator.RegisterService<IGameStateEventsDispatcher>(gameStateEventsDispatcher);
-            
-            
+
+
             _audioInstaller.Install(serviceLocator);
             _sceneLoadingInstaller.Install(serviceLocator, commandQueueService, gameStateEventsDispatcher);
         }
@@ -73,6 +82,7 @@ namespace Popeye.Modules.Installers
             serviceLocator.RemoveService<ICommandQueueService>();
             serviceLocator.RemoveService<ITimeFunctionalities>();
             serviceLocator.RemoveService<IEventSystemService>();
+            serviceLocator.RemoveService<IScreenFadeService>();
         }
     }
 }

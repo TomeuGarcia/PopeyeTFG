@@ -1,3 +1,4 @@
+using Popeye.Modules.Enemies.Components;
 using UnityEngine;
 
 namespace Popeye.Modules.Enemies.Hazards

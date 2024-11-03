@@ -19,7 +19,7 @@ namespace Popeye.Modules.CombatSystem.Testing.Scripts
             for (int i = 0; i < transform.childCount; ++i)
             {
                 _damageTriggers[i] = transform.GetChild(i).GetComponent<DamageTrigger>();
-                _damageTriggers[i].Configure(combatManager, damageHit);
+                _damageTriggers[i].Configure(new DamageDealer(combatManager), damageHit);
                 _damageTriggers[i].Activate();
             }
             

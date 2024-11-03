@@ -37,7 +37,8 @@ namespace Popeye.Modules.Enemies
         [SerializeField] private Rigidbody _rigidbody;
         internal override void Init()
         {
-            _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
+            _damageTrigger.Configure(new DamageDealer(ServiceLocator.Instance.GetService<ICombatManager>()),
+                new DamageHit(_contactDamageHitConfig));
             _shieldedMovement.Configure(this);
             _enemyPatrolling.Configure(this);
             _shieldedDashing.Configure(this);

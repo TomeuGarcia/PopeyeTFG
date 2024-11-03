@@ -13,7 +13,7 @@ namespace Popeye.Modules.CombatSystem
         Enemy = 1 << 1,                 // 2
         Destructible = 1 << 2,          // 4
         Interactable = 1 << 3,          // 8 
-                                        // 32 ...
+                                        // 16 ...
     }
     
     

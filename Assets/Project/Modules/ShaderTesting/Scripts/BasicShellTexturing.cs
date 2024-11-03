@@ -2,81 +2,89 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicShellTexturing : MonoBehaviour
+namespace Popeye.Modules.ShaderTesting
 {
-    [Header("REFERENCES")]
-    [SerializeField] private Material _ShellTexturingMaterial;
-    [SerializeField] private MeshRenderer _meshPrefab;
-
-    private MeshRenderer[] _meshes;
-    private const int MESHES_BUFFER = 100;
-
-    [SerializeField, Range(1, 100)] private int _numberOfMeshes = 10;
-    private int _oldNumberOfMeshes;
-
-    [SerializeField, Range(1, 200)] private int _resolution = 50;
-    private int _oldResolution;
-    
 
 
-
-    private void Awake()
+    public class BasicShellTexturing : MonoBehaviour
     {
-        _meshPrefab.sharedMaterial = _ShellTexturingMaterial;
-        _meshPrefab.gameObject.SetActive(false);
+        [Header("REFERENCES")] [SerializeField]
+        private Material _ShellTexturingMaterial;
 
-        _meshes = new MeshRenderer[MESHES_BUFFER];
-        for (int i = 0; i < MESHES_BUFFER; ++i)
+        [SerializeField] private MeshRenderer _meshPrefab;
+
+        private MeshRenderer[] _meshes;
+        private const int MESHES_BUFFER = 100;
+
+        [SerializeField, Range(1, 100)] private int _numberOfMeshes = 10;
+        private int _oldNumberOfMeshes;
+
+        [SerializeField, Range(1, 200)] private int _resolution = 50;
+        private int _oldResolution;
+
+
+
+
+        private void Awake()
         {
-            _meshes[i] = Instantiate(_meshPrefab, transform);
-        }
+            _meshPrefab.sharedMaterial = _ShellTexturingMaterial;
+            _meshPrefab.gameObject.SetActive(false);
 
-        UpdateNumberOfMeshes();
-        UpdateResolution();
-    }
+            _meshes = new MeshRenderer[MESHES_BUFFER];
+            for (int i = 0; i < MESHES_BUFFER; ++i)
+            {
+                _meshes[i] = Instantiate(_meshPrefab, transform);
+            }
 
-
-    private void Update()
-    {
-        if (_numberOfMeshes != _oldNumberOfMeshes)
-        {
             UpdateNumberOfMeshes();
-        }
-        if (_resolution != _oldResolution)
-        {
             UpdateResolution();
         }
-        
-    
-    }
 
 
-    private void UpdateNumberOfMeshes()
-    {
-        for (int i = 0; i < _numberOfMeshes; ++i)
+        private void Update()
         {
-            _meshes[i].gameObject.SetActive(true);
+            if (_numberOfMeshes != _oldNumberOfMeshes)
+            {
+                UpdateNumberOfMeshes();
+            }
 
-            float height01 = (float)i / _numberOfMeshes;
-            _meshes[i].material.SetFloat("_Height01", height01);
-        }
-        for (int i = _numberOfMeshes; i < MESHES_BUFFER; ++i)
-        {
-            _meshes[i].gameObject.SetActive(false);
+            if (_resolution != _oldResolution)
+            {
+                UpdateResolution();
+            }
+
+
         }
 
-        _oldNumberOfMeshes = _numberOfMeshes;
-    }
 
-
-    private void UpdateResolution()
-    {
-        for (int i = 0; i < _numberOfMeshes; ++i)
+        private void UpdateNumberOfMeshes()
         {
-            _meshes[i].material.SetFloat("_Resolution", _resolution);
+            for (int i = 0; i < _numberOfMeshes; ++i)
+            {
+                _meshes[i].gameObject.SetActive(true);
+
+                float height01 = (float)i / _numberOfMeshes;
+                _meshes[i].material.SetFloat("_Height01", height01);
+            }
+
+            for (int i = _numberOfMeshes; i < MESHES_BUFFER; ++i)
+            {
+                _meshes[i].gameObject.SetActive(false);
+            }
+
+            _oldNumberOfMeshes = _numberOfMeshes;
         }
 
-        _oldResolution = _resolution;
-    }
 
+        private void UpdateResolution()
+        {
+            for (int i = 0; i < _numberOfMeshes; ++i)
+            {
+                _meshes[i].material.SetFloat("_Resolution", _resolution);
+            }
+
+            _oldResolution = _resolution;
+        }
+
+    }
 }

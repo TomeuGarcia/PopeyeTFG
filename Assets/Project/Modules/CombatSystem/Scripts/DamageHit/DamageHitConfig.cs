@@ -10,14 +10,12 @@ namespace Popeye.Modules.CombatSystem
     {
         [SerializeField] private DamageHitTargetPreset _damageHitPreset;
         [SerializeField, Range(0, 200)] private int _damage = 10;
-        [SerializeField, Range(0f, 10f)] private float _stunDuration = 0;
 
         [SerializeField] private KnockbackHitConfig _knockbackHitConfig;
         
         
         public DamageHitTargetType DamageHitTargetTypeMask => _damageHitPreset.TargetMask;
         public int Damage => _damage;
-        public float StunDuration => _stunDuration;
 
         public KnockbackHitConfig KnockbackHitConfig => _knockbackHitConfig;
 

@@ -3,37 +3,42 @@ using Cysharp.Threading.Tasks;
 using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.CombatSystem;
+using Popeye.Scripts.TransformUtilities;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
 {
     public class AnchorDamageDealer : MonoBehaviour
     {
-        private IAnchorMediator _anchor;
+        private IAnchorDamageDealerListener _listener;
         private AnchorDamageConfig _config;
         private Transform _damageStartTransform;
         
-        private TransformMotion _throwDamageTriggerMotion;
-        private TransformMotion _spinDamageTriggerMotion;
+        private RigidbodyMotion _throwDamageTriggerMotion;
+        private RigidbodyMotion _spinDamageTriggerMotion;
         
+        [Header("THROW")]
         [SerializeField] private DamageTrigger _anchorThrowDamageTrigger;
+        [SerializeField] private Rigidbody _anchorThrowRigidbody;
+        [Header("SLAM")]
         [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
+        [Header("SPIN")]
         [SerializeField] private DamageTrigger _anchorSpinDamageTrigger;
         [SerializeField] private BoxCollider _anchorSpinCollider;
+        [SerializeField] private Rigidbody _anchorSpinRigidbody;
 
         private bool _sidewaysKnockbackIsRight;
 
         private DamageHit ThrowDamageHit => _config.ThrowDamageHit;
         private DamageHit PullDamageHit => _config.PullDamageHit;
-        private DamageHit KickDamageHit => _config.KickDamageHit;
         private DamageHit SpinDamageHit => _config.SpinDamageHit;
         private DamageHit VerticalLandDamageHit => _config.VerticalLandDamageHit;
 
-        public void Configure(IAnchorMediator anchor,
+        public void Configure(IAnchorDamageDealerListener listener,
             AnchorDamageConfig anchorDamageConfig, ICombatManager combatManager, 
             Transform damageStartTransform)
         {
-            _anchor = anchor;
+            _listener = listener;
             
             _config = anchorDamageConfig;
             _config.Init();
@@ -41,22 +46,22 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _damageStartTransform = damageStartTransform;
 
 
-            _anchorThrowDamageTrigger.Configure(combatManager);
+            _anchorThrowDamageTrigger.Configure(new DamageDealer(combatManager));
             _anchorThrowDamageTrigger.Deactivate();
 
-            _anchorSpinDamageTrigger.Configure(combatManager, SpinDamageHit);
+            _anchorSpinDamageTrigger.Configure(new DamageDealer(combatManager), SpinDamageHit);
             _anchorSpinDamageTrigger.Deactivate();
             
             
-            _anchorVerticalLandDamageTrigger.Configure(combatManager);
+            _anchorVerticalLandDamageTrigger.Configure(new DamageDealer(combatManager));
             _anchorVerticalLandDamageTrigger.Deactivate();
             
 
-            _throwDamageTriggerMotion = new TransformMotion();
-            _throwDamageTriggerMotion.Configure(_anchorThrowDamageTrigger.transform);
+            _throwDamageTriggerMotion = new RigidbodyMotion();
+            _throwDamageTriggerMotion.Configure(_anchorThrowRigidbody);
 
-            _spinDamageTriggerMotion = new TransformMotion();
-            _spinDamageTriggerMotion.Configure(_anchorSpinDamageTrigger.transform);
+            _spinDamageTriggerMotion = new RigidbodyMotion();
+            _spinDamageTriggerMotion.Configure(_anchorSpinRigidbody);
 
             SubscribeToEvents();
         }
@@ -85,26 +90,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         public void DealThrowDamage(AnchorThrowResult anchorThrowResult)
         {
-            DealForwardThrowDamage(anchorThrowResult, ThrowDamageHit, _config.ThrowDamageExtraDuration);
-        }
-
-        public async UniTaskVoid DealPullDamage(AnchorThrowResult anchorPullResult)
-        {
-            _anchorThrowDamageTrigger.OnBeforeDamageDealt += SetPullAttackKnockbackEndPosition;
-            await DealBackwardThrowDamage(anchorPullResult, PullDamageHit, _config.PullDamageExtraDuration);
-            _anchorThrowDamageTrigger.OnBeforeDamageDealt -= SetPullAttackKnockbackEndPosition;
-        }
-        
-        public void DealKickDamage(AnchorThrowResult anchorKickResult)
-        {
-            DealForwardThrowDamage(anchorKickResult, KickDamageHit, _config.KickDamageExtraDuration);
-        }
-
-        
-        private void DealForwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit, 
-            float extraDurationBeforeDeactivate)
-        {
-            _anchorThrowDamageTrigger.SetDamageHit(damageHit);
+            _anchorThrowDamageTrigger.SetDamageHit(ThrowDamageHit);
             _anchorThrowDamageTrigger.UpdateDamageKnockbackDirection(anchorThrowResult.Direction);
             
             
@@ -113,19 +99,25 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             damagePathPoints[0] = _damageStartTransform.position;
             
             DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints, 
-                    anchorThrowResult.Duration, extraDurationBeforeDeactivate,
+                    anchorThrowResult.Duration, _config.ThrowDamageExtraDuration,
                     anchorThrowResult.MoveEaseCurve, -1.0f)
                 .Forget();
         }
 
-        private async UniTask DealBackwardThrowDamage(AnchorThrowResult anchorThrowResult, DamageHit damageHit,
-            float extraDurationBeforeDeactivate)
+        public async UniTaskVoid DealPullDamage(AnchorThrowResult anchorPullResult)
         {
-            _anchorThrowDamageTrigger.SetDamageHit(damageHit);
+            _anchorThrowDamageTrigger.OnBeforeDamageDealt += SetPullAttackKnockbackEndPosition;
+            await DoDealPullDamage(anchorPullResult);
+            _anchorThrowDamageTrigger.OnBeforeDamageDealt -= SetPullAttackKnockbackEndPosition;
+        }
+        
+        private async UniTask DoDealPullDamage(AnchorThrowResult anchorThrowResult)
+        {
+            _anchorThrowDamageTrigger.SetDamageHit(PullDamageHit);
             _anchorThrowDamageTrigger.UpdateKnockbackEndPosition(anchorThrowResult.Direction);
 
             await DealTrajectoryDamage(anchorThrowResult.TrajectoryPathPoints,
-                anchorThrowResult.Duration, extraDurationBeforeDeactivate,
+                anchorThrowResult.Duration, _config.PullDamageExtraDuration,
                 anchorThrowResult.MoveEaseCurve, -1.0f);
         }
         
@@ -134,8 +126,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private async UniTask DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
             AnimationCurve ease, float easeThreshold)
         {
-            _throwDamageTriggerMotion.SetPosition(trajectoryPoints[0]);
-            _throwDamageTriggerMotion.SetRotation(_damageStartTransform.rotation);
+            _throwDamageTriggerMotion.SetPositionIgnoringPhysics(trajectoryPoints[0]);
+            _throwDamageTriggerMotion.SetRotationIgnoringPhysics(_damageStartTransform.rotation);
+            await UniTask.Yield();
+            await UniTask.Yield();
             _throwDamageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
 
             float wait = 0f;
@@ -227,6 +221,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _sidewaysKnockbackIsRight = spinningToTheRight;
             _anchorSpinDamageTrigger.Activate();
             _anchorSpinDamageTrigger.OnBeforeDamageDealt += SetPushSidewaysKnockback;
+            
+            _spinDamageTriggerMotion.SetPositionIgnoringPhysics(_damageStartTransform.position);
+            _spinDamageTriggerMotion.SetRotationIgnoringPhysics(Quaternion.identity);
         }
         public void UpdateSpinningDamage(Vector3 spinCenter, Quaternion rotation, float spinRadius)
         {
@@ -247,7 +244,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
 
         private void OnDamageDealt(DamageHitResult damageHitResult)
         {
-            _anchor.OnDamageDealt(damageHitResult);
+            _listener.OnDamageDealt(damageHitResult);
         }
         
     }

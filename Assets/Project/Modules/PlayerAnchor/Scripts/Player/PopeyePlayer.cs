@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using AYellowpaper;
 using Cysharp.Threading.Tasks;
 using Popeye.Modules.CombatSystem;
 using Popeye.Modules.PlayerAnchor.Player.PlayerConfigurations;
@@ -10,11 +8,11 @@ using Popeye.Modules.PlayerAnchor.Anchor.AnchorConfigurations;
 using Popeye.Modules.PlayerAnchor.Player.InstantTranslation;
 using Popeye.Modules.PlayerAnchor.Player.PlayerEvents;
 using Popeye.Modules.PlayerAnchor.Player.PlayerFocus;
-using Popeye.Modules.PlayerAnchor.Player.Stamina;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.Checkpoint;
 using Popeye.Modules.PlayerAnchor.SafeGroundChecking.OnVoid;
 using Popeye.Modules.PlayerController.Inputs;
+using Popeye.Scripts.TransformUtilities;
 using Popeye.Scripts.ValueGating;
 using Project.Modules.WorldElements.DestructiblePlatforms;
 using UnityEngine;
@@ -59,7 +57,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerHealth _playerHealth;
         
         private PlayerMovementChecker _playerMovementChecker;
-        private TransformMotion _playerMotion;
+        private IMotionBehaviour _playerMotion;
         private IPlayerInstantTranslation _playerInstantTranslation;
         private PlayerDasher _playerDasher;
         
@@ -96,7 +94,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IPlayerView playerView, IPlayerAudio playerAudio, 
             IPlayerHealing playerHealing, PlayerHealth playerHealth,
             PlayerMovementChecker playerMovementChecker, 
-            TransformMotion playerMotion, IPlayerInstantTranslation playerInstantTranslation,
+            IMotionBehaviour playerMotion, IPlayerInstantTranslation playerInstantTranslation,
             PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower,
@@ -290,7 +288,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void StartChargingThrow()
         {
             _anchorThrower.StartThrow();
-            _anchor.SetGrabbedToThrow();
+            _anchor.SetGrabbedToThrow();    
         }
 
         public void UpdateChargingThrow()
@@ -419,7 +417,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnAnchorEndedInVoid()
         {
             _anchor.OnVoidChecker.ClearState();
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.PullingAnchor);
+            _stateMachine.TryOverwriteState(PlayerStates.PlayerStates.PullingAnchor);
             _pullingAnchorFromTheVoid = true;
         }
 
@@ -571,7 +569,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         public void OnKilledByDamageTaken(DamageHitResult damageHitResult)
         {
             _playerAudio.PlayTakeDamageSound();
-            _stateMachine.OverwriteState(PlayerStates.PlayerStates.Dead);
+            _stateMachine.TryOverwriteState(PlayerStates.PlayerStates.Dead);
             _eventsDispatcher.DispatchOnDiedEvent();
         
             _eventsDispatcher.DispatchOnKilledByDamageEvent(damageHitResult, Position);

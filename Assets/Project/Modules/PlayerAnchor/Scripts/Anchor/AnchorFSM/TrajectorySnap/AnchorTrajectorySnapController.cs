@@ -11,7 +11,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         
         
 
-        public void Configure()
+        public AnchorTrajectorySnapController()
         {
             _currentSnapTarget = null;
         }

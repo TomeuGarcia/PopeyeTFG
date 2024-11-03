@@ -9,7 +9,7 @@ namespace Popeye.Modules.GameDataEvents
     public class GameDataEventsInstaller : MonoBehaviour
     {
         [SerializeField] private GameDataEventsDispatchTester _eventsDispatchTester;
-        [SerializeField] private GameDataEventsCSVSaverConfig _csvSaverConfig;
+        [SerializeField] private GameDataEventsFileSaverConfig _csvSaverConfig;
 
         [SerializeField] private SceneReferenceAsset _ignoreScene;
         
@@ -17,7 +17,7 @@ namespace Popeye.Modules.GameDataEvents
         
         private LastLoadedSceneDataEventsProvider _activeSceneDataEventsProvider;
         private GameDataEventsListener _eventsListener;
-        private GameDataEventsCSVSaver _gameDataEventsCSVSaver;
+        private GameDataEventsFileSaver _gameDataEventsCSVSaver;
 
         public void Install(IEventSystemService eventSystemService, 
             ICurrentlyPlayedSceneProvider currentlyPlayedSceneProvider)
@@ -28,7 +28,7 @@ namespace Popeye.Modules.GameDataEvents
                 new LastLoadedSceneDataEventsProvider(currentlyPlayedSceneProvider);
             
             _gameDataEventsCSVSaver = 
-                new GameDataEventsCSVSaver(_csvSaverConfig);
+                new GameDataEventsFileSaver(_csvSaverConfig);
                 
             _eventsListener = 
                 new GameDataEventsListener(eventSystemService, _gameDataEventsCSVSaver, _activeSceneDataEventsProvider);

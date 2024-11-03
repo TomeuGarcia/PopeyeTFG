@@ -6,5 +6,6 @@ namespace Popeye.Modules.PlayerAnchor.Player.PlayerStates
     {
         PlayerStates StartState { get; }
         Dictionary<PlayerStates, APlayerState> CreateStatesDictionary(PlayerStatesBlackboard blackboard);
+        HashSet<PlayerStates> CreateNonOverwritableStates();
     }
 }

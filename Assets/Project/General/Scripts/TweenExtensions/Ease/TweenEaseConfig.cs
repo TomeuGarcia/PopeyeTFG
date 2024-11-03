@@ -33,31 +33,31 @@ namespace Project.Scripts.TweenExtensions
     public static class TweenEaseConfigExtensions
     {
         public static TweenerCore<Vector3,Vector3,VectorOptions> SetEase(
-            this TweenerCore<Vector3,Vector3,VectorOptions> t, TweenEaseConfig tweenEaseConfig)
+            this TweenerCore<Vector3,Vector3,VectorOptions> target, TweenEaseConfig tweenEaseConfig)
         {
             if (tweenEaseConfig.UseCurve)
             {
-                t.SetEase(tweenEaseConfig.EaseCurve);
+                target.SetEase(tweenEaseConfig.EaseCurve);
             }
             else
             {
-                t.SetEase(tweenEaseConfig.Ease);
+                target.SetEase(tweenEaseConfig.Ease);
             }
-            return t;
+            return target;
         }
         
         public static TweenerCore<Quaternion,Quaternion,NoOptions> SetEase(
-            this TweenerCore<Quaternion,Quaternion,NoOptions> t, TweenEaseConfig tweenEaseConfig)
+            this TweenerCore<Quaternion,Quaternion,NoOptions> target, TweenEaseConfig tweenEaseConfig)
         {
             if (tweenEaseConfig.UseCurve)
             {
-                t.SetEase(tweenEaseConfig.EaseCurve);
+                target.SetEase(tweenEaseConfig.EaseCurve);
             }
             else
             {
-                t.SetEase(tweenEaseConfig.Ease);
+                target.SetEase(tweenEaseConfig.Ease);
             }
-            return t;
+            return target;
         }
     }
     

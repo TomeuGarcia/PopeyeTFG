@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Popeye.Core.Pool;
+using Popeye.Modules.Enemies.Bullets;
 using UnityEngine;
 using UnityEngine.Serialization;
 

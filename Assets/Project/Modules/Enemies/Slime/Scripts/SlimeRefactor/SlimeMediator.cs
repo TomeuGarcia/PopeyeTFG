@@ -52,7 +52,7 @@ namespace Popeye.Modules.Enemies
             _enemyHealth.Configure(this);
             slimeAnimatorController.Configure(this,ServiceLocator.Instance.GetService<IParticleFactory>());
             _enemyPatrolling.Configure(this);
-            _damageTrigger.Configure(ServiceLocator.Instance.GetService<ICombatManager>(),new DamageHit(_contactDamageHitConfig));
+            _damageTrigger.Configure(new DamageDealer(ServiceLocator.Instance.GetService<ICombatManager>()),new DamageHit(_contactDamageHitConfig));
             _damageTrigger.OnDamageDealt += OnDamageDealt;
             PlayMoveAnimation();
         }
