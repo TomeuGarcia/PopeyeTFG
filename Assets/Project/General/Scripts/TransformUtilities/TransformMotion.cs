@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Popeye.Scripts.TransformUtilities
 {
-    public class TransformMotion
+    public class TransformMotion : IMotionBehaviour
     {
         private Transform _moveTransform;
         private Transform _rotateTransform;

@@ -7,13 +7,13 @@ namespace Popeye.Modules.PlayerAnchor.Player.InstantTranslation
     public class PopeyePlayerInstantTranslation : IPlayerInstantTranslation
     {
         private readonly PlayerController.PlayerController _playerController;
-        private readonly TransformMotion _playerMotion;
+        private readonly IMotionBehaviour _playerMotion;
         private readonly TransformMotion _anchorMotion;
         private readonly IAnchorMediator _anchorMediator;
 
         public PopeyePlayerInstantTranslation(
             PlayerController.PlayerController playerController, 
-            TransformMotion playerMotion,
+            IMotionBehaviour playerMotion,
             IAnchorMediator anchorMediator,
             TransformMotion anchorMotion)
         {

@@ -262,7 +262,7 @@ namespace Popeye.Modules.PlayerAnchor
             
             IMovementInputHandler movementInputHandler = new CameraAxisMovementInput(_isometricCamera.Value.CameraTransform);
             PlayerStatesBlackboard playerStatesBlackboard = new PlayerStatesBlackboard();
-            TransformMotion playerMotion = new TransformMotion();
+            RigidbodyMotion playerMotion = new RigidbodyMotion();
             PlayerFSM playerStateMachine = new PlayerFSM();
             PlayerHealth playerHealth = new PlayerHealth();
             PlayerDasher playerDasher = new PlayerDasher();
@@ -320,7 +320,7 @@ namespace Popeye.Modules.PlayerAnchor
             playerStatesBlackboard.Configure(_playerGeneralConfig.StatesConfig, _player, playerView, 
                 movesetInputsController, _anchor, playerMovementChecker, _anchorSpinAttack, _spikesSpecialAttack,
                 _playerDeathAnimationSequencer);
-            playerMotion.Configure(_playerController.Transform, _playerController.LookTransform);
+            playerMotion.Configure(_playerController.Rigidbody, _playerController.LookTransform);
             playerHealth.Configure(_player, _playerHealthBehaviour, _playerGeneralConfig.PlayerHealthConfig.HealthData,
                 _playerController.Rigidbody, _playerGeneralConfig.VoidFallDamageConfig);
             playerDasher.Configure(_player, _anchor, _playerGeneralConfig, playerMotion, 

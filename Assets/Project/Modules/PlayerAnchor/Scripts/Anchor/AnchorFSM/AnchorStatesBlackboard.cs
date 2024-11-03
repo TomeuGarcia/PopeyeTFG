@@ -7,7 +7,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates
     public class AnchorStatesBlackboard
     {
         public IAnchorMediator AnchorMediator { get; private set; }
-        public TransformMotion TransformMotion { get; private set; }
+        public IMotionBehaviour TransformMotion { get; private set; }
         public AnchorMotionConfig AnchorMotionConfig { get; private set; }
         public AnchorPhysics AnchorPhysics { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Popeye.Modules.PlayerAnchor.Anchor.AnchorStates
         
         
         public void Configure(IAnchorMediator anchorMediator,
-            TransformMotion anchorMotion, AnchorMotionConfig anchorMotionConfig,
+            IMotionBehaviour anchorMotion, AnchorMotionConfig anchorMotionConfig,
             AnchorPhysics anchorPhysics, AnchorChain anchorChain,
             Transform anchorCarryHolder, Transform anchorGrabToThrowHolder,
             Transform playerPositionTransform)

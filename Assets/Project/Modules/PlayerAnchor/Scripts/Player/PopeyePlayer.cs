@@ -57,7 +57,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private PlayerHealth _playerHealth;
         
         private PlayerMovementChecker _playerMovementChecker;
-        private TransformMotion _playerMotion;
+        private IMotionBehaviour _playerMotion;
         private IPlayerInstantTranslation _playerInstantTranslation;
         private PlayerDasher _playerDasher;
         
@@ -94,7 +94,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
             IPlayerView playerView, IPlayerAudio playerAudio, 
             IPlayerHealing playerHealing, PlayerHealth playerHealth,
             PlayerMovementChecker playerMovementChecker, 
-            TransformMotion playerMotion, IPlayerInstantTranslation playerInstantTranslation,
+            IMotionBehaviour playerMotion, IPlayerInstantTranslation playerInstantTranslation,
             PlayerDasher playerDasher,
             PopeyeAnchor anchor, 
             IAnchorThrower anchorThrower,

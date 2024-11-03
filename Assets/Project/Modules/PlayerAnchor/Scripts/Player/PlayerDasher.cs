@@ -14,7 +14,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         private IPlayerMediator _player;
         private IAnchorMediator _anchor;
         private PlayerGeneralConfig _playerGeneralConfig;
-        private TransformMotion _playerMotion;
+        private IMotionBehaviour _playerMotion;
         private ObstacleProbingConfig _obstacleProbingConfig;
 
         private LayerMask ObstacleLayerMask => _obstacleProbingConfig.ObstaclesLayerMask;
@@ -24,7 +24,7 @@ namespace Popeye.Modules.PlayerAnchor.Player
         
 
         public void Configure(IPlayerMediator playerMediator, IAnchorMediator anchorMediator,
-            PlayerGeneralConfig playerGeneralConfig, TransformMotion playerMotion,
+            PlayerGeneralConfig playerGeneralConfig, IMotionBehaviour playerMotion,
             ObstacleProbingConfig obstacleProbingConfig,
             CollisionProbingConfig floorPlatformsProbingConfig)
         {

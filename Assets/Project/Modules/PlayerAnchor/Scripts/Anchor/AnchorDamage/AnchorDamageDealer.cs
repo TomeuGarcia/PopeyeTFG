@@ -4,6 +4,7 @@ using Popeye.Modules.PlayerAnchor;
 using Popeye.Modules.PlayerAnchor.Player;
 using Popeye.Modules.CombatSystem;
 using Popeye.Scripts.TransformUtilities;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Popeye.Modules.PlayerAnchor.Anchor
@@ -14,13 +15,18 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private AnchorDamageConfig _config;
         private Transform _damageStartTransform;
         
-        private TransformMotion _throwDamageTriggerMotion;
-        private TransformMotion _spinDamageTriggerMotion;
+        private RigidbodyMotion _throwDamageTriggerMotion;
+        private RigidbodyMotion _spinDamageTriggerMotion;
         
+        [Header("THROW")]
         [SerializeField] private DamageTrigger _anchorThrowDamageTrigger;
+        [SerializeField] private Rigidbody _anchorThrowRigidbody;
+        [Header("SLAM")]
         [SerializeField] private DamageTrigger _anchorVerticalLandDamageTrigger;
+        [Header("SPIN")]
         [SerializeField] private DamageTrigger _anchorSpinDamageTrigger;
         [SerializeField] private BoxCollider _anchorSpinCollider;
+        [SerializeField] private Rigidbody _anchorSpinRigidbody;
 
         private bool _sidewaysKnockbackIsRight;
 
@@ -52,11 +58,11 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _anchorVerticalLandDamageTrigger.Deactivate();
             
 
-            _throwDamageTriggerMotion = new TransformMotion();
-            _throwDamageTriggerMotion.Configure(_anchorThrowDamageTrigger.transform);
+            _throwDamageTriggerMotion = new RigidbodyMotion();
+            _throwDamageTriggerMotion.Configure(_anchorThrowRigidbody);
 
-            _spinDamageTriggerMotion = new TransformMotion();
-            _spinDamageTriggerMotion.Configure(_anchorSpinDamageTrigger.transform);
+            _spinDamageTriggerMotion = new RigidbodyMotion();
+            _spinDamageTriggerMotion.Configure(_anchorSpinRigidbody);
 
             SubscribeToEvents();
         }
@@ -121,8 +127,10 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
         private async UniTask DealTrajectoryDamage(Vector3[] trajectoryPoints, float duration, float extraDurationBeforeDeactivate,
             AnimationCurve ease, float easeThreshold)
         {
-            _throwDamageTriggerMotion.SetPosition(trajectoryPoints[0]);
-            _throwDamageTriggerMotion.SetRotation(_damageStartTransform.rotation);
+            _throwDamageTriggerMotion.SetPositionIgnoringPhysics(trajectoryPoints[0]);
+            _throwDamageTriggerMotion.SetRotationIgnoringPhysics(_damageStartTransform.rotation);
+            await UniTask.Yield();
+            await UniTask.Yield();
             _throwDamageTriggerMotion.MoveAlongPath(trajectoryPoints, duration, ease);
 
             float wait = 0f;
@@ -214,6 +222,9 @@ namespace Popeye.Modules.PlayerAnchor.Anchor
             _sidewaysKnockbackIsRight = spinningToTheRight;
             _anchorSpinDamageTrigger.Activate();
             _anchorSpinDamageTrigger.OnBeforeDamageDealt += SetPushSidewaysKnockback;
+            
+            _spinDamageTriggerMotion.SetPositionIgnoringPhysics(_damageStartTransform.position);
+            _spinDamageTriggerMotion.SetRotationIgnoringPhysics(Quaternion.identity);
         }
         public void UpdateSpinningDamage(Vector3 spinCenter, Quaternion rotation, float spinRadius)
         {
